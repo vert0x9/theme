@@ -1,0 +1,1391 @@
+{
+  "sections": {
+    "hero_banner_FL7KzB": {
+      "type": "hero-banner",
+      "blocks": {
+        "slide_RMziqq": {
+          "type": "slide",
+          "settings": {
+            "banner_layout": "hero-banner--full",
+            "color_scheme": "scheme-51d4fff8-710e-4b00-8bd8-6e01eeb45ddb",
+            "header_menu_text_color": "#ffffff",
+            "heading": "<h2>Your Summer <br\/><em><strong>Camera<\/strong><\/em> is Ready<\/h2>",
+            "subheading": "",
+            "subheading_link": "",
+            "text": "<p>A curated shelf of fully refurbished film cameras — ready for <br\/>road trips, rooftops, and every golden hour between now and September.<\/p>",
+            "button_link_1": "shopify:\/\/collections\/cameras",
+            "button_link_1_type": "button",
+            "button_label_1": "Refurbished Cameras",
+            "button_style_1": "button--filled",
+            "button_link_2": "shopify:\/\/collections\/slr-other",
+            "button_label_2": "",
+            "button_style_2": "button--outlined",
+            "content_position": "end",
+            "content_alignment": "start",
+            "image": "shopify:\/\/shop_images\/Espio_Fuji400_37_d0929830-d2ed-4bcf-a5af-8d4ba0aec1d7.png",
+            "video_external": "",
+            "show_controls_on_video": false,
+            "enable_media_overlay_desktop": true,
+            "content_position_mobile": "end",
+            "content_alignment_mobile": "center",
+            "image_mobile": "shopify:\/\/shop_images\/Espio_Fuji400_37.png",
+            "video_external_mobile": "",
+            "show_controls_on_video_mobile": false,
+            "enable_media_overlay_mobile": true,
+            "mobile_text_offset_y": 0
+          }
+        },
+        "slide_wUn8BY": {
+          "type": "slide",
+          "disabled": true,
+          "settings": {
+            "banner_layout": "hero-banner--full",
+            "color_scheme": "scheme-1",
+            "header_menu_text_color": "#ffffff",
+            "heading": "<p>Highlight your promotion<\/p>",
+            "subheading": "Highlight your promotion",
+            "subheading_link": "",
+            "text": "<p>Highlight your promotion<\/p>",
+            "button_link_1": "\/",
+            "button_link_1_type": "button",
+            "button_label_1": "View more",
+            "button_style_1": "button--filled",
+            "button_link_2": "\/",
+            "button_label_2": "View more",
+            "button_style_2": "button--outlined",
+            "content_position": "end",
+            "content_alignment": "start",
+            "image": "shopify:\/\/shop_images\/Hasselblad_Jewel_Tones-3972.png",
+            "video_external": "",
+            "show_controls_on_video": false,
+            "enable_media_overlay_desktop": true,
+            "content_position_mobile": "end",
+            "content_alignment_mobile": "center",
+            "video_external_mobile": "",
+            "show_controls_on_video_mobile": false,
+            "enable_media_overlay_mobile": true,
+            "mobile_text_offset_y": 0
+          }
+        },
+        "slide_L8JXgj": {
+          "type": "slide",
+          "settings": {
+            "banner_layout": "hero-banner--full",
+            "color_scheme": "scheme-2",
+            "header_menu_text_color": "#ffffff",
+            "heading": "<p>Expired Film Club<\/p>",
+            "subheading": "",
+            "subheading_link": "",
+            "text": "<p>Rare stocks, beautiful results, <br\/>and the occasional happy accident.<\/p>",
+            "button_link_1": "shopify:\/\/pages\/expired-film-club",
+            "button_link_1_type": "button",
+            "button_label_1": "Join Expired Film Club",
+            "button_style_1": "button--filled",
+            "button_link_2": "\/",
+            "button_label_2": "",
+            "button_style_2": "button--outlined",
+            "content_position": "end",
+            "content_alignment": "start",
+            "image": "shopify:\/\/shop_images\/Film_Club_Website_Hero.jpg",
+            "video_external": "",
+            "show_controls_on_video": false,
+            "enable_media_overlay_desktop": true,
+            "content_position_mobile": "center",
+            "content_alignment_mobile": "center",
+            "video_external_mobile": "",
+            "show_controls_on_video_mobile": false,
+            "enable_media_overlay_mobile": true,
+            "mobile_text_offset_y": 0
+          }
+        },
+        "slide_Dinr9L": {
+          "type": "slide",
+          "settings": {
+            "banner_layout": "hero-banner--full",
+            "color_scheme": "scheme-1",
+            "header_menu_text_color": "#ffffff",
+            "heading": "<p>Hasselblad Cameras<\/p>",
+            "subheading": "",
+            "subheading_link": "",
+            "text": "<p>Fully refurbished and backed by<br\/>our industry leading six month warranty.<\/p>",
+            "button_link_1": "shopify:\/\/pages\/fully-refurbished-hasselblad-cameras",
+            "button_link_1_type": "button",
+            "button_label_1": "Shop Hasselblad Now",
+            "button_style_1": "button--filled",
+            "button_link_2": "\/",
+            "button_label_2": "",
+            "button_style_2": "button--outlined",
+            "content_position": "start",
+            "content_alignment": "start",
+            "image": "shopify:\/\/shop_images\/Hasselblad_Jewel_Tones-4058.png",
+            "video_external": "",
+            "show_controls_on_video": false,
+            "enable_media_overlay_desktop": true,
+            "content_position_mobile": "start",
+            "content_alignment_mobile": "center",
+            "image_mobile": "shopify:\/\/shop_images\/Hasselblad_Jewel_Tones-4053.png",
+            "video_external_mobile": "",
+            "show_controls_on_video_mobile": false,
+            "enable_media_overlay_mobile": true,
+            "mobile_text_offset_y": 0
+          }
+        },
+        "slide_dXBLUX": {
+          "type": "slide",
+          "settings": {
+            "banner_layout": "hero-banner--full",
+            "color_scheme": "scheme-6",
+            "header_menu_text_color": "#ffffff",
+            "heading": "<p>Film Camera Repairs<\/p>",
+            "subheading": "Mail in or drop off in brooklyn",
+            "subheading_link": "",
+            "text": "<p>Whether you're in Brooklyn or Boise,<\/p><p>getting your camera fixed has never been easier. <\/p><p><\/p>",
+            "button_link_1": "shopify:\/\/pages\/film-camera-repairs",
+            "button_link_1_type": "button",
+            "button_label_1": "Learn more",
+            "button_style_1": "button--filled",
+            "button_link_2": "shopify:\/\/pages\/film-camera-repairs-1",
+            "button_label_2": "start a repair",
+            "button_style_2": "button--outlined",
+            "content_position": "end",
+            "content_alignment": "start",
+            "image": "shopify:\/\/shop_images\/REPAIRS_DESKTOP.jpg",
+            "video_external": "",
+            "show_controls_on_video": false,
+            "enable_media_overlay_desktop": true,
+            "content_position_mobile": "end",
+            "content_alignment_mobile": "center",
+            "image_mobile": "shopify:\/\/shop_images\/Repairs_Mobile_4.jpg",
+            "video_external_mobile": "",
+            "show_controls_on_video_mobile": false,
+            "enable_media_overlay_mobile": true,
+            "mobile_text_offset_y": -1
+          }
+        },
+        "slide_zn4jpc": {
+          "type": "slide",
+          "disabled": true,
+          "settings": {
+            "banner_layout": "hero-banner--full",
+            "color_scheme": "scheme-2",
+            "header_menu_text_color": "#ffffff",
+            "heading": "<p>New to Film?<\/p>",
+            "subheading": "",
+            "subheading_link": "",
+            "text": "<p>Our automatic compacts make getting<br\/>great results a snap. Without the learning curve<\/p>",
+            "button_link_1": "shopify:\/\/collections\/point-shoots",
+            "button_link_1_type": "button",
+            "button_label_1": "Shop Point & Shoots",
+            "button_style_1": "button--filled",
+            "button_link_2": "shopify:\/\/collections\/cameras",
+            "button_label_2": "Shop All Cameras",
+            "button_style_2": "button--outlined",
+            "content_position": "end",
+            "content_alignment": "start",
+            "image": "shopify:\/\/shop_images\/espioWEB72_BFC-0064.jpg",
+            "video_external": "",
+            "show_controls_on_video": false,
+            "enable_media_overlay_desktop": true,
+            "content_position_mobile": "end",
+            "content_alignment_mobile": "center",
+            "image_mobile": "shopify:\/\/shop_images\/pentax_mobile.png",
+            "video_external_mobile": "",
+            "show_controls_on_video_mobile": false,
+            "enable_media_overlay_mobile": true,
+            "mobile_text_offset_y": 0
+          }
+        },
+        "slide_dW7QHW": {
+          "type": "slide",
+          "disabled": true,
+          "settings": {
+            "banner_layout": "hero-banner--full",
+            "color_scheme": "scheme-7",
+            "header_menu_text_color": "#ffffff",
+            "heading": "<p>SX-70s are back!<\/p>",
+            "subheading": "",
+            "subheading_link": "",
+            "text": "",
+            "button_link_1": "shopify:\/\/pages\/polaroid-repairs",
+            "button_link_1_type": "button",
+            "button_label_1": "SX-70 Repairs",
+            "button_style_1": "button--filled",
+            "button_link_2": "shopify:\/\/collections\/cameras-polaroid-sx-70",
+            "button_label_2": "SX-70 Cameras",
+            "button_style_2": "button--outlined",
+            "content_position": "end",
+            "content_alignment": "end",
+            "image": "shopify:\/\/shop_images\/ConvertOut-Resized-DSCF1525_7f06b8af-9363-4321-8b51-e82cf3d5e011.jpg",
+            "video_external": "",
+            "show_controls_on_video": false,
+            "enable_media_overlay_desktop": true,
+            "content_position_mobile": "center",
+            "content_alignment_mobile": "center",
+            "video_external_mobile": "",
+            "show_controls_on_video_mobile": false,
+            "enable_media_overlay_mobile": true,
+            "mobile_text_offset_y": 0
+          }
+        },
+        "slide_UxGwkV": {
+          "type": "slide",
+          "disabled": true,
+          "settings": {
+            "banner_layout": "hero-banner--full",
+            "color_scheme": "scheme-1",
+            "header_menu_text_color": "#ffffff",
+            "heading": "<p>Polaroid <br\/>600<\/p>",
+            "subheading": "",
+            "subheading_link": "",
+            "text": "<p>Square. In a good way<\/p>",
+            "button_link_1": "shopify:\/\/collections\/cameras-polaroid-600",
+            "button_link_1_type": "button",
+            "button_label_1": "Shop Polaroid",
+            "button_style_1": "button--filled",
+            "button_link_2": "\/",
+            "button_label_2": "",
+            "button_style_2": "button--outlined",
+            "content_position": "end",
+            "content_alignment": "end",
+            "image": "shopify:\/\/shop_images\/polaroidwide.png",
+            "video_external": "",
+            "show_controls_on_video": false,
+            "enable_media_overlay_desktop": true,
+            "content_position_mobile": "center",
+            "content_alignment_mobile": "center",
+            "image_mobile": "shopify:\/\/shop_images\/polaroidmobilenew.png",
+            "video_external_mobile": "",
+            "show_controls_on_video_mobile": false,
+            "enable_media_overlay_mobile": true,
+            "mobile_text_offset_y": 0
+          }
+        }
+      },
+      "block_order": [
+        "slide_RMziqq",
+        "slide_wUn8BY",
+        "slide_L8JXgj",
+        "slide_Dinr9L",
+        "slide_dXBLUX",
+        "slide_zn4jpc",
+        "slide_dW7QHW",
+        "slide_UxGwkV"
+      ],
+      "custom_css": [],
+      "settings": {
+        "enable_transparent_header": true,
+        "slider_height_desktop": 75,
+        "slider_height_mobile": 85,
+        "slideshow_autoplay_interval": 5,
+        "show_slideshow_navigation": true,
+        "slideshow_navigation_position": "hero__swiper-buttons--sides",
+        "color_scheme_arrows": "scheme-1",
+        "show_slideshow_pagination": true,
+        "slideshow_pagination_style": "style-2",
+        "floating_bar": false
+      }
+    },
+    "fixed_bfc_trust_bar_QrUJTK": {
+      "type": "FIXED-bfc-trust-bar",
+      "blocks": {
+        "trust_bar_REHQJV": {
+          "type": "trust_bar",
+          "settings": {
+            "background_color": "#525741",
+            "stat_color": "#f4a027",
+            "vertical_padding": 8,
+            "icon_1": "camera",
+            "stat_1": "25,000+",
+            "label_1": "Cameras Restored",
+            "icon_2": "warranty",
+            "stat_2": "3–6 Month",
+            "label_2": "Warranty on Every Camera",
+            "icon_3": "film",
+            "stat_3": "Refurbished & Tested",
+            "label_3": "Before Every Sale",
+            "icon_4": "location",
+            "stat_4": "Open Daily 11-8",
+            "label_4": "855 Grand St Brooklyn, NYC"
+          }
+        }
+      },
+      "block_order": [
+        "trust_bar_REHQJV"
+      ],
+      "name": "BFC Trust Bar",
+      "settings": {
+        "horizontal_padding": 24,
+        "header_font_weight": "600",
+        "body_font_weight": "400",
+        "body_font_size": 16,
+        "body_font_size_small": 12,
+        "text_color": "#111111",
+        "background_color": "#f7f4f0",
+        "heading_size_preset": "default",
+        "header_line_height": "1.2",
+        "header_letter_spacing": 0,
+        "heading_color": "#111111",
+        "body_line_height": "1.5",
+        "body_letter_spacing": 0,
+        "section_padding_top": 0,
+        "section_padding_bottom": 0,
+        "accent_color": "#e36e15",
+        "secondary_text_color": "#82906b",
+        "item_title_font": "poppins_n5"
+      }
+    },
+    "fixed_bfc_developing_membership_cta_DjALEd": {
+      "type": "FIXED-bfc-developing-membership-cta",
+      "blocks": {
+        "developing_membership_cta_cmB3QV": {
+          "type": "developing_membership_cta",
+          "settings": {
+            "eyebrow": "",
+            "heading": "Develop from anywhere. Save every month.",
+            "body": "Mail in your rolls from anywhere in the US. Members get discounted developing, free scans, and priority turnaround — month after month.",
+            "calc_heading": "See what you'd save",
+            "rolls_label": "Rolls developed per month",
+            "rolls_unit": "rolls",
+            "slider_min": 1,
+            "slider_max": 12,
+            "slider_default": 4,
+            "without_label": "Without membership",
+            "without_note": "per month",
+            "with_label": "With membership",
+            "with_note": "per month",
+            "savings_prefix": "You save",
+            "savings_suffix": "per year with membership",
+            "per_roll_price": 18,
+            "membership_price_monthly": 45,
+            "membership_price_yearly": 513,
+            "rolls_included_monthly": 3,
+            "extra_roll_price": 16,
+            "cta_label": "Join the Membership",
+            "cta_url": "shopify:\/\/pages\/membership",
+            "cta2_label": "Learn more",
+            "cta2_url": "",
+            "fine_print": "Prices based on standard C-41 develop + scan. Extra rolls billed at member rate.",
+            "image": "shopify:\/\/shop_images\/Developing_Image_Leahy_15.jpg",
+            "media_aspect": "3 \/ 2",
+            "flush_media": true,
+            "flip_layout": false,
+            "bg": "#f7f4f0",
+            "fg": "#111111",
+            "accent": "#111111",
+            "border_color": "#dedad5",
+            "calc_bg": "#ffffff",
+            "padding_top": 24,
+            "padding_bottom": 24,
+            "side_padding_vw": 0,
+            "ignore_padding_mobile": false
+          }
+        }
+      },
+      "block_order": [
+        "developing_membership_cta_cmB3QV"
+      ],
+      "name": "BFC Developing Membership CTA",
+      "settings": {
+        "horizontal_padding": 24,
+        "header_font_weight": "400",
+        "body_font_weight": "400",
+        "body_font_size": 14,
+        "body_font_size_small": 12,
+        "text_color": "#111111",
+        "background_color": "#f7f4f0",
+        "heading_size_preset": "default",
+        "header_line_height": "1.2",
+        "header_letter_spacing": 0,
+        "heading_color": "#111111",
+        "body_line_height": "1.5",
+        "body_letter_spacing": 0,
+        "section_padding_top": 36,
+        "section_padding_bottom": 0,
+        "accent_color": "#e36e15",
+        "secondary_text_color": "#82906b",
+        "item_title_font": "poppins_n5"
+      }
+    },
+    "fixed_bfc_top_sellers_qYMXxr": {
+      "type": "FIXED-bfc-top-sellers",
+      "blocks": {
+        "top_sellers_e8xVCT": {
+          "type": "top_sellers",
+          "settings": {
+            "heading": "Top Sellers",
+            "subheading": "The cameras everyone's buying",
+            "collection": "cameras",
+            "products_limit": 12,
+            "show_vendor": false,
+            "show_custom_text": false,
+            "custom_text": "Custom text",
+            "custom_text_use_tags": false,
+            "custom_text_tag_1": "preorder, pre-order",
+            "custom_text_label_1": "Preorder",
+            "custom_text_tag_2": "exclusive, limited",
+            "custom_text_label_2": "Exclusive",
+            "custom_text_tag_3": "backorder, back-order",
+            "custom_text_label_3": "Backorder",
+            "show_stock": true,
+            "show_variant_count": false,
+            "show_price": true,
+            "show_quick_add": true,
+            "hide_oos": true,
+            "exclude_handles": "glitter-disposable",
+            "show_two_variant_adds": false,
+            "variant_add_label": "Add",
+            "enable_badges": true,
+            "badge_tag_1": "best seller, best-seller",
+            "badge_label_1": "Best Seller",
+            "badge_tag_2": "just arrived, new",
+            "badge_label_2": "Just Arrived",
+            "badge_tag_3": "limited, limited edition",
+            "badge_label_3": "Limited",
+            "show_view_all": true,
+            "view_all_label": "Shop all",
+            "show_arrows": true,
+            "edge_fade": true,
+            "square_corners": true,
+            "mobile_limit_enabled": false,
+            "mobile_show_count": 9,
+            "section_padding_y": 28,
+            "side_padding_vw": 0,
+            "ignore_padding_mobile": false,
+            "add_label": "Add"
+          }
+        }
+      },
+      "block_order": [
+        "top_sellers_e8xVCT"
+      ],
+      "name": "BFC Top Sellers",
+      "settings": {
+        "horizontal_padding": 24,
+        "header_font_weight": "400",
+        "body_font_weight": "400",
+        "body_font_size": 14,
+        "body_font_size_small": 12,
+        "text_color": "#111111",
+        "background_color": "#f7f4f0",
+        "heading_size_preset": "default",
+        "header_line_height": "1.2",
+        "header_letter_spacing": 0,
+        "heading_color": "#111111",
+        "body_line_height": "1.5",
+        "body_letter_spacing": 0,
+        "section_padding_top": 40,
+        "section_padding_bottom": 40,
+        "accent_color": "#e36e15",
+        "secondary_text_color": "#82906b",
+        "item_title_font": "poppins_n5"
+      }
+    },
+    "fixed_bfc_kit_builder_qL3Fdq": {
+      "type": "FIXED-bfc-kit-builder",
+      "blocks": {
+        "kit_addon_R4hfeh": {
+          "type": "kit_addon",
+          "settings": {
+            "addon_type": "strap",
+            "addon_film_format": "any",
+            "camera_types": "35mm",
+            "addon_recommended": true,
+            "addon_name": "Couch Strap",
+            "addon_sub": "",
+            "addon_product": "couch-camera-strap-psychedelic-sunset-hendrix",
+            "addon_variant_id": ""
+          }
+        },
+        "kit_addon_ATW8hy": {
+          "type": "kit_addon",
+          "settings": {
+            "addon_type": "strap",
+            "addon_film_format": "any",
+            "camera_types": "35mm",
+            "addon_recommended": true,
+            "addon_name": "Couch Strap",
+            "addon_sub": "",
+            "addon_product": "couch-camera-strap-cork-and-orange-flowers",
+            "addon_variant_id": ""
+          }
+        },
+        "kit_addon_aMArta": {
+          "type": "kit_addon",
+          "settings": {
+            "addon_type": "strap",
+            "addon_film_format": "any",
+            "camera_types": "35mm",
+            "addon_recommended": false,
+            "addon_name": "Couch Strap Seatbelot",
+            "addon_sub": "",
+            "addon_product": "couch-camera-strap-recycled-army-green-seatbelt",
+            "addon_variant_id": ""
+          }
+        },
+        "kit_addon_b94rJ3": {
+          "type": "kit_addon",
+          "settings": {
+            "addon_type": "strap",
+            "addon_film_format": "any",
+            "camera_types": "35mm",
+            "addon_recommended": false,
+            "addon_name": "Couch Strap Seatbelot",
+            "addon_sub": "",
+            "addon_product": "couch-camera-strap-recycled-industrial-silver-seatbelt",
+            "addon_variant_id": ""
+          }
+        },
+        "kit_addon_LEcgkb": {
+          "type": "kit_addon",
+          "settings": {
+            "addon_type": "film_color",
+            "addon_film_format": "any",
+            "camera_types": "35mm",
+            "addon_recommended": false,
+            "addon_name": "Kodak Gold 200",
+            "addon_sub": "",
+            "addon_product": "eastman-kodak-gold-200-color",
+            "addon_variant_id": ""
+          }
+        },
+        "kit_addon_6dDaG7": {
+          "type": "kit_addon",
+          "settings": {
+            "addon_type": "film_color",
+            "addon_film_format": "any",
+            "camera_types": "35mm",
+            "addon_recommended": false,
+            "addon_name": "HP5",
+            "addon_sub": "",
+            "addon_product": "ilford-hp5-400-35mm",
+            "addon_variant_id": ""
+          }
+        },
+        "kit_addon_aA9nwQ": {
+          "type": "kit_addon",
+          "settings": {
+            "addon_type": "film_color",
+            "addon_film_format": "any",
+            "camera_types": "35mm",
+            "addon_recommended": true,
+            "addon_name": "Portra 400",
+            "addon_sub": "",
+            "addon_product": "kodak-portra-400-35mm",
+            "addon_variant_id": ""
+          }
+        },
+        "kit_addon_RWGpMN": {
+          "type": "kit_addon",
+          "settings": {
+            "addon_type": "film_color",
+            "addon_film_format": "any",
+            "camera_types": "35mm",
+            "addon_recommended": false,
+            "addon_name": "Ultramax",
+            "addon_sub": "",
+            "addon_product": "eastman-kodak-ultramax-400-color",
+            "addon_variant_id": ""
+          }
+        },
+        "kit_addon_MntJqT": {
+          "type": "kit_addon",
+          "settings": {
+            "addon_type": "film_color",
+            "addon_film_format": "any",
+            "camera_types": "35mm",
+            "addon_recommended": true,
+            "addon_name": "Ultramax",
+            "addon_sub": "",
+            "addon_product": "cinestill-800t-120mm",
+            "addon_variant_id": ""
+          }
+        },
+        "kit_camera_CxUwqG": {
+          "type": "kit_camera",
+          "settings": {
+            "camera_type": "pol",
+            "camera_tag": "",
+            "camera_name": "Canon WP-1",
+            "camera_detail": "",
+            "camera_product": "",
+            "camera_fallback": ""
+          }
+        },
+        "kit_camera_6pKKTA": {
+          "type": "kit_camera",
+          "settings": {
+            "camera_type": "pol",
+            "camera_tag": "",
+            "camera_name": "Cool Cam Red",
+            "camera_detail": "Simple reliable box camera",
+            "camera_product": "polaroid-600-red-cool-cam",
+            "camera_fallback": ""
+          }
+        },
+        "kit_camera_MmzFTY": {
+          "type": "kit_camera",
+          "settings": {
+            "camera_type": "pol",
+            "camera_tag": "",
+            "camera_name": "SX-70",
+            "camera_detail": "Simple reliable box camera",
+            "camera_product": "polaroid-600-red-cool-cam",
+            "camera_fallback": ""
+          }
+        },
+        "kit_camera_Feh9GC": {
+          "type": "kit_camera",
+          "settings": {
+            "camera_type": "slr",
+            "camera_tag": "",
+            "camera_name": "Canon AE-1 Progran",
+            "camera_detail": "Manual & Program, versatile starter kit",
+            "camera_product": "canon-ae-1-program",
+            "camera_fallback": ""
+          }
+        },
+        "kit_camera_dimtJ8": {
+          "type": "kit_camera",
+          "settings": {
+            "camera_type": "slr",
+            "camera_tag": "",
+            "camera_name": "Pentax K1000",
+            "camera_detail": "Most famous beginner SLR. Fully refurbished.",
+            "camera_product": "pentax-k1000",
+            "camera_fallback": ""
+          }
+        },
+        "kit_camera_VwQC7T": {
+          "type": "kit_camera",
+          "settings": {
+            "camera_type": "slr",
+            "camera_tag": "",
+            "camera_name": "Minolta F90X",
+            "camera_detail": "A fully automatic auto focus SLR",
+            "camera_product": "nikon-f90x",
+            "camera_fallback": "minolta-x-7000"
+          }
+        },
+        "kit_camera_GcgRXp": {
+          "type": "kit_camera",
+          "settings": {
+            "camera_type": "ps",
+            "camera_tag": "",
+            "camera_name": "Canon WP-1",
+            "camera_detail": "Underwater, In the sand, take it on any adventure",
+            "camera_product": "canon-wp-1",
+            "camera_fallback": ""
+          }
+        },
+        "kit_camera_CQCWCg": {
+          "type": "kit_camera",
+          "settings": {
+            "camera_type": "ps",
+            "camera_tag": "",
+            "camera_name": "Minolta Hi-Matic",
+            "camera_detail": "Simple easy point & shoot with a strong flash",
+            "camera_product": "minolta-hi-matic-af2",
+            "camera_fallback": "olympus-stylus-zoom"
+          }
+        },
+        "kit_camera_rmAFiE": {
+          "type": "kit_camera",
+          "settings": {
+            "camera_type": "ps",
+            "camera_tag": "",
+            "camera_name": "Contax T",
+            "camera_detail": "For the best quality enjoy the superior unrivaled T* lens",
+            "camera_product": "t2",
+            "camera_fallback": "contax-tvs"
+          }
+        },
+        "kit_builder_mini_RpjRKc": {
+          "type": "kit_builder_mini",
+          "settings": {
+            "eyebrow": "Not sure what to get?",
+            "headline": "We'll pick your kit.",
+            "subtext": "Tell us how you want to shoot.",
+            "full_builder_url": "",
+            "seamless_mode": true,
+            "dev_credits_variant_id": "",
+            "dev_credits_price": "18.00",
+            "dev_credits_label": "Pre-buy developing credits",
+            "dev_credits_sub": "Normally $18 a roll — locked in cheaper here.",
+            "mem_eyebrow": "Film Developing Membership",
+            "mem_body": "Save on every roll with discounted developing.",
+            "mem_cta": "Learn about membership →",
+            "mem_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "kit_addon_R4hfeh",
+        "kit_addon_ATW8hy",
+        "kit_addon_aMArta",
+        "kit_addon_b94rJ3",
+        "kit_addon_LEcgkb",
+        "kit_addon_6dDaG7",
+        "kit_addon_aA9nwQ",
+        "kit_addon_RWGpMN",
+        "kit_addon_MntJqT",
+        "kit_camera_CxUwqG",
+        "kit_camera_6pKKTA",
+        "kit_camera_MmzFTY",
+        "kit_camera_Feh9GC",
+        "kit_camera_dimtJ8",
+        "kit_camera_VwQC7T",
+        "kit_camera_GcgRXp",
+        "kit_camera_CQCWCg",
+        "kit_camera_rmAFiE",
+        "kit_builder_mini_RpjRKc"
+      ],
+      "name": "BFC Kit Builder",
+      "settings": {
+        "horizontal_padding": 24,
+        "header_font_weight": "600",
+        "body_font_weight": "400",
+        "body_font_size": 16,
+        "body_font_size_small": 12,
+        "text_color": "#111111",
+        "background_color": "#f7f4f0",
+        "heading_size_preset": "default",
+        "header_line_height": "1.2",
+        "header_letter_spacing": 0,
+        "heading_color": "#111111",
+        "body_line_height": "1.5",
+        "body_letter_spacing": 0,
+        "section_padding_top": 40,
+        "section_padding_bottom": 40,
+        "accent_color": "#e36e15",
+        "secondary_text_color": "#82906b",
+        "item_title_font": "poppins_n5",
+        "polaroid_box_collection": "cameras-polaroid-600",
+        "polaroid_sx70_collection": "cameras-polaroid-sx-70",
+        "polaroid_600_film_collection": "",
+        "polaroid_sx70_film_collection": ""
+      }
+    },
+    "fixed_bfc_icon_menu_4rUY4i": {
+      "type": "FIXED-bfc-icon-menu",
+      "blocks": {
+        "icon_item_QBbmJV": {
+          "type": "icon_item",
+          "settings": {
+            "group_id": "icon-menu-1",
+            "product": "pentax-k1000-35mm-bundle",
+            "label": "",
+            "link": ""
+          }
+        },
+        "icon_item_7QHM4k": {
+          "type": "icon_item",
+          "settings": {
+            "group_id": "icon-menu-1",
+            "product": "canon-wp-2",
+            "label": "Wp-1",
+            "link": ""
+          }
+        },
+        "icon_item_rYxWRx": {
+          "type": "icon_item",
+          "settings": {
+            "group_id": "icon-menu-1",
+            "product": "canon-ae1-program-bundle",
+            "label": "Canon AE-1 Program",
+            "link": ""
+          }
+        },
+        "icon_item_Wnbjqr": {
+          "type": "icon_item",
+          "settings": {
+            "group_id": "icon-menu-1",
+            "product": "hello-kitty-bundle",
+            "label": "Hello Kitty",
+            "image": "shopify:\/\/shop_images\/hello_Kitty_Kit.png",
+            "link": ""
+          }
+        },
+        "icon_item_Gc7zEP": {
+          "type": "icon_item",
+          "settings": {
+            "group_id": "icon-menu-1",
+            "product": "cool-cam-red-bundle",
+            "label": "",
+            "link": ""
+          }
+        },
+        "icon_item_HWUVJM": {
+          "type": "icon_item",
+          "settings": {
+            "group_id": "icon-menu-1",
+            "product": "film-case-loaded-with-expired-film",
+            "label": "",
+            "link": ""
+          }
+        },
+        "icon_menu_qYdk4Y": {
+          "type": "icon_menu",
+          "settings": {
+            "group_id": "icon-menu-1",
+            "title": "Save on our favorite bundles",
+            "header_align": "left",
+            "columns_mobile": 3,
+            "columns_desktop": 6,
+            "item_gap": 16,
+            "image_shape": "rounded_square",
+            "square_corners": true,
+            "bg_color": "#f7f4f0",
+            "icon_bg_color": "#f7f4f0",
+            "text_color": "#111111",
+            "padding_top": 36,
+            "padding_bottom": 36,
+            "side_padding_vw": 0,
+            "ignore_padding_mobile": false
+          }
+        }
+      },
+      "block_order": [
+        "icon_item_QBbmJV",
+        "icon_item_7QHM4k",
+        "icon_item_rYxWRx",
+        "icon_item_Wnbjqr",
+        "icon_item_Gc7zEP",
+        "icon_item_HWUVJM",
+        "icon_menu_qYdk4Y"
+      ],
+      "name": "BFC Icon Menu",
+      "settings": {
+        "horizontal_padding": 24,
+        "header_font_weight": "400",
+        "body_font_weight": "400",
+        "body_font_size": 13,
+        "body_font_size_small": 12,
+        "text_color": "#111111",
+        "background_color": "#f7f4f0",
+        "heading_size_preset": "lg",
+        "header_line_height": "1.2",
+        "header_letter_spacing": 0,
+        "heading_color": "#111111",
+        "body_line_height": "1.5",
+        "body_letter_spacing": 0,
+        "section_padding_top": 0,
+        "section_padding_bottom": 40,
+        "accent_color": "#e36e15",
+        "secondary_text_color": "#82906b",
+        "item_title_font": "poppins_n5"
+      }
+    },
+    "fixed_bfc_holiday_guides_YVbMD9": {
+      "type": "FIXED-bfc-holiday-guides",
+      "blocks": {
+        "holiday_guides_wpDReU": {
+          "type": "holiday_guides",
+          "settings": {
+            "group_id": "auto",
+            "eyebrow": "Refurbished & Warrantied",
+            "heading": "Super 8 Cameras",
+            "body": "<p>We’re excited to offer a full lineup of Super 8 cameras you can actually rely on. Every camera is fully restored, film-tested, and backed by a 6 month warranty.<\/p>",
+            "show_product_grid": true,
+            "product_collection": "8mm",
+            "products_to_show": 2,
+            "products": [],
+            "use_inline_links": true,
+            "link_label_1": "View Entire Collection",
+            "link_url_1": "shopify:\/\/collections\/8mm",
+            "link_label_2": "",
+            "link_url_2": "shopify:\/\/collections\/all",
+            "link_label_3": "",
+            "link_url_3": "shopify:\/\/collections\/all",
+            "cta_label": "Shop the guides",
+            "cta_link": "",
+            "image": "shopify:\/\/shop_images\/03.jpg",
+            "media_layout": "single",
+            "slide_interval": 5,
+            "slide_show_dots": true,
+            "slide_autoplay": true,
+            "lock_media_fit": false,
+            "media_ratio": "1.25",
+            "media_radius": 0,
+            "square_corners": false,
+            "gap": 36,
+            "full_width_content": true,
+            "keep_side_by_side_mobile": true,
+            "mobile_media_ratio": "third",
+            "mobile_grid_rows": 3,
+            "bg_color": "#f7f4f0",
+            "text_color": "#111111",
+            "border_color": "#e6e6e6",
+            "padding_top": 48,
+            "padding_bottom": 48,
+            "side_padding_vw": 0,
+            "ignore_padding_mobile": false
+          }
+        }
+      },
+      "block_order": [
+        "holiday_guides_wpDReU"
+      ],
+      "name": "BFC Holiday Guides",
+      "settings": {
+        "horizontal_padding": 24,
+        "header_font_weight": "400",
+        "body_font_weight": "400",
+        "body_font_size": 14,
+        "body_font_size_small": 12,
+        "text_color": "#111111",
+        "background_color": "#f7f4f0",
+        "heading_size_preset": "lg",
+        "header_line_height": "1.2",
+        "header_letter_spacing": 0,
+        "heading_color": "#111111",
+        "body_line_height": "1.5",
+        "body_letter_spacing": 0,
+        "section_padding_top": 12,
+        "section_padding_bottom": 40,
+        "accent_color": "#e36e15",
+        "secondary_text_color": "#82906b",
+        "item_title_font": "poppins_n5"
+      }
+    },
+    "fixed_bfc_holiday_guides_HieyhT": {
+      "type": "FIXED-bfc-holiday-guides",
+      "blocks": {
+        "holiday_guides_VB8L6M": {
+          "type": "holiday_guides",
+          "settings": {
+            "group_id": "auto",
+            "eyebrow": "Instant Optics",
+            "heading": "Make your polaroid magical",
+            "body": "<p>Quick picks for different shooting styles. Browse a guide, grab the essentials, and go make something.<\/p>",
+            "show_product_grid": true,
+            "product_collection": "",
+            "products_to_show": 8,
+            "products": [
+              "637-adapter",
+              "sx-37-adapter"
+            ],
+            "use_inline_links": true,
+            "link_label_1": "Shop Collection",
+            "link_url_1": "shopify:\/\/collections\/all",
+            "link_label_2": "",
+            "link_url_2": "shopify:\/\/collections\/all",
+            "link_label_3": "",
+            "link_url_3": "shopify:\/\/collections\/all",
+            "cta_label": "Shop the guides",
+            "cta_link": "",
+            "media_layout": "grid",
+            "slide_interval": 5,
+            "slide_show_dots": true,
+            "slide_autoplay": true,
+            "image_grid_1": "shopify:\/\/shop_images\/PolaroidexampleLens.png",
+            "image_grid_2": "shopify:\/\/shop_images\/examplepolaroid3.png",
+            "image_grid_3": "shopify:\/\/shop_images\/polaroidexamplens1.png",
+            "image_grid_4": "shopify:\/\/shop_images\/examplepolaroidlens2.png",
+            "image_grid_5": "shopify:\/\/shop_images\/polaroid_example_4.png",
+            "image_grid_6": "shopify:\/\/shop_images\/polaroidexample6.png",
+            "lock_media_fit": true,
+            "media_ratio": "1.25",
+            "media_radius": 0,
+            "square_corners": false,
+            "gap": 36,
+            "full_width_content": true,
+            "keep_side_by_side_mobile": true,
+            "mobile_media_ratio": "third",
+            "mobile_grid_rows": 3,
+            "bg_color": "#525741",
+            "text_color": "#ffffff",
+            "border_color": "#e6e6e6",
+            "padding_top": 48,
+            "padding_bottom": 48,
+            "side_padding_vw": 0,
+            "ignore_padding_mobile": false
+          }
+        }
+      },
+      "block_order": [
+        "holiday_guides_VB8L6M"
+      ],
+      "name": "BFC Holiday Guides",
+      "settings": {
+        "horizontal_padding": 24,
+        "header_font_weight": "400",
+        "body_font_weight": "400",
+        "body_font_size": 16,
+        "body_font_size_small": 12,
+        "text_color": "#111111",
+        "background_color": "#f7f4f0",
+        "heading_size_preset": "lg",
+        "header_line_height": "1.05",
+        "header_letter_spacing": 0,
+        "heading_color": "#111111",
+        "body_line_height": "1.5",
+        "body_letter_spacing": 0,
+        "section_padding_top": 40,
+        "section_padding_bottom": 40,
+        "accent_color": "#e36e15",
+        "secondary_text_color": "#82906b",
+        "item_title_font": "poppins_n5"
+      }
+    },
+    "fixed_bfc_category_strip_GjLLG7": {
+      "type": "FIXED-bfc-category-strip",
+      "blocks": {
+        "cover_item_xL7jVi": {
+          "type": "cover_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Yashica_Sound_20XL_1.png",
+            "title": "Super 8",
+            "subtitle": "",
+            "url": "shopify:\/\/collections\/8mm",
+            "badge": ""
+          }
+        },
+        "cover_item_pMPpz3": {
+          "type": "cover_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Canon_AE-1_Program_Black_4.png",
+            "title": "35mm",
+            "subtitle": "",
+            "url": "shopify:\/\/collections\/35mm-cameras",
+            "badge": ""
+          }
+        },
+        "cover_item_yLCCCG": {
+          "type": "cover_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Yashica_A_Grey_4.png",
+            "title": "Medium Format",
+            "subtitle": "",
+            "url": "shopify:\/\/collections\/medium-format-cameras",
+            "badge": ""
+          }
+        },
+        "cover_item_bYQBpH": {
+          "type": "cover_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Barbie_600_ba446c6a-6dfe-4c44-823b-9c87301cbe01.png",
+            "title": "Polaroid 600",
+            "subtitle": "",
+            "url": "shopify:\/\/collections\/cameras-polaroid-600",
+            "badge": ""
+          }
+        },
+        "cover_item_mrHgYD": {
+          "type": "cover_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/35mm_Group_1901.png",
+            "title": "35mm",
+            "subtitle": "",
+            "url": "shopify:\/\/collections\/35mm-film",
+            "badge": ""
+          }
+        },
+        "cover_item_89qmHK": {
+          "type": "cover_item",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Instant_Group_1919.png",
+            "title": "Instant Film",
+            "subtitle": "",
+            "url": "shopify:\/\/collections\/film-instant",
+            "badge": ""
+          }
+        }
+      },
+      "block_order": [
+        "cover_item_xL7jVi",
+        "cover_item_pMPpz3",
+        "cover_item_yLCCCG",
+        "cover_item_bYQBpH",
+        "cover_item_mrHgYD",
+        "cover_item_89qmHK"
+      ],
+      "custom_css": [
+        "h2 {}"
+      ],
+      "name": "BFC Category Strip",
+      "settings": {
+        "eyebrow": "",
+        "heading": "",
+        "subheading": "",
+        "header_align": "left",
+        "columns_mobile": 2,
+        "columns_desktop": 6,
+        "grid_gap": 16,
+        "media_aspect": "1 \/ 1",
+        "media_radius": 8,
+        "square_corners": false,
+        "media_placeholder_color": "#e3ddda",
+        "text_align": "left",
+        "horizontal_padding": 24,
+        "header_font_weight": "400",
+        "body_font_weight": "400",
+        "body_font_size": 14,
+        "body_font_size_small": 11,
+        "heading_size_preset": "default",
+        "header_line_height": "1.2",
+        "header_letter_spacing": 0,
+        "heading_color": "#111111",
+        "body_line_height": "1.5",
+        "body_letter_spacing": 0,
+        "item_title_font": "poppins_n5",
+        "section_padding_top": 40,
+        "section_padding_bottom": 40,
+        "text_color": "#111111",
+        "background_color": "#f7f4f0",
+        "accent_color": "#e36e15",
+        "secondary_text_color": "#82906b"
+      }
+    },
+    "bfc_reviews_carousel_QW6LbR": {
+      "type": "bfc-reviews-carousel",
+      "name": "BFC Reviews Carousel",
+      "settings": {
+        "heading": "What people are saying",
+        "cards_visible": 3,
+        "max_reviews": 30,
+        "horizontal_padding": 24,
+        "heading_size_preset": "default",
+        "header_font_weight": "300",
+        "text_color": "#111111",
+        "background_color": "#f7f4f0",
+        "card_bg": "#ffffff",
+        "star_color": "#e36e15",
+        "section_padding_top": 48,
+        "section_padding_bottom": 48
+      }
+    },
+    "fixed_bfc_holiday_guides_NttHwH": {
+      "type": "FIXED-bfc-holiday-guides",
+      "blocks": {
+        "holiday_guides_cbRCCR": {
+          "type": "holiday_guides",
+          "settings": {
+            "group_id": "auto",
+            "eyebrow": "Refurbished & Warrantied",
+            "heading": "Hasselblads",
+            "body": "<p>One of the only stores in the US selling fully refubrished guaranteed to work Hasselblads. All include 6 months warranty.<\/p>",
+            "show_product_grid": true,
+            "product_collection": "hasselblads",
+            "products_to_show": 4,
+            "products": [],
+            "use_inline_links": true,
+            "link_label_1": "Shop Collection",
+            "link_url_1": "shopify:\/\/collections\/hasselblads",
+            "link_label_2": "",
+            "link_url_2": "shopify:\/\/collections\/all",
+            "link_label_3": "",
+            "link_url_3": "shopify:\/\/collections\/all",
+            "cta_label": "Shop the guides",
+            "cta_link": "",
+            "image": "shopify:\/\/shop_images\/Hasselblad_Jewel_Tones-4058.png",
+            "media_layout": "slideshow",
+            "slide_1": "shopify:\/\/shop_images\/Hasselblad_Jewel_Tones-4072.png",
+            "slide_2": "shopify:\/\/shop_images\/Hasselblad_Jewel_Tones-3982.png",
+            "slide_3": "shopify:\/\/shop_images\/Hasselblad_Jewel_Tones-4055.png",
+            "slide_3_mobile": "shopify:\/\/shop_images\/Hasselblad_Jewel_Tones-4053.png",
+            "slide_4": "shopify:\/\/shop_images\/Hasselblad_Jewel_Tones-4052.png",
+            "slide_4_mobile": "shopify:\/\/shop_images\/Hasselblad_Jewel_Tones-4052.png",
+            "slide_5": "shopify:\/\/shop_images\/Hasselblad_Jewel_Tones-4067.png",
+            "slide_5_mobile": "shopify:\/\/shop_images\/Hasselblad_Jewel_Tones-4069.png",
+            "slide_interval": 5,
+            "slide_show_dots": true,
+            "slide_autoplay": true,
+            "image_grid_1": "shopify:\/\/shop_images\/Hasselblad_Jewel_Tones-4070.png",
+            "image_grid_2": "shopify:\/\/shop_images\/Hasselblad_Jewel_Tones-3991.png",
+            "lock_media_fit": false,
+            "media_ratio": "1.5",
+            "media_radius": 0,
+            "square_corners": false,
+            "gap": 36,
+            "full_width_content": true,
+            "keep_side_by_side_mobile": false,
+            "mobile_media_ratio": "third",
+            "mobile_grid_rows": 3,
+            "bg_color": "#f7f4f0",
+            "text_color": "#111111",
+            "border_color": "#e6e6e6",
+            "padding_top": 48,
+            "padding_bottom": 48,
+            "side_padding_vw": 0,
+            "ignore_padding_mobile": false
+          }
+        }
+      },
+      "block_order": [
+        "holiday_guides_cbRCCR"
+      ],
+      "name": "BFC Holiday Guides",
+      "settings": {
+        "horizontal_padding": 24,
+        "header_font_weight": "300",
+        "body_font_weight": "400",
+        "body_font_size": 16,
+        "body_font_size_small": 12,
+        "text_color": "#111111",
+        "background_color": "#f7f4f0",
+        "heading_size_preset": "lg",
+        "header_line_height": "1.05",
+        "header_letter_spacing": 0,
+        "heading_color": "#111111",
+        "body_line_height": "1.5",
+        "body_letter_spacing": 0,
+        "section_padding_top": 40,
+        "section_padding_bottom": 40,
+        "accent_color": "#e36e15",
+        "secondary_text_color": "#82906b",
+        "item_title_font": "poppins_n5"
+      }
+    },
+    "hero_banner_TBbgPU": {
+      "type": "hero-banner",
+      "blocks": {
+        "slide_X79abx": {
+          "type": "slide",
+          "settings": {
+            "banner_layout": "hero-banner--full",
+            "color_scheme": "scheme-cff46e11-510f-466f-8591-6bd732f3a314",
+            "header_menu_text_color": "#ffffff",
+            "heading": "<h2><em><strong>Get Your Camera<\/strong><\/em><\/h2><h2><em><strong> Repaired Now<\/strong><\/em><\/h2>",
+            "subheading": "",
+            "subheading_link": "",
+            "text": "",
+            "button_link_1": "shopify:\/\/products\/35mm-and-medium-format-repair",
+            "button_link_1_type": "button",
+            "button_label_1": "Start Your Repair",
+            "button_style_1": "button--filled",
+            "button_link_2": "\/",
+            "button_label_2": "",
+            "button_style_2": "button--outlined",
+            "content_position": "end",
+            "content_alignment": "start",
+            "image": "shopify:\/\/shop_images\/REPAIRS_DESKTOP.jpg",
+            "video_external": "",
+            "show_controls_on_video": false,
+            "enable_media_overlay_desktop": false,
+            "content_position_mobile": "end",
+            "content_alignment_mobile": "center",
+            "image_mobile": "shopify:\/\/shop_images\/REPAIRS_MOBILE.jpg",
+            "video_external_mobile": "",
+            "show_controls_on_video_mobile": false,
+            "enable_media_overlay_mobile": true,
+            "mobile_text_offset_y": 0
+          }
+        }
+      },
+      "block_order": [
+        "slide_X79abx"
+      ],
+      "disabled": true,
+      "name": "t:sections.hero-banner.name",
+      "settings": {
+        "enable_transparent_header": true,
+        "slider_height_desktop": 70,
+        "slider_height_mobile": 90,
+        "slideshow_autoplay_interval": 6,
+        "show_slideshow_navigation": true,
+        "slideshow_navigation_position": "hero__swiper-buttons--start",
+        "color_scheme_arrows": "scheme-cff46e11-510f-466f-8591-6bd732f3a314",
+        "show_slideshow_pagination": true,
+        "slideshow_pagination_style": "style-1",
+        "floating_bar": false
+      }
+    },
+    "bfc_repair_hero_UFMb9f": {
+      "type": "bfc-repair-hero",
+      "name": "Repair Hero",
+      "settings": {
+        "heading_line_1": "Get Your Camera",
+        "heading_accent": "Repaired",
+        "heading_line_2": "Now",
+        "tagline": "Expert service from our in-house technicians",
+        "button_text": "START YOUR REPAIR",
+        "button_link": "shopify:\/\/pages\/film-camera-repairs-1",
+        "image": "shopify:\/\/shop_images\/Deconstructed_K1000_TP.png",
+        "image_offset": -9,
+        "section_height": 520,
+        "show_accent_line": true
+      }
+    },
+    "fixed_bfc_new_arrivals_ejGpXn": {
+      "type": "FIXED-bfc-new-arrivals",
+      "blocks": {
+        "new_arrivals_wzq7xP": {
+          "type": "new_arrivals",
+          "settings": {
+            "group_id": "new-arrivals-1",
+            "anchor_id": "new-arrivals",
+            "heading": "New Arrivals",
+            "text": "",
+            "header_text_align": "left",
+            "text_align": "center",
+            "text_max_width": 820,
+            "header_max_width": 820,
+            "manual_products": [],
+            "collection": "all",
+            "use_newest_from_collection": true,
+            "full_rows_only": false,
+            "full_rows_columns_desktop": 5,
+            "disable_see_more": false,
+            "items_to_show": 12,
+            "initial_items": 12,
+            "show_more_label": "Display more",
+            "collapse_label": "Collapse",
+            "show_back_to_top": false,
+            "back_to_top_label": "Back to top",
+            "info_display": "hover",
+            "background_color": "#f7f4f0",
+            "text_color": "#1c1c1c",
+            "padding_top": 40,
+            "padding_bottom": 40,
+            "side_padding_vw": 0,
+            "ignore_padding_mobile": false,
+            "product_radius": 8,
+            "square_corners": false,
+            "button_text": "See All",
+            "button_link": "shopify:\/\/collections\/all"
+          }
+        }
+      },
+      "block_order": [
+        "new_arrivals_wzq7xP"
+      ],
+      "name": "BFC New Arrivals",
+      "settings": {
+        "horizontal_padding": 24,
+        "header_font_weight": "500",
+        "body_font_weight": "400",
+        "body_font_size": 16,
+        "body_font_size_small": 12,
+        "text_color": "#111111",
+        "background_color": "#f7f4f0",
+        "heading_size_preset": "default",
+        "header_line_height": "1.2",
+        "header_letter_spacing": 0,
+        "heading_color": "#111111",
+        "body_line_height": "1.5",
+        "body_letter_spacing": 0,
+        "section_padding_top": 40,
+        "section_padding_bottom": 40,
+        "accent_color": "#e36e15",
+        "secondary_text_color": "#82906b",
+        "item_title_font": "poppins_n5"
+      }
+    }
+  },
+  "order": [
+    "hero_banner_FL7KzB",
+    "fixed_bfc_trust_bar_QrUJTK",
+    "fixed_bfc_developing_membership_cta_DjALEd",
+    "fixed_bfc_top_sellers_qYMXxr",
+    "fixed_bfc_kit_builder_qL3Fdq",
+    "fixed_bfc_icon_menu_4rUY4i",
+    "fixed_bfc_holiday_guides_YVbMD9",
+    "fixed_bfc_holiday_guides_HieyhT",
+    "fixed_bfc_category_strip_GjLLG7",
+    "bfc_reviews_carousel_QW6LbR",
+    "fixed_bfc_holiday_guides_NttHwH",
+    "hero_banner_TBbgPU",
+    "bfc_repair_hero_UFMb9f",
+    "fixed_bfc_new_arrivals_ejGpXn"
+  ]
+}

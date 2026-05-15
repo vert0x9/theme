@@ -1,0 +1,179 @@
+{%- comment -%}
+  BFC PDP Lightbox — bfc-pdp-lightbox.liquid
+  Usage: {% render 'bfc-pdp-lightbox' %}
+  
+  Click any slide image to open fullscreen. Pinch-zoom on mobile, scroll-zoom on desktop.
+  Automatically hooks into .bfc4-slide img, .sx-slide img, .bfc4f-slide img
+{%- endcomment -%}
+
+<div class="bfc-lb-overlay" id="bfc-lb-overlay" onclick="bfcLbClose()">
+  <button class="bfc-lb-close" onclick="bfcLbClose()" aria-label="Close">&times;</button>
+  <div class="bfc-lb-wrap" onclick="event.stopPropagation()">
+    <img class="bfc-lb-img" id="bfc-lb-img" src="" alt="" draggable="false"/>
+  </div>
+  <button class="bfc-lb-prev" id="bfc-lb-prev" onclick="event.stopPropagation();bfcLbNav(-1)" aria-label="Previous">&lsaquo;</button>
+  <button class="bfc-lb-next" id="bfc-lb-next" onclick="event.stopPropagation();bfcLbNav(1)" aria-label="Next">&rsaquo;</button>
+</div>
+
+<style>
+.bfc4-slide img, .sx-slide img, .bfc4f-slide img,
+.bfc4-slide picture img { cursor: zoom-in; }
+
+.bfc-lb-overlay {
+  position: fixed; inset: 0; z-index: 999999;
+  background: rgba(0,0,0,0.92);
+  display: none; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.2s ease;
+}
+.bfc-lb-overlay.is-open { display: flex; opacity: 1; }
+.bfc-lb-close {
+  position: absolute; top: 16px; right: 16px; z-index: 3;
+  background: none; border: none; color: rgba(255,255,255,0.7);
+  font-size: 32px; cursor: pointer; padding: 8px; line-height: 1;
+  transition: color 0.15s;
+}
+.bfc-lb-close:hover { color: #fff; }
+.bfc-lb-wrap {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; touch-action: pinch-zoom;
+}
+.bfc-lb-img {
+  max-width: 92vw; max-height: 92vh;
+  object-fit: contain;
+  transform-origin: center center;
+  transition: transform 0.15s ease;
+  user-select: none; -webkit-user-select: none;
+}
+.bfc-lb-prev, .bfc-lb-next {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+  background: rgba(255,255,255,0.08); border: none;
+  color: rgba(255,255,255,0.6); font-size: 36px;
+  width: 48px; height: 64px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+.bfc-lb-prev:hover, .bfc-lb-next:hover { background: rgba(255,255,255,0.15); color: #fff; }
+.bfc-lb-prev { left: 0; }
+.bfc-lb-next { right: 0; }
+@media (max-width: 600px) {
+  .bfc-lb-prev, .bfc-lb-next { display: none; }
+}
+</style>
+
+<script>
+(function(){
+  var overlay = document.getElementById('bfc-lb-overlay');
+  var lbImg   = document.getElementById('bfc-lb-img');
+  var srcs    = [];
+  var idx     = 0;
+  var scale   = 1;
+
+  /* Collect all slide images */
+  function collectSrcs() {
+    srcs = [];
+    document.querySelectorAll('.bfc4-slide img, .bfc4-slide picture img, .sx-slide img, .bfc4f-slide img').forEach(function(img) {
+      /* Get highest-res srcset or fallback to src */
+      var best = img.src;
+      if (img.srcset) {
+        var parts = img.srcset.split(',');
+        best = parts[parts.length - 1].trim().split(' ')[0];
+      }
+      /* Upgrade to 1800w if it's a Shopify CDN URL */
+      if (best.indexOf('cdn.shopify') > -1) {
+        best = best.replace(/width=\d+/, 'width=1800');
+      }
+      srcs.push(best);
+    });
+  }
+
+  /* Open */
+  window.bfcLbOpen = function(imgEl) {
+    collectSrcs();
+    var src = imgEl.src;
+    /* Find matching index */
+    idx = 0;
+    for (var i = 0; i < srcs.length; i++) {
+      if (src.indexOf(srcs[i].split('?')[0].slice(-40)) > -1 || srcs[i].indexOf(src.split('?')[0].slice(-40)) > -1) {
+        idx = i; break;
+      }
+    }
+    show();
+    overlay.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    scale = 1;
+    lbImg.style.transform = 'scale(1)';
+  };
+
+  /* Close */
+  window.bfcLbClose = function() {
+    overlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+    scale = 1;
+    lbImg.style.transform = 'scale(1)';
+  };
+
+  /* Navigate */
+  window.bfcLbNav = function(dir) {
+    idx = (idx + dir + srcs.length) % srcs.length;
+    scale = 1;
+    lbImg.style.transform = 'scale(1)';
+    show();
+  };
+
+  function show() {
+    if (srcs[idx]) lbImg.src = srcs[idx];
+    document.getElementById('bfc-lb-prev').style.visibility = srcs.length > 1 ? 'visible' : 'hidden';
+    document.getElementById('bfc-lb-next').style.visibility = srcs.length > 1 ? 'visible' : 'hidden';
+  }
+
+  /* Scroll to zoom (desktop) */
+  overlay.addEventListener('wheel', function(e) {
+    e.preventDefault();
+    scale += e.deltaY < 0 ? 0.25 : -0.25;
+    scale = Math.max(1, Math.min(5, scale));
+    lbImg.style.transform = 'scale(' + scale + ')';
+  }, { passive: false });
+
+  /* Keyboard */
+  document.addEventListener('keydown', function(e) {
+    if (!overlay.classList.contains('is-open')) return;
+    if (e.key === 'Escape') bfcLbClose();
+    if (e.key === 'ArrowLeft') bfcLbNav(-1);
+    if (e.key === 'ArrowRight') bfcLbNav(1);
+  });
+
+  /* Double-tap to zoom on mobile */
+  var lastTap = 0;
+  lbImg.addEventListener('click', function(e) {
+    var now = Date.now();
+    if (now - lastTap < 300) {
+      scale = scale > 1 ? 1 : 2.5;
+      lbImg.style.transform = 'scale(' + scale + ')';
+    }
+    lastTap = now;
+  });
+
+  /* Attach click handlers to all slide images */
+  document.addEventListener('click', function(e) {
+    var img = e.target;
+    if (img.tagName !== 'IMG') return;
+    var slide = img.closest('.bfc4-slide, .sx-slide, .bfc4f-slide');
+    if (!slide) return;
+    e.preventDefault();
+    bfcLbOpen(img);
+  });
+
+  /* Swipe nav on mobile inside lightbox */
+  var touchStartX = 0;
+  overlay.addEventListener('touchstart', function(e) {
+    if (scale > 1) return;
+    touchStartX = e.touches[0].clientX;
+  }, { passive: true });
+  overlay.addEventListener('touchend', function(e) {
+    if (scale > 1) return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 50) bfcLbNav(dx < 0 ? 1 : -1);
+  });
+})();
+</script>

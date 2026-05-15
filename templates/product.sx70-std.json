@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "bfc-pdp-sx70-std",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

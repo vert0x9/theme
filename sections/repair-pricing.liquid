@@ -1,0 +1,1338 @@
+{% comment %}
+  BFC Page Builder Section
+  Drop into: sections/bfc-page-builder.liquid
+  Add to a page template via: templates/page.bfc-builder.json
+  Supports blocks: hero, text_image, richtext, steps, features, pricing, faq, banner, image_block, divider, logos, testimonials
+{% endcomment %}
+
+{%- style -%}
+  :root {
+    --bfc-bg:        #f0ede6;
+    --bfc-surface:   #f7f5f0;
+    --bfc-border:    rgba(0,0,0,0.12);
+    --bfc-text:      #1a1f2e;
+    --bfc-muted:     #6b7280;
+    --bfc-accent:    #d4763b;
+    --bfc-accent-h:  #bf5f28;
+    --bfc-font-head: 'EB Garamond', serif;
+    --bfc-font-body: 'Sora', sans-serif;
+    --bfc-font-ui:   'Poppins', sans-serif;
+  }
+
+  /* ── Google Fonts ── */
+  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Sora:wght@400;600&family=Poppins:wght@400;600&display=swap');
+
+  /* ── Reset for section ── */
+  .bfc-section *, .bfc-section *::before, .bfc-section *::after {
+    box-sizing: border-box;
+  }
+
+  .bfc-section {
+    background: var(--bfc-bg);
+    color: var(--bfc-text);
+    font-family: var(--bfc-font-body);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ════════════════════════════════════════
+     HERO
+  ════════════════════════════════════════ */
+  .bfc-hero {
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 40px;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .bfc-hero h1 {
+    font-family: var(--bfc-font-head);
+    font-size: clamp(32px, 5vw, 64px);
+    font-weight: 500;
+    color: #fff;
+    font-style: italic;
+    line-height: 1.1;
+    margin: 0;
+  }
+
+  .bfc-hero p {
+    color: rgba(255,255,255,0.65);
+    font-size: 16px;
+    max-width: 520px;
+    margin: 0;
+  }
+
+  .bfc-btn {
+    display: inline-block;
+    font-family: var(--bfc-font-ui);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 13px 32px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 160ms ease;
+    border: none;
+  }
+
+  .bfc-hero .bfc-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.45);
+    color: #fff;
+  }
+
+  .bfc-hero .bfc-btn:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: #fff;
+    color: #fff;
+  }
+
+  /* ════════════════════════════════════════
+     TEXT + IMAGE
+  ════════════════════════════════════════ */
+  .bfc-text-image {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 320px;
+  }
+
+  .bfc-text-image .bfc-text-side {
+    padding: 56px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .bfc-text-image .bfc-text-side h2 {
+    font-family: var(--bfc-font-head);
+    font-size: 32px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .bfc-text-image .bfc-text-side p {
+    color: var(--bfc-muted);
+    font-size: 14px;
+    line-height: 1.8;
+    margin: 0;
+  }
+
+  .bfc-text-image .bfc-text-side .bfc-btn {
+    align-self: flex-start;
+    background: var(--bfc-accent);
+    color: #fff;
+    padding: 11px 26px;
+  }
+
+  .bfc-text-image .bfc-text-side .bfc-btn:hover {
+    background: var(--bfc-accent-h);
+    color: #fff;
+  }
+
+  .bfc-text-image .bfc-img-side {
+    position: relative;
+    overflow: hidden;
+    background: #ddd8ce;
+    min-height: 320px;
+  }
+
+  .bfc-text-image .bfc-img-side img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    position: absolute;
+    inset: 0;
+  }
+
+  @media (max-width: 768px) {
+    .bfc-text-image {
+      grid-template-columns: 1fr;
+    }
+    .bfc-text-image .bfc-img-side {
+      min-height: 240px;
+      position: relative;
+    }
+    .bfc-text-image .bfc-text-side {
+      padding: 36px 24px;
+    }
+    .bfc-text-image.img-left .bfc-img-side { order: -1; }
+  }
+
+  /* ════════════════════════════════════════
+     RICH TEXT
+  ════════════════════════════════════════ */
+  .bfc-richtext {
+    padding: 56px 40px;
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .bfc-richtext.centered {
+    margin: 0 auto;
+    text-align: center;
+    align-items: center;
+  }
+
+  .bfc-richtext h2 {
+    font-family: var(--bfc-font-head);
+    font-size: 32px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .bfc-richtext p {
+    font-size: 15px;
+    color: var(--bfc-muted);
+    line-height: 1.85;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .bfc-richtext { padding: 40px 24px; }
+  }
+
+  /* ════════════════════════════════════════
+     STEPS
+  ════════════════════════════════════════ */
+  .bfc-steps {
+    padding: 56px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .bfc-steps-header h2 {
+    font-family: var(--bfc-font-head);
+    font-size: 30px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .bfc-steps-header p {
+    color: var(--bfc-muted);
+    font-size: 14px;
+    margin: 8px 0 0;
+  }
+
+  .bfc-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--bfc-border);
+    border: 1px solid var(--bfc-border);
+    width: 100%;
+  }
+
+  .bfc-step-item {
+    background: var(--bfc-surface);
+    padding: 28px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .bfc-step-number {
+    font-family: var(--bfc-font-head);
+    font-size: 14px;
+    color: var(--bfc-accent);
+    font-weight: 600;
+  }
+
+  .bfc-step-title {
+    font-family: var(--bfc-font-ui);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .bfc-step-desc {
+    font-size: 13px;
+    color: var(--bfc-muted);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 768px) {
+    .bfc-steps { padding: 36px 24px; }
+    .bfc-steps-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ════════════════════════════════════════
+     FEATURES
+  ════════════════════════════════════════ */
+  .bfc-features {
+    padding: 56px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .bfc-features h2 {
+    font-family: var(--bfc-font-head);
+    font-size: 30px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .bfc-features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .bfc-feature-card {
+    background: #fff;
+    border: 1px solid var(--bfc-border);
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .bfc-feature-icon {
+    width: 40px; height: 40px;
+    background: var(--bfc-bg);
+    border: 1px solid var(--bfc-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bfc-accent);
+    flex-shrink: 0;
+  }
+
+  .bfc-feature-icon svg { width: 20px; height: 20px; }
+
+  .bfc-feature-card h4 {
+    font-family: var(--bfc-font-ui);
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .bfc-feature-card p {
+    font-size: 13px;
+    color: var(--bfc-muted);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    .bfc-features-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 600px) {
+    .bfc-features { padding: 36px 24px; }
+    .bfc-features-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ════════════════════════════════════════
+     PRICING TABLE
+  ════════════════════════════════════════ */
+  .bfc-pricing {
+    padding: 56px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .bfc-pricing-header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .bfc-pricing-header-top {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .bfc-pricing-header h2 {
+    font-family: var(--bfc-font-head);
+    font-size: 30px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .bfc-pricing-tag {
+    font-family: var(--bfc-font-ui);
+    font-size: 11px;
+    color: var(--bfc-muted);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .bfc-pricing-subtext {
+    font-size: 14px;
+    color: var(--bfc-muted);
+    line-height: 1.7;
+    max-width: 680px;
+    margin: 4px 0 0;
+  }
+
+  .bfc-pricing-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .bfc-pricing-table th {
+    font-family: var(--bfc-font-ui);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bfc-muted);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--bfc-border);
+    background: var(--bfc-bg);
+  }
+
+  .bfc-pricing-table th:last-child { text-align: right; }
+
+  .bfc-pricing-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--bfc-border);
+    vertical-align: top;
+  }
+
+  .bfc-pricing-table td:last-child {
+    text-align: right;
+    white-space: nowrap;
+    font-family: var(--bfc-font-head);
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .bfc-pricing-table tr:last-child td { border-bottom: none; }
+
+  .bfc-pricing-table tbody tr:hover td {
+    background: rgba(212,118,59,0.03);
+  }
+
+  .bfc-pricing-category td {
+    background: var(--bfc-bg) !important;
+    padding: 16px 16px 8px;
+  }
+
+  .bfc-pricing-category-label {
+    font-family: var(--bfc-font-ui);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--bfc-accent);
+  }
+
+  .bfc-pricing-service-name {
+    font-family: var(--bfc-font-ui);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .bfc-pricing-service-note {
+    font-size: 12px;
+    color: var(--bfc-muted);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 600px) {
+    .bfc-pricing { padding: 36px 16px; }
+    .bfc-pricing-table td, .bfc-pricing-table th { padding: 11px 10px; }
+  }
+
+  /* ════════════════════════════════════════
+     FAQ
+  ════════════════════════════════════════ */
+  .bfc-faq {
+    padding: 56px 40px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .bfc-faq-intro h2 {
+    font-family: var(--bfc-font-head);
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .bfc-faq-intro p {
+    font-size: 13px;
+    color: var(--bfc-muted);
+    margin: 12px 0 0;
+    line-height: 1.75;
+  }
+
+  .bfc-faq-intro .bfc-btn {
+    margin-top: 24px;
+    background: var(--bfc-accent);
+    color: #fff;
+    display: inline-block;
+    padding: 11px 24px;
+  }
+
+  .bfc-faq-intro .bfc-btn:hover { background: var(--bfc-accent-h); color: #fff; }
+
+  .bfc-faq-list { display: flex; flex-direction: column; }
+
+  .bfc-faq-item { border-top: 1px solid var(--bfc-border); }
+  .bfc-faq-item:last-child { border-bottom: 1px solid var(--bfc-border); }
+
+  .bfc-faq-q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 0;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .bfc-faq-q span {
+    font-family: var(--bfc-font-ui);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .bfc-faq-plus {
+    width: 22px; height: 22px;
+    flex-shrink: 0;
+    color: var(--bfc-text);
+    transition: transform 240ms ease;
+  }
+
+  .bfc-faq-item.open .bfc-faq-plus { transform: rotate(45deg); }
+
+  .bfc-faq-a {
+    font-size: 14px;
+    color: var(--bfc-muted);
+    line-height: 1.75;
+    padding-bottom: 18px;
+    display: none;
+  }
+
+  .bfc-faq-item.open .bfc-faq-a { display: block; }
+
+  @media (max-width: 768px) {
+    .bfc-faq {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding: 36px 24px;
+    }
+  }
+
+  /* ════════════════════════════════════════
+     CTA BANNER
+  ════════════════════════════════════════ */
+  .bfc-banner {
+    padding: 64px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 18px;
+  }
+
+  .bfc-banner h2 {
+    font-family: var(--bfc-font-head);
+    font-size: 38px;
+    font-weight: 500;
+    color: #fff;
+    font-style: italic;
+    margin: 0;
+  }
+
+  .bfc-banner p {
+    color: rgba(255,255,255,0.6);
+    font-size: 15px;
+    max-width: 480px;
+    margin: 0;
+  }
+
+  .bfc-banner .bfc-btn {
+    background: var(--bfc-accent);
+    color: #fff;
+    padding: 14px 36px;
+  }
+
+  .bfc-banner .bfc-btn:hover { background: var(--bfc-accent-h); color: #fff; }
+
+  /* ════════════════════════════════════════
+     IMAGE BLOCK
+  ════════════════════════════════════════ */
+  .bfc-image-block {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .bfc-image-block img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  /* ════════════════════════════════════════
+     DIVIDER
+  ════════════════════════════════════════ */
+  .bfc-divider {
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: 48px;
+  }
+
+  .bfc-divider::before, .bfc-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--bfc-border);
+  }
+
+  .bfc-divider span {
+    font-family: var(--bfc-font-ui);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bfc-muted);
+    white-space: nowrap;
+  }
+
+  /* ════════════════════════════════════════
+     LOGOS
+  ════════════════════════════════════════ */
+  .bfc-logos {
+    padding: 40px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    align-items: center;
+  }
+
+  .bfc-logos-label {
+    font-family: var(--bfc-font-ui);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bfc-muted);
+  }
+
+  .bfc-logos-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 36px;
+    flex-wrap: wrap;
+  }
+
+  .bfc-logos-row img {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+    opacity: 0.55;
+    filter: grayscale(1);
+    transition: opacity 200ms, filter 200ms;
+  }
+
+  .bfc-logos-row img:hover { opacity: 1; filter: grayscale(0); }
+
+  /* ════════════════════════════════════════
+     TESTIMONIALS
+  ════════════════════════════════════════ */
+  .bfc-testimonials {
+    padding: 56px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .bfc-testimonials h2 {
+    font-family: var(--bfc-font-head);
+    font-size: 30px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .bfc-testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .bfc-testimonial-card {
+    background: #fff;
+    border: 1px solid var(--bfc-border);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .bfc-testimonial-stars {
+    color: var(--bfc-accent);
+    font-size: 13px;
+    letter-spacing: 2px;
+  }
+
+  .bfc-testimonial-text {
+    font-size: 14px;
+    color: var(--bfc-text);
+    line-height: 1.75;
+    font-style: italic;
+    flex: 1;
+  }
+
+  .bfc-testimonial-author {
+    font-family: var(--bfc-font-ui);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--bfc-muted);
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 900px) {
+    .bfc-testimonials-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 600px) {
+    .bfc-testimonials { padding: 36px 24px; }
+    .bfc-testimonials-grid { grid-template-columns: 1fr; }
+  }
+{%- endstyle -%}
+
+<div class="bfc-section">
+  {%- for block in section.blocks -%}
+
+    {%- case block.type -%}
+
+    {%- when 'hero' -%}
+      <div class="bfc-hero" style="background: {{ block.settings.bg_color }};" {{ block.shopify_attributes }}>
+        {%- if block.settings.heading != blank -%}
+          <h1>{{ block.settings.heading }}</h1>
+        {%- endif -%}
+        {%- if block.settings.subtext != blank -%}
+          <p>{{ block.settings.subtext }}</p>
+        {%- endif -%}
+        {%- if block.settings.btn_text != blank -%}
+          <a href="{{ block.settings.btn_url }}" class="bfc-btn">{{ block.settings.btn_text }}</a>
+        {%- endif -%}
+      </div>
+
+    {%- when 'text_image' -%}
+      <div class="bfc-text-image{% if block.settings.img_position == 'left' %} img-left{% endif %}" {{ block.shopify_attributes }}>
+        {%- if block.settings.img_position == 'left' -%}
+          <div class="bfc-img-side">
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', alt: block.settings.image.alt }}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        <div class="bfc-text-side">
+          {%- if block.settings.heading != blank -%}
+            <h2>{{ block.settings.heading }}</h2>
+          {%- endif -%}
+          {%- if block.settings.body != blank -%}
+            <p>{{ block.settings.body }}</p>
+          {%- endif -%}
+          {%- if block.settings.btn_text != blank -%}
+            <a href="{{ block.settings.btn_url }}" class="bfc-btn">{{ block.settings.btn_text }}</a>
+          {%- endif -%}
+        </div>
+        {%- if block.settings.img_position != 'left' -%}
+          <div class="bfc-img-side">
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', alt: block.settings.image.alt }}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+    {%- when 'richtext' -%}
+      <div class="bfc-richtext{% if block.settings.centered %} centered{% endif %}" {{ block.shopify_attributes }}>
+        {%- if block.settings.heading != blank -%}
+          <h2>{{ block.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if block.settings.body != blank -%}
+          <p>{{ block.settings.body }}</p>
+        {%- endif -%}
+      </div>
+
+    {%- when 'steps' -%}
+      <div class="bfc-steps" {{ block.shopify_attributes }}>
+        {%- if block.settings.heading != blank or block.settings.subtext != blank -%}
+          <div class="bfc-steps-header">
+            {%- if block.settings.heading != blank -%}<h2>{{ block.settings.heading }}</h2>{%- endif -%}
+            {%- if block.settings.subtext != blank -%}<p>{{ block.settings.subtext }}</p>{%- endif -%}
+          </div>
+        {%- endif -%}
+        <div class="bfc-steps-grid">
+          {%- assign step_count = 0 -%}
+          {%- for i in (1..6) -%}
+            {%- assign title_key = 'step' | append: i | append: '_title' -%}
+            {%- assign desc_key  = 'step' | append: i | append: '_desc' -%}
+            {%- if block.settings[title_key] != blank -%}
+              {%- assign step_count = step_count | plus: 1 -%}
+              <div class="bfc-step-item">
+                <div class="bfc-step-number">0{{ i }}</div>
+                <div class="bfc-step-title">{{ block.settings[title_key] }}</div>
+                {%- if block.settings[desc_key] != blank -%}
+                  <div class="bfc-step-desc">{{ block.settings[desc_key] }}</div>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+    {%- when 'features' -%}
+      <div class="bfc-features" {{ block.shopify_attributes }}>
+        {%- if block.settings.heading != blank -%}
+          <h2>{{ block.settings.heading }}</h2>
+        {%- endif -%}
+        <div class="bfc-features-grid">
+          {%- for i in (1..6) -%}
+            {%- assign title_key = 'f' | append: i | append: '_title' -%}
+            {%- assign desc_key  = 'f' | append: i | append: '_desc' -%}
+            {%- if block.settings[title_key] != blank -%}
+              <div class="bfc-feature-card">
+                <div class="bfc-feature-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 8v4l3 3"/>
+                  </svg>
+                </div>
+                <h4>{{ block.settings[title_key] }}</h4>
+                {%- if block.settings[desc_key] != blank -%}
+                  <p>{{ block.settings[desc_key] }}</p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+    {%- when 'pricing' -%}
+      <div class="bfc-pricing" {{ block.shopify_attributes }}>
+        <div class="bfc-pricing-header">
+          <div class="bfc-pricing-header-top">
+            {%- if block.settings.heading != blank -%}
+              <h2>{{ block.settings.heading }}</h2>
+            {%- endif -%}
+            {%- if block.settings.tag != blank -%}
+              <span class="bfc-pricing-tag">{{ block.settings.tag }}</span>
+            {%- endif -%}
+          </div>
+          {%- if block.settings.description != blank -%}
+            <p class="bfc-pricing-subtext">{{ block.settings.description }}</p>
+          {%- endif -%}
+        </div>
+
+        <table class="bfc-pricing-table">
+          <thead>
+            <tr>
+              <th>{{ block.settings.col1_label | default: 'Service' }}</th>
+              <th>{{ block.settings.col2_label | default: 'Price' }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- for i in (1..40) -%}
+              {%- assign type_key  = 'row' | append: i | append: '_type' -%}
+              {%- assign name_key  = 'row' | append: i | append: '_name' -%}
+              {%- assign price_key = 'row' | append: i | append: '_price' -%}
+              {%- assign note_key  = 'row' | append: i | append: '_note' -%}
+              {%- if block.settings[name_key] != blank -%}
+                {%- if block.settings[type_key] == 'category' -%}
+                  <tr class="bfc-pricing-category">
+                    <td colspan="2">
+                      <span class="bfc-pricing-category-label">{{ block.settings[name_key] }}</span>
+                    </td>
+                  </tr>
+                {%- else -%}
+                  <tr>
+                    <td>
+                      <div class="bfc-pricing-service-name">{{ block.settings[name_key] }}</div>
+                      {%- if block.settings[note_key] != blank -%}
+                        <div class="bfc-pricing-service-note">{{ block.settings[note_key] }}</div>
+                      {%- endif -%}
+                    </td>
+                    <td>{{ block.settings[price_key] }}</td>
+                  </tr>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+
+    {%- when 'faq' -%}
+      <div class="bfc-faq" {{ block.shopify_attributes }}>
+        <div class="bfc-faq-intro">
+          {%- if block.settings.heading != blank -%}
+            <h2>{{ block.settings.heading }}</h2>
+          {%- endif -%}
+          {%- if block.settings.intro != blank -%}
+            <p>{{ block.settings.intro }}</p>
+          {%- endif -%}
+          {%- if block.settings.btn_text != blank -%}
+            <a href="{{ block.settings.btn_url }}" class="bfc-btn">{{ block.settings.btn_text }}</a>
+          {%- endif -%}
+        </div>
+        <div class="bfc-faq-list">
+          {%- for i in (1..8) -%}
+            {%- assign q_key = 'q' | append: i -%}
+            {%- assign a_key = 'a' | append: i -%}
+            {%- if block.settings[q_key] != blank -%}
+              <div class="bfc-faq-item">
+                <div class="bfc-faq-q" onclick="this.closest('.bfc-faq-item').classList.toggle('open')">
+                  <span>{{ block.settings[q_key] }}</span>
+                  <svg class="bfc-faq-plus" viewBox="0 0 256 256" fill="currentColor">
+                    <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/>
+                  </svg>
+                </div>
+                <div class="bfc-faq-a">{{ block.settings[a_key] }}</div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+    {%- when 'banner' -%}
+      <div class="bfc-banner" style="background: {{ block.settings.bg_color }};" {{ block.shopify_attributes }}>
+        {%- if block.settings.heading != blank -%}
+          <h2>{{ block.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if block.settings.body != blank -%}
+          <p>{{ block.settings.body }}</p>
+        {%- endif -%}
+        {%- if block.settings.btn_text != blank -%}
+          <a href="{{ block.settings.btn_url }}" class="bfc-btn">{{ block.settings.btn_text }}</a>
+        {%- endif -%}
+      </div>
+
+    {%- when 'image_block' -%}
+      {%- if block.settings.image != blank -%}
+        <div class="bfc-image-block" {{ block.shopify_attributes }}>
+          {{ block.settings.image | image_url: width: 2400 | image_tag: loading: 'lazy', alt: block.settings.image.alt, style: 'max-height: ' | append: block.settings.max_height | append: 'px' }}
+        </div>
+      {%- endif -%}
+
+    {%- when 'divider' -%}
+      <div class="bfc-divider" {{ block.shopify_attributes }}>
+        {%- if block.settings.label != blank -%}
+          <span>{{ block.settings.label }}</span>
+        {%- endif -%}
+      </div>
+
+    {%- when 'logos' -%}
+      <div class="bfc-logos" {{ block.shopify_attributes }}>
+        {%- if block.settings.label != blank -%}
+          <p class="bfc-logos-label">{{ block.settings.label }}</p>
+        {%- endif -%}
+        <div class="bfc-logos-row">
+          {%- for i in (1..6) -%}
+            {%- assign logo_key = 'logo' | append: i -%}
+            {%- if block.settings[logo_key] != blank -%}
+              {{ block.settings[logo_key] | image_url: width: 300 | image_tag: loading: 'lazy', alt: 'Logo' }}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+    {%- when 'testimonials' -%}
+      <div class="bfc-testimonials" {{ block.shopify_attributes }}>
+        {%- if block.settings.heading != blank -%}
+          <h2>{{ block.settings.heading }}</h2>
+        {%- endif -%}
+        <div class="bfc-testimonials-grid">
+          {%- for i in (1..3) -%}
+            {%- assign text_key   = 't' | append: i | append: '_text' -%}
+            {%- assign author_key = 't' | append: i | append: '_author' -%}
+            {%- if block.settings[text_key] != blank -%}
+              <div class="bfc-testimonial-card">
+                <div class="bfc-testimonial-stars">★★★★★</div>
+                <div class="bfc-testimonial-text">{{ block.settings[text_key] }}</div>
+                {%- if block.settings[author_key] != blank -%}
+                  <div class="bfc-testimonial-author">— {{ block.settings[author_key] }}</div>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+    {%- endcase -%}
+  {%- endfor -%}
+</div>
+
+{% schema %}
+{
+  "name": "Pricing Estimate",
+  "tag": "section",
+  "class": "bfc-page-builder",
+  "blocks": [
+    {
+      "type": "hero",
+      "name": "Hero",
+      "settings": [
+        { "type": "text",    "id": "heading",  "label": "Heading",          "default": "Get Your Camera Repaired" },
+        { "type": "textarea","id": "subtext",  "label": "Subtext",          "default": "Expert film camera repair in Brooklyn." },
+        { "type": "text",    "id": "btn_text", "label": "Button Text",      "default": "Start Your Repair" },
+        { "type": "url",     "id": "btn_url",  "label": "Button URL" },
+        { "type": "color",   "id": "bg_color", "label": "Background Color", "default": "#1a1f2e" }
+      ]
+    },
+    {
+      "type": "text_image",
+      "name": "Text + Image",
+      "settings": [
+        { "type": "image_picker", "id": "image",        "label": "Image" },
+        { "type": "select",       "id": "img_position", "label": "Image Position", "default": "right",
+          "options": [{ "value": "right", "label": "Right" }, { "value": "left", "label": "Left" }] },
+        { "type": "text",         "id": "heading",  "label": "Heading",     "default": "Section Heading" },
+        { "type": "textarea",     "id": "body",     "label": "Body Text",   "default": "Add your content here." },
+        { "type": "text",         "id": "btn_text", "label": "Button Text", "default": "Learn More" },
+        { "type": "url",          "id": "btn_url",  "label": "Button URL" }
+      ]
+    },
+    {
+      "type": "richtext",
+      "name": "Rich Text",
+      "settings": [
+        { "type": "text",     "id": "heading",  "label": "Heading", "default": "Section Heading" },
+        { "type": "textarea", "id": "body",     "label": "Body Text" },
+        { "type": "checkbox", "id": "centered", "label": "Center Aligned", "default": false }
+      ]
+    },
+    {
+      "type": "steps",
+      "name": "Steps",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "How It Works" },
+        { "type": "text", "id": "subtext", "label": "Subtext", "default": "Six simple steps to get your camera repaired." },
+        { "type": "header", "content": "Step 1" },
+        { "type": "text",     "id": "step1_title", "label": "Title",       "default": "Submit Your Camera" },
+        { "type": "textarea", "id": "step1_desc",  "label": "Description", "default": "Fill out our intake form online." },
+        { "type": "header", "content": "Step 2" },
+        { "type": "text",     "id": "step2_title", "label": "Title",       "default": "Ship or Drop Off" },
+        { "type": "textarea", "id": "step2_desc",  "label": "Description", "default": "Mail it in or visit our Brooklyn workshop." },
+        { "type": "header", "content": "Step 3" },
+        { "type": "text",     "id": "step3_title", "label": "Title",       "default": "Pay Diagnostic Fee" },
+        { "type": "textarea", "id": "step3_desc",  "label": "Description", "default": "$50 non-refundable bench fee to begin assessment." },
+        { "type": "header", "content": "Step 4" },
+        { "type": "text",     "id": "step4_title", "label": "Title",       "default": "Receive Your Quote" },
+        { "type": "textarea", "id": "step4_desc",  "label": "Description", "default": "We'll send a full repair estimate for your approval." },
+        { "type": "header", "content": "Step 5" },
+        { "type": "text",     "id": "step5_title", "label": "Title",       "default": "Repair Begins" },
+        { "type": "textarea", "id": "step5_desc",  "label": "Description", "default": "Our technician gets to work on your camera." },
+        { "type": "header", "content": "Step 6" },
+        { "type": "text",     "id": "step6_title", "label": "Title",       "default": "Pick Up or Ship Back" },
+        { "type": "textarea", "id": "step6_desc",  "label": "Description", "default": "Collect your repaired camera in person or by mail." }
+      ]
+    },
+    {
+      "type": "features",
+      "name": "Features",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Section Heading", "default": "What We Repair" },
+        { "type": "header", "content": "Feature 1" },
+        { "type": "text",     "id": "f1_title", "label": "Title", "default": "35mm SLR" },
+        { "type": "textarea", "id": "f1_desc",  "label": "Description", "default": "Full CLA and all mechanical repairs." },
+        { "type": "header", "content": "Feature 2" },
+        { "type": "text",     "id": "f2_title", "label": "Title", "default": "Medium Format" },
+        { "type": "textarea", "id": "f2_desc",  "label": "Description", "default": "Hasselblad, Mamiya, Bronica and more." },
+        { "type": "header", "content": "Feature 3" },
+        { "type": "text",     "id": "f3_title", "label": "Title", "default": "Rangefinders" },
+        { "type": "textarea", "id": "f3_desc",  "label": "Description", "default": "Leica, Contax, Canonet and others." },
+        { "type": "header", "content": "Feature 4" },
+        { "type": "text",     "id": "f4_title", "label": "Title", "default": "Point & Shoot" },
+        { "type": "textarea", "id": "f4_desc",  "label": "Description", "default": "Compact cameras of all types." },
+        { "type": "header", "content": "Feature 5" },
+        { "type": "text",     "id": "f5_title", "label": "Title", "default": "Lenses" },
+        { "type": "textarea", "id": "f5_desc",  "label": "Description", "default": "CLA and all lens-specific repairs." },
+        { "type": "header", "content": "Feature 6" },
+        { "type": "text",     "id": "f6_title", "label": "Title", "default": "Light Seals" },
+        { "type": "textarea", "id": "f6_desc",  "label": "Description", "default": "All models, fast turnaround." }
+      ]
+    },
+    {
+      "type": "pricing",
+      "name": "Pricing Table",
+      "settings": [
+        { "type": "text",     "id": "heading",     "label": "Heading",          "default": "Camera Repair Pricing" },
+        { "type": "text",     "id": "tag",         "label": "Tag / Label",       "default": "Transparent Pricing" },
+        { "type": "textarea", "id": "description", "label": "Description",       "default": "A non-refundable diagnostic fee is required before any repair work begins. All prices are estimates — final cost confirmed after bench inspection." },
+        { "type": "text",     "id": "col1_label",  "label": "Column 1 Header",  "default": "Service" },
+        { "type": "text",     "id": "col2_label",  "label": "Column 2 Header",  "default": "Price" },
+        { "type": "header", "content": "Row 1" },
+        { "type": "select",   "id": "row1_type",  "label": "Type", "default": "category", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row1_name",  "label": "Name",  "default": "Diagnostic & Additional Fees" },
+        { "type": "text",     "id": "row1_price", "label": "Price" },
+        { "type": "text",     "id": "row1_note",  "label": "Note" },
+        { "type": "header", "content": "Row 2" },
+        { "type": "select",   "id": "row2_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row2_name",  "label": "Name",  "default": "Diagnostic Fee" },
+        { "type": "text",     "id": "row2_price", "label": "Price", "default": "$50" },
+        { "type": "text",     "id": "row2_note",  "label": "Note",  "default": "Non-refundable, required before any repair work begins" },
+        { "type": "header", "content": "Row 3" },
+        { "type": "select",   "id": "row3_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row3_name",  "label": "Name",  "default": "Trial Fee" },
+        { "type": "text",     "id": "row3_price", "label": "Price", "default": "10%" },
+        { "type": "text",     "id": "row3_note",  "label": "Note",  "default": "Non-refundable unless stated otherwise" },
+        { "type": "header", "content": "Row 4" },
+        { "type": "select",   "id": "row4_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row4_name",  "label": "Name",  "default": "Impact Damage Fee" },
+        { "type": "text",     "id": "row4_price", "label": "Price", "default": "$75" },
+        { "type": "text",     "id": "row4_note",  "label": "Note",  "default": "Applied when impact damage is present" },
+        { "type": "header", "content": "Row 5" },
+        { "type": "select",   "id": "row5_type",  "label": "Type", "default": "category", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row5_name",  "label": "Name",  "default": "Body CLA Pricing" },
+        { "type": "text",     "id": "row5_price", "label": "Price" },
+        { "type": "text",     "id": "row5_note",  "label": "Note" },
+        { "type": "header", "content": "Row 6" },
+        { "type": "select",   "id": "row6_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row6_name",  "label": "Name",  "default": "Canon AE-1" },
+        { "type": "text",     "id": "row6_price", "label": "Price", "default": "$270" },
+        { "type": "text",     "id": "row6_note",  "label": "Note" },
+        { "type": "header", "content": "Row 7" },
+        { "type": "select",   "id": "row7_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row7_name",  "label": "Name",  "default": "Canon AE-1 Program" },
+        { "type": "text",     "id": "row7_price", "label": "Price", "default": "$280" },
+        { "type": "text",     "id": "row7_note",  "label": "Note" },
+        { "type": "header", "content": "Row 8" },
+        { "type": "select",   "id": "row8_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row8_name",  "label": "Name",  "default": "Pentax K1000" },
+        { "type": "text",     "id": "row8_price", "label": "Price", "default": "$260" },
+        { "type": "text",     "id": "row8_note",  "label": "Note" },
+        { "type": "header", "content": "Row 9" },
+        { "type": "select",   "id": "row9_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row9_name",  "label": "Name",  "default": "Canon P" },
+        { "type": "text",     "id": "row9_price", "label": "Price", "default": "$380" },
+        { "type": "text",     "id": "row9_note",  "label": "Note" },
+        { "type": "header", "content": "Row 10" },
+        { "type": "select",   "id": "row10_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row10_name",  "label": "Name",  "default": "Canon 7" },
+        { "type": "text",     "id": "row10_price", "label": "Price", "default": "$380" },
+        { "type": "text",     "id": "row10_note",  "label": "Note" },
+        { "type": "header", "content": "Row 11" },
+        { "type": "select",   "id": "row11_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row11_name",  "label": "Name",  "default": "Canonet" },
+        { "type": "text",     "id": "row11_price", "label": "Price", "default": "$260\u2013$300" },
+        { "type": "text",     "id": "row11_note",  "label": "Note" },
+        { "type": "header", "content": "Row 12" },
+        { "type": "select",   "id": "row12_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row12_name",  "label": "Name",  "default": "Contax G2" },
+        { "type": "text",     "id": "row12_price", "label": "Price", "default": "$650" },
+        { "type": "text",     "id": "row12_note",  "label": "Note" },
+        { "type": "header", "content": "Row 13" },
+        { "type": "select",   "id": "row13_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row13_name",  "label": "Name",  "default": "Hasselblad 500CM / 503CX" },
+        { "type": "text",     "id": "row13_price", "label": "Price", "default": "$450" },
+        { "type": "text",     "id": "row13_note",  "label": "Note" },
+        { "type": "header", "content": "Row 14" },
+        { "type": "select",   "id": "row14_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row14_name",  "label": "Name",  "default": "Hasselblad Magazine" },
+        { "type": "text",     "id": "row14_price", "label": "Price", "default": "$200" },
+        { "type": "text",     "id": "row14_note",  "label": "Note" },
+        { "type": "header", "content": "Row 15" },
+        { "type": "select",   "id": "row15_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row15_name",  "label": "Name",  "default": "Canon F1" },
+        { "type": "text",     "id": "row15_price", "label": "Price", "default": "$450" },
+        { "type": "text",     "id": "row15_note",  "label": "Note" },
+        { "type": "header", "content": "Row 16" },
+        { "type": "select",   "id": "row16_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row16_name",  "label": "Name",  "default": "Contax T2" },
+        { "type": "text",     "id": "row16_price", "label": "Price", "default": "$600" },
+        { "type": "text",     "id": "row16_note",  "label": "Note" },
+        { "type": "header", "content": "Row 17" },
+        { "type": "select",   "id": "row17_type",  "label": "Type", "default": "category", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row17_name",  "label": "Name",  "default": "Fixed Lens Repair \u2014 CLA Pricing" },
+        { "type": "text",     "id": "row17_price", "label": "Price" },
+        { "type": "text",     "id": "row17_note",  "label": "Note" },
+        { "type": "header", "content": "Row 18" },
+        { "type": "select",   "id": "row18_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row18_name",  "label": "Name",  "default": "Below 70mm" },
+        { "type": "text",     "id": "row18_price", "label": "Price", "default": "$165" },
+        { "type": "text",     "id": "row18_note",  "label": "Note" },
+        { "type": "header", "content": "Row 19" },
+        { "type": "select",   "id": "row19_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row19_name",  "label": "Name",  "default": "70mm\u2013120mm" },
+        { "type": "text",     "id": "row19_price", "label": "Price", "default": "$195" },
+        { "type": "text",     "id": "row19_note",  "label": "Note" },
+        { "type": "header", "content": "Row 20" },
+        { "type": "select",   "id": "row20_type",  "label": "Type", "default": "category", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row20_name",  "label": "Name",  "default": "Zoom Lens Repair \u2014 CLA Pricing" },
+        { "type": "text",     "id": "row20_price", "label": "Price" },
+        { "type": "text",     "id": "row20_note",  "label": "Note" },
+        { "type": "header", "content": "Row 21" },
+        { "type": "select",   "id": "row21_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row21_name",  "label": "Name",  "default": "Below 70mm" },
+        { "type": "text",     "id": "row21_price", "label": "Price", "default": "$220" },
+        { "type": "text",     "id": "row21_note",  "label": "Note" },
+        { "type": "header", "content": "Row 22" },
+        { "type": "select",   "id": "row22_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row22_name",  "label": "Name",  "default": "70mm\u2013120mm" },
+        { "type": "text",     "id": "row22_price", "label": "Price", "default": "$240" },
+        { "type": "text",     "id": "row22_note",  "label": "Note" },
+        { "type": "header", "content": "Row 23" },
+        { "type": "select",   "id": "row23_type",  "label": "Type", "default": "category", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row23_name",  "label": "Name",  "default": "Additional Notes" },
+        { "type": "text",     "id": "row23_price", "label": "Price" },
+        { "type": "text",     "id": "row23_note",  "label": "Note" },
+        { "type": "header", "content": "Row 24" },
+        { "type": "select",   "id": "row24_type",  "label": "Type", "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row24_name",  "label": "Name",  "default": "Specialty & Pro Glass" },
+        { "type": "text",     "id": "row24_price", "label": "Price", "default": "Priced separately" },
+        { "type": "text",     "id": "row24_note",  "label": "Note",  "default": "Includes Soviet lenses, Leica, Zeiss, Macro, Fisheye, Tilt-shift, etc." },
+        { "type": "header", "content": "Rows 25\u201340 (add more)" },
+        { "type": "select",   "id": "row25_type",  "label": "Row 25 Type",  "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row25_name",  "label": "Row 25 Name" },
+        { "type": "text",     "id": "row25_price", "label": "Row 25 Price" },
+        { "type": "text",     "id": "row25_note",  "label": "Row 25 Note" },
+        { "type": "select",   "id": "row26_type",  "label": "Row 26 Type",  "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row26_name",  "label": "Row 26 Name" },
+        { "type": "text",     "id": "row26_price", "label": "Row 26 Price" },
+        { "type": "text",     "id": "row26_note",  "label": "Row 26 Note" },
+        { "type": "select",   "id": "row27_type",  "label": "Row 27 Type",  "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row27_name",  "label": "Row 27 Name" },
+        { "type": "text",     "id": "row27_price", "label": "Row 27 Price" },
+        { "type": "text",     "id": "row27_note",  "label": "Row 27 Note" },
+        { "type": "select",   "id": "row28_type",  "label": "Row 28 Type",  "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row28_name",  "label": "Row 28 Name" },
+        { "type": "text",     "id": "row28_price", "label": "Row 28 Price" },
+        { "type": "text",     "id": "row28_note",  "label": "Row 28 Note" },
+        { "type": "select",   "id": "row29_type",  "label": "Row 29 Type",  "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row29_name",  "label": "Row 29 Name" },
+        { "type": "text",     "id": "row29_price", "label": "Row 29 Price" },
+        { "type": "text",     "id": "row29_note",  "label": "Row 29 Note" },
+        { "type": "select",   "id": "row30_type",  "label": "Row 30 Type",  "default": "row", "options": [{ "value": "row", "label": "Row" }, { "value": "category", "label": "Category Header" }] },
+        { "type": "text",     "id": "row30_name",  "label": "Row 30 Name" },
+        { "type": "text",     "id": "row30_price", "label": "Row 30 Price" },
+        { "type": "text",     "id": "row30_note",  "label": "Row 30 Note" }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "FAQ",
+      "settings": [
+        { "type": "text",     "id": "heading",  "label": "Heading",     "default": "Frequently Asked Questions" },
+        { "type": "textarea", "id": "intro",    "label": "Intro Text",  "default": "Everything you need to know about our repair service." },
+        { "type": "text",     "id": "btn_text", "label": "Button Text", "default": "Contact Us" },
+        { "type": "url",      "id": "btn_url",  "label": "Button URL" },
+        { "type": "header", "content": "Question 1" },
+        { "type": "text",     "id": "q1", "label": "Question", "default": "What is the diagnostic fee?" },
+        { "type": "textarea", "id": "a1", "label": "Answer",   "default": "The $50 diagnostic fee covers our technician's time to fully assess your camera. It is non-refundable." },
+        { "type": "header", "content": "Question 2" },
+        { "type": "text",     "id": "q2", "label": "Question", "default": "How long does repair take?" },
+        { "type": "textarea", "id": "a2", "label": "Answer",   "default": "Standard turnaround is 2–4 weeks from when we receive your camera." },
+        { "type": "header", "content": "Question 3" },
+        { "type": "text",     "id": "q3", "label": "Question", "default": "What cameras do you repair?" },
+        { "type": "textarea", "id": "a3", "label": "Answer",   "default": "We specialize in 35mm and medium format film cameras from all major brands." },
+        { "type": "header", "content": "Question 4" },
+        { "type": "text",     "id": "q4", "label": "Question", "default": "Do you offer a warranty?" },
+        { "type": "textarea", "id": "a4", "label": "Answer",   "default": "Yes, all repairs come with a 90-day warranty on parts and labor." },
+        { "type": "header", "content": "Question 5" },
+        { "type": "text",     "id": "q5", "label": "Question" },
+        { "type": "textarea", "id": "a5", "label": "Answer" },
+        { "type": "header", "content": "Question 6" },
+        { "type": "text",     "id": "q6", "label": "Question" },
+        { "type": "textarea", "id": "a6", "label": "Answer" },
+        { "type": "header", "content": "Question 7" },
+        { "type": "text",     "id": "q7", "label": "Question" },
+        { "type": "textarea", "id": "a7", "label": "Answer" },
+        { "type": "header", "content": "Question 8" },
+        { "type": "text",     "id": "q8", "label": "Question" },
+        { "type": "textarea", "id": "a8", "label": "Answer" }
+      ]
+    },
+    {
+      "type": "banner",
+      "name": "CTA Banner",
+      "settings": [
+        { "type": "text",     "id": "heading",  "label": "Heading",          "default": "Ready to Get Started?" },
+        { "type": "textarea", "id": "body",     "label": "Body",             "default": "Mail in your camera or drop it off at our Brooklyn workshop." },
+        { "type": "text",     "id": "btn_text", "label": "Button Text",      "default": "Start Your Repair" },
+        { "type": "url",      "id": "btn_url",  "label": "Button URL" },
+        { "type": "color",    "id": "bg_color", "label": "Background Color", "default": "#1a1f2e" }
+      ]
+    },
+    {
+      "type": "image_block",
+      "name": "Image",
+      "settings": [
+        { "type": "image_picker", "id": "image",      "label": "Image" },
+        { "type": "range",        "id": "max_height",  "label": "Max Height", "min": 200, "max": 800, "step": 20, "default": 500, "unit": "px" }
+      ]
+    },
+    {
+      "type": "divider",
+      "name": "Divider",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label (optional)" }
+      ]
+    },
+    {
+      "type": "logos",
+      "name": "Logo Row",
+      "settings": [
+        { "type": "text",         "id": "label", "label": "Label",  "default": "Trusted by photographers worldwide" },
+        { "type": "image_picker", "id": "logo1", "label": "Logo 1" },
+        { "type": "image_picker", "id": "logo2", "label": "Logo 2" },
+        { "type": "image_picker", "id": "logo3", "label": "Logo 3" },
+        { "type": "image_picker", "id": "logo4", "label": "Logo 4" },
+        { "type": "image_picker", "id": "logo5", "label": "Logo 5" },
+        { "type": "image_picker", "id": "logo6", "label": "Logo 6" }
+      ]
+    },
+    {
+      "type": "testimonials",
+      "name": "Testimonials",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "What Our Customers Say" },
+        { "type": "header", "content": "Review 1" },
+        { "type": "textarea", "id": "t1_text",   "label": "Review Text",   "default": "Incredible work. My AE-1 shoots like new." },
+        { "type": "text",     "id": "t1_author", "label": "Author Name",   "default": "Sarah M." },
+        { "type": "header", "content": "Review 2" },
+        { "type": "textarea", "id": "t2_text",   "label": "Review Text",   "default": "Fast turnaround, fair pricing, excellent communication." },
+        { "type": "text",     "id": "t2_author", "label": "Author Name",   "default": "James K." },
+        { "type": "header", "content": "Review 3" },
+        { "type": "textarea", "id": "t3_text",   "label": "Review Text",   "default": "The only shop I trust with my Hasselblad." },
+        { "type": "text",     "id": "t3_author", "label": "Author Name",   "default": "Elena R." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Page Builder",
+      "blocks": [
+        { "type": "hero" },
+        { "type": "richtext" },
+        { "type": "features" },
+        { "type": "pricing" },
+        { "type": "faq" },
+        { "type": "banner" }
+      ]
+    }
+  ]
+}
+{% endschema %}

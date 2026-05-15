@@ -1,0 +1,948 @@
+{% comment %}
+  polaroid-repairs.liquid
+  Shopify Liquid section — Polaroid / SX-70 Repairs & Restorations
+  Styled to match film-camera-repairs.liquid
+{% endcomment %}
+
+{{ 'section-polaroid-repairs.css' | asset_url | stylesheet_tag }}
+
+<style>
+/* ============================================================
+   POLAROID REPAIRS — SELF-CONTAINED STYLES
+   BEM-style class naming: .pol-*
+   ============================================================ */
+
+/* ---------- Reset / base ---------- */
+.pol-section { box-sizing: border-box; font-family: inherit; color: #1a1a1a; }
+.pol-section *, .pol-section *::before, .pol-section *::after { box-sizing: inherit; }
+
+/* ---------- Hero ---------- */
+.pol-hero {
+  position: relative;
+  min-height: 480px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background: #111;
+}
+.pol-hero__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.72;
+}
+.pol-hero__img--mobile { display: none; }
+.pol-hero__content {
+  position: relative;
+  z-index: 2;
+  padding: 60px 48px;
+  max-width: 680px;
+}
+.pol-hero__title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  font-style: italic;
+  color: #fff;
+  line-height: 1.1;
+  margin: 0 0 24px;
+  letter-spacing: -0.02em;
+}
+.pol-hero__cta {
+  display: inline-block;
+  padding: 14px 32px;
+  background: #fff;
+  color: #111;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.pol-hero__cta:hover { background: #e8e8e8; }
+
+/* ---------- Waitlist Banner ---------- */
+.pol-waitlist-banner {
+  background: #1a1a1a;
+  color: #fff;
+  padding: 28px 48px;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+.pol-waitlist-banner__icon {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  margin-top: 2px;
+}
+.pol-waitlist-banner__body {}
+.pol-waitlist-banner__heading {
+  font-size: 1.05rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 6px;
+}
+.pol-waitlist-banner__text {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+  opacity: 0.88;
+}
+.pol-waitlist-banner__text strong { color: #fff; opacity: 1; }
+
+/* ---------- Steps ---------- */
+.pol-steps {
+  padding: 72px 48px;
+  background: #f7f5f2;
+}
+.pol-steps__heading {
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 48px;
+  text-align: center;
+}
+.pol-steps__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.pol-step__number {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.4;
+  margin-bottom: 10px;
+}
+.pol-step__title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 8px;
+}
+.pol-step__text {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  opacity: 0.75;
+  margin: 0;
+}
+
+/* ---------- What's Included ---------- */
+.pol-includes {
+  padding: 72px 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  max-width: 100%;
+}
+.pol-includes__copy {
+  padding-right: 64px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.pol-includes__eyebrow {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin-bottom: 12px;
+}
+.pol-includes__heading {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 20px;
+}
+.pol-includes__desc {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  opacity: 0.8;
+  margin: 0 0 32px;
+}
+.pol-includes__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pol-includes__list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+.pol-includes__list li::before {
+  content: '';
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: #1a1a1a;
+  flex-shrink: 0;
+}
+.pol-includes__img-wrap {
+  overflow: hidden;
+}
+.pol-includes__img {
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---------- Policy Pills ---------- */
+.pol-policies {
+  background: #1a1a1a;
+  padding: 40px 48px;
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+}
+.pol-policy {
+  flex: 1;
+  padding: 0 32px;
+  border-right: 1px solid rgba(255,255,255,0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.pol-policy:first-child { padding-left: 0; }
+.pol-policy:last-child { border-right: none; }
+.pol-policy__label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.pol-policy__value {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* ---------- Services Grid ---------- */
+.pol-services {
+  padding: 72px 48px;
+  background: #fff;
+}
+.pol-services__heading {
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 8px;
+}
+.pol-services__subheading {
+  font-size: 0.95rem;
+  opacity: 0.6;
+  margin: 0 0 48px;
+  line-height: 1.6;
+}
+.pol-services__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1px;
+  background: #e8e8e8;
+  border: 1px solid #e8e8e8;
+}
+.pol-service-card {
+  background: #fff;
+  padding: 28px 24px;
+}
+.pol-service-card__title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 8px;
+}
+.pol-service-card__text {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  opacity: 0.7;
+  margin: 0;
+}
+
+/* ---------- Pricing ---------- */
+.pol-pricing {
+  padding: 72px 48px;
+  background: #f7f5f2;
+  text-align: center;
+}
+.pol-pricing__eyebrow {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin-bottom: 8px;
+}
+.pol-pricing__heading {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  margin: 0 0 12px;
+}
+.pol-pricing__note {
+  font-size: 0.9rem;
+  opacity: 0.65;
+  max-width: 560px;
+  margin: 0 auto 48px;
+  line-height: 1.6;
+}
+.pol-pricing__grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 24px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+.pol-price-card {
+  background: #fff;
+  border: 1px solid #e4e4e4;
+  padding: 28px 32px;
+  text-align: center;
+  min-width: 160px;
+}
+.pol-price-card__amount {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.pol-price-card__label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.55;
+}
+
+/* ---------- Image Divider ---------- */
+.pol-img-divider {
+  position: relative;
+  height: 320px;
+  overflow: hidden;
+}
+.pol-img-divider__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  display: block;
+}
+
+/* ---------- Shipping ---------- */
+.pol-shipping {
+  padding: 72px 48px;
+  background: #fff;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+.pol-shipping__heading {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0 0 16px;
+}
+.pol-shipping__text {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  opacity: 0.78;
+  margin: 0;
+}
+.pol-shipping__notice {
+  background: #f7f5f2;
+  border-left: 3px solid #1a1a1a;
+  padding: 20px 24px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.pol-shipping__notice strong { display: block; margin-bottom: 4px; font-weight: 800; text-transform: uppercase; font-size: 0.78rem; letter-spacing: 0.06em; }
+
+/* ---------- FAQ ---------- */
+.pol-faq {
+  padding: 72px 48px;
+  background: #f7f5f2;
+}
+.pol-faq__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.pol-faq__heading {
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+.pol-faq__contact-link {
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.pol-faq__list {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.pol-faq__item {
+  border-top: 1px solid #d8d6d2;
+}
+.pol-faq__item:last-child { border-bottom: 1px solid #d8d6d2; }
+.pol-faq__question {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 22px 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  color: #1a1a1a;
+}
+.pol-faq__question::after {
+  content: '+';
+  font-size: 1.3rem;
+  font-weight: 300;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+.pol-faq__item.is-open .pol-faq__question::after {
+  transform: rotate(45deg);
+}
+.pol-faq__answer {
+  display: none;
+  padding: 0 0 20px;
+  font-size: 0.92rem;
+  line-height: 1.75;
+  opacity: 0.78;
+}
+.pol-faq__answer a { color: #1a1a1a; text-underline-offset: 2px; }
+.pol-faq__item.is-open .pol-faq__answer { display: block; }
+
+/* ---------- CTA Strip ---------- */
+.pol-cta-strip {
+  background: #1a1a1a;
+  color: #fff;
+  padding: 64px 48px;
+  text-align: center;
+}
+.pol-cta-strip__heading {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 800;
+  font-style: italic;
+  margin: 0 0 12px;
+}
+.pol-cta-strip__text {
+  font-size: 0.95rem;
+  opacity: 0.72;
+  margin: 0 0 32px;
+  line-height: 1.6;
+}
+.pol-cta-strip__link {
+  display: inline-block;
+  padding: 14px 36px;
+  background: #fff;
+  color: #1a1a1a;
+  font-weight: 700;
+  font-size: 0.88rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  margin: 0 8px 12px;
+  transition: background 0.2s;
+}
+.pol-cta-strip__link:hover { background: #e8e8e8; }
+.pol-cta-strip__link--secondary {
+  background: transparent;
+  color: rgba(255,255,255,0.75);
+  border: 1px solid rgba(255,255,255,0.3);
+}
+.pol-cta-strip__link--secondary:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .pol-hero__content { padding: 40px 24px; }
+  .pol-waitlist-banner { padding: 24px; flex-direction: column; gap: 12px; }
+  .pol-steps { padding: 48px 24px; }
+  .pol-includes { grid-template-columns: 1fr; padding: 48px 24px; }
+  .pol-includes__copy { padding-right: 0; padding-bottom: 32px; }
+  .pol-includes__img { min-height: 260px; }
+  .pol-policies { flex-direction: column; padding: 32px 24px; gap: 20px; }
+  .pol-policy { padding: 0; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.12); padding-bottom: 20px; }
+  .pol-policy:last-child { border-bottom: none; padding-bottom: 0; }
+  .pol-services { padding: 48px 24px; }
+  .pol-pricing { padding: 48px 24px; }
+  .pol-img-divider { height: 200px; }
+  .pol-shipping { grid-template-columns: 1fr; padding: 48px 24px; gap: 32px; }
+  .pol-faq { padding: 48px 24px; }
+  .pol-faq__header { flex-direction: column; align-items: flex-start; }
+  .pol-cta-strip { padding: 48px 24px; }
+}
+@media (max-width: 600px) {
+  .pol-hero { min-height: 380px; }
+  .pol-hero__img--desktop { display: none; }
+  .pol-hero__img--mobile { display: block; }
+}
+</style>
+
+<div class="pol-section">
+
+  {%- comment -%} ── HERO ── {%- endcomment -%}
+  <section class="pol-hero">
+    {%- if section.settings.hero_image_desktop != blank -%}
+      <img
+        class="pol-hero__img pol-hero__img--desktop"
+        src="{{ section.settings.hero_image_desktop | image_url: width: 2000 }}"
+        alt="{{ section.settings.hero_image_desktop.alt | escape }}"
+        loading="eager"
+        width="2000"
+      >
+    {%- endif -%}
+    {%- if section.settings.hero_image_mobile != blank -%}
+      <img
+        class="pol-hero__img pol-hero__img--mobile"
+        src="{{ section.settings.hero_image_mobile | image_url: width: 800 }}"
+        alt="{{ section.settings.hero_image_mobile.alt | escape }}"
+        loading="eager"
+        width="800"
+      >
+    {%- elsif section.settings.hero_image_desktop != blank -%}
+      <img
+        class="pol-hero__img pol-hero__img--mobile"
+        src="{{ section.settings.hero_image_desktop | image_url: width: 800 }}"
+        alt="{{ section.settings.hero_image_desktop.alt | escape }}"
+        loading="eager"
+        width="800"
+      >
+    {%- endif -%}
+    <div class="pol-hero__content">
+      <h1 class="pol-hero__title">
+        {{ section.settings.hero_title | default: "Revive Your<br>Polaroid." }}
+      </h1>
+      <a href="{{ section.settings.hero_cta_url | default: '#waitlist' }}" class="pol-hero__cta">
+        {{ section.settings.hero_cta_label | default: "Join Waitlist" }}
+      </a>
+    </div>
+  </section>
+
+  {%- comment -%} ── WAITLIST BANNER ── {%- endcomment -%}
+  <div class="pol-waitlist-banner" id="waitlist">
+    <div class="pol-waitlist-banner__icon">⏸</div>
+    <div class="pol-waitlist-banner__body">
+      <p class="pol-waitlist-banner__heading">Restorations are Waitlist Only — Waitlist Currently Paused</p>
+      <p class="pol-waitlist-banner__text">
+        We are <strong>not accepting new waitlist signups right now</strong> while we work through our current queue.
+        We're actively speeding things up and will reopen the waitlist as soon as we have capacity.
+        Check back soon — we'll announce when signups reopen.
+      </p>
+    </div>
+  </div>
+
+  {%- comment -%} ── HOW IT WORKS STEPS ── {%- endcomment -%}
+  <section class="pol-steps">
+    <h2 class="pol-steps__heading">{{ section.settings.steps_heading | default: "What a Restoration Involves" }}</h2>
+    <div class="pol-steps__grid">
+
+      <div class="pol-step">
+        <p class="pol-step__number">Step 01</p>
+        <h3 class="pol-step__title">Full Disassembly</h3>
+        <p class="pol-step__text">Your SX-70 is completely disassembled. Every component is catalogued and inspected before any work begins.</p>
+      </div>
+
+      <div class="pol-step">
+        <p class="pol-step__number">Step 02</p>
+        <h3 class="pol-step__title">Board & Mechanism Cleaning</h3>
+        <p class="pol-step__text">Circuit boards are detail cleaned, mechanical parts are serviced, and every element is evaluated for function.</p>
+      </div>
+
+      <div class="pol-step">
+        <p class="pol-step__number">Step 03</p>
+        <h3 class="pol-step__title">CLA & Calibration</h3>
+        <p class="pol-step__text">A comprehensive Cleaning, Lubrication, and Adjustment is performed — not just on the problem areas, but top to bottom.</p>
+      </div>
+
+      <div class="pol-step">
+        <p class="pol-step__number">Step 04</p>
+        <h3 class="pol-step__title">Cosmetic Refresh</h3>
+        <p class="pol-step__text">New leather is fitted as standard. Optional viewfinder sticker replacement and custom skins available.</p>
+      </div>
+
+      <div class="pol-step">
+        <p class="pol-step__number">Step 05</p>
+        <h3 class="pol-step__title">Testing & Return</h3>
+        <p class="pol-step__text">Your camera is tested with film before being carefully packed and shipped back to you with a 6-month warranty.</p>
+      </div>
+
+    </div>
+  </section>
+
+  {%- comment -%} ── WHAT'S INCLUDED ── {%- endcomment -%}
+  <section class="pol-includes">
+    <div class="pol-includes__copy">
+      <p class="pol-includes__eyebrow">Every Restoration</p>
+      <h2 class="pol-includes__heading">Everything Included, Nothing Extra</h2>
+      <p class="pol-includes__desc">
+        SX-70s are up to 53 years old. Oxidation, corrosion, and worn parts are the norm — not the exception.
+        Our restoration addresses every layer of the camera, not just the symptoms. Every refurbished camera is backed by a 6-month mechanical warranty.
+      </p>
+      <ul class="pol-includes__list">
+        <li>Full mechanical CLA (top-down, not just the problem)</li>
+        <li>New leather covering (standard)</li>
+        <li>Free optional 600 film speed upgrade</li>
+        <li>Optional new viewfinder stickers</li>
+        <li>Optional custom skins at no extra cost</li>
+        <li>Board upgrade (coming soon)</li>
+        <li>6-month mechanical warranty</li>
+      </ul>
+    </div>
+    {%- if section.settings.includes_image != blank -%}
+      <div class="pol-includes__img-wrap">
+        <img
+          class="pol-includes__img"
+          src="{{ section.settings.includes_image | image_url: width: 900 }}"
+          alt="{{ section.settings.includes_image.alt | escape }}"
+          loading="lazy"
+          width="900"
+        >
+      </div>
+    {%- else -%}
+      <div class="pol-includes__img-wrap" style="background:#e4e0db;">
+        <img
+          class="pol-includes__img"
+          src="https://brooklynfilmcamera.com/cdn/shop/files/BFC_Bree_Right.png?v=1748450615&width=800"
+          alt="SX-70 restoration in progress"
+          loading="lazy"
+          width="800"
+        >
+      </div>
+    {%- endif -%}
+  </section>
+
+  {%- comment -%} ── POLICY PILLS ── {%- endcomment -%}
+  <div class="pol-policies">
+    <div class="pol-policy">
+      <span class="pol-policy__label">Turnaround Time</span>
+      <span class="pol-policy__value">3–4 Weeks</span>
+    </div>
+    <div class="pol-policy">
+      <span class="pol-policy__label">Warranty</span>
+      <span class="pol-policy__value">6 Months</span>
+    </div>
+    <div class="pol-policy">
+      <span class="pol-policy__label">Leather</span>
+      <span class="pol-policy__value">Replaced as Standard</span>
+    </div>
+    <div class="pol-policy">
+      <span class="pol-policy__label">Access</span>
+      <span class="pol-policy__value">Waitlist Only</span>
+    </div>
+  </div>
+
+  {%- comment -%} ── WHAT WE SERVICE ── {%- endcomment -%}
+  <section class="pol-services">
+    <h2 class="pol-services__heading">What We Service</h2>
+    <p class="pol-services__subheading">We specialise exclusively in folding SX-70 models. Don't see your issue listed? Email us — there's a lot we can solve.</p>
+    <div class="pol-services__grid">
+
+      <div class="pol-service-card">
+        <h3 class="pol-service-card__title">Full CLA</h3>
+        <p class="pol-service-card__text">Complete disassembly, cleaning, lubrication, and mechanical adjustment. Our standard for every restoration.</p>
+      </div>
+
+      <div class="pol-service-card">
+        <h3 class="pol-service-card__title">Shutter Repair</h3>
+        <p class="pol-service-card__text">Stuck, intermittent, or misfiring shutters are among the most common SX-70 issues. Our techs handle them routinely.</p>
+      </div>
+
+      <div class="pol-service-card">
+        <h3 class="pol-service-card__title">Sonar Autofocus</h3>
+        <p class="pol-service-card__text">Calibration and repair of the sonar autofocus system on SX-70 Sonar models.</p>
+      </div>
+
+      <div class="pol-service-card">
+        <h3 class="pol-service-card__title">600 Speed Upgrade</h3>
+        <p class="pol-service-card__text">Internal modification to allow use of 600-speed film in SX-70 bodies. Included free with every restoration.</p>
+      </div>
+
+      <div class="pol-service-card">
+        <h3 class="pol-service-card__title">Mirror Cleaning</h3>
+        <p class="pol-service-card__text">Cloudy or dirty viewfinder/mirror surfaces cleaned and assessed for replacement if needed.</p>
+      </div>
+
+      <div class="pol-service-card">
+        <h3 class="pol-service-card__title">Leather Replacement</h3>
+        <p class="pol-service-card__text">Fresh leather as standard on every restoration. Custom skins can also be fitted on request — even if you mail them to us.</p>
+      </div>
+
+      <div class="pol-service-card">
+        <h3 class="pol-service-card__title">Rollers & Film Path</h3>
+        <p class="pol-service-card__text">Roller cleaning and film path service to ensure even development and eliminate streaking or chemical residue.</p>
+      </div>
+
+      <div class="pol-service-card">
+        <h3 class="pol-service-card__title">Parts Replacement</h3>
+        <p class="pol-service-card__text">Where broken parts are found at intake, we'll quote you separately. Parts cost is not included in the restoration fee.</p>
+      </div>
+
+    </div>
+  </section>
+
+  {%- comment -%} ── PRICING ── {%- endcomment -%}
+  <section class="pol-pricing">
+    <p class="pol-pricing__eyebrow">Transparent Pricing</p>
+    <h2 class="pol-pricing__heading">Restoration Pricing</h2>
+    <p class="pol-pricing__note">
+      Our restoration is a fixed-scope service. Any broken parts found during intake are invoiced separately before work proceeds.
+    </p>
+    <div class="pol-pricing__grid">
+      <div class="pol-price-card">
+        <p class="pol-price-card__amount">${{ section.settings.price_restoration | default: 'TBD' }}</p>
+        <p class="pol-price-card__label">Full Restoration</p>
+      </div>
+      <div class="pol-price-card">
+        <p class="pol-price-card__amount">Free</p>
+        <p class="pol-price-card__label">600 Speed Upgrade</p>
+      </div>
+      <div class="pol-price-card">
+        <p class="pol-price-card__amount">Free</p>
+        <p class="pol-price-card__label">Custom Skin Fitting</p>
+      </div>
+      <div class="pol-price-card">
+        <p class="pol-price-card__amount">Quoted</p>
+        <p class="pol-price-card__label">Parts Replacement</p>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ── IMAGE DIVIDER ── {%- endcomment -%}
+  {%- if section.settings.divider_image != blank -%}
+    <div class="pol-img-divider">
+      <img
+        class="pol-img-divider__img"
+        src="{{ section.settings.divider_image | image_url: width: 2000 }}"
+        alt="{{ section.settings.divider_image.alt | escape }}"
+        loading="lazy"
+        width="2000"
+      >
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ── SHIPPING ── {%- endcomment -%}
+  <section class="pol-shipping">
+    <div>
+      <h2 class="pol-shipping__heading">Mail-In Instructions</h2>
+      <p class="pol-shipping__text">
+        Once you're off the waitlist and your restoration is confirmed, you'll receive a prepaid shipping label by email.
+        Pack your camera securely in bubble wrap or foam with adequate cushioning — no loose accessories needed.
+        Remove batteries before shipping.
+      </p>
+    </div>
+    <div>
+      <div class="pol-shipping__notice">
+        <strong>⚠ Important</strong>
+        Do <em>not</em> mail your camera to our storefront. You will be emailed a label with a specific workshop address upon confirmation. Cameras mailed without a label cannot be accepted and may be lost.
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ── FAQ ── {%- endcomment -%}
+  <section class="pol-faq">
+    <div class="pol-faq__header">
+      <h2 class="pol-faq__heading">Frequently Asked Questions</h2>
+      <a href="/pages/visit" class="pol-faq__contact-link">Contact Us</a>
+    </div>
+    <div class="pol-faq__list">
+
+      <div class="pol-faq__item">
+        <button class="pol-faq__question" type="button">Why is the waitlist paused?</button>
+        <div class="pol-faq__answer">
+          <p>We're working through our current queue and actively speeding up turnaround. We've temporarily paused new signups so we can give every camera in the pipeline the attention it deserves. We'll reopen as soon as we have capacity — keep an eye on our site and socials for the announcement.</p>
+        </div>
+      </div>
+
+      <div class="pol-faq__item">
+        <button class="pol-faq__question" type="button">How long does a restoration take?</button>
+        <div class="pol-faq__answer">
+          <p>Our standard turnaround is 3–4 weeks from when we receive your camera. Cameras requiring special parts or more extensive servicing may take longer. We do not offer rush service at this time.</p>
+        </div>
+      </div>
+
+      <div class="pol-faq__item">
+        <button class="pol-faq__question" type="button">Which Polaroid models do you restore?</button>
+        <div class="pol-faq__answer">
+          <p>We currently service folding SX-70 cameras only — including Model 1, Model 2, Alpha 1, Sonar models, and similar variants. We do not currently service 600 series, One Step, or box-style Polaroid cameras. We do not repair digital cameras.</p>
+        </div>
+      </div>
+
+      <div class="pol-faq__item">
+        <button class="pol-faq__question" type="button">Are parts replacements included in the restoration cost?</button>
+        <div class="pol-faq__answer">
+          <p>No. If broken or failed parts are found when we receive your camera, we will contact you with a separate parts invoice before any replacement work proceeds. You can approve or decline individually.</p>
+        </div>
+      </div>
+
+      <div class="pol-faq__item">
+        <button class="pol-faq__question" type="button">Can I supply my own leather or skin?</button>
+        <div class="pol-faq__answer">
+          <p>Absolutely — mail it along with your camera (or separately, clearly labelled with your order reference) and our tech will fit it after the mechanical restoration is complete.</p>
+        </div>
+      </div>
+
+      <div class="pol-faq__item">
+        <button class="pol-faq__question" type="button">Can I talk to the technician directly?</button>
+        <div class="pol-faq__answer">
+          <p>Due to the volume of cameras in our queue, direct technician communication isn't possible. For specific notes or questions about your camera, email us at <a href="mailto:sx70@brooklynfilmcamera.com">sx70@brooklynfilmcamera.com</a> and we'll make sure it's passed along.</p>
+        </div>
+      </div>
+
+      <div class="pol-faq__item">
+        <button class="pol-faq__question" type="button">Can I troubleshoot my camera myself before sending it in?</button>
+        <div class="pol-faq__answer">
+          <p>We have a troubleshooting playlist on our YouTube channel: <a href="https://youtube.com/playlist?list=PL3SpFGXiJgNtGXI2L8SKdFZ9-xOou_rhF" target="_blank" rel="noopener">watch here</a>. If you can't find a solution there, it almost certainly needs hands-on servicing.</p>
+        </div>
+      </div>
+
+      <div class="pol-faq__item">
+        <button class="pol-faq__question" type="button">Do you repair 35mm or medium format cameras?</button>
+        <div class="pol-faq__answer">
+          <p>Yes — but through our separate film camera repair service. <a href="/pages/film-camera-repairs">See film camera repairs →</a></p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  {%- comment -%} ── CTA STRIP ── {%- endcomment -%}
+  <section class="pol-cta-strip">
+    <h2 class="pol-cta-strip__heading">Waitlist Is Currently Paused</h2>
+    <p class="pol-cta-strip__text">We're working on your cameras and will reopen signups soon. In the meantime, got a 35mm or medium format camera that needs attention?</p>
+    <a href="/pages/film-camera-repairs" class="pol-cta-strip__link">35mm &amp; Medium Format Repairs</a>
+    <a href="/pages/visit" class="pol-cta-strip__link pol-cta-strip__link--secondary">Contact Us</a>
+  </section>
+
+</div>
+
+<script>
+  document.querySelectorAll('.pol-faq__question').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var item = this.closest('.pol-faq__item');
+      var isOpen = item.classList.contains('is-open');
+      // Close all
+      document.querySelectorAll('.pol-faq__item').forEach(function(i) { i.classList.remove('is-open'); });
+      // Open this one if it wasn't open
+      if (!isOpen) item.classList.add('is-open');
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Polaroid Repairs",
+  "tag": "section",
+  "class": "section-polaroid-repairs",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image_desktop",
+      "label": "Hero Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image_mobile",
+      "label": "Hero Image (Mobile)"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Hero Title",
+      "default": "Revive Your\nPolaroid."
+    },
+    {
+      "type": "text",
+      "id": "hero_cta_label",
+      "label": "Hero CTA Label",
+      "default": "Join Waitlist"
+    },
+    {
+      "type": "url",
+      "id": "hero_cta_url",
+      "label": "Hero CTA URL"
+    },
+    {
+      "type": "header",
+      "content": "What's Included"
+    },
+    {
+      "type": "image_picker",
+      "id": "includes_image",
+      "label": "Includes Section Image"
+    },
+    {
+      "type": "header",
+      "content": "Pricing"
+    },
+    {
+      "type": "text",
+      "id": "price_restoration",
+      "label": "Full Restoration Price (number only)",
+      "default": "225"
+    },
+    {
+      "type": "header",
+      "content": "Image Divider"
+    },
+    {
+      "type": "image_picker",
+      "id": "divider_image",
+      "label": "Divider Image (optional)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Polaroid Repairs"
+    }
+  ]
+}
+{% endschema %}

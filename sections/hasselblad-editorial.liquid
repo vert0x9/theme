@@ -1,0 +1,1001 @@
+<div id="hb-cls-{{ section.id }}" class="hb-cls" data-section-id="{{ section.id }}">
+
+  <nav class="hbc-nav" id="hbc-nav-{{ section.id }}">
+    <a href="/" class="hbc-nav__logo">Brooklyn Film Camera</a>
+    <div class="hbc-nav__links">
+      <a href="#hbc-specs-{{ section.id }}" class="hbc-nav__link">Specs</a>
+      <a href="#hbc-cla-{{ section.id }}" class="hbc-nav__link">CLA</a>
+      <a href="#hbc-process-{{ section.id }}" class="hbc-nav__link">Process</a>
+      <a href="#hbc-showcase-{{ section.id }}" class="hbc-nav__link">Browse</a>
+    </div>
+  </nav>
+
+  {%- comment -%} Compute min price from available Hasselblad products {%- endcomment -%}
+  {%- assign hb_min_price = nil -%}
+  {%- assign hb_product_count = 0 -%}
+  {%- if section.settings.collection != blank -%}
+    {%- for product in section.settings.collection.products -%}
+      {%- if product.available and product.metafields.custom.brand == 'Hasselblad' -%}
+        {%- assign hb_product_count = hb_product_count | plus: 1 -%}
+        {%- if hb_min_price == nil or product.price < hb_min_price -%}
+          {%- assign hb_min_price = product.price -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+
+  <section class="hbc-collection">
+
+    <div class="hbc-ts__header" style="padding: calc(60px + 32px) 0 0; margin-left: 48px; margin-right: 48px;">
+      <div class="hbc-ts__header-row">
+        <h1 class="hbc-ts__title bfc-heading">Hasselblad Medium Format</h1>
+        <a class="hbc-ts__viewall" href="https://brooklynfilmcamera.com/collections/medium-format-cameras?sort_by=manual&filter.p.m.custom.brand=Hasselblad">View all</a>
+      </div>
+      <p class="hbc-ts__subheading">
+        {%- if hb_product_count > 0 -%}
+          {{ hb_product_count }} camera{% if hb_product_count != 1 %}s{% endif %} in stock{%- if hb_min_price != nil %} &middot; from {{ hb_min_price | money_without_trailing_zeros }}{%- endif %} &middot; full CLA &middot; 6-month warranty
+        {%- else -%}
+          Restored medium format cameras &middot; full CLA &middot; 6-month warranty
+        {%- endif -%}
+      </p>
+    </div>
+
+    <div class="hbc-ts__rail-wrap" data-bfc-ts style="margin-top: 20px;">
+      <button class="hbc-ts__arrow hbc-ts__arrow--prev" type="button" aria-label="Scroll left" data-bfc-ts-prev>‹</button>
+      <button class="hbc-ts__arrow hbc-ts__arrow--next" type="button" aria-label="Scroll right" data-bfc-ts-next>›</button>
+      <div class="hbc-ts__rail" role="list" data-bfc-ts-rail>
+        {%- if hb_product_count > 0 -%}
+          {%- for product in section.settings.collection.products -%}
+            {%- if product.available and product.metafields.custom.brand == 'Hasselblad' -%}
+              <article class="hbc-ts__card" role="listitem">
+                <a class="hbc-ts__img" href="{{ product.url }}" aria-label="{{ product.title | escape }}" tabindex="-1" aria-hidden="true">
+                  {%- if product.featured_image -%}
+                    <img src="{{ product.featured_image | image_url: width: 720 }}"
+                         srcset="{{ product.featured_image | image_url: width: 360 }} 360w, {{ product.featured_image | image_url: width: 540 }} 540w, {{ product.featured_image | image_url: width: 720 }} 720w"
+                         sizes="(min-width: 990px) 260px, 70vw"
+                         alt="{{ product.title | escape }}"
+                         loading="{% if forloop.index <= 3 %}eager{% else %}lazy{% endif %}"
+                         width="{{ product.featured_image.width }}"
+                         height="{{ product.featured_image.height }}">
+                  {%- endif -%}
+                </a>
+                <div class="hbc-ts__meta">
+                  <div class="hbc-ts__vendor">{{ product.product_type }}</div>
+                  <a class="hbc-ts__name" href="{{ product.url }}" aria-label="{{ product.title | escape }}">{{ product.title | escape }}</a>
+                  <div class="hbc-ts__bottom">
+                    <div class="hbc-ts__price">
+                      <span class="hbc-ts__price-now">{{ product.price | money }}</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'variant' -%}
+              <article class="hbc-ts__card" role="listitem" {{ block.shopify_attributes }}>
+                <a class="hbc-ts__img" href="{{ block.settings.variant_url }}" aria-label="{{ block.settings.variant_name | escape }}" tabindex="-1" aria-hidden="true">
+                  {%- if block.settings.variant_image != blank -%}
+                    <img src="{{ block.settings.variant_image | image_url: width: 720 }}" alt="{{ block.settings.variant_name | escape }}" loading="lazy">
+                  {%- endif -%}
+                </a>
+                <div class="hbc-ts__meta">
+                  <div class="hbc-ts__vendor">{{ block.settings.variant_subtitle }}</div>
+                  <a class="hbc-ts__name" href="{{ block.settings.variant_url }}" aria-label="{{ block.settings.variant_name | escape }}">{{ block.settings.variant_name | escape }}</a>
+                  <div class="hbc-ts__bottom">
+                    <div class="hbc-ts__price">
+                      <span class="hbc-ts__price-now">${{ block.settings.variant_price }}</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+      <span class="hbc-ts__fade hbc-ts__fade--left" aria-hidden="true"></span>
+      <span class="hbc-ts__fade hbc-ts__fade--right" aria-hidden="true"></span>
+    </div>
+
+  </section>
+
+  {%- assign shoot_images = section.blocks | where: 'type', 'shoot_image' -%}
+  {%- if shoot_images.size > 0 -%}
+  <section class="hbc-shoots">
+    <div class="hbc-shoots__grid">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'shoot_image' -%}
+          <div class="hbc-shoots__item hbc-shoots__item--{{ block.settings.image_span }}" {{ block.shopify_attributes }}>
+            <div class="hbc-shoots__img-wrap">
+              <img src="{{ block.settings.image | image_url: width: 1200 }}"
+                   alt="{{ block.settings.image_alt | default: 'Shot on Hasselblad' }}"
+                   loading="lazy">
+              {%- if block.settings.caption != blank -%}
+                <div class="hbc-shoots__caption">{{ block.settings.caption }}</div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </section>
+  {%- endif -%}
+
+  <section class="hbc-marquee">
+    <div class="hbc-marquee__inner">
+      <span>Hasselblad</span><span class="hbc-marquee__dot">&bull;</span>
+      <span>500C/M</span><span class="hbc-marquee__dot">&bull;</span>
+      <span>Zeiss Optics</span><span class="hbc-marquee__dot">&bull;</span>
+      <span>6x6 Medium Format</span><span class="hbc-marquee__dot">&bull;</span>
+      <span>Fully Mechanical</span><span class="hbc-marquee__dot">&bull;</span>
+      <span>V-System</span><span class="hbc-marquee__dot">&bull;</span>
+      <span>Brooklyn Restored</span><span class="hbc-marquee__dot">&bull;</span>
+      <span>Hasselblad</span><span class="hbc-marquee__dot">&bull;</span>
+      <span>500C/M</span><span class="hbc-marquee__dot">&bull;</span>
+      <span>Zeiss Optics</span><span class="hbc-marquee__dot">&bull;</span>
+      <span>6x6 Medium Format</span><span class="hbc-marquee__dot">&bull;</span>
+      <span>Fully Mechanical</span>
+    </div>
+  </section>
+
+  <section class="hbc-quote hbc-reveal" id="hbc-quote-{{ section.id }}">
+    <div class="hbc-quote__inner">
+      {%- if section.settings.quote_image != blank -%}
+        <img class="hbc-quote__img" src="{{ section.settings.quote_image | image_url: width: 200 }}" alt="">
+      {%- endif -%}
+      <p class="hbc-quote__text">{{ section.settings.quote_text | default: 'The default Hasselblad setup for a reason &mdash; fast, sharp, and flexible.' }}</p>
+      <div class="hbc-quote__rule"></div>
+      <div class="hbc-quote__attr">{{ section.settings.quote_attribution | default: 'Brooklyn Film Camera' }}</div>
+    </div>
+  </section>
+
+  <section class="hbc-specs hbc-reveal" id="hbc-specs-{{ section.id }}">
+    <div class="hbc-specs__inner">
+      <div class="hbc-specs__header">
+        {%- if section.settings.specs_image != blank -%}
+          <div class="hbc-specs__img"><img src="{{ section.settings.specs_image | image_url: width: 800 }}" alt="{{ section.settings.product_name }}"></div>
+        {%- endif -%}
+        <div class="hbc-overline">Specifications</div>
+        <h2 class="hbc-heading">{{ section.settings.specs_title_1 | default: 'Built to last another 50 years.' }}</h2>
+        <p class="hbc-body">{{ section.settings.specs_description }}</p>
+      </div>
+      <div class="hbc-specs__table">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'spec' -%}
+            <div class="hbc-specs__row" {{ block.shopify_attributes }}>
+              <span class="hbc-specs__label">{{ block.settings.spec_label }}</span>
+              <span class="hbc-specs__value">{{ block.settings.spec_value }}</span>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  <section class="hbc-gallery">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'gallery_image' -%}
+        <div class="hbc-gallery__item" {{ block.shopify_attributes }}>
+          <img src="{{ block.settings.image | image_url: width: 800 }}" alt="{{ block.settings.image_alt | default: section.settings.product_name }}" loading="lazy">
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </section>
+
+  <!-- ============================================================
+       CLA SECTION — PROMINENT DEDICATED BLOCK
+  ============================================================ -->
+  <section class="hbc-cla hbc-reveal" id="hbc-cla-{{ section.id }}">
+    <div class="hbc-cla__inner">
+      <div class="hbc-cla__header">
+        <div class="hbc-overline" style="text-align:center;">Our Standard</div>
+        <h2 class="hbc-heading" style="text-align:center;max-width:none;">A Quality Guarantee</h2>
+        <p class="hbc-cla__lead">{{ section.settings.cla_description | default: 'A lot of cameras get sold with no service history and no accountability. Every Hasselblad body we sell receives a full CLA in our shop. Lenses and accessories are cleaned and serviced as needed before they ship.' }}</p>
+      </div>
+
+      <div class="hbc-cla__steps">
+        <div class="hbc-cla__step">
+          <div class="hbc-cla__step-letter">C</div>
+          <h3 class="hbc-cla__step-title">Clean</h3>
+          <p class="hbc-cla__step-desc">Every body is fully disassembled. Old lubricants, dust, fungal haze, and decades of oxidation are removed from the shutter blades, mirror box, focusing screen, film rails, and all optical elements. Zeiss glass is cleaned element by element.</p>
+        </div>
+        <div class="hbc-cla__step">
+          <div class="hbc-cla__step-letter">L</div>
+          <h3 class="hbc-cla__step-title">Lubricate</h3>
+          <p class="hbc-cla__step-desc">The right lubricant in the right place is what separates a camera that works from one that lasts. We re-lubricate every gear, cam, and bearing to Hasselblad's original specifications — using professional-grade greases that won't migrate to shutter blades or film plane.</p>
+        </div>
+        <div class="hbc-cla__step">
+          <div class="hbc-cla__step-letter">A</div>
+          <h3 class="hbc-cla__step-title">Adjust</h3>
+          <p class="hbc-cla__step-desc">Shutter speeds calibrated across all settings. Mirror alignment checked. Film plane parallelism verified. Infinity focus confirmed. Flash sync tested. Every timing measurement is confirmed with precision instruments — not guesswork.</p>
+        </div>
+      </div>
+
+      <div class="hbc-cla__proof">
+        <div class="hbc-cla__proof-item">
+          <div class="hbc-cla__proof-num">CLA'd</div>
+          <div class="hbc-cla__proof-label">on most units before sale</div>
+        </div>
+        <div class="hbc-cla__proof-divider"></div>
+        <div class="hbc-cla__proof-item">
+          <div class="hbc-cla__proof-num">6-Mo</div>
+          <div class="hbc-cla__proof-label">warranty covers mechanical function</div>
+        </div>
+        <div class="hbc-cla__proof-divider"></div>
+        <div class="hbc-cla__proof-item">
+          <div class="hbc-cla__proof-num">Tested</div>
+          <div class="hbc-cla__proof-label">with professional equipment before shipping</div>
+        </div>
+        <div class="hbc-cla__proof-divider"></div>
+        <div class="hbc-cla__proof-item">
+          <div class="hbc-cla__proof-num">In-House</div>
+          <div class="hbc-cla__proof-label">done by our Brooklyn technicians</div>
+        </div>
+      </div>
+
+      <div class="hbc-cla__callout">
+        <p class="hbc-cla__callout-text">{{ section.settings.cla_quote | default: 'Most Hasselblads on the market haven&rsquo;t been serviced in years. Ours have.' }}</p>
+        <div class="hbc-cla__callout-attr">{{ section.settings.cla_quote_attr | default: '— Brooklyn Film Camera Technicians' }}</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hbc-process hbc-reveal" id="hbc-process-{{ section.id }}">
+    <div class="hbc-process__inner">
+      <div class="hbc-overline" style="text-align:center;">Our Restoration Process</div>
+      <h2 class="hbc-heading" style="text-align:center;max-width:none;">{{ section.settings.process_title_1 | default: 'How we restore every camera.' }}</h2>
+      {%- if section.settings.process_image != blank -%}
+        <div class="hbc-process__hero-img"><img src="{{ section.settings.process_image | image_url: width: 1200 }}" alt="Our restoration process"></div>
+      {%- endif -%}
+      <div class="hbc-process__grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'process_step' -%}
+            <div class="hbc-process__card" {{ block.shopify_attributes }}>
+              {%- if block.settings.step_image != blank -%}
+                <div class="hbc-process__card-img"><img src="{{ block.settings.step_image | image_url: width: 400 }}" alt="{{ block.settings.step_title }}"></div>
+              {%- endif -%}
+              <div class="hbc-process__num">{{ block.settings.step_number }}</div>
+              <h3 class="hbc-process__title">{{ block.settings.step_title }}</h3>
+              <div class="hbc-process__rule"></div>
+              <p class="hbc-process__desc">{{ block.settings.step_description }}</p>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  <section class="hbc-editorial hbc-reveal" id="hbc-editorial-{{ section.id }}">
+    <div class="hbc-editorial__inner">
+      <div class="hbc-editorial__text">
+        <div class="hbc-overline">{{ section.settings.why_tag | default: 'Why Hasselblad' }}</div>
+        <h2 class="hbc-heading">{{ section.settings.why_title_1 | default: 'Why shoot Hasselblad' }}</h2>
+        <p class="hbc-body">{{ section.settings.why_description_1 }}</p>
+        <p class="hbc-body" style="margin-top:16px;">{{ section.settings.why_description_2 }}</p>
+      </div>
+      <div class="hbc-editorial__sidebar">
+        {%- if section.settings.why_image != blank -%}
+          <div class="hbc-editorial__sidebar-img"><img src="{{ section.settings.why_image | image_url: width: 800 }}" alt="Why Hasselblad"></div>
+        {%- endif -%}
+        <div class="hbc-overline" style="margin-top:24px;">Ideal For</div>
+        {%- assign uc_index = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'use_case' -%}
+            {%- assign uc_index = uc_index | plus: 1 -%}
+            <div class="hbc-usecase" {{ block.shopify_attributes }}>
+              <span class="hbc-usecase__num">{{ uc_index }}</span>
+              {{ block.settings.use_case_text }}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  <section class="hbc-hero hbc-reveal" id="hbc-showcase-{{ section.id }}">
+    <div class="hbc-showcase__header">
+      <div class="hbc-overline">Browse in Detail</div>
+    </div>
+
+    {%- assign showcase_count = 0 -%}
+
+    <div class="hbc-showcase__left">
+      <div class="hbc-showcase__images" id="hbc-images-{{ section.id }}">
+        {%- if hb_product_count > 0 -%}
+          {%- for product in section.settings.collection.products -%}
+            {%- if product.available and product.metafields.custom.brand == 'Hasselblad' -%}
+              {%- if product.featured_image != blank -%}
+                <div class="hbc-showcase__slide {% if showcase_count == 0 %}active{% endif %}"
+                     data-index="{{ showcase_count }}"
+                     data-title="{{ product.title | escape }}"
+                     data-price="{{ product.price | money_without_trailing_zeros }}"
+                     data-url="{{ product.url }}"
+                     data-type="{{ product.product_type | escape }}"
+                     data-desc="{{ product.description | strip_html | truncate: 160 | escape }}">
+                  <img src="{{ product.featured_image | image_url: width: 1200 }}"
+                       alt="{{ product.title }}"
+                       loading="lazy">
+                </div>
+                {%- assign showcase_count = showcase_count | plus: 1 -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'hero_image' -%}
+              <div class="hbc-showcase__slide {% if forloop.first %}active{% endif %}"
+                   data-index="{{ forloop.index0 }}"
+                   data-title="{{ section.settings.product_name | escape }}"
+                   data-price="{{ section.settings.starting_price | default: '3,150' }}"
+                   data-url="#"
+                   data-type="Medium Format Camera"
+                   data-desc=""
+                   {{ block.shopify_attributes }}>
+                <img src="{{ block.settings.image | image_url: width: 1200 }}"
+                     alt="{{ block.settings.image_alt | default: section.settings.product_name }}"
+                     loading="lazy">
+              </div>
+              {%- assign showcase_count = showcase_count | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+
+      <button class="hbc-showcase__arrow hbc-showcase__arrow--prev" id="hbc-prev-{{ section.id }}" aria-label="Previous camera">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12 4L6 10L12 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="hbc-showcase__arrow hbc-showcase__arrow--next" id="hbc-next-{{ section.id }}" aria-label="Next camera">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M8 4L14 10L8 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <div class="hbc-showcase__counter" id="hbc-counter-{{ section.id }}">
+        <span class="hbc-showcase__counter-cur">01</span>
+        <span class="hbc-showcase__counter-sep">/</span>
+        <span class="hbc-showcase__counter-total">{{ showcase_count | prepend: '0' | slice: -2, 2 }}</span>
+      </div>
+
+      <div class="hbc-showcase__thumbs" id="hbc-thumbs-{{ section.id }}">
+        {%- if hb_product_count > 0 -%}
+          {%- assign ti = 0 -%}
+          {%- for product in section.settings.collection.products -%}
+            {%- if product.available and product.metafields.custom.brand == 'Hasselblad' -%}
+              {%- if product.featured_image != blank -%}
+                <button class="hbc-showcase__thumb {% if ti == 0 %}active{% endif %}" data-index="{{ ti }}" aria-label="{{ product.title }}">
+                  <img src="{{ product.featured_image | image_url: width: 100 }}" alt="{{ product.title }}">
+                </button>
+                {%- assign ti = ti | plus: 1 -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign ti = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'hero_image' -%}
+              <button class="hbc-showcase__thumb {% if ti == 0 %}active{% endif %}" data-index="{{ ti }}">
+                <img src="{{ block.settings.image | image_url: width: 100 }}" alt="">
+              </button>
+              {%- assign ti = ti | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="hbc-showcase__right" id="hbc-info-{{ section.id }}">
+      <div class="hbc-hero__overline">{{ section.settings.hero_tag | default: 'Medium Format &middot; 120 Film &middot; 6x6' }}</div>
+      <div class="hbc-showcase__product-name" id="hbc-pname-{{ section.id }}">
+        {%- if hb_product_count > 0 -%}
+          {%- assign first_shown = false -%}
+          {%- for product in section.settings.collection.products -%}
+            {%- if product.available and product.metafields.custom.brand == 'Hasselblad' and first_shown == false -%}
+              {{ product.title }}{%- assign first_shown = true -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {{ section.settings.hero_title_1 | default: 'Hasselblad' }} {{ section.settings.hero_title_2 | default: '500C/M' }}
+        {%- endif -%}
+      </div>
+      <div class="hbc-showcase__product-type" id="hbc-ptype-{{ section.id }}">
+        {%- if hb_product_count > 0 -%}
+          {%- assign first_shown = false -%}
+          {%- for product in section.settings.collection.products -%}
+            {%- if product.available and product.metafields.custom.brand == 'Hasselblad' and first_shown == false -%}
+              {{ product.product_type }}{%- assign first_shown = true -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+      <div class="hbc-hero__rule"></div>
+      <p class="hbc-hero__desc">{{ section.settings.hero_description }}</p>
+      <div class="hbc-showcase__price-row">
+        <div class="hbc-showcase__price" id="hbc-pprice-{{ section.id }}">
+          {%- if hb_product_count > 0 -%}
+            {%- assign first_shown = false -%}
+            {%- for product in section.settings.collection.products -%}
+              {%- if product.available and product.metafields.custom.brand == 'Hasselblad' and first_shown == false -%}
+                {{ product.price | money_without_trailing_zeros }}{%- assign first_shown = true -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- else -%}
+            ${{ section.settings.starting_price | default: '3,150' }}
+          {%- endif -%}
+        </div>
+        <div class="hbc-showcase__price-note">Fully restored &middot; 6-mo warranty</div>
+      </div>
+      <div class="hbc-hero__actions">
+        <a href="#" class="hbc-btn hbc-showcase__view-btn" id="hbc-plink-{{ section.id }}">View This Camera</a>
+        <a href="https://brooklynfilmcamera.com/collections/medium-format-cameras?sort_by=manual&filter.p.m.custom.brand=Hasselblad" class="hbc-btn hbc-btn--ghost">All Hasselblad</a>
+      </div>
+      <div class="hbc-hero__meta">
+        <div class="hbc-hero__meta-item"><strong>6-Month</strong> Warranty</div>
+        <div class="hbc-hero__meta-sep"></div>
+        <div class="hbc-hero__meta-item"><strong>Full CLA</strong> Every Unit</div>
+        <div class="hbc-hero__meta-sep"></div>
+        <div class="hbc-hero__meta-item"><strong>A-Grade</strong> Condition</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="hbc-cta hbc-reveal">
+    <div class="hbc-cta__inner">
+      {%- if section.settings.cta_image != blank -%}
+        <div class="hbc-cta__img"><img src="{{ section.settings.cta_image | image_url: width: 600 }}" alt="Visit us"></div>
+      {%- endif -%}
+      <div class="hbc-overline" style="text-align:center;">Come See Us</div>
+      <h2 class="hbc-heading" style="text-align:center;max-width:none;">Visit the Shop</h2>
+      <p class="hbc-body" style="text-align:center;max-width:520px;margin:0 auto 32px;">{{ section.settings.cta_description | default: 'Come handle a Hasselblad in person at our Grand Street shop. Open every day, 11am-8pm.' }}</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="/pages/visit" class="hbc-btn">Visit Our Store</a>
+        <a href="/pages/faq" class="hbc-btn hbc-btn--ghost">Read FAQ</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="hbc-footer">&copy; {{ 'now' | date: '%Y' }} Brooklyn Film Camera &middot; 855 Grand St, Brooklyn NY</footer>
+</div>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Poppins:wght@300;400;500;600&display=swap');
+.hb-cls{--c-bg:#faf9f7;--c-text:#1a1a1a;--c-muted:#6b6560;--c-faint:#a39e98;--c-accent:#8b7355;--c-accent-light:#c4b49a;--c-border:#e0dcd6;--c-border-light:#ece9e3;--c-card:#fff;--c-dark:#111;--c-dark-text:#f5f2ee;--f-body:'Poppins',sans-serif;--f-head:'EB Garamond',Georgia,serif;font-family:var(--f-body);background:var(--c-bg);color:var(--c-text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.hb-cls *,.hb-cls *::before,.hb-cls *::after{box-sizing:border-box;margin:0;padding:0}
+.hb-cls ::selection{background:rgba(139,115,85,0.15)}
+@keyframes hbcFadeUp{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:translateY(0)}}
+@keyframes hbcMarquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.hbc-reveal{opacity:0;transform:translateY(36px);transition:opacity 0.8s cubic-bezier(0.25,1,0.5,1),transform 0.8s cubic-bezier(0.25,1,0.5,1)}.hbc-reveal.visible{opacity:1;transform:translateY(0)}
+
+/* NAV */
+.hbc-nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;background:rgba(250,249,247,0.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--c-border-light);transition:all 0.3s}
+.hbc-nav.scrolled{box-shadow:0 1px 12px rgba(0,0,0,0.04)}
+.hbc-nav__logo{font-family:var(--f-head);font-size:16px;font-weight:600;color:var(--c-text);text-decoration:none;letter-spacing:0.01em}
+.hbc-nav__links{display:flex;gap:32px}.hbc-nav__link{font-family:var(--f-body);font-size:12px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--c-muted);text-decoration:none;transition:color 0.3s}.hbc-nav__link:hover{color:var(--c-text)}
+
+/* COLLECTION RAIL — exact top sellers pattern */
+.hbc-collection{ background: var(--c-bg); border-bottom: 1px solid var(--c-border-light); }
+
+.hbc-collection .hbc-ts__header{ margin-bottom: 0; }
+.hbc-collection .hbc-ts__header-row{ display:flex;align-items:baseline;justify-content:space-between;gap:16px; }
+.hbc-collection .hbc-ts__title{ margin:0;letter-spacing:-0.02em;font-family:var(--f-head);font-size:28px;font-weight:500;color:var(--c-text); }
+.hbc-collection .hbc-ts__viewall{ color:var(--c-text);text-decoration:none;font-size:12px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;opacity:.7; }
+.hbc-collection .hbc-ts__viewall:hover{ opacity:1; }
+.hbc-collection .hbc-ts__subheading{ margin:8px 0 0;color:var(--c-muted);font-size:13px;line-height:1.35; }
+
+.hbc-collection .hbc-ts__rail-wrap{ position:relative;margin-top:0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);--bfc-ts-left-pad:48px; }
+.hbc-collection .hbc-ts__rail{ display:grid;grid-auto-flow:column;grid-auto-columns:clamp(220px,24vw,280px);gap:16px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-left:var(--bfc-ts-left-pad);padding-left:var(--bfc-ts-left-pad);padding-right:0;padding-top:20px;padding-bottom:24px;-webkit-overflow-scrolling:touch;scrollbar-width:none; }
+.hbc-collection .hbc-ts__rail::-webkit-scrollbar{ display:none; }
+
+.hbc-collection .hbc-ts__card{ scroll-snap-align:start;scroll-snap-stop:always;background:var(--c-bg);border:1px solid var(--c-border-light);overflow:hidden;display:grid;grid-template-rows:auto 1fr;min-height:100%; }
+.hbc-collection .hbc-ts__img{ position:relative;display:block;aspect-ratio:4/3;background:var(--c-card);overflow:hidden;text-decoration:none; }
+.hbc-collection .hbc-ts__img img{ width:100%;height:100%;object-fit:cover;padding:0;display:block;transform:scale(1);transition:transform .25s ease; }
+.hbc-collection .hbc-ts__card:hover .hbc-ts__img img{ transform:scale(1.03); }
+
+.hbc-collection .hbc-ts__meta{ padding:14px 16px 16px;display:grid;gap:6px;border-top:1px solid var(--c-border-light); }
+.hbc-collection .hbc-ts__vendor{ font-size:10px;color:var(--c-faint);text-transform:uppercase;letter-spacing:.1em;font-weight:500; }
+.hbc-collection .hbc-ts__name{ color:var(--c-text);text-decoration:none;font-family:var(--f-head);font-size:17px;line-height:1.25;font-weight:500;letter-spacing:-0.01em; }
+.hbc-collection .hbc-ts__name:hover{ text-decoration:underline; }
+.hbc-collection .hbc-ts__bottom{ margin-top:2px; }
+.hbc-collection .hbc-ts__price-now{ font-size:15px;font-weight:600;color:var(--c-text); }
+
+.hbc-collection .hbc-ts__arrow{ position:absolute;top:42%;transform:translateY(-50%);z-index:3;width:40px;height:40px;border:1px solid var(--c-border);background:rgba(250,249,247,.9);backdrop-filter:blur(6px);cursor:pointer;display:none;align-items:center;justify-content:center;font-size:22px;line-height:1;color:var(--c-text); }
+.hbc-collection .hbc-ts__arrow--prev{ left:10px; }
+.hbc-collection .hbc-ts__arrow--next{ right:10px; }
+@media(min-width:990px){ .hbc-collection .hbc-ts__arrow{ display:flex; } }
+
+.hbc-collection .hbc-ts__fade{ position:absolute;top:0;bottom:0;width:56px;z-index:2;pointer-events:none; }
+.hbc-collection .hbc-ts__fade--left{ left:0;background:linear-gradient(to right,var(--c-bg),transparent); }
+.hbc-collection .hbc-ts__fade--right{ right:0;background:linear-gradient(to left,var(--c-bg),transparent); }
+
+@media(max-width:749px){
+  .hbc-collection .hbc-ts__rail{ grid-auto-columns:78vw;gap:12px;--bfc-ts-left-pad:24px; }
+  .hbc-collection .hbc-ts__header{ margin-left:24px!important;margin-right:24px!important; }
+}
+
+/* SHOWCASE — mid-page detail browser */
+.hbc-hero{display:grid;grid-template-columns:1.15fr 1fr;min-height:640px;border-top:1px solid var(--c-border-light)}
+.hbc-showcase__header{display:none}
+.hbc-showcase__left{position:relative;overflow:hidden;background:var(--c-card)}
+.hbc-showcase__images{position:absolute;inset:0}
+.hbc-showcase__slide{position:absolute;inset:0;opacity:0;transition:opacity 0.6s ease}
+.hbc-showcase__slide.active{opacity:1}
+.hbc-showcase__slide img{width:100%;height:100%;object-fit:cover}
+
+/* Arrows */
+.hbc-showcase__arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:10;width:44px;height:44px;background:rgba(250,249,247,0.9);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid var(--c-border);color:var(--c-text);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.25s;padding:0}
+.hbc-showcase__arrow:hover{background:#fff;border-color:var(--c-accent);color:var(--c-accent)}
+.hbc-showcase__arrow--prev{left:20px}
+.hbc-showcase__arrow--next{right:20px}
+
+/* Counter */
+.hbc-showcase__counter{position:absolute;top:20px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:6px;background:rgba(250,249,247,0.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:6px 14px;border:1px solid var(--c-border-light);font-family:var(--f-body);font-size:11px;font-weight:500;letter-spacing:0.08em;color:var(--c-muted)}
+.hbc-showcase__counter-cur{color:var(--c-text)}
+.hbc-showcase__counter-sep{color:var(--c-border)}
+
+/* Thumbnail strip */
+.hbc-showcase__thumbs{position:absolute;bottom:0;left:0;right:0;display:flex;gap:0;border-top:1px solid var(--c-border-light);background:rgba(250,249,247,0.92);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow-x:auto;scrollbar-width:none}
+.hbc-showcase__thumbs::-webkit-scrollbar{display:none}
+.hbc-showcase__thumb{flex:0 0 80px;height:72px;border:none;border-right:1px solid var(--c-border-light);background:transparent;cursor:pointer;padding:6px;transition:background 0.2s;position:relative}
+.hbc-showcase__thumb img{width:100%;height:100%;object-fit:contain}
+.hbc-showcase__thumb::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:transparent;transition:background 0.2s}
+.hbc-showcase__thumb.active::after,.hbc-showcase__thumb:hover::after{background:var(--c-accent)}
+.hbc-showcase__thumb.active{background:rgba(139,115,85,0.06)}
+
+/* Right panel */
+.hbc-showcase__right{display:flex;flex-direction:column;justify-content:center;padding:64px 56px}
+
+/* Dynamic product name */
+.hbc-showcase__product-name{font-family:var(--f-head);font-size:40px;font-weight:500;line-height:1.1;color:var(--c-text);letter-spacing:-0.01em;margin-bottom:8px;transition:opacity 0.3s}
+.hbc-showcase__product-name.switching{opacity:0}
+
+/* Product type tag */
+.hbc-showcase__product-type{font-family:var(--f-body);font-size:13px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--c-muted);margin-bottom:20px;transition:opacity 0.3s}
+.hbc-showcase__product-type.switching{opacity:0}
+
+/* Price row */
+.hbc-showcase__price-row{margin-bottom:28px;display:flex;align-items:baseline;gap:16px}
+.hbc-showcase__price{font-family:var(--f-head);font-size:32px;color:var(--c-text);font-weight:500;transition:opacity 0.3s}
+.hbc-showcase__price.switching{opacity:0}
+.hbc-showcase__price-note{font-size:11px;color:var(--c-faint);font-weight:400}
+
+/* View button transition */
+.hbc-showcase__view-btn.switching{opacity:0.5}
+
+/* Shared hero/right panel styles */
+.hbc-hero__overline{font-family:var(--f-body);font-size:11px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--c-accent);margin-bottom:16px}
+.hbc-hero__rule{width:40px;height:1px;background:var(--c-border);margin:20px 0}
+.hbc-hero__desc{font-size:14px;line-height:1.75;color:var(--c-muted);max-width:400px;margin-bottom:28px;font-weight:400}
+.hbc-hero__actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:36px}
+.hbc-hero__meta{display:flex;gap:20px;align-items:center}.hbc-hero__meta-item{font-size:12px;color:var(--c-muted);font-weight:400}.hbc-hero__meta-item strong{font-weight:600;color:var(--c-text)}.hbc-hero__meta-sep{width:1px;height:16px;background:var(--c-border)}
+
+/* BUTTONS */
+.hbc-btn{display:inline-block;background:var(--c-text);color:#fff;padding:14px 36px;font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;font-family:var(--f-body);border:1px solid var(--c-text);transition:all 0.3s ease;cursor:pointer}.hbc-btn:hover{background:var(--c-accent);border-color:var(--c-accent)}
+.hbc-btn--ghost{background:transparent;color:var(--c-text);border:1px solid var(--c-border)}.hbc-btn--ghost:hover{border-color:var(--c-text);background:rgba(0,0,0,0.02)}
+.hbc-btn--sm{padding:10px 28px;font-size:11px}
+.hbc-btn--light{background:#fff;color:var(--c-dark);border-color:#fff}.hbc-btn--light:hover{background:var(--c-accent-light);border-color:var(--c-accent-light);color:#fff}
+.hbc-btn--ghost-light{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.4)}.hbc-btn--ghost-light:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.7)}
+
+/* SHARED TYPOGRAPHY */
+.hbc-overline{font-family:var(--f-body);font-size:11px;font-weight:500;letter-spacing:0.18em;text-transform:uppercase;color:var(--c-accent);margin-bottom:14px}
+.hbc-heading{font-family:var(--f-head);font-size:36px;font-weight:500;line-height:1.2;color:var(--c-text);max-width:480px;margin-bottom:20px;letter-spacing:-0.01em}.hbc-heading em{font-style:normal;font-weight:500;color:var(--c-text)}
+.hbc-body{font-size:14px;line-height:1.75;color:var(--c-muted);max-width:440px;font-weight:400}
+
+/* MARQUEE */
+.hbc-marquee{overflow:hidden;border-top:1px solid var(--c-border-light);border-bottom:1px solid var(--c-border-light);padding:16px 0;white-space:nowrap}
+.hbc-marquee__inner{display:inline-flex;gap:0;animation:hbcMarquee 30s linear infinite}
+.hbc-marquee__inner span{font-family:var(--f-head);font-size:14px;font-weight:400;color:var(--c-faint);letter-spacing:0.05em;padding:0 16px}.hbc-marquee__dot{color:var(--c-accent-light);padding:0 8px}
+
+/* QUOTE */
+.hbc-quote{padding:48px 48px;text-align:center;background:var(--c-card);border-bottom:1px solid var(--c-border-light)}
+.hbc-quote__inner{max-width:640px;margin:0 auto}
+.hbc-quote__img{width:56px;height:56px;border-radius:50%;object-fit:cover;margin:0 auto 14px;display:block;border:1px solid var(--c-border-light)}
+.hbc-quote__text{font-family:var(--f-head);font-size:20px;font-weight:500;line-height:1.5;color:var(--c-text)}
+.hbc-quote__rule{width:24px;height:1px;background:var(--c-border);margin:16px auto}.hbc-quote__attr{font-family:var(--f-body);font-size:11px;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--c-faint)}
+
+/* SPECS */
+.hbc-specs{padding:80px 48px}.hbc-specs__inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1fr 1.2fr;gap:64px;align-items:start}
+.hbc-specs__img{margin-bottom:24px;overflow:hidden}.hbc-specs__img img{width:100%;height:auto;display:block}
+.hbc-specs__table{border-top:1px solid var(--c-border)}
+.hbc-specs__row{display:flex;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--c-border-light);transition:background 0.2s}.hbc-specs__row:hover{background:rgba(0,0,0,0.01)}
+.hbc-specs__label{font-size:13px;font-weight:500;color:var(--c-muted);text-transform:uppercase;letter-spacing:0.06em}
+.hbc-specs__value{font-family:var(--f-head);font-size:17px;color:var(--c-text);font-weight:400}
+
+/* GALLERY */
+.hbc-gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--c-border-light);border-top:1px solid var(--c-border-light);border-bottom:1px solid var(--c-border-light)}
+.hbc-gallery__item{background:var(--c-card);aspect-ratio:1/1;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.hbc-gallery__item img{width:80%;height:80%;object-fit:contain;transition:transform 0.6s cubic-bezier(0.25,1,0.5,1)}.hbc-gallery__item:hover img{transform:scale(1.05)}
+
+/* ============================================================
+   CLA SECTION — DARK FULL-WIDTH FEATURE
+============================================================ */
+.hbc-cla{background:var(--c-dark);padding:88px 48px}
+.hbc-cla__inner{max-width:1080px;margin:0 auto}
+.hbc-cla .hbc-overline{color:var(--c-accent-light)}
+.hbc-cla__header{text-align:center;margin-bottom:60px}
+.hbc-cla__header .hbc-heading{color:var(--c-dark-text);max-width:none;font-size:38px;line-height:1.15;margin-bottom:20px}
+.hbc-cla__header .hbc-heading em{color:var(--c-accent-light)}
+.hbc-cla__lead{font-size:15px;line-height:1.75;color:rgba(245,242,238,0.65);max-width:600px;margin:0 auto;font-weight:400;text-align:center}
+
+.hbc-cla__steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,0.06);margin-bottom:60px}
+.hbc-cla__step{background:var(--c-dark);padding:40px 32px;position:relative;transition:background 0.3s}
+.hbc-cla__step:hover{background:#1a1a1a}
+.hbc-cla__step-letter{font-family:var(--f-head);font-size:72px;font-weight:400;line-height:1;color:rgba(196,180,154,0.08);position:absolute;top:24px;right:28px;letter-spacing:-0.04em;pointer-events:none;transition:color 0.3s}
+.hbc-cla__step:hover .hbc-cla__step-letter{color:rgba(196,180,154,0.14)}
+.hbc-cla__step-title{font-family:var(--f-body);font-size:15px;font-weight:600;color:var(--c-dark-text);margin-bottom:14px;padding-top:4px;text-transform:uppercase;letter-spacing:0.06em}
+.hbc-cla__step::before{content:'';display:block;width:28px;height:2px;background:var(--c-accent);margin-bottom:16px}
+.hbc-cla__step-desc{font-size:14px;line-height:1.75;color:rgba(245,242,238,0.55);font-weight:400}
+
+.hbc-cla__proof{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;align-items:center;gap:0;border:1px solid rgba(255,255,255,0.08);margin-bottom:56px}
+.hbc-cla__proof-item{padding:28px 24px;text-align:center}
+.hbc-cla__proof-num{font-family:var(--f-body);font-size:22px;font-weight:600;color:var(--c-dark-text);margin-bottom:6px;letter-spacing:-0.01em}
+.hbc-cla__proof-label{font-size:12px;color:rgba(245,242,238,0.45);font-weight:400;line-height:1.4}
+.hbc-cla__proof-divider{width:1px;height:50px;background:rgba(255,255,255,0.08);flex-shrink:0}
+
+.hbc-cla__callout{border-left:2px solid rgba(255,255,255,0.15);padding:24px 32px;background:rgba(255,255,255,0.03)}
+.hbc-cla__callout-text{font-family:var(--f-body);font-size:14px;font-weight:400;color:rgba(245,242,238,0.7);line-height:1.7;margin-bottom:12px}
+.hbc-cla__callout-attr{font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:rgba(245,242,238,0.35)}
+
+/* PROCESS */
+.hbc-process{padding:80px 48px;background:var(--c-card)}.hbc-process__inner{max-width:1080px;margin:0 auto}
+.hbc-process__hero-img{margin:32px 0 48px;overflow:hidden;max-height:400px}.hbc-process__hero-img img{width:100%;height:100%;object-fit:cover;display:block}
+.hbc-process__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:16px;background:var(--c-border-light)}
+.hbc-process__card{background:var(--c-bg);padding:36px 28px;transition:background 0.3s}.hbc-process__card:hover{background:var(--c-card)}
+.hbc-process__card-img{margin:-36px -28px 20px;overflow:hidden;aspect-ratio:16/10}.hbc-process__card-img img{width:100%;height:100%;object-fit:cover}
+.hbc-process__num{font-family:var(--f-head);font-size:36px;color:var(--c-accent-light);margin-bottom:16px;font-weight:400}
+.hbc-process__title{font-family:var(--f-head);font-size:20px;font-weight:500;color:var(--c-text);margin-bottom:8px}
+.hbc-process__rule{width:24px;height:1px;background:var(--c-accent-light);margin-bottom:12px}
+.hbc-process__desc{font-size:13px;line-height:1.7;color:var(--c-muted);font-weight:300}
+
+/* EDITORIAL */
+.hbc-editorial{padding:80px 48px}.hbc-editorial__inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:1.2fr 1fr;gap:64px;align-items:start}
+.hbc-editorial__sidebar{padding:40px;border:1px solid var(--c-border);background:var(--c-card)}
+.hbc-editorial__sidebar-img{margin:-40px -40px 0;overflow:hidden;aspect-ratio:16/10}.hbc-editorial__sidebar-img img{width:100%;height:100%;object-fit:cover}
+.hbc-usecase{padding:14px 0;border-bottom:1px solid var(--c-border-light);font-size:14px;line-height:1.6;color:var(--c-muted);font-weight:300;display:flex;gap:14px;align-items:flex-start}
+.hbc-usecase:last-child{border-bottom:none}.hbc-usecase__num{font-family:var(--f-head);font-size:16px;color:var(--c-accent-light);flex-shrink:0;width:20px;font-weight:500}
+
+/* VARIANTS */
+.hbc-variants{padding:80px 48px;background:var(--c-card);border-top:1px solid var(--c-border-light)}.hbc-variants__inner{max-width:1080px;margin:0 auto}
+.hbc-variants__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:48px;background:var(--c-border-light)}
+.hbc-variant{display:block;background:var(--c-bg);padding:36px 28px;text-align:center;text-decoration:none;color:var(--c-text);transition:all 0.3s;position:relative}
+.hbc-variant:hover{background:var(--c-card);box-shadow:0 4px 24px rgba(0,0,0,0.04)}
+.hbc-variant__badge{position:absolute;top:14px;right:14px;font-size:10px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--c-accent);padding:4px 10px;background:rgba(139,115,85,0.08);border:1px solid rgba(139,115,85,0.15)}
+.hbc-variant__img{margin-bottom:18px;aspect-ratio:1/1;max-width:160px;margin-left:auto;margin-right:auto}.hbc-variant__img img{width:100%;height:100%;object-fit:contain}
+.hbc-variant__name{font-family:var(--f-head);font-size:19px;font-weight:500;color:var(--c-text);margin-bottom:6px}
+.hbc-variant__sub{font-size:13px;color:var(--c-faint);font-weight:300;margin-bottom:14px}
+.hbc-variant__rule{width:20px;height:1px;background:var(--c-accent-light);margin:0 auto 14px}
+.hbc-variant__price{font-family:var(--f-head);font-size:26px;color:var(--c-text);margin-bottom:18px;font-weight:400}
+.hbc-variants__note{font-size:12px;color:var(--c-faint);text-align:center;margin-top:32px;font-weight:300}
+.hbc-variants__shopall{text-align:center;margin-top:20px}
+
+/* CREATIVE SHOOTS GALLERY */
+.hbc-shoots{background:var(--c-dark);padding:6px}
+.hbc-shoots__grid{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:280px;gap:6px}
+@media(max-width:768px){.hbc-shoots__grid{grid-template-columns:repeat(2,1fr);grid-auto-rows:220px}}
+
+/* Default: 1 row. Tall spans 2 rows to match 2 stacked short images */
+.hbc-shoots__item{overflow:hidden;background:var(--c-dark);grid-row:span 1}
+.hbc-shoots__item--tall,
+.hbc-shoots__item--feature{grid-row:span 2}
+/* Reset unused span classes */
+.hbc-shoots__item--1,.hbc-shoots__item--2,.hbc-shoots__item--3,
+.hbc-shoots__item--wide,.hbc-shoots__item--full{grid-column:unset}
+
+.hbc-shoots__img-wrap{width:100%;height:100%;overflow:hidden}
+.hbc-shoots__img-wrap img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.7s cubic-bezier(0.25,1,0.5,1)}
+.hbc-shoots__item:hover .hbc-shoots__img-wrap img{transform:scale(1.04);filter:brightness(0.85)}
+
+.hbc-shoots__caption{position:absolute;bottom:0;left:0;right:0;padding:10px 14px;font-family:var(--f-body);font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:rgba(245,242,238,0.7);background:linear-gradient(transparent,rgba(0,0,0,0.55));opacity:0;transition:opacity 0.3s}
+.hbc-shoots__item:hover .hbc-shoots__caption{opacity:1}
+
+/* CTA */
+.hbc-cta{padding:80px 48px;border-top:1px solid var(--c-border-light)}.hbc-cta__inner{max-width:560px;margin:0 auto}
+.hbc-cta__img{margin-bottom:28px;overflow:hidden;max-width:300px;margin-left:auto;margin-right:auto}.hbc-cta__img img{width:100%;height:auto;display:block}
+
+/* FOOTER */
+.hbc-footer{padding:40px 48px;text-align:center;border-top:1px solid var(--c-border-light);font-size:12px;color:var(--c-faint);font-weight:300}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .hbc-collection__header{padding:0 24px;flex-direction:column;align-items:flex-start;gap:12px}
+  .hbc-collection__title{font-size:28px}
+  .hbc-rail{grid-auto-columns:78vw;scroll-padding-left:24px;padding-left:24px}
+  .hbc-hero{grid-template-columns:1fr;min-height:unset}
+  .hbc-showcase__left{height:72vw;min-height:unset;border-right:none;border-bottom:1px solid var(--c-border-light)}
+  .hbc-showcase__thumbs{display:none}
+  .hbc-showcase__right{padding:28px 24px}
+  .hbc-showcase__product-name{font-size:24px}
+  .hbc-showcase__price{font-size:22px}
+  .hbc-specs__inner,.hbc-editorial__inner{grid-template-columns:1fr;gap:48px}
+  .hbc-process__grid{grid-template-columns:1fr 1fr}.hbc-variants__grid{grid-template-columns:1fr}
+  .hbc-gallery{grid-template-columns:1fr 1fr}.hbc-heading{font-size:30px}
+  .hbc-quote__text{font-size:22px}.hbc-nav__links{display:none}
+  .hbc-hero__meta{flex-direction:column;gap:8px;align-items:flex-start}.hbc-hero__meta-sep{display:none}
+  .hbc-specs,.hbc-process,.hbc-editorial,.hbc-variants,.hbc-cta{padding-left:24px;padding-right:24px}
+  .hbc-shoots__header{padding:0 24px 36px}
+  .hbc-cla{padding:72px 24px}
+  .hbc-cla__steps{grid-template-columns:1fr}
+  .hbc-cla__proof{grid-template-columns:1fr 1fr;grid-template-rows:auto auto}.hbc-cla__proof-divider{display:none}
+  .hbc-cla__header .hbc-heading{font-size:28px}
+  .hbc-cla__callout-text{font-size:18px}
+}
+</style>
+
+<script>
+// Hasselblad collection rail — exact top sellers pattern
+(function () {
+  var root = document.querySelector('.hbc-collection [data-bfc-ts]');
+  if (!root) return;
+  var rail = root.querySelector('[data-bfc-ts-rail]');
+  var prev = root.querySelector('[data-bfc-ts-prev]');
+  var next = root.querySelector('[data-bfc-ts-next]');
+  if (!rail) return;
+  var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var behavior = prefersReduced ? 'auto' : 'smooth';
+  function scrollByAmount(dir) {
+    var amount = Math.max(240, Math.floor(rail.clientWidth * 0.85));
+    rail.scrollBy({ left: dir * amount, behavior: behavior });
+  }
+  function updateArrows() {
+    if (!prev || !next) return;
+    var max = rail.scrollWidth - rail.clientWidth - 2;
+    prev.disabled = rail.scrollLeft <= 2;
+    next.disabled = rail.scrollLeft >= max;
+    prev.style.opacity = prev.disabled ? '0.35' : '1';
+    next.style.opacity = next.disabled ? '0.35' : '1';
+  }
+  if (prev) prev.addEventListener('click', function () { scrollByAmount(-1); });
+  if (next) next.addEventListener('click', function () { scrollByAmount(1); });
+  rail.addEventListener('scroll', function () { window.requestAnimationFrame(updateArrows); }, { passive: true });
+  window.addEventListener('resize', function () { window.requestAnimationFrame(updateArrows); });
+  updateArrows();
+})();
+</script>
+
+<script>
+// Clear any lingering hash so the browser doesn't auto-scroll to an anchor on load
+(function(){
+  if(window.location.hash && window.location.hash.indexOf('hbc-')!==-1){
+    if(window.history && window.history.replaceState){
+      window.history.replaceState(null,'',window.location.pathname+window.location.search);
+    }
+  }
+})();
+</script>
+
+<script>
+(function(){
+  var SID='{{ section.id }}';
+  var root=document.getElementById('hb-cls-'+SID);
+  if(!root)return;
+
+  // Nav scroll
+  var nav=document.getElementById('hbc-nav-'+SID);
+  window.addEventListener('scroll',function(){nav.classList.toggle('scrolled',window.scrollY>60);},{passive:true});
+
+  // Showcase
+  var slides=root.querySelectorAll('.hbc-showcase__slide');
+  var thumbs=root.querySelectorAll('.hbc-showcase__thumb');
+  var counterCur=root.querySelector('#hbc-counter-'+SID+' .hbc-showcase__counter-cur');
+  var pName=document.getElementById('hbc-pname-'+SID);
+  var pType=document.getElementById('hbc-ptype-'+SID);
+  var pPrice=document.getElementById('hbc-pprice-'+SID);
+  var pLink=document.getElementById('hbc-plink-'+SID);
+  var cur=0;
+  var total=slides.length;
+  var autoTimer=null;
+
+  function pad(n){return n<10?'0'+n:String(n);}
+
+  function goTo(i,skipAuto){
+    if(i<0)i=total-1;
+    if(i>=total)i=0;
+    var prev=cur;
+    cur=i;
+
+    // Swap slides
+    slides[prev].classList.remove('active');
+    slides[cur].classList.add('active');
+
+    // Thumbs
+    thumbs.forEach(function(t){t.classList.remove('active');});
+    if(thumbs[cur])thumbs[cur].classList.add('active');
+
+    // Scroll thumb strip horizontally (without moving the page)
+    if(thumbs[cur]){
+      var strip=thumbs[cur].parentNode;
+      if(strip){
+        var thumbLeft=thumbs[cur].offsetLeft;
+        var thumbW=thumbs[cur].offsetWidth;
+        var stripW=strip.offsetWidth;
+        strip.scrollLeft=thumbLeft-(stripW/2)+(thumbW/2);
+      }
+    }
+
+    // Counter
+    if(counterCur)counterCur.textContent=pad(cur+1);
+
+    // Right panel — fade out, swap, fade in
+    var slide=slides[cur];
+    var newTitle=slide.getAttribute('data-title')||'';
+    var newType=slide.getAttribute('data-type')||'';
+    var newPrice=slide.getAttribute('data-price')||'';
+    var newUrl=slide.getAttribute('data-url')||'#';
+
+    [pName,pType,pPrice,pLink].forEach(function(el){if(el)el.classList.add('switching');});
+    setTimeout(function(){
+      if(pName)pName.textContent=newTitle;
+      if(pType)pType.textContent=newType;
+      if(pPrice)pPrice.textContent=newPrice;
+      if(pLink)pLink.setAttribute('href',newUrl);
+      [pName,pType,pPrice,pLink].forEach(function(el){if(el)el.classList.remove('switching');});
+    },280);
+
+    if(!skipAuto)resetAuto();
+  }
+
+  function resetAuto(){
+    clearInterval(autoTimer);
+    if(total>1)autoTimer=setInterval(function(){goTo(cur+1,true);},5000);
+  }
+
+  // Thumb clicks
+  thumbs.forEach(function(t){
+    t.addEventListener('click',function(){
+      goTo(parseInt(t.getAttribute('data-index')||0));
+    });
+  });
+
+  // Arrow buttons
+  var btnPrev=document.getElementById('hbc-prev-'+SID);
+  var btnNext=document.getElementById('hbc-next-'+SID);
+  if(btnPrev)btnPrev.addEventListener('click',function(){goTo(cur-1);});
+  if(btnNext)btnNext.addEventListener('click',function(){goTo(cur+1);});
+
+  // Keyboard
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft')goTo(cur-1);
+    if(e.key==='ArrowRight')goTo(cur+1);
+  });
+
+  // Touch swipe on left panel
+  var touchStartX=0;
+  var leftPanel=root.querySelector('.hbc-showcase__left');
+  if(leftPanel){
+    leftPanel.addEventListener('touchstart',function(e){touchStartX=e.touches[0].clientX;},{passive:true});
+    leftPanel.addEventListener('touchend',function(e){
+      var dx=e.changedTouches[0].clientX-touchStartX;
+      if(Math.abs(dx)>40){dx<0?goTo(cur+1):goTo(cur-1);}
+    },{passive:true});
+  }
+
+  // Set initial link
+  if(slides[0]&&pLink)pLink.setAttribute('href',slides[0].getAttribute('data-url')||'#');
+
+  // Start auto
+  resetAuto();
+
+  // Scroll reveal
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.12});
+  root.querySelectorAll('.hbc-reveal').forEach(function(el){obs.observe(el);});
+
+  // Smooth scroll for anchor links
+  root.querySelectorAll('a[href^="#hbc-"]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var t=document.getElementById(a.getAttribute('href').substring(1));
+      if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name":"Hasselblad Classic",
+  "tag":"section",
+  "class":"hb-classic-section",
+  "settings":[
+    {"type":"header","content":"Hero"},
+    {"type":"collection","id":"collection","label":"Hasselblad Collection","info":"Products with brand metafield = Hasselblad will be pulled automatically for the slideshow and shop grid"},
+    {"type":"text","id":"product_name","label":"Product Name","default":"Hasselblad 500CM"},
+    {"type":"text","id":"hero_tag","label":"Hero Tag","default":"Medium Format · 120 Film · 6×6"},
+    {"type":"text","id":"hero_title_1","label":"Title Line 1","default":"Hasselblad"},
+    {"type":"text","id":"hero_title_2","label":"Title Line 2","default":"500C/M"},
+    {"type":"text","id":"hero_subtitle","label":"Subtitle","default":"Fully restored. 6-month warranty."},
+    {"type":"textarea","id":"hero_description","label":"Description","default":"Fully mechanical, modular medium format cameras. Every unit CLA'd by our in-house technicians and backed by a 6-month warranty."},
+    {"type":"text","id":"starting_price","label":"Starting Price","default":"3,150"},
+    {"type":"header","content":"Quote"},
+    {"type":"text","id":"quote_text","label":"Quote","default":"The standard Hasselblad setup for a reason — versatile, reliable, and sharp."},
+    {"type":"text","id":"quote_attribution","label":"Attribution","default":"Brooklyn Film Camera"},
+    {"type":"image_picker","id":"quote_image","label":"Quote Image (optional)","info":"Small circular image above the quote"},
+    {"type":"header","content":"Specs Section"},
+    {"type":"text","id":"specs_title_1","label":"Title","default":"Technical specs."},
+    {"type":"textarea","id":"specs_description","label":"Description","default":"The 500C/M's modular V-System lets you swap backs, finders, and lenses. Fully mechanical — no batteries, no electronics."},
+    {"type":"image_picker","id":"specs_image","label":"Specs Image (optional)","info":"Image shown above the specs copy"},
+    {"type":"header","content":"CLA Section"},
+    {"type":"textarea","id":"cla_description","label":"CLA Intro Description","default":"A lot of cameras get sold with no service history and no accountability. Every Hasselblad body we sell receives a full CLA in our shop. Lenses and accessories are cleaned and serviced as needed before they ship."},
+    {"type":"textarea","id":"cla_quote","label":"CLA Pull Quote","default":"Most Hasselblads on the market haven't been serviced in years. Ours have."},
+    {"type":"text","id":"cla_quote_attr","label":"CLA Quote Attribution","default":"— Brooklyn Film Camera Technicians"},
+    {"type":"header","content":"Process Section"},
+    {"type":"text","id":"process_title_1","label":"Title","default":"How we restore every camera."},
+    {"type":"image_picker","id":"process_image","label":"Process Hero Image (optional)","info":"Wide image between title and step cards"},
+    {"type":"header","content":"Why Section"},
+    {"type":"text","id":"why_tag","label":"Tag","default":"Why Hasselblad"},
+    {"type":"text","id":"why_title_1","label":"Title","default":"Why shoot Hasselblad"},
+    {"type":"textarea","id":"why_description_1","label":"Description 1","default":"6x6 medium format gives you negatives with four times the surface area of 35mm — more detail, more dynamic range, more to work with in the darkroom or in post."},
+    {"type":"textarea","id":"why_description_2","label":"Description 2","default":"Zeiss Planar T* lenses are sharp edge to edge with excellent contrast and flare resistance. They're the reason Hasselblads are still the go-to for portrait and studio work."},
+    {"type":"image_picker","id":"why_image","label":"Sidebar Feature Image (optional)","info":"Image at the top of the Ideal For sidebar"},
+    {"type":"header","content":"CTA"},
+    {"type":"textarea","id":"cta_description","label":"CTA Description","default":"Stop by our shop at 855 Grand St in Brooklyn to handle one in person. We're open every day, 11am–8pm."},
+    {"type":"image_picker","id":"cta_image","label":"CTA Image (optional)","info":"Image above the closing call-to-action"},
+    {"type":"header","content":"Creative Shoots Gallery"},
+    {"type":"text","id":"shoots_title","label":"Gallery Title (unused)","info":"Add 'shoot_image' blocks below to populate the gallery that appears directly under the hero"}
+  ],
+  "blocks":[
+    {"type":"hero_image","name":"Hero Slideshow Image","settings":[
+      {"type":"image_picker","id":"image","label":"Image"},
+      {"type":"text","id":"image_alt","label":"Alt Text (optional)"}
+    ]},
+    {"type":"gallery_image","name":"Gallery Strip Image","settings":[
+      {"type":"image_picker","id":"image","label":"Image"},
+      {"type":"text","id":"image_alt","label":"Alt Text (optional)"}
+    ]},
+    {"type":"shoot_image","name":"Creative Shoot Photo","settings":[
+      {"type":"image_picker","id":"image","label":"Photo"},
+      {"type":"text","id":"image_alt","label":"Alt Text (optional)"},
+      {"type":"text","id":"caption","label":"Caption (optional)","info":"Shown on hover"},
+      {"type":"select","id":"image_span","label":"Grid Size","options":[
+        {"value":"1","label":"Small (3 cols)"},
+        {"value":"2","label":"Medium (4 cols)"},
+        {"value":"3","label":"Half width (6 cols)"},
+        {"value":"tall","label":"Tall (3 cols × 2 rows)"},
+        {"value":"feature","label":"Feature (6 cols × 2 rows)"},
+        {"value":"full","label":"Full width (12 cols × 2 rows)"}
+      ],"default":"3"}
+    ]},
+    {"type":"spec","name":"Spec","settings":[
+      {"type":"text","id":"spec_label","label":"Label","default":"Format"},
+      {"type":"text","id":"spec_value","label":"Value","default":"120 Film (6x6)"}
+    ]},
+    {"type":"process_step","name":"Process Step","settings":[
+      {"type":"text","id":"step_number","label":"Step Number","default":"01"},
+      {"type":"text","id":"step_title","label":"Title"},
+      {"type":"textarea","id":"step_description","label":"Description"},
+      {"type":"image_picker","id":"step_image","label":"Step Image (optional)","info":"Image at the top of this step card"}
+    ]},
+    {"type":"use_case","name":"Use Case","settings":[
+      {"type":"text","id":"use_case_text","label":"Text"}
+    ]},
+    {"type":"variant","name":"Product Variant","settings":[
+      {"type":"text","id":"variant_name","label":"Name","default":"500CM + 80mm f/2.8"},
+      {"type":"text","id":"variant_subtitle","label":"Subtitle","default":"Fully Refurbished, In Box"},
+      {"type":"text","id":"variant_price","label":"Price","default":"3,450"},
+      {"type":"url","id":"variant_url","label":"Product URL"},
+      {"type":"text","id":"variant_badge","label":"Badge (optional)"},
+      {"type":"image_picker","id":"variant_image","label":"Product Image (optional)","info":"Photo shown in the variant card"}
+    ]}
+  ],
+  "presets":[{
+    "name":"Hasselblad Landing Page",
+    "blocks":[
+      {"type":"spec","settings":{"spec_label":"Format","spec_value":"120 Film (6x6)"}},
+      {"type":"spec","settings":{"spec_label":"Lens Mount","spec_value":"V-System"}},
+      {"type":"spec","settings":{"spec_label":"Exposure","spec_value":"Fully Manual"}},
+      {"type":"spec","settings":{"spec_label":"Focus","spec_value":"Manual"}},
+      {"type":"spec","settings":{"spec_label":"Shutter","spec_value":"1s - 1/500th"}},
+      {"type":"spec","settings":{"spec_label":"Flash","spec_value":"Cable Sync"}},
+      {"type":"spec","settings":{"spec_label":"Build","spec_value":"Modular"}},
+      {"type":"spec","settings":{"spec_label":"Tripod","spec_value":"1/4\"-20"}},
+      {"type":"process_step","settings":{"step_number":"01","step_title":"Inspection","step_description":"Every body, back, and lens is checked for mechanical function, light seals, shutter accuracy, and optical condition."}},
+      {"type":"process_step","settings":{"step_number":"02","step_title":"Full CLA","step_description":"Complete clean, lubricate, and adjust. Shutters calibrated, mirrors aligned, focusing screens cleaned, film plane verified."}},
+      {"type":"process_step","settings":{"step_number":"03","step_title":"Professional Testing","step_description":"Each camera is verified using professional testing equipment — shutter speeds, exposure accuracy, and mechanical function confirmed before it ships."}},
+      {"type":"process_step","settings":{"step_number":"04","step_title":"6-Month Warranty","step_description":"Every camera ships with our 6-month warranty. If something goes wrong mechanically, send it back and we'll fix it."}},
+      {"type":"use_case","settings":{"use_case_text":"Portrait and studio photographers shooting medium format"}},
+      {"type":"use_case","settings":{"use_case_text":"Editorial and fashion work on natural light"}},
+      {"type":"use_case","settings":{"use_case_text":"Studio flash — sync at every shutter speed"}},
+      {"type":"use_case","settings":{"use_case_text":"Landscape and fine art photographers"}},
+      {"type":"use_case","settings":{"use_case_text":"Anyone who wants a working Hasselblad, not a shelf piece"}},
+      {"type":"variant","settings":{"variant_name":"500CM + 80mm f/2.8 T*","variant_subtitle":"Fully Refurbished, In Box","variant_price":"3,450","variant_badge":"Only 1 Left"}},
+      {"type":"variant","settings":{"variant_name":"500CM + 150mm f/2.8","variant_subtitle":"Prism Finder, Refurbished","variant_price":"3,700","variant_badge":""}},
+      {"type":"variant","settings":{"variant_name":"500C + 50mm f/1.4","variant_subtitle":"Prism Finder, Refurbished","variant_price":"3,150","variant_badge":""}}
+    ]
+  }]
+}
+{% endschema %}

@@ -1,0 +1,806 @@
+
+{% liquid
+  assign base_text = section.settings.text_color | default: '#111111'
+  assign base_bg = section.settings.background_color | default: '#F7F4F0'
+  assign page_width_px = settings.page_width | default: 1200
+  assign horizontal_pad = section.settings.horizontal_padding | default: 24
+  assign heading_size_preset = section.settings.heading_size_preset | default: 'default'
+  case heading_size_preset
+    when 'sm'
+      assign header_size_mobile = '1.4'
+      assign header_size_desktop = '2.0'
+    when 'md'
+      assign header_size_mobile = '1.6'
+      assign header_size_desktop = '2.4'
+    when 'lg'
+      assign header_size_mobile = '2.0'
+      assign header_size_desktop = '3.2'
+    when 'xl'
+      assign header_size_mobile = '2.4'
+      assign header_size_desktop = '3.8'
+    when 'xxl'
+      assign header_size_mobile = '2.8'
+      assign header_size_desktop = '4.4'
+    else
+      assign header_size_mobile = '1.75'
+      assign header_size_desktop = '2.75'
+  endcase
+  assign header_weight = section.settings.header_font_weight | default: 600
+  assign body_weight = section.settings.body_font_weight | default: 400
+  assign body_size = section.settings.body_font_size | default: 16
+  assign body_size_small = section.settings.body_font_size_small | default: 12
+  assign header_line_height = section.settings.header_line_height | default: '1.05'
+  assign header_letter_spacing = section.settings.header_letter_spacing | default: 0
+  assign heading_color = section.settings.heading_color | default: base_text
+  assign body_line_height = section.settings.body_line_height | default: '1.5'
+  assign body_letter_spacing = section.settings.body_letter_spacing | default: 0
+  assign section_pad_top = section.settings.section_padding_top | default: 40
+  assign section_pad_bottom = section.settings.section_padding_bottom | default: 40
+  assign accent_color = section.settings.accent_color | default: '#E36E15'
+  assign secondary_text_color = section.settings.secondary_text_color | default: '#82906B'
+  assign item_title_font = section.settings.item_title_font
+%}
+<section id="bfc-icon-menu-{{ section.id }}" class="bfc-combined" aria-label="{{ section.settings.section_label | default: 'BFC Icon Menu' }}">
+  <style>
+    {{ item_title_font | font_face: font_display: 'swap' }}
+
+    /* Fix shopify-section wrapper background & spacing */
+    #shopify-section-{{ section.id }} {
+      background-color: {{ base_bg }};
+      margin: 0;
+      padding: {{ section_pad_top }}px 0 {{ section_pad_bottom }}px;
+      width: 100%;
+    }
+    #bfc-icon-menu-{{ section.id }}{
+      --bfc-header-family: var(--font-heading-family, inherit);
+      --bfc-body-family: var(--font-body-family, inherit);
+      --bfc-header-weight: {{ header_weight }};
+      --bfc-body-weight: {{ body_weight }};
+      --bfc-header-size-mobile: {{ header_size_mobile }}rem;
+      --bfc-header-size-desktop: {{ header_size_desktop }}rem;
+      --bfc-horizontal-pad: {{ horizontal_pad }}px;
+      --bfc-page-width: {{ page_width_px }}px;
+      --bfc-align-pad: clamp(
+        var(--bfc-horizontal-pad),
+        calc((100vw - min(100vw, var(--bfc-page-width))) / 2 + var(--bfc-horizontal-pad)),
+        120px
+      );
+      --bfc-body-size: {{ body_size }}px;
+      --bfc-body-size-small: {{ body_size_small }}px;
+      --bfc-text: {{ base_text }};
+      --bfc-bg: {{ base_bg }};
+      --bfc-heading-color: {{ heading_color }};
+      --bfc-header-letter-spacing: {{ header_letter_spacing }}px;
+      --bfc-header-line-height: {{ header_line_height }};
+      --bfc-body-letter-spacing: {{ body_letter_spacing }}px;
+      --bfc-body-line-height: {{ body_line_height }};
+      --bfc-accent: {{ accent_color }};
+      --bfc-secondary-text: {{ secondary_text_color }};
+      --bfc-item-title-family: {{ item_title_font.family | default: 'Poppins' }}, {{ item_title_font.fallback_families | default: 'sans-serif' }};
+      --bfc-item-title-weight: {{ item_title_font.weight | default: 500 }};
+      color: var(--bfc-text);
+      background: var(--bfc-bg);
+      font-family: var(--bfc-body-family);
+      font-weight: var(--bfc-body-weight);
+      font-size: var(--bfc-body-size);
+    }
+    #bfc-icon-menu-{{ section.id }} .bfc-heading{
+      font-family: var(--bfc-header-family, inherit);
+      font-size: clamp(var(--bfc-header-size-mobile, 1.75rem), 3.5vw, var(--bfc-header-size-desktop, 2.75rem));
+      font-weight: var(--bfc-header-weight, 300);
+      line-height: var(--bfc-header-line-height, 1.05);
+      letter-spacing: var(--bfc-header-letter-spacing, -0.02em);
+      margin: 0;
+      color: var(--bfc-heading-color, #111111);
+    }
+        #bfc-icon-menu-{{ section.id }} .bfc-block{
+      margin: 0 auto;
+    }
+    #bfc-icon-menu-{{ section.id }} .bfc-block + .bfc-block{
+      margin-top: 24px;
+    }
+    #bfc-icon-menu-{{ section.id }} .visually-hidden{
+      position: absolute;width: 1px;height: 1px;padding: 0;margin: -1px;overflow: hidden;clip: rect(0,0,0,0);white-space: nowrap;border: 0;
+    }
+    #bfc-icon-menu-{{ section.id }} a:focus-visible,
+    #bfc-icon-menu-{{ section.id }} button:focus-visible,
+    #bfc-icon-menu-{{ section.id }} input:focus-visible{
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce){
+      #bfc-icon-menu-{{ section.id }} *{
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  
+    #bfc-icon-menu-{{ section.id }} .bfc-eyebrow{
+      font-family: var(--bfc-body-family);
+      font-size: var(--bfc-body-size-small);
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--bfc-secondary-text);
+      margin: 0 0 10px;
+    }
+    #bfc-icon-menu-{{ section.id }} .bfc-item-title{
+      font-family: var(--bfc-item-title-family);
+      font-weight: var(--bfc-item-title-weight);
+      font-size: var(--bfc-body-size);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      color: var(--bfc-text);
+    }
+
+    #bfc-icon-menu-{{ section.id }} .bfc-detail-text{
+      font-family: var(--bfc-body-family);
+      font-size: var(--bfc-body-size-small);
+      font-weight: var(--bfc-body-weight);
+      letter-spacing: var(--bfc-body-letter-spacing);
+      line-height: var(--bfc-body-line-height);
+      color: var(--bfc-secondary-text);
+      margin: 0;
+    }
+
+  </style>
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'icon_menu' %}
+        {% liquid
+          assign header_align_class = 'text-left'
+          if block.settings.header_align == 'center'
+            assign header_align_class = 'text-center'
+          elsif block.settings.header_align == 'right'
+            assign header_align_class = 'text-right'
+          endif
+          assign icon_id = 'icon-menu-' | append: section.id | append: '-' | append: block.id
+          assign icon_group = block.settings.group_id | default: block.id
+          assign icon_radius = '12px'
+          if block.settings.image_shape == 'circle'
+            assign icon_radius = '50%'
+          endif
+          if block.settings.square_corners
+            assign icon_radius = '0'
+          endif
+        %}
+        {%- style -%}
+          #{{ icon_id }} {
+            --padding-top: {{ block.settings.padding_top }}px;
+            --padding-bottom: {{ block.settings.padding_bottom }}px;
+            --text-color: {{ block.settings.text_color | default: base_text }};
+            --bg-color: {{ block.settings.bg_color | default: base_bg }};
+            --item-gap: {{ block.settings.item_gap }}px;
+            --icon-radius: {{ icon_radius }};
+            --bfc-block-pad: calc(var(--bfc-align-pad) + {{ block.settings.side_padding_vw }}vw);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-top: var(--padding-top);
+            padding-bottom: var(--padding-bottom);
+          }
+          #{{ icon_id }} .icon-menu__header {
+            margin-bottom: 24px;
+            padding: 0 var(--bfc-block-pad);
+          }
+          @media (min-width: 750px) {
+            #{{ icon_id }} .icon-menu__header {
+              padding: 0 var(--bfc-block-pad);
+            }
+          }
+          @media (max-width: 749px) {
+            {% if block.settings.ignore_padding_mobile %}
+              #{{ icon_id }}{
+                --bfc-block-pad: var(--bfc-horizontal-pad);
+              }
+            {% endif %}
+          }
+          #{{ icon_id }} .icon-menu__header h2 {
+            margin: 0;
+          }
+          #{{ icon_id }} .icon-menu__list {
+            display: grid;
+            grid-template-columns: repeat({{ block.settings.columns_mobile }}, 1fr);
+            list-style: none;
+            margin: 0;
+            padding: 0 var(--bfc-block-pad);
+            gap: var(--item-gap);
+          }
+          #{{ icon_id }} .icon-menu__item {
+            width: 100%;
+          }
+          @media (min-width: 750px) {
+            #{{ icon_id }} .icon-menu__list {
+              grid-template-columns: repeat({{ block.settings.columns_desktop }}, 1fr);
+              padding: 0 var(--bfc-block-pad);
+            }
+          }
+          #{{ icon_id }} .icon-menu__link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            text-align: center;
+            font-family: var(--bfc-body-family);
+          }
+          #{{ icon_id }} .icon-menu__link:hover .icon-menu__image {
+            transform: scale(1.05);
+          }
+          #{{ icon_id }} .icon-menu__image-wrapper {
+            position: relative;
+            overflow: hidden;
+            background-color: {{ block.settings.icon_bg_color | default: base_bg }};
+            margin-bottom: 8px;
+            border-radius: var(--icon-radius);
+          }
+          #{{ icon_id }} .icon-menu__image-wrapper::before {
+            content: '';
+            display: block;
+            padding-top: 100%;
+          }
+          #{{ icon_id }} .icon-menu__image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+          }
+          #{{ icon_id }} .icon-menu__placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10%;
+            box-sizing: border-box;
+          }
+          #{{ icon_id }} .icon-menu__label {
+            font-size: var(--bfc-body-size);
+            font-weight: var(--bfc-body-weight);
+            line-height: 1.4;
+          }
+        {%- endstyle -%}
+        <section id="{{ icon_id }}" class="bfc-block icon-menu-section" {{ block.shopify_attributes }}>
+          {%- if block.settings.title != blank -%}
+            <div class="icon-menu__header {{ header_align_class }}">
+              <h2 class="bfc-heading">{{ block.settings.title | escape }}</h2>
+            </div>
+          {%- endif -%}
+          <ul class="icon-menu__list">
+            {%- assign icon_count = 0 -%}
+            {%- for item in section.blocks -%}
+              {%- if item.type == 'icon_item' and item.settings.group_id == icon_group -%}
+                {%- assign icon_count = icon_count | plus: 1 -%}
+                {%- liquid
+                  assign item_product = item.settings.product
+                  if item.settings.image != blank
+                    assign item_image = item.settings.image
+                  elsif item_product != blank and item_product.featured_image != blank
+                    assign item_image = item_product.featured_image
+                  else
+                    assign item_image = nil
+                  endif
+                  if item.settings.label != blank
+                    assign item_label = item.settings.label
+                  elsif item_product != blank
+                    assign item_label = item_product.title
+                  else
+                    assign item_label = 'Category'
+                  endif
+                  if item.settings.link != blank
+                    assign item_link = item.settings.link
+                  elsif item_product != blank
+                    assign item_link = item_product.url
+                  else
+                    assign item_link = '#'
+                  endif
+                -%}
+                <li class="icon-menu__item" {{ item.shopify_attributes }}>
+                  <a href="{{ item_link }}"
+                     class="icon-menu__link">
+                    <div class="icon-menu__image-wrapper">
+                      {%- if item_image != blank -%}
+                        <img
+                          src="{{ item_image | image_url: width: 800 }}"
+                          srcset="
+                            {{ item_image | image_url: width: 400 }} 400w,
+                            {{ item_image | image_url: width: 600 }} 600w,
+                            {{ item_image | image_url: width: 800 }} 800w
+                          "
+                          sizes="(min-width: 990px) 150px, 30vw"
+                          alt="{{ item_image.alt | default: item_label | escape }}"
+                          class="icon-menu__image"
+                          loading="lazy"
+                          width="800"
+                          height="800">
+                      {%- else -%}
+                        <div class="icon-menu__placeholder" aria-hidden="true">
+                          <span aria-hidden="true">{{ 'collection-2' | placeholder_svg_tag: 'placeholder-svg' }}</span>
+                        </div>
+                      {%- endif -%}
+                    </div>
+                    <span class="icon-menu__label">{{ item_label | escape }}</span>
+                  </a>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+          {%- if icon_count == 0 -%}
+            <div style="text-align: center; padding: 2rem;">
+              <p>Add icon items in the theme editor.</p>
+            </div>
+          {%- endif -%}
+        </section>
+    {% endcase %}
+  {% endfor %}
+</section>
+{% schema %}
+{
+  "name": "BFC Icon Menu",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "label": "Horizontal padding",
+      "min": 12,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "header_font_weight",
+      "label": "Header font weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "SemiBold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "300"
+    },
+    {
+      "type": "select",
+      "id": "body_font_weight",
+      "label": "Body font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "body_font_size",
+      "label": "Body font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "body_font_size_small",
+      "label": "Small text size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Base text color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Base background color",
+      "default": "#F7F4F0"
+    },
+    {
+      "type": "header",
+      "content": "Heading Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_size_preset",
+      "label": "Heading size",
+      "info": "Controls heading size at all screen widths consistently.",
+      "options": [
+        {
+          "value": "sm",
+          "label": "Small"
+        },
+        {
+          "value": "md",
+          "label": "Medium"
+        },
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "lg",
+          "label": "Large"
+        },
+        {
+          "value": "xl",
+          "label": "X-Large"
+        },
+        {
+          "value": "xxl",
+          "label": "XX-Large"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "header_line_height",
+      "label": "Heading line height",
+      "options": [
+        {
+          "value": "1.0",
+          "label": "1.0 (Tightest)"
+        },
+        {
+          "value": "1.05",
+          "label": "1.05 (Default)"
+        },
+        {
+          "value": "1.1",
+          "label": "1.1"
+        },
+        {
+          "value": "1.2",
+          "label": "1.2"
+        },
+        {
+          "value": "1.3",
+          "label": "1.3"
+        },
+        {
+          "value": "1.4",
+          "label": "1.4 (Loose)"
+        }
+      ],
+      "default": "1.05"
+    },
+    {
+      "type": "range",
+      "id": "header_letter_spacing",
+      "label": "Heading letter spacing",
+      "min": -2,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "default": -2
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "info": "Falls back to base text color if unset",
+      "default": "#111111"
+    },
+    {
+      "type": "header",
+      "content": "Body Typography"
+    },
+    {
+      "type": "select",
+      "id": "body_line_height",
+      "label": "Body line height",
+      "options": [
+        {
+          "value": "1.3",
+          "label": "1.3 (Tight)"
+        },
+        {
+          "value": "1.4",
+          "label": "1.4"
+        },
+        {
+          "value": "1.5",
+          "label": "1.5 (Default)"
+        },
+        {
+          "value": "1.6",
+          "label": "1.6"
+        },
+        {
+          "value": "1.8",
+          "label": "1.8 (Loose)"
+        }
+      ],
+      "default": "1.5"
+    },
+    {
+      "type": "range",
+      "id": "body_letter_spacing",
+      "label": "Body letter spacing",
+      "min": -1,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Section top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Section bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Section Colors"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "info": "Used for links and highlights",
+      "default": "#E36E15"
+    },
+    {
+      "type": "color",
+      "id": "secondary_text_color",
+      "label": "Secondary text color",
+      "info": "Used for eyebrows and small detail text",
+      "default": "#82906B"
+    },
+    {
+      "type": "font_picker",
+      "id": "item_title_font",
+      "label": "Item title font",
+      "info": "Font used for product/item titles (e.g. the old best-seller title font)",
+      "default": "poppins_n5"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon_menu",
+      "name": "Icon Menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "group_id",
+          "label": "Group ID (match Icon Item blocks)",
+          "default": "icon-menu-1"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Spotlight"
+        },
+        {
+          "type": "select",
+          "id": "header_align",
+          "label": "Heading alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "header",
+          "content": "Item Styling"
+        },
+        {
+          "type": "range",
+          "id": "columns_mobile",
+          "label": "Columns (Mobile)",
+          "min": 2,
+          "max": 4,
+          "step": 1,
+          "default": 3
+        },
+        {
+          "type": "range",
+          "id": "columns_desktop",
+          "label": "Columns (Desktop)",
+          "min": 4,
+          "max": 12,
+          "step": 1,
+          "default": 8
+        },
+        {
+          "type": "range",
+          "id": "item_gap",
+          "label": "Gap between items",
+          "min": 8,
+          "max": 40,
+          "step": 2,
+          "unit": "px",
+          "default": 16
+        },
+        {
+          "type": "select",
+          "id": "image_shape",
+          "label": "Image shape",
+          "options": [
+            {
+              "value": "circle",
+              "label": "Circle"
+            },
+            {
+              "value": "rounded_square",
+              "label": "Rounded Square"
+            }
+          ],
+          "default": "circle"
+        },
+        {
+          "type": "checkbox",
+          "id": "square_corners",
+          "label": "Square corners",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Section Colors & Spacing"
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Block background color",
+          "info": "Leave unset to inherit section background",
+          "default": "#F7F4F0"
+        },
+        {
+          "type": "color",
+          "id": "icon_bg_color",
+          "label": "Icon tile background",
+          "info": "The color behind each icon/image tile. Defaults to section background.",
+          "default": "#F7F4F0"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#111111"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "label": "Top padding",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "default": 36
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "label": "Bottom padding",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "default": 36
+        },
+        {
+          "type": "range",
+          "id": "side_padding_vw",
+          "label": "Side padding add-on (vw)",
+          "min": 0,
+          "max": 10,
+          "step": 0.5,
+          "unit": "vw",
+          "default": 0
+        },
+        {
+          "type": "checkbox",
+          "id": "ignore_padding_mobile",
+          "label": "Ignore side padding on mobile",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "icon_item",
+      "name": "Icon Item",
+      "limit": 24,
+      "settings": [
+        {
+          "type": "text",
+          "id": "group_id",
+          "label": "Group ID (matches Icon Menu)",
+          "default": "icon-menu-1"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Title override",
+          "info": "Leave blank to use the product title"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image override",
+          "info": "Leave blank to use the product image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link override",
+          "info": "Leave blank to link to the product page"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Icon Menu"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1333 @@
+{%- comment -%}
+  ============================================================
+  BFC EXTENDED WARRANTY — PAGE SECTION
+  ============================================================
+  Drop this section into a page template (e.g. page.extended-warranty.json)
+  and apply that template to /pages/extended-warranty.
+
+  Flow:
+    1. Pick camera category (SLR, Point & Shoot, Medium Format,
+       Polaroid/SX-70, Super 8)
+    2. Enter the camera's purchase price (or paste a BFC product URL
+       to auto-fill the price)
+    3. Pick coverage length — SLR/POL/MF/SX/S8 get one button (+6mo,
+       since base warranty is already 6mo). Point & Shoot gets four
+       (+3/+6/+9/+12, since base is 3mo).
+    4. Add the correct variant to cart
+
+  Customer-account note: Shopify's new Customer Accounts (CAO) makes
+  the `customer` object nil in storefront Liquid, so we can't auto-list
+  someone's past orders. Two fallbacks:
+    a) Deep-link to /account so they can find their order themselves.
+    b) Manual order-number + email lookup that POSTs to a Base44
+       endpoint (since Base44 holds the Shopify Admin refresh token
+       and can resolve the camera's price from the order). The Base44
+       endpoint URL is configured in section settings; if blank, the
+       lookup UI is hidden.
+
+  ⚠️ VARIANT IDS — edit `WARRANTY_VARIANTS` in the script block below
+  to match the actual variant IDs from your bfc-warranty-tiers-js.liquid
+  snippet. Tier max thresholds (in cents) are the canonical 11-tier set:
+  [20000, 30000, 40000, 50000, 70000, 100000, 150000, 200000, 300000,
+   400000, 9999999]. Categories slr/mf/pol/sx/s8 only need v6+p6.
+  Category `pas` needs v3+p3, v6+p6, v9+p9, v12+p12 (PAS p6/p9 fall
+  back to tier-6 IDs for tiers 7-10 per BFC's pricing rules).
+============================================================
+{%- endcomment -%}
+
+{% style %}
+.bfc-ew {
+  --or: #E36E15;
+  --go: #F4A027;
+  --ce: #ABCC99;
+  --cv: #F8F6EE;
+  --bk: #202009;
+  --ch: #4E4741;
+  --gr: #E3DDDA;
+  --sr: 'Cormorant Garamond', Georgia, serif;
+  --sn: 'Poppins', sans-serif;
+  --t:  0.2s ease;
+  font-family: var(--sn);
+  color: var(--bk);
+  background: var(--cv);
+  -webkit-font-smoothing: antialiased;
+  padding: 64px 48px 96px;
+}
+.bfc-ew * { box-sizing: border-box; }
+.bfc-ew-inner { max-width: 880px; margin: 0 auto; }
+
+/* ── HEADER ────────────────────────────────── */
+.bfc-ew-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+.bfc-ew-eyebrow {
+  display: inline-block;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 16px;
+}
+.bfc-ew-title {
+  font-family: var(--sr);
+  font-size: clamp(36px, 4.8vw, 60px);
+  font-weight: 300; line-height: 1.02;
+  color: var(--bk);
+  margin: 0 0 18px;
+  letter-spacing: -0.01em;
+}
+.bfc-ew-title em { font-style: italic; color: var(--or); }
+.bfc-ew-lead {
+  font-size: 14px; line-height: 1.7;
+  color: var(--ch);
+  max-width: 56ch;
+  margin: 0 auto;
+}
+
+/* ── ELIGIBILITY WARNING ──
+   High-contrast dark banner with three numbered rules. Sits between
+   the header and the calculator so it's unmissable. */
+.bfc-ew-warning {
+  background: var(--bk);
+  color: #fff;
+  border-left: 4px solid var(--or);
+  padding: 28px 32px 30px;
+  margin-bottom: 40px;
+}
+.bfc-ew-warning-head {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+.bfc-ew-warning-icon {
+  flex-shrink: 0;
+  color: var(--or);
+}
+.bfc-ew-warning-title {
+  font-family: var(--sn);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--or);
+}
+.bfc-ew-warning-rules {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: grid;
+  gap: 16px;
+}
+.bfc-ew-warning-rules li {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+.bfc-ew-warning-rule-num {
+  font-family: var(--sm, ui-monospace, 'SF Mono', monospace);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--or);
+  padding-top: 3px;
+}
+.bfc-ew-warning-rule-body {
+  font-family: var(--sn);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.82);
+}
+.bfc-ew-warning-rule-body strong {
+  color: #fff;
+  font-weight: 600;
+}
+@media (max-width: 700px) {
+  .bfc-ew-warning { padding: 22px 22px 24px; }
+  .bfc-ew-warning-rules li { grid-template-columns: 28px 1fr; gap: 10px; }
+  .bfc-ew-warning-rule-body { font-size: 13px; }
+}
+
+/* ── STEPS ─────────────────────────────────── */
+.bfc-ew-step {
+  background: #fff;
+  border: 1px solid rgba(32,32,9,0.1);
+  margin-bottom: 16px;
+}
+.bfc-ew-step-head {
+  display: flex; align-items: center; gap: 14px;
+  padding: 22px 28px 18px;
+  border-bottom: 1px solid rgba(32,32,9,0.08);
+}
+.bfc-ew-step-num {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(227,110,21,0.1);
+  color: var(--or);
+  font-family: var(--sn);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.bfc-ew-step-title {
+  font-family: var(--sr);
+  font-size: 20px; font-weight: 400;
+  color: var(--bk);
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+}
+.bfc-ew-step-body { padding: 24px 28px 26px; }
+.bfc-ew-step.is-disabled { opacity: 0.5; pointer-events: none; }
+
+/* ── STEP 1: CATEGORY OPTIONS ─────────────── */
+.bfc-ew-cats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+}
+.bfc-ew-cat {
+  padding: 14px 16px;
+  background: #fff;
+  border: 1px solid rgba(32,32,9,0.18);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--sn);
+  font-size: 12px;
+  color: var(--bk);
+  transition: background var(--t), border-color var(--t);
+  line-height: 1.3;
+}
+.bfc-ew-cat:hover { background: var(--cv); }
+.bfc-ew-cat.is-active {
+  background: var(--bk); color: #fff;
+  border-color: var(--bk);
+}
+.bfc-ew-cat-name { font-weight: 600; letter-spacing: 0.02em; }
+.bfc-ew-cat-sub {
+  display: block;
+  font-size: 10px;
+  color: rgba(32,32,9,0.5);
+  margin-top: 3px;
+  letter-spacing: 0.04em;
+}
+.bfc-ew-cat.is-active .bfc-ew-cat-sub { color: rgba(255,255,255,0.6); }
+
+/* ── STEP 2: PRICE INPUT ───────────────────── */
+.bfc-ew-price-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.bfc-ew-price-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.bfc-ew-price-field::before {
+  content: '$';
+  position: absolute;
+  left: 14px;
+  font-family: var(--sr);
+  font-size: 22px;
+  color: rgba(32,32,9,0.4);
+  pointer-events: none;
+}
+.bfc-ew-price-input {
+  width: 100%;
+  padding: 14px 14px 14px 34px;
+  background: var(--cv);
+  border: 1px solid rgba(32,32,9,0.18);
+  font-family: var(--sr);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--bk);
+  outline: none;
+  transition: border-color var(--t);
+  -moz-appearance: textfield;
+}
+.bfc-ew-price-input::-webkit-outer-spin-button,
+.bfc-ew-price-input::-webkit-inner-spin-button {
+  -webkit-appearance: none; margin: 0;
+}
+.bfc-ew-price-input:focus { border-color: var(--or); }
+
+.bfc-ew-url-toggle {
+  background: none; border: none;
+  font-family: var(--sn);
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--or);
+  cursor: pointer;
+  padding: 4px 0;
+  text-align: left;
+  align-self: flex-start;
+}
+.bfc-ew-url-toggle:hover { color: #c9600f; }
+.bfc-ew-url-row {
+  display: none;
+  gap: 8px;
+}
+.bfc-ew-url-row.is-open { display: flex; }
+.bfc-ew-url-input {
+  flex: 1; min-width: 0;
+  padding: 12px 14px;
+  background: var(--cv);
+  border: 1px solid rgba(32,32,9,0.18);
+  font-family: var(--sn);
+  font-size: 13px;
+  color: var(--bk);
+  outline: none;
+}
+.bfc-ew-url-input:focus { border-color: var(--or); }
+.bfc-ew-url-btn {
+  padding: 12px 20px;
+  background: var(--bk); color: #fff;
+  border: none;
+  font-family: var(--sn);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.bfc-ew-url-btn:hover { background: #000; }
+.bfc-ew-url-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.bfc-ew-url-status {
+  font-family: var(--sn);
+  font-size: 11px;
+  color: var(--ch);
+  margin-top: 2px;
+  min-height: 14px;
+}
+.bfc-ew-url-status.is-error { color: #b03a2e; }
+.bfc-ew-url-status.is-success { color: #2a4820; }
+
+/* ── STEP 3: COVERAGE LENGTH ───────────────── */
+.bfc-ew-lengths {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+}
+.bfc-ew-length {
+  padding: 14px 12px;
+  background: #fff;
+  border: 1px solid rgba(32,32,9,0.18);
+  cursor: pointer;
+  text-align: center;
+  font-family: var(--sn);
+  color: var(--bk);
+  transition: background var(--t), border-color var(--t);
+  line-height: 1.2;
+}
+.bfc-ew-length:hover { background: var(--cv); }
+.bfc-ew-length.is-active {
+  background: var(--bk); color: #fff;
+  border-color: var(--bk);
+}
+.bfc-ew-length-months {
+  display: block;
+  font-family: var(--sr);
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 2px;
+}
+.bfc-ew-length-label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(32,32,9,0.55);
+}
+.bfc-ew-length.is-active .bfc-ew-length-label { color: rgba(255,255,255,0.65); }
+.bfc-ew-length-info {
+  display: block;
+  font-size: 11px;
+  margin-top: 6px;
+  color: rgba(32,32,9,0.55);
+}
+.bfc-ew-length.is-active .bfc-ew-length-info { color: rgba(255,255,255,0.7); }
+
+/* ── RESULT CARD ───────────────────────────── */
+.bfc-ew-result {
+  background: var(--bk); color: #fff;
+  padding: 32px 36px;
+  margin-top: 24px;
+  display: none;
+}
+.bfc-ew-result.is-visible { display: block; }
+.bfc-ew-result-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 22px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+.bfc-ew-result-summary { min-width: 0; flex: 1; }
+.bfc-ew-result-ey {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 10px;
+  display: block;
+}
+.bfc-ew-result-tier {
+  font-family: var(--sr);
+  font-size: 26px; font-weight: 300;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+.bfc-ew-result-tier em { font-style: italic; color: var(--go); }
+.bfc-ew-result-coverage {
+  font-family: var(--sn);
+  font-size: 12px;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.02em;
+}
+.bfc-ew-result-price {
+  flex-shrink: 0;
+  text-align: right;
+}
+.bfc-ew-result-price-amt {
+  font-family: var(--sr);
+  font-size: clamp(34px, 4vw, 48px);
+  font-weight: 300;
+  line-height: 1;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+.bfc-ew-result-price-label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-top: 6px;
+}
+
+/* ── ORDER ID FIELD ──
+   Required input for the camera's original order number. Attached to the
+   warranty cart line as a line item property so the order shows up in the
+   Shopify Admin order page alongside the camera order it extends. */
+.bfc-ew-order-field {
+  margin-bottom: 18px;
+}
+.bfc-ew-order-label {
+  display: flex; align-items: baseline; gap: 10px;
+  font-family: var(--sn);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 8px;
+}
+.bfc-ew-order-required {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--or);
+}
+.bfc-ew-order-input {
+  width: 100%;
+  padding: 13px 16px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.18);
+  font-family: var(--sn);
+  font-size: 14px; font-weight: 500;
+  color: #fff;
+  outline: none;
+  transition: border-color var(--t), background var(--t);
+  letter-spacing: 0.02em;
+}
+.bfc-ew-order-input::placeholder { color: rgba(255,255,255,0.35); }
+.bfc-ew-order-input:focus {
+  border-color: var(--or);
+  background: rgba(255,255,255,0.08);
+}
+.bfc-ew-order-input.is-invalid {
+  border-color: #d96050;
+  background: rgba(217,96,80,0.08);
+}
+.bfc-ew-order-help {
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.55;
+  margin-top: 8px;
+}
+
+.bfc-ew-result-actions {
+  display: flex; gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.bfc-ew-atc {
+  padding: 16px 28px;
+  background: var(--or); color: #fff;
+  border: none;
+  font-family: var(--sn);
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--t);
+  flex-grow: 1;
+  min-width: 180px;
+}
+.bfc-ew-atc:hover { background: #c9600f; }
+.bfc-ew-atc:disabled { opacity: 0.5; cursor: not-allowed; }
+.bfc-ew-atc.is-success { background: #2a4820; }
+.bfc-ew-result-note {
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 14px;
+  line-height: 1.5;
+}
+
+/* ── ORDER LOOKUP ──────────────────────────── */
+.bfc-ew-lookup {
+  margin-top: 56px;
+  padding-top: 48px;
+  border-top: 1px solid rgba(32,32,9,0.1);
+}
+.bfc-ew-lookup-head { text-align: center; margin-bottom: 24px; }
+.bfc-ew-lookup-ey {
+  display: inline-block;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(32,32,9,0.5);
+  margin-bottom: 12px;
+}
+.bfc-ew-lookup-title {
+  font-family: var(--sr);
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 300; line-height: 1.1;
+  color: var(--bk);
+  margin: 0;
+}
+.bfc-ew-lookup-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+.bfc-ew-lookup-card {
+  background: #fff;
+  border: 1px solid rgba(32,32,9,0.1);
+  padding: 28px 28px 24px;
+}
+.bfc-ew-lookup-card-ey {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 12px;
+  display: block;
+}
+.bfc-ew-lookup-card-title {
+  font-family: var(--sr);
+  font-size: 20px; font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+.bfc-ew-lookup-card-body {
+  font-size: 12.5px; line-height: 1.6;
+  color: var(--ch);
+  margin-bottom: 16px;
+}
+.bfc-ew-lookup-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--or);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+}
+.bfc-ew-lookup-link:hover { color: #c9600f; }
+.bfc-ew-lookup-form { display: flex; flex-direction: column; gap: 10px; }
+.bfc-ew-lookup-input {
+  width: 100%;
+  padding: 11px 14px;
+  background: var(--cv);
+  border: 1px solid rgba(32,32,9,0.18);
+  font-family: var(--sn);
+  font-size: 13px;
+  color: var(--bk);
+  outline: none;
+}
+.bfc-ew-lookup-input:focus { border-color: var(--or); }
+.bfc-ew-lookup-btn {
+  padding: 11px 20px;
+  background: var(--bk); color: #fff;
+  border: none;
+  font-family: var(--sn);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer;
+  align-self: flex-start;
+}
+.bfc-ew-lookup-btn:hover { background: #000; }
+.bfc-ew-lookup-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.bfc-ew-lookup-status {
+  font-size: 11px;
+  color: var(--ch);
+  line-height: 1.5;
+  margin-top: 6px;
+  min-height: 16px;
+}
+.bfc-ew-lookup-status.is-error { color: #b03a2e; }
+.bfc-ew-lookup-status.is-success { color: #2a4820; }
+.bfc-ew-lookup-result {
+  margin-top: 12px;
+  padding: 14px 16px;
+  background: rgba(171,204,153,0.18);
+  border-left: 2px solid var(--ce);
+  font-size: 12px;
+  line-height: 1.55;
+  display: none;
+}
+.bfc-ew-lookup-result.is-visible { display: block; }
+.bfc-ew-lookup-result-title { font-weight: 600; margin-bottom: 4px; color: var(--bk); }
+.bfc-ew-lookup-result-meta { color: var(--ch); font-size: 11px; }
+.bfc-ew-lookup-result-action {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background: var(--or); color: #fff;
+  border: none;
+  font-family: var(--sn);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer;
+}
+
+@media (max-width: 700px) {
+  .bfc-ew { padding: 40px 20px 64px; }
+  .bfc-ew-step-head { padding: 18px 20px 16px; }
+  .bfc-ew-step-body { padding: 20px 20px 22px; }
+  .bfc-ew-result { padding: 24px 22px; }
+  .bfc-ew-result-top { flex-direction: column; gap: 12px; }
+  .bfc-ew-result-price { text-align: left; }
+  .bfc-ew-lookup-card { padding: 22px 20px 20px; }
+}
+{% endstyle %}
+
+<div class="bfc-ew">
+  <div class="bfc-ew-inner">
+
+    {%- comment -%} ── HEADER ── {%- endcomment -%}
+    <div class="bfc-ew-header">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="bfc-ew-eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      <h1 class="bfc-ew-title">{{ section.settings.headline | default: 'Extended <em>Coverage</em>' }}</h1>
+      <p class="bfc-ew-lead">{{ section.settings.lead | default: 'Use the calculator below to find the right extended warranty for any camera you bought from us. Pick your camera type, enter the price you paid, and choose how long you want coverage to run.' }}</p>
+    </div>
+
+    {%- comment -%} ── ELIGIBILITY WARNING ── {%- endcomment -%}
+    <div class="bfc-ew-warning" role="alert">
+      <div class="bfc-ew-warning-head">
+        <svg class="bfc-ew-warning-icon" width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+          <path d="M11 2L21 19H1L11 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M11 9V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+          <circle cx="11" cy="16" r="0.9" fill="currentColor"/>
+        </svg>
+        <div class="bfc-ew-warning-title">Before You Buy &mdash; Read This</div>
+      </div>
+      <ol class="bfc-ew-warning-rules">
+        <li>
+          <span class="bfc-ew-warning-rule-num">01</span>
+          <div class="bfc-ew-warning-rule-body">
+            <strong>BFC cameras only.</strong> Extended warranties can only be purchased for cameras bought directly from Brooklyn Film Camera. Cameras from other sellers, eBay, or other shops are not eligible.
+          </div>
+        </li>
+        <li>
+          <span class="bfc-ew-warning-rule-num">02</span>
+          <div class="bfc-ew-warning-rule-body">
+            <strong>30-day purchase window.</strong> Extended warranties must be purchased within <strong>30 days</strong> of your original camera purchase. After 30 days, coverage is no longer available.
+          </div>
+        </li>
+        <li>
+          <span class="bfc-ew-warning-rule-num">03</span>
+          <div class="bfc-ew-warning-rule-body">
+            <strong>Coverage starts from the camera purchase date.</strong> The extension is added to the date you bought the camera, not the date you bought the warranty. A +6 month extension on a camera bought 20 days ago gives you 6 additional months from the original purchase.
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    {%- comment -%} ── STEP 1: CATEGORY ── {%- endcomment -%}
+    <div class="bfc-ew-step" id="bfc-ew-step1">
+      <div class="bfc-ew-step-head">
+        <span class="bfc-ew-step-num">01</span>
+        <div class="bfc-ew-step-title">Which type of camera are you covering?</div>
+      </div>
+      <div class="bfc-ew-step-body">
+        <div class="bfc-ew-cats" id="bfc-ew-cats">
+          <button type="button" class="bfc-ew-cat" data-cat="slr">
+            <span class="bfc-ew-cat-name">SLR / Rangefinder</span>
+            <span class="bfc-ew-cat-sub">6mo base warranty</span>
+          </button>
+          <button type="button" class="bfc-ew-cat" data-cat="pas">
+            <span class="bfc-ew-cat-name">Point &amp; Shoot</span>
+            <span class="bfc-ew-cat-sub">3mo base warranty</span>
+          </button>
+          <button type="button" class="bfc-ew-cat" data-cat="mf">
+            <span class="bfc-ew-cat-name">Medium Format</span>
+            <span class="bfc-ew-cat-sub">6mo base warranty</span>
+          </button>
+          <button type="button" class="bfc-ew-cat" data-cat="pol">
+            <span class="bfc-ew-cat-name">Polaroid / SX-70</span>
+            <span class="bfc-ew-cat-sub">6mo base warranty</span>
+          </button>
+          <button type="button" class="bfc-ew-cat" data-cat="s8">
+            <span class="bfc-ew-cat-name">Super 8</span>
+            <span class="bfc-ew-cat-sub">6mo base warranty</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} ── STEP 2: PRICE ── {%- endcomment -%}
+    <div class="bfc-ew-step is-disabled" id="bfc-ew-step2">
+      <div class="bfc-ew-step-head">
+        <span class="bfc-ew-step-num">02</span>
+        <div class="bfc-ew-step-title">How much did you pay for the camera?</div>
+      </div>
+      <div class="bfc-ew-step-body">
+        <div class="bfc-ew-price-row">
+          <div class="bfc-ew-price-field">
+            <input
+              type="number"
+              class="bfc-ew-price-input"
+              id="bfc-ew-price"
+              placeholder="0"
+              min="0"
+              step="1"
+              inputmode="decimal"
+              autocomplete="off"
+            />
+          </div>
+          <button type="button" class="bfc-ew-url-toggle" id="bfc-ew-url-toggle">
+            Or paste a BFC product URL to auto-fill the price ▾
+          </button>
+          <div class="bfc-ew-url-row" id="bfc-ew-url-row">
+            <input
+              type="url"
+              class="bfc-ew-url-input"
+              id="bfc-ew-url"
+              placeholder="https://brooklynfilmcamera.com/products/..."
+              autocomplete="off"
+            />
+            <button type="button" class="bfc-ew-url-btn" id="bfc-ew-url-btn">Fetch Price</button>
+          </div>
+          <div class="bfc-ew-url-status" id="bfc-ew-url-status"></div>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} ── STEP 3: COVERAGE LENGTH ── {%- endcomment -%}
+    <div class="bfc-ew-step is-disabled" id="bfc-ew-step3">
+      <div class="bfc-ew-step-head">
+        <span class="bfc-ew-step-num">03</span>
+        <div class="bfc-ew-step-title">How long do you want extended coverage?</div>
+      </div>
+      <div class="bfc-ew-step-body">
+        <div class="bfc-ew-lengths" id="bfc-ew-lengths">
+          {%- comment -%} Buttons rendered dynamically via JS based on category {%- endcomment -%}
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} ── RESULT ── {%- endcomment -%}
+    <div class="bfc-ew-result" id="bfc-ew-result" aria-live="polite">
+      <div class="bfc-ew-result-top">
+        <div class="bfc-ew-result-summary">
+          <span class="bfc-ew-result-ey">Your Coverage</span>
+          <div class="bfc-ew-result-tier" id="bfc-ew-result-tier">—</div>
+          <div class="bfc-ew-result-coverage" id="bfc-ew-result-coverage">—</div>
+        </div>
+        <div class="bfc-ew-result-price">
+          <div class="bfc-ew-result-price-amt" id="bfc-ew-result-price-amt">—</div>
+          <span class="bfc-ew-result-price-label">One-time</span>
+        </div>
+      </div>
+
+      <div class="bfc-ew-order-field">
+        <label class="bfc-ew-order-label" for="bfc-ew-order-id">
+          Original camera order number
+          <span class="bfc-ew-order-required">Required</span>
+        </label>
+        <input
+          type="text"
+          id="bfc-ew-order-id"
+          class="bfc-ew-order-input"
+          placeholder="e.g. #BFC12345"
+          autocomplete="off"
+          required
+        />
+        <div class="bfc-ew-order-help">We use this to confirm coverage eligibility and attach the warranty to your original purchase. Find it in your order confirmation email or BFC account.</div>
+      </div>
+
+      <div class="bfc-ew-result-actions">
+        <button type="button" class="bfc-ew-atc" id="bfc-ew-atc" disabled>
+          <span id="bfc-ew-atc-text">Enter your order number</span>
+        </button>
+      </div>
+      <div class="bfc-ew-result-note">
+        Coverage activates the day your original warranty ends. Extends mechanical &amp; electrical defect coverage for the chosen duration.
+      </div>
+    </div>
+
+    {%- comment -%} ── ORDER LOOKUP (optional, gated by section setting) ── {%- endcomment -%}
+    {%- if section.settings.show_lookup -%}
+      <div class="bfc-ew-lookup">
+        <div class="bfc-ew-lookup-head">
+          <span class="bfc-ew-lookup-ey">Need help finding your price?</span>
+          <h2 class="bfc-ew-lookup-title">Look up your past purchase.</h2>
+        </div>
+        <div class="bfc-ew-lookup-options">
+
+          {%- comment -%} Account deep-link (works under CAO since /account redirects to the customer portal) {%- endcomment -%}
+          <div class="bfc-ew-lookup-card">
+            <span class="bfc-ew-lookup-card-ey">Option 1</span>
+            <div class="bfc-ew-lookup-card-title">Sign in to your account</div>
+            <p class="bfc-ew-lookup-card-body">View your full order history and find the camera you want to cover. The price you paid is shown on each order.</p>
+            <a href="/account" class="bfc-ew-lookup-link">
+              Open my account
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+
+          {%- comment -%} Manual order lookup via Base44 (skipped if endpoint URL is blank) {%- endcomment -%}
+          {%- if section.settings.lookup_endpoint != blank -%}
+            <div class="bfc-ew-lookup-card">
+              <span class="bfc-ew-lookup-card-ey">Option 2</span>
+              <div class="bfc-ew-lookup-card-title">Have an order number?</div>
+              <p class="bfc-ew-lookup-card-body">Enter your order number and email and we'll find the camera price for you. Order numbers start with #BFC.</p>
+              <div class="bfc-ew-lookup-form">
+                <input type="text" class="bfc-ew-lookup-input" id="bfc-ew-lookup-order" placeholder="Order number (e.g. #BFC12345)" autocomplete="off"/>
+                <input type="email" class="bfc-ew-lookup-input" id="bfc-ew-lookup-email" placeholder="Email used on the order" autocomplete="email"/>
+                <button type="button" class="bfc-ew-lookup-btn" id="bfc-ew-lookup-btn" data-endpoint="{{ section.settings.lookup_endpoint }}">Find My Camera</button>
+                <div class="bfc-ew-lookup-status" id="bfc-ew-lookup-status"></div>
+                <div class="bfc-ew-lookup-result" id="bfc-ew-lookup-result">
+                  <div class="bfc-ew-lookup-result-title" id="bfc-ew-lookup-result-title">—</div>
+                  <div class="bfc-ew-lookup-result-meta" id="bfc-ew-lookup-result-meta">—</div>
+                  <button type="button" class="bfc-ew-lookup-result-action" id="bfc-ew-lookup-result-action">Use this price</button>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+
+        </div>
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  /* ============================================================
+     WARRANTY VARIANTS — sourced from snippets/bfc-warranty-tiers-js.liquid
+     ============================================================
+     Each render of that snippet defines a `BFC_WARRANTY_TIERS` array
+     for one category. We render it four times (slr, mf, polaroid, pas)
+     and copy each into WARRANTY_VARIANTS. Super 8 + SX-70 reuse pricing
+     from other categories so they're set up as aliases below.
+
+     Snippet's key naming is TOTAL-months (not extension months):
+       SLR/MF/POL (base 6mo) — `v12`/`p12` is the +6 month variant
+       PAS (base 3mo) —
+         `v6`/`p6`   = +3 ext (6 total)
+         `v9`/`p9`   = +6 ext (9 total)
+         `v12`/`p12` = +9 ext (12 total)
+     ============================================================ */
+  var TIER_MAX = [20000, 30000, 40000, 50000, 70000, 100000, 150000, 200000, 300000, 400000, 9999999];
+  var TIER_LABEL = [
+    '$0 – $200', '$201 – $300', '$301 – $400', '$401 – $500',
+    '$501 – $700', '$701 – $1,000', '$1,001 – $1,500',
+    '$1,501 – $2,000', '$2,001 – $3,000', '$3,001 – $4,000', '$4,001+'
+  ];
+
+  var WARRANTY_VARIANTS = {};
+
+  (function() {
+    {% render 'bfc-warranty-tiers-js', category: 'slr' %}
+    WARRANTY_VARIANTS.slr = BFC_WARRANTY_TIERS;
+  })();
+  (function() {
+    {% render 'bfc-warranty-tiers-js', category: 'mf' %}
+    WARRANTY_VARIANTS.mf = BFC_WARRANTY_TIERS;
+  })();
+  (function() {
+    {% render 'bfc-warranty-tiers-js', category: 'polaroid' %}
+    WARRANTY_VARIANTS.pol = BFC_WARRANTY_TIERS;
+  })();
+  (function() {
+    {% render 'bfc-warranty-tiers-js', category: 'pas' %}
+    WARRANTY_VARIANTS.pas = BFC_WARRANTY_TIERS;
+  })();
+  /* Aliases — Super 8 PDPs use SLR pricing, SX-70 PDPs use Polaroid pricing. */
+  WARRANTY_VARIANTS.sx = WARRANTY_VARIANTS.pol;
+  WARRANTY_VARIANTS.s8 = WARRANTY_VARIANTS.slr;
+
+  /* Map calculator's "extension months" → snippet's "total months" key prefix.
+     This is the bridge between the UI's friendly "+3/+6/+9" labels and the
+     snippet's v6/v9/v12 keys, which encode total-months-of-coverage. */
+  function variantKeys(cat, extMonths) {
+    if (cat === 'pas') {
+      if (extMonths === 3) return ['v6', 'p6'];
+      if (extMonths === 6) return ['v9', 'p9'];
+      if (extMonths === 9) return ['v12', 'p12'];
+      return null;
+    }
+    /* slr, mf, pol, sx, s8 — single +6mo button */
+    if (extMonths === 6) return ['v12', 'p12'];
+    return null;
+  }
+
+  /* Category metadata: which coverage lengths are offered + the
+     label/months for each. PAS gets four; everyone else gets one. */
+  var CAT_META = {
+    slr: { name: 'SLR / Rangefinder', base_months: 6, lengths: [{ key: 6, months: 6, label: '+6 months', sub: 'Total: 12 months' }] },
+    mf:  { name: 'Medium Format',     base_months: 6, lengths: [{ key: 6, months: 6, label: '+6 months', sub: 'Total: 12 months' }] },
+    pol: { name: 'Polaroid / SX-70',  base_months: 6, lengths: [{ key: 6, months: 6, label: '+6 months', sub: 'Total: 12 months' }] },
+    sx:  { name: 'Polaroid / SX-70',  base_months: 6, lengths: [{ key: 6, months: 6, label: '+6 months', sub: 'Total: 12 months' }] },
+    s8:  { name: 'Super 8',           base_months: 6, lengths: [{ key: 6, months: 6, label: '+6 months', sub: 'Total: 12 months' }] },
+    pas: { name: 'Point & Shoot',     base_months: 3, lengths: [
+      { key: 3, months: 3, label: '+3 months', sub: 'Total: 6 months'  },
+      { key: 6, months: 6, label: '+6 months', sub: 'Total: 9 months'  },
+      { key: 9, months: 9, label: '+9 months', sub: 'Total: 12 months' }
+    ]}
+  };
+
+  /* SX is just an alias for POL — collapse it so variant lookups don't have to dupe. */
+  WARRANTY_VARIANTS.sx = WARRANTY_VARIANTS.pol;
+
+  /* ── STATE ───────────────────────── */
+  var STATE = {
+    category: null,
+    priceCents: 0,
+    length: null   // months number
+  };
+
+  /* ── ELEMENTS ──────────────────────── */
+  var $step1 = document.getElementById('bfc-ew-step1');
+  var $step2 = document.getElementById('bfc-ew-step2');
+  var $step3 = document.getElementById('bfc-ew-step3');
+  var $cats = document.getElementById('bfc-ew-cats');
+  var $price = document.getElementById('bfc-ew-price');
+  var $urlToggle = document.getElementById('bfc-ew-url-toggle');
+  var $urlRow = document.getElementById('bfc-ew-url-row');
+  var $urlInput = document.getElementById('bfc-ew-url');
+  var $urlBtn = document.getElementById('bfc-ew-url-btn');
+  var $urlStatus = document.getElementById('bfc-ew-url-status');
+  var $lengths = document.getElementById('bfc-ew-lengths');
+  var $result = document.getElementById('bfc-ew-result');
+  var $rTier = document.getElementById('bfc-ew-result-tier');
+  var $rCoverage = document.getElementById('bfc-ew-result-coverage');
+  var $rPrice = document.getElementById('bfc-ew-result-price-amt');
+  var $atc = document.getElementById('bfc-ew-atc');
+  var $atcText = document.getElementById('bfc-ew-atc-text');
+  var $orderInput = document.getElementById('bfc-ew-order-id');
+
+  /* ── HELPERS ──────────────────────── */
+  function fmtMoney(cents) {
+    if (cents == null || isNaN(cents)) return '—';
+    var n = cents / 100;
+    return '$' + n.toLocaleString('en-US', { minimumFractionDigits: n % 1 === 0 ? 0 : 2, maximumFractionDigits: 2 });
+  }
+
+  function tierIndexForPrice(cents) {
+    for (var i = 0; i < TIER_MAX.length; i++) {
+      if (cents <= TIER_MAX[i]) return i;
+    }
+    return TIER_MAX.length - 1;
+  }
+
+  /* XHR (bypasses Judge.me's monkey-patched window.fetch — BFC convention) */
+  function xhrJSON(method, url, body, headers, cb) {
+    var x = new XMLHttpRequest();
+    x.open(method, url, true);
+    x.setRequestHeader('Content-Type', 'application/json');
+    x.setRequestHeader('Accept', 'application/json');
+    if (headers) {
+      Object.keys(headers).forEach(function(k) { x.setRequestHeader(k, headers[k]); });
+    }
+    x.onload = function() {
+      var data = null;
+      try { data = JSON.parse(x.responseText); } catch (e) {}
+      cb(x.status >= 200 && x.status < 300 ? null : (data && data.message) || ('HTTP ' + x.status), data, x.status);
+    };
+    x.onerror = function() { cb('Network error', null, 0); };
+    x.send(body ? JSON.stringify(body) : null);
+  }
+
+  /* ── STEP 1: CATEGORY ──────────────── */
+  $cats.addEventListener('click', function(e) {
+    var btn = e.target.closest('.bfc-ew-cat');
+    if (!btn) return;
+    Array.prototype.forEach.call($cats.querySelectorAll('.bfc-ew-cat'), function(b) {
+      b.classList.toggle('is-active', b === btn);
+    });
+    STATE.category = btn.dataset.cat;
+    $step2.classList.remove('is-disabled');
+    renderLengths();
+    refreshResult();
+  });
+
+  /* ── STEP 2: PRICE ────────────────── */
+  $price.addEventListener('input', function() {
+    var n = parseFloat($price.value);
+    STATE.priceCents = isFinite(n) && n > 0 ? Math.round(n * 100) : 0;
+    if (STATE.priceCents > 0) {
+      $step3.classList.remove('is-disabled');
+    }
+    refreshResult();
+  });
+
+  /* URL paste autofill */
+  $urlToggle.addEventListener('click', function() {
+    $urlRow.classList.toggle('is-open');
+  });
+  $urlBtn.addEventListener('click', function() {
+    var raw = $urlInput.value.trim();
+    if (!raw) { setUrlStatus('Paste a product URL first.', 'error'); return; }
+    var match = raw.match(/\/products\/([a-z0-9\-]+)/i);
+    if (!match) { setUrlStatus("That doesn't look like a product URL.", 'error'); return; }
+    var handle = match[1];
+    $urlBtn.disabled = true;
+    setUrlStatus('Fetching…');
+    xhrJSON('GET', '/products/' + handle + '.js', null, null, function(err, data) {
+      $urlBtn.disabled = false;
+      if (err || !data || !data.price) {
+        setUrlStatus(err || "Couldn't find that product.", 'error');
+        return;
+      }
+      // Shopify product.js price is in cents
+      STATE.priceCents = data.price;
+      $price.value = (data.price / 100).toFixed(2).replace(/\.00$/, '');
+      $step3.classList.remove('is-disabled');
+      // Best-effort category detection from product.type + tags
+      var detected = detectCategory(data);
+      if (detected && !STATE.category) {
+        selectCategory(detected);
+      }
+      setUrlStatus('Found: ' + data.title + ' — ' + fmtMoney(data.price), 'success');
+      refreshResult();
+    });
+  });
+  function setUrlStatus(msg, kind) {
+    $urlStatus.textContent = msg || '';
+    $urlStatus.classList.toggle('is-error', kind === 'error');
+    $urlStatus.classList.toggle('is-success', kind === 'success');
+  }
+  function detectCategory(product) {
+    var t = (product.type || '').toLowerCase();
+    var tags = (product.tags || []).map(function(s) { return s.toLowerCase(); });
+    var combined = t + ' ' + tags.join(' ');
+    if (/super\s?8|super-8/.test(combined)) return 's8';
+    if (/medium\s?format|6x6|6x7|tlr|rolleiflex|hasselblad|mamiya/.test(combined)) return 'mf';
+    if (/polaroid|sx-?70|instant/.test(combined)) return 'pol';
+    if (/point\s?(\&|and)?\s?shoot|p&s|compact/.test(combined)) return 'pas';
+    if (/slr|rangefinder|35mm|leica/.test(combined)) return 'slr';
+    return null;
+  }
+  function selectCategory(cat) {
+    var btn = $cats.querySelector('[data-cat="' + cat + '"]');
+    if (btn) btn.click();
+  }
+
+  /* ── STEP 3: COVERAGE LENGTH ─────── */
+  function renderLengths() {
+    var meta = CAT_META[STATE.category];
+    if (!meta) { $lengths.innerHTML = ''; return; }
+    $lengths.innerHTML = meta.lengths.map(function(L) {
+      return (
+        '<button type="button" class="bfc-ew-length" data-len="' + L.key + '">' +
+          '<span class="bfc-ew-length-months">' + L.label + '</span>' +
+          '<span class="bfc-ew-length-label">Extended Coverage</span>' +
+          '<span class="bfc-ew-length-info">' + L.sub + '</span>' +
+        '</button>'
+      );
+    }).join('');
+    // Auto-select if only one option
+    if (meta.lengths.length === 1) {
+      var only = $lengths.querySelector('.bfc-ew-length');
+      if (only) only.click();
+    } else {
+      STATE.length = null;
+    }
+  }
+  $lengths.addEventListener('click', function(e) {
+    var btn = e.target.closest('.bfc-ew-length');
+    if (!btn) return;
+    Array.prototype.forEach.call($lengths.querySelectorAll('.bfc-ew-length'), function(b) {
+      b.classList.toggle('is-active', b === btn);
+    });
+    STATE.length = parseInt(btn.dataset.len, 10);
+    refreshResult();
+  });
+
+  /* ── RESULT ─────────────────────── */
+  function lookupVariant() {
+    if (!STATE.category || !STATE.priceCents || !STATE.length) return null;
+    var tiers = WARRANTY_VARIANTS[STATE.category];
+    if (!tiers) return null;
+    var idx = tierIndexForPrice(STATE.priceCents);
+    var tier = tiers[idx];
+    if (!tier) return null;
+    var keys = variantKeys(STATE.category, STATE.length);
+    if (!keys) return null;
+    var vid = tier[keys[0]];
+    var price = tier[keys[1]];
+    if (!vid || price == null) return null;
+    return {
+      variantId: vid,
+      price: price,
+      tierIndex: idx,
+      tierLabel: TIER_LABEL[idx]
+    };
+  }
+  function refreshResult() {
+    var v = lookupVariant();
+    if (!v) {
+      $result.classList.remove('is-visible');
+      return;
+    }
+    $result.classList.add('is-visible');
+    $rTier.innerHTML = 'Tier <em>' + v.tierLabel + '</em>';
+    $rCoverage.textContent =
+      CAT_META[STATE.category].name + ' • ' + STATE.length + '-month extension';
+    $rPrice.textContent = fmtMoney(v.price);
+    refreshAtcButton(v);
+  }
+
+  /* Button state depends on variant + order ID together. Pulled out so we
+     can refresh it on order-input changes without re-computing the tier. */
+  function refreshAtcButton(v) {
+    if (!v) v = lookupVariant();
+    var hasOrder = $orderInput && $orderInput.value.trim().length > 0;
+    $atc.classList.remove('is-success');
+    if (!v || !v.variantId) {
+      $atc.disabled = true;
+      $atcText.textContent = 'Add to Cart';
+      return;
+    }
+    if (!hasOrder) {
+      $atc.disabled = true;
+      $atcText.textContent = 'Enter your order number';
+      return;
+    }
+    $atc.disabled = false;
+    $atcText.textContent = 'Add to Cart — ' + fmtMoney(v.price);
+  }
+
+  /* Live-refresh ATC state as user types in the order field, and clear
+     any invalid-state styling once they start fixing it. */
+  if ($orderInput) {
+    $orderInput.addEventListener('input', function() {
+      $orderInput.classList.remove('is-invalid');
+      refreshAtcButton();
+    });
+  }
+
+  /* ── ATC ─────────────────────────── */
+  $atc.addEventListener('click', function() {
+    var v = lookupVariant();
+    if (!v || !v.variantId) return;
+
+    /* Required: the original camera's order number. Sent as a line item
+       property so the warranty cart line shows the original order on
+       Shopify's order page (visible to customer + admin). Underscore-
+       prefixed names would hide it from the customer; we want this
+       visible since it's the link to their original purchase. */
+    var orderNumber = $orderInput ? $orderInput.value.trim() : '';
+    if (!orderNumber) {
+      if ($orderInput) {
+        $orderInput.classList.add('is-invalid');
+        $orderInput.focus();
+      }
+      return;
+    }
+
+    $atc.disabled = true;
+    $atcText.textContent = 'Adding…';
+
+    var payload = {
+      items: [{
+        id: v.variantId,
+        quantity: 1,
+        properties: {
+          'Original Order #': orderNumber,
+          'Camera Category': CAT_META[STATE.category].name,
+          'Coverage': '+' + STATE.length + ' months'
+        }
+      }],
+      sections: 'cart-drawer,cart-icon-bubble',
+      sections_url: window.location.pathname
+    };
+
+    xhrJSON('POST', '/cart/add.js', payload, null, function(err, data) {
+      if (err) {
+        $atc.disabled = false;
+        $atcText.textContent = 'Error — try again';
+        return;
+      }
+      $atc.classList.add('is-success');
+      $atcText.textContent = 'Added!';
+
+      /* Refresh + open the Release theme's cart-drawer if available. */
+      try {
+        var drawer = document.querySelector('cart-drawer');
+        if (drawer && data && data.sections) {
+          if (typeof drawer.renderContents === 'function') {
+            drawer.renderContents(data);
+          }
+          var bubbleSection = data.sections['cart-icon-bubble'];
+          if (bubbleSection) {
+            var existing = document.getElementById('cart-icon-bubble');
+            if (existing) {
+              var temp = document.createElement('div');
+              temp.innerHTML = bubbleSection;
+              var fresh = temp.querySelector('#cart-icon-bubble');
+              if (fresh) existing.innerHTML = fresh.innerHTML;
+            }
+          }
+          if (typeof drawer.open === 'function') {
+            drawer.open();
+            return;
+          }
+        }
+      } catch (e) {
+        /* Fall through to /cart redirect */
+      }
+      window.location.href = '/cart';
+    });
+  });
+
+  /* ── ORDER LOOKUP (only wired if Base44 endpoint configured) ── */
+  var $lookupBtn = document.getElementById('bfc-ew-lookup-btn');
+  if ($lookupBtn) {
+    var $lookupOrder = document.getElementById('bfc-ew-lookup-order');
+    var $lookupEmail = document.getElementById('bfc-ew-lookup-email');
+    var $lookupStatus = document.getElementById('bfc-ew-lookup-status');
+    var $lookupResult = document.getElementById('bfc-ew-lookup-result');
+    var $lookupResTitle = document.getElementById('bfc-ew-lookup-result-title');
+    var $lookupResMeta = document.getElementById('bfc-ew-lookup-result-meta');
+    var $lookupResAction = document.getElementById('bfc-ew-lookup-result-action');
+
+    function setLookupStatus(msg, kind) {
+      $lookupStatus.textContent = msg || '';
+      $lookupStatus.classList.toggle('is-error', kind === 'error');
+      $lookupStatus.classList.toggle('is-success', kind === 'success');
+    }
+
+    $lookupBtn.addEventListener('click', function() {
+      var order = $lookupOrder.value.trim();
+      var email = $lookupEmail.value.trim();
+      if (!order || !email) {
+        setLookupStatus('Enter both order number and email.', 'error');
+        return;
+      }
+      var endpoint = $lookupBtn.dataset.endpoint;
+      if (!endpoint) {
+        setLookupStatus('Lookup not configured. Please sign in to your account instead.', 'error');
+        return;
+      }
+      $lookupBtn.disabled = true;
+      setLookupStatus('Searching…');
+      $lookupResult.classList.remove('is-visible');
+      xhrJSON('POST', endpoint, { order_number: order, email: email }, null, function(err, data) {
+        $lookupBtn.disabled = false;
+        if (err) {
+          setLookupStatus(err === 'Network error' ? 'Network error. Try again or sign in to your account.' : "Couldn't find that order. Check your inputs or sign in to your account.", 'error');
+          return;
+        }
+        if (!data || !data.found || !data.items || !data.items.length) {
+          setLookupStatus("No matching camera found on that order.", 'error');
+          return;
+        }
+        // Use the highest-priced item as the camera (warranties / accessories typically cost less)
+        var primary = data.items.slice().sort(function(a, b) { return (b.price_cents || 0) - (a.price_cents || 0); })[0];
+        setLookupStatus('Found your order.', 'success');
+        $lookupResult.classList.add('is-visible');
+        $lookupResTitle.textContent = primary.title || 'Camera';
+        $lookupResMeta.textContent = 'Paid ' + fmtMoney(primary.price_cents) + ' • Order ' + order;
+        $lookupResAction.onclick = function() {
+          STATE.priceCents = primary.price_cents;
+          $price.value = (primary.price_cents / 100).toFixed(2).replace(/\.00$/, '');
+          var detected = detectCategory({ type: primary.product_type || '', tags: primary.tags || [] });
+          if (detected) selectCategory(detected);
+          $step3.classList.remove('is-disabled');
+          /* Pre-fill the required order ID since they just looked it up. */
+          if ($orderInput && order) {
+            $orderInput.value = order;
+            $orderInput.classList.remove('is-invalid');
+          }
+          refreshResult();
+          window.scrollTo({ top: $result.getBoundingClientRect().top + window.pageYOffset - 80, behavior: 'smooth' });
+        };
+      });
+    });
+  }
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "BFC Extended Warranty",
+  "tag": "section",
+  "class": "bfc-extended-warranty-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "A self-contained calculator that adds the correct extended warranty variant to cart based on the camera's price and category. Variant IDs are sourced live from snippets/bfc-warranty-tiers-js.liquid — the same registry used on every PDP, so they stay in sync automatically."
+    },
+    { "type": "header", "content": "Header" },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "BFC Coverage"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "default": "Extended <em>Coverage</em>",
+      "info": "Wrap a word in <em>...</em> for italic orange emphasis."
+    },
+    {
+      "type": "textarea",
+      "id": "lead",
+      "label": "Lead paragraph",
+      "default": "Use the calculator below to find the right extended warranty for any camera you bought from us. Pick your camera type, enter the price you paid, and choose how long you want coverage to run."
+    },
+    { "type": "header", "content": "Order Lookup" },
+    {
+      "type": "paragraph",
+      "content": "Shopify's new Customer Accounts (CAO) makes the `customer` object nil in storefront Liquid, so we can't auto-list a shopper's past orders. The lookup section gives them two options: sign in to their account (always shown when enabled), and a manual order-number + email lookup (only shown if a Base44 endpoint URL is configured below)."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_lookup",
+      "label": "Show order lookup section",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "lookup_endpoint",
+      "label": "Base44 lookup endpoint URL",
+      "info": "If configured, shoppers can paste their order # + email and we'll fetch the camera price via Base44 (which has Admin API access). Leave blank to hide the manual lookup form. Endpoint should accept POST { order_number, email } and return { found: true, items: [{ title, price_cents, product_type, tags }] }."
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Extended Warranty",
+      "category": "Custom"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["page"]
+  }
+}
+{% endschema %}

@@ -1,0 +1,26 @@
+{%- comment -%}
+  BFC Purchase Tracker — bfc-track-purchase.liquid
+  Add to your order confirmation / thank you page (Additional Scripts in Settings > Checkout):
+  
+    {% render 'bfc-track-purchase' %}
+  
+  Or for Checkout Extensibility, add to the thank_you.liquid / order status page.
+  This fires once per order, logging each line item handle as a "purchase" event.
+{%- endcomment -%}
+
+{%- if first_time_accessed -%}
+<script>
+(function(){
+  var BFC_ACTIVITY_API = 'https://api.base44.app/api/apps/6910fd9136cfabdf03f66780/functions/productActivity';
+  {%- for line_item in order.line_items -%}
+    {%- if line_item.product.handle != blank -%}
+      fetch(BFC_ACTIVITY_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ handle: '{{ line_item.product.handle }}', event: 'purchase' })
+      }).catch(function(){});
+    {%- endif -%}
+  {%- endfor -%}
+})();
+</script>
+{%- endif -%}

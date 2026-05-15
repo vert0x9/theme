@@ -1,0 +1,123 @@
+{%- comment -%}
+  ============================================================================
+  BFC WARRANTY TIERS — Liquid pricing snippet — snippets/bfc-warranty-tiers.liquid
+
+  Single source of truth for extended-warranty variant IDs and prices.
+  Returns assigns for use on a PDP. Usage from a PDP:
+
+    {%- include 'bfc-warranty-tiers', category: 'slr', cam_price: current_variant.price -%}
+
+  Required input:
+    - category   one of 'slr', 'polaroid', 'mf', 'pas'
+    - cam_price  the camera price in cents (current_variant.price)
+
+  Outputs (use after include):
+    For SLR / Polaroid / MF (only +6 mo offered):
+      w_w12_vid       variant id of the +6 month tier matching cam_price
+      w_w12_price     price in cents
+
+    For PAS (all three: +3 mo / +6 mo / +9 mo):
+      w_w6_vid, w_w6_price    +3 months (6 mo total)
+      w_w9_vid, w_w9_price    +6 months (9 mo total)
+      w_w12_vid, w_w12_price  +9 months (12 mo total)
+
+  Tier brackets (matches Shopify Price Tier option exactly):
+    0: $0-$200       6: $1001-$1500
+    1: $201-$300     7: $1501-$2000
+    2: $301-$400     8: $2001-$3000
+    3: $401-$500     9: $3001-$4000
+    4: $501-$700    10: $4001+
+    5: $701-$1000
+
+  Updated 2026-05-13 with the new bfc-extended-warranty-new product variants.
+  ============================================================================
+{%- endcomment -%}
+
+{%- comment -%} Pick tier index based on camera price (in cents) {%- endcomment -%}
+{%- if cam_price <= 20000 -%}
+  {%- assign w_tier = 0 -%}
+{%- elsif cam_price <= 30000 -%}
+  {%- assign w_tier = 1 -%}
+{%- elsif cam_price <= 40000 -%}
+  {%- assign w_tier = 2 -%}
+{%- elsif cam_price <= 50000 -%}
+  {%- assign w_tier = 3 -%}
+{%- elsif cam_price <= 70000 -%}
+  {%- assign w_tier = 4 -%}
+{%- elsif cam_price <= 100000 -%}
+  {%- assign w_tier = 5 -%}
+{%- elsif cam_price <= 150000 -%}
+  {%- assign w_tier = 6 -%}
+{%- elsif cam_price <= 200000 -%}
+  {%- assign w_tier = 7 -%}
+{%- elsif cam_price <= 300000 -%}
+  {%- assign w_tier = 8 -%}
+{%- elsif cam_price <= 400000 -%}
+  {%- assign w_tier = 9 -%}
+{%- else -%}
+  {%- assign w_tier = 10 -%}
+{%- endif -%}
+
+{%- if category == 'slr' -%}
+  {%- comment -%} SLR / Rangefinder — only +6 month offered (single button) {%- endcomment -%}
+  {%- case w_tier -%}
+    {%- when 0 -%}{%- assign w_w12_vid = '46244383752364' -%}{%- assign w_w12_price = 1500 -%}
+    {%- when 1 -%}{%- assign w_w12_vid = '46244383785132' -%}{%- assign w_w12_price = 2500 -%}
+    {%- when 2 -%}{%- assign w_w12_vid = '46244383817900' -%}{%- assign w_w12_price = 3500 -%}
+    {%- when 3 -%}{%- assign w_w12_vid = '46244383850668' -%}{%- assign w_w12_price = 4500 -%}
+    {%- when 4 -%}{%- assign w_w12_vid = '46244383883436' -%}{%- assign w_w12_price = 5500 -%}
+    {%- when 5 -%}{%- assign w_w12_vid = '46244383916204' -%}{%- assign w_w12_price = 8000 -%}
+    {%- when 6 -%}{%- assign w_w12_vid = '46244383948972' -%}{%- assign w_w12_price = 10000 -%}
+    {%- when 7 -%}{%- assign w_w12_vid = '46244383981740' -%}{%- assign w_w12_price = 12000 -%}
+    {%- when 8 -%}{%- assign w_w12_vid = '46247281524908' -%}{%- assign w_w12_price = 15000 -%}
+    {%- when 9 -%}{%- assign w_w12_vid = '46247281655980' -%}{%- assign w_w12_price = 18000 -%}
+    {%- when 10 -%}{%- assign w_w12_vid = '46247281688748' -%}{%- assign w_w12_price = 21000 -%}
+  {%- endcase -%}
+{%- elsif category == 'polaroid' -%}
+  {%- comment -%} Polaroid — only +6 month offered (single button) {%- endcomment -%}
+  {%- case w_tier -%}
+    {%- when 0 -%}{%- assign w_w12_vid = '46244384342188' -%}{%- assign w_w12_price = 2000 -%}
+    {%- when 1 -%}{%- assign w_w12_vid = '46244384374956' -%}{%- assign w_w12_price = 3500 -%}
+    {%- when 2 -%}{%- assign w_w12_vid = '46244384407724' -%}{%- assign w_w12_price = 4500 -%}
+    {%- when 3 -%}{%- assign w_w12_vid = '46244384440492' -%}{%- assign w_w12_price = 6000 -%}
+    {%- when 4 -%}{%- assign w_w12_vid = '46244384473260' -%}{%- assign w_w12_price = 7000 -%}
+    {%- when 5 -%}{%- assign w_w12_vid = '46244384506028' -%}{%- assign w_w12_price = 10500 -%}
+    {%- when 6 -%}{%- assign w_w12_vid = '46244384538796' -%}{%- assign w_w12_price = 13000 -%}
+    {%- when 7 -%}{%- assign w_w12_vid = '46244384571564' -%}{%- assign w_w12_price = 16000 -%}
+    {%- when 8 -%}{%- assign w_w12_vid = '46247281557676' -%}{%- assign w_w12_price = 19500 -%}
+    {%- when 9 -%}{%- assign w_w12_vid = '46247281721516' -%}{%- assign w_w12_price = 23500 -%}
+    {%- when 10 -%}{%- assign w_w12_vid = '46247281754284' -%}{%- assign w_w12_price = 27000 -%}
+  {%- endcase -%}
+{%- elsif category == 'mf' -%}
+  {%- comment -%} Medium Format — only +6 month offered (single button) {%- endcomment -%}
+  {%- case w_tier -%}
+    {%- when 0 -%}{%- assign w_w12_vid = '46244384932012' -%}{%- assign w_w12_price = 2000 -%}
+    {%- when 1 -%}{%- assign w_w12_vid = '46244384964780' -%}{%- assign w_w12_price = 3000 -%}
+    {%- when 2 -%}{%- assign w_w12_vid = '46244384997548' -%}{%- assign w_w12_price = 4000 -%}
+    {%- when 3 -%}{%- assign w_w12_vid = '46244385030316' -%}{%- assign w_w12_price = 5500 -%}
+    {%- when 4 -%}{%- assign w_w12_vid = '46244385063084' -%}{%- assign w_w12_price = 6500 -%}
+    {%- when 5 -%}{%- assign w_w12_vid = '46244385095852' -%}{%- assign w_w12_price = 9500 -%}
+    {%- when 6 -%}{%- assign w_w12_vid = '46244385128620' -%}{%- assign w_w12_price = 12000 -%}
+    {%- when 7 -%}{%- assign w_w12_vid = '46244385161388' -%}{%- assign w_w12_price = 15000 -%}
+    {%- when 8 -%}{%- assign w_w12_vid = '46247281590444' -%}{%- assign w_w12_price = 18000 -%}
+    {%- when 9 -%}{%- assign w_w12_vid = '46247281787052' -%}{%- assign w_w12_price = 21500 -%}
+    {%- when 10 -%}{%- assign w_w12_vid = '46247281819820' -%}{%- assign w_w12_price = 25000 -%}
+  {%- endcase -%}
+{%- elsif category == 'pas' -%}
+  {%- comment -%} Point & Shoot — 3 coverage options (+3 / +6 / +9 months).
+      For tiers 7-10 ($1501+), +3 and +6 month buttons fall back to the highest
+      tier they offer ($1001-$1500); +9 month has all 11 tiers. {%- endcomment -%}
+  {%- case w_tier -%}
+    {%- when 0 -%}{%- assign w_w6_vid = '46244385226924' -%}{%- assign w_w6_price = 1500 -%}{%- assign w_w9_vid = '46244385521836' -%}{%- assign w_w9_price = 1500 -%}{%- assign w_w12_vid = '46244385816748' -%}{%- assign w_w12_price = 1500 -%}
+    {%- when 1 -%}{%- assign w_w6_vid = '46244385259692' -%}{%- assign w_w6_price = 1500 -%}{%- assign w_w9_vid = '46244385554604' -%}{%- assign w_w9_price = 2000 -%}{%- assign w_w12_vid = '46244385849516' -%}{%- assign w_w12_price = 3000 -%}
+    {%- when 2 -%}{%- assign w_w6_vid = '46244385292460' -%}{%- assign w_w6_price = 2000 -%}{%- assign w_w9_vid = '46244385587372' -%}{%- assign w_w9_price = 3000 -%}{%- assign w_w12_vid = '46244385882284' -%}{%- assign w_w12_price = 4000 -%}
+    {%- when 3 -%}{%- assign w_w6_vid = '46244385325228' -%}{%- assign w_w6_price = 2500 -%}{%- assign w_w9_vid = '46244385620140' -%}{%- assign w_w9_price = 3500 -%}{%- assign w_w12_vid = '46244385915052' -%}{%- assign w_w12_price = 5000 -%}
+    {%- when 4 -%}{%- assign w_w6_vid = '46244385357996' -%}{%- assign w_w6_price = 3000 -%}{%- assign w_w9_vid = '46244385652908' -%}{%- assign w_w9_price = 4500 -%}{%- assign w_w12_vid = '46244385947820' -%}{%- assign w_w12_price = 6500 -%}
+    {%- when 5 -%}{%- assign w_w6_vid = '46244385390764' -%}{%- assign w_w6_price = 4000 -%}{%- assign w_w9_vid = '46244385685676' -%}{%- assign w_w9_price = 6500 -%}{%- assign w_w12_vid = '46244385980588' -%}{%- assign w_w12_price = 9000 -%}
+    {%- when 6 -%}{%- assign w_w6_vid = '46244385423532' -%}{%- assign w_w6_price = 5000 -%}{%- assign w_w9_vid = '46244385718444' -%}{%- assign w_w9_price = 8000 -%}{%- assign w_w12_vid = '46244386013356' -%}{%- assign w_w12_price = 11500 -%}
+    {%- when 7 -%}{%- assign w_w6_vid = '46244385423532' -%}{%- assign w_w6_price = 5000 -%}{%- assign w_w9_vid = '46244385718444' -%}{%- assign w_w9_price = 8000 -%}{%- assign w_w12_vid = '46244386046124' -%}{%- assign w_w12_price = 14000 -%}
+    {%- when 8 -%}{%- assign w_w6_vid = '46244385423532' -%}{%- assign w_w6_price = 5000 -%}{%- assign w_w9_vid = '46244385718444' -%}{%- assign w_w9_price = 8000 -%}{%- assign w_w12_vid = '46247281623212' -%}{%- assign w_w12_price = 17500 -%}
+    {%- when 9 -%}{%- assign w_w6_vid = '46244385423532' -%}{%- assign w_w6_price = 5000 -%}{%- assign w_w9_vid = '46244385718444' -%}{%- assign w_w9_price = 8000 -%}{%- assign w_w12_vid = '46247281852588' -%}{%- assign w_w12_price = 21000 -%}
+    {%- when 10 -%}{%- assign w_w6_vid = '46244385423532' -%}{%- assign w_w6_price = 5000 -%}{%- assign w_w9_vid = '46244385718444' -%}{%- assign w_w9_price = 8000 -%}{%- assign w_w12_vid = '46247281885356' -%}{%- assign w_w12_price = 23500 -%}
+  {%- endcase -%}
+{%- endif -%}

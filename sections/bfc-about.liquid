@@ -1,0 +1,690 @@
+{{ 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap' | stylesheet_tag }}
+
+<style>
+  .bfc-about *,
+  .bfc-about *::before,
+  .bfc-about *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  .bfc-about {
+    background: #F8F6EE;
+    color: #2A2418;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ── HERO ── */
+  .bfc-about__hero {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 80px 48px 72px;
+    border-bottom: 1px solid #E0D9CC;
+  }
+
+  .bfc-about__eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #E36E15;
+    margin-bottom: 18px;
+  }
+
+  .bfc-about__headline {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(40px, 5.5vw, 66px);
+    font-weight: 400;
+    line-height: 1.08;
+    color: #1E1A12;
+    letter-spacing: -0.02em;
+    margin-bottom: 40px;
+    max-width: 700px;
+  }
+
+  .bfc-about__headline em {
+    font-style: italic;
+    color: #E36E15;
+  }
+
+  .bfc-about__intro-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .bfc-about__intro-col p {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #5A5241;
+  }
+
+  .bfc-about__intro-col p + p {
+    margin-top: 18px;
+  }
+
+  .bfc-about__jobs-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #F8F6EE;
+    text-decoration: none;
+    background: #E36E15;
+    padding: 13px 24px;
+    transition: background 0.2s;
+  }
+
+  .bfc-about__jobs-link:hover {
+    background: #C45C0E;
+  }
+
+  /* ── TEAM ── */
+  .bfc-about__team-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 72px 48px 80px;
+  }
+
+  .bfc-about__team-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 48px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #E0D9CC;
+  }
+
+  .bfc-about__team-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(26px, 3.5vw, 38px);
+    font-weight: 400;
+    color: #1E1A12;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .bfc-about__team-title em {
+    font-style: italic;
+    color: #E36E15;
+  }
+
+  .bfc-about__team-count {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #A89880;
+  }
+
+  /* Grid — 4 columns on desktop */
+  .bfc-about__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  /* Card */
+  .bfc-about__card {
+    background: #FFFFFF;
+    border: 1px solid #E8E2D8;
+    overflow: hidden;
+    transition: box-shadow 0.25s, transform 0.25s;
+  }
+
+  .bfc-about__card:hover {
+    box-shadow: 0 8px 32px rgba(42, 36, 24, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .bfc-about__card-img-wrap {
+    position: relative;
+    width: 100%;
+    padding-top: 110%;
+    background: #FFFFFF;
+  }
+
+  .bfc-about__card-img {
+    position: absolute;
+    inset: 8px;
+    width: calc(100% - 16px);
+    height: calc(100% - 16px);
+    object-fit: contain;
+    object-position: center center;
+  }
+
+  .bfc-about__initials {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 400;
+    font-style: italic;
+    color: #C8B99A;
+  }
+
+  .bfc-about__card-body {
+    padding: 16px 18px 18px;
+  }
+
+  .bfc-about__card-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: #1E1A12;
+    line-height: 1.2;
+    margin-bottom: 3px;
+  }
+
+  .bfc-about__card-pronouns {
+    font-size: 12px;
+    color: #A89880;
+    margin-bottom: 2px;
+    font-style: italic;
+  }
+
+  .bfc-about__card-role {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #E36E15;
+    margin-bottom: 10px;
+  }
+
+  .bfc-about__card-bio {
+    font-size: 13px;
+    line-height: 1.65;
+    color: #7A6E5E;
+    margin-bottom: 14px;
+  }
+
+  .bfc-about__card-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-top: 12px;
+    border-top: 1px solid #EDE8DF;
+  }
+
+  .bfc-about__card-link {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #A89880;
+    text-decoration: none;
+    transition: color 0.18s;
+  }
+
+  .bfc-about__card-link:hover {
+    color: #E36E15;
+  }
+
+  .bfc-about__card-link--email:hover {
+    color: #5A5241;
+  }
+
+  .bfc-about__card-links .dot {
+    color: #D4CCBE;
+    font-size: 10px;
+  }
+
+  /* ── JOIN CTA ── */
+  .bfc-about__join {
+    max-width: 1200px;
+    margin: 0 auto 80px;
+    padding: 40px 48px;
+    background: #FFFFFF;
+    border-top: 1px solid #E0D9CC;
+    border-bottom: 1px solid #E0D9CC;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .bfc-about__join-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #1E1A12;
+    margin-bottom: 5px;
+    letter-spacing: -0.01em;
+  }
+
+  .bfc-about__join-heading em {
+    font-style: italic;
+    color: #E36E15;
+  }
+
+  .bfc-about__join-sub {
+    font-size: 14px;
+    color: #8A7E6E;
+    line-height: 1.6;
+  }
+
+  .bfc-about__join-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #F8F6EE;
+    text-decoration: none;
+    background: #2A2418;
+    padding: 13px 26px;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+
+  .bfc-about__join-btn:hover {
+    background: #3D3524;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 1024px) {
+    .bfc-about__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .bfc-about__hero {
+      padding: 56px 24px 56px;
+    }
+
+    .bfc-about__intro-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .bfc-about__team-wrap {
+      padding: 56px 24px 64px;
+    }
+
+    .bfc-about__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .bfc-about__join {
+      padding: 28px 24px;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .bfc-about__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .bfc-about__card-body {
+      padding: 12px 12px 14px;
+    }
+
+    .bfc-about__card-name {
+      font-size: 15px;
+    }
+  }
+</style>
+
+<div class="bfc-about" id="bfc-about-{{ section.id }}">
+
+  {%- comment -%} HERO {%- endcomment -%}
+  <div class="bfc-about__hero">
+    <p class="bfc-about__eyebrow">{{ section.settings.eyebrow }}</p>
+    <h1 class="bfc-about__headline">{{ section.settings.headline }}</h1>
+
+    <div class="bfc-about__intro-grid">
+      <div class="bfc-about__intro-col">
+        <p>{{ section.settings.intro_p1 }}</p>
+        {% if section.settings.intro_p2 != blank %}
+          <p>{{ section.settings.intro_p2 }}</p>
+        {% endif %}
+      </div>
+      <div class="bfc-about__intro-col">
+        {% if section.settings.jobs_url != blank %}
+          <a class="bfc-about__jobs-link" href="{{ section.settings.jobs_url }}">
+            {{ section.settings.jobs_label }} &rarr;
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} TEAM {%- endcomment -%}
+  <div class="bfc-about__team-wrap">
+    <div class="bfc-about__team-header">
+      <h2 class="bfc-about__team-title">{{ section.settings.team_title }}</h2>
+      <span class="bfc-about__team-count">{{ section.blocks.size }} people</span>
+    </div>
+
+    <div class="bfc-about__grid">
+      {% for block in section.blocks %}
+        {% if block.type == 'team_member' %}
+          <div class="bfc-about__card" {{ block.shopify_attributes }}>
+
+            <div class="bfc-about__card-img-wrap">
+              {% if block.settings.photo != blank %}
+                <img
+                  class="bfc-about__card-img"
+                  src="{{ block.settings.photo | img_url: '600x750' }}"
+                  alt="{{ block.settings.name }}"
+                  loading="lazy"
+                  width="600"
+                  height="750"
+                >
+              {% else %}
+                <div class="bfc-about__initials">
+                  {{ block.settings.name | split: ' ' | first | slice: 0 }}{{ block.settings.name | split: ' ' | last | slice: 0 }}
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="bfc-about__card-body">
+              <div class="bfc-about__card-name">{{ block.settings.name }}</div>
+              {% if block.settings.pronouns != blank %}
+                <div class="bfc-about__card-pronouns">{{ block.settings.pronouns }}</div>
+              {% endif %}
+              <div class="bfc-about__card-role">{{ block.settings.role }}</div>
+              {% if block.settings.bio != blank %}
+                <p class="bfc-about__card-bio">{{ block.settings.bio }}</p>
+              {% endif %}
+
+              {% assign has_link = false %}
+              {% if block.settings.email != blank or block.settings.website != blank or block.settings.instagram != blank or block.settings.extra_link_url != blank %}
+                {% assign has_link = true %}
+              {% endif %}
+
+              {% if has_link %}
+                <div class="bfc-about__card-links">
+                  {% if block.settings.email != blank %}
+                    <a class="bfc-about__card-link bfc-about__card-link--email" href="mailto:{{ block.settings.email }}">Email</a>
+                  {% endif %}
+                  {% if block.settings.website != blank %}
+                    {% if block.settings.email != blank %}<span class="dot">&middot;</span>{% endif %}
+                    <a class="bfc-about__card-link" href="{{ block.settings.website }}" target="_blank" rel="noopener noreferrer">Website</a>
+                  {% endif %}
+                  {% if block.settings.instagram != blank %}
+                    {% if block.settings.email != blank or block.settings.website != blank %}<span class="dot">&middot;</span>{% endif %}
+                    <a class="bfc-about__card-link" href="{{ block.settings.instagram }}" target="_blank" rel="noopener noreferrer">Instagram</a>
+                  {% endif %}
+                  {% if block.settings.extra_link_url != blank %}
+                    <span class="dot">&middot;</span>
+                    <a class="bfc-about__card-link" href="{{ block.settings.extra_link_url }}" target="_blank" rel="noopener noreferrer">{{ block.settings.extra_link_label | default: 'More' }}</a>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+  {%- comment -%} JOIN CTA {%- endcomment -%}
+  {% if section.settings.jobs_url != blank %}
+    <div class="bfc-about__join">
+      <div>
+        <h3 class="bfc-about__join-heading">{{ section.settings.join_heading }}</h3>
+        <p class="bfc-about__join-sub">{{ section.settings.join_sub }}</p>
+      </div>
+      <a class="bfc-about__join-btn" href="{{ section.settings.jobs_url }}">
+        {{ section.settings.join_btn }} &rarr;
+      </a>
+    </div>
+  {% endif %}
+
+</div>
+
+{% schema %}
+{
+  "name": "About Us",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Brooklyn Film Camera"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline (use <em> for italic accent)",
+      "default": "A team you can <em>trust.</em>"
+    },
+    {
+      "type": "textarea",
+      "id": "intro_p1",
+      "label": "Intro paragraph 1",
+      "default": "We are a small team of dedicated photographers and creatives working to make the film community better. Passionate about our products and committed to providing the best possible care for your cameras."
+    },
+    {
+      "type": "textarea",
+      "id": "intro_p2",
+      "label": "Intro paragraph 2 (optional)",
+      "default": "Our team includes professionally trained camera technicians, experienced business professionals, and passionate camera enthusiasts — all working together to provide expert service and exceptional care for every camera that comes through our doors."
+    },
+    {
+      "type": "header",
+      "content": "Team section"
+    },
+    {
+      "type": "text",
+      "id": "team_title",
+      "label": "Team heading",
+      "default": "Meet the <em>team</em>"
+    },
+    {
+      "type": "header",
+      "content": "Join us CTA"
+    },
+    {
+      "type": "text",
+      "id": "join_heading",
+      "label": "Join heading",
+      "default": "Interested in joining <em>our team?</em>"
+    },
+    {
+      "type": "text",
+      "id": "join_sub",
+      "label": "Join subtext",
+      "default": "We're always looking for passionate people who love film photography."
+    },
+    {
+      "type": "text",
+      "id": "join_btn",
+      "label": "Button label",
+      "default": "See Open Positions"
+    },
+    {
+      "type": "url",
+      "id": "jobs_url",
+      "label": "Open positions URL"
+    },
+    {
+      "type": "text",
+      "id": "jobs_label",
+      "label": "Hero jobs link label",
+      "default": "We're hiring"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "team_member",
+      "name": "Team Member",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "photo",
+          "label": "Photo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name"
+        },
+        {
+          "type": "text",
+          "id": "pronouns",
+          "label": "Pronouns (optional, e.g. they/them)"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role / Title"
+        },
+        {
+          "type": "textarea",
+          "id": "bio",
+          "label": "Bio"
+        },
+        {
+          "type": "text",
+          "id": "email",
+          "label": "Email address"
+        },
+        {
+          "type": "url",
+          "id": "website",
+          "label": "Personal website (optional)"
+        },
+        {
+          "type": "url",
+          "id": "instagram",
+          "label": "Instagram URL (optional)"
+        },
+        {
+          "type": "url",
+          "id": "extra_link_url",
+          "label": "Extra link URL (optional)"
+        },
+        {
+          "type": "text",
+          "id": "extra_link_label",
+          "label": "Extra link label",
+          "default": "More"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Us",
+      "settings": {
+        "jobs_url": "/pages/open-positions"
+      },
+      "blocks": [
+        {
+          "type": "team_member",
+          "settings": {
+            "name": "Taylor",
+            "role": "Camera Tech · Lens Specialist",
+            "bio": "Taylor is a freelance camera assistant, graphic designer, and lens tech at BFC. Her path through the film world started behind the camera, but eventually she found herself drawn to what's inside the gear. There's an art to fixing something broken — restoring a lens, cleaning out the years, and revealing its history.",
+            "email": "taylor@brooklynfilmcamera.com",
+            "instagram": "https://www.instagram.com/filmsbytaylor/"
+          }
+        },
+        {
+          "type": "team_member",
+          "settings": {
+            "name": "Griffin",
+            "role": "Operations Manager",
+            "pronouns": "they/them",
+            "bio": "Griffin does construction, project management, some photography, and bartending. When not working you may catch them playing pool, pinball, or biking around Brooklyn.",
+            "email": "griffin@brooklynfilmcamera.com"
+          }
+        },
+        {
+          "type": "team_member",
+          "settings": {
+            "name": "Shanna",
+            "role": "Head Vampire (Purchasing)",
+            "bio": "Shanna is a freelance photographer, retoucher, and the owner of Larkhill Prints. When she's not hanging out with her Frenchie or trotting the globe, you can find her at BFC.",
+            "email": "shanna@brooklynfilmcamera.com",
+            "website": "https://www.shannahutchins.com/",
+            "instagram": "https://www.instagram.com/shannahutchins",
+            "extra_link_url": "https://larkhill-prints.square.site/",
+            "extra_link_label": "Larkhill Prints"
+          }
+        },
+        {
+          "type": "team_member",
+          "settings": {
+            "name": "Isabelle",
+            "role": "SX-70 Lead Tech",
+            "bio": "Isabelle is a visual artist with a focus in painting and printmaking. Often drawing from her own photography as reference for her artworks, film photography has been an exciting space for expanding this practice.",
+            "email": "isabelle@brooklynfilmcamera.com",
+            "website": "https://ifv.cargo.site/"
+          }
+        },
+        {
+          "type": "team_member",
+          "settings": {
+            "name": "Mitch",
+            "role": "Camera Buyer",
+            "bio": "Mitch is an old-time fiddle and banjo player currently living in southern Spain. He has been involved in the film photography world since joining the Impossible Project in 2014, and is now the lead camera buyer for BFC.",
+            "email": "mitch@brooklynfilmcamera.com"
+          }
+        },
+        {
+          "type": "team_member",
+          "settings": {
+            "name": "Dan",
+            "role": "Clerk / Events / DJ",
+            "bio": "Dan Hureira is a photographer and music enthusiast. He throws parties and produces music as part of his record label Bouquet. Dan is one of the many faces you'll see behind the counter providing excellent service.",
+            "email": "dan@brooklynfilmcamera.com",
+            "website": "https://ifeellikedan.com/",
+            "instagram": "https://www.instagram.com/ifeellikedan"
+          }
+        },
+        {
+          "type": "team_member",
+          "settings": {
+            "name": "Sydney",
+            "role": "35mm & 120 Tech",
+            "bio": "Sydney Task (also known as Syd) is a photographer, filmmaker, animator, and serial hobbyist. When she's not clerking at BFC, she might be rock climbing, drawing silly characters, learning the banjo, or roaming the streets with a camera in hand.",
+            "email": "Sydney@brooklynfilmcamera.com",
+            "website": "https://www.sydneytask.com/",
+            "instagram": "https://www.instagram.com/sydneytask/"
+          }
+        },
+        {
+          "type": "team_member",
+          "settings": {
+            "name": "Ingridi",
+            "role": "SX-70 Tech",
+            "bio": "Ingridi Viruel is a photographer and filmmaker originally from Brazil. When she is not at BFC, she likes to experiment with portraiture and alternative processes.",
+            "email": "ingridi@brooklynfilmcamera.com",
+            "instagram": "https://www.instagram.com/ingridiviruel"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

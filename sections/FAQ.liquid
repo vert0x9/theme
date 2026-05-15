@@ -1,0 +1,220 @@
+{% comment %}
+BFC — Responsive FAQ page template with tabbed categories
+- Hero heading + intro copy
+- Tab navigation generated from FAQ categories (plus "All")
+- Accordions for each question/answer
+- Mobile-friendly layout with sticky tabs on scroll and smooth transitions
+- Lightweight JS for filtering FAQs by category
+
+Drop this in: sections/bfc-faq-page.liquid
+{% endcomment %}
+
+<section id="bfc-faq-{{ section.id }}" class="bfcfaq-root">
+  <style>
+    #bfc-faq-{{ section.id }}{--wrap:{{ section.settings.max_width }};--pad:{{ section.settings.section_pad }}px;--g:{{ section.settings.gap }}px;--bg:{{ section.settings.bg }};--text:{{ section.settings.text }};--muted:{{ section.settings.muted }};--accent:{{ section.settings.accent }};--radius:{{ section.settings.radius }}px;--font:var(--font-body-family, "{{ section.settings.font | default: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial' }}");background:var(--bg);color:var(--text);font-family:var(--font)}
+    #bfc-faq-{{ section.id }} .wrap{max-width:var(--wrap);margin-inline:auto;padding:var(--pad) 18px;display:grid;gap:24px}
+    #bfc-faq-{{ section.id }} .hero{display:grid;gap:10px}
+    #bfc-faq-{{ section.id }} .eyebrow{font:600 12px/1 var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+    #bfc-faq-{{ section.id }} .hed{font-weight:700;font-size:clamp(26px,3.8vw,38px);line-height:1.15}
+    #bfc-faq-{{ section.id }} .dek{font-weight:400;font-size:16px;line-height:1.6;color:var(--muted);max-width:720px}
+
+    #bfc-faq-{{ section.id }} .tabs{position:sticky;top:0;z-index:3;background:var(--bg);padding:12px 0 6px;border-bottom:1px solid color-mix(in srgb, var(--muted) 30%, transparent)}
+    #bfc-faq-{{ section.id }} .tab-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    #bfc-faq-{{ section.id }} .tab-list{display:flex;gap:4px;flex-wrap:wrap}
+    #bfc-faq-{{ section.id }} .tab{border:1px solid transparent;padding:10px 12px;border-radius:var(--radius);background:transparent;color:var(--text);font:600 14px/1 var(--font);cursor:pointer;transition:color .15s ease, border-color .15s ease}
+    #bfc-faq-{{ section.id }} .tab:hover{color:var(--accent)}
+    #bfc-faq-{{ section.id }} .tab.is-active{border-color:var(--text);color:var(--text)}
+    #bfc-faq-{{ section.id }} .toggle-all{border:1px solid color-mix(in srgb, var(--muted) 25%, transparent);padding:10px 12px;border-radius:var(--radius);background:color-mix(in srgb, var(--accent) 6%, transparent);color:var(--text);font:600 14px/1 var(--font);cursor:pointer;transition:color .15s ease, border-color .15s ease, background .15s ease}
+    #bfc-faq-{{ section.id }} .toggle-all:hover{border-color:var(--text);color:var(--text);background:color-mix(in srgb, var(--accent) 10%, transparent)}
+
+    #bfc-faq-{{ section.id }} .faq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:var(--g)}
+    #bfc-faq-{{ section.id }} .faq-card{background:var(--bg);border:1px solid color-mix(in srgb, var(--muted) 35%, transparent);border-radius:var(--radius);box-shadow:none}
+    #bfc-faq-{{ section.id }} .faq-card details{padding:18px;border-radius:var(--radius)}
+    #bfc-faq-{{ section.id }} .faq-card summary{list-style:none;display:flex;align-items:flex-start;gap:10px;font:700 16px/1.4 var(--font);cursor:pointer;color:var(--text)}
+    #bfc-faq-{{ section.id }} .faq-card summary::-webkit-details-marker{display:none}
+    #bfc-faq-{{ section.id }} .faq-card summary .tag{display:inline-flex;align-items:center;justify-content:center;min-width:28px;min-height:28px;padding:6px;border-radius:var(--radius);border:1px solid color-mix(in srgb, var(--muted) 30%, transparent);background:transparent;color:var(--text);font:700 12px/1 var(--font)}
+    #bfc-faq-{{ section.id }} .faq-card .answer{margin:12px 0 0;font:400 15px/1.7 var(--font);color:var(--muted)}
+
+    #bfc-faq-{{ section.id }} .empty{font:600 15px/1 var(--font);color:var(--muted);padding:12px 0}
+
+    @media (max-width: 720px){
+      #bfc-faq-{{ section.id }} .tabs{top:0;padding:8px 0}
+      #bfc-faq-{{ section.id }} .tab{flex:1 1 auto;text-align:center}
+    }
+  </style>
+
+  <div class="wrap">
+    <header class="hero">
+      {% if section.settings.eyebrow != blank %}<div class="eyebrow">{{ section.settings.eyebrow }}</div>{% endif %}
+      {% if section.settings.hed != blank %}<h2 class="hed">{{ section.settings.hed }}</h2>{% endif %}
+      {% if section.settings.dek != blank %}<p class="dek">{{ section.settings.dek }}</p>{% endif %}
+    </header>
+
+    <nav class="tabs" aria-label="FAQ categories">
+      <div class="tab-bar">
+        <div class="tab-list" role="tablist"></div>
+        <button type="button" class="toggle-all" data-toggle-all>Open all</button>
+      </div>
+    </nav>
+
+    <div class="faq-grid" data-faq-grid>
+      {% for block in section.blocks %}
+        {% assign category = block.settings.category | default: 'General' %}
+        <article class="faq-card" data-category="{{ category | escape }}" {{ block.shopify_attributes }}>
+          <details {% if block.settings.default_open %}open{% endif %}>
+            <summary>
+              <span class="tag">{{ category | slice: 0, 3 | upcase }}</span>
+              <span>{{ block.settings.question }}</span>
+            </summary>
+            <div class="answer">{{ block.settings.answer }}</div>
+          </details>
+        </article>
+      {% endfor %}
+    </div>
+
+    <div class="empty" hidden data-empty>Nothing here yet. Add FAQ blocks or choose another tab.</div>
+  </div>
+
+  <script>
+    (() => {
+      const root = document.currentScript.closest('#bfc-faq-{{ section.id }}');
+      const grid = root?.querySelector('[data-faq-grid]');
+      const tabs = root?.querySelector('.tab-list');
+      const toggleAll = root?.querySelector('[data-toggle-all]');
+      const empty = root?.querySelector('[data-empty]');
+      if (!root || !grid || !tabs) return;
+
+      const cards = Array.from(grid.children);
+      const categories = ['All'];
+      cards.forEach(card => {
+        const cat = card.getAttribute('data-category')?.trim();
+        if (cat && !categories.includes(cat)) categories.push(cat);
+      });
+
+      categories.forEach((cat, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = cat;
+        btn.className = 'tab' + (idx === 0 ? ' is-active' : '');
+        btn.setAttribute('role','tab');
+        btn.dataset.cat = cat;
+        tabs.appendChild(btn);
+      });
+
+      const update = (cat) => {
+        let visible = 0;
+        cards.forEach(card => {
+          const match = cat === 'All' || card.getAttribute('data-category') === cat;
+          card.hidden = !match;
+          if (match) visible += 1;
+        });
+        if (empty) empty.hidden = visible !== 0;
+      };
+
+      const setAll = (openState) => {
+        cards.forEach(card => {
+          if (card.hidden) return;
+          const details = card.querySelector('details');
+          if (!details) return;
+          details.open = openState;
+        });
+        if (toggleAll) toggleAll.textContent = openState ? 'Close all' : 'Open all';
+      };
+
+      tabs.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-cat]');
+        if (!btn) return;
+        tabs.querySelectorAll('.tab').forEach(el => el.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        update(btn.dataset.cat);
+        if (toggleAll) toggleAll.textContent = 'Open all';
+      });
+
+      toggleAll?.addEventListener('click', () => {
+        const shouldOpen = toggleAll.textContent?.toLowerCase().includes('open');
+        setAll(shouldOpen);
+      });
+
+      update('All');
+    })();
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "BFC FAQ Page",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"Eyebrow"},
+    {"type":"text","id":"hed","label":"Heading","default":"Common Questions and Help"},
+    {"type":"textarea","id":"dek","label":"Intro text","default":"Quick details about visiting, orders, repairs, and film services."},
+    {"type":"range","id":"max_width","label":"Max width","default":1120,"min":720,"max":1600,"step":40,"unit":"px"},
+    {"type":"range","id":"section_pad","label":"Vertical padding","default":36,"min":12,"max":120,"step":4,"unit":"px"},
+    {"type":"range","id":"gap","label":"Grid gap","default":16,"min":8,"max":48,"step":2,"unit":"px"},
+    {"type":"range","id":"radius","label":"Corner radius","default":0,"min":0,"max":20,"step":1,"unit":"px"},
+    {"type":"color","id":"bg","label":"Background","default":"#ffffff"},
+    {"type":"color","id":"text","label":"Text color","default":"#111827"},
+    {"type":"color","id":"muted","label":"Muted color","default":"#6b7280"},
+    {"type":"color","id":"accent","label":"Accent color","default":"#111827"},
+    {"type":"text","id":"font","label":"Font stack","default":"Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial"}
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ item",
+      "settings": [
+        {"type":"text","id":"question","label":"Question","default":"How do refunds work?"},
+        {"type":"richtext","id":"answer","label":"Answer","default":"<p>Refunds are processed back to your original payment method. Once approved, you'll receive a confirmation email with tracking.</p>"},
+        {"type":"text","id":"category","label":"Category","default":"Billing"},
+        {"type":"checkbox","id":"default_open","label":"Start open","default":false}
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC FAQ Page",
+      "blocks": [
+        {"type":"faq","settings":{"question":"Visit & Hours","answer":"<p>Open every day 11:00–8:00. Find us at 855 Grand Street, Brooklyn, NY 11211. <a href=\"#\">Get directions</a>.</p>","category":"Info / Casual"}},
+        {"type":"faq","settings":{"question":"Order Pickup","answer":"<p>Pickup is available during all open hours. We’ll email you when your order is fulfilled and ready.</p>","category":"Info / Casual"}},
+        {"type":"faq","settings":{"question":"Returns, Exchanges & Warranty","answer":"<p>See our full returns and exchanges policy <a href=\"https://brooklynfilmcamera.com/pages/warranty\" rel=\"noopener\" target=\"_blank\">here</a>. Unless otherwise states for individual products, Polaroid cameras include a 6-month warranty, SLR cameras include a 6 month warranty, point & shoots include a 3 month warranty ; excludes body damage, drops, and water/moisture damage.</p>","category":"Info / Casual"}},
+        {"type":"faq","settings":{"question":"Camera Issues & Support","answer":"<p>If your camera develops an issue within warranty, we’ll repair or exchange it after assessment. Contact <a href=\"mailto:SX70@brooklynfilmcamera.com\">SX70@brooklynfilmcamera.com</a>.</p>","category":"Info / Casual"}},
+        {"type":"faq","settings":{"question":"Shipping Worldwide","answer":"<p>We ship internationally to most regions.</p>","category":"Info / Casual"}},
+        {"type":"faq","settings":{"question":"Film Development & Scanning","answer":"<p>In-store drop-off during open hours. You can mail us your film as well.&nbsp;</p>","category":"Info / Casual"}},
+        {"type":"faq","settings":{"question":"Repair Coverage","answer":"<p>We service most cameras through two departments: Polaroid and Everything Else (mostly 35mm & Medium Format)</p>","category":"Info / Casual"}},
+        {"type":"faq","settings":{"question":"Sell Us Your Gear","answer":"<p>Sell in person at our Brooklyn location. Please email photos first to <a href=\"mailto:hello@brooklynfilmcamera.com\">griffin@brooklynfilmcamera.com</a>.</p>","category":"Info / Casual"}},
+        {"type":"faq","settings":{"question":"Turnaround Time","answer":"<p>Typical turnaround is 5–12 days from receipt. Submit a repair order to see current estimates.</p>","category":"Polaroid Restoration FAQ"}},
+        {"type":"faq","settings":{"question":"I shipped you my camera! Did you get it?","answer":"<p>If tracking shows delivered, it should be with us. For assurance, include your order number in your account or reply to order emails.</p>","category":"Polaroid Restoration FAQ"}},
+        {"type":"faq","settings":{"question":"New Issue After Servicing","answer":"<p>All cameras are fully serviced. If something unexpected occurs afterward, contact us so we can assess and resolve it quickly. All of our services come with warranty.</p>","category":"Polaroid Restoration FAQ"}},
+        {"type":"faq","settings":{"question":"Repair Warranty Details","answer":"<p>Covers additional repairs within 6 months of the repair date. It <em>does not</em> cover body damage, impact/drops, or water/moisture damage.</p>","category":"Polaroid Restoration FAQ"}},
+        {"type":"faq","settings":{"question":"If a Repair Isn’t Possible","answer":"<p>If a repair isn’t feasible, we’ll reach out to discuss next steps with you.</p>","category":"Polaroid Restoration FAQ"}},
+        {"type":"faq","settings":{"question":"Why We Don’t Repair 600","answer":"<p>Due to price point and aging plastic parts, 600-series repairs typically aren’t practical.</p>","category":"Polaroid Restoration FAQ"}},
+        {"type":"faq","settings":{"question":"Clean Your SX-70","answer":"<p>Keep the exterior clean and rollers spotless to prevent streaks, incomplete spread, or ejection issues.</p><p><a href=\"https://www.youtube.com/watch?v=DB2jwIhosxE\" rel=\"noopener\" target=\"_blank\">Watch video</a></p>","category":"SX-70 Troubleshooting"}},
+        {"type":"faq","settings":{"question":"Won’t Power On","answer":"<p>Often the film-pack battery. Try a fresh pack, clean contacts, and reseat the pack to jump-start.</p><p><a href=\"https://www.youtube.com/watch?v=N3TTMkNE-jE\" rel=\"noopener\" target=\"_blank\">Watch video</a></p>","category":"SX-70 Troubleshooting"}},
+        {"type":"faq","settings":{"question":"Exposure Too Dark/Light","answer":"<p>May indicate a meter needing service. Learn your camera’s tendencies and use the lighten/darken wheel to compensate.</p><p><a href=\"https://www.youtube.com/watch?v=iNhyW7BJ5gA\" rel=\"noopener\" target=\"_blank\">Watch video</a></p>","category":"SX-70 Troubleshooting"}},
+        {"type":"faq","settings":{"question":"Won’t Close Fully","answer":"<p>Usually a mirror stuck mid-cycle. Carefully reset by cycling the mechanism; don’t force the panels shut.</p><p><a href=\"https://www.youtube.com/watch?v=kIhiuvZQ7MU\" rel=\"noopener\" target=\"_blank\">Watch video</a></p>","category":"SX-70 Troubleshooting"}},
+        {"type":"faq","settings":{"question":"Open & Close","answer":"<p>Follow the correct sequence to protect hinges and keep the linkage aligned.</p><p><a href=\"https://www.youtube.com/watch?v=zELr5wYLNYo\" rel=\"noopener\" target=\"_blank\">Watch video</a></p>","category":"SX-70 Troubleshooting"}},
+        {"type":"faq","settings":{"question":"Flash Bar Issues","answer":"<p>Clean the flash-port contacts and ensure a firm seat. Oxidation can block communication.</p><p><a href=\"https://www.youtube.com/watch?v=nqUFI3MlkTs\" rel=\"noopener\" target=\"_blank\">Watch video</a></p>","category":"SX-70 Troubleshooting"}},
+        {"type":"faq","settings":{"question":"Light Leaks","answer":"<p>Often from bellows wear. Inspect in a dark room with a small flashlight inside the bellows to locate leaks.</p><p><a href=\"https://www.youtube.com/watch?v=-fekZBMoLcs\" rel=\"noopener\" target=\"_blank\">Watch video</a></p>","category":"SX-70 Troubleshooting"}},
+        {"type":"faq","settings":{"question":"600 Film Mod","answer":"<p>Lets your SX-70 shoot Polaroid 600 film (faster ISO, widely available). This is a permanent board-level change.</p>","category":"Modifications"}},
+        {"type":"faq","settings":{"question":"Replacement Board Projects","answer":"<p>Still in development.</p>","category":"Modifications"}},
+        {"type":"faq","settings":{"question":"Warranty Coverage","answer":"<p>All cameras and lenses include a 3-month warranty. For issues, contact <a href=\"mailto:Repairs@brooklynfilmcamera.com\">Repairs@brooklynfilmcamera.com</a>.</p>","category":"Non-Polaroid Repairs FAQ"}},
+        {"type":"faq","settings":{"question":"Repair Process","answer":"<p>Order a repair quote and drop off your camera. Many repairs are completed in about a week.</p>","category":"Non-Polaroid Repairs FAQ"}},
+        {"type":"faq","settings":{"question":"What We Repair","answer":"<p>We repair most camera types. See details in our <a href=\"https://brooklynfilmcamera.com/blogs/repairs-1/cla-repairs-pricing#camera-pricing\" rel=\"noopener\" target=\"_blank\">repair coverage blog post</a>.</p>","category":"Non-Polaroid Repairs FAQ"}},
+        {"type":"faq","settings":{"question":"SX-70 vs 600 Film","answer":"<p>SX-70 film has an ISO of 160, while 600 film has an ISO of 640, meaning images will only properly expose in cameras designed for them. SX-70 film has higher contrast, richer saturation, and finer grain, but is only compatible with SX-70 folding and box cameras. 600 film is compatible with all other integral Polaroid cameras as well as the SLR 680.</p>","category":"Cameras & Film"}},
+        {"type":"faq","settings":{"question":"Benefits of 600 Mod","answer":"<p><strong>Better Low-light:</strong> 600 film allows more settings without flash.<br><strong>Easier to Find:</strong> Stocked widely, easier to source than SX-70.<br><strong>Special Editions:</strong> Polaroid releases many special 600 films, while SX-70 is limited to core Color and B&W.</p>","category":"Cameras & Film"}},
+        {"type":"faq","settings":{"question":"SX-70 vs 600 Cameras","answer":"<p>Most Polaroid 600 cameras have plastic lenses and fixed focal zones. The SX-70 is a higher-end tool with glass optics and precise manual focusing. The exception is the SLR 680, which combines SX-70 features with 600 film compatibility.</p>","category":"Cameras & Film"}},
+        {"type":"faq","settings":{"question":"Exposure Compensation","answer":"<p>Adjust toward white to increase exposure, toward black for darker exposures. Useful when backlighting tricks the meter into underexposing your subject.</p>","category":"Cameras & Film"}},
+        {"type":"faq","settings":{"question":"Why Modern Film Looks Different","answer":"<p>The original Polaroid went bankrupt in 2008. The Impossible Project (now Polaroid) revived film with different chemistry due to supply and environmental restrictions. Today’s film is constantly improving but won’t exactly match 70s–90s stock.</p>","category":"Cameras & Film"}},
+        {"type":"faq","settings":{"question":"Shielding Film","answer":"<p>Modern film is more light-sensitive after ejection. Shield from strong light for at least 5 minutes to avoid burns, shifts, or fading.</p>","category":"Cameras & Film"}},
+        {"type":"faq","settings":{"question":"Instax in Polaroid?","answer":"<p>No — Instax film is designed for Fujifilm Instax cameras only and cannot be used in Polaroid bodies.</p>","category":"Cameras & Film"}},
+        {"type":"faq","settings":{"question":"Do You Sell New Polaroid Cameras?","answer":"<p>Yes, we sell all current Polaroid models.</p>","category":"Cameras & Film"}},
+        {"type":"faq","settings":{"question":"Yashica TLR Models","answer":"<p><strong>Yashica A:</strong> 1/25–1/300s, f/3.5–f/22.<br><strong>Yashica C:</strong> Bulb–1/300s, f/3.5–f/22.<br><strong>Yashica D:</strong> 1–1/500s + bulb, lock and ergonomic upgrades.<br><strong>Yashica Mat-124:</strong> Modeled after Rolleiflex, 4-element lens, built-in meter (now unreliable).<br><strong>Yashica Mat-124G:</strong> Final TLR, cosmetic updates, 1–1/500s shutter, unreliable internal meter.</p>","category":"Cameras & Film"}},
+        {"type":"faq","settings":{"question":"Do You Sell SLRs?","answer":"<p>Yes! We stock models like the Pentax K1000, Nikon F3, and more. Inventory updates often, so check back regularly.</p>","category":"Cameras & Film"}},
+        {"type":"faq","settings":{"question":"Film Development & Scanning","answer":"<p>Yes, we offer film drop-off services during open hours. Services are in-store only (no mail-ins). <a href=\"#\">Learn more</a>.</p>","category":"Cameras & Film"}},
+        {"type":"faq","settings":{"question":"I Shot a Blank Roll","answer":"<p>Common causes include:<br>• Film not advancing properly<br>• Damaged/misaligned mirror or mechanisms<br>• Degraded light seals exposing the roll</p>","category":"Cameras & Film"}}
+      ]
+    }
+  ]
+}
+{% endschema %}

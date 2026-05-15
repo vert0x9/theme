@@ -1,0 +1,106 @@
+{%- comment -%}
+BFC: Repairs page waitlist modal (self-contained, with page blur)
+{%- endcomment -%}
+
+{% if template == 'page.repairs-polaroid' %}
+
+<style>
+  :root{
+    --bfc-bg:#ffffff; --bfc-text:#111827; --bfc-muted:#6b7280;
+    --bfc-border:#e5e7eb; --bfc-overlay:rgba(17,24,39,.5); --bfc-radius:16px;
+  }
+
+  /* Modal shell */
+  .bfc-modal{position:fixed;inset:0;z-index:9999;display:none}
+  .bfc-modal[aria-hidden="false"]{display:block}
+  .bfc-modal__overlay{position:absolute;inset:0;background:var(--bfc-overlay);backdrop-filter:blur(6px)}
+  .bfc-modal__wrap{position:relative;display:grid;place-items:center;min-height:100vh;padding:24px}
+
+  /* Dialog */
+  .bfc-modal__dialog{
+    position:relative;max-width:520px;width:100%;
+    background:var(--bfc-bg);border:1px solid var(--bfc-border);
+    border-radius:var(--bfc-radius);box-shadow:0 25px 80px rgba(0,0,0,.2);
+    overflow:hidden;text-align:center;padding:36px 28px
+  }
+
+  /* Type */
+  .bfc-modal__eyebrow{display:block;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--bfc-muted);margin-bottom:8px}
+  .bfc-modal__title{font-size:26px;line-height:1.2;margin:0 0 12px}
+  .bfc-modal__text{color:var(--bfc-muted);line-height:1.6;margin:0 0 18px}
+
+  /* Buttons */
+  .bfc-modal__cta{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin-top:20px}
+  .bfc-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;
+    padding:0 18px;border-radius:999px;border:1px solid var(--bfc-text);
+    background:var(--bfc-text);color:#fff;font-weight:600;text-decoration:none;cursor:pointer
+  }
+  .bfc-btn--secondary{background:#fff;color:var(--bfc-text);border-color:var(--bfc-border)}
+
+  /* Page blur (exclude this section so the modal stays sharp) */
+  .bfc-modal-open header,
+  .bfc-modal-open footer,
+  .bfc-modal-open #MainContent > *:not(#shopify-section-{{ section.id }}){
+    filter: blur(6px);
+    transition: filter .2s ease;
+  }
+</style>
+
+<div class="bfc-modal" id="bfcWaitlistModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="bfcWaitlistTitle">
+  <div class="bfc-modal__overlay" data-close></div>
+  <div class="bfc-modal__wrap">
+    <div class="bfc-modal__dialog">
+      <span class="bfc-modal__eyebrow">Polaroid Service</span>
+      <h2 class="bfc-modal__title" id="bfcWaitlistTitle">SX-70 Restorations Waitlist</h2>
+      <p class="bfc-modal__text"><strong>Restorations will be reopening soon!</strong> In the meantime, you can join our waitlist with the link below. We’ll email you as soon as slots open, giving you early access before the general public.</p>
+      <p class="bfc-modal__text"><strong>Estimated start:</strong> 2–3 months.</p>
+      <div class="bfc-modal__cta">
+        <a class="bfc-btn" href="https://forms.gle/dhfRQdCjtrAePfxY6" target="_blank" rel="noopener">Join the Waitlist</a>
+        <button class="bfc-btn bfc-btn--secondary" type="button" data-close>Not now</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function(){
+    var modal = document.getElementById('bfcWaitlistModal');
+    if(!modal) return;
+
+    function open(){
+      modal.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+      document.documentElement.classList.add('bfc-modal-open');
+    }
+    function close(){
+      modal.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      document.documentElement.classList.remove('bfc-modal-open');
+    }
+
+    // Close on overlay click & Not now
+    modal.querySelectorAll('[data-close]').forEach(function(el){
+      el.addEventListener('click', close);
+    });
+
+    // Close on ESC
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') close();
+    });
+
+    // Auto-open shortly after page load
+    window.requestAnimationFrame(function(){ setTimeout(open, 600); });
+  })();
+</script>
+
+{% endif %}
+
+{% schema %}
+{
+  "name": "Repairs Waitlist",
+  "settings": [],
+  "blocks": [],
+  "presets": [{ "name": "Repairs Waitlist" }]
+}
+{% endschema %}

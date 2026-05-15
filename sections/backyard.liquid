@@ -1,0 +1,700 @@
+{% comment %}
+  Section: BFC Backyard — Event Space Rental Landing Page
+  Assign to a dedicated page template (e.g. page.backyard.liquid)
+{% endcomment %}
+
+{{ 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap' | stylesheet_tag }}
+
+{% style %}
+  .bfc4-backyard * { margin: 0; padding: 0; box-sizing: border-box; }
+  .bfc4-backyard {
+    --or: #E36E15;
+    --go: #F4A027;
+    --ce: #ABCC99;
+    --cv: #F8F6EE;
+    --bk: #202009;
+    --ww: #FDFBF7;
+    font-family: 'Poppins', sans-serif;
+    color: var(--bk);
+    background: var(--cv);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HERO ── */
+  .bfc4-by-hero {
+    position: relative;
+    width: 100%;
+    min-height: var(--bfc-hero-h, 100vh);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .bfc4-by-hero__slides {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    transition: transform 0.8s ease-in-out;
+  }
+  .bfc4-by-hero__slide {
+    min-width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+  }
+  .bfc4-by-hero__slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .bfc4-by-hero__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 900px;
+    padding: 2rem;
+    animation: bfcByFadeUp 1s ease-out both;
+  }
+  @keyframes bfcByFadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .bfc4-by-hero__tag {
+    font-weight: 500;
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--go);
+    margin-bottom: 1.5rem;
+  }
+  .bfc4-by-hero__title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: clamp(4rem, 9vw, 7.5rem);
+    line-height: 1.0;
+    color: var(--cv);
+    margin-bottom: 1.5rem;
+  }
+  .bfc4-by-hero__sub {
+    font-weight: 300;
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+    color: var(--cv);
+    opacity: 0.9;
+    line-height: 1.7;
+    max-width: 640px;
+    margin: 0 auto 2.5rem;
+  }
+  .bfc4-by-cta {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bk);
+    background: var(--go);
+    padding: 1.15rem 3rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+  }
+  .bfc4-by-cta:hover { background: var(--or); color: var(--cv); }
+
+  /* ── SHARED ── */
+  .bfc4-by-tag {
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--or);
+    margin-bottom: 0.75rem;
+  }
+  .bfc4-by-heading {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: clamp(2.5rem, 4.5vw, 3.5rem);
+    line-height: 1.15;
+    color: var(--bk);
+    margin-bottom: 1rem;
+  }
+  .bfc4-by-body {
+    font-weight: 300;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--bk);
+    opacity: 0.85;
+    max-width: 640px;
+  }
+  .bfc4-by-divider {
+    width: 60px;
+    height: 3px;
+    background: var(--go);
+    margin: 1.5rem 0;
+  }
+  .bfc4-by-divider--center { margin: 1.5rem auto; }
+
+  /* ── OVERVIEW + PRICING GRID ── */
+  .bfc4-by-overview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+    padding: 5rem 2rem;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+  @media (max-width: 768px) {
+    .bfc4-by-overview { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+  .bfc4-by-details { list-style: none; margin-top: 1.5rem; }
+  .bfc4-by-details li {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(32,32,9,0.08);
+    display: flex;
+    justify-content: space-between;
+  }
+  .bfc4-by-details li span:last-child { font-weight: 500; color: var(--or); }
+
+  /* Pricing card */
+  .bfc4-by-pricing {
+    background: var(--ww);
+    border: 1px solid rgba(32,32,9,0.06);
+    padding: 3rem;
+  }
+  .bfc4-by-pricing__rate {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: 4rem;
+    color: var(--or);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+  .bfc4-by-pricing__rate span {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    font-size: 1.15rem;
+    color: var(--bk);
+    opacity: 0.5;
+  }
+  .bfc4-by-pricing__note {
+    font-weight: 300;
+    font-size: 1rem;
+    color: var(--bk);
+    opacity: 0.7;
+    margin-top: 0.75rem;
+    line-height: 1.7;
+  }
+  .bfc4-by-pricing__inc {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(32,32,9,0.08);
+  }
+  .bfc4-by-pricing__inc h4 {
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--bk);
+    margin-bottom: 1rem;
+  }
+  .bfc4-by-pricing__inc p {
+    font-weight: 300;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--bk);
+    opacity: 0.8;
+  }
+
+  /* ── USE CASES ── */
+  .bfc4-by-section { padding: 5rem 2rem; max-width: 1120px; margin: 0 auto; }
+  .bfc4-by-uses {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+  .bfc4-by-use {
+    padding: 2.25rem;
+    background: var(--ww);
+    border: 1px solid rgba(32,32,9,0.06);
+    transition: border-color 0.3s;
+  }
+  .bfc4-by-use:hover { border-color: var(--go); }
+  .bfc4-by-use h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+    color: var(--bk);
+  }
+  .bfc4-by-use p {
+    font-weight: 300;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--bk);
+    opacity: 0.75;
+  }
+
+  /* ── REVENUE SPLIT ── */
+  .bfc4-by-revsplit {
+    background: var(--bk);
+    padding: 5rem 2rem;
+    text-align: center;
+  }
+  .bfc4-by-revsplit__inner { max-width: 780px; margin: 0 auto; }
+  .bfc4-by-revsplit .bfc4-by-tag { color: var(--ce); }
+  .bfc4-by-revsplit .bfc4-by-heading { color: var(--cv); }
+  .bfc4-by-revsplit .bfc4-by-body {
+    color: var(--cv);
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+  }
+  .bfc4-by-cta--green {
+    background: var(--ce);
+    color: var(--bk);
+  }
+  .bfc4-by-cta--green:hover { background: var(--go); }
+  .bfc4-by-revsplit__cta-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem 2rem;
+    flex-wrap: wrap;
+  }
+  .bfc4-by-revsplit__cta-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.5rem;
+    line-height: 1.3;
+    color: var(--cv);
+    opacity: 0.92;
+  }
+
+  /* ── CONTACT ── */
+  .bfc4-by-contact {
+    padding: 5rem 2rem;
+    max-width: 740px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  /* ── FOOTER ── */
+  .bfc4-by-footer {
+    text-align: center;
+    padding: 2.5rem 2rem;
+    border-top: 1px solid rgba(32,32,9,0.06);
+  }
+  .bfc4-by-footer p {
+    font-weight: 300;
+    font-size: 0.9rem;
+    color: var(--bk);
+    opacity: 0.5;
+  }
+  .bfc4-by-footer a { color: var(--or); text-decoration: none; }
+{% endstyle %}
+
+<div class="bfc4-backyard">
+
+  <!-- ══════ HERO ══════ -->
+  {% assign slides = section.blocks | where: 'type', 'hero_slide' %}
+  {% assign brightness = 100 | minus: section.settings.hero_overlay_opacity %}
+  <style>.bfc4-by-hero__slide img { filter: brightness(0.{{ brightness }}); }</style>
+  <section class="bfc4-by-hero" style="min-height: {{ section.settings.hero_height }};">
+    {% if slides.size > 0 %}
+      <div class="bfc4-by-hero__slides" id="bfc-hero-slider" data-speed="{{ section.settings.slide_speed }}">
+        {% for block in slides %}
+          <div class="bfc4-by-hero__slide" {{ block.shopify_attributes }}>
+            <img
+              src="{{ block.settings.image | image_url: width: 1920 }}"
+              alt="{{ block.settings.image.alt | default: 'The Backyard at Brooklyn Film Camera' }}"
+              {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}
+            />
+          </div>
+        {% endfor %}
+      </div>
+    {% elsif section.settings.hero_image != blank %}
+      <div class="bfc4-by-hero__slides">
+        <div class="bfc4-by-hero__slide">
+          <img
+            src="{{ section.settings.hero_image | image_url: width: 1920 }}"
+            alt="{{ section.settings.hero_image.alt | default: 'The Backyard at Brooklyn Film Camera' }}"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </div>
+      </div>
+    {% endif %}
+    <div class="bfc4-by-hero__content">
+      <p class="bfc4-by-hero__tag">{{ section.settings.hero_tag }}</p>
+      <h1 class="bfc4-by-hero__title">{{ section.settings.hero_title }}</h1>
+      <p class="bfc4-by-hero__sub">{{ section.settings.hero_subtitle }}</p>
+      <a href="{{ section.settings.form_url | default: 'https://docs.google.com/forms/d/1dOn6EIQ-MlE0KvOHVDVfTzCN1tQq5FfU18IoaGoOsy0/viewform' }}" target="_blank" rel="noopener" class="bfc4-by-cta">{{ section.settings.hero_cta }}</a>
+    </div>
+  </section>
+
+  <!-- ══════ OVERVIEW + PRICING ══════ -->
+  <div class="bfc4-by-overview">
+    <div>
+      <p class="bfc4-by-tag">The Space</p>
+      <h2 class="bfc4-by-heading">{{ section.settings.overview_title }}</h2>
+      <div class="bfc4-by-divider"></div>
+      <p class="bfc4-by-body">{{ section.settings.overview_body }}</p>
+      <ul class="bfc4-by-details">
+        <li><span>Location</span><span>{{ section.settings.detail_location }}</span></li>
+        <li><span>Setting</span><span>{{ section.settings.detail_setting }}</span></li>
+        <li><span>Capacity</span><span>{{ section.settings.detail_capacity }}</span></li>
+        <li><span>Availability</span><span>{{ section.settings.detail_availability }}</span></li>
+      </ul>
+    </div>
+
+    <div class="bfc4-by-pricing">
+      <p class="bfc4-by-tag">Rental Rate</p>
+      <div class="bfc4-by-pricing__rate">${{ section.settings.rate }}<span> / event</span></div>
+      <p class="bfc4-by-pricing__note">{{ section.settings.rate_note }}</p>
+      <div class="bfc4-by-pricing__inc">
+        <h4>What's Included</h4>
+        <p>{{ section.settings.rate_includes }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ USE CASES ══════ -->
+  <section class="bfc4-by-section">
+    <p class="bfc4-by-tag">Perfect For</p>
+    <h2 class="bfc4-by-heading">All Kinds of Gatherings</h2>
+    <div class="bfc4-by-divider"></div>
+    <div class="bfc4-by-uses">
+      {% for block in section.blocks %}
+        {% if block.type == 'use_case' %}
+          <div class="bfc4-by-use" {{ block.shopify_attributes }}>
+            <h3>{{ block.settings.title }}</h3>
+            <p>{{ block.settings.description }}</p>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- ══════ REVENUE SPLIT ══════ -->
+  <section class="bfc4-by-revsplit">
+    <div class="bfc4-by-revsplit__inner">
+      <p class="bfc4-by-tag">{{ section.settings.rev_tag }}</p>
+      <h2 class="bfc4-by-heading">{{ section.settings.rev_title }}</h2>
+      <p class="bfc4-by-body">{{ section.settings.rev_body }}</p>
+      <div class="bfc4-by-revsplit__cta-row">
+        <span class="bfc4-by-revsplit__cta-label">{{ section.settings.rev_cta }}</span>
+        <button type="button" class="bfc4-by-cta bfc4-by-cta--green bfc-copy-email" data-email="hannah@brooklynfilmcamera.com">
+          Copy Email
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════ CONTACT ══════ -->
+  <section class="bfc4-by-contact" id="bfc-backyard-inquire">
+    <p class="bfc4-by-tag">Prefer Email?</p>
+    <h2 class="bfc4-by-heading">Reach Out Directly</h2>
+    <div class="bfc4-by-divider bfc4-by-divider--center"></div>
+    <p class="bfc4-by-body" style="margin: 0 auto 2.5rem;">
+      If filling out a form isn't your thing, email our events coordinator directly. Tell us about your event, your preferred date, and any special requirements.
+    </p>
+    <button type="button" class="bfc4-by-cta bfc-copy-email" id="bfc-copy-email" data-email="hannah@brooklynfilmcamera.com">
+      Copy Email Address
+    </button>
+    <p id="bfc-copy-confirm" style="margin-top:1rem;font-size:0.95rem;font-weight:500;color:var(--or);opacity:0;transition:opacity 0.3s;">
+      Copied to clipboard!
+    </p>
+  </section>
+
+  <!-- ══════ FOOTER ══════ -->
+  <footer class="bfc4-by-footer">
+    <p>Brooklyn Film Camera &middot; 855 Grand Street, Brooklyn, NY &middot; <a href="https://brooklynfilmcamera.com">brooklynfilmcamera.com</a></p>
+  </footer>
+
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    /* Slider */
+    var slider = document.getElementById('bfc-hero-slider');
+    if (slider) {
+      var slideEls = slider.querySelectorAll('.bfc4-by-hero__slide');
+      if (slideEls.length > 1) {
+        var speed = parseInt(slider.getAttribute('data-speed'), 10) || 5;
+        var current = 0;
+        var total = slideEls.length;
+        setInterval(function() {
+          current = (current + 1) % total;
+          slider.style.transform = 'translateX(-' + (current * 100) + '%)';
+        }, speed * 1000);
+      }
+    }
+
+    /* Copy email (handles all .bfc-copy-email buttons) */
+    var copyBtns = document.querySelectorAll('.bfc-copy-email');
+    copyBtns.forEach(function(btn) {
+      var originalText = btn.textContent.trim();
+      btn.addEventListener('click', function() {
+        var email = btn.getAttribute('data-email');
+        navigator.clipboard.writeText(email).then(function() {
+          btn.textContent = 'Copied!';
+          var msg = document.getElementById('bfc-copy-confirm');
+          if (msg) msg.style.opacity = '1';
+          setTimeout(function() {
+            btn.textContent = originalText;
+            if (msg) msg.style.opacity = '0';
+          }, 2500);
+        });
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Backyard Rental",
+  "tag": "section",
+  "class": "bfc4-backyard-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "url",
+      "id": "form_url",
+      "label": "Inquiry form URL",
+      "info": "Google Form (or any URL) used by the hero and revenue-split CTAs. Opens in a new tab."
+    },
+    {
+      "type": "select",
+      "id": "hero_height",
+      "label": "Hero height",
+      "default": "100vh",
+      "options": [
+        { "value": "60vh", "label": "60% screen" },
+        { "value": "75vh", "label": "75% screen" },
+        { "value": "85vh", "label": "85% screen" },
+        { "value": "100vh", "label": "Full screen" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "hero_overlay_opacity",
+      "label": "Image darkness",
+      "min": 20,
+      "max": 90,
+      "step": 5,
+      "default": 65,
+      "unit": "%",
+      "info": "Higher = darker hero image. Applied as a brightness filter directly on the image."
+    },
+    {
+      "type": "range",
+      "id": "slide_speed",
+      "label": "Slide speed (seconds)",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "default": 5,
+      "info": "Time each image is shown before crossfading"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Fallback hero image",
+      "info": "Used if no Hero Image blocks are added"
+    },
+    {
+      "type": "text",
+      "id": "hero_tag",
+      "label": "Tagline",
+      "default": "Brooklyn Film Camera Presents"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Title",
+      "default": "The Backyard"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_subtitle",
+      "label": "Subtitle",
+      "default": "An intimate outdoor event space in the heart of Williamsburg. Host your next gathering at 855 Grand Street."
+    },
+    {
+      "type": "text",
+      "id": "hero_cta",
+      "label": "CTA text",
+      "default": "Inquire About Your Event"
+    },
+    {
+      "type": "header",
+      "content": "Space Overview"
+    },
+    {
+      "type": "text",
+      "id": "overview_title",
+      "label": "Section title",
+      "default": "Your Event, Our Backyard"
+    },
+    {
+      "type": "textarea",
+      "id": "overview_body",
+      "label": "Description",
+      "default": "A versatile, open-air space tucked behind our Grand Street storefront. Whether you're throwing a birthday, hosting a pop-up, or organizing a creative workshop, The Backyard brings the atmosphere — you bring the vision."
+    },
+    {
+      "type": "text",
+      "id": "detail_location",
+      "label": "Location",
+      "default": "855 Grand St, Brooklyn"
+    },
+    {
+      "type": "text",
+      "id": "detail_setting",
+      "label": "Setting",
+      "default": "Outdoor / Covered"
+    },
+    {
+      "type": "text",
+      "id": "detail_capacity",
+      "label": "Capacity",
+      "default": "Up to ~50 guests"
+    },
+    {
+      "type": "text",
+      "id": "detail_availability",
+      "label": "Availability",
+      "default": "By inquiry"
+    },
+    {
+      "type": "header",
+      "content": "Pricing"
+    },
+    {
+      "type": "text",
+      "id": "rate",
+      "label": "Rate (number only)",
+      "default": "425"
+    },
+    {
+      "type": "textarea",
+      "id": "rate_note",
+      "label": "Sliding scale note",
+      "default": "Sliding scale options available depending on the type of event and amount of space used. We're happy to work with you — reach out and let's figure out a rate that fits."
+    },
+    {
+      "type": "textarea",
+      "id": "rate_includes",
+      "label": "What's included",
+      "default": "Access to the full backyard space, basic setup and breakdown coordination, and proximity to BFC's storefront for your guests to browse. Additional add-ons such as lighting, A/V, and furniture are available upon request."
+    },
+    {
+      "type": "header",
+      "content": "Revenue Split Section"
+    },
+    {
+      "type": "text",
+      "id": "rev_tag",
+      "label": "Tag",
+      "default": "For Revenue-Generating Events"
+    },
+    {
+      "type": "text",
+      "id": "rev_title",
+      "label": "Title",
+      "default": "Want to Host an Event That Makes Money?"
+    },
+    {
+      "type": "textarea",
+      "id": "rev_body",
+      "label": "Body",
+      "default": "If you're planning a ticketed event, pop-up shop, or any gathering that generates revenue, we offer flexible revenue-split arrangements instead of the standard backyard fee. Skip the upfront cost and let's build something that works for both of us."
+    },
+    {
+      "type": "text",
+      "id": "rev_cta",
+      "label": "Label next to email button",
+      "default": "Contact us about revenue splits",
+      "info": "Shown next to the Copy Email button in the dark revenue-split section."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hero_slide",
+      "name": "Hero Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "use_case",
+      "name": "Use Case",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Private Parties"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Birthdays, milestones, celebrations — an unforgettable Brooklyn setting."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Backyard Rental",
+      "blocks": [
+        {
+          "type": "hero_slide"
+        },
+        {
+          "type": "use_case",
+          "settings": {
+            "title": "Private Parties",
+            "description": "Birthdays, milestones, celebrations — an unforgettable Brooklyn setting."
+          }
+        },
+        {
+          "type": "use_case",
+          "settings": {
+            "title": "Pop-Ups & Markets",
+            "description": "Vendor markets, brand activations, and product launches with foot traffic built in."
+          }
+        },
+        {
+          "type": "use_case",
+          "settings": {
+            "title": "Workshops & Classes",
+            "description": "Photography walks, art workshops, skill shares — creative energy on tap."
+          }
+        },
+        {
+          "type": "use_case",
+          "settings": {
+            "title": "Community Events",
+            "description": "Meetups, screenings, listening parties — bring your people together."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

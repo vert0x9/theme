@@ -1,0 +1,589 @@
+{%- comment -%}
+  Section: Announcement Split Bar
+  - No blocks
+  - Left + Right are configured entirely in settings
+  - Each side can be: static / slider / marquee
+{%- endcomment -%}
+
+{%- liquid
+  render 'css', css: 'section-announcement-bar.css'
+
+  assign left_behaviour = section.settings.left_behaviour
+  assign right_behaviour = section.settings.right_behaviour
+
+  assign needs_marquee_css = false
+  if left_behaviour == 'marquee' or right_behaviour == 'marquee'
+    assign needs_marquee_css = true
+  endif
+  if needs_marquee_css
+    render 'css', css: 'section-marquees.css'
+  endif
+
+  assign needs_slider_js = false
+  if left_behaviour == 'slider' or right_behaviour == 'slider'
+    assign needs_slider_js = true
+  endif
+
+  assign left_slide_count = 0
+  for i in (1..5)
+    assign k = 'left_slide_' | append: i
+    assign v = section.settings[k]
+    if v != blank
+      assign left_slide_count = left_slide_count | plus: 1
+    endif
+  endfor
+
+  assign right_slide_count = 0
+  for i in (1..5)
+    assign k = 'right_slide_' | append: i
+    assign v = section.settings[k]
+    if v != blank
+      assign right_slide_count = right_slide_count | plus: 1
+    endif
+  endfor
+
+  assign marquee_duration_rate = section.settings.slider_autoplay_interval | times: 10
+  assign left_marquee_duration = left_slide_count | times: marquee_duration_rate
+  assign right_marquee_duration = right_slide_count | times: marquee_duration_rate
+-%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} {
+    --split-gap: {{ section.settings.split_gap }}px;
+    --split-edge-pad: {{ section.settings.edge_padding }}px;
+  }
+
+  #shopify-section-{{ section.id }} .text--label,
+  #shopify-section-{{ section.id }} .text--link,
+  #shopify-section-{{ section.id }} .countdown-timer__message {
+    font-weight: {{ section.settings.font_weight }};
+  }
+
+  /* Split layout */
+  #shopify-section-{{ section.id }} .announcement-bar__split {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: var(--split-gap);
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__split-side {
+    flex: 1 1 0;
+    min-width: 0; /* required for sliders/marquees inside flex */
+  }
+
+  /* Inner wrappers control edge alignment + edge padding */
+  #shopify-section-{{ section.id }} .announcement-bar__split-inner {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__split-inner--left {
+    justify-content: flex-start;
+    text-align: left;
+    padding-left: var(--split-edge-pad);
+    padding-right: 0;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__split-inner--right {
+    justify-content: flex-end;
+    text-align: right;
+    padding-right: var(--split-edge-pad);
+    padding-left: 0;
+  }
+
+  /* Make the actual text box size to its content (prevents "centered" feel) */
+  #shopify-section-{{ section.id }} .announcement-bar__split .announcement-bar__text-content {
+    width: auto !important;
+    max-width: 100%;
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__split-inner--left .announcement-bar__text-content {
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__split-inner--right .announcement-bar__text-content {
+    justify-content: flex-end !important;
+    text-align: right !important;
+  }
+
+  /* Slider containers fill the half, but slides pin content to each edge */
+  #shopify-section-{{ section.id }} .announcement-bar__split-inner announcement-bar-slider,
+  #shopify-section-{{ section.id }} .announcement-bar__split-inner .announcement-bar__slider {
+    width: 100% !important;
+    min-width: 0;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__split-side--left .swiper-slide {
+    display: flex;
+    justify-content: flex-start !important;
+    min-width: 0;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__split-side--right .swiper-slide {
+    display: flex;
+    justify-content: flex-end !important;
+    min-width: 0;
+  }
+
+  /* Marquee item alignment */
+  #shopify-section-{{ section.id }} .announcement-bar__split-side--left .marquee__item {
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+
+  #shopify-section-{{ section.id }} .announcement-bar__split-side--right .marquee__item {
+    justify-content: flex-end !important;
+    text-align: right !important;
+  }
+
+  /* Mobile stack */
+  @media screen and (max-width: 749px) {
+    #shopify-section-{{ section.id }} .announcement-bar__split {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    #shopify-section-{{ section.id }} .announcement-bar__split-inner--left,
+    #shopify-section-{{ section.id }} .announcement-bar__split-inner--right {
+      justify-content: center !important;
+      text-align: center !important;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    #shopify-section-{{ section.id }} .announcement-bar__split .announcement-bar__text-content {
+      justify-content: center !important;
+      text-align: center !important;
+    }
+
+    #shopify-section-{{ section.id }} .announcement-bar__split-side--left .swiper-slide,
+    #shopify-section-{{ section.id }} .announcement-bar__split-side--right .swiper-slide {
+      justify-content: center !important;
+    }
+  }
+{%- endstyle -%}
+
+{%- if needs_slider_js -%}
+  <script src="{{- 'announcement-bar-slider.js' | asset_url -}}" defer="defer"></script>
+{%- endif -%}
+
+{%- capture left_swiper_options -%}
+  data-swiper-options='{
+    "slidesPerView": 1,
+    "slidesPerViewDesktop": 1,
+    "loop": true,
+    "autoplay": { "delay": {{ section.settings.slider_autoplay_interval | times: 1000 }} }
+  }'
+{%- endcapture -%}
+
+{%- capture right_swiper_options -%}
+  data-swiper-options='{
+    "slidesPerView": 1,
+    "slidesPerViewDesktop": 1,
+    "loop": true,
+    "autoplay": { "delay": {{ section.settings.slider_autoplay_interval | times: 1000 }} }
+  }'
+{%- endcapture -%}
+
+{%- capture left_static -%}
+  <div class="announcement-bar__text-content text--label icon">
+    {% render 'icon',
+      icon_name: section.settings.left_icon,
+      custom_icon: section.settings.left_custom_icon,
+      icon_alt: section.settings.left_static_content | strip_html
+    %}
+    {{ section.settings.left_static_content }}
+  </div>
+{%- endcapture -%}
+
+{%- capture right_static -%}
+  <div class="announcement-bar__text-content text--label icon">
+    {% render 'icon',
+      icon_name: section.settings.right_icon,
+      custom_icon: section.settings.right_custom_icon,
+      icon_alt: section.settings.right_static_content | strip_html
+    %}
+    {{ section.settings.right_static_content }}
+  </div>
+{%- endcapture -%}
+
+{%- capture left_slider -%}
+  <announcement-bar-slider
+    class="swiper announcement-bar__slider"
+    data-autoplay-interval="{{- section.settings.slider_autoplay_interval | times: 1000 -}}"
+    {{ left_swiper_options | strip_newlines }}
+  >
+    <div class="swiper-wrapper">
+      {%- for i in (1..5) -%}
+        {%- liquid
+          assign k = 'left_slide_' | append: i
+          assign v = section.settings[k]
+          if v == blank
+            continue
+          endif
+        -%}
+        <div class="swiper-slide">
+          <div class="announcement-bar__text-content text--label icon">
+            {% render 'icon',
+              icon_name: section.settings.left_icon,
+              custom_icon: section.settings.left_custom_icon,
+              icon_alt: v | strip_html
+            %}
+            {{ v }}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </announcement-bar-slider>
+{%- endcapture -%}
+
+{%- capture right_slider -%}
+  <announcement-bar-slider
+    class="swiper announcement-bar__slider"
+    data-autoplay-interval="{{- section.settings.slider_autoplay_interval | times: 1000 -}}"
+    {{ right_swiper_options | strip_newlines }}
+  >
+    <div class="swiper-wrapper">
+      {%- for i in (1..5) -%}
+        {%- liquid
+          assign k = 'right_slide_' | append: i
+          assign v = section.settings[k]
+          if v == blank
+            continue
+          endif
+        -%}
+        <div class="swiper-slide">
+          <div class="announcement-bar__text-content text--label icon">
+            {% render 'icon',
+              icon_name: section.settings.right_icon,
+              custom_icon: section.settings.right_custom_icon,
+              icon_alt: v | strip_html
+            %}
+            {{ v }}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </announcement-bar-slider>
+{%- endcapture -%}
+
+{%- capture left_marquee -%}
+  <div class="announcement_bar__marquee marquee--hover-pause enable-animation" style="--marquee-duration: {{ left_marquee_duration | times: 1 }}s;">
+    {% capture marquee_items %}
+      {%- for i in (1..5) -%}
+        {%- liquid
+          assign k = 'left_slide_' | append: i
+          assign v = section.settings[k]
+          if v == blank
+            continue
+          endif
+        -%}
+        <li class="marquee__item icon text--label">
+          {% render 'icon',
+            icon_name: section.settings.left_icon,
+            custom_icon: section.settings.left_custom_icon,
+            icon_alt: v | strip_html
+          %}
+          {{ v }}
+        </li>
+      {%- endfor -%}
+    {% endcapture %}
+
+    {% liquid
+      assign items_size = left_slide_count | times: 1.0
+      assign items_size_should_be = 12
+      assign lower_limit = 1
+      assign upper_limit = items_size_should_be | divided_by: items_size | ceil
+    %}
+
+    <ul class="marquee__content">
+      {% for i in (lower_limit..upper_limit) -%}
+        {{ marquee_items }}
+      {%- endfor %}
+    </ul>
+    <ul aria-hidden="true" class="marquee__content">
+      {% for i in (lower_limit..upper_limit) -%}
+        {{ marquee_items }}
+      {%- endfor %}
+    </ul>
+  </div>
+{%- endcapture -%}
+
+{%- capture right_marquee -%}
+  <div class="announcement_bar__marquee marquee--hover-pause enable-animation" style="--marquee-duration: {{ right_marquee_duration | times: 1 }}s;">
+    {% capture marquee_items %}
+      {%- for i in (1..5) -%}
+        {%- liquid
+          assign k = 'right_slide_' | append: i
+          assign v = section.settings[k]
+          if v == blank
+            continue
+          endif
+        -%}
+        <li class="marquee__item icon text--label">
+          {% render 'icon',
+            icon_name: section.settings.right_icon,
+            custom_icon: section.settings.right_custom_icon,
+            icon_alt: v | strip_html
+          %}
+          {{ v }}
+        </li>
+      {%- endfor -%}
+    {% endcapture %}
+
+    {% liquid
+      assign items_size = right_slide_count | times: 1.0
+      assign items_size_should_be = 12
+      assign lower_limit = 1
+      assign upper_limit = items_size_should_be | divided_by: items_size | ceil
+    %}
+
+    <ul class="marquee__content">
+      {% for i in (lower_limit..upper_limit) -%}
+        {{ marquee_items }}
+      {%- endfor %}
+    </ul>
+    <ul aria-hidden="true" class="marquee__content">
+      {% for i in (lower_limit..upper_limit) -%}
+        {{ marquee_items }}
+      {%- endfor %}
+    </ul>
+  </div>
+{%- endcapture -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="announcement-bar bar js-announcement-bar">
+    <div class="container {{ section.settings.section_width }}">
+      <div class="announcement-bar__wrapper">
+        <div class="announcement-bar__split">
+
+          <div class="announcement-bar__split-side announcement-bar__split-side--left">
+            <div class="announcement-bar__split-inner announcement-bar__split-inner--left">
+              {%- if left_behaviour == 'marquee' and left_slide_count > 0 -%}
+                {{ left_marquee }}
+              {%- elsif left_behaviour == 'slider' and left_slide_count > 1 -%}
+                {{ left_slider }}
+              {%- elsif left_behaviour == 'slider' and left_slide_count == 1 -%}
+                {%- for i in (1..5) -%}
+                  {%- assign k = 'left_slide_' | append: i -%}
+                  {%- assign v = section.settings[k] -%}
+                  {%- if v != blank -%}
+                    <div class="announcement-bar__text-content text--label icon">
+                      {% render 'icon', icon_name: section.settings.left_icon, custom_icon: section.settings.left_custom_icon, icon_alt: v | strip_html %}
+                      {{ v }}
+                    </div>
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- else -%}
+                {{ left_static }}
+              {%- endif -%}
+            </div>
+          </div>
+
+          <div class="announcement-bar__split-side announcement-bar__split-side--right">
+            <div class="announcement-bar__split-inner announcement-bar__split-inner--right">
+              {%- if right_behaviour == 'marquee' and right_slide_count > 0 -%}
+                {{ right_marquee }}
+              {%- elsif right_behaviour == 'slider' and right_slide_count > 1 -%}
+                {{ right_slider }}
+              {%- elsif right_behaviour == 'slider' and right_slide_count == 1 -%}
+                {%- for i in (1..5) -%}
+                  {%- assign k = 'right_slide_' | append: i -%}
+                  {%- assign v = section.settings[k] -%}
+                  {%- if v != blank -%}
+                    <div class="announcement-bar__text-content text--label icon">
+                      {% render 'icon', icon_name: section.settings.right_icon, custom_icon: section.settings.right_custom_icon, icon_alt: v | strip_html %}
+                      {{ v }}
+                    </div>
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- else -%}
+                {{ right_static }}
+              {%- endif -%}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Announcement Split Bar",
+  "tag": "section",
+  "class": "section-announcement-bar section-announcement-bar--split",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Left side"
+    },
+    {
+      "type": "select",
+      "id": "left_behaviour",
+      "label": "Left behaviour",
+      "options": [
+        { "value": "static", "label": "Static" },
+        { "value": "slider", "label": "Slider" },
+        { "value": "marquee", "label": "Marquee" }
+      ],
+      "default": "static"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "left_static_content",
+      "label": "Left static content",
+      "default": "Brooklyn Film Camera"
+    },
+    {
+      "type": "text",
+      "id": "left_icon",
+      "label": "Left icon",
+      "default": "theme-box"
+    },
+    {
+      "type": "image_picker",
+      "id": "left_custom_icon",
+      "label": "Left custom icon"
+    },
+    {
+      "type": "header",
+      "content": "Left rotating items"
+    },
+    { "type": "richtext", "id": "left_slide_1", "label": "Left item 1", "default": "<p>Free US shipping over $100</p>" },
+    { "type": "richtext", "id": "left_slide_2", "label": "Left item 2", "default": "<p>Film developing in Brooklyn</p>" },
+    { "type": "richtext", "id": "left_slide_3", "label": "Left item 3", "default": "<p>New drops weekly</p>" },
+    { "type": "richtext", "id": "left_slide_4", "label": "Left item 4", "default": "<p>In-store pickup available</p>" },
+    { "type": "richtext", "id": "left_slide_5", "label": "Left item 5", "default": "<p>Support real camera techs</p>" },
+
+    {
+      "type": "header",
+      "content": "Right side"
+    },
+    {
+      "type": "select",
+      "id": "right_behaviour",
+      "label": "Right behaviour",
+      "options": [
+        { "value": "static", "label": "Static" },
+        { "value": "slider", "label": "Slider" },
+        { "value": "marquee", "label": "Marquee" }
+      ],
+      "default": "slider"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "right_static_content",
+      "label": "Right static content",
+      "default": "Repairs, film, and vintage cameras"
+    },
+    {
+      "type": "text",
+      "id": "right_icon",
+      "label": "Right icon",
+      "default": "theme-box"
+    },
+    {
+      "type": "image_picker",
+      "id": "right_custom_icon",
+      "label": "Right custom icon"
+    },
+    {
+      "type": "header",
+      "content": "Right rotating items"
+    },
+    { "type": "richtext", "id": "right_slide_1", "label": "Right item 1", "default": "<p>6 month warranty on cameras</p>" },
+    { "type": "richtext", "id": "right_slide_2", "label": "Right item 2", "default": "<p>Fast support via email</p>" },
+    { "type": "richtext", "id": "right_slide_3", "label": "Right item 3", "default": "<p>Trusted gear, tested in-house</p>" },
+    { "type": "richtext", "id": "right_slide_4", "label": "Right item 4", "default": "<p>Lab scans and prints available</p>" },
+    { "type": "richtext", "id": "right_slide_5", "label": "Right item 5", "default": "<p>Brooklyn based since day one</p>" },
+
+    {
+      "type": "header",
+      "content": "Motion + spacing"
+    },
+    {
+      "type": "range",
+      "id": "slider_autoplay_interval",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Slider autoplay interval",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "split_gap",
+      "min": 4,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap between left and right",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "edge_padding",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Edge padding",
+      "default": 16
+    },
+
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "select",
+      "id": "font_weight",
+      "label": "Font weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Medium" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "700"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Section width",
+      "options": [
+        { "value": "max-w-page", "label": "Page" },
+        { "value": "max-w-fluid", "label": "Fluid" },
+        { "value": "max-w-full", "label": "Full" }
+      ],
+      "default": "max-w-fluid"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Announcement Split Bar"
+    }
+  ]
+}
+{% endschema %}

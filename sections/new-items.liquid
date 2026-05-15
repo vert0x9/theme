@@ -1,0 +1,990 @@
+{% assign items_to_show = section.settings.items_to_show | default: 12 %}
+{% assign initial_items = section.settings.initial_items | default: 12 %}
+
+{%- comment -%}
+  Resolve anchor ID:
+  - Use custom anchor if set
+  - Otherwise fall back to "new-arrivals"
+{%- endcomment -%}
+{% assign anchor_id = section.settings.anchor_id | strip | default: 'new-arrivals' %}
+
+{%- comment -%}
+  Use THEME typography (Theme settings -> Typography)
+{%- endcomment -%}
+{% liquid
+  assign body_font = settings.type_body_font
+  assign header_font = settings.type_header_font
+%}
+
+{%- comment -%}
+  Manual product list (highest priority)
+{%- endcomment -%}
+{% assign manual_products = section.settings.manual_products | compact %}
+{% assign has_manual = false %}
+{% if manual_products and manual_products.size > 0 %}
+  {% assign has_manual = true %}
+{% endif %}
+
+{%- comment -%}
+  Single collection setting (second priority)
+{%- endcomment -%}
+{% assign selected_collection = section.settings.collection %}
+{% assign has_single_collection = false %}
+{% if selected_collection %}
+  {% assign has_single_collection = true %}
+{% endif %}
+
+{%- comment -%}
+  NEW SETTINGS (all default OFF)
+{%- endcomment -%}
+{% assign use_newest_from_collection = section.settings.use_newest_from_collection %}
+{% assign full_rows_only = section.settings.full_rows_only %}
+{% assign full_rows_columns_desktop = section.settings.full_rows_columns_desktop | default: 5 %}
+{% assign disable_see_more = section.settings.disable_see_more %}
+
+{%- comment -%}
+  Determine products_to_render + source_type:
+  - "products": an array of product objects
+  - "handles": an array of product handles
+{%- endcomment -%}
+{% assign products_to_render = nil %}
+{% assign source_type = '' %}
+
+{% if has_manual %}
+  {% assign products_to_render = manual_products %}
+  {% assign source_type = 'products' %}
+{% elsif has_single_collection %}
+  {%- comment -%}
+    If "Newest products" is ON, sort by created_at desc.
+    Otherwise respect the collection's configured sort order.
+  {%- endcomment -%}
+  {% if use_newest_from_collection %}
+    {% assign products_to_render = selected_collection.products | sort: 'created_at' | reverse %}
+  {% else %}
+    {% assign products_to_render = selected_collection.products %}
+  {% endif %}
+  {% assign source_type = 'products' %}
+{% else %}
+  {%- comment -%}
+    Multi-collection block fallback: build a unique list of handles
+  {%- endcomment -%}
+  {% assign product_handles_string = ',' %}
+  {% assign product_counter = 0 %}
+
+  {% for block in section.blocks %}
+    {% if product_counter >= items_to_show %}
+      {% break %}
+    {% endif %}
+
+    {% if block.settings.collection %}
+      {% assign collection_products = block.settings.collection.products %}
+      {% for product in collection_products %}
+        {% if product_counter >= items_to_show %}
+          {% break %}
+        {% endif %}
+
+        {% assign token = ',' | append: product.handle | append: ',' %}
+        {% unless product_handles_string contains token %}
+          {% assign product_handles_string = product_handles_string | append: product.handle | append: ',' %}
+          {% assign product_counter = product_counter | plus: 1 %}
+        {% endunless %}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+
+  {% assign products_to_render = product_handles_string | split: ',' | uniq | compact %}
+  {% assign source_type = 'handles' %}
+{% endif %}
+
+{%- comment -%}
+  NEW: Full-width rows trimming (default OFF)
+  Example: columns=5 and items_to_show=12 => render_limit becomes 10
+{%- endcomment -%}
+{% assign render_limit = items_to_show %}
+{% if full_rows_only %}
+  {% assign remainder = render_limit | modulo: full_rows_columns_desktop %}
+  {% if remainder != 0 and render_limit > full_rows_columns_desktop %}
+    {% assign render_limit = render_limit | minus: remainder %}
+  {% endif %}
+{% endif %}
+
+{%- comment -%}
+  Ensure initial_items never exceeds render_limit
+{%- endcomment -%}
+{% if initial_items > render_limit %}
+  {% assign initial_items = render_limit %}
+{% endif %}
+
+{%- comment -%}
+  NEW: Disable "See More" (default OFF)
+  When ON: show up to render_limit and never hide cards / never show controls.
+{%- endcomment -%}
+{% if disable_see_more %}
+  {% assign initial_items = render_limit %}
+{% endif %}
+
+<section
+  id="{{ anchor_id }}"
+  class="bfc-new-arrivals"
+  aria-label="New arrivals"
+>
+  <div class="new-arrivals-inner">
+    {% if section.settings.heading != blank %}
+      <h2 class="section-heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    {% if section.settings.text != blank %}
+      <div class="section-text rte">
+        {{ section.settings.text }}
+      </div>
+    {% endif %}
+
+    {% assign total_products = products_to_render | size | default: 0 %}
+
+    {% if products_to_render and total_products > 0 %}
+      <div class="grid">
+        {% assign product_index = 0 %}
+
+        {% if source_type == 'products' %}
+          {% for product in products_to_render limit: render_limit %}
+            {% if product == blank %}
+              {% continue %}
+            {% endif %}
+
+            {% assign product_index = product_index | plus: 1 %}
+            {% assign image = product.featured_image %}
+            {% assign selected_variant = product.selected_or_first_available_variant %}
+
+            <div
+              class="product-card{% if product_index > initial_items %} product-card--hidden{% endif %}"
+              data-index="{{ product_index }}"
+            >
+              <a href="{{ product.url }}" class="product-link">
+                <div class="product-image-wrapper">
+                  {% if image %}
+                    <img
+                      src="{{ image | image_url: width: 800 }}"
+                      alt="{{ product.title | escape }}"
+                      loading="lazy"
+                      class="product-image"
+                      width="{{ image.width }}"
+                      height="{{ image.height }}"
+                    >
+                  {% else %}
+                    <div class="placeholder">No image available</div>
+                  {% endif %}
+                </div>
+
+                {% if section.settings.info_display == 'below' %}
+                  <div class="product-info below">
+                    <p class="product-title">{{ product.title }}</p>
+                    <p class="product-price">{{ product.price | money }}</p>
+                  </div>
+                {% endif %}
+
+                {% if section.settings.info_display == 'hover' %}
+                  <div class="product-info hover">
+                    <p class="product-title">{{ product.title }}</p>
+                    <p class="product-price">{{ product.price | money }}</p>
+                  </div>
+                {% endif %}
+              </a>
+
+              {% if selected_variant %}
+                <form method="post" action="{{ routes.cart_add_url }}" class="quick-add-form">
+                  <input type="hidden" name="id" value="{{ selected_variant.id }}">
+                  <input type="hidden" name="quantity" value="1">
+                  <button type="submit" class="quick-add-button" {% unless product.available %}disabled{% endunless %}>
+                    <span aria-hidden="true">+</span>
+                    <span class="visually-hidden">Add to cart</span>
+                  </button>
+                </form>
+              {% endif %}
+            </div>
+          {% endfor %}
+        {% else %}
+          {% assign rendered_count = 0 %}
+          {% for handle in products_to_render %}
+            {% if rendered_count >= render_limit %}
+              {% break %}
+            {% endif %}
+            {% if handle == '' %}
+              {% continue %}
+            {% endif %}
+
+            {% assign product = all_products[handle] %}
+            {% if product %}
+              {% assign rendered_count = rendered_count | plus: 1 %}
+              {% assign product_index = product_index | plus: 1 %}
+              {% assign image = product.featured_image %}
+              {% assign selected_variant = product.selected_or_first_available_variant %}
+
+              <div
+                class="product-card{% if product_index > initial_items %} product-card--hidden{% endif %}"
+                data-index="{{ product_index }}"
+              >
+                <a href="{{ product.url }}" class="product-link">
+                  <div class="product-image-wrapper">
+                    {% if image %}
+                      <img
+                        src="{{ image | image_url: width: 800 }}"
+                        alt="{{ product.title | escape }}"
+                        loading="lazy"
+                        class="product-image"
+                        width="{{ image.width }}"
+                        height="{{ image.height }}"
+                      >
+                    {% else %}
+                      <div class="placeholder">No image available</div>
+                    {% endif %}
+                  </div>
+
+                  {% if section.settings.info_display == 'below' %}
+                    <div class="product-info below">
+                      <p class="product-title">{{ product.title }}</p>
+                      <p class="product-price">{{ product.price | money }}</p>
+                    </div>
+                  {% endif %}
+
+                  {% if section.settings.info_display == 'hover' %}
+                    <div class="product-info hover">
+                      <p class="product-title">{{ product.title }}</p>
+                      <p class="product-price">{{ product.price | money }}</p>
+                    </div>
+                  {% endif %}
+                </a>
+
+                {% if selected_variant %}
+                  <form method="post" action="{{ routes.cart_add_url }}" class="quick-add-form">
+                    <input type="hidden" name="id" value="{{ selected_variant.id }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="quick-add-button" {% unless product.available %}disabled{% endunless %}>
+                      <span aria-hidden="true">+</span>
+                      <span class="visually-hidden">Add to cart</span>
+                    </button>
+                  </form>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      {%- comment -%}
+        Show-more UI:
+        - Only if NOT disable_see_more
+        - Only if there are hidden items OR back-to-top enabled
+      {%- endcomment -%}
+      {% if disable_see_more == false %}
+        {% if product_index > initial_items or section.settings.show_back_to_top %}
+          <div class="show-more-wrapper">
+            <div class="show-more-controls">
+              {% if product_index > initial_items %}
+                <button type="button" class="show-more-button" data-show-more>
+                  {{ section.settings.show_more_label | default: 'Display more' }}
+                </button>
+
+                <button type="button" class="collapse-button" data-collapse style="display: none;">
+                  {{ section.settings.collapse_label | default: 'Collapse' }}
+                </button>
+              {% endif %}
+            </div>
+
+            {% if section.settings.show_back_to_top %}
+              <button type="button" class="back-to-top-button" data-back-to-top>
+                {{ section.settings.back_to_top_label | default: 'Back to top' }}
+              </button>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endif %}
+    {% endif %}
+
+    {% if section.settings.button_text != blank and section.settings.button_link != blank %}
+      <div class="cta-wrapper">
+        <a href="{{ section.settings.button_link }}" class="cta-button">{{ section.settings.button_text }}</a>
+      </div>
+    {% endif %}
+  </div>
+
+  {% style %}
+    {{ body_font | font_face }}
+    {{ header_font | font_face }}
+
+    {% assign header_ls = section.settings.header_letter_spacing | default: 0 %}
+
+    #{{ anchor_id }}{
+      --bg: {{ section.settings.background_color }};
+      --text: {{ section.settings.text_color }};
+      --radius: {{ section.settings.product_radius }}px;
+
+      color: var(--text);
+      background: var(--bg);
+      padding: {{ section.settings.padding_top }}px clamp(16px, 4vw, 48px) {{ section.settings.padding_bottom }}px;
+
+      font-family: {{ body_font.family }}, {{ body_font.fallback_families }};
+    }
+
+    #{{ anchor_id }} .new-arrivals-inner {
+      margin: 0 auto;
+    }
+
+    #{{ anchor_id }} .section-heading {
+      margin: 0 0 18px;
+      font-family: {{ header_font.family }}, {{ header_font.fallback_families }};
+      font-weight: {{ section.settings.header_font_weight | default: 600 }};
+      font-style: normal;
+      font-size: {{ section.settings.header_title_font_size_mobile | default: 1.8 }}rem;
+      letter-spacing: {{ header_ls | times: 0.01 }}em;
+      max-width: {{ section.settings.header_max_width | default: 820 }}px;
+
+      {% if section.settings.header_uppercase %}
+        text-transform: uppercase;
+      {% else %}
+        text-transform: none;
+      {% endif %}
+    }
+
+    #{{ anchor_id }} .section-text {
+      max-width: {{ section.settings.text_max_width | default: 820 }}px;
+      margin: 0 auto 28px;
+      font-family: {{ body_font.family }}, {{ body_font.fallback_families }};
+    }
+
+    {% case section.settings.text_align %}
+      {% when 'left' %}
+        #{{ anchor_id }} .section-heading,
+        #{{ anchor_id }} .section-text { text-align: left; margin-left: 0; margin-right: auto; }
+      {% when 'right' %}
+        #{{ anchor_id }} .section-heading,
+        #{{ anchor_id }} .section-text { text-align: right; margin-left: auto; margin-right: 0; }
+      {% else %}
+        #{{ anchor_id }} .section-heading,
+        #{{ anchor_id }} .section-text { text-align: center; margin-left: auto; margin-right: auto; }
+    {% endcase %}
+
+    @media (min-width: 750px) {
+      #{{ anchor_id }} .section-heading {
+        font-size: {{ section.settings.header_title_font_size_desktop | default: 2.2 }}rem;
+      }
+    }
+
+    /* Grid */
+    #{{ anchor_id }} .grid {
+      display: grid;
+      gap: 16px;
+
+      {% if full_rows_only %}
+        grid-template-columns: repeat({{ full_rows_columns_desktop }}, minmax(0, 1fr));
+      {% else %}
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      {% endif %}
+    }
+
+    @media (max-width: 768px) {
+      #{{ anchor_id }} .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    #{{ anchor_id }} .product-card {
+      position: relative;
+      overflow: hidden;
+      background: #fff;
+      border-radius: var(--radius);
+      transition: transform 0.2s ease;
+    }
+
+    #{{ anchor_id }} .product-card:hover { transform: translateY(-4px); }
+
+    {% if disable_see_more %}
+      #{{ anchor_id }} .product-card.product-card--hidden { display: block; }
+    {% else %}
+      #{{ anchor_id }} .product-card.product-card--hidden { display: none; }
+    {% endif %}
+
+    #{{ anchor_id }} .product-link {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      text-decoration: none;
+      color: inherit;
+      font-family: {{ body_font.family }}, {{ body_font.fallback_families }};
+    }
+
+    #{{ anchor_id }} .product-image-wrapper {
+      position: relative;
+      padding-top: 100%;
+      background: #f9f9f9;
+      overflow: hidden;
+      border-top-left-radius: var(--radius);
+      border-top-right-radius: var(--radius);
+    }
+
+    #{{ anchor_id }} .product-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    #{{ anchor_id }} .placeholder {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+      font-family: {{ body_font.family }}, {{ body_font.fallback_families }};
+    }
+
+    #{{ anchor_id }} .product-info {
+      padding: 12px;
+      text-align: center;
+      background: #fff;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      font-family: {{ body_font.family }}, {{ body_font.fallback_families }};
+    }
+
+    #{{ anchor_id }} .product-info.hover {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0;
+      transform: translateY(8px);
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    #{{ anchor_id }} .product-card:hover .product-info.hover {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #{{ anchor_id }} .product-title {
+      margin: 0 0 4px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    #{{ anchor_id }} .product-price {
+      margin: 0;
+      font-size: 13px;
+      color: #444;
+    }
+
+    #{{ anchor_id }} .product-info.below { border-top: 1px solid #eee; }
+
+    #{{ anchor_id }} .cta-wrapper { text-align: center; margin-top: 32px; }
+
+    #{{ anchor_id }} .cta-button {
+      display: inline-block;
+      padding: 12px 36px;
+      background: #000;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      font-size: 12px;
+      border-radius: 999px;
+      transition: opacity 0.2s ease;
+      font-family: {{ body_font.family }}, {{ body_font.fallback_families }};
+    }
+
+    #{{ anchor_id }} .cta-button:hover { opacity: 0.85; }
+
+    #{{ anchor_id }} .quick-add-form {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      z-index: 2;
+    }
+
+    #{{ anchor_id }} .quick-add-button {
+      min-width: 24px;
+      min-height: 24px;
+      border-radius: 0;
+      border: none;
+      background: transparent;
+      color: #111;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+      box-shadow: none;
+      transition: color 0.15s ease, transform 0.15s ease;
+      font-family: {{ body_font.family }}, {{ body_font.fallback_families }};
+    }
+
+    #{{ anchor_id }} .quick-add-button:focus-visible { outline: 1px solid currentColor; outline-offset: 2px; }
+    #{{ anchor_id }} .quick-add-button:hover { color: #000; transform: translateY(-1px); }
+    #{{ anchor_id }} .quick-add-button:disabled { cursor: not-allowed; opacity: 0.45; }
+
+    #{{ anchor_id }} .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    #{{ anchor_id }} .show-more-wrapper {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    #{{ anchor_id }} .show-more-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #{{ anchor_id }} .show-more-button,
+    #{{ anchor_id }} .collapse-button,
+    #{{ anchor_id }} .back-to-top-button {
+      padding: 10px 32px;
+      border-radius: 999px;
+      border: 1px solid #111;
+      background: #fff;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease;
+      font-family: {{ body_font.family }}, {{ body_font.fallback_families }};
+    }
+
+    #{{ anchor_id }} .show-more-button:hover,
+    #{{ anchor_id }} .collapse-button:hover,
+    #{{ anchor_id }} .back-to-top-button:hover {
+      background: #111;
+      color: #fff;
+    }
+
+    #{{ anchor_id }} .collapse-button,
+    #{{ anchor_id }} .back-to-top-button {
+      font-size: 11px;
+      padding: 8px 20px;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 600px) {
+      #{{ anchor_id }} .show-more-wrapper { flex-direction: column; align-items: center; }
+    }
+  {% endstyle %}
+
+  <script>
+    (function() {
+      var root = document.getElementById('{{ anchor_id }}');
+      if (!root) return;
+
+      var initialItems = {{ initial_items | json }};
+      var disableSeeMore = {{ disable_see_more | json }};
+
+      // Quick-add handler with cart drawer update
+      root.addEventListener('submit', function(event) {
+        var form = event.target;
+        if (!form.classList || !form.classList.contains('quick-add-form')) return;
+
+        event.preventDefault();
+
+        var button = form.querySelector('button');
+        if (button) {
+          button.disabled = true;
+          button.setAttribute('aria-busy', 'true');
+        }
+
+        var formData = new FormData(form);
+        if (!formData.get('quantity')) {
+          formData.append('quantity', '1');
+        }
+
+        var body = new URLSearchParams(formData).toString();
+
+        fetch('{{ routes.cart_add_url }}.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          body: body,
+          credentials: 'same-origin'
+        })
+          .then(function(res) {
+            if (!res.ok) throw new Error('Add to cart failed');
+            return res.json();
+          })
+          .then(function() {
+            return fetch('/cart/update.js', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+              },
+              body: JSON.stringify({
+                updates: {},
+                sections: ['cart-drawer', 'cart-icon-bubble'],
+                sections_url: window.location.pathname
+              }),
+              credentials: 'same-origin'
+            });
+          })
+          .then(function(res) {
+            if (!res.ok) throw new Error('Cart update fetch failed');
+            return res.json();
+          })
+          .then(function(state) {
+            var drawer = document.querySelector('cart-drawer');
+            if (drawer && typeof drawer.renderContents === 'function') drawer.renderContents(state);
+            if (drawer && typeof drawer.open === 'function') drawer.open();
+          })
+          .catch(function(error) {
+            console.error('Quick add failed', error);
+          })
+          .finally(function() {
+            if (button) {
+              button.disabled = false;
+              button.removeAttribute('aria-busy');
+            }
+          });
+      });
+
+      if (disableSeeMore) return;
+
+      // Show more / collapse logic
+      var showMoreBtn = root.querySelector('[data-show-more]');
+      var collapseBtn = root.querySelector('[data-collapse]');
+
+      if (showMoreBtn && collapseBtn) {
+        showMoreBtn.addEventListener('click', function() {
+          var cards = root.querySelectorAll('.product-card');
+          for (var i = 0; i < cards.length; i++) {
+            var idx = parseInt(cards[i].getAttribute('data-index'), 10) || 0;
+            if (idx > initialItems) {
+              cards[i].classList.remove('product-card--hidden');
+              cards[i].style.display = '';
+            }
+          }
+          showMoreBtn.style.display = 'none';
+          collapseBtn.style.display = 'inline-block';
+        });
+
+        collapseBtn.addEventListener('click', function() {
+          var cards = root.querySelectorAll('.product-card');
+          for (var i = 0; i < cards.length; i++) {
+            var idx = parseInt(cards[i].getAttribute('data-index'), 10) || 0;
+            if (idx > initialItems) {
+              cards[i].classList.add('product-card--hidden');
+              cards[i].style.display = 'none';
+            } else {
+              cards[i].classList.remove('product-card--hidden');
+              cards[i].style.display = '';
+            }
+          }
+          collapseBtn.style.display = 'none';
+          showMoreBtn.style.display = 'inline-block';
+          root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
+
+      // Back to top logic
+      var backToTopBtn = root.querySelector('[data-back-to-top]');
+      if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', function() {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+    })();
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "New Arrivals Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Custom anchor ID (optional)",
+      "info": "Example: new-arrivals — then you can link to #new-arrivals from other sections",
+      "default": "new-arrivals"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "NEW ARRIVALS"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p></p>"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text alignment",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "text_max_width",
+      "label": "Text max width",
+      "default": 820,
+      "min": 420,
+      "max": 1200,
+      "step": 20,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "header_align",
+      "label": "Header alignment (legacy)",
+      "default": "center",
+      "options": [
+        { "value": "left",  "label": "Left" },
+        { "value": "center","label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "header_max_width",
+      "label": "Header max width",
+      "default": 820,
+      "min": 420,
+      "max": 1200,
+      "step": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "header_title_font_size_mobile",
+      "label": "Header title size (Mobile)",
+      "min": 1.2,
+      "max": 3,
+      "step": 0.1,
+      "unit": "rem",
+      "default": 1.8
+    },
+    {
+      "type": "range",
+      "id": "header_title_font_size_desktop",
+      "label": "Header title size (Desktop)",
+      "min": 1.5,
+      "max": 4.5,
+      "step": 0.1,
+      "unit": "rem",
+      "default": 2.2
+    },
+    {
+      "type": "select",
+      "id": "header_font_weight",
+      "label": "Header font weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Bold" }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "range",
+      "id": "header_letter_spacing",
+      "label": "Header letter spacing (×0.01em)",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "header_uppercase",
+      "label": "Uppercase heading",
+      "default": false
+    },
+
+    {
+      "type": "product_list",
+      "id": "manual_products",
+      "label": "Manual product selection",
+      "info": "If products are chosen here, only these will appear."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection (optional)",
+      "info": "If set and no manual products are chosen, products will be pulled from this collection in its configured sort order."
+    },
+
+    {
+      "type": "checkbox",
+      "id": "use_newest_from_collection",
+      "label": "Use newest products from chosen collection",
+      "default": false,
+      "info": "Only affects the single Collection setting (and only when Manual products is empty)."
+    },
+
+    {
+      "type": "checkbox",
+      "id": "full_rows_only",
+      "label": "Only show full-width rows (desktop)",
+      "default": false,
+      "info": "Example: 12 max items with 5 columns shows 10 items (2 full rows)."
+    },
+    {
+      "type": "range",
+      "id": "full_rows_columns_desktop",
+      "label": "Desktop columns (for full-width rows)",
+      "default": 5,
+      "min": 2,
+      "max": 6,
+      "step": 1
+    },
+
+    {
+      "type": "checkbox",
+      "id": "disable_see_more",
+      "label": "Hide “Display more” / “Collapse” (always)",
+      "default": false,
+      "info": "Still respects Maximum items to show, but never hides cards or shows the buttons."
+    },
+
+    {
+      "type": "range",
+      "id": "items_to_show",
+      "label": "Maximum items to show",
+      "default": 12,
+      "min": 4,
+      "max": 48,
+      "step": 1
+    },
+    {
+      "type": "range",
+      "id": "initial_items",
+      "label": "Items visible before “Display more”",
+      "default": 12,
+      "min": 4,
+      "max": 48,
+      "step": 1
+    },
+    {
+      "type": "text",
+      "id": "show_more_label",
+      "label": "“Display more” button label",
+      "default": "Display more"
+    },
+    {
+      "type": "text",
+      "id": "collapse_label",
+      "label": "Collapse button label",
+      "default": "Collapse"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_back_to_top",
+      "label": "Show “Back to top” button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "back_to_top_label",
+      "label": "“Back to top” label",
+      "default": "Back to top"
+    },
+    {
+      "type": "select",
+      "id": "info_display",
+      "label": "Product info placement",
+      "default": "hover",
+      "options": [
+        { "value": "hover", "label": "Show product info on hover" },
+        { "value": "below", "label": "Show product info below image" }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#1C1C1C"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "default": 40,
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "default": 40,
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "product_radius",
+      "label": "Product corner radius (px)",
+      "default": 8,
+      "min": 0,
+      "max": 32,
+      "step": 2
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Bottom button text",
+      "default": "SEE ALL"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Bottom button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_source",
+      "name": "Collection",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" }
+      ]
+    }
+  ],
+  "max_blocks": 48,
+  "presets": [
+    { "name": "New Arrivals Grid", "category": "Featured" }
+  ]
+}
+{% endschema %}

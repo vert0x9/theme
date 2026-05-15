@@ -1,0 +1,395 @@
+{%- comment -%}
+  Section: Icon Menu
+  - A grid of collection links with icons.
+  - Wraps on all screen sizes.
+  - Added font size control for labels.
+  - UPDATED: Font controls for header to match Editorial Collections.
+{%- endcomment -%}
+
+{%- liquid
+  assign header_align_class = 'text-left'
+  if section.settings.header_align == 'center'
+    assign header_align_class = 'text-center'
+  elsif section.settings.header_align == 'right'
+    assign header_align_class = 'text-right'
+  endif
+
+  # --- UPDATED: Header Font Logic ---
+  assign sans_font_stack = '"Univers", "Helvetica Neue", Helvetica, Arial, sans-serif'
+  assign serif_font_stack = '"Adobe Garamond Pro", "Garamond", "Times New Roman", serif'
+  assign header_font_family = sans_font_stack
+  if section.settings.header_font_style == 'serif'
+    assign header_font_family = serif_font_stack
+  endif
+-%}
+
+{%- style -%}
+  #icon-menu-{{ section.id }} {
+    --padding-top: {{ section.settings.padding_top }}px;
+    --padding-bottom: {{ section.settings.padding_bottom }}px;
+    --text-color: {{ section.settings.text_color }};
+    --bg-color: {{ section.settings.bg_color }};
+    --item-gap: {{ section.settings.item_gap }}px;
+    
+    --label-font-size: {{ section.settings.label_font_size }}px;
+    
+    /* --- UPDATED: Header Font Variables --- */
+    --header-font-family: {{ header_font_family }};
+    --header-font-size-mobile: {{ section.settings.header_font_size_mobile }}rem;
+    --header-font-size-desktop: {{ section.settings.header_font_size_desktop }}rem;
+    --header-font-weight: {{ section.settings.header_font_weight }};
+
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding-top: var(--padding-top);
+    padding-bottom: var(--padding-bottom);
+  }
+
+  #icon-menu-{{ section.id }} .icon-menu__header {
+    margin-bottom: 24px;
+    padding: 0 1.5rem; /* Page padding for header */
+  }
+  
+  @media (min-width: 750px) {
+    #icon-menu-{{ section.id }} .icon-menu__header {
+      padding: 0 4rem; /* Larger padding for header */
+    }
+  }
+
+  /* --- MODIFICATION: Use Header Font Variables --- */
+  #icon-menu-{{ section.id }} .icon-menu__header h2 {
+    font-family: var(--header-font-family);
+    font-size: var(--header-font-size-mobile); /* Mobile-first */
+    font-weight: var(--header-font-weight);
+    margin: 0;
+  }
+
+  /* This is now a grid on all screen sizes.
+  */
+  #icon-menu-{{ section.id }} .icon-menu__list {
+    display: grid;
+    grid-template-columns: repeat({{ section.settings.columns_mobile }}, 1fr);
+    list-style: none;
+    margin: 0;
+    padding: 0 1.5rem;
+    gap: var(--item-gap);
+  }
+
+  #icon-menu-{{ section.id }} .icon-menu__item {
+    width: 100%; /* Let the grid control the width */
+  }
+
+  /* On desktop, we just change the column count.
+  */
+  @media (min-width: 750px) {
+     #icon-menu-{{ section.id }} .icon-menu__list {
+        grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+        padding: 0 4rem; /* Match header padding */
+     }
+     
+     /* --- NEW: Desktop font size override --- */
+     #icon-menu-{{ section.id }} .icon-menu__header h2 {
+        font-size: var(--header-font-size-desktop);
+     }
+  }
+
+
+  #icon-menu-{{ section.id }} .icon-menu__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
+  }
+  
+  #icon-menu-{{ section.id }} .icon-menu__link:hover .icon-menu__image {
+    transform: scale(1.05);
+  }
+
+  #icon-menu-{{ section.id }} .icon-menu__image-wrapper {
+    position: relative;
+    overflow: hidden;
+    background-color: #f0f0f0; /* Placeholder color */
+    margin-bottom: 8px;
+    {%- if section.settings.image_shape == 'circle' -%}
+      border-radius: 50%;
+    {%- else -%}
+      border-radius: 12px;
+    {%- endif -%}
+  }
+
+  /* 1:1 Aspect ratio box */
+  #icon-menu-{{ section.id }} .icon-menu__image-wrapper::before {
+    content: '';
+    display: block;
+    padding-top: 100%;
+  }
+
+  #icon-menu-{{ section.id }} .icon-menu__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  #icon-menu-{{ section.id }} .icon-menu__placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10%;
+    box-sizing: border-box;
+  }
+
+  #icon-menu-{{ section.id }} .icon-menu__label {
+    font-size: var(--label-font-size);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+{%- endstyle -%}
+
+<section id="icon-menu-{{ section.id }}" class="icon-menu-section">
+  
+  {%- if section.settings.title != blank -%}
+    <div class="icon-menu__header {{ header_align_class }}">
+      <h2>{{ section.settings.title | escape }}</h2>
+    </div>
+  {%- endif -%}
+
+  <ul class="icon-menu__list">
+    {%- for block in section.blocks -%}
+      <li class="icon-menu__item" {{ block.shopify_attributes }}>
+        <a href="{{ block.settings.link | default: '#' }}" 
+           class="icon-menu__link"
+           aria-label="{{ block.settings.label | escape }}">
+          
+          <div class="icon-menu__image-wrapper">
+            {%- if block.settings.image != blank -%}
+              <img 
+                src="{{ block.settings.image | image_url: width: 200 }}"
+                alt="{{ block.settings.image.alt | default: block.settings.label | escape }}"
+                class="icon-menu__image"
+                loading="lazy"
+                width="200"
+                height="200">
+            {%- else -%}
+              <div class="icon-menu__placeholder">
+                {{ 'collection-2' | placeholder_svg_tag: 'placeholder-svg' }}
+              </div>
+            {%- endif -%}
+          </div>
+          
+          <span class="icon-menu__label">{{ block.settings.label | escape }}</span>
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+  
+  {%- if section.blocks.size == 0 -%}
+    <div style="text-align: center; padding: 2rem;">
+      <p>Add icon items in the theme editor.</p>
+    </div>
+  {%- endif -%}
+
+</section>
+
+{% schema %}
+{
+  "name": "Icon Menu",
+  "tag": "section",
+  "class": "section-icon-menu",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Spotlight"
+    },
+    {
+      "type": "select",
+      "id": "header_align",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "header_font_style",
+      "label": "Header font style",
+      "options": [
+        { "value": "sans", "label": "Sans (Univers-like)" },
+        { "value": "serif", "label": "Serif (Garamond-like)" }
+      ],
+      "default": "sans"
+    },
+    {
+      "type": "range",
+      "id": "header_font_size_mobile",
+      "label": "Header title size (Mobile)",
+      "min": 1.2,
+      "max": 3,
+      "step": 0.1,
+      "unit": "rem",
+      "default": 1.5
+    },
+    {
+      "type": "range",
+      "id": "header_font_size_desktop",
+      "label": "Header title size (Desktop)",
+      "min": 1.5,
+      "max": 4.5,
+      "step": 0.1,
+      "unit": "rem",
+      "default": 1.8
+    },
+    {
+      "type": "select",
+      "id": "header_font_weight",
+      "label": "Header font weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Bold" }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "header",
+      "content": "Item Styling"
+    },
+    {
+      "type": "range",
+      "id": "columns_mobile",
+      "label": "Columns (Mobile)",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns (Desktop)",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "item_gap",
+      "label": "Gap between items",
+      "min": 8,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "image_shape",
+      "label": "Image shape",
+      "options": [
+        { "value": "circle", "label": "Circle" },
+        { "value": "rounded_square", "label": "Rounded Square" }
+      ],
+      "default": "circle"
+    },
+    {
+      "type": "range",
+      "id": "label_font_size",
+      "label": "Label font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Section Colors & Spacing"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#111111"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Icon Item",
+      "limit": 16,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Category",
+          "info": "You can use <b><b>Bold</b></b> or <i><i>Italic</i></i> tags for styling."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Icon Menu",
+      "blocks": [
+        { "type": "item", "settings": { "label": "Air Jordan 1" } },
+        { "type": "item", "settings": { "label": "Dunk" } },
+        { "type": "item", "settings": { "label": "Graphic Tees" } },
+        { "type": "item", "settings": { "label": "Air Max" } },
+        { "type": "item", "settings": { "label": "Vomero" } },
+        { "type": "item", "settings": { "label": "ACG" } },
+        { "type": "item", "settings": { "label": "Pegasus" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

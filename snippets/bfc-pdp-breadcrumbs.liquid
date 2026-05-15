@@ -1,0 +1,97 @@
+{%- comment -%}
+  BFC PDP Breadcrumbs — bfc-pdp-breadcrumbs.liquid
+  Usage: {% render 'bfc-pdp-breadcrumbs' %}
+  
+  Shows: Home / Collection / Product
+  Uses current collection context if available, otherwise product.collections.first
+{%- endcomment -%}
+
+{%- liquid
+  assign bc_collection = collection
+  if bc_collection == blank or bc_collection == nil
+    assign bc_collection = product.collections.first
+  endif
+-%}
+
+<nav class="bfc-bc" aria-label="Breadcrumb">
+  <a href="/" class="bfc-bc-link">Home</a>
+  <span class="bfc-bc-sep">/</span>
+  {%- if bc_collection != blank and bc_collection != nil -%}
+    <a href="{{ bc_collection.url }}" class="bfc-bc-link">{{ bc_collection.title }}</a>
+    <span class="bfc-bc-sep">/</span>
+  {%- endif -%}
+  <span class="bfc-bc-current">{{ product.title }}</span>
+</nav>
+
+{%- comment -%} JSON-LD BreadcrumbList for search engine rich results {%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ shop.url }}/"
+    }{%- if bc_collection != blank and bc_collection != nil -%},
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ bc_collection.title | json }},
+      "item": "{{ shop.url }}{{ bc_collection.url }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": {{ product.title | json }},
+      "item": "{{ shop.url }}{{ product.url }}"
+    }
+    {%- else -%},
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ product.title | json }},
+      "item": "{{ shop.url }}{{ product.url }}"
+    }
+    {%- endif -%}
+  ]
+}
+</script>
+
+<style>
+.bfc-bc {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(32,32,9,0.5);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.bfc-bc-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.bfc-bc-link:hover { color: var(--or, #E36E15); }
+.bfc-bc-sep {
+  opacity: 0.5;
+  font-weight: 400;
+}
+.bfc-bc-current {
+  color: rgba(32,32,9,0.75);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 280px;
+}
+@media (max-width: 600px) {
+  .bfc-bc { font-size: 8.5px; gap: 5px; }
+  .bfc-bc-current { max-width: 180px; }
+}
+</style>

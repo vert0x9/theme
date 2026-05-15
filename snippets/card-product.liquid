@@ -1,0 +1,672 @@
+{% comment %}
+  Renders a product card
+  Accepts:
+  - product_ref: {Object} Product Liquid object
+  - section_id: {String} Section id
+  - block_index: {Number} Block index for unique id
+  Usage:
+  {%- render 'card-product', product_ref: product_ref, section_id: section.id, block_index: block_index  -%}
+{% endcomment %}
+
+{% comment %} Product Media {% endcomment %}
+
+{%- liquid
+  assign image_per_view = image_per_view | default: 3
+  assign is_small = is_small | default: false
+
+  assign search_product = search_product | default: false
+  assign is_in_drawer = is_in_drawer | default: false
+  assign product_images = product_ref.variants | map: 'featured_image' | uniq
+
+  assign variants_display_desktop = settings.product_card_variants_display_desktop
+  assign variants_display_mobile = settings.product_card_variants_display_mobile
+
+  assign variants_display_limit = settings.product_card_variants_display_limit | default: 3
+
+  assign show_variants = show_variants | default: true
+
+  assign product_title_placeholder = 'product.label' | t
+-%}
+
+{%- capture media -%}
+  {% comment %} Variables | Product Media {% endcomment %}
+  {%- assign media_classes = "media product-card__media" -%}
+  {%- if settings.product_card_media_hover and product_ref.gift_card? == false -%}
+    {%- assign media_classes = media_classes | append: ' product-card__media--hoverable' -%}
+  {%- endif -%}
+
+  {% comment %} Styles | Product Media {% endcomment %}
+  <style>
+    .product-card__media {
+      --product-card-media-aspect-ratio: {{ settings.product_card_media_aspect_ratio }};
+      --product-card-media-object-fit: {{ settings.product_card_media_object_fit }};
+    }
+  </style>
+
+  {% comment %} Render | Product Media {% endcomment %}
+  <div
+    class="{{ media_classes }}"
+    data-update-media="{% if product_ref.first_available_variant == product_ref.selected_variant %}true{% else %}false{% endif %}"
+  >
+    {% liquid
+      assign hover_media = product_ref.media[1]
+
+      if hover_media.media_type == 'video' or hover_media.media_type == 'external_video'
+        assign hover_media = product_ref.media[2]
+      endif
+
+      if product_ref.featured_image
+        if product_images.size > 1 and variants_display_desktop != 'none' or variants_display_mobile != 'none'
+          # Always render the main product featured_image as the default visible image
+          assign default_loading = 'lazy'
+          if product_index and product_index <= image_per_view
+            assign default_loading = 'eager'
+          endif
+          render 'image', image: product_ref.featured_image, attr: 'data-default-image', image_per_view: image_per_view, loading: default_loading
+
+          # Render variant-specific images as hidden for JS swapping on swatch click
+          for product_image in product_images
+            if product_image != blank and product_image.id != product_ref.featured_image.id
+              assign data_product_images = ''
+              for variant in product_ref.variants
+                if variant.featured_image == product_image
+                  assign data_product_images = data_product_images | append: variant.id | append: ','
+                endif
+              endfor
+              assign data_product_images = data_product_images | split: ',' | uniq | join: ','
+              if data_product_images != ""
+                assign attr = 'data-product-images="' | append: data_product_images | append: '"'
+              endif
+
+              render 'image', image: product_image, attr: attr, image_per_view: image_per_view, loading: 'lazy', class: 'hidden'
+            endif
+          endfor
+        else
+          render 'image', image: product_ref.featured_image, image_per_view: image_per_view, loading: loading
+        endif
+
+        if settings.product_card_media_hover and product_ref.media.size > 1 and hover_media != nil
+          render 'image', image: hover_media, alt: hover_media.alt | default: product_ref.title, class: 'hover-img', image_per_view: image_per_view
+        endif
+      else
+        echo 'product-1' | placeholder_svg_tag: 'placeholder-svg'
+      endif
+    %}
+  </div>
+{%- endcapture -%}
+
+{% comment %} Product Add-To-Cart Button {% endcomment %}
+{%- capture add_to_cart_button -%}
+  {%- if settings.product_card_enable_quick_add_to_cart_button or settings.product_card_enable_single_add_to_cart_button -%}
+    {% comment %} Variables | Product Add-To-Cart Button {% endcomment %}
+    {%- assign button_classes = 'button product-card__add-to-cart--button color-' | append: settings.product_card_action_buttons_color_scheme | append: ' ' -%}
+    {%- if settings.product_card_add_to_cart_btn_content == 'icon-hover' -%}
+      {%- assign button_classes = button_classes | append: ' product-card__add-to-cart--button-icon-with-hover ' -%}
+    {%- endif -%}
+    {% if is_small %}
+      {% assign button_classes = button_classes | append: 'product-card-small__button ' %}
+    {% endif %}
+    {%- if settings.product_card_add_to_cart_btn_content == 'icon' or settings.product_card_add_to_cart_btn_content == 'icon-hover' -%}
+      {%- assign button_classes = button_classes | append: 'button--icon' -%}
+      {%- if settings.button_border_radius == '0' -%}
+        {%- assign button_classes = button_classes | append: ' button--rounded-0' -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- assign button_classes = button_classes | append: 'button--uppercase button--filled' -%}
+    {%- endif -%}
+
+    {%- capture button_content -%}
+      {%- assign button_label = '' -%}
+      {%- if product_ref.metafields.theme.preorder.value -%}
+        {%- assign button_label = 'product.preorder' | t  -%}
+      {%- else -%}
+        {%- if product_ref.variants.size == 1 -%}
+          {%- assign button_label = 'theme.actions.add_to_cart' | t  -%}
+        {%- elsif product_ref.variants.size > 1  -%}
+          {%- assign button_label = 'product.choose_options' | t  -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- if is_in_drawer -%}
+        {%- assign button_label = 'product.select_size' | t  -%}
+      {%- endif -%}
+      {%- if settings.product_card_add_to_cart_btn_content contains 'icon' -%}
+        {% render 'icon', icon_name: 'theme-plus' %}
+      {%- endif -%}
+      {%- if settings.product_card_add_to_cart_btn_content contains 'hover' -%}
+        <span class="product-card__add-to-cart--text">{{- settings.product_card_add_to_cart_icon_hover_text -}}</span>
+      {%- endif -%}
+      {%- if settings.product_card_add_to_cart_btn_content contains 'text' -%}
+        <span>{{- button_label -}}</span>
+      {%- else -%}
+        <span class="visually-hidden">{{- button_label -}}</span>
+      {%- endif -%}
+    {%- endcapture -%}
+
+    {% comment %} Render | Product Add-To-Cart Button {% endcomment %}
+    {%- if product_ref.variants.size == 1 and settings.product_card_enable_single_add_to_cart_button -%}
+      <button
+        type="submit"
+        class="{{ button_classes }}"
+        {%- unless product_ref.available -%}disabled{%- endunless -%}
+      >
+        {{- button_content -}}
+      </button>
+    {%- endif -%}
+    {%- if product_ref.variants.size > 1 and settings.product_card_enable_quick_add_to_cart_button -%}
+      <button
+        type="button"
+        class="quick-cart-drawer__trigger {{ button_classes }}"
+        tabindex="{% if is_in_drawer == true %}-1{% else %}0{% endif %}"
+        aria-expanded="false"
+        aria-controls="quick-cart-drawer"
+        data-product-url="{{- product_ref.handle | prepend: '/products/'  -}}"
+        {%- unless product_ref.available -%}disabled{%- endunless -%}
+      >
+        {{- button_content -}}
+        <div class="quick-cart-drawer__trigger--loading">
+          {%- render 'loading-spinner' -%}
+        </div>
+      </button>
+    {%- endif -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{% comment %} Product Add-To-Cart Form {% endcomment %}
+{%- capture add_to_cart -%}
+  {%- if product_ref.available -%}
+    {%- capture variant_id_input -%}
+      <input type='hidden' name='id' value='{{- product_ref.selected_or_first_available_variant.id -}}'>
+    {%- endcapture -%}
+
+    {%- if product_ref.variants.size == 1 and settings.product_card_enable_single_add_to_cart_button -%}
+      {% comment %} Render | Product Add-To-Cart Form {% endcomment %}
+      <form class="product-card__add-to-cart--form">
+        {{ variant_id_input }}
+        <input type='hidden' name='quantity' value='1'>
+        {{ add_to_cart_button }}
+      </form>
+    {%- else -%}
+      {{ variant_id_input }}
+    {%- endif -%}
+    {%- if product_ref.variants.size > 1 and settings.product_card_enable_quick_add_to_cart_button -%}
+      {{ add_to_cart_button }}
+    {%- endif -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{% comment %} Product Variants || Options || Swatches {% endcomment %}
+{%- capture product_variants -%}
+  {%- if product_ref.available and variants_display_desktop != 'none' or variants_display_mobile != 'none' -%}
+    {% comment %} Variables | Product Swatches {% endcomment %}
+    {%- assign swatch_options = settings.swatches_option | split: ',' -%}
+    {%- assign current_swatch_options = '' -%}
+    {%- for swatch_opt in swatch_options -%}
+      {%- assign swatch_opt_striped = swatch_opt | strip -%}
+      {%- assign swatch_option = product_ref.options_by_name[swatch_opt_striped].values | join: ',' -%}
+      {%- assign current_swatch_options = current_swatch_options | append: swatch_option | append: ',' -%}
+    {%- endfor -%}
+    {%- assign current_swatch_options = current_swatch_options | split: ','-%}
+
+    {% comment %} Check for variant priorty  {% endcomment %}
+    {% assign swatches_option_array = settings.swatches_option | split: ',' %}
+
+    {%- liquid
+      assign variants_available_arr = product_ref.variants | map: 'available'
+      assign variants_option_first_arr = product_ref.variants | map: 'option1'
+      assign variants_option_second_arr = product_ref.variants | map: 'option2'
+      assign variants_option_third_arr = product_ref.variants | map: 'option3'
+    -%}
+
+    {% comment %} Render | Product Variants & Swatches {% endcomment %}
+    <div class="product-card__variants">
+      {%- capture swatch_info_class -%}
+        {%- if variants_display_desktop == 'info' and variants_display_mobile != 'info'  -%}
+          small-hide
+        {%- elsif variants_display_mobile == 'info' and variants_display_desktop != 'info' -%}
+          small-up-hide
+        {%- endif -%}
+      {%- endcapture -%}
+      {%- if variants_display_desktop == 'info' or variants_display_mobile == 'info' -%}
+        <span class="product-card__variants--info {{ swatch_info_class }}">
+        {%- liquid
+          if product_ref.options_with_values.size > 1
+            assign options_count_and_name = ''
+            assign option_last_count_and_name = ''
+            for option_with_value in product_ref.options_with_values
+              if forloop.last == false
+                assign options_count_and_name = options_count_and_name | append: option_with_value.values.size | append: ' ' | append: option_with_value.name | append: ', '
+              else
+                assign option_last_count_and_name = option_with_value.values.size | append: ' ' | append: option_with_value.name
+              endif
+            endfor
+            assign options_count_and_name = options_count_and_name | replace_last: ', ', '' | downcase
+            assign option_last_count_and_name = option_last_count_and_name | downcase
+            echo 'product.variant_info_multiple_options' | t: options_count_and_name: options_count_and_name, option_last_count_and_name: option_last_count_and_name
+          else
+            for option_with_value in product_ref.options_with_values
+              assign option_count_and_name = option_with_value.values.size | append: ' ' | append: option_with_value.name
+              assign option_count_and_name = option_count_and_name | downcase
+              echo 'product.variant_info_one_option' | t: option_count_and_name: option_count_and_name
+            endfor
+          endif
+        -%}
+        </span>
+      {%- endif -%}
+      <ul class="product-card__variants--list product-card__variants--list--{{ settings.product_card_product_options_position }}">
+        {%- comment -%}digifist-note -- this part is a need max variant setting{%- endcomment -%}
+        {%- for opts in (1..3) -%}
+          {%- assign options = blank -%}
+          {%- if opts == 1 -%}
+            {%- assign options = product_ref.options_with_values[0] -%}
+          {%- elsif opts == 2 -%}
+            {%- assign options = product_ref.options_with_values[1] -%}
+          {%- elsif opts == 3 -%}
+            {%- assign options = product_ref.options_with_values[2] -%}
+          {%- endif -%}
+          {%- if options.values != blank -%}
+            {%- if options.values.size > 1 -%}
+              {%- capture swatch_button_class -%}
+                {%- unless swatches_option_array contains options.name -%}
+                  hidden
+                {%- else -%}
+                  {%- if variants_display_desktop != 'button' and variants_display_mobile == 'button' -%}
+                    small-up-hide
+                  {%- elsif variants_display_mobile != 'button' and variants_display_desktop == 'button' -%}
+                    small-hide
+                  {%- elsif variants_display_desktop != 'button' and variants_display_mobile != 'button' -%}
+                    hidden
+                  {%- endif -%}
+                {%- endunless -%}
+              {%- endcapture -%}
+              <li class="{{ swatch_button_class }}">
+                <fieldset class="product__variant-options js-product-card-options" role="radiogroup">
+                  {%- for opt in options.values -%}
+
+                    {%- liquid
+                      # unique element id for js actions
+                      assign section_id = section.id | default: 'section'
+                      assign block_id = block.id | default: 'block'
+                      assign variant_id = section_id | append: '-' | append: product_ref.id | append: '-variant-option-' | append: opts | append: '-' | append: forloop.index | append: '-' | append: block_id
+
+                      assign color_option_values = product_ref.options_by_name[settings.swatches_option].values
+                      assign selected_variant = product_ref.selected_or_first_available_variant
+                      assign selected_variant_color = blank
+
+                      for option_value in selected_variant.options
+                        if color_option_values contains option_value
+                          assign selected_variant_color = option_value
+                        endif
+                      endfor
+
+                      assign option_disabled = true
+                      for option1_name in variants_option_first_arr
+                        case opts
+                          when 1
+                            if variants_option_first_arr[forloop.index0] == opt and variants_available_arr[forloop.index0]
+                              assign option_disabled = false
+                            endif
+                          when 2
+                            if option1_name == product.selected_or_first_available_variant.option1 and variants_option_second_arr[forloop.index0] == opt and variants_available_arr[forloop.index0]
+                              assign option_disabled = false
+                            endif
+                          when 3
+                            if option1_name == product.selected_or_first_available_variant.option1 and variants_option_second_arr[forloop.index0] == product.selected_or_first_available_variant.option2 and variants_option_third_arr[forloop.index0] == opt and variants_available_arr[forloop.index0]
+                              assign option_disabled = false
+                            endif
+                        endcase
+                      endfor
+
+                      # product swatch check
+                      assign opt_swatch = false
+
+                      assign variant_is_checked = false
+                      for selected_variant_option in selected_variant.options
+                        if selected_variant_option == opt
+                          assign variant_is_checked = true
+                        endif
+                      endfor
+
+                      assign input_is_checked = false
+                      if variant_is_checked
+                        assign input_is_checked = true
+                      endif
+
+                      assign option_disabled = false
+                      assign all_variants = product_ref.variants
+                      for each_variant in all_variants
+                        for each_variant_option in each_variant.options
+                          if each_variant_option == opt and each_variant.available == false
+                            assign option_disabled = true
+                          endif
+                        endfor
+                      endfor
+
+                      assign input_is_disabled = false
+                      if option_disabled
+                        assign input_is_disabled = true
+                      endif
+
+                      assign input_name = product_ref.id | append: '-option[' | append: opts | append: ']'
+                    -%}
+
+                    <div class="button--variant{% if opt_swatch %} button--swatch{% if settings.swatches_shape == 'circle' %} button--swatch-rounded{% endif %}{% endif %}" tabindex="0">
+                      {%- render 'product-option', id: variant_id, name: input_name, value: opt, swatch_value: opt.swatch, checked: input_is_checked, class: 'hidden variant-option-radio-input', visually_hidden: true, block: block, product: product_ref, option: options, where: 'card-product' -%}
+                    </div>
+                    {%- if forloop.index == variants_display_limit -%}
+                      {%- assign more_variants_size = options.values.size | minus: variants_display_limit -%}
+                      {%- unless more_variants_size == 0 -%}
+                        <li class="product-card__variants--more">{{- "+" | append: more_variants_size -}}</li>
+                      {%- endunless -%}
+                      {%- break -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                </fieldset>
+              </li>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </div>
+  {%- endif -%}
+
+  <script data-product-variants-json type="application/json">
+    {{- product_ref.variants | json -}}
+  </script>
+{%- endcapture -%}
+
+{%- assign product_link_with_variant = product_ref.url | append: '?variant=' | append: product_ref.selected_or_first_available_variant.id -%}
+
+{%- if search_product -%}
+  {%- assign product_link_with_variant = product_ref.url -%}
+{%- endif -%}
+
+<product-card class="product-card{% if is_small %} product-card--small{% endif %}{% unless product_ref.available %} product-card__sold-out{% endunless %}">
+  <div class="product-card__actions">
+    <a href="{{ product_link_with_variant }}" tabindex="-1" class="product-card__link" data-product-link title="{{ 'product.go_to_title' | t : title: product_ref.title }}">
+      {{ media }}
+    </a>
+    {% if is_small == false %}
+      {{ add_to_cart }}
+    {% endif %}
+  </div>
+  <div class="product-card__content">
+    {%- liquid
+      assign product_card_info_classes = 'product-card__info'
+      if settings.product_card_badge_position == 'start'
+        assign product_card_info_classes = product_card_info_classes | append: ' product-card__badge--on-start'
+      endif
+      if settings.product_card_price_position == 'inline'
+        assign product_card_info_classes = product_card_info_classes | append: ' product-card__price--inline'
+      endif
+    -%}
+    <div class="{{ product_card_info_classes }}">
+      {%- if settings.show_product_card_vendor -%}
+        <span class="product-card__vendor">
+          {{ product_ref.vendor | link_to_vendor }}
+        </span>
+      {%- endif -%}
+      <h3 class="product-card__title">
+        <a href="{{ product_link_with_variant }}" class="product-card__link" tabindex="{% if is_in_drawer == true %}-1{% else %}0{% endif %}" data-product-link title="{{ 'product.go_to_title' | t : title: product_ref.title }}">
+          <span>{{ product_ref.title | default: product_title_placeholder }}</span>
+        </a>
+        {% render 'product-badges', product: product_ref %}
+      </h3>
+
+      {%- comment -%} ── BFC: Judge.me rating from review_widget_data metafield ── {%- endcomment -%}
+      {%- assign jm_data = product_ref.metafields.judgeme.review_widget_data -%}
+      {%- assign jm_count = 0 -%}
+      {%- assign jm_avg = 0 -%}
+      {%- if jm_data != blank -%}
+        {%- comment -%} If metafield is JSON-typed, access fields directly. Otherwise parse as string. {%- endcomment -%}
+        {%- assign jm_direct_count = jm_data.number_of_reviews -%}
+        {%- if jm_direct_count != blank -%}
+          {%- assign jm_count = jm_direct_count | plus: 0 -%}
+          {%- assign jm_avg = jm_data.average_rating | times: 1.0 -%}
+        {%- else -%}
+          {%- comment -%} Fallback: parse as string using .value or direct cast {%- endcomment -%}
+          {%- assign jm_data_str = jm_data | append: '' -%}
+          {%- assign count_split = jm_data_str | split: '"number_of_reviews":' -%}
+          {%- if count_split.size > 1 -%}
+            {%- assign count_raw = count_split[1] | split: ',' | first -%}
+            {%- assign jm_count = count_raw | plus: 0 -%}
+          {%- endif -%}
+          {%- assign rating_split = jm_data_str | split: '"average_rating":"' -%}
+          {%- if rating_split.size > 1 -%}
+            {%- assign rating_raw = rating_split[1] | split: '"' | first -%}
+            {%- assign jm_avg = rating_raw | times: 1.0 -%}
+          {%- endif -%}
+        {%- endif -%}
+      {%- endif -%}
+
+      {%- if jm_count > 0 and jm_avg >= 4.0 -%}
+        {%- assign jm_full = jm_avg | floor -%}
+        {%- assign jm_decimal = jm_avg | minus: jm_full -%}
+        {%- assign jm_half = false -%}
+        {%- if jm_decimal >= 0.25 and jm_decimal < 0.75 -%}
+          {%- assign jm_half = true -%}
+        {%- elsif jm_decimal >= 0.75 -%}
+          {%- assign jm_full = jm_full | plus: 1 -%}
+        {%- endif -%}
+        {%- assign jm_half_index = jm_full | plus: 1 -%}
+        <div class="bfc-card-rating" aria-label="{{ jm_avg }} out of 5 stars, {{ jm_count }} review{% if jm_count != 1 %}s{% endif %}">
+          <span class="bfc-card-stars" aria-hidden="true">
+            {%- for i in (1..5) -%}
+              {%- if i <= jm_full -%}
+                <span class="bfc-card-star is-full">★</span>
+              {%- elsif i == jm_half_index and jm_half -%}
+                <span class="bfc-card-star is-half">★</span>
+              {%- else -%}
+                <span class="bfc-card-star is-empty">★</span>
+              {%- endif -%}
+            {%- endfor -%}
+          </span>
+          <span class="bfc-card-rating-count">({{ jm_count }})</span>
+        </div>
+      {%- endif -%}
+
+      <span class="product-card__price">
+        {%- render 'price', product: product_ref -%}
+      </span>
+
+      {%- comment -%} ── BFC: Restoration badge + activity counter ── {%- endcomment -%}
+      {%- comment -%} Collection IDs to EXCLUDE from warranty badge (modern Polaroid, disposables, etc) {%- endcomment -%}
+      {%- assign bfc_hide_ids = '291299754156,323693871276' | split: ',' -%}
+      {%- comment -%} Handle-based excludes (film/accessories/services/etc) {%- endcomment -%}
+      {%- assign bfc_hide_collections = 'film,35mm-film,120-film,super-8-film,black-and-white-film,color-film,slide-film,expired-film,cinestill,fuji,kodak,ilford,lomography,accessories,straps,cases,lens-caps,caps,batteries,developing,film-developing,services,memberships,gift-cards,merch,apparel,books,prints,posters' | split: ',' -%}
+      {%- assign bfc_exclude = false -%}
+      {%- if product_ref.gift_card? -%}
+        {%- assign bfc_exclude = true -%}
+      {%- else -%}
+        {%- for coll in product_ref.collections -%}
+          {%- assign coll_id_str = coll.id | append: '' -%}
+          {%- if bfc_hide_ids contains coll_id_str -%}
+            {%- assign bfc_exclude = true -%}
+            {%- break -%}
+          {%- endif -%}
+          {%- if bfc_hide_collections contains coll.handle -%}
+            {%- assign bfc_exclude = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+      {%- assign bfc_warranty = nil -%}
+      {%- unless bfc_exclude -%}
+        {%- assign bfc_warranty = product_ref.metafields.bfc.warranty_months -%}
+        {%- unless bfc_warranty -%}
+          {%- comment -%} 3mo for point-and-shoot (ID 319541739692), 6mo for everything else {%- endcomment -%}
+          {%- assign bfc_warranty = 6 -%}
+          {%- for coll in product_ref.collections -%}
+            {%- if coll.id == 319541739692 -%}
+              {%- assign bfc_warranty = 3 -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endunless -%}
+      {%- endunless -%}
+      <div class="bfc-card-meta">
+        {%- if bfc_warranty -%}
+          <span class="bfc-card-meta-item bfc-card-meta-restored">
+            <svg width="10" height="10" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 7L5.5 10.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Serviced · {{ bfc_warranty }}mo warranty
+          </span>
+        {%- endif -%}
+        <span class="bfc-card-activity"
+          data-handle="{{ product_ref.handle }}"
+          data-available="{{ product_ref.available }}"
+          data-qty="{{ product_ref.variants | map: 'inventory_quantity' | sum }}"></span>
+      </div>
+    </div>
+    <div class="product-card__options product-card__options--{{ settings.product_card_product_options_position }}">
+      {% if settings.show_product_groups_on_product_card %}
+        {% render 'product-groups', product: product_ref, on: 'card' %}
+      {% endif %}
+      {{ product_variants }}
+    </div>
+    {% if is_in_drawer %}
+      {{ add_to_cart }}
+    {% endif %}
+  </div>
+</product-card>
+
+{%- comment -%} ── BFC Card Enhancements: CSS + Activity Counter ── {%- endcomment -%}
+<style>
+  .bfc-card-rating {
+    margin: 2px 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    line-height: 1;
+  }
+  .bfc-card-stars {
+    display: inline-flex;
+    gap: 1px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+  .bfc-card-star {
+    display: inline-block;
+    color: rgba(32,32,9,0.2);
+    position: relative;
+  }
+  .bfc-card-star.is-full {
+    color: #E36E15;
+  }
+  .bfc-card-star.is-half {
+    background: linear-gradient(90deg, #E36E15 50%, rgba(32,32,9,0.2) 50%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .bfc-card-rating-count {
+    font-size: 10.5px;
+    color: rgba(32,32,9,0.55);
+    font-weight: 500;
+  }
+  .bfc-card-meta {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+    margin-top: 6px;
+    font-family: 'Poppins', sans-serif;
+  }
+  .bfc-card-meta:empty { display: none; }
+  .bfc-card-meta-item {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 9.5px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: #4E4741;
+  }
+  .bfc-card-meta-restored svg { color: #2a4820; flex-shrink: 0; }
+  .bfc-card-activity {
+    display: none; align-items: center; gap: 5px;
+    font-size: 9.5px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: #E36E15;
+  }
+  .bfc-card-activity.is-visible { display: inline-flex; }
+  .bfc-card-activity::before {
+    content: ''; width: 5px; height: 5px; background: #E36E15;
+    flex-shrink: 0; border-radius: 50%;
+    animation: bfc-card-pulse 2s ease-in-out infinite;
+  }
+  @keyframes bfc-card-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .bfc-card-activity-sep {
+    margin: 0 6px; opacity: 0.5;
+  }
+</style>
+<script>
+(function() {
+  if (window.__bfcCardActivityInit) return;
+  window.__bfcCardActivityInit = true;
+
+  // Phase 1: Render inventory-based messages immediately (no fetch needed)
+  // Returns all visible elements that should ALSO check cart activity
+  function renderInventoryMessages() {
+    var cartCheckList = [];
+    document.querySelectorAll('.bfc-card-activity').forEach(function(el) {
+      var available = el.dataset.available === 'true';
+      var qty = parseInt(el.dataset.qty, 10);
+      if (isNaN(qty)) qty = null;
+
+      if (available) {
+        // In stock — show "only N left" if low
+        if (qty !== null && qty === 1) {
+          el.textContent = 'Only 1 left';
+          el.classList.add('is-visible');
+        } else if (qty !== null && qty > 0 && qty <= 3) {
+          el.textContent = 'Only ' + qty + ' left';
+          el.classList.add('is-visible');
+        }
+      }
+      // EVERY product (in-stock OR out-of-stock) gets cart activity check —
+      // OOS products still benefit from showing "people have this in their cart"
+      // as demand/waitlist signal
+      cartCheckList.push(el);
+    });
+    return cartCheckList;
+  }
+
+  // Phase 2: Fetch cart activity. If product has BOTH inventory msg + cart activity,
+  // append the cart message as a second line.
+  function loadActivity() {
+    var cartCheckList = renderInventoryMessages();
+    if (!cartCheckList.length) return;
+
+    fetch('https://app--6910fd9136cfabdf03f66780.base44.app/api/apps/6910fd9136cfabdf03f66780/functions/productActivity?sort=-created_date&limit=500')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var events = Array.isArray(data) ? data : (data.results || data.data || []);
+        if (!events.length) return;
+        var now = Date.now();
+        var counts = {};
+        events.forEach(function(e) {
+          if (!e || e.event !== 'atc' || !e.handle || !e.created_date) return;
+          var age = now - new Date(e.created_date).getTime();
+          if (age > 2505600000) return; // 29 days
+          counts[e.handle] = (counts[e.handle] || 0) + 1;
+        });
+        cartCheckList.forEach(function(el) {
+          var n = counts[el.dataset.handle] || 0;
+          if (n < 3) return;
+          var cartMsg = n + ' people have this in their cart';
+          if (el.classList.contains('is-visible')) {
+            // Already showing inventory msg — combine into one sentence
+            el.textContent = el.textContent + ' & ' + cartMsg;
+          } else {
+            el.textContent = cartMsg;
+            el.classList.add('is-visible');
+          }
+        });
+      })
+      .catch(function() {});
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadActivity);
+  } else {
+    loadActivity();
+  }
+})();
+</script>

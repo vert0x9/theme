@@ -1,0 +1,1081 @@
+<div class="bfc-mini" id="bfc-mini">
+
+  <div class="bfc-mini__head">
+    <div class="bfc-mini__eyebrow">{{ section.settings.eyebrow | default: "Not sure what to get?" }}</div>
+    <h2 class="bfc-mini__title">{{ section.settings.headline | default: "We'll pick your kit." }}</h2>
+    <p class="bfc-mini__sub">{{ section.settings.subtext | default: "Tell us how you want to shoot — we'll recommend the right camera, film, and accessories. Every camera is tested and warrantied." }}</p>
+  </div>
+
+  <div class="bfc-mini__tabs" role="tablist" aria-label="Camera type">
+    <button class="bfc-mini__tab" type="button" role="tab" data-type="ps" aria-selected="false">
+      <span class="bfc-mini__tab-name">Point &amp; Shoot</span>
+      <span class="bfc-mini__tab-hint">Auto everything</span>
+    </button>
+    <button class="bfc-mini__tab" type="button" role="tab" data-type="slr" aria-selected="false">
+      <span class="bfc-mini__tab-name">35mm SLR</span>
+      <span class="bfc-mini__tab-hint">Full manual control</span>
+    </button>
+    <button class="bfc-mini__tab" type="button" role="tab" data-type="pol" aria-selected="false">
+      <span class="bfc-mini__tab-name">Polaroid</span>
+      <span class="bfc-mini__tab-hint">Instant prints</span>
+    </button>
+  </div>
+
+  <div class="bfc-mini__panels">
+
+    {% assign bfc_types = 'ps,slr,pol' | split: ',' %}
+    {% for btype_item in bfc_types %}
+
+      <div class="bfc-mini__panel" data-type="{{ btype_item }}" role="tabpanel" hidden>
+
+        {% comment %} ── LEFT: camera picker ── {% endcomment %}
+        <div class="bfc-mini__cam-col">
+          <div class="bfc-mini__cam-col-label">Choose your camera</div>
+          <div class="bfc-mini__cam-list" data-cam-list="{{ btype_item }}">
+            {% for block in section.blocks %}
+              {% if block.type == 'camera' and block.settings.camera_type == btype_item %}
+                {% assign c_price = block.settings.camera_price %}
+                <button
+                  class="bfc-mini__cam-card"
+                  type="button"
+                  aria-pressed="false"
+                  data-cam-id="{{ block.id }}"
+                  data-cam-type="{{ btype_item }}"
+                  data-cam-price="{{ c_price }}"
+                  data-cam-variant="{{ block.settings.camera_variant_id }}"
+                  data-cam-name="{{ block.settings.camera_name | escape }}"
+                >
+                  <div class="bfc-mini__cam-card-img">
+                    {% if block.settings.camera_image != blank %}
+                      <img src="{{ block.settings.camera_image | image_url: width: 400 }}" alt="{{ block.settings.camera_name }}" loading="lazy" width="400" height="400">
+                    {% else %}
+                      <div class="bfc-mini__cam-img-ph">—</div>
+                    {% endif %}
+                  </div>
+                  <div class="bfc-mini__cam-card-body">
+                    {% if block.settings.camera_tag != blank %}
+                      <span class="bfc-mini__cam-tag">{{ block.settings.camera_tag }}</span>
+                    {% endif %}
+                    <span class="bfc-mini__cam-name">{{ block.settings.camera_name }}</span>
+                    <span class="bfc-mini__cam-detail">{{ block.settings.camera_detail }}</span>
+                    <span class="bfc-mini__cam-price">${{ c_price }}</span>
+                  </div>
+                  <span class="bfc-mini__cam-check" aria-hidden="true"></span>
+                </button>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+
+        {% comment %} ── RIGHT: add-ons + summary ── {% endcomment %}
+        <div class="bfc-mini__right-col">
+
+          {% comment %} Add-on groups {% endcomment %}
+          <div class="bfc-mini__addons" data-addons-for="{{ btype_item }}">
+
+            {% assign has_film_color = false %}
+            {% assign has_film_bw    = false %}
+            {% assign has_straps     = false %}
+            {% assign has_cases      = false %}
+
+            {% for block in section.blocks %}
+              {% if block.type == 'addon' %}
+                {% assign show_for_this = false %}
+                {% if btype_item == 'ps'  and block.settings.show_for_ps  %} {% assign show_for_this = true %} {% endif %}
+                {% if btype_item == 'slr' and block.settings.show_for_slr %} {% assign show_for_this = true %} {% endif %}
+                {% if btype_item == 'pol' and block.settings.show_for_pol %} {% assign show_for_this = true %} {% endif %}
+                {% if show_for_this %}
+                  {% if block.settings.addon_type == 'film_color' %} {% assign has_film_color = true %} {% endif %}
+                  {% if block.settings.addon_type == 'film_bw'    %} {% assign has_film_bw    = true %} {% endif %}
+                  {% if block.settings.addon_type == 'strap'      %} {% assign has_straps     = true %} {% endif %}
+                  {% if block.settings.addon_type == 'case'       %} {% assign has_cases      = true %} {% endif %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+
+            {% if has_film_color %}
+              <div class="bfc-mini__addon-group">
+                <div class="bfc-mini__addon-group-label">Color Film <span class="bfc-mini__addon-note">Select one</span></div>
+                <div class="bfc-mini__addon-row" data-addon-key="film_color_{{ btype_item }}">
+                  {% for block in section.blocks %}
+                    {% if block.type == 'addon' and block.settings.addon_type == 'film_color' %}
+                      {% assign show_for_this = false %}
+                      {% if btype_item == 'ps'  and block.settings.show_for_ps  %} {% assign show_for_this = true %} {% endif %}
+                      {% if btype_item == 'slr' and block.settings.show_for_slr %} {% assign show_for_this = true %} {% endif %}
+                      {% if btype_item == 'pol' and block.settings.show_for_pol %} {% assign show_for_this = true %} {% endif %}
+                      {% if show_for_this %}
+                        <button class="bfc-mini__addon-card" type="button" aria-pressed="false"
+                          data-addon-group="film_color_{{ btype_item }}"
+                          data-addon-id="{{ block.id }}"
+                          data-addon-price="{{ block.settings.addon_price }}"
+                          data-addon-variant="{{ block.settings.addon_variant_id }}"
+                          data-addon-name="{{ block.settings.addon_name | escape }}"
+                          data-addon-exclusive="true">
+                          {% if block.settings.addon_recommended %}<span class="bfc-mini__addon-rec">Recommended</span>{% endif %}
+                          <span class="bfc-mini__addon-name">{{ block.settings.addon_name }}</span>
+                          <span class="bfc-mini__addon-sub">{{ block.settings.addon_sub }}</span>
+                          <span class="bfc-mini__addon-price">${{ block.settings.addon_price }}</span>
+                        </button>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+
+            {% if has_film_bw %}
+              <div class="bfc-mini__addon-group">
+                <div class="bfc-mini__addon-group-label">B&amp;W Film <span class="bfc-mini__addon-note">Select one</span></div>
+                <div class="bfc-mini__addon-row" data-addon-key="film_bw_{{ btype_item }}">
+                  {% for block in section.blocks %}
+                    {% if block.type == 'addon' and block.settings.addon_type == 'film_bw' %}
+                      {% assign show_for_this = false %}
+                      {% if btype_item == 'ps'  and block.settings.show_for_ps  %} {% assign show_for_this = true %} {% endif %}
+                      {% if btype_item == 'slr' and block.settings.show_for_slr %} {% assign show_for_this = true %} {% endif %}
+                      {% if btype_item == 'pol' and block.settings.show_for_pol %} {% assign show_for_this = true %} {% endif %}
+                      {% if show_for_this %}
+                        <button class="bfc-mini__addon-card" type="button" aria-pressed="false"
+                          data-addon-group="film_bw_{{ btype_item }}"
+                          data-addon-id="{{ block.id }}"
+                          data-addon-price="{{ block.settings.addon_price }}"
+                          data-addon-variant="{{ block.settings.addon_variant_id }}"
+                          data-addon-name="{{ block.settings.addon_name | escape }}"
+                          data-addon-exclusive="true">
+                          {% if block.settings.addon_recommended %}<span class="bfc-mini__addon-rec">Recommended</span>{% endif %}
+                          <span class="bfc-mini__addon-name">{{ block.settings.addon_name }}</span>
+                          <span class="bfc-mini__addon-sub">{{ block.settings.addon_sub }}</span>
+                          <span class="bfc-mini__addon-price">${{ block.settings.addon_price }}</span>
+                        </button>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+
+            {% if has_straps %}
+              <div class="bfc-mini__addon-group">
+                <div class="bfc-mini__addon-group-label">Strap <span class="bfc-mini__addon-note">Optional</span></div>
+                <div class="bfc-mini__addon-row" data-addon-key="strap_{{ btype_item }}">
+                  {% for block in section.blocks %}
+                    {% if block.type == 'addon' and block.settings.addon_type == 'strap' %}
+                      {% assign show_for_this = false %}
+                      {% if btype_item == 'ps'  and block.settings.show_for_ps  %} {% assign show_for_this = true %} {% endif %}
+                      {% if btype_item == 'slr' and block.settings.show_for_slr %} {% assign show_for_this = true %} {% endif %}
+                      {% if btype_item == 'pol' and block.settings.show_for_pol %} {% assign show_for_this = true %} {% endif %}
+                      {% if show_for_this %}
+                        <button class="bfc-mini__addon-card" type="button" aria-pressed="false"
+                          data-addon-group="strap_{{ btype_item }}"
+                          data-addon-id="{{ block.id }}"
+                          data-addon-price="{{ block.settings.addon_price }}"
+                          data-addon-variant="{{ block.settings.addon_variant_id }}"
+                          data-addon-name="{{ block.settings.addon_name | escape }}"
+                          data-addon-exclusive="true">
+                          {% if block.settings.addon_recommended %}<span class="bfc-mini__addon-rec">Recommended</span>{% endif %}
+                          <span class="bfc-mini__addon-name">{{ block.settings.addon_name }}</span>
+                          <span class="bfc-mini__addon-sub">{{ block.settings.addon_sub }}</span>
+                          <span class="bfc-mini__addon-price">${{ block.settings.addon_price }}</span>
+                        </button>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+
+            {% if has_cases %}
+              <div class="bfc-mini__addon-group">
+                <div class="bfc-mini__addon-group-label">Case <span class="bfc-mini__addon-note">Optional</span></div>
+                <div class="bfc-mini__addon-row" data-addon-key="case_{{ btype_item }}">
+                  {% for block in section.blocks %}
+                    {% if block.type == 'addon' and block.settings.addon_type == 'case' %}
+                      {% assign show_for_this = false %}
+                      {% if btype_item == 'ps'  and block.settings.show_for_ps  %} {% assign show_for_this = true %} {% endif %}
+                      {% if btype_item == 'slr' and block.settings.show_for_slr %} {% assign show_for_this = true %} {% endif %}
+                      {% if btype_item == 'pol' and block.settings.show_for_pol %} {% assign show_for_this = true %} {% endif %}
+                      {% if show_for_this %}
+                        <button class="bfc-mini__addon-card" type="button" aria-pressed="false"
+                          data-addon-group="case_{{ btype_item }}"
+                          data-addon-id="{{ block.id }}"
+                          data-addon-price="{{ block.settings.addon_price }}"
+                          data-addon-variant="{{ block.settings.addon_variant_id }}"
+                          data-addon-name="{{ block.settings.addon_name | escape }}"
+                          data-addon-exclusive="true">
+                          {% if block.settings.addon_recommended %}<span class="bfc-mini__addon-rec">Recommended</span>{% endif %}
+                          <span class="bfc-mini__addon-name">{{ block.settings.addon_name }}</span>
+                          <span class="bfc-mini__addon-sub">{{ block.settings.addon_sub }}</span>
+                          <span class="bfc-mini__addon-price">${{ block.settings.addon_price }}</span>
+                        </button>
+                      {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+
+          </div>
+
+          {% comment %} ── Kit summary + ATC ── {% endcomment %}
+          <div class="bfc-mini__summary" data-summary="{{ btype_item }}">
+            <div class="bfc-mini__summary-empty">Select a camera to build your kit.</div>
+            <div class="bfc-mini__summary-lines" hidden></div>
+            <div class="bfc-mini__summary-total" hidden>
+              <span>Kit total</span>
+              <span class="bfc-mini__summary-total-price">$0</span>
+            </div>
+            <div class="bfc-mini__summary-actions" hidden>
+              {% if btype_item == 'ps' %}
+                <div class="bfc-mini__warranty-badge">3 month warranty included</div>
+              {% else %}
+                <div class="bfc-mini__warranty-badge">6 month warranty included</div>
+              {% endif %}
+              <button class="bfc-mini__atc" type="button" data-atc="{{ btype_item }}">Add kit to cart</button>
+              {% if section.settings.full_builder_url != blank %}
+                <a class="bfc-mini__builder-link" href="{{ section.settings.full_builder_url }}">Customise further</a>
+              {% endif %}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    {% endfor %}
+
+    <div class="bfc-mini__empty" id="bfc-mini-empty">
+      <span>Select a shooting style above to get started.</span>
+    </div>
+
+  </div>
+
+</div>
+
+<style>
+.bfc-mini *, .bfc-mini *::before, .bfc-mini *::after { box-sizing: border-box; }
+.bfc-mini button { font-family: inherit; cursor: pointer; }
+.bfc-mini a { text-decoration: none; }
+
+.bfc-mini {
+  background: #F8F6EE;
+  color: #202009;
+  font-family: 'Poppins', sans-serif;
+  padding: 72px 72px 80px;
+  border-top: 1px solid #E3DDDA;
+}
+
+/* ── HEADER ── */
+.bfc-mini__head { max-width: 560px; margin-bottom: 40px; }
+.bfc-mini__eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #82906B;
+  margin-bottom: 12px;
+}
+.bfc-mini__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 4vw, 52px);
+  font-weight: 300;
+  letter-spacing: -.02em;
+  line-height: 1.0;
+  color: #202009;
+  margin: 0 0 14px;
+}
+.bfc-mini__sub {
+  font-size: 14px;
+  color: #6a6850;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ── TABS ── */
+.bfc-mini__tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: #D9D5CC;
+  outline: 2px solid #D9D5CC;
+  margin-bottom: 2px;
+}
+.bfc-mini__tab {
+  background: #F8F6EE;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 20px 24px 18px;
+  text-align: left;
+  transition: background .15s, border-color .15s;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.bfc-mini__tab:hover { background: #F0EDE5; }
+.bfc-mini__tab[aria-selected="true"] { background: #202009; border-bottom-color: #E36E15; }
+.bfc-mini__tab-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: #202009;
+  line-height: 1.1;
+  transition: color .15s;
+}
+.bfc-mini__tab[aria-selected="true"] .bfc-mini__tab-name { color: #F8F6EE; }
+.bfc-mini__tab-hint { font-size: 12px; color: #82906B; transition: color .15s; }
+.bfc-mini__tab[aria-selected="true"] .bfc-mini__tab-hint { color: #6a6850; }
+
+/* ── PANELS ── */
+.bfc-mini__panels {
+  background: #D9D5CC;
+  outline: 2px solid #D9D5CC;
+}
+.bfc-mini__panel {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 2px;
+  background: #D9D5CC;
+  animation: bfc-mini-fadein .28s ease both;
+}
+.bfc-mini__panel[hidden] { display: none; }
+
+@keyframes bfc-mini-fadein {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── CAMERA COLUMN ── */
+.bfc-mini__cam-col {
+  background: #F8F6EE;
+  display: flex;
+  flex-direction: column;
+}
+.bfc-mini__cam-col-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #9a9880;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid #E3DDDA;
+}
+.bfc-mini__cam-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: #D9D5CC;
+  flex: 1;
+}
+
+.bfc-mini__cam-card {
+  background: #F8F6EE;
+  border: none;
+  border-left: 3px solid transparent;
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  gap: 0 14px;
+  align-items: center;
+  padding: 14px 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+  position: relative;
+}
+.bfc-mini__cam-card:hover { background: #F0EDE5; }
+.bfc-mini__cam-card[aria-pressed="true"] {
+  background: #202009;
+  border-left-color: #E36E15;
+}
+
+.bfc-mini__cam-card-img {
+  width: 72px;
+  height: 72px;
+  background: #EDEAE1;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.bfc-mini__cam-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .25s ease;
+}
+.bfc-mini__cam-card:hover .bfc-mini__cam-card-img img { transform: scale(1.06); }
+.bfc-mini__cam-card[aria-pressed="true"] .bfc-mini__cam-card-img { background: #19190a; }
+.bfc-mini__cam-img-ph {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: #ccc;
+}
+
+.bfc-mini__cam-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.bfc-mini__cam-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #82906B;
+  transition: color .15s;
+}
+.bfc-mini__cam-card[aria-pressed="true"] .bfc-mini__cam-tag { color: #6a6850; }
+.bfc-mini__cam-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: #202009;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color .15s;
+}
+.bfc-mini__cam-card[aria-pressed="true"] .bfc-mini__cam-name { color: #F8F6EE; }
+.bfc-mini__cam-detail {
+  font-size: 11px;
+  color: #82906B;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color .15s;
+}
+.bfc-mini__cam-card[aria-pressed="true"] .bfc-mini__cam-detail { color: #6a6850; }
+.bfc-mini__cam-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px;
+  color: #202009;
+  flex-shrink: 0;
+  transition: color .15s;
+}
+.bfc-mini__cam-card[aria-pressed="true"] .bfc-mini__cam-price { color: #F4A027; }
+
+.bfc-mini__cam-check {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid #D9D5CC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: transparent;
+  transition: all .15s;
+}
+.bfc-mini__cam-card[aria-pressed="true"] .bfc-mini__cam-check {
+  background: #E36E15;
+  border-color: #E36E15;
+  color: #F8F6EE;
+}
+.bfc-mini__cam-card[aria-pressed="true"] .bfc-mini__cam-check::before { content: '✓'; }
+
+/* ── RIGHT COLUMN ── */
+.bfc-mini__right-col {
+  background: #F8F6EE;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── ADD-ONS ── */
+.bfc-mini__addons {
+  padding: 20px 28px 8px;
+  border-bottom: 1px solid #E3DDDA;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.bfc-mini__addon-group { margin-bottom: 20px; }
+.bfc-mini__addon-group-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #4E4741;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.bfc-mini__addon-note {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: .02em;
+  text-transform: none;
+  color: #9a9880;
+}
+.bfc-mini__addon-row {
+  display: grid;
+  gap: 2px;
+  background: #D9D5CC;
+  outline: 2px solid #D9D5CC;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+.bfc-mini__addon-card {
+  background: #F8F6EE;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 12px 14px 10px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: relative;
+  transition: background .15s, border-color .15s;
+}
+.bfc-mini__addon-card:hover { background: #F0EDE5; }
+.bfc-mini__addon-card[aria-pressed="true"] {
+  background: #202009;
+  border-bottom-color: #E36E15;
+}
+.bfc-mini__addon-rec {
+  position: absolute;
+  top: 0; right: 0;
+  background: #ABCC99;
+  color: #202009;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+}
+.bfc-mini__addon-card[aria-pressed="true"] .bfc-mini__addon-rec {
+  background: #E36E15;
+  color: #F8F6EE;
+}
+.bfc-mini__addon-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #202009;
+  line-height: 1.2;
+  transition: color .15s;
+}
+.bfc-mini__addon-card[aria-pressed="true"] .bfc-mini__addon-name { color: #F8F6EE; }
+.bfc-mini__addon-sub {
+  font-size: 11px;
+  color: #82906B;
+  line-height: 1.4;
+  transition: color .15s;
+}
+.bfc-mini__addon-card[aria-pressed="true"] .bfc-mini__addon-sub { color: #6a6850; }
+.bfc-mini__addon-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  color: #202009;
+  margin-top: 6px;
+  transition: color .15s;
+}
+.bfc-mini__addon-card[aria-pressed="true"] .bfc-mini__addon-price { color: #F4A027; }
+
+/* ── SUMMARY ── */
+.bfc-mini__summary {
+  padding: 24px 28px 28px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0;
+}
+.bfc-mini__summary-empty {
+  font-size: 14px;
+  color: #9a9880;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+}
+.bfc-mini__summary-lines {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #E3DDDA;
+  margin-bottom: 0;
+}
+.bfc-mini__summary-line {
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  gap: 0 14px;
+  padding: 9px 0;
+  border-bottom: 1px solid #E3DDDA;
+  align-items: baseline;
+}
+.bfc-mini__summary-line-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #9a9880;
+}
+.bfc-mini__summary-line-name {
+  font-size: 13px;
+  color: #4E4741;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bfc-mini__summary-line-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  color: #4E4741;
+}
+.bfc-mini__summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 14px 0 18px;
+}
+.bfc-mini__summary-total span:first-child {
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #82906B;
+}
+.bfc-mini__summary-total-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 300;
+  color: #202009;
+}
+.bfc-mini__summary-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.bfc-mini__warranty-badge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #ABCC99;
+  margin-bottom: 2px;
+}
+.bfc-mini__atc {
+  background: #202009;
+  color: #F8F6EE;
+  border: none;
+  padding: 14px 28px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .2s;
+  align-self: flex-start;
+}
+.bfc-mini__atc:hover { background: #E36E15; }
+.bfc-mini__atc:disabled { opacity: .4; cursor: not-allowed; }
+.bfc-mini__builder-link {
+  font-size: 12px;
+  color: #82906B;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color .15s;
+  align-self: flex-start;
+}
+.bfc-mini__builder-link:hover { color: #202009; }
+
+.bfc-mini__empty {
+  background: #F8F6EE;
+  padding: 48px 44px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-style: italic;
+  color: #9a9880;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 960px) {
+  .bfc-mini { padding: 48px 24px 56px; }
+  .bfc-mini__panel { grid-template-columns: 1fr; }
+  .bfc-mini__cam-list { flex-direction: row; overflow-x: auto; gap: 2px; }
+  .bfc-mini__cam-card { grid-template-columns: 56px 1fr; min-width: 200px; }
+  .bfc-mini__cam-check { display: none; }
+  .bfc-mini__tabs { grid-template-columns: 1fr; }
+  .bfc-mini__addon-row { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+}
+@media (max-width: 480px) {
+  .bfc-mini__cam-card { grid-template-columns: 52px 1fr; min-width: 170px; }
+}
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── state per camera type ── */
+  var state = { ps: {}, slr: {}, pol: {} };
+  ['ps','slr','pol'].forEach(function(t){ state[t] = { cam: null, addons: {} }; });
+
+  /* ── TABS ── */
+  var tabs   = document.querySelectorAll('.bfc-mini__tab');
+  var panels = document.querySelectorAll('.bfc-mini__panel');
+  var empty  = document.getElementById('bfc-mini-empty');
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      var type = tab.getAttribute('data-type');
+      tabs.forEach(function (t) { t.setAttribute('aria-selected', 'false'); });
+      tab.setAttribute('aria-selected', 'true');
+      var matched = false;
+      panels.forEach(function (panel) {
+        if (panel.getAttribute('data-type') === type) {
+          panel.hidden = false;
+          matched = true;
+        } else {
+          panel.hidden = true;
+        }
+      });
+      if (empty) empty.hidden = matched;
+    });
+  });
+
+  /* ── CAMERA SELECTION ── */
+  document.querySelectorAll('.bfc-mini__cam-card').forEach(function (card) {
+    card.addEventListener('click', function () {
+      var type     = card.getAttribute('data-cam-type');
+      var camId    = card.getAttribute('data-cam-id');
+      var camPrice = parseFloat(card.getAttribute('data-cam-price')) || 0;
+      var camVar   = card.getAttribute('data-cam-variant');
+      var camName  = card.getAttribute('data-cam-name');
+
+      /* deselect siblings */
+      document.querySelectorAll('.bfc-mini__cam-card[data-cam-type="' + type + '"]').forEach(function (c) {
+        c.setAttribute('aria-pressed', 'false');
+      });
+      card.setAttribute('aria-pressed', 'true');
+
+      state[type].cam = { id: camId, price: camPrice, variant: camVar, name: camName };
+      refreshSummary(type);
+    });
+  });
+
+  /* ── ADD-ON SELECTION (exclusive within group) ── */
+  document.querySelectorAll('.bfc-mini__addon-card').forEach(function (card) {
+    card.addEventListener('click', function () {
+      var group   = card.getAttribute('data-addon-group');
+      var addonId = card.getAttribute('data-addon-id');
+      var already = card.getAttribute('aria-pressed') === 'true';
+      var type    = group.split('_').pop(); /* last segment is the camera type */
+      var groupKey = group.replace('_' + type, ''); /* e.g. film_color, strap */
+
+      /* deselect all in group */
+      document.querySelectorAll('.bfc-mini__addon-card[data-addon-group="' + group + '"]').forEach(function (c) {
+        c.setAttribute('aria-pressed', 'false');
+      });
+
+      if (!already) {
+        card.setAttribute('aria-pressed', 'true');
+        state[type].addons[groupKey] = {
+          id:      addonId,
+          price:   parseFloat(card.getAttribute('data-addon-price')) || 0,
+          variant: card.getAttribute('data-addon-variant'),
+          name:    card.getAttribute('data-addon-name'),
+          key:     groupKey
+        };
+      } else {
+        delete state[type].addons[groupKey];
+      }
+      refreshSummary(type);
+    });
+  });
+
+  /* ── SUMMARY ── */
+  function refreshSummary(type) {
+    var s        = state[type];
+    var summary  = document.querySelector('.bfc-mini__summary[data-summary="' + type + '"]');
+    if (!summary) return;
+
+    var emptyEl   = summary.querySelector('.bfc-mini__summary-empty');
+    var linesEl   = summary.querySelector('.bfc-mini__summary-lines');
+    var totalEl   = summary.querySelector('.bfc-mini__summary-total');
+    var priceEl   = summary.querySelector('.bfc-mini__summary-total-price');
+    var actionsEl = summary.querySelector('.bfc-mini__summary-actions');
+
+    if (!s.cam) {
+      emptyEl.hidden   = false;
+      linesEl.hidden   = true;
+      totalEl.hidden   = true;
+      actionsEl.hidden = true;
+      return;
+    }
+
+    emptyEl.hidden   = true;
+    linesEl.hidden   = false;
+    totalEl.hidden   = false;
+    actionsEl.hidden = false;
+
+    /* Build line items */
+    var total = s.cam.price;
+    var addonLabelMap = {
+      film_color: 'Color Film',
+      film_bw:    'B&W Film',
+      strap:      'Strap',
+      'case':     'Case'
+    };
+    var lines = '<div class="bfc-mini__summary-line">' +
+      '<span class="bfc-mini__summary-line-label">Camera</span>' +
+      '<span class="bfc-mini__summary-line-name">' + escHtml(s.cam.name) + '</span>' +
+      '<span class="bfc-mini__summary-line-price">$' + s.cam.price + '</span>' +
+    '</div>';
+
+    Object.keys(s.addons).forEach(function (k) {
+      var a = s.addons[k];
+      total += a.price;
+      lines += '<div class="bfc-mini__summary-line">' +
+        '<span class="bfc-mini__summary-line-label">' + (addonLabelMap[k] || k) + '</span>' +
+        '<span class="bfc-mini__summary-line-name">' + escHtml(a.name) + '</span>' +
+        '<span class="bfc-mini__summary-line-price">$' + a.price + '</span>' +
+      '</div>';
+    });
+
+    linesEl.innerHTML = lines;
+    priceEl.textContent = '$' + total.toFixed(2).replace(/\.00$/, '');
+  }
+
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── ADD TO CART ── */
+  document.querySelectorAll('.bfc-mini__atc').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var type = btn.getAttribute('data-atc');
+      var s    = state[type];
+      if (!s.cam) return;
+
+      var variantIds = [s.cam.variant];
+      Object.keys(s.addons).forEach(function (k) {
+        if (s.addons[k].variant) variantIds.push(s.addons[k].variant);
+      });
+
+      var items = variantIds
+        .filter(function (id) { return id && id !== '0' && id.trim() !== ''; })
+        .map(function (id) {
+          return { id: parseInt(id, 10), quantity: 1, properties: { _source: 'kit-builder-mini' } };
+        });
+
+      if (!items.length) { btn.textContent = 'No variant IDs set'; return; }
+
+      btn.textContent = 'Adding\u2026';
+      btn.disabled = true;
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ items: items })
+      })
+      .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+      .then(function () { window.location.href = '/cart'; })
+      .catch(function () {
+        btn.textContent = 'Something went wrong';
+        btn.disabled = false;
+      });
+    });
+  });
+
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Kit Builder Mini",
+  "tag": "section",
+  "class": "bfc-kit-builder-mini",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "Not sure what to get?"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "default": "We'll pick your kit."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Tell us how you want to shoot — we'll recommend the right camera, film, and accessories. Every camera is tested and warrantied."
+    },
+    {
+      "type": "url",
+      "id": "full_builder_url",
+      "label": "Full Kit Builder page link (optional)"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "camera",
+      "name": "Camera",
+      "settings": [
+        {
+          "type": "select",
+          "id": "camera_type",
+          "label": "Camera type (which tab this appears under)",
+          "options": [
+            { "value": "ps",  "label": "Point & Shoot" },
+            { "value": "slr", "label": "35mm SLR" },
+            { "value": "pol", "label": "Polaroid" }
+          ],
+          "default": "ps"
+        },
+        {
+          "type": "text",
+          "id": "camera_tag",
+          "label": "Tag (e.g. Most Popular, Best Value)",
+          "info": "Short label shown above the name."
+        },
+        {
+          "type": "text",
+          "id": "camera_name",
+          "label": "Name",
+          "default": "Canon Sure Shot WP-1"
+        },
+        {
+          "type": "text",
+          "id": "camera_detail",
+          "label": "Detail line",
+          "default": "Waterproof · Auto focus · 35mm f/2.8"
+        },
+        {
+          "type": "number",
+          "id": "camera_price",
+          "label": "Price ($)",
+          "default": 275
+        },
+        {
+          "type": "text",
+          "id": "camera_variant_id",
+          "label": "Variant ID",
+          "info": "Numeric Shopify variant ID."
+        },
+        {
+          "type": "image_picker",
+          "id": "camera_image",
+          "label": "Image"
+        }
+      ]
+    },
+    {
+      "type": "recommendation",
+      "name": "Recommendation",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Legacy block — please delete and use Camera + Add-on blocks instead."
+        }
+      ]
+    },
+    {
+      "type": "addon",
+      "name": "Add-on",
+      "settings": [
+        {
+          "type": "select",
+          "id": "addon_type",
+          "label": "Add-on type",
+          "options": [
+            { "value": "film_color", "label": "Color Film" },
+            { "value": "film_bw",   "label": "B&W Film" },
+            { "value": "strap",     "label": "Strap" },
+            { "value": "case",      "label": "Case" }
+          ],
+          "default": "film_color"
+        },
+        {
+          "type": "header",
+          "content": "Show in these tabs"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_for_ps",
+          "label": "Show for Point & Shoot",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_for_slr",
+          "label": "Show for 35mm SLR",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_for_pol",
+          "label": "Show for Polaroid",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Add-on details"
+        },
+        {
+          "type": "checkbox",
+          "id": "addon_recommended",
+          "label": "Mark as recommended",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "addon_name",
+          "label": "Name",
+          "default": "Kodak Gold 200"
+        },
+        {
+          "type": "text",
+          "id": "addon_sub",
+          "label": "Sub-line",
+          "default": "36 exp · Warm, forgiving in natural light"
+        },
+        {
+          "type": "number",
+          "id": "addon_price",
+          "label": "Price ($)",
+          "default": 12
+        },
+        {
+          "type": "text",
+          "id": "addon_variant_id",
+          "label": "Variant ID",
+          "info": "Numeric Shopify variant ID."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kit Builder Mini",
+      "blocks": [
+        { "type": "camera", "settings": { "camera_type": "ps",  "camera_tag": "Weatherproof",  "camera_name": "Canon Sure Shot WP-1",   "camera_detail": "Waterproof · Auto focus · 35mm f/2.8",          "camera_price": 275 } },
+        { "type": "camera", "settings": { "camera_type": "ps",  "camera_tag": "Most Popular",  "camera_name": "Olympus Stylus MJU",     "camera_detail": "Ultra-compact · Auto focus · 35mm f/2.8",       "camera_price": 400 } },
+        { "type": "camera", "settings": { "camera_type": "ps",  "camera_tag": "Best Value",    "camera_name": "Minolta Freedom Zoom",   "camera_detail": "Zoom lens · Fully automatic",                   "camera_price": 215 } },
+        { "type": "camera", "settings": { "camera_type": "slr", "camera_tag": "Most Popular",  "camera_name": "Pentax K1000",           "camera_detail": "Fully mechanical · 50mm f/2 · Built-in meter",  "camera_price": 350 } },
+        { "type": "camera", "settings": { "camera_type": "slr", "camera_tag": "Iconic",        "camera_name": "Canon AE-1 Program",     "camera_detail": "Program auto + full manual · 50mm",             "camera_price": 375 } },
+        { "type": "camera", "settings": { "camera_type": "slr", "camera_tag": "Pro Level",     "camera_name": "Nikon F3",               "camera_detail": "Professional · 50mm f/1.8 · Titanium shutter",  "camera_price": 830 } },
+        { "type": "camera", "settings": { "camera_type": "pol", "camera_tag": "Classic",       "camera_name": "Polaroid 600 Red Stripe","camera_detail": "Auto flash · 600 format · Square prints",       "camera_price": 130 } },
+        { "type": "camera", "settings": { "camera_type": "pol", "camera_tag": "Best Value",    "camera_name": "Polaroid GO Gen 2",      "camera_detail": "Smallest Polaroid · Double exposures",          "camera_price": 89  } },
+        { "type": "camera", "settings": { "camera_type": "pol", "camera_tag": "Premium",       "camera_name": "Polaroid Now+",          "camera_detail": "App-controlled · 5 lens filters",               "camera_price": 149 } },
+        { "type": "addon",  "settings": { "addon_type": "film_color", "show_for_ps": true,  "show_for_slr": true,  "show_for_pol": false, "addon_recommended": true,  "addon_name": "Kodak Gold 200",     "addon_sub": "36 exp · Warm, forgiving in natural light", "addon_price": 12 } },
+        { "type": "addon",  "settings": { "addon_type": "film_color", "show_for_ps": true,  "show_for_slr": true,  "show_for_pol": false, "addon_recommended": false, "addon_name": "Kodak Portra 400",   "addon_sub": "36 exp · Pro portrait film",                "addon_price": 20 } },
+        { "type": "addon",  "settings": { "addon_type": "film_color", "show_for_ps": false, "show_for_slr": false, "show_for_pol": true,  "addon_recommended": true,  "addon_name": "Polaroid 600 Color", "addon_sub": "8 shots · Classic square prints",           "addon_price": 22 } },
+        { "type": "addon",  "settings": { "addon_type": "film_bw",    "show_for_ps": true,  "show_for_slr": true,  "show_for_pol": false, "addon_recommended": true,  "addon_name": "Ilford HP5 Plus",    "addon_sub": "36 exp · Classic B&W starter",              "addon_price": 15 } },
+        { "type": "addon",  "settings": { "addon_type": "film_bw",    "show_for_ps": true,  "show_for_slr": true,  "show_for_pol": false, "addon_recommended": false, "addon_name": "Kodak Tri-X 400",    "addon_sub": "36 exp · High contrast, grain",             "addon_price": 15 } },
+        { "type": "addon",  "settings": { "addon_type": "film_bw",    "show_for_ps": false, "show_for_slr": false, "show_for_pol": true,  "addon_recommended": false, "addon_name": "Polaroid 600 B&W",   "addon_sub": "8 shots · Moody monochrome",                "addon_price": 22 } },
+        { "type": "addon",  "settings": { "addon_type": "strap",      "show_for_ps": true,  "show_for_slr": true,  "show_for_pol": true,  "addon_recommended": false, "addon_name": "Canvas Strap",       "addon_sub": "Black · Adjustable",                        "addon_price": 28 } },
+        { "type": "addon",  "settings": { "addon_type": "strap",      "show_for_ps": false, "show_for_slr": true,  "show_for_pol": false, "addon_recommended": false, "addon_name": "Waxed Leather",      "addon_sub": "Tan · Develops patina",                     "addon_price": 48 } },
+        { "type": "addon",  "settings": { "addon_type": "case",       "show_for_ps": true,  "show_for_slr": false, "show_for_pol": false, "addon_recommended": false, "addon_name": "Neoprene Pouch",     "addon_sub": "Slim · Fits most compacts",                 "addon_price": 18 } }
+      ]
+    }
+  ]
+}
+{% endschema %}

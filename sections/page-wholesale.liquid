@@ -1,0 +1,1019 @@
+{% comment %}
+  page-wholesale.liquid — sections/page-wholesale.liquid
+  BFC Wholesale Program page
+  Design tokens: --or #E36E15 | --go #F4A027 | --ce #ABCC99 | --cv #F8F6EE | --bk #202009
+  Fonts: Cormorant Garamond (headings) + Poppins (body)
+  No rounded corners. No emojis.
+{% endcomment %}
+
+<style>
+  :root {
+    --or: #E36E15;
+    --go: #F4A027;
+    --ce: #ABCC99;
+    --cv: #F8F6EE;
+    --bk: #202009;
+    --wh: #ffffff;
+    --mid: #6b6b4f;
+    --border: #d9d5c8;
+  }
+
+  .bfc-ws {
+    font-family: 'Poppins', sans-serif;
+    color: var(--bk);
+    background: var(--wh);
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  .bfc-ws h1,
+  .bfc-ws h2,
+  .bfc-ws h3,
+  .bfc-ws h4 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    line-height: 1.15;
+    margin: 0;
+  }
+
+  .bfc-ws p {
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 0 0 12px;
+  }
+
+  .bfc-ws a {
+    color: var(--or);
+    text-decoration: none;
+  }
+
+  .bfc-ws a:hover {
+    text-decoration: underline;
+  }
+
+  /* ── Hero ── */
+  .bfc-ws__hero {
+    padding: 72px 0 56px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: end;
+  }
+
+  .bfc-ws__hero-eyebrow {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--or);
+    margin-bottom: 16px;
+  }
+
+  .bfc-ws__hero h1 {
+    font-size: clamp(40px, 5vw, 64px);
+    color: var(--bk);
+    margin-bottom: 20px;
+  }
+
+  .bfc-ws__hero-sub {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--mid);
+    max-width: 460px;
+  }
+
+  .bfc-ws__hero-aside {
+    background: var(--cv);
+    padding: 32px;
+    border-left: 3px solid var(--or);
+  }
+
+  .bfc-ws__hero-aside h4 {
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--or);
+    margin-bottom: 16px;
+  }
+
+  .bfc-ws__hero-aside ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .bfc-ws__hero-aside li {
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+  }
+
+  .bfc-ws__hero-aside li:last-child {
+    border-bottom: none;
+  }
+
+  .bfc-ws__hero-aside li::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--or);
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  /* ── Sections ── */
+  .bfc-ws__section {
+    padding: 56px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .bfc-ws__section:last-child {
+    border-bottom: none;
+  }
+
+  .bfc-ws__section-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--or);
+    margin-bottom: 12px;
+  }
+
+  .bfc-ws__section h2 {
+    font-size: clamp(28px, 3.5vw, 40px);
+    color: var(--bk);
+    margin-bottom: 20px;
+  }
+
+  .bfc-ws__section-intro {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--mid);
+    max-width: 660px;
+    margin-bottom: 40px;
+  }
+
+  /* ── Value props ── */
+  .bfc-ws__props {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 40px;
+  }
+
+  .bfc-ws__prop {
+    background: var(--wh);
+    padding: 28px 24px;
+  }
+
+  .bfc-ws__prop-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 300;
+    color: var(--or);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .bfc-ws__prop h4 {
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .bfc-ws__prop p {
+    font-size: 13px;
+    color: var(--mid);
+    margin: 0;
+  }
+
+  /* ── Pricing tiers ── */
+  .bfc-ws__tiers {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 40px;
+  }
+
+  .bfc-ws__tier {
+    background: var(--cv);
+    padding: 28px 20px;
+  }
+
+  .bfc-ws__tier--featured {
+    background: var(--bk);
+  }
+
+  .bfc-ws__tier--featured .bfc-ws__tier-name,
+  .bfc-ws__tier--featured .bfc-ws__tier-discount,
+  .bfc-ws__tier--featured .bfc-ws__tier-desc,
+  .bfc-ws__tier--featured .bfc-ws__tier-moq {
+    color: var(--cv);
+  }
+
+  .bfc-ws__tier--featured .bfc-ws__tier-pays {
+    color: var(--go);
+  }
+
+  .bfc-ws__tier-badge {
+    font-family: 'Poppins', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--or);
+    color: var(--wh);
+    padding: 3px 8px;
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+
+  .bfc-ws__tier-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 8px;
+  }
+
+  .bfc-ws__tier-moq {
+    font-size: 13px;
+    color: var(--bk);
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+
+  .bfc-ws__tier-discount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+    font-weight: 600;
+    color: var(--bk);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .bfc-ws__tier-pays {
+    font-size: 12px;
+    color: var(--or);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .bfc-ws__tier-profit {
+    font-size: 11px;
+    font-weight: 700;
+    color: #4a7a3a;
+    background: rgba(171, 204, 153, 0.2);
+    border: 1px solid rgba(171, 204, 153, 0.5);
+    padding: 4px 10px;
+    display: inline-block;
+    margin-bottom: 16px;
+    letter-spacing: 0.03em;
+  }
+
+  .bfc-ws__tier--featured .bfc-ws__tier-profit {
+    color: var(--ce);
+    background: rgba(171, 204, 153, 0.12);
+    border-color: rgba(171, 204, 153, 0.3);
+  }
+
+  .bfc-ws__tier-desc {
+    font-size: 12px;
+    color: var(--mid);
+    line-height: 1.55;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    margin-top: 4px;
+  }
+
+  .bfc-ws__tier--featured .bfc-ws__tier-desc {
+    border-color: #3a3a25;
+  }
+
+  /* ── Pricing table ── */
+  .bfc-ws__table-wrap {
+    overflow-x: auto;
+    margin-top: 40px;
+  }
+
+  .bfc-ws__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .bfc-ws__table thead tr {
+    background: var(--bk);
+    color: var(--cv);
+  }
+
+  .bfc-ws__table th {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .bfc-ws__table th:not(:first-child) {
+    text-align: right;
+  }
+
+  .bfc-ws__table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--bk);
+  }
+
+  .bfc-ws__table td:not(:first-child) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .bfc-ws__table tr:nth-child(odd) td {
+    background: var(--cv);
+  }
+
+  .bfc-ws__table tr:nth-child(even) td {
+    background: var(--wh);
+  }
+
+  .bfc-ws__table td:first-child {
+    font-weight: 600;
+  }
+
+  .bfc-ws__table td.bfc-ws__td-msrp {
+    color: var(--mid);
+  }
+
+  .bfc-ws__table td.bfc-ws__td-type {
+    color: var(--mid);
+    font-size: 11px;
+    font-weight: 400;
+  }
+
+  .bfc-ws__table td.bfc-ws__td-bulk {
+    color: var(--or);
+    font-weight: 600;
+  }
+
+  .bfc-ws__table td.bfc-ws__td-profit {
+    color: #3a6e2a;
+    font-weight: 700;
+  }
+
+  .bfc-ws__table tfoot td {
+    font-size: 11px;
+    color: var(--mid);
+    background: var(--cv) !important;
+    font-style: italic;
+    border-bottom: none;
+    padding-top: 14px;
+  }
+
+  /* ── Terms ── */
+  .bfc-ws__terms {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 40px;
+    margin-top: 32px;
+  }
+
+  .bfc-ws__term {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 14px;
+    align-items: start;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .bfc-ws__term-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--or);
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+
+  /* ── FAQ ── */
+  .bfc-ws__faq {
+    margin-top: 32px;
+  }
+
+  .bfc-ws__faq-item {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .bfc-ws__faq-q {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 18px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--bk);
+    gap: 16px;
+  }
+
+  .bfc-ws__faq-q:hover {
+    color: var(--or);
+  }
+
+  .bfc-ws__faq-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .bfc-ws__faq-icon::before,
+  .bfc-ws__faq-icon::after {
+    content: '';
+    position: absolute;
+    background: var(--or);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .bfc-ws__faq-icon::before {
+    width: 18px;
+    height: 2px;
+    top: 8px;
+    left: 0;
+  }
+
+  .bfc-ws__faq-icon::after {
+    width: 2px;
+    height: 18px;
+    top: 0;
+    left: 8px;
+  }
+
+  .bfc-ws__faq-item.is-open .bfc-ws__faq-icon::after {
+    transform: rotate(90deg);
+    opacity: 0;
+  }
+
+  .bfc-ws__faq-a {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--mid);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+
+  .bfc-ws__faq-item.is-open .bfc-ws__faq-a {
+    max-height: 400px;
+    padding-bottom: 20px;
+  }
+
+  /* ── Contact ── */
+  .bfc-ws__contact {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .bfc-ws__btn {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--bk);
+    color: var(--cv);
+    border: 2px solid var(--bk);
+    padding: 14px 32px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    display: inline-block;
+    border-radius: 0;
+  }
+
+  .bfc-ws__btn:hover {
+    background: var(--or);
+    border-color: var(--or);
+  }
+
+  .bfc-ws__copy-feedback {
+    font-size: 12px;
+    color: var(--or);
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .bfc-ws__copy-feedback.is-visible {
+    opacity: 1;
+  }
+
+  /* ── CTA strip ── */
+  .bfc-ws__cta-strip {
+    background: var(--bk);
+    padding: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    margin-top: 56px;
+  }
+
+  .bfc-ws__cta-strip h3 {
+    font-size: clamp(22px, 2.5vw, 30px);
+    color: var(--cv);
+    margin-bottom: 6px;
+  }
+
+  .bfc-ws__cta-strip p {
+    color: #a0a080;
+    font-size: 13px;
+    margin: 0;
+  }
+
+  .bfc-ws__btn--light {
+    background: var(--cv);
+    color: var(--bk);
+    border-color: var(--cv);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .bfc-ws__btn--light:hover {
+    background: var(--or);
+    border-color: var(--or);
+    color: var(--wh);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 860px) {
+    .bfc-ws__hero { grid-template-columns: 1fr; }
+    .bfc-ws__props { grid-template-columns: 1fr 1fr; }
+    .bfc-ws__tiers { grid-template-columns: 1fr 1fr; }
+    .bfc-ws__terms { grid-template-columns: 1fr; }
+    .bfc-ws__cta-strip { flex-direction: column; text-align: center; }
+  }
+
+  @media (max-width: 560px) {
+    .bfc-ws__props { grid-template-columns: 1fr; }
+    .bfc-ws__tiers { grid-template-columns: 1fr; }
+    .bfc-ws__hero { padding: 40px 0 32px; }
+    .bfc-ws__cta-strip { padding: 32px 24px; }
+  }
+</style>
+
+<div class="bfc-ws">
+
+  {%- comment -%}── HERO ──{%- endcomment -%}
+  <div class="bfc-ws__hero">
+    <div>
+      <p class="bfc-ws__hero-eyebrow">Wholesale Program</p>
+      <h1>Restored cameras.<br>Built for your shelf.</h1>
+      <p class="bfc-ws__hero-sub">
+        Brooklyn Film Camera has been restoring and selling analog cameras since 2015.
+        We're opening our wholesale program to a select group of labs, boutiques, record stores, and creative spaces.
+        No sourcing headache. No warranty work. Just a camera with a history, ready to sell.
+      </p>
+    </div>
+    <div class="bfc-ws__hero-aside">
+      <h4>At a glance</h4>
+      <ul>
+        <li>15–22% off MSRP, tiered by quantity</li>
+        <li>No minimum — start with a single unit</li>
+        <li>90-day warranty, handled by BFC</li>
+        <li>Mix-and-match models toward your tier</li>
+        <li>Product photography + copy included</li>
+        <li>Free shipping on 10+ unit orders (US)</li>
+      </ul>
+    </div>
+  </div>
+
+  {%- comment -%}── WHY BFC ──{%- endcomment -%}
+  <div class="bfc-ws__section">
+    <p class="bfc-ws__section-label">About the program</p>
+    <h2>Not just old cameras. Restored ones.</h2>
+    <p class="bfc-ws__section-intro">
+      Every camera that comes through our shop is professionally inspected, cleaned, adjusted, and verified with our in-house testing equipment before it ships. We don't sell as-is. We sell working, reliable photographic tools with a real warranty behind them — and that's what you're carrying in your shop.
+    </p>
+
+    <div class="bfc-ws__props">
+      <div class="bfc-ws__prop">
+        <div class="bfc-ws__prop-num">01</div>
+        <h4>Fully restored</h4>
+        <p>Every unit is CLA'd, adjusted, and verified with professional testing equipment by our in-house repair team.</p>
+      </div>
+      <div class="bfc-ws__prop">
+        <div class="bfc-ws__prop-num">02</div>
+        <h4>90-day warranty</h4>
+        <p>We back every camera we sell. Your shop can manage claims or have customers contact us directly — your call. Customers cover return shipping on wholesale warranty orders.</p>
+      </div>
+      <div class="bfc-ws__prop">
+        <div class="bfc-ws__prop-num">03</div>
+        <h4>Ready to merchandise</h4>
+        <p>Free product photography, spec copy, and display assets included. Your listing or shelf display is ready out of the box.</p>
+      </div>
+      <div class="bfc-ws__prop">
+        <div class="bfc-ws__prop-num">04</div>
+        <h4>Proven inventory</h4>
+        <p>Canon AE-1 Program, Pentax K1000, Olympus Stylus, Hasselblads, and more — cameras with real demand and a proven track record.</p>
+      </div>
+      <div class="bfc-ws__prop">
+        <div class="bfc-ws__prop-num">05</div>
+        <h4>No commitment</h4>
+        <p>Start with a single unit. No MOQ, no locked-in contract, no pressure. The relationship earns itself.</p>
+      </div>
+      <div class="bfc-ws__prop">
+        <div class="bfc-ws__prop-num">06</div>
+        <h4>NYC credibility</h4>
+        <p>BFC is one of the most-visited analog shops on the East Coast. You're carrying a name that means something in this world.</p>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%}── PRICING TIERS ──{%- endcomment -%}
+  <div class="bfc-ws__section">
+    <p class="bfc-ws__section-label">Wholesale pricing</p>
+    <h2>Tiered by quantity. Simple by design.</h2>
+    <p class="bfc-ws__section-intro">
+      Our pricing is honest. We're not a liquidator — we're selling a restored, warranted product that your shop didn't have to source or touch. Discounts are structured so you have room to make real margin, and bulk orders reflect the efficiency of running a larger batch. The cameras listed here are our most commonly wholesaled models, but we can source and restore almost anything in our catalog — reach out if you have something specific in mind.
+    </p>
+
+    <div class="bfc-ws__tiers">
+      <div class="bfc-ws__tier">
+        <div class="bfc-ws__tier-name">Standard</div>
+        <div class="bfc-ws__tier-moq">1 – 4 units</div>
+        <div class="bfc-ws__tier-discount">15%</div>
+        <div class="bfc-ws__tier-pays">You pay 85% of MSRP</div>
+        <div class="bfc-ws__tier-profit">~$58 profit per AE-1 sold</div>
+        <div class="bfc-ws__tier-desc">No commitment. Start with one unit, see how it does. Mix and match models freely.</div>
+      </div>
+      <div class="bfc-ws__tier">
+        <div class="bfc-ws__tier-name">Volume</div>
+        <div class="bfc-ws__tier-moq">5 – 9 units</div>
+        <div class="bfc-ws__tier-discount">18%</div>
+        <div class="bfc-ws__tier-pays">You pay 82% of MSRP</div>
+        <div class="bfc-ws__tier-profit">~$69 profit per AE-1 sold</div>
+        <div class="bfc-ws__tier-desc">A solid opening order. All models mix-and-match toward your tier count.</div>
+      </div>
+      <div class="bfc-ws__tier bfc-ws__tier--featured">
+        <div class="bfc-ws__tier-badge">Most popular</div>
+        <div class="bfc-ws__tier-name">Bulk</div>
+        <div class="bfc-ws__tier-moq">10 – 19 units</div>
+        <div class="bfc-ws__tier-discount">20%</div>
+        <div class="bfc-ws__tier-pays">You pay 80% of MSRP</div>
+        <div class="bfc-ws__tier-profit">~$77 profit per AE-1 sold</div>
+        <div class="bfc-ws__tier-desc">Free US shipping included. Labor cap reduces our costs — savings passed on to you.</div>
+      </div>
+      <div class="bfc-ws__tier">
+        <div class="bfc-ws__tier-name">Large</div>
+        <div class="bfc-ws__tier-moq">20+ units</div>
+        <div class="bfc-ws__tier-discount">22%</div>
+        <div class="bfc-ws__tier-pays">You pay 78% of MSRP</div>
+        <div class="bfc-ws__tier-profit">~$85 profit per AE-1 sold</div>
+        <div class="bfc-ws__tier-desc">Priority allocation on in-demand models. Net-30 payment terms available depending on history.</div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%}── SAMPLE PRICES ──{%- endcomment -%}
+  <div class="bfc-ws__section">
+    <p class="bfc-ws__section-label">Reference pricing</p>
+    <h2>What it looks like in practice</h2>
+    <p class="bfc-ws__section-intro">
+      Prices below are based on current BFC MSRP. A/B grade variants affect your acquisition cost by roughly 10–15%, but every grade is warrantied. Profit column assumes you sell at BFC MSRP — price higher or lower as you see fit. These are our most commonly wholesaled models; we can wholesale most cameras in our catalog, including medium format, TLR, Polaroid, and higher-end bodies. Ask.
+    </p>
+
+    <div class="bfc-ws__table-wrap">
+      <table class="bfc-ws__table">
+        <thead>
+          <tr>
+            <th>Camera</th>
+            <th>Type</th>
+            <th>BFC MSRP</th>
+            <th>Bulk (20%)</th>
+            <th>Profit at MSRP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Canon AE-1 Program</td>
+            <td class="bfc-ws__td-type">35mm SLR</td>
+            <td class="bfc-ws__td-msrp">$375 – $395</td>
+            <td class="bfc-ws__td-bulk">$300 – $316</td>
+            <td class="bfc-ws__td-profit">~$75</td>
+          </tr>
+          <tr>
+            <td>Pentax K1000</td>
+            <td class="bfc-ws__td-type">35mm SLR</td>
+            <td class="bfc-ws__td-msrp">$350 – $370</td>
+            <td class="bfc-ws__td-bulk">$280 – $296</td>
+            <td class="bfc-ws__td-profit">~$70</td>
+          </tr>
+          <tr>
+            <td>Olympus Stylus Zoom</td>
+            <td class="bfc-ws__td-type">35mm P&S</td>
+            <td class="bfc-ws__td-msrp">$350</td>
+            <td class="bfc-ws__td-bulk">$280</td>
+            <td class="bfc-ws__td-profit">~$70</td>
+          </tr>
+          <tr>
+            <td>Olympus Stylus Zoom 70</td>
+            <td class="bfc-ws__td-type">35mm P&S</td>
+            <td class="bfc-ws__td-msrp">$350 – $375</td>
+            <td class="bfc-ws__td-bulk">$280 – $300</td>
+            <td class="bfc-ws__td-profit">~$70</td>
+          </tr>
+          <tr>
+            <td>Olympus XA2</td>
+            <td class="bfc-ws__td-type">35mm P&S</td>
+            <td class="bfc-ws__td-msrp">$275</td>
+            <td class="bfc-ws__td-bulk">$220</td>
+            <td class="bfc-ws__td-profit">~$55</td>
+          </tr>
+          <tr>
+            <td>Canon Sure Shot WP-1</td>
+            <td class="bfc-ws__td-type">35mm P&S</td>
+            <td class="bfc-ws__td-msrp">$275</td>
+            <td class="bfc-ws__td-bulk">$220</td>
+            <td class="bfc-ws__td-profit">~$55</td>
+          </tr>
+          <tr>
+            <td>Minolta Freedom Zoom</td>
+            <td class="bfc-ws__td-type">35mm P&S</td>
+            <td class="bfc-ws__td-msrp">$215</td>
+            <td class="bfc-ws__td-bulk">$172</td>
+            <td class="bfc-ws__td-profit">~$43</td>
+          </tr>
+          <tr>
+            <td>Leica Mini Zoom</td>
+            <td class="bfc-ws__td-type">35mm P&S</td>
+            <td class="bfc-ws__td-msrp">$575</td>
+            <td class="bfc-ws__td-bulk">$460</td>
+            <td class="bfc-ws__td-profit">~$115</td>
+          </tr>
+          <tr>
+            <td>Yashica T3</td>
+            <td class="bfc-ws__td-type">35mm P&S</td>
+            <td class="bfc-ws__td-msrp">$675</td>
+            <td class="bfc-ws__td-bulk">$540</td>
+            <td class="bfc-ws__td-profit">~$135</td>
+          </tr>
+          <tr>
+            <td>Nikon F3 w/ 50mm</td>
+            <td class="bfc-ws__td-type">35mm SLR</td>
+            <td class="bfc-ws__td-msrp">$930</td>
+            <td class="bfc-ws__td-bulk">$744</td>
+            <td class="bfc-ws__td-profit">~$186</td>
+          </tr>
+          <tr>
+            <td>Polaroid 600 Supercolor</td>
+            <td class="bfc-ws__td-type">Polaroid 600</td>
+            <td class="bfc-ws__td-msrp">$175</td>
+            <td class="bfc-ws__td-bulk">$140</td>
+            <td class="bfc-ws__td-profit">~$35</td>
+          </tr>
+          <tr>
+            <td>Polaroid 600 Red Stripe</td>
+            <td class="bfc-ws__td-type">Polaroid 600</td>
+            <td class="bfc-ws__td-msrp">$150</td>
+            <td class="bfc-ws__td-bulk">$120</td>
+            <td class="bfc-ws__td-profit">~$30</td>
+          </tr>
+          <tr>
+            <td>Polaroid 600 OneStep Close-Up</td>
+            <td class="bfc-ws__td-type">Polaroid 600</td>
+            <td class="bfc-ws__td-msrp">$125</td>
+            <td class="bfc-ws__td-bulk">$100</td>
+            <td class="bfc-ws__td-profit">~$25</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="5">Bulk tier (20% off) shown. Standard, Volume, and Large tiers also available — see pricing section above. All units fully restored and verified with professional testing equipment. Additional models available on request.</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  {%- comment -%}── TERMS ──{%- endcomment -%}
+  <div class="bfc-ws__section">
+    <p class="bfc-ws__section-label">Program terms</p>
+    <h2>How it works</h2>
+
+    <div class="bfc-ws__terms">
+      <div class="bfc-ws__term">
+        <div class="bfc-ws__term-dot"></div>
+        <span>No minimum to start — first order can be a single unit</span>
+      </div>
+      <div class="bfc-ws__term">
+        <div class="bfc-ws__term-dot"></div>
+        <span>Mix-and-match any models toward your tier MOQ</span>
+      </div>
+      <div class="bfc-ws__term">
+        <div class="bfc-ws__term-dot"></div>
+        <span>Net-30 payment terms available depending on client and history</span>
+      </div>
+      <div class="bfc-ws__term">
+        <div class="bfc-ws__term-dot"></div>
+        <span>Free shipping on 10+ unit orders (contiguous US)</span>
+      </div>
+      <div class="bfc-ws__term">
+        <div class="bfc-ws__term-dot"></div>
+        <span>90-day warranty — your shop manages claims or customers contact BFC directly, your choice</span>
+      </div>
+      <div class="bfc-ws__term">
+        <div class="bfc-ws__term-dot"></div>
+        <span>Customers always cover return shipping on wholesale warranty claims</span>
+      </div>
+      <div class="bfc-ws__term">
+        <div class="bfc-ws__term-dot"></div>
+        <span>Product photography, spec copy, and display assets provided free</span>
+      </div>
+      <div class="bfc-ws__term">
+        <div class="bfc-ws__term-dot"></div>
+        <span>Restock turnaround: 2–3 weeks for most models</span>
+      </div>
+      <div class="bfc-ws__term">
+        <div class="bfc-ws__term-dot"></div>
+        <span>Grade A and B variants available — both fully warranted</span>
+      </div>
+      <div class="bfc-ws__term">
+        <div class="bfc-ws__term-dot"></div>
+        <span>Medium format and Hasselblad pricing available on request</span>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%}── FAQ ──{%- endcomment -%}
+  <div class="bfc-ws__section">
+    <p class="bfc-ws__section-label">Questions</p>
+    <h2>Common questions</h2>
+
+    <div class="bfc-ws__faq">
+
+      <div class="bfc-ws__faq-item">
+        <button class="bfc-ws__faq-q" aria-expanded="false">
+          <span>What types of stores do you work with?</span>
+          <span class="bfc-ws__faq-icon" aria-hidden="true"></span>
+        </button>
+        <div class="bfc-ws__faq-a">
+          We work with film labs, record stores, high-end vintage boutiques, lifestyle and gift shops, art bookstores, photo galleries, museum shops, and any creative retail space where a restored analog camera is a natural fit. We generally don't wholesale to other camera shops.
+        </div>
+      </div>
+
+      <div class="bfc-ws__faq-item">
+        <button class="bfc-ws__faq-q" aria-expanded="false">
+          <span>What does "restored" actually mean for your cameras?</span>
+          <span class="bfc-ws__faq-icon" aria-hidden="true"></span>
+        </button>
+        <div class="bfc-ws__faq-a">
+          Every camera is refurbished. Some models, such as the AE-1, K1000, and F3, are fully CLA'd to factory standard. Others are refurbished and verified with our in-house professional testing equipment by our repair team. We check shutter accuracy, light seals, meters, and mechanical function. We don't sell as-is — everything that leaves our shop is a working camera.
+        </div>
+      </div>
+
+      <div class="bfc-ws__faq-item">
+        <button class="bfc-ws__faq-q" aria-expanded="false">
+          <span>How does the warranty work for my customers?</span>
+          <span class="bfc-ws__faq-icon" aria-hidden="true"></span>
+        </button>
+        <div class="bfc-ws__faq-a">
+          All cameras come with a 90-day warranty through BFC. How warranty claims are handled is up to you — your shop can choose to manage the process on behalf of your customers (collect the camera, ship it to us, we repair or replace and return it), or you can have customers contact us directly. Either way works, and we'll accommodate whatever arrangement makes most sense for your shop. One consistent rule: the customer is always responsible for return shipping costs on warranty claims from wholesale orders — that's separate from BFC's direct retail warranty policy.
+        </div>
+      </div>
+
+      <div class="bfc-ws__faq-item">
+        <button class="bfc-ws__faq-q" aria-expanded="false">
+          <span>Can I start with just one camera to try it out?</span>
+          <span class="bfc-ws__faq-icon" aria-hidden="true"></span>
+        </button>
+        <div class="bfc-ws__faq-a">
+          Yes. There's no minimum order to get started. A single unit at Standard tier pricing lets you see how it moves in your shop before committing to anything larger. Most of our wholesale partners start with 1–3 units and scale from there.
+        </div>
+      </div>
+
+      <div class="bfc-ws__faq-item">
+        <button class="bfc-ws__faq-q" aria-expanded="false">
+          <span>What's the difference between Grade A and Grade B?</span>
+          <span class="bfc-ws__faq-icon" aria-hidden="true"></span>
+        </button>
+        <div class="bfc-ws__faq-a">
+          Grade refers to cosmetic condition only. Grade A cameras have minimal wear and look close to new. Grade B cameras may show light signs of use — small scuffs or brassing — but are mechanically identical to Grade A and carry the same 90-day warranty. Grade B units are priced roughly 10–15% lower, which can work well for certain retail contexts.
+        </div>
+      </div>
+
+      <div class="bfc-ws__faq-item">
+        <button class="bfc-ws__faq-q" aria-expanded="false">
+          <span>Do you do consignment?</span>
+          <span class="bfc-ws__faq-icon" aria-hidden="true"></span>
+        </button>
+        <div class="bfc-ws__faq-a">
+          Our standard program is wholesale (you purchase outright). We can discuss consignment arrangements for established partners on a case-by-case basis — reach out and we'll talk through what makes sense for your situation.
+        </div>
+      </div>
+
+      <div class="bfc-ws__faq-item">
+        <button class="bfc-ws__faq-q" aria-expanded="false">
+          <span>What's the restocking timeline?</span>
+          <span class="bfc-ws__faq-icon" aria-hidden="true"></span>
+        </button>
+        <div class="bfc-ws__faq-a">
+          Most models are available within 2–3 weeks of an order being placed. High-demand models (AE-1 Program, Pentax K1000, Olympus Stylus) move fast — we recommend placing orders before you're out of stock rather than after. Large-tier partners get priority allocation on restocks.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  {%- comment -%}── CONTACT ──{%- endcomment -%}
+  <div class="bfc-ws__section" id="bfc-ws-inquiry">
+    <p class="bfc-ws__section-label">Get in touch</p>
+    <h2>Interested? Let's talk.</h2>
+    <p class="bfc-ws__section-intro">
+      Reach out directly and we'll get back to you within 1–2 business days with our full catalog and pricing sheet.
+    </p>
+    <div class="bfc-ws__contact">
+      <button
+        class="bfc-ws__btn"
+        id="bfc-ws-copy-btn"
+        onclick="
+          navigator.clipboard.writeText('griffin@brooklynfilmcamera.com').then(function() {
+            var fb = document.getElementById('bfc-ws-copy-fb');
+            fb.classList.add('is-visible');
+            setTimeout(function() { fb.classList.remove('is-visible'); }, 2000);
+          });
+        "
+      >
+        Copy email address
+      </button>
+      <span class="bfc-ws__copy-feedback" id="bfc-ws-copy-fb">Copied — griffin@brooklynfilmcamera.com</span>
+    </div>
+  </div>
+
+  {%- comment -%}── CTA STRIP ──{%- endcomment -%}
+  <div class="bfc-ws__cta-strip">
+    <div>
+      <h3>Ready to look at the full catalog?</h3>
+      <p>Drop us a line and we'll send over pricing, available models, and product photography.</p>
+    </div>
+    <a href="#bfc-ws-inquiry" class="bfc-ws__btn bfc-ws__btn--light">Get in touch</a>
+  </div>
+
+</div>
+
+<script>
+  (function () {
+    var items = document.querySelectorAll('.bfc-ws__faq-item');
+    items.forEach(function (item) {
+      var btn = item.querySelector('.bfc-ws__faq-q');
+      btn.addEventListener('click', function () {
+        var isOpen = item.classList.contains('is-open');
+        items.forEach(function (i) {
+          i.classList.remove('is-open');
+          i.querySelector('.bfc-ws__faq-q').setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('is-open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    var ctaLink = document.querySelector('.bfc-ws__btn--light[href="#bfc-ws-inquiry"]');
+    if (ctaLink) {
+      ctaLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        var target = document.getElementById('bfc-ws-inquiry');
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+  })();
+</script>

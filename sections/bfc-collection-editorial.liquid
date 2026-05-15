@@ -1,0 +1,462 @@
+{% comment %}
+BFC — Category Covers Strip (with Collection-Cover styling controls)
++ Header (eyebrow/title/subtitle)
++ Scroll hint link (plain text "Shop all", not bold) with smooth scrolling
++ Mobile-only item limit (hide items after X)
+(no arrow)
++ Desktop-only aspect override, including "Short (≈70%)" and "Skinny (≈35%)"
++ RESTORED: Original "Serif/Sans (Univers)" font dropdown for header
++ KEPT: Header font size controls
++ ADDED: Header font weight control
++ FIX: Force-remove borders from header
+{% endcomment %}
+
+{% liquid
+  assign heading_font_stack = '"Adobe Garamond Pro", "Garamond", "Times New Roman", serif'
+  assign sans_font_stack = '"Univers", "Helvetica Neue", Helvetica, Arial, sans-serif'
+  if section.settings.heading_font == 'sans'
+    assign heading_font_stack = sans_font_stack
+  endif
+
+  assign badge_font_stack = sans_font_stack
+  if section.settings.badge_font == 'serif'
+    assign badge_font_stack = heading_font_stack
+  endif
+
+  assign badge_transform_class = ''
+  if section.settings.badge_transform == 'upper'
+    assign badge_transform_class = 'badge--upper'
+  endif
+%}
+
+<section id="bfc-catstrip-{{ section.id }}" class="bfc-category-strip" aria-label="Sub-collections">
+  {%- style -%}
+  #bfc-catstrip-{{ section.id }}{
+    --bg: {{ section.settings.background_color }};
+    --text: {{ section.settings.text_color }};
+    --gap: {{ section.settings.gap_px }}px;
+    --radius: {{ section.settings.media_radius }}px;
+    --badge-bg: {{ section.settings.badge_background }};
+    --badge-text: {{ section.settings.badge_text_color }};
+    --badge-pad: {{ section.settings.badge_padding }}px;
+    --badge-radius: {{ section.settings.badge_radius }}px;
+    --overlay-color: {{ section.settings.overlay_color }};
+    --overlay-opacity: {{ section.settings.overlay_opacity }};
+    
+    /* Header Font Vars */
+    --header-title-font-family: {{ heading_font_stack }};
+    --header-title-font-weight: {{ section.settings.header_font_weight }};
+    --header-title-font-size-mobile: {{ section.settings.header_title_font_size_mobile }}rem;
+    --header-title-font-size-desktop: {{ section.settings.header_title_font_size_desktop }}rem;
+    
+    color: var(--text);
+    background: var(--bg);
+    padding: {{ section.settings.padding_top }}px clamp(16px, 4vw, 48px) {{ section.settings.padding_bottom }}px;
+  }
+
+  /* Header */
+  #bfc-catstrip-{{ section.id }} .header{
+    display:grid; gap:.5rem; margin-bottom: clamp(12px, 2.5vw, 24px);
+    max-width: {{ section.settings.header_max_width }}px;
+    border: none; /* <-- FIX: Override global theme styles */
+    {% case section.settings.header_align %}
+      {% when 'center' %} justify-items:center; text-align:center;
+      {% when 'right' %}  justify-items:end; text-align:right;
+      {% else %}           justify-items:start; text-align:left;
+    {% endcase %}
+  }
+  #bfc-catstrip-{{ section.id }} .eyebrow{
+    font-family: {{ sans_font_stack }};
+    font-size:.85rem; letter-spacing:.18em; text-transform:uppercase; opacity:.75; margin:0;
+  }
+  #bfc-catstrip-{{ section.id }} .heading{
+    font-family: var(--header-title-font-family);
+    font-weight: var(--header-title-font-weight);
+    font-style: normal;
+    font-size: var(--header-title-font-size-mobile);
+    margin:0;
+    line-height:1.15;
+    border: none; /* <-- FIX: Override global theme styles */
+  }
+  #bfc-catstrip-{{ section.id }} .subhead{
+    font-family: {{ sans_font_stack }};
+    font-size: 1rem; line-height:1.55; opacity:.85; margin:0;
+  }
+  #bfc-catstrip-{{ section.id }} .header-divider{
+    height:1px; width: 64px; background: currentColor; opacity:.18;
+    {% if section.settings.header_align == 'center' %} justify-self:center;
+    {% elsif section.settings.header_align == 'right' %} justify-self:end;
+    {% else %} justify-self:start; {% endif %}
+    margin-top: .25rem;
+  }
+
+  /* Grid */
+  #bfc-catstrip-{{ section.id }} .grid{
+    display:grid;
+    gap: var(--gap);
+    grid-template-columns: repeat({{ section.settings.columns_mobile }}, minmax(0,1fr));
+    align-items:start;
+  }
+  @media (min-width: 750px){
+    #bfc-catstrip-{{ section.id }} .grid{
+      grid-template-columns: repeat({{ section.settings.columns_tablet }}, minmax(0,1fr));
+    }
+    /* Apply desktop header font size */
+    #bfc-catstrip-{{ section.id }} .heading{
+      font-size: var(--header-title-font-size-desktop);
+    }
+  }
+  @media (min-width: 990px){
+    #bfc-catstrip-{{ section.id }} .grid{
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, minmax(0,1fr));
+    }
+  }
+
+  /* Mobile-only limit: hide items after N */
+  @media (max-width: 749px){
+    #bfc-catstrip-{{ section.id }} .grid > *:nth-child(n+{{ section.settings.mobile_show_count | plus: 1 }}){ display:none; }
+  }
+
+  /* Tiles */
+  #bfc-catstrip-{{ section.id }} .tile{
+    display:flex;flex-direction:column;gap:8px;text-decoration:none;color:inherit;
+  }
+  #bfc-catstrip-{{ section.id }} .media{
+    position:relative;overflow:hidden;border-radius: var(--radius);background:#eee;
+  }
+
+  /* Base aspect (mobile/tablet): square / portrait / natural (fallback 4:5) */
+  #bfc-catstrip-{{ section.id }} .media::before{content:"";display:block;
+    {% case section.settings.media_aspect %}
+      {% when 'square' %}padding-top:100%;
+      {% when 'portrait' %}padding-top:125%;
+      {% else %}padding-top:125%;
+    {% endcase %}
+  }
+
+  /* Desktop override (optional) */
+  @media (min-width: 990px){
+    #bfc-catstrip-{{ section.id }} .media::before{
+      {% if section.settings.media_aspect_desktop != 'inherit' %}
+        {% case section.settings.media_aspect_desktop %}
+          {% when 'square' %}padding-top:100%;
+          {% when 'portrait' %}padding-top:125%;
+          {% when 'short' %}padding-top:70%;
+          {% when 'skinny' %}padding-top:35%;
+        {% endcase %}
+      {% endif %}
+    }
+  }
+
+  #bfc-catstrip-{{ section.id }} .media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+
+  /* Optional global overlay + per-tile tint */
+  #bfc-catstrip-{{ section.id }} .media .overlay{position:absolute;inset:0;background:var(--overlay-color);
+    opacity: calc(var(--overlay-opacity) / 100);pointer-events:none}
+  #bfc-catstrip-{{ section.id }} .media[data-tint]::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background: rgba(0,0,0, calc(var(--tile-tint,0)/100));
+  }
+
+  #bfc-catstrip-{{ section.id }} .copy{ display:flex;flex-direction:column;gap:4px; font-family: {{ sans_font_stack }}; }
+  #bfc-catstrip-{{ section.id }} .title{ font-family: {{ sans_font_stack }}; font-weight:600; letter-spacing:.2px; }
+  #bfc-catstrip-{{ section.id }} .subtitle{ font-size:.9rem;opacity:.78;line-height:1.35; }
+
+  /* Badge */
+  #bfc-catstrip-{{ section.id }} .badge{
+    display:inline-flex;align-items:center;justify-content:center;
+    background: var(--badge-bg); color: var(--badge-text);
+    padding: 0 var(--badge-pad); border-radius: var(--badge-radius);
+    font-family: {{ badge_font_stack }};
+    font-size: .82rem; letter-spacing: .08em; line-height: 1.2; width: fit-content; position: relative;
+  }
+  #bfc-catstrip-{{ section.id }} .badge.badge--upper{text-transform:uppercase}
+  #bfc-catstrip-{{ section.id }} .badge.style-outline{ background:transparent; border:1px solid currentColor; color: var(--badge-bg) }
+  #bfc-catstrip-{{ section.id }} .badge.style-underline{ background:transparent; color: var(--badge-bg); border-radius:0; padding-inline:0 }
+  #bfc-catstrip-{{ section.id }} .badge.style-underline::after{ content:""; position:absolute; inset-inline:0; bottom:-0.15em; height:2px; background: currentColor }
+
+  /* Per-tile text alignment */
+  #bfc-catstrip-{{ section.id }} .text-left  .copy{ text-align:left;   align-items:flex-start }
+  #bfc-catstrip-{{ section.id }} .text-center.copy-center .copy,
+  #bfc-catstrip-{{ section.id }} .text-center .copy{ text-align:center; align-items:center }
+  #bfc-catstrip-{{ section.id }} .text-right .copy{ text-align:right;  align-items:flex-end }
+
+  /* Scroll hint (plain text, not bold, no arrow) */
+  #bfc-catstrip-{{ section.id }} .scroll-hint{
+    margin-top: clamp(12px, 2.5vw, 20px);
+    display:inline-flex;
+    align-items:center;
+    gap:.5rem;
+    font-family: {{ sans_font_stack }};
+    font-size:1.05rem;
+    font-weight: normal;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    color: inherit;
+    opacity:.95;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+  }
+  {%- endstyle -%}
+
+  {%- if section.settings.header_enable -%}
+    <header class="header">
+      {%- if section.settings.header_eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.header_eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.header_title != blank -%}
+        <h2 class="heading">{{ section.settings.header_title }}</h2>
+      {%- endif -%}
+      {%- if section.settings.header_subtitle != blank -%}
+        <p class="subhead">{{ section.settings.header_subtitle }}</p>
+      {%- endif -%}
+      {%- if section.settings.header_divider -%}
+        <span class="header-divider" aria-hidden="true"></span>
+      {%- endif -%}
+    </header>
+  {%- endif -%}
+
+  <div class="grid">
+    {% for block in section.blocks %}
+      {% if block.type == 'category_cover' %}
+        {% assign cat_image = block.settings.image %}
+        {% assign has_cat_image = cat_image %}
+        {% assign badge_text = block.settings.badge | default: section.settings.badge_text %}
+
+        <a class="tile text-{{ block.settings.text_align }}" href="{{ block.settings.url | default: '#' }}" {{ block.shopify_attributes }}>
+          <div
+            class="media{% unless has_cat_image %} media--empty{% endunless %}"
+            style="--tile-tint: {{ block.settings.bg_tint | default: 0 }}%"
+            {% if block.settings.bg_tint > 0 %} data-tint{% endif %}
+          >
+            {% if has_cat_image %}
+              <img
+                src="{{ cat_image | image_url: width: 600 }}"
+                srcset="
+                  {{ cat_image | image_url: width: 300 }} 300w,
+                  {{ cat_image | image_url: width: 450 }} 450w,
+                  {{ cat_image | image_url: width: 600 }} 600w,
+                  {{ cat_image | image_url: width: 900 }} 900w
+                "
+                sizes="(min-width: 990px) calc(100vw/{{ section.settings.columns_desktop }}), (min-width: 750px) calc(100vw/{{ section.settings.columns_tablet }}), calc(100vw/{{ section.settings.columns_mobile }})"
+                width="{{ cat_image.width }}"
+                height="{{ cat_image.height }}"
+                loading="lazy"
+                alt="{{ cat_image.alt | default: block.settings.title | escape }}"
+              >
+              {% if section.settings.enable_media_overlay %}
+                <span class="overlay" aria-hidden="true"></span>
+              {% endif %}
+              {% if badge_text != blank and section.settings.badge_position == 'over_media' %}
+                <span class="badge {{ badge_transform_class }} style-{{ section.settings.badge_style }}" style="position:absolute;top:0.75rem;left:0.75rem;">
+                  {{ badge_text }}
+                </span>
+              {% endif %}
+            {% else %}
+              <span class="title" style="display:flex;align-items:center;justify-content:center;height:100%;padding:24px;">
+                {{ block.settings.title }}
+              </span>
+            {% endif %}
+          </div>
+
+          <div class="copy {% if block.settings.text_align == 'center' %}copy-center{% endif %}">
+            {% if badge_text != blank and section.settings.badge_position == 'above_title' %}
+              <span class="badge {{ badge_transform_class }} style-{{ section.settings.badge_style }}">{{ badge_text }}</span>
+            {% endif %}
+
+            <span class="title">{{ block.settings.title }}</span>
+
+            {% if badge_text != blank and section.settings.badge_position == 'inline_title' %}
+              <span class="badge {{ badge_transform_class }} style-{{ section.settings.badge_style }}" style="margin-inline-start:.6rem;">
+                {{ badge_text }}
+              </span>
+            {% endif %}
+
+            {% if block.settings.subtitle != blank %}
+              <span class="subtitle">{{ block.settings.subtitle }}</span>
+            {% endif %}
+
+            {% if badge_text != blank and section.settings.badge_position == 'below_title' %}
+              <span class="badge {{ badge_transform_class }} style-{{ section.settings.badge_style }}">{{ badge_text }}</span>
+            {% endif %}
+          </div>
+        </a>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  {%- if section.settings.scroll_hint_enable -%}
+    <div style="{% case section.settings.header_align %}{% when 'center' %}text-align:center{% when 'right' %}text-align:right{% else %}text-align:left{% endcase %};">
+      <a class="scroll-hint" href="#after-bfc-catstrip-{{ section.id }}">
+        {{ section.settings.scroll_hint_label }}
+      </a>
+    </div>
+  {%- endif -%}
+</section>
+
+<span id="after-bfc-catstrip-{{ section.id }}"></span>
+
+<script>
+  (function(){
+    var sectionId = {{ section.id | json }};
+    var link = document.querySelector('#bfc-catstrip-' + sectionId + ' .scroll-hint');
+    if (!link) return;
+    link.addEventListener('click', function(e){
+      var href = link.getAttribute('href');
+      if (!href || href.charAt(0) !== '#') return;
+      var target = document.querySelector(href);
+      if (target){
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Editorial Collections",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    /* Header controls */
+    { "type": "checkbox", "id": "header_enable", "label": "Show header", "default": true },
+    { "type": "text", "id": "header_eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "header_title", "label": "Title", "default": "Shop by category" },
+    { "type": "text", "id": "header_subtitle", "label": "Subtitle" },
+    { "type": "checkbox", "id": "header_divider", "label": "Show small divider", "default": false },
+    { "type": "select", "id": "header_align", "label": "Header alignment", "default": "left", "options": [
+      { "value": "left", "label": "Left" },
+      { "value": "center", "label": "Center" },
+      { "value": "right", "label": "Right" }
+    ]},
+    { "type": "range", "id": "header_max_width", "label": "Header max width", "default": 820, "min": 420, "max": 1200, "step": 20, "unit": "px" },
+    {
+      "type": "select",
+      "id": "heading_font",
+      "label": "Header title font style",
+      "default": "serif",
+      "options": [
+        { "value": "serif", "label": "Serif (Garamond-like)" },
+        { "value": "sans", "label": "Sans (Univers-like)" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "header_title_font_size_mobile",
+      "label": "Header title size (Mobile)",
+      "min": 1.2,
+      "max": 3,
+      "step": 0.1,
+      "unit": "rem",
+      "default": 1.8
+    },
+    {
+      "type": "range",
+      "id": "header_title_font_size_desktop",
+      "label": "Header title size (Desktop)",
+      "min": 1.5,
+      "max": 4.5,
+      "step": 0.1,
+      "unit": "rem",
+      "default": 2.2
+    },
+    {
+      "type": "select",
+      "id": "header_font_weight",
+      "label": "Header font weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Bold" }
+      ],
+      "default": "600"
+    },
+
+    /* Grid sizing */
+    { "type": "range", "id": "columns_mobile",  "label": "Columns (mobile)",  "min": 1, "max": 3, "step": 1, "default": 2 },
+    { "type": "range", "id": "columns_tablet",  "label": "Columns (tablet)",  "min": 2, "max": 4, "step": 1, "default": 3 },
+    { "type": "range", "id": "columns_desktop", "label": "Columns (desktop)", "min": 3, "max": 8, "step": 1, "default": 6 },
+
+    /* Mobile limit */
+    { "type": "range", "id": "mobile_show_count", "label": "Show this many on mobile", "min": 1, "max": 12, "step": 1, "default": 6 },
+
+    /* Spacing & colors */
+    { "type": "range", "id": "gap_px", "label": "Grid gap (px)", "min": 4, "max": 28, "step": 1, "default": 12 },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "default": 40, "min": 0, "max": 200, "step": 4, "unit": "px" },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "default": 40, "min": 0, "max": 200, "step": 4, "unit": "px" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#FFFFFF" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#1C1C1C" },
+
+    /* Media and overlay */
+    { "type": "select", "id": "media_aspect", "label": "Image aspect ratio (mobile/tablet)", "default": "portrait", "options": [
+      { "value": "square", "label": "Square (1:1)" },
+      { "value": "portrait", "label": "Portrait (4:5)" },
+      { "value": "natural", "label": "Natural (fallback 4:5 box)" }
+    ]},
+    { "type": "select", "id": "media_aspect_desktop", "label": "Desktop aspect override", "default": "inherit", "options": [
+      { "value": "inherit", "label": "Inherit mobile/tablet" },
+      { "value": "square", "label": "Square (1:1)" },
+      { "value": "portrait", "label": "Portrait (4:5)" },
+      { "value": "short", "label": "Short row (≈ 70% height)" },
+      { "value": "skinny", "label": "Skinny row (≈ 35% height)" }
+    ]},
+    { "type": "range", "id": "media_radius", "label": "Image corner radius", "default": 16, "min": 0, "max": 60, "step": 2, "unit": "px" },
+    { "type": "checkbox", "id": "enable_media_overlay", "label": "Global image overlay tint", "default": false },
+    { "type": "color", "id": "overlay_color", "label": "Overlay color", "default": "#000000" },
+    { "type": "range", "id": "overlay_opacity", "label": "Overlay opacity", "default": 25, "min": 0, "max": 90, "step": 5 },
+
+    /* Typography & badges */
+    { "type": "text", "id": "badge_text", "label": "Fallback badge text", "info": "Used when a block’s badge is empty." },
+    { "type":"select", "id": "badge_font", "label": "Badge font style", "default": "sans", "options": [
+      { "value": "sans", "label": "Sans serif" },
+      { "value": "serif", "label": "Serif" }
+    ]},
+    { "type": "select", "id": "badge_transform", "label": "Badge letter case", "default": "upper", "options": [
+      { "value": "upper", "label": "Uppercase" },
+      { "value": "normal", "label": "As typed" }
+    ]},
+    { "type": "select", "id": "badge_position", "label": "Badge position", "default": "above_title", "options": [
+      { "value": "above_title", "label": "Above title" },
+      { "value": "inline_title", "label": "Inline with title" },
+      { "value": "below_title", "label": "Below title" },
+      { "value": "over_media", "label": "Over image" }
+    ]},
+    { "type": "select", "id": "badge_style", "label": "Badge style", "default": "solid", "options": [
+      { "value": "solid", "label": "Solid" },
+      { "value": "outline", "label": "Outline" },
+      { "value": "underline", "label": "Underline" }
+    ]},
+    { "type": "color", "id": "badge_background", "label": "Badge background color", "default": "#1C1C1C" },
+    { "type": "color", "id": "badge_text_color", "label": "Badge text color", "default": "#FFFFFF" },
+    { "type": "range", "id": "badge_padding", "label": "Badge horizontal padding", "default": 12, "min": 6, "max": 24, "step": 2, "unit": "px" },
+    { "type": "range", "id": "badge_radius", "label": "Badge radius", "default": 28, "min": 0, "max": 60, "step": 4, "unit": "px" },
+
+    /* Scroll hint */
+    { "type": "checkbox", "id": "scroll_hint_enable", "label": "Show scroll hint button", "default": true },
+    { "type": "text", "id": "scroll_hint_label", "label": "Scroll hint label", "default": "Shop all" }
+  ],
+  "blocks": [
+    {
+      "type": "category_cover",
+      "name": "Category cover",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "text", "id": "subtitle", "label": "Subtitle" },
+        { "type": "url", "id": "url", "label": "Link" },
+        { "type": "text", "id": "badge", "label": "Badge (overrides fallback)" },
+        { "type": "range", "id": "bg_tint", "label": "Per-tile darken (tint %)", "min": 0, "max": 80, "step": 5, "default": 0 },
+        { "type": "select", "id": "text_align", "label": "Text alignment", "default": "left", "options": [
+          { "value": "left", "label": "Left" },
+          { "value": "center", "label": "Center" },
+          { "value": "right", "label": "Right" }
+        ] }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "Category covers strip (styled)" }
+  ]
+}
+{% endschema %}

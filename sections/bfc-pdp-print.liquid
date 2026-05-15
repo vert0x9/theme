@@ -1,0 +1,980 @@
+{% comment %}
+  BFC Print Configurator — bfc-pdp-print.liquid
+  Cloudinary cloud: dj20glh2k | Upload preset: bfc-prints
+  Product ID: 8526903541932
+{% endcomment %}
+
+<style>
+/* Cropper.js v1.6.2 CSS */
+.cropper-container{-webkit-touch-callout:none;direction:ltr;font-size:0;line-height:0;position:relative;-ms-touch-action:none;touch-action:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.cropper-container img{backface-visibility:hidden;display:block;height:100%;image-orientation:0deg;max-height:none!important;max-width:none!important;min-height:0!important;min-width:0!important;width:100%}.cropper-canvas,.cropper-crop-box,.cropper-drag-box,.cropper-modal,.cropper-wrap-box{bottom:0;left:0;position:absolute;right:0;top:0}.cropper-canvas,.cropper-wrap-box{overflow:hidden}.cropper-drag-box{background-color:#fff;opacity:0}.cropper-modal{background-color:#000;opacity:.5}.cropper-view-box{display:block;height:100%;outline:1px solid #39f;outline-color:rgba(51,153,255,.75);overflow:hidden;width:100%}.cropper-dashed{border:0 dashed #eee;display:block;opacity:.5;position:absolute}.cropper-dashed.dashed-h{border-bottom-width:1px;border-top-width:1px;height:33.33333%;left:0;top:33.33333%;width:100%}.cropper-dashed.dashed-v{border-left-width:1px;border-right-width:1px;height:100%;left:33.33333%;top:0;width:33.33333%}.cropper-center{display:block;height:0;left:50%;opacity:.75;position:absolute;top:50%;width:0}.cropper-center:after,.cropper-center:before{background-color:#eee;content:" ";display:block;position:absolute}.cropper-center:before{height:1px;left:-3px;top:0;width:7px}.cropper-center:after{height:7px;left:0;top:-3px;width:1px}.cropper-face,.cropper-line,.cropper-point{display:block;height:100%;opacity:.1;position:absolute;width:100%}.cropper-face{background-color:#fff;left:0;top:0}.cropper-line{background-color:#39f}.cropper-line.line-e{cursor:ew-resize;right:-3px;top:0;width:5px}.cropper-line.line-n{cursor:ns-resize;height:5px;left:0;top:-3px}.cropper-line.line-w{cursor:ew-resize;left:-3px;top:0;width:5px}.cropper-line.line-s{bottom:-3px;cursor:ns-resize;height:5px;left:0}.cropper-point{background-color:#39f;height:5px;opacity:.75;width:5px}.cropper-point.point-e{cursor:ew-resize;margin-top:-3px;right:-3px;top:50%}.cropper-point.point-n{cursor:ns-resize;left:50%;margin-left:-3px;top:-3px}.cropper-point.point-w{cursor:ew-resize;left:-3px;margin-top:-3px;top:50%}.cropper-point.point-s{bottom:-3px;cursor:s-resize;left:50%;margin-left:-3px}.cropper-point.point-ne{cursor:nesw-resize;right:-3px;top:-3px}.cropper-point.point-nw{cursor:nwse-resize;left:-3px;top:-3px}.cropper-point.point-sw{bottom:-3px;cursor:nesw-resize;left:-3px}.cropper-point.point-se{bottom:-3px;cursor:nwse-resize;height:20px;opacity:1;right:-3px;width:20px}@media (min-width:768px){.cropper-point.point-se{height:15px;width:15px}}@media (min-width:992px){.cropper-point.point-se{height:10px;width:10px}}@media (min-width:1200px){.cropper-point.point-se{height:5px;opacity:.75;width:5px}}.cropper-point.point-se:before{background-color:#39f;bottom:-50%;content:" ";display:block;height:200%;opacity:0;position:absolute;right:-50%;width:200%}.cropper-invisible{opacity:0}.cropper-bg{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC")}.cropper-hide{display:block;height:0;position:absolute;width:0}.cropper-hidden{display:none!important}.cropper-move{cursor:move}.cropper-crop{cursor:crosshair}.cropper-disabled .cropper-drag-box,.cropper-disabled .cropper-face,.cropper-disabled .cropper-line,.cropper-disabled .cropper-point{cursor:not-allowed}
+
+/* ═══════════════════════════════════════
+   BFC PRINT CONFIGURATOR
+   ═══════════════════════════════════════ */
+:root {
+  --bfc-or: #E36E15;
+  --bfc-go: #F4A027;
+  --bfc-ce: #ABCC99;
+  --bfc-cv: #F8F6EE;
+  --bfc-bk: #202009;
+  --bfc-ch: #4E4741;
+  --bfc-gr: #E3DDDA;
+}
+
+.bfc-print {
+  font-family: 'Poppins', sans-serif;
+  color: var(--bfc-bk);
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+}
+
+.bfc-print *,
+.bfc-print *::before,
+.bfc-print *::after { box-sizing: border-box; }
+
+/* Section titles */
+.bfc-print__step { margin-bottom: 24px; }
+.bfc-print__step-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.bfc-print__step-num {
+  width: 28px; height: 28px;
+  background: var(--bfc-or);
+  color: var(--bfc-cv);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.bfc-print__step-num--inactive { background: var(--bfc-gr); color: var(--bfc-ch); }
+.bfc-print__step-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--bfc-bk);
+}
+.bfc-print__step-title--inactive { color: var(--bfc-ch); }
+
+/* Panels */
+.bfc-print__panel {
+  background: #fff;
+  border: 1px solid var(--bfc-gr);
+  overflow: hidden;
+}
+
+/* Upload zone */
+.bfc-print__upload {
+  border: 2px dashed var(--bfc-gr);
+  padding: 56px 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  background: var(--bfc-cv);
+}
+.bfc-print__upload:hover,
+.bfc-print__upload.dragover {
+  border-color: var(--bfc-or);
+  background: #fdf3ec;
+}
+.bfc-print__upload svg { margin-bottom: 10px; opacity: 0.35; }
+.bfc-print__upload p {
+  font-size: 14px;
+  color: var(--bfc-ch);
+  margin: 4px 0 0;
+}
+.bfc-print__upload-cta {
+  font-weight: 600;
+  color: var(--bfc-or);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.bfc-print__upload-types {
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  color: var(--bfc-ch);
+  margin-top: 8px;
+  opacity: 0.5;
+}
+#bfcFileInput { display: none; }
+
+/* Crop layout */
+.bfc-print__crop-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+}
+@media (max-width: 860px) {
+  .bfc-print__crop-layout,
+  .bfc-print__border-layout { grid-template-columns: 1fr; }
+}
+
+.bfc-print__crop-area {
+  background: var(--bfc-bk);
+  height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+.bfc-print__crop-area img {
+  display: block;
+  max-width: 100%;
+  max-height: 480px;
+}
+.bfc-print__crop-area .cropper-container { max-height: 480px !important; }
+
+.bfc-print__sidebar {
+  border-left: 1px solid var(--bfc-gr);
+  display: flex;
+  flex-direction: column;
+}
+.bfc-print__sidebar-section {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--bfc-gr);
+}
+.bfc-print__sidebar-section:last-child { border-bottom: none; }
+
+/* File bar */
+.bfc-print__file-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: var(--bfc-cv);
+  font-size: 12px;
+  border-bottom: 1px solid var(--bfc-gr);
+}
+.bfc-print__file-name {
+  font-weight: 700;
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 140px;
+}
+.bfc-print__file-meta { color: var(--bfc-ch); font-size: 11px; }
+.bfc-print__file-change {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--bfc-or);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  text-decoration: underline;
+}
+
+/* Control labels */
+.bfc-print__label {
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--bfc-ch);
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* Size inputs */
+.bfc-print__size-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+.bfc-print__size-row input {
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  text-align: center;
+  padding: 8px;
+  border: 1px solid var(--bfc-gr);
+  background: var(--bfc-cv);
+  width: 100%;
+  color: var(--bfc-bk);
+}
+.bfc-print__size-row input:focus { outline: none; border-color: var(--bfc-or); }
+.bfc-print__size-row span { font-size: 14px; color: var(--bfc-ch); }
+.bfc-print__size-unit {
+  font-size: 10px;
+  color: var(--bfc-ch);
+  text-align: right;
+  margin-top: 2px;
+}
+
+/* Ratio grid */
+.bfc-print__ratio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.bfc-print__ratio-btn {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 8px;
+  border: 1px solid var(--bfc-gr);
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  color: var(--bfc-bk);
+}
+.bfc-print__ratio-btn:hover { border-color: var(--bfc-or); background: #fdf3ec; }
+.bfc-print__ratio-btn.active { border-color: var(--bfc-or); background: #fdf3ec; color: var(--bfc-or); font-weight: 600; }
+
+/* Orientation */
+.bfc-print__orient-row { display: flex; gap: 4px; }
+.bfc-print__orient-btn {
+  flex: 1; padding: 7px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px; font-weight: 500;
+  border: 1px solid var(--bfc-gr);
+  background: #fff;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s;
+  color: var(--bfc-bk);
+}
+.bfc-print__orient-btn:hover { border-color: var(--bfc-or); }
+.bfc-print__orient-btn.active { border-color: var(--bfc-or); background: #fdf3ec; color: var(--bfc-or); font-weight: 600; }
+
+/* DPI bar */
+.bfc-print__dpi {
+  padding: 10px 16px;
+  font-size: 12px;
+  line-height: 1.4;
+  display: none;
+  align-items: flex-start;
+  gap: 8px;
+}
+.bfc-print__dpi svg { flex-shrink: 0; margin-top: 1px; }
+.bfc-print__dpi.warn { display: flex; background: #FFF3E0; color: #E65100; border-top: 1px solid #FFCC80; }
+.bfc-print__dpi.ok { display: flex; background: #E8F5E9; color: #2D8A4E; border-top: 1px solid #A5D6A7; }
+
+/* Border layout */
+.bfc-print__border-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+}
+.bfc-print__preview-area {
+  background: repeating-conic-gradient(var(--bfc-gr) 0% 25%, var(--bfc-cv) 0% 50%) 50% / 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36px;
+  min-height: 380px;
+}
+.bfc-print__preview-frame {
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  line-height: 0;
+}
+.bfc-print__preview-frame canvas { display: block; }
+.bfc-print__preview-empty { text-align: center; color: var(--bfc-ch); font-size: 14px; opacity: 0.5; }
+
+/* Toggle */
+.bfc-print__toggle-row { display: flex; align-items: center; gap: 10px; }
+.bfc-print__toggle {
+  position: relative; display: block; width: 40px; height: 22px; min-width: 40px; min-height: 22px;
+  background: var(--bfc-gr); cursor: pointer; transition: background 0.2s; flex-shrink: 0;
+  overflow: hidden;
+}
+.bfc-print__toggle.on { background: var(--bfc-or); }
+.bfc-print__toggle-knob {
+  position: absolute; top: 3px; left: 3px;
+  width: 16px; height: 16px; background: white;
+  transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  pointer-events: none;
+}
+.bfc-print__toggle.on .bfc-print__toggle-knob { transform: translateX(18px); }
+.bfc-print__toggle-label { font-size: 13px; font-weight: 500; }
+
+.bfc-print__border-controls { display: none; margin-top: 14px; }
+.bfc-print__border-controls.visible { display: block; }
+
+/* Slider */
+.bfc-print__slider-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.bfc-print__slider-row input[type="range"] {
+  flex: 1; -webkit-appearance: none; height: 4px;
+  background: var(--bfc-gr); outline: none;
+}
+.bfc-print__slider-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 16px; height: 16px;
+  background: var(--bfc-or); cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.bfc-print__slider-val { font-size: 12px; min-width: 36px; text-align: right; }
+
+/* Swatches */
+.bfc-print__color-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.bfc-print__swatch {
+  width: 26px; height: 26px;
+  border: 2px solid transparent; cursor: pointer; transition: all 0.15s;
+}
+.bfc-print__swatch:hover { transform: scale(1.15); }
+.bfc-print__swatch.active { border-color: var(--bfc-or); box-shadow: 0 0 0 2px #fdf3ec; }
+.bfc-print__swatch--white { box-shadow: inset 0 0 0 1px var(--bfc-gr); }
+.bfc-print__swatch--white.active { box-shadow: inset 0 0 0 1px var(--bfc-gr), 0 0 0 2px #fdf3ec; border-color: var(--bfc-or); }
+.bfc-print__custom-color {
+  width: 26px; height: 26px; border: none; cursor: pointer; padding: 0; background: none; overflow: hidden;
+}
+.bfc-print__custom-color::-webkit-color-swatch-wrapper { padding: 0; }
+.bfc-print__custom-color::-webkit-color-swatch { border: 1px solid var(--bfc-gr); }
+
+/* Pricing */
+.bfc-print__price-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
+.bfc-print__price-label { font-size: 13px; color: var(--bfc-ch); }
+.bfc-print__price-value { font-size: 13px; font-weight: 600; }
+.bfc-print__price-total {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding-top: 12px; margin-top: 12px; border-top: 1px solid var(--bfc-gr);
+}
+.bfc-print__price-total-label { font-size: 14px; font-weight: 600; }
+.bfc-print__price-total-amount {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px; font-weight: 700; color: var(--bfc-or);
+}
+
+/* ATC */
+.bfc-print__atc {
+  width: 100%;
+  padding: 14px;
+  background: var(--bfc-bk);
+  color: var(--bfc-cv);
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-top: 14px;
+}
+.bfc-print__atc:hover { background: var(--bfc-ch); }
+.bfc-print__atc:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Section inactive */
+.bfc-print__step--inactive { opacity: 0.4; pointer-events: none; }
+
+/* Upload progress */
+.bfc-print__progress {
+  display: none;
+  margin-top: 14px;
+}
+.bfc-print__progress.visible { display: block; }
+.bfc-print__progress-bar {
+  height: 4px;
+  background: var(--bfc-gr);
+  overflow: hidden;
+}
+.bfc-print__progress-fill {
+  height: 100%;
+  background: var(--bfc-or);
+  width: 0%;
+  transition: width 0.3s;
+}
+.bfc-print__progress-text {
+  font-size: 11px;
+  color: var(--bfc-ch);
+  margin-top: 6px;
+  text-align: center;
+}
+</style>
+
+<div class="bfc-print" data-section-id="{{ section.id }}">
+
+  {%- comment -%} We need the first variant ID for cart/add.js {%- endcomment -%}
+  {%- assign variant_id = product.selected_or_first_available_variant.id -%}
+
+  <!-- STEP 1: Upload &amp; Crop -->
+  <div class="bfc-print__step" id="bfcStep1">
+    <div class="bfc-print__step-head">
+      <div class="bfc-print__step-num">1</div>
+      <div class="bfc-print__step-title">Upload &amp; Crop</div>
+    </div>
+
+    <!-- Upload state -->
+    <div class="bfc-print__panel" id="bfcUploadPanel">
+      <div style="padding:20px;">
+        <div class="bfc-print__upload" id="bfcUploadZone">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <p>Drag & drop your image or <span class="bfc-print__upload-cta">browse files</span></p>
+          <p class="bfc-print__upload-types">JPG, PNG, TIFF, WEBP -- full resolution</p>
+        </div>
+        <div class="bfc-print__progress" id="bfcProgress">
+          <div class="bfc-print__progress-bar"><div class="bfc-print__progress-fill" id="bfcProgressFill"></div></div>
+          <div class="bfc-print__progress-text" id="bfcProgressText">Uploading...</div>
+        </div>
+      </div>
+    </div>
+    <input type="file" id="bfcFileInput" accept="image/jpeg,image/png,image/tiff,image/webp">
+
+    <!-- Crop state -->
+    <div class="bfc-print__panel" id="bfcCropPanel" style="display:none;">
+      <div class="bfc-print__file-bar">
+        <span class="bfc-print__file-name" id="bfcFileName"></span>
+        <span class="bfc-print__file-meta" id="bfcFileMeta"></span>
+        <button class="bfc-print__file-change" id="bfcChangeBtn">Change</button>
+      </div>
+      <div class="bfc-print__crop-layout">
+        <div class="bfc-print__crop-area">
+          <img id="bfcCropImg" src="" alt="Your image">
+        </div>
+        <div class="bfc-print__sidebar">
+          <div class="bfc-print__sidebar-section">
+            <label class="bfc-print__label">Print Size (inches)</label>
+            <div class="bfc-print__size-row">
+              <input type="number" id="bfcPrintW" value="8" min="1" max="60" step="0.5">
+              <span>&times;</span>
+              <input type="number" id="bfcPrintH" value="10" min="1" max="60" step="0.5">
+            </div>
+            <div class="bfc-print__size-unit">width &times; height</div>
+          </div>
+          <div class="bfc-print__sidebar-section">
+            <label class="bfc-print__label">Quick Sizes</label>
+            <div class="bfc-print__ratio-grid" id="bfcRatioGrid">
+              <button class="bfc-print__ratio-btn active" data-w="4" data-h="5">4&times;5</button>
+              <button class="bfc-print__ratio-btn" data-w="5" data-h="7">5&times;7</button>
+              <button class="bfc-print__ratio-btn" data-w="8" data-h="10">8&times;10</button>
+              <button class="bfc-print__ratio-btn" data-w="11" data-h="14">11&times;14</button>
+              <button class="bfc-print__ratio-btn" data-w="16" data-h="20">16&times;20</button>
+              <button class="bfc-print__ratio-btn" data-w="20" data-h="24">20&times;24</button>
+              <button class="bfc-print__ratio-btn" data-w="12" data-h="12">Square</button>
+              <button class="bfc-print__ratio-btn" data-w="0" data-h="0">Free</button>
+            </div>
+          </div>
+          <div class="bfc-print__sidebar-section">
+            <label class="bfc-print__label">Orientation</label>
+            <div class="bfc-print__orient-row">
+              <button class="bfc-print__orient-btn active" data-o="portrait">Portrait</button>
+              <button class="bfc-print__orient-btn" data-o="landscape">Landscape</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="bfc-print__dpi" id="bfcDpiBar"></div>
+    </div>
+  </div>
+
+  <!-- STEP 2: Border &amp; Preview -->
+  <div class="bfc-print__step bfc-print__step--inactive" id="bfcStep2">
+    <div class="bfc-print__step-head">
+      <div class="bfc-print__step-num bfc-print__step-num--inactive" id="bfcS2Num">2</div>
+      <div class="bfc-print__step-title bfc-print__step-title--inactive" id="bfcS2Title">Border &amp; Preview</div>
+    </div>
+    <div class="bfc-print__panel">
+      <div class="bfc-print__border-layout">
+        <div class="bfc-print__preview-area">
+          <div class="bfc-print__preview-empty" id="bfcPrevEmpty">Upload an image to see your print preview</div>
+          <div class="bfc-print__preview-frame" id="bfcPrevFrame" style="display:none;">
+            <canvas id="bfcPrevCanvas"></canvas>
+          </div>
+        </div>
+        <div class="bfc-print__sidebar">
+          <div class="bfc-print__sidebar-section">
+            <div class="bfc-print__toggle-row">
+              <div class="bfc-print__toggle" id="bfcBorderToggle"><span class="bfc-print__toggle-knob"></span></div>
+              <span class="bfc-print__toggle-label">Add border</span>
+            </div>
+            <div class="bfc-print__border-controls" id="bfcBorderControls">
+              <div style="margin-top:12px;">
+                <label class="bfc-print__label">Width</label>
+                <div class="bfc-print__slider-row">
+                  <input type="range" id="bfcBorderW" min="0.125" max="3" step="0.125" value="0.5">
+                  <span class="bfc-print__slider-val" id="bfcBorderWVal">0.5"</span>
+                </div>
+              </div>
+              <div style="margin-top:8px;">
+                <label class="bfc-print__label">Color</label>
+                <div class="bfc-print__color-row">
+                  <div class="bfc-print__swatch bfc-print__swatch--white active" data-c="#FFFFFF" style="background:#FFFFFF;"></div>
+                  <div class="bfc-print__swatch" data-c="#F5F0E8" style="background:#F5F0E8;"></div>
+                  <div class="bfc-print__swatch" data-c="#E8E0D0" style="background:#E8E0D0;"></div>
+                  <div class="bfc-print__swatch" data-c="#202009" style="background:#202009;"></div>
+                  <div class="bfc-print__swatch" data-c="#4E4741" style="background:#4E4741;"></div>
+                  <input type="color" class="bfc-print__custom-color" id="bfcCustomColor" value="#FFFFFF" title="Custom color">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bfc-print__sidebar-section" style="flex:1;">
+            <label class="bfc-print__label">Pricing</label>
+            <div class="bfc-print__price-row">
+              <span class="bfc-print__price-label">Base print</span>
+              <span class="bfc-print__price-value" id="bfcBasePrice">$40.00</span>
+            </div>
+            <div class="bfc-print__price-row" id="bfcBorderPriceRow" style="display:none;">
+              <span class="bfc-print__price-label">Border</span>
+              <span class="bfc-print__price-value" id="bfcBorderPrice">$0.00</span>
+            </div>
+            <div class="bfc-print__price-total">
+              <span class="bfc-print__price-total-label">Total</span>
+              <span class="bfc-print__price-total-amount" id="bfcTotalPrice">$40.00</span>
+            </div>
+            <button class="bfc-print__atc" id="bfcAtcBtn" disabled>Upload an image first</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Cloudinary Upload Widget -->
+<script src="https://upload-widget.cloudinary.com/global/all.js"></script>
+
+<!-- Cropper.js — upload cropper.min.js to theme Assets -->
+{{ 'cropper.min.js' | asset_url | script_tag }}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  /* ═══════════ CONFIG ═══════════ */
+  const CLOUD_NAME = {{ section.settings.cloud_name | json }};
+  const UPLOAD_PRESET = {{ section.settings.upload_preset | json }};
+  const VARIANT_ID = {{ variant_id | json }};
+  const PRICE_PER_STEP = {{ section.settings.price_per_step }};
+  const STEP_SIZE = 2.5;
+
+  /* ═══════════ STATE ═══════════ */
+  let cropper = null;
+  let fileUrl = '';      // Cloudinary URL
+  let fileName = '';
+  let natW = 0, natH = 0;
+  let printW = 8, printH = 10;
+  let orient = 'portrait';
+  let borderOn = false, borderW = 0.5, borderC = '#FFFFFF';
+
+  const $ = id => document.getElementById(id);
+
+  /* ═══════════ CLOUDINARY UPLOAD ═══════════ */
+  const widget = cloudinary.createUploadWidget({
+    cloudName: CLOUD_NAME,
+    uploadPreset: UPLOAD_PRESET,
+    sources: ['local', 'camera'],
+    multiple: false,
+    maxFileSize: 100000000,
+    clientAllowedFormats: ['jpg', 'jpeg', 'png', 'tiff', 'tif', 'webp'],
+    showPoweredBy: false,
+    styles: {
+      palette: {
+        window: '#F8F6EE',
+        windowBorder: '#E3DDDA',
+        tabIcon: '#E36E15',
+        menuIcons: '#4E4741',
+        textDark: '#202009',
+        textLight: '#F8F6EE',
+        link: '#E36E15',
+        action: '#E36E15',
+        inactiveTabIcon: '#4E4741',
+        error: '#E65100',
+        inProgress: '#E36E15',
+        complete: '#2D8A4E',
+        sourceBg: '#F8F6EE'
+      }
+    }
+  }, (error, result) => {
+    if (error) {
+      console.error('Upload error:', error);
+      $('bfcProgressText').textContent = 'Upload failed. Try again.';
+      return;
+    }
+    if (result.event === 'upload-added') {
+      $('bfcProgress').classList.add('visible');
+      $('bfcProgressFill').style.width = '0%';
+      $('bfcProgressText').textContent = 'Uploading...';
+    }
+    if (result.event === 'progress' && result.info) {
+      $('bfcProgressFill').style.width = result.info.progress + '%';
+      $('bfcProgressText').textContent = 'Uploading... ' + Math.round(result.info.progress) + '%';
+    }
+    if (result.event === 'success') {
+      fileUrl = result.info.secure_url;
+      fileName = result.info.original_filename + '.' + result.info.format;
+      natW = result.info.width;
+      natH = result.info.height;
+      $('bfcProgress').classList.remove('visible');
+      initCropper(fileUrl);
+    }
+  });
+
+  /* Also support drag-and-drop + click on our custom zone */
+  $('bfcUploadZone').addEventListener('click', () => widget.open());
+  $('bfcUploadZone').addEventListener('dragover', e => { e.preventDefault(); $('bfcUploadZone').classList.add('dragover'); });
+  $('bfcUploadZone').addEventListener('dragleave', () => $('bfcUploadZone').classList.remove('dragover'));
+  $('bfcUploadZone').addEventListener('drop', e => {
+    e.preventDefault();
+    $('bfcUploadZone').classList.remove('dragover');
+    /* For drag-and-drop, fall back to direct file input since widget.open() won't accept drops */
+    if (e.dataTransfer.files.length) {
+      handleLocalFile(e.dataTransfer.files[0]);
+    }
+  });
+  $('bfcChangeBtn').addEventListener('click', () => widget.open());
+
+  /* Fallback: direct file upload via hidden input (for drag-and-drop) */
+  $('bfcFileInput').addEventListener('change', e => {
+    if (e.target.files.length) handleLocalFile(e.target.files[0]);
+  });
+
+  function handleLocalFile(file) {
+    /* Upload to Cloudinary via unsigned upload API */
+    if (!file.type.startsWith('image/')) return;
+    $('bfcProgress').classList.add('visible');
+    $('bfcProgressFill').style.width = '10%';
+    $('bfcProgressText').textContent = 'Uploading...';
+
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', UPLOAD_PRESET);
+
+    fetch('https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/image/upload', {
+      method: 'POST',
+      body: fd
+    })
+    .then(r => r.json())
+    .then(data => {
+      if (data.secure_url) {
+        fileUrl = data.secure_url;
+        fileName = data.original_filename + '.' + data.format;
+        natW = data.width;
+        natH = data.height;
+        $('bfcProgress').classList.remove('visible');
+        initCropper(fileUrl);
+      } else {
+        throw new Error(data.error?.message || 'Upload failed');
+      }
+    })
+    .catch(err => {
+      console.error('Direct upload failed:', err);
+      $('bfcProgressText').textContent = 'Upload failed: ' + err.message;
+    });
+  }
+
+  /* ═══════════ CROPPER ═══════════ */
+  function initCropper(src) {
+    $('bfcUploadPanel').style.display = 'none';
+    $('bfcCropPanel').style.display = 'block';
+    $('bfcStep2').classList.remove('bfc-print__step--inactive');
+    $('bfcS2Num').classList.remove('bfc-print__step-num--inactive');
+    $('bfcS2Title').classList.remove('bfc-print__step-title--inactive');
+    $('bfcAtcBtn').disabled = false;
+    $('bfcAtcBtn').textContent = 'Add to Cart';
+
+    $('bfcFileName').textContent = fileName;
+    $('bfcFileMeta').textContent = natW + '\u00D7' + natH + 'px';
+
+    if (cropper) { cropper.destroy(); cropper = null; }
+    const imgEl = $('bfcCropImg');
+    imgEl.onload = function() {
+      cropper = new Cropper(imgEl, {
+        aspectRatio: printW / printH,
+        viewMode: 1,
+        dragMode: 'move',
+        autoCropArea: 0.92,
+        responsive: true,
+        guides: true,
+        center: true,
+        highlight: true,
+        cropBoxMovable: true,
+        cropBoxResizable: false,
+        toggleDragModeOnDblclick: false,
+        ready: () => updateAll(),
+        crop: debounce(() => updateAll(), 50),
+      });
+    };
+    imgEl.crossOrigin = 'anonymous';
+    imgEl.src = src;
+  }
+
+  /* ═══════════ RATIOS ═══════════ */
+  $('bfcRatioGrid').addEventListener('click', e => {
+    const btn = e.target.closest('.bfc-print__ratio-btn');
+    if (!btn) return;
+    $('bfcRatioGrid').querySelectorAll('.bfc-print__ratio-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const w = parseFloat(btn.dataset.w), h = parseFloat(btn.dataset.h);
+    if (w === 0 && h === 0) {
+      if (cropper) { cropper.setAspectRatio(NaN); cropper.options.cropBoxResizable = true; }
+      return;
+    }
+    const pw = orient === 'portrait' ? Math.min(w,h) : Math.max(w,h);
+    const ph = orient === 'portrait' ? Math.max(w,h) : Math.min(w,h);
+    $('bfcPrintW').value = pw; $('bfcPrintH').value = ph;
+    printW = pw; printH = ph;
+    if (cropper) { cropper.setAspectRatio(pw/ph); cropper.options.cropBoxResizable = false; }
+    updateAll();
+  });
+
+  /* ═══════════ ORIENTATION ═══════════ */
+  document.querySelectorAll('.bfc-print__orient-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.bfc-print__orient-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      orient = btn.dataset.o;
+      const w = parseFloat($('bfcPrintW').value), h = parseFloat($('bfcPrintH').value);
+      if (orient === 'portrait' && w > h) { $('bfcPrintW').value = h; $('bfcPrintH').value = w; }
+      else if (orient === 'landscape' && h > w) { $('bfcPrintW').value = h; $('bfcPrintH').value = w; }
+      printW = parseFloat($('bfcPrintW').value); printH = parseFloat($('bfcPrintH').value);
+      if (cropper) cropper.setAspectRatio(printW / printH);
+      updateAll();
+    });
+  });
+
+  /* ═══════════ MANUAL SIZE ═══════════ */
+  [$('bfcPrintW'), $('bfcPrintH')].forEach(inp => {
+    inp.addEventListener('input', () => {
+      printW = parseFloat($('bfcPrintW').value) || 1;
+      printH = parseFloat($('bfcPrintH').value) || 1;
+      $('bfcRatioGrid').querySelectorAll('.bfc-print__ratio-btn').forEach(b => b.classList.remove('active'));
+      if (cropper) cropper.setAspectRatio(printW / printH);
+      updateAll();
+    });
+  });
+
+  /* ═══════════ BORDER ═══════════ */
+  $('bfcBorderToggle').addEventListener('click', () => {
+    borderOn = !borderOn;
+    $('bfcBorderToggle').classList.toggle('on', borderOn);
+    $('bfcBorderControls').classList.toggle('visible', borderOn);
+    $('bfcBorderPriceRow').style.display = borderOn ? 'flex' : 'none';
+    updateAll();
+  });
+
+  $('bfcBorderW').addEventListener('input', () => {
+    borderW = parseFloat($('bfcBorderW').value);
+    const d = borderW % 1 === 0 ? borderW.toFixed(0) : borderW.toFixed(3).replace(/0+$/, '');
+    $('bfcBorderWVal').textContent = d + '"';
+    updateAll();
+  });
+
+  document.querySelectorAll('.bfc-print__swatch').forEach(s => {
+    s.addEventListener('click', () => {
+      document.querySelectorAll('.bfc-print__swatch').forEach(x => x.classList.remove('active'));
+      s.classList.add('active');
+      borderC = s.dataset.c;
+      updateAll();
+    });
+  });
+
+  $('bfcCustomColor').addEventListener('input', e => {
+    document.querySelectorAll('.bfc-print__swatch').forEach(x => x.classList.remove('active'));
+    borderC = e.target.value;
+    updateAll();
+  });
+
+  /* ═══════════ PRICING ═══════════ */
+  function calcPrice() {
+    const wS = Math.ceil(printW / STEP_SIZE);
+    const hS = Math.ceil(printH / STEP_SIZE);
+    const base = (wS + hS) * PRICE_PER_STEP;
+    let bs = 0;
+    if (borderOn) {
+      const tw = printW + borderW * 2, th = printH + borderW * 2;
+      bs = (Math.ceil(tw / STEP_SIZE) + Math.ceil(th / STEP_SIZE)) * PRICE_PER_STEP - base;
+    }
+    return { base, bs, total: base + bs };
+  }
+
+  /* ═══════════ UPDATE ALL ═══════════ */
+  function updateAll() {
+    updatePreview();
+    updateDPI();
+    updatePricing();
+  }
+
+  function updatePreview() {
+    if (!cropper) return;
+    const d = cropper.getData(true);
+    if (!d || !d.width) return;
+    $('bfcPrevEmpty').style.display = 'none';
+    $('bfcPrevFrame').style.display = 'block';
+
+    const maxS = 320;
+    const tW = borderOn ? printW + borderW * 2 : printW;
+    const tH = borderOn ? printH + borderW * 2 : printH;
+    const r = tW / tH;
+    let cw, ch;
+    if (r >= 1) { cw = maxS; ch = maxS / r; } else { ch = maxS; cw = maxS * r; }
+
+    const cvs = $('bfcPrevCanvas'), ctx = cvs.getContext('2d');
+    cvs.width = cw * 2; cvs.height = ch * 2;
+    cvs.style.width = cw + 'px'; cvs.style.height = ch + 'px';
+    ctx.scale(2, 2);
+
+    if (borderOn) { ctx.fillStyle = borderC; ctx.fillRect(0, 0, cw, ch); }
+    const bX = borderOn ? (borderW / tW) * cw : 0;
+    const bY = borderOn ? (borderW / tH) * ch : 0;
+    const iW = cw - bX * 2, iH = ch - bY * 2;
+
+    try {
+      const cc = cropper.getCroppedCanvas({
+        width: 800,
+        height: 800 / (d.width / d.height),
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: 'high'
+      });
+      if (cc) ctx.drawImage(cc, bX, bY, iW, iH);
+      else {
+        const imgEl = $('bfcCropImg');
+        ctx.drawImage(imgEl, d.x, d.y, d.width, d.height, bX, bY, iW, iH);
+      }
+    } catch(e) {
+      try { ctx.drawImage($('bfcCropImg'), d.x, d.y, d.width, d.height, bX, bY, iW, iH); } catch(e2) {}
+    }
+
+    if (borderOn) {
+      ctx.strokeStyle = 'rgba(0,0,0,0.06)';
+      ctx.lineWidth = 0.5;
+      ctx.strokeRect(bX, bY, iW, iH);
+    }
+  }
+
+  function updateDPI() {
+    if (!cropper) { $('bfcDpiBar').className = 'bfc-print__dpi'; return; }
+    const d = cropper.getData(true);
+    if (!d || !d.width) return;
+    const dpi = Math.min(d.width / printW, d.height / printH);
+    const bar = $('bfcDpiBar');
+    if (dpi < 150) {
+      bar.className = 'bfc-print__dpi warn';
+      bar.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Low resolution \u2014 ' + Math.round(dpi) + ' DPI at ' + printW + '"&times;' + printH + '". May appear pixelated.</span>';
+    } else {
+      bar.className = 'bfc-print__dpi ok';
+      const label = dpi >= 300 ? 'Excellent' : 'Acceptable';
+      bar.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>' + label + ' \u2014 ' + Math.round(dpi) + ' DPI at ' + printW + '"&times;' + printH + '".</span>';
+    }
+  }
+
+  function updatePricing() {
+    const p = calcPrice();
+    $('bfcBasePrice').textContent = '$' + p.base.toFixed(2);
+    $('bfcBorderPrice').textContent = '+$' + p.bs.toFixed(2);
+    $('bfcTotalPrice').textContent = '$' + p.total.toFixed(2);
+  }
+
+  /* ═══════════ ADD TO CART ═══════════ */
+  $('bfcAtcBtn').addEventListener('click', () => {
+    if (!cropper || !fileUrl) return;
+    const d = cropper.getData(true);
+    if (!d) return;
+    const p = calcPrice();
+    const dpi = Math.round(Math.min(d.width / printW, d.height / printH));
+
+    const cropData = JSON.stringify({
+      x: d.x, y: d.y, width: d.width, height: d.height,
+      rotate: d.rotate || 0, scaleX: d.scaleX || 1, scaleY: d.scaleY || 1
+    });
+
+    $('bfcAtcBtn').disabled = true;
+    $('bfcAtcBtn').textContent = 'Adding...';
+
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: VARIANT_ID,
+        quantity: 1,
+        properties: {
+          'Print Size': printW + '" \u00D7 ' + printH + '"',
+          'Border': borderOn ? borderW + '" ' + (borderC === '#FFFFFF' ? 'White' : borderC === '#202009' ? 'Black' : borderC) : 'None',
+          '_file_url': fileUrl,
+          '_file_name': fileName,
+          '_original_px': natW + ' \u00D7 ' + natH,
+          '_crop_data': cropData,
+          '_effective_dpi': String(dpi),
+          '_border_width': String(borderOn ? borderW : 0),
+          '_border_color': borderC,
+          '_print_w': String(printW),
+          '_print_h': String(printH),
+          '_price_calculated': '$' + p.total.toFixed(2)
+        }
+      })
+    })
+    .then(r => {
+      if (!r.ok) throw new Error('Cart error');
+      return r.json();
+    })
+    .then(() => {
+      $('bfcAtcBtn').textContent = 'Added to Cart';
+      $('bfcAtcBtn').style.background = '#2D8A4E';
+      /* Optional: redirect to cart or update cart drawer */
+      setTimeout(() => {
+        $('bfcAtcBtn').textContent = 'Add to Cart';
+        $('bfcAtcBtn').style.background = '';
+        $('bfcAtcBtn').disabled = false;
+        /* Uncomment to redirect to cart: */
+        /* window.location.href = '/cart'; */
+      }, 2000);
+    })
+    .catch(err => {
+      console.error('Add to cart failed:', err);
+      $('bfcAtcBtn').textContent = 'Error - Try Again';
+      $('bfcAtcBtn').style.background = '#E65100';
+      setTimeout(() => {
+        $('bfcAtcBtn').textContent = 'Add to Cart';
+        $('bfcAtcBtn').style.background = '';
+        $('bfcAtcBtn').disabled = false;
+      }, 2500);
+    });
+  });
+
+  /* ═══════════ INIT ═══════════ */
+  updatePricing();
+
+  function debounce(fn, ms) {
+    let t;
+    return function(...a) { clearTimeout(t); t = setTimeout(() => fn.apply(this, a), ms); };
+  }
+
+});
+</script>
+
+{% schema %}
+{
+  "name": "Print Configurator",
+  "tag": "section",
+  "class": "bfc-print-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Custom Print"
+    },
+    {
+      "type": "range",
+      "id": "price_per_step",
+      "label": "Price per 2.5\" increment ($)",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "cloud_name",
+      "label": "Cloudinary Cloud Name",
+      "default": "dj20glh2k"
+    },
+    {
+      "type": "text",
+      "id": "upload_preset",
+      "label": "Cloudinary Upload Preset",
+      "default": "bfc-prints"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Print Configurator"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,2391 @@
+{% comment %}
+  BFC Editorial section
+  -----------------------------------------------------------------
+  Uses the shared tokens in assets/bfc-editorial.css to set font, type,
+  and spacing scales. Compose new blocks by wrapping markup in
+  .block, applying alignment/width utilities, and mapping any
+  per-block spacing to --block-space-before / --block-space-after.
+{% endcomment %}
+
+{{ 'bfc-editorial.css' | asset_url | stylesheet_tag }}
+
+{% liquid
+  assign wrap_width = section.settings.max_width | default: 1120
+  assign stack_gap = section.settings.stack_gap | default: '6'
+  assign pad_block = section.settings.pad_block | default: '7'
+  assign pad_inline = section.settings.pad_inline | default: '5'
+  assign gallery_gap = section.settings.gallery_gap | default: '4'
+  assign radius = section.settings.radius | default: 12
+%}
+
+<section id="bfc-editorial-{{ section.id }}" class="bfc-editorial" style="--paper:{{ section.settings.paper }};--ink:{{ section.settings.ink }};--muted:{{ section.settings.muted }};--accent:{{ section.settings.accent }};--rule:{{ section.settings.rule }};--wrap-width:{{ wrap_width }}px;--stack-gap:var(--space-{{ stack_gap }});--section-pad-block:var(--space-{{ pad_block }});--section-pad-inline:var(--space-{{ pad_inline }});--grid-gap:var(--space-{{ gallery_gap }});--radius:{{ radius }}px;" data-section-id="{{ section.id }}">
+  <div class="wrap">
+    <div class="stack">
+      {% for block in section.blocks %}
+        {% assign top_space = block.settings.spacing_top | default: '0' %}
+        {% assign bottom_space = block.settings.spacing_bottom | default: '0' %}
+        {% case block.type %}
+
+        {% when 'hero_photo' %}
+          {% assign hero_image = block.settings.image %}
+          {% assign hero_label = block.settings.hed | strip_html | strip | default: block.settings.eyebrow | strip | default: 'Open story' %}
+          <article class="block block--hero {% if block.settings.inverse %}is-inverse{% endif %}" style="--block-space-before:var(--space-{{ top_space }});--block-space-after:var(--space-{{ bottom_space }});" {{ block.shopify_attributes }}>
+{% assign hero_block_link = false %}
+{% if block.settings.block_url != blank
+  and block.settings.enable_lightbox == false
+  and block.settings.image_link_url == blank %}
+  {% assign hero_block_link = true %}
+{% endif %}
+            {% if hero_block_link %}
+              <a class="block-link" href="{{ block.settings.block_url }}" aria-label="{{ hero_label | escape }}"></a>
+            {% endif %}
+            {% if hero_image != blank %}
+              {% liquid
+                assign hero_width = 2400
+                assign hero_ar = hero_image.aspect_ratio | default: 1.5
+                assign hero_height = hero_width | divided_by: hero_ar | ceil
+                assign hero_alt = hero_image.alt | default: '' | escape
+                assign hero_src = hero_image | image_url: width: hero_width
+                assign hero_lb_width = 2800
+                assign hero_height_lb = hero_lb_width | divided_by: hero_ar | ceil
+                assign hero_lightbox = hero_image | image_url: width: hero_lb_width
+              %}
+              <figure class="hero-media" style="--hero-ratio:{{ hero_ar }}">
+                {% if block.settings.enable_lightbox %}
+                  <a href="{{ hero_lightbox }}" data-lightbox="{{ hero_lightbox }}" data-lightbox-width="{{ hero_lb_width }}" data-lightbox-height="{{ hero_height_lb }}" data-lightbox-alt="{{ hero_alt }}">
+                    <img src="{{ hero_src }}" alt="{{ hero_alt }}" width="{{ hero_width }}" height="{{ hero_height }}" loading="eager" fetchpriority="high" decoding="async">
+                  </a>
+                {% elsif block.settings.image_link_url != blank %}
+                  <a href="{{ block.settings.image_link_url }}">
+                    <img src="{{ hero_src }}" alt="{{ hero_alt }}" width="{{ hero_width }}" height="{{ hero_height }}" loading="eager" fetchpriority="high" decoding="async">
+                  </a>
+                {% else %}
+                  <img src="{{ hero_src }}" alt="{{ hero_alt }}" width="{{ hero_width }}" height="{{ hero_height }}" loading="eager" fetchpriority="high" decoding="async">
+                {% endif %}
+                {% if block.settings.caption != blank %}
+                  <figcaption class="align-{{ block.settings.caption_align }}">{{ block.settings.caption }}</figcaption>
+                {% endif %}
+              </figure>
+            {% endif %}
+            {% if block.settings.show_overlay %}
+              <div class="hero-overlay">
+                <div class="panel {% if block.settings.inverse %}is-inverse{% endif %}" data-solid="{{ block.settings.overlay_background }}">
+                  {% if block.settings.eyebrow != blank %}<p class="eyebrow">{{ block.settings.eyebrow }}</p>{% endif %}
+                  {% if block.settings.hed != blank %}<h1 class="hed is-hero">{{ block.settings.hed }}</h1>{% endif %}
+                  {% if block.settings.dek != blank %}<p class="dek">{{ block.settings.dek }}</p>{% endif %}
+                  {% if block.settings.show_meta %}
+                    <div class="meta">
+                      {% if block.settings.byline != blank %}<span>{{ block.settings.byline }}</span>{% endif %}
+                      {% if block.settings.date != blank %}<span>{{ block.settings.date }}</span>{% endif %}
+                      {% if block.settings.read_time != blank %}<span>{{ block.settings.read_time }}</span>{% endif %}
+                    </div>
+                  {% endif %}
+                  {% if block.settings.cta_label != blank and block.settings.cta_url != blank %}
+                    <div class="cta-group align-{{ block.settings.cta_align }}">
+                      {% assign btn_style = block.settings.cta_style | default: 'primary' %}
+                      <a class="button button--{{ btn_style }}" href="{{ block.settings.cta_url }}">{{ block.settings.cta_label }}</a>
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {% endif %}
+          </article>
+
+        {% when 'meta_row' %}
+          <div class="block block--meta" style="--block-space-before:var(--space-{{ top_space }});--block-space-after:var(--space-{{ bottom_space }});" {{ block.shopify_attributes }}>
+            <div class="meta content-narrow align-{{ block.settings.align }}">
+              {% if block.settings.show_auto and article %}
+                {% if article.author %}<span>{{ article.author }}</span>{% endif %}
+                {% if article.published_at %}<span>{{ article.published_at | date: format: 'date' }}</span>{% endif %}
+                {% if article.tags.size > 0 %}<span>{{ article.tags | join: ', ' }}</span>{% endif %}
+              {% endif %}
+              {% for i in (1..6) %}
+                {% assign key = 'tag_' | append: i %}
+                {% assign url_key = 'tag_url_' | append: i %}
+                {% assign label = block.settings[key] %}
+                {% assign tag_url = block.settings[url_key] %}
+                {% if label != blank %}
+                  <span class="chip">{% if tag_url != blank %}<a href="{{ tag_url }}">{{ label }}</a>{% else %}{{ label }}{% endif %}</span>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+
+        {% when 'rich_text' %}
+          <div class="block block--rich-text" style="--block-space-before:var(--space-{{ top_space }});--block-space-after:var(--space-{{ bottom_space }});" {{ block.shopify_attributes }}>
+            {% assign width_class = block.settings.width | default: 'narrow' %}
+            <div class="content-{{ width_class }} align-{{ block.settings.align }}">
+              {% if block.settings.eyebrow != blank %}<p class="eyebrow">{{ block.settings.eyebrow }}</p>{% endif %}
+              {% if block.settings.hed != blank %}<h2 class="hed">{{ block.settings.hed }}</h2>{% endif %}
+              {% if block.settings.dek != blank %}<p class="dek">{{ block.settings.dek }}</p>{% endif %}
+              {% if block.settings.body != blank %}
+                <div class="body-copy copy {% if block.settings.dropcap %}dropcap{% endif %}">{{ block.settings.body }}</div>
+              {% endif %}
+              {% if block.settings.cta_label != blank and block.settings.cta_url != blank %}
+                {% assign btn_style = block.settings.cta_style | default: 'primary' %}
+                <div class="cta-group align-{{ block.settings.cta_align }}" style="margin-top:var(--space-3);">
+                  <a class="button button--{{ btn_style }}" href="{{ block.settings.cta_url }}">{{ block.settings.cta_label }}</a>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+        {% when 'inline_image' %}
+          {% assign inline_image = block.settings.image %}
+          {% if inline_image != blank %}
+            {% liquid
+              assign inline_width = 1800
+              assign inline_ar = inline_image.aspect_ratio | default: 1.5
+              assign inline_height = inline_width | divided_by: inline_ar | ceil
+              assign inline_alt = inline_image.alt | default: '' | escape
+              assign inline_src = inline_image | image_url: width: inline_width
+              assign inline_lb_width = 2400
+              assign inline_lb_height = inline_lb_width | divided_by: inline_ar | ceil
+              assign inline_lightbox = inline_image | image_url: width: inline_lb_width
+            %}
+            <figure class="block block--inline inline-media content-{{ block.settings.width }} align-{{ block.settings.align }} {% if block.settings.bleed %}bleed-inline{% endif %}" style="--block-space-before:var(--space-{{ top_space }});--block-space-after:var(--space-{{ bottom_space }});--inline-max-height:{{ block.settings.max_height }}px;" data-crop="{% if block.settings.max_height > 0 %}true{% else %}false{% endif %}" {{ block.shopify_attributes }}>
+              {% capture inline_tag %}
+                <img src="{{ inline_src }}" alt="{{ inline_alt }}" width="{{ inline_width }}" height="{{ inline_height }}" loading="lazy" decoding="async">
+              {% endcapture %}
+              {% if block.settings.enable_lightbox %}
+                <a href="{{ inline_lightbox }}" data-lightbox="{{ inline_lightbox }}" data-lightbox-width="{{ inline_lb_width }}" data-lightbox-height="{{ inline_lb_height }}" data-lightbox-alt="{{ inline_alt }}">{{ inline_tag | strip }}</a>
+              {% elsif block.settings.image_link_url != blank %}
+                <a href="{{ block.settings.image_link_url }}">{{ inline_tag | strip }}</a>
+              {% else %}
+                {{ inline_tag | strip }}
+              {% endif %}
+              {% if block.settings.caption != blank %}<figcaption class="align-{{ block.settings.caption_align }}">{{ block.settings.caption }}</figcaption>{% endif %}
+            </figure>
+          {% endif %}
+
+        {% when 'breakout_gallery' %}
+          <div class="block block--gallery" style="--block-space-before:var(--space-{{ top_space }});--block-space-after:var(--space-{{ bottom_space }});" {{ block.shopify_attributes }}>
+{% assign gallery_block_link = false %}
+{% if block.settings.block_url != blank and block.settings.enable_lightbox == false %}
+  {% assign gallery_block_link = true %}
+{% endif %}
+            <div class="gallery">
+              {% if gallery_block_link %}
+                <a class="block-link" href="{{ block.settings.block_url }}" aria-label="View gallery"></a>
+              {% endif %}
+              {% for i in (1..10) %}
+                {% assign key_image = 'image_' | append: i %}
+                {% assign key_caption = 'caption_' | append: i %}
+                {% assign key_span = 'span_' | append: i %}
+                {% assign key_url = 'url_' | append: i %}
+                {% assign gi = block.settings[key_image] %}
+                {% assign caption = block.settings[key_caption] %}
+                {% assign span = block.settings[key_span] | default: '6' %}
+                {% assign link = block.settings[key_url] %}
+                {% if gi != blank %}
+                  {% liquid
+                    assign gallery_width = 1600
+                    assign gallery_ar = gi.aspect_ratio | default: 1.5
+                    assign gallery_height = gallery_width | divided_by: gallery_ar | ceil
+                    assign gallery_alt = gi.alt | default: '' | escape
+                    assign gallery_src = gi | image_url: width: gallery_width
+                    assign gallery_lb_width = 2200
+                    assign gallery_lb_height = gallery_lb_width | divided_by: gallery_ar | ceil
+                    assign gallery_lightbox = gi | image_url: width: gallery_lb_width
+                  %}
+                  <figure class="g-span-{{ span }}">
+                    {% capture gallery_tag %}
+                      <img src="{{ gallery_src }}" alt="{{ gallery_alt }}" width="{{ gallery_width }}" height="{{ gallery_height }}" loading="lazy" decoding="async">
+                    {% endcapture %}
+                    {% if block.settings.enable_lightbox %}
+                      <a href="{{ gallery_lightbox }}" data-lightbox="{{ gallery_lightbox }}" data-lightbox-width="{{ gallery_lb_width }}" data-lightbox-height="{{ gallery_lb_height }}" data-lightbox-alt="{{ gallery_alt }}">{{ gallery_tag | strip }}</a>
+                    {% elsif block.settings.block_url == blank and link != blank %}
+                      <a href="{{ link }}">{{ gallery_tag | strip }}</a>
+                    {% else %}
+                      {{ gallery_tag | strip }}
+                    {% endif %}
+                    {% if caption != blank %}<figcaption class="align-{{ block.settings.caption_align }}">{{ caption }}</figcaption>{% endif %}
+                  </figure>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+
+        {% when 'pull_quote' %}
+          <figure class="block block--quote pull-quote content-{{ block.settings.width }} align-{{ block.settings.align }}" style="--block-space-before:var(--space-{{ top_space }});--block-space-after:var(--space-{{ bottom_space }});" {{ block.shopify_attributes }}>
+            <blockquote>{{ block.settings.quote }}</blockquote>
+            {% if block.settings.attribution != blank %}<figcaption>— {{ block.settings.attribution }}</figcaption>{% endif %}
+          </figure>
+
+        {% when 'cta_group' %}
+          <div class="block block--cta" style="--block-space-before:var(--space-{{ top_space }});--block-space-after:var(--space-{{ bottom_space }});" {{ block.shopify_attributes }}>
+            <div class="cta-group align-{{ block.settings.align }}">
+              {% for i in (1..3) %}
+                {% assign key_label = 'label_' | append: i %}
+                {% assign key_url = 'url_' | append: i %}
+                {% assign key_style = 'style_' | append: i %}
+                {% assign label = block.settings[key_label] %}
+                {% assign url = block.settings[key_url] %}
+                {% assign style = block.settings[key_style] | default: 'primary' %}
+                {% if label != blank and url != blank %}
+                  <a class="button button--{{ style }}" href="{{ url }}">{{ label }}</a>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+
+        {% when 'product_spec_box' %}
+          <aside class="block block--spec product-spec content-{{ block.settings.width }} align-{{ block.settings.align }}" style="--block-space-before:var(--space-{{ top_space }});--block-space-after:var(--space-{{ bottom_space }});" {{ block.shopify_attributes }}>
+            {% if block.settings.title != blank %}<div class="product-spec__title">{{ block.settings.title }}</div>{% endif %}
+            {% if block.settings.body != blank %}<div class="body-copy copy">{{ block.settings.body }}</div>{% endif %}
+            <dl>
+              {% for i in (1..6) %}
+                {% assign key_label = 'label_' | append: i %}
+                {% assign key_value = 'value_' | append: i %}
+                {% assign label = block.settings[key_label] %}
+                {% assign value = block.settings[key_value] %}
+                {% if label != blank or value != blank %}
+                  {% if label != blank %}<dt>{{ label }}</dt>{% endif %}
+                  {% if value != blank %}<dd>{{ value }}</dd>{% endif %}
+                {% endif %}
+              {% endfor %}
+            </dl>
+          </aside>
+
+        {% when 'product_card_inline' %}
+          {% assign product = all_products[block.settings.product_handle] %}
+          {% if product %}
+            {% assign card_image = block.settings.image | default: product.featured_image %}
+            {% if card_image %}
+              {% liquid
+                assign card_width = 800
+                assign card_ar = card_image.aspect_ratio | default: 1
+                assign card_height = card_width | divided_by: card_ar | ceil
+                assign card_alt = card_image.alt | default: product.title | escape
+                assign card_src = card_image | image_url: width: card_width
+              %}
+            {% endif %}
+            <article class="block block--product product-card content-{{ block.settings.width }} align-{{ block.settings.align }}" style="--block-space-before:var(--space-{{ top_space }});--block-space-after:var(--space-{{ bottom_space }});" {{ block.shopify_attributes }}>
+              <div class="product-card__header">
+                {% if card_image %}
+                  <figure class="product-card__image">
+                    <img src="{{ card_src }}" alt="{{ card_alt }}" width="{{ card_width }}" height="{{ card_height }}" loading="lazy" decoding="async">
+                  </figure>
+                {% endif %}
+                <div class="product-card__meta">
+                  <div class="product-card__title">{{ block.settings.title | default: product.title }}</div>
+                  {% if block.settings.show_price %}
+                    <div class="product-card__price">{{ product.price | money_with_currency }}</div>
+                  {% endif %}
+                  {% if block.settings.kicker != blank %}<div class="product-card__kicker">{{ block.settings.kicker }}</div>{% endif %}
+                </div>
+              </div>
+              {% if block.settings.body != blank %}<div class="product-card__body copy">{{ block.settings.body }}</div>{% endif %}
+              <div class="product-card__actions">
+                <a class="button button--{{ block.settings.cta_style | default: 'outline' }}" href="{{ block.settings.cta_url | default: product.url }}">{{ block.settings.cta_label | default: 'View product' }}</a>
+                {% if block.settings.secondary_label != blank and block.settings.secondary_url != blank %}
+                  <a class="button button--{{ block.settings.secondary_style | default: 'link' }}" href="{{ block.settings.secondary_url }}">{{ block.settings.secondary_label }}</a>
+                {% endif %}
+              </div>
+            </article>
+          {% endif %}
+
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <dialog class="bfcpe-lightbox">
+    <div class="lb-inner">
+      <button class="lb-close" type="button" data-lightbox-close aria-label="Close image">&times;</button>
+      <img src="" alt="" width="1" height="1" style="width:100%;height:auto;border-radius:var(--radius)">
+    </div>
+  </dialog>
+
+  <script src="{{ 'bfcpe-lightbox.js' | asset_url }}" defer></script>
+</section>
+
+{% schema %}
+{
+  "name": "BFC Editorial",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "paper",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "ink",
+      "label": "Text color",
+      "default": "#111827"
+    },
+    {
+      "type": "color",
+      "id": "muted",
+      "label": "Muted text",
+      "default": "#4b5563"
+    },
+    {
+      "type": "color",
+      "id": "accent",
+      "label": "Accent",
+      "default": "#0b3d91"
+    },
+    {
+      "type": "color",
+      "id": "rule",
+      "label": "Rule color",
+      "default": "rgba(17, 24, 39, 0.12)"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Content width",
+      "min": 960,
+      "max": 1440,
+      "step": 20,
+      "unit": "px",
+      "default": 1120
+    },
+    {
+      "type": "select",
+      "id": "pad_block",
+      "label": "Vertical padding",
+      "options": [
+        {
+          "value": "4",
+          "label": "Space 4"
+        },
+        {
+          "value": "5",
+          "label": "Space 5"
+        },
+        {
+          "value": "6",
+          "label": "Space 6"
+        },
+        {
+          "value": "7",
+          "label": "Space 7"
+        }
+      ],
+      "default": "7"
+    },
+    {
+      "type": "select",
+      "id": "pad_inline",
+      "label": "Horizontal padding",
+      "options": [
+        {
+          "value": "3",
+          "label": "Space 3"
+        },
+        {
+          "value": "4",
+          "label": "Space 4"
+        },
+        {
+          "value": "5",
+          "label": "Space 5"
+        },
+        {
+          "value": "6",
+          "label": "Space 6"
+        }
+      ],
+      "default": "5"
+    },
+    {
+      "type": "select",
+      "id": "stack_gap",
+      "label": "Block gap",
+      "options": [
+        {
+          "value": "3",
+          "label": "Space 3"
+        },
+        {
+          "value": "4",
+          "label": "Space 4"
+        },
+        {
+          "value": "5",
+          "label": "Space 5"
+        },
+        {
+          "value": "6",
+          "label": "Space 6"
+        },
+        {
+          "value": "7",
+          "label": "Space 7"
+        }
+      ],
+      "default": "6"
+    },
+    {
+      "type": "select",
+      "id": "gallery_gap",
+      "label": "Gallery gap",
+      "options": [
+        {
+          "value": "2",
+          "label": "Space 2"
+        },
+        {
+          "value": "3",
+          "label": "Space 3"
+        },
+        {
+          "value": "4",
+          "label": "Space 4"
+        },
+        {
+          "value": "5",
+          "label": "Space 5"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "range",
+      "id": "radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hero_photo",
+      "name": "Hero photo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_lightbox",
+          "label": "Enable lightbox"
+        },
+        {
+          "type": "url",
+          "id": "image_link_url",
+          "label": "Image link"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_overlay",
+          "label": "Show overlay",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "overlay_background",
+          "label": "Use overlay backdrop",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "inverse",
+          "label": "Inverse text for overlay"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow"
+        },
+        {
+          "type": "richtext",
+          "id": "hed",
+          "label": "Headline"
+        },
+        {
+          "type": "textarea",
+          "id": "dek",
+          "label": "Dek"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_meta",
+          "label": "Show meta",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "byline",
+          "label": "Byline"
+        },
+        {
+          "type": "text",
+          "id": "date",
+          "label": "Date"
+        },
+        {
+          "type": "text",
+          "id": "read_time",
+          "label": "Read time"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "CTA label"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "CTA link"
+        },
+        {
+          "type": "select",
+          "id": "cta_style",
+          "label": "CTA style",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "ghost",
+              "label": "Ghost"
+            },
+            {
+              "value": "link",
+              "label": "Link"
+            }
+          ],
+          "default": "primary"
+        },
+        {
+          "type": "select",
+          "id": "cta_align",
+          "label": "CTA alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "url",
+          "id": "block_url",
+          "label": "Block link"
+        },
+        {
+          "type": "textarea",
+          "id": "caption",
+          "label": "Caption"
+        },
+        {
+          "type": "select",
+          "id": "caption_align",
+          "label": "Caption alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "spacing_top",
+          "label": "Spacing above",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            },
+            {
+              "value": "4",
+              "label": "Space 4"
+            }
+          ],
+          "default": "0"
+        },
+        {
+          "type": "select",
+          "id": "spacing_bottom",
+          "label": "Spacing below",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            },
+            {
+              "value": "4",
+              "label": "Space 4"
+            }
+          ],
+          "default": "0"
+        }
+      ]
+    },
+    {
+      "type": "meta_row",
+      "name": "Meta row",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_auto",
+          "label": "Include article author/date/tags",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "align",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "text",
+          "id": "tag_1",
+          "label": "Chip 1 label"
+        },
+        {
+          "type": "url",
+          "id": "tag_url_1",
+          "label": "Chip 1 link"
+        },
+        {
+          "type": "text",
+          "id": "tag_2",
+          "label": "Chip 2 label"
+        },
+        {
+          "type": "url",
+          "id": "tag_url_2",
+          "label": "Chip 2 link"
+        },
+        {
+          "type": "text",
+          "id": "tag_3",
+          "label": "Chip 3 label"
+        },
+        {
+          "type": "url",
+          "id": "tag_url_3",
+          "label": "Chip 3 link"
+        },
+        {
+          "type": "text",
+          "id": "tag_4",
+          "label": "Chip 4 label"
+        },
+        {
+          "type": "url",
+          "id": "tag_url_4",
+          "label": "Chip 4 link"
+        },
+        {
+          "type": "text",
+          "id": "tag_5",
+          "label": "Chip 5 label"
+        },
+        {
+          "type": "url",
+          "id": "tag_url_5",
+          "label": "Chip 5 link"
+        },
+        {
+          "type": "text",
+          "id": "tag_6",
+          "label": "Chip 6 label"
+        },
+        {
+          "type": "url",
+          "id": "tag_url_6",
+          "label": "Chip 6 link"
+        },
+        {
+          "type": "select",
+          "id": "spacing_top",
+          "label": "Spacing above",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Space 1"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            }
+          ],
+          "default": "0"
+        },
+        {
+          "type": "select",
+          "id": "spacing_bottom",
+          "label": "Spacing below",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Space 1"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            }
+          ],
+          "default": "0"
+        }
+      ]
+    },
+    {
+      "type": "rich_text",
+      "name": "Rich text",
+      "settings": [
+        {
+          "type": "select",
+          "id": "width",
+          "label": "Content width",
+          "options": [
+            {
+              "value": "narrow",
+              "label": "Narrow"
+            },
+            {
+              "value": "wide",
+              "label": "Wide"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "default": "narrow"
+        },
+        {
+          "type": "select",
+          "id": "align",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow"
+        },
+        {
+          "type": "richtext",
+          "id": "hed",
+          "label": "Headline"
+        },
+        {
+          "type": "textarea",
+          "id": "dek",
+          "label": "Dek"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Body"
+        },
+        {
+          "type": "checkbox",
+          "id": "dropcap",
+          "label": "Enable drop cap"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "CTA label"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "CTA link"
+        },
+        {
+          "type": "select",
+          "id": "cta_style",
+          "label": "CTA style",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "ghost",
+              "label": "Ghost"
+            },
+            {
+              "value": "link",
+              "label": "Link"
+            }
+          ],
+          "default": "primary"
+        },
+        {
+          "type": "select",
+          "id": "cta_align",
+          "label": "CTA alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "spacing_top",
+          "label": "Spacing above",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Space 1"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            },
+            {
+              "value": "4",
+              "label": "Space 4"
+            }
+          ],
+          "default": "0"
+        },
+        {
+          "type": "select",
+          "id": "spacing_bottom",
+          "label": "Spacing below",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Space 1"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            },
+            {
+              "value": "4",
+              "label": "Space 4"
+            }
+          ],
+          "default": "0"
+        }
+      ]
+    },
+    {
+      "type": "inline_image",
+      "name": "Inline image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "width",
+          "label": "Width",
+          "options": [
+            {
+              "value": "narrow",
+              "label": "Narrow"
+            },
+            {
+              "value": "wide",
+              "label": "Wide"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "default": "wide"
+        },
+        {
+          "type": "select",
+          "id": "align",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "checkbox",
+          "id": "bleed",
+          "label": "Bleed to viewport edges"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_lightbox",
+          "label": "Enable lightbox"
+        },
+        {
+          "type": "url",
+          "id": "image_link_url",
+          "label": "Image link"
+        },
+        {
+          "type": "range",
+          "id": "max_height",
+          "label": "Desktop crop height",
+          "min": 0,
+          "max": 1200,
+          "step": 20,
+          "unit": "px",
+          "default": 0
+        },
+        {
+          "type": "textarea",
+          "id": "caption",
+          "label": "Caption"
+        },
+        {
+          "type": "select",
+          "id": "caption_align",
+          "label": "Caption alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "select",
+          "id": "spacing_top",
+          "label": "Spacing above",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Space 1"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            },
+            {
+              "value": "4",
+              "label": "Space 4"
+            }
+          ],
+          "default": "0"
+        },
+        {
+          "type": "select",
+          "id": "spacing_bottom",
+          "label": "Spacing below",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Space 1"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            },
+            {
+              "value": "4",
+              "label": "Space 4"
+            }
+          ],
+          "default": "0"
+        }
+      ]
+    },
+    {
+      "type": "breakout_gallery",
+      "name": "Breakout gallery",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "enable_lightbox",
+          "label": "Enable lightbox"
+        },
+        {
+          "type": "url",
+          "id": "block_url",
+          "label": "Gallery link"
+        },
+        {
+          "type": "select",
+          "id": "caption_align",
+          "label": "Caption alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Image 1"
+        },
+        {
+          "type": "textarea",
+          "id": "caption_1",
+          "label": "Caption 1"
+        },
+        {
+          "type": "select",
+          "id": "span_1",
+          "label": "Span 1",
+          "options": [
+            {
+              "value": "3",
+              "label": "Span 3"
+            },
+            {
+              "value": "4",
+              "label": "Span 4"
+            },
+            {
+              "value": "6",
+              "label": "Span 6"
+            },
+            {
+              "value": "8",
+              "label": "Span 8"
+            },
+            {
+              "value": "12",
+              "label": "Span 12"
+            }
+          ],
+          "default": "6"
+        },
+        {
+          "type": "url",
+          "id": "url_1",
+          "label": "Image 1 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Image 2"
+        },
+        {
+          "type": "textarea",
+          "id": "caption_2",
+          "label": "Caption 2"
+        },
+        {
+          "type": "select",
+          "id": "span_2",
+          "label": "Span 2",
+          "options": [
+            {
+              "value": "3",
+              "label": "Span 3"
+            },
+            {
+              "value": "4",
+              "label": "Span 4"
+            },
+            {
+              "value": "6",
+              "label": "Span 6"
+            },
+            {
+              "value": "8",
+              "label": "Span 8"
+            },
+            {
+              "value": "12",
+              "label": "Span 12"
+            }
+          ],
+          "default": "6"
+        },
+        {
+          "type": "url",
+          "id": "url_2",
+          "label": "Image 2 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_3",
+          "label": "Image 3"
+        },
+        {
+          "type": "textarea",
+          "id": "caption_3",
+          "label": "Caption 3"
+        },
+        {
+          "type": "select",
+          "id": "span_3",
+          "label": "Span 3",
+          "options": [
+            {
+              "value": "3",
+              "label": "Span 3"
+            },
+            {
+              "value": "4",
+              "label": "Span 4"
+            },
+            {
+              "value": "6",
+              "label": "Span 6"
+            },
+            {
+              "value": "8",
+              "label": "Span 8"
+            },
+            {
+              "value": "12",
+              "label": "Span 12"
+            }
+          ],
+          "default": "6"
+        },
+        {
+          "type": "url",
+          "id": "url_3",
+          "label": "Image 3 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_4",
+          "label": "Image 4"
+        },
+        {
+          "type": "textarea",
+          "id": "caption_4",
+          "label": "Caption 4"
+        },
+        {
+          "type": "select",
+          "id": "span_4",
+          "label": "Span 4",
+          "options": [
+            {
+              "value": "3",
+              "label": "Span 3"
+            },
+            {
+              "value": "4",
+              "label": "Span 4"
+            },
+            {
+              "value": "6",
+              "label": "Span 6"
+            },
+            {
+              "value": "8",
+              "label": "Span 8"
+            },
+            {
+              "value": "12",
+              "label": "Span 12"
+            }
+          ],
+          "default": "6"
+        },
+        {
+          "type": "url",
+          "id": "url_4",
+          "label": "Image 4 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_5",
+          "label": "Image 5"
+        },
+        {
+          "type": "textarea",
+          "id": "caption_5",
+          "label": "Caption 5"
+        },
+        {
+          "type": "select",
+          "id": "span_5",
+          "label": "Span 5",
+          "options": [
+            {
+              "value": "3",
+              "label": "Span 3"
+            },
+            {
+              "value": "4",
+              "label": "Span 4"
+            },
+            {
+              "value": "6",
+              "label": "Span 6"
+            },
+            {
+              "value": "8",
+              "label": "Span 8"
+            },
+            {
+              "value": "12",
+              "label": "Span 12"
+            }
+          ],
+          "default": "6"
+        },
+        {
+          "type": "url",
+          "id": "url_5",
+          "label": "Image 5 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_6",
+          "label": "Image 6"
+        },
+        {
+          "type": "textarea",
+          "id": "caption_6",
+          "label": "Caption 6"
+        },
+        {
+          "type": "select",
+          "id": "span_6",
+          "label": "Span 6",
+          "options": [
+            {
+              "value": "3",
+              "label": "Span 3"
+            },
+            {
+              "value": "4",
+              "label": "Span 4"
+            },
+            {
+              "value": "6",
+              "label": "Span 6"
+            },
+            {
+              "value": "8",
+              "label": "Span 8"
+            },
+            {
+              "value": "12",
+              "label": "Span 12"
+            }
+          ],
+          "default": "6"
+        },
+        {
+          "type": "url",
+          "id": "url_6",
+          "label": "Image 6 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_7",
+          "label": "Image 7"
+        },
+        {
+          "type": "textarea",
+          "id": "caption_7",
+          "label": "Caption 7"
+        },
+        {
+          "type": "select",
+          "id": "span_7",
+          "label": "Span 7",
+          "options": [
+            {
+              "value": "3",
+              "label": "Span 3"
+            },
+            {
+              "value": "4",
+              "label": "Span 4"
+            },
+            {
+              "value": "6",
+              "label": "Span 6"
+            },
+            {
+              "value": "8",
+              "label": "Span 8"
+            },
+            {
+              "value": "12",
+              "label": "Span 12"
+            }
+          ],
+          "default": "6"
+        },
+        {
+          "type": "url",
+          "id": "url_7",
+          "label": "Image 7 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_8",
+          "label": "Image 8"
+        },
+        {
+          "type": "textarea",
+          "id": "caption_8",
+          "label": "Caption 8"
+        },
+        {
+          "type": "select",
+          "id": "span_8",
+          "label": "Span 8",
+          "options": [
+            {
+              "value": "3",
+              "label": "Span 3"
+            },
+            {
+              "value": "4",
+              "label": "Span 4"
+            },
+            {
+              "value": "6",
+              "label": "Span 6"
+            },
+            {
+              "value": "8",
+              "label": "Span 8"
+            },
+            {
+              "value": "12",
+              "label": "Span 12"
+            }
+          ],
+          "default": "6"
+        },
+        {
+          "type": "url",
+          "id": "url_8",
+          "label": "Image 8 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_9",
+          "label": "Image 9"
+        },
+        {
+          "type": "textarea",
+          "id": "caption_9",
+          "label": "Caption 9"
+        },
+        {
+          "type": "select",
+          "id": "span_9",
+          "label": "Span 9",
+          "options": [
+            {
+              "value": "3",
+              "label": "Span 3"
+            },
+            {
+              "value": "4",
+              "label": "Span 4"
+            },
+            {
+              "value": "6",
+              "label": "Span 6"
+            },
+            {
+              "value": "8",
+              "label": "Span 8"
+            },
+            {
+              "value": "12",
+              "label": "Span 12"
+            }
+          ],
+          "default": "6"
+        },
+        {
+          "type": "url",
+          "id": "url_9",
+          "label": "Image 9 link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_10",
+          "label": "Image 10"
+        },
+        {
+          "type": "textarea",
+          "id": "caption_10",
+          "label": "Caption 10"
+        },
+        {
+          "type": "select",
+          "id": "span_10",
+          "label": "Span 10",
+          "options": [
+            {
+              "value": "3",
+              "label": "Span 3"
+            },
+            {
+              "value": "4",
+              "label": "Span 4"
+            },
+            {
+              "value": "6",
+              "label": "Span 6"
+            },
+            {
+              "value": "8",
+              "label": "Span 8"
+            },
+            {
+              "value": "12",
+              "label": "Span 12"
+            }
+          ],
+          "default": "6"
+        },
+        {
+          "type": "url",
+          "id": "url_10",
+          "label": "Image 10 link"
+        },
+        {
+          "type": "select",
+          "id": "spacing_top",
+          "label": "Spacing above",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Space 1"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            },
+            {
+              "value": "4",
+              "label": "Space 4"
+            }
+          ],
+          "default": "0"
+        },
+        {
+          "type": "select",
+          "id": "spacing_bottom",
+          "label": "Spacing below",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Space 1"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            },
+            {
+              "value": "4",
+              "label": "Space 4"
+            }
+          ],
+          "default": "0"
+        }
+      ]
+    },
+    {
+      "type": "pull_quote",
+      "name": "Pull quote",
+      "settings": [
+        {
+          "type": "select",
+          "id": "width",
+          "label": "Width",
+          "options": [
+            {
+              "value": "narrow",
+              "label": "Narrow"
+            },
+            {
+              "value": "wide",
+              "label": "Wide"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "default": "narrow"
+        },
+        {
+          "type": "select",
+          "id": "align",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote"
+        },
+        {
+          "type": "text",
+          "id": "attribution",
+          "label": "Attribution"
+        },
+        {
+          "type": "select",
+          "id": "spacing_top",
+          "label": "Spacing above",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Space 1"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            }
+          ],
+          "default": "0"
+        },
+        {
+          "type": "select",
+          "id": "spacing_bottom",
+          "label": "Spacing below",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Space 1"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            }
+          ],
+          "default": "0"
+        }
+      ]
+    },
+    {
+      "type": "cta_group",
+      "name": "CTA group",
+      "settings": [
+        {
+          "type": "select",
+          "id": "align",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "text",
+          "id": "label_1",
+          "label": "Button 1 label"
+        },
+        {
+          "type": "url",
+          "id": "url_1",
+          "label": "Button 1 link"
+        },
+        {
+          "type": "select",
+          "id": "style_1",
+          "label": "Button 1 style",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "ghost",
+              "label": "Ghost"
+            },
+            {
+              "value": "link",
+              "label": "Link"
+            }
+          ],
+          "default": "outline"
+        },
+        {
+          "type": "text",
+          "id": "label_2",
+          "label": "Button 2 label"
+        },
+        {
+          "type": "url",
+          "id": "url_2",
+          "label": "Button 2 link"
+        },
+        {
+          "type": "select",
+          "id": "style_2",
+          "label": "Button 2 style",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "ghost",
+              "label": "Ghost"
+            },
+            {
+              "value": "link",
+              "label": "Link"
+            }
+          ],
+          "default": "outline"
+        },
+        {
+          "type": "text",
+          "id": "label_3",
+          "label": "Button 3 label"
+        },
+        {
+          "type": "url",
+          "id": "url_3",
+          "label": "Button 3 link"
+        },
+        {
+          "type": "select",
+          "id": "style_3",
+          "label": "Button 3 style",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "ghost",
+              "label": "Ghost"
+            },
+            {
+              "value": "link",
+              "label": "Link"
+            }
+          ],
+          "default": "outline"
+        },
+        {
+          "type": "select",
+          "id": "spacing_top",
+          "label": "Spacing above",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Space 1"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            }
+          ],
+          "default": "0"
+        },
+        {
+          "type": "select",
+          "id": "spacing_bottom",
+          "label": "Spacing below",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Space 1"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            }
+          ],
+          "default": "0"
+        }
+      ]
+    },
+    {
+      "type": "product_spec_box",
+      "name": "Product spec box",
+      "settings": [
+        {
+          "type": "select",
+          "id": "width",
+          "label": "Width",
+          "options": [
+            {
+              "value": "narrow",
+              "label": "Narrow"
+            },
+            {
+              "value": "wide",
+              "label": "Wide"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "default": "narrow"
+        },
+        {
+          "type": "select",
+          "id": "align",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Product specs"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Intro copy"
+        },
+        {
+          "type": "text",
+          "id": "label_1",
+          "label": "Row 1 label"
+        },
+        {
+          "type": "textarea",
+          "id": "value_1",
+          "label": "Row 1 value"
+        },
+        {
+          "type": "text",
+          "id": "label_2",
+          "label": "Row 2 label"
+        },
+        {
+          "type": "textarea",
+          "id": "value_2",
+          "label": "Row 2 value"
+        },
+        {
+          "type": "text",
+          "id": "label_3",
+          "label": "Row 3 label"
+        },
+        {
+          "type": "textarea",
+          "id": "value_3",
+          "label": "Row 3 value"
+        },
+        {
+          "type": "text",
+          "id": "label_4",
+          "label": "Row 4 label"
+        },
+        {
+          "type": "textarea",
+          "id": "value_4",
+          "label": "Row 4 value"
+        },
+        {
+          "type": "text",
+          "id": "label_5",
+          "label": "Row 5 label"
+        },
+        {
+          "type": "textarea",
+          "id": "value_5",
+          "label": "Row 5 value"
+        },
+        {
+          "type": "text",
+          "id": "label_6",
+          "label": "Row 6 label"
+        },
+        {
+          "type": "textarea",
+          "id": "value_6",
+          "label": "Row 6 value"
+        },
+        {
+          "type": "select",
+          "id": "spacing_top",
+          "label": "Spacing above",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Space 1"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            }
+          ],
+          "default": "0"
+        },
+        {
+          "type": "select",
+          "id": "spacing_bottom",
+          "label": "Spacing below",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Space 1"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            }
+          ],
+          "default": "0"
+        }
+      ]
+    },
+    {
+      "type": "product_card_inline",
+      "name": "Product card inline",
+      "settings": [
+        {
+          "type": "select",
+          "id": "width",
+          "label": "Width",
+          "options": [
+            {
+              "value": "narrow",
+              "label": "Narrow"
+            },
+            {
+              "value": "wide",
+              "label": "Wide"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ],
+          "default": "wide"
+        },
+        {
+          "type": "select",
+          "id": "align",
+          "label": "Alignment",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "product",
+          "id": "product_handle",
+          "label": "Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Override image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "kicker",
+          "label": "Meta"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_price",
+          "label": "Show price",
+          "default": true
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Body"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Primary CTA label",
+          "default": "View product"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "Primary CTA link"
+        },
+        {
+          "type": "select",
+          "id": "cta_style",
+          "label": "Primary CTA style",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "ghost",
+              "label": "Ghost"
+            },
+            {
+              "value": "link",
+              "label": "Link"
+            }
+          ],
+          "default": "outline"
+        },
+        {
+          "type": "text",
+          "id": "secondary_label",
+          "label": "Secondary CTA label"
+        },
+        {
+          "type": "url",
+          "id": "secondary_url",
+          "label": "Secondary CTA link"
+        },
+        {
+          "type": "select",
+          "id": "secondary_style",
+          "label": "Secondary CTA style",
+          "options": [
+            {
+              "value": "primary",
+              "label": "Primary"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "ghost",
+              "label": "Ghost"
+            },
+            {
+              "value": "link",
+              "label": "Link"
+            }
+          ],
+          "default": "link"
+        },
+        {
+          "type": "select",
+          "id": "spacing_top",
+          "label": "Spacing above",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Space 1"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            }
+          ],
+          "default": "0"
+        },
+        {
+          "type": "select",
+          "id": "spacing_bottom",
+          "label": "Spacing below",
+          "options": [
+            {
+              "value": "0",
+              "label": "None"
+            },
+            {
+              "value": "1",
+              "label": "Space 1"
+            },
+            {
+              "value": "2",
+              "label": "Space 2"
+            },
+            {
+              "value": "3",
+              "label": "Space 3"
+            }
+          ],
+          "default": "0"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Photo Essay",
+      "blocks": [
+        {
+          "type": "hero_photo"
+        },
+        {
+          "type": "meta_row"
+        },
+        {
+          "type": "rich_text"
+        },
+        {
+          "type": "inline_image"
+        },
+        {
+          "type": "rich_text"
+        },
+        {
+          "type": "breakout_gallery"
+        },
+        {
+          "type": "pull_quote"
+        },
+        {
+          "type": "product_spec_box"
+        }
+      ]
+    },
+    {
+      "name": "Review Story",
+      "blocks": [
+        {
+          "type": "hero_photo"
+        },
+        {
+          "type": "meta_row"
+        },
+        {
+          "type": "rich_text"
+        },
+        {
+          "type": "product_card_inline"
+        },
+        {
+          "type": "inline_image"
+        },
+        {
+          "type": "breakout_gallery"
+        },
+        {
+          "type": "cta_group"
+        }
+      ]
+    },
+    {
+      "name": "Interview",
+      "blocks": [
+        {
+          "type": "hero_photo"
+        },
+        {
+          "type": "meta_row"
+        },
+        {
+          "type": "rich_text"
+        },
+        {
+          "type": "pull_quote"
+        },
+        {
+          "type": "inline_image"
+        },
+        {
+          "type": "rich_text"
+        },
+        {
+          "type": "cta_group"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

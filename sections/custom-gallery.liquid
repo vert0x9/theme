@@ -1,0 +1,304 @@
+{% comment %}
+BFC — Creative Photo Gallery
+A responsive, option-dense gallery section with flexible cards, typography, and button styles.
+Drop this into: sections/bfc-creative-photo-gallery.liquid
+{% endcomment %}
+
+<section id="bfc-creative-gallery-{{ section.id }}" class="bfc-gallery">
+  <style>
+    #bfc-creative-gallery-{{ section.id }}{--wrap:{{ section.settings.max_width }};--pad:{{ section.settings.section_padding }}px;--gap:{{ section.settings.gap }}px;--bg:{{ section.settings.bg }};--text:{{ section.settings.text_color }};--muted:{{ section.settings.muted_color }};--accent:{{ section.settings.accent }};--card:{{ section.settings.card_bg }};--radius:{{ section.settings.radius }}px;--sans:"{{ section.settings.sans_font | default: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial' }}";--display:"{{ section.settings.display_font | default: '"Playfair Display", Georgia, Times New Roman, Times, serif' }}";--cols:{{ section.settings.columns_desktop }};--cols-mobile:{{ section.settings.columns_mobile }};background:var(--bg);color:var(--text)}
+    #bfc-creative-gallery-{{ section.id }} .wrap{max-width:var(--wrap);margin-inline:auto;padding:var(--pad) 16px}
+    #bfc-creative-gallery-{{ section.id }} .intro{display:grid;gap:12px;margin-bottom:clamp(16px,3vw,32px)}
+    #bfc-creative-gallery-{{ section.id }} .eyebrow{font:700 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+    #bfc-creative-gallery-{{ section.id }} .hed{font-family:var(--display);font-weight:800;font-size:clamp(26px,3vw,42px);line-height:1.15;margin:0}
+    #bfc-creative-gallery-{{ section.id }} .dek{font:400 17px/1.7 var(--sans);color:var(--muted);margin:0}
+    #bfc-creative-gallery-{{ section.id }} .intro .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+    #bfc-creative-gallery-{{ section.id }} .gallery{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:var(--gap);grid-auto-flow:dense}
+    #bfc-creative-gallery-{{ section.id }} .card{position:relative;background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:none;transition:transform .2s ease}
+    #bfc-creative-gallery-{{ section.id }} .card:hover{transform:translateY(-4px)}
+    #bfc-creative-gallery-{{ section.id }} .card-inner{display:flex;flex-direction:column;height:100%}
+    #bfc-creative-gallery-{{ section.id }} .media{position:relative}
+    #bfc-creative-gallery-{{ section.id }} .media img{display:block;width:100%;height:100%;object-fit:{{ section.settings.object_fit }};aspect-ratio:var(--ratio, auto)}
+    #bfc-creative-gallery-{{ section.id }} .media .badge{position:absolute;top:12px;left:12px;padding:8px 12px;border-radius:999px;background:color-mix(in oklab, var(--accent) 82%, white);color:#0f172a;font:700 12px/1 var(--sans);text-transform:uppercase;letter-spacing:.08em;box-shadow:0 6px 20px rgba(0,0,0,.12)}
+    #bfc-creative-gallery-{{ section.id }} .overlay{position:absolute;inset:0;display:grid;align-content:end;padding:clamp(12px,3vw,26px);background:linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,.55) 100%);color:#fff;gap:10px}
+    #bfc-creative-gallery-{{ section.id }} .overlay.is-solid{background:color-mix(in oklab, var(--card) 80%, transparent);color:var(--text)}
+    #bfc-creative-gallery-{{ section.id }} .overlay .title{font-family:var(--display);font-weight:700;font-size:clamp(18px,2.5vw,30px);margin:0}
+    #bfc-creative-gallery-{{ section.id }} .overlay .subhead{font:600 14px/1.4 var(--sans);margin:0;color:inherit;opacity:.86}
+    #bfc-creative-gallery-{{ section.id }} .overlay .rich{font:400 14px/1.6 var(--sans);color:inherit}
+
+    #bfc-creative-gallery-{{ section.id }} .content{display:grid;gap:12px;padding:clamp(14px,2vw,20px)}
+    #bfc-creative-gallery-{{ section.id }} .content .title{font-family:var(--display);font-weight:700;font-size:clamp(18px,2.5vw,28px);margin:0}
+    #bfc-creative-gallery-{{ section.id }} .content .subhead{font:600 13px/1.5 var(--sans);text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin:0}
+    #bfc-creative-gallery-{{ section.id }} .content .rich{font:400 15px/1.7 var(--sans);color:var(--muted)}
+    #bfc-creative-gallery-{{ section.id }} .content .caption{font:500 12px/1.5 var(--sans);color:var(--muted)}
+
+    #bfc-creative-gallery-{{ section.id }} .meta-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    #bfc-creative-gallery-{{ section.id }} .chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:color-mix(in oklab, var(--accent) 12%, var(--card));color:var(--text);font:700 12px/1 var(--sans)}
+
+    #bfc-creative-gallery-{{ section.id }} .buttons{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+    #bfc-creative-gallery-{{ section.id }} .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:999px;font:700 14px/1 var(--sans);border:1px solid transparent;text-decoration:none;transition:all .2s ease}
+    #bfc-creative-gallery-{{ section.id }} .btn--primary{background:var(--accent);color:#0f172a;border-color:var(--accent)}
+    #bfc-creative-gallery-{{ section.id }} .btn--outline{background:transparent;color:var(--text);border-color:var(--text)}
+    #bfc-creative-gallery-{{ section.id }} .btn--ghost{background:transparent;color:var(--text);border-color:transparent}
+    #bfc-creative-gallery-{{ section.id }} .btn--link{background:transparent;color:var(--accent);border-color:transparent;padding:0;text-decoration:underline;text-underline-offset:4px}
+
+    #bfc-creative-gallery-{{ section.id }} .card.span-2{grid-column:span 2}
+    #bfc-creative-gallery-{{ section.id }} .card.span-3{grid-column:span 3}
+    #bfc-creative-gallery-{{ section.id }} .card.span-4{grid-column:span 4}
+    #bfc-creative-gallery-{{ section.id }} .card.is-frameless{box-shadow:none;background:transparent}
+    #bfc-creative-gallery-{{ section.id }} .card.is-frameless .content{padding:0}
+
+    #bfc-creative-gallery-{{ section.id }} .text-card{background:color-mix(in oklab, var(--card) 80%, white);display:grid;gap:14px}
+    #bfc-creative-gallery-{{ section.id }} .text-card .headline{font-family:var(--display);font-weight:800;font-size:clamp(20px,2.8vw,32px);margin:0}
+    #bfc-creative-gallery-{{ section.id }} .text-card .body{font:400 15px/1.8 var(--sans);color:var(--muted)}
+
+    #bfc-creative-gallery-{{ section.id }} dialog.bfc-gallery-lightbox{border:0;padding:0;background:transparent;max-width:min(92vw,1400px)}
+    #bfc-creative-gallery-{{ section.id }} dialog.bfc-gallery-lightbox::backdrop{background:rgba(0,0,0,.7)}
+    #bfc-creative-gallery-{{ section.id }} .lb-inner{position:relative}
+    #bfc-creative-gallery-{{ section.id }} .lb-inner img{display:block;width:100%;height:auto;border-radius:20px}
+    #bfc-creative-gallery-{{ section.id }} .lb-close{position:absolute;top:10px;right:10px;padding:10px 14px;border-radius:999px;border:0;background:#000000b0;color:#fff;font:700 13px/1 var(--sans);cursor:pointer}
+
+    @media(max-width:900px){
+      #bfc-creative-gallery-{{ section.id }}{--cols:{{ section.settings.columns_tablet | default: 2 }}}
+    }
+    @media(max-width:720px){
+      #bfc-creative-gallery-{{ section.id }}{--cols:var(--cols-mobile)}
+      #bfc-creative-gallery-{{ section.id }} .card.span-2,#bfc-creative-gallery-{{ section.id }} .card.span-3,#bfc-creative-gallery-{{ section.id }} .card.span-4{grid-column:span var(--cols-mobile)}
+    }
+  </style>
+
+  <div class="wrap">
+    <div class="intro tx-{{ section.settings.text_align }}">
+      {% if section.settings.eyebrow != blank %}<div class="eyebrow">{{ section.settings.eyebrow }}</div>{% endif %}
+      {% if section.settings.title != blank %}<h2 class="hed">{{ section.settings.title }}</h2>{% endif %}
+      {% if section.settings.dek != blank %}<div class="dek">{{ section.settings.dek }}</div>{% endif %}
+      {% if section.settings.show_controls %}
+        <div class="controls buttons">
+          {% if section.settings.primary_text != blank %}<a class="btn btn--primary" href="{{ section.settings.primary_url }}">{{ section.settings.primary_text }}</a>{% endif %}
+          {% if section.settings.secondary_text != blank %}<a class="btn btn--outline" href="{{ section.settings.secondary_url }}">{{ section.settings.secondary_text }}</a>{% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="gallery">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'image_card' %}
+            {% assign ratio = block.settings.ratio_override %}
+            <article class="card span-{{ block.settings.span }} {% if block.settings.frameless %}is-frameless{% endif %}" style="--ratio:{{ ratio }}" {{ block.shopify_attributes }}>
+              <div class="card-inner">
+                {% if block.settings.image != blank %}
+                  {% assign w = 1600 %}
+                  {% assign ar = block.settings.image.aspect_ratio | default: 1 %}
+                  {% assign h = w | divided_by: ar | ceil %}
+                  <div class="media">
+                    {% if block.settings.enable_link and block.settings.link_url != blank %}<a class="cover-link" href="{{ block.settings.link_url }}" aria-label="Open" style="position:absolute;inset:0;z-index:2"></a>{% endif %}
+                    <img src="{{ block.settings.image | image_url: width: w }}" alt="{{ block.settings.alt | default: block.settings.title | escape }}" width="{{ w }}" height="{{ h }}" loading="lazy" decoding="async">
+                    {% if block.settings.badge != blank %}<div class="badge">{{ block.settings.badge }}</div>{% endif %}
+                    {% if block.settings.overlay_title != blank or block.settings.overlay_body != blank %}
+                      <div class="overlay {% if block.settings.overlay_style == 'solid' %}is-solid{% endif %} align-{{ block.settings.text_align }}">
+                        {% if block.settings.overlay_subhead != blank %}<p class="subhead">{{ block.settings.overlay_subhead }}</p>{% endif %}
+                        {% if block.settings.overlay_title != blank %}<p class="title">{{ block.settings.overlay_title }}</p>{% endif %}
+                        {% if block.settings.overlay_body != blank %}<div class="rich">{{ block.settings.overlay_body }}</div>{% endif %}
+                        {% if block.settings.overlay_button_text != blank %}
+                          <div class="buttons">
+                            <a href="{{ block.settings.overlay_button_url }}" class="btn btn--{{ block.settings.overlay_button_style }}">{{ block.settings.overlay_button_text }}</a>
+                            {% if block.settings.enable_lightbox %}<button type="button" class="btn btn--ghost" data-lightbox data-lightbox-src="{{ block.settings.image | image_url: width: 2400 }}" data-lightbox-alt="{{ block.settings.alt | escape }}">{{ block.settings.lightbox_label }}</button>{% endif %}
+                          </div>
+                        {% elsif block.settings.enable_lightbox %}
+                          <div class="buttons"><button type="button" class="btn btn--ghost" data-lightbox data-lightbox-src="{{ block.settings.image | image_url: width: 2400 }}" data-lightbox-alt="{{ block.settings.alt | escape }}">{{ block.settings.lightbox_label }}</button></div>
+                        {% endif %}
+                      </div>
+                    {% elsif block.settings.enable_lightbox %}
+                      <button type="button" class="btn btn--ghost" style="position:absolute;bottom:12px;right:12px;z-index:3" data-lightbox data-lightbox-src="{{ block.settings.image | image_url: width: 2400 }}" data-lightbox-alt="{{ block.settings.alt | escape }}">{{ block.settings.lightbox_label }}</button>
+                    {% endif %}
+                  </div>
+                {% endif %}
+
+                <div class="content tx-{{ block.settings.text_align }}">
+                  {% if block.settings.subhead != blank %}<p class="subhead">{{ block.settings.subhead }}</p>{% endif %}
+                  {% if block.settings.title != blank %}<p class="title">{{ block.settings.title }}</p>{% endif %}
+                  {% if block.settings.body != blank %}<div class="rich">{{ block.settings.body }}</div>{% endif %}
+                  <div class="meta-row">
+                    {% if block.settings.tag_one != blank %}<span class="chip">{{ block.settings.tag_one }}</span>{% endif %}
+                    {% if block.settings.tag_two != blank %}<span class="chip">{{ block.settings.tag_two }}</span>{% endif %}
+                  </div>
+                  {% if block.settings.caption != blank %}<div class="caption">{{ block.settings.caption }}</div>{% endif %}
+                  <div class="buttons align-{{ block.settings.button_align }}">
+                    {% if block.settings.button_text != blank %}<a class="btn btn--{{ block.settings.button_style }}" href="{{ block.settings.button_url }}">{{ block.settings.button_text }}</a>{% endif %}
+                    {% if block.settings.secondary_text != blank %}<a class="btn btn--{{ block.settings.secondary_style }}" href="{{ block.settings.secondary_url }}">{{ block.settings.secondary_text }}</a>{% endif %}
+                  </div>
+                </div>
+              </div>
+            </article>
+
+          {% when 'text_block' %}
+            <article class="card text-card span-{{ block.settings.span }}" style="background:{{ block.settings.background }}" {{ block.shopify_attributes }}>
+              <div class="content">
+                {% if block.settings.kicker != blank %}<p class="subhead">{{ block.settings.kicker }}</p>{% endif %}
+                {% if block.settings.headline != blank %}<p class="headline">{{ block.settings.headline }}</p>{% endif %}
+                {% if block.settings.body != blank %}<div class="body">{{ block.settings.body }}</div>{% endif %}
+                <div class="buttons">
+                  {% if block.settings.button_text != blank %}<a class="btn btn--{{ block.settings.button_style }}" href="{{ block.settings.button_url }}">{{ block.settings.button_text }}</a>{% endif %}
+                  {% if block.settings.link_text != blank %}<a class="btn btn--link" href="{{ block.settings.link_url }}">{{ block.settings.link_text }}</a>{% endif %}
+                </div>
+              </div>
+            </article>
+
+          {% when 'spacer' %}
+            <div class="card span-{{ block.settings.span }} is-frameless" style="height:{{ block.settings.height }}px" aria-hidden="true" {{ block.shopify_attributes }}></div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <dialog class="bfc-gallery-lightbox" id="bfc-gallery-lightbox-{{ section.id }}">
+    <div class="lb-inner">
+      <button class="lb-close" type="button" aria-label="Close">✕</button>
+      <img
+        src="data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs="
+        alt=""
+        width="1600"
+        height="900"
+        loading="lazy"
+        decoding="async"
+      >
+    </div>
+  </dialog>
+
+  <script>
+    (() => {
+      const root = document.getElementById('bfc-creative-gallery-{{ section.id }}');
+      if (!root) return;
+      const lightbox = root.querySelector('dialog.bfc-gallery-lightbox');
+      const lbImg = lightbox?.querySelector('img');
+      const closeBtn = lightbox?.querySelector('.lb-close');
+      root.querySelectorAll('[data-lightbox]').forEach(el => {
+        el.addEventListener('click', evt => {
+          evt.preventDefault();
+          const src = el.getAttribute('data-lightbox-src');
+          if (!lightbox || !src || !lbImg) return;
+          lbImg.src = src;
+          lbImg.alt = el.getAttribute('data-lightbox-alt') || '';
+          lightbox.showModal();
+        });
+      });
+      closeBtn?.addEventListener('click', () => lightbox?.close());
+      lightbox?.addEventListener('click', evt => {
+        const rect = lightbox.getBoundingClientRect();
+        if (evt.clientX < rect.left || evt.clientX > rect.right || evt.clientY < rect.top || evt.clientY > rect.bottom) {
+          lightbox.close();
+        }
+      });
+    })();
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "BFC Creative Gallery",
+  "tag": "section",
+  "class": "spaced-section",
+  "settings": [
+    {"type":"text","id":"eyebrow","label":"Eyebrow"},
+    {"type":"richtext","id":"title","label":"Heading","default":"<p>Creative gallery</p>"},
+    {"type":"richtext","id":"dek","label":"Subheading"},
+    {"type":"select","id":"text_align","label":"Intro alignment","default":"center","options":[{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}]},
+    {"type":"checkbox","id":"show_controls","label":"Show intro buttons","default":true},
+    {"type":"text","id":"primary_text","label":"Primary button text","default":"View collection"},
+    {"type":"url","id":"primary_url","label":"Primary button link"},
+    {"type":"text","id":"secondary_text","label":"Secondary button text","default":"Learn more"},
+    {"type":"url","id":"secondary_url","label":"Secondary button link"},
+    {"type":"range","id":"max_width","label":"Content width","min":960,"max":1680,"step":20,"unit":"px","default":1200},
+    {"type":"range","id":"section_padding","label":"Section padding","min":0,"max":120,"step":4,"unit":"px","default":52},
+    {"type":"range","id":"gap","label":"Gallery gap","min":6,"max":36,"step":2,"unit":"px","default":16},
+    {"type":"select","id":"object_fit","label":"Image object fit","default":"cover","options":[{"value":"cover","label":"Cover"},{"value":"contain","label":"Contain"}]},
+    {"type":"range","id":"columns_desktop","label":"Columns (desktop)","min":2,"max":5,"step":1,"default":3},
+    {"type":"range","id":"columns_tablet","label":"Columns (tablet)","min":2,"max":4,"step":1,"default":2},
+    {"type":"range","id":"columns_mobile","label":"Columns (mobile)","min":1,"max":3,"step":1,"default":1},
+    {"type":"range","id":"radius","label":"Card radius","min":0,"max":32,"step":2,"unit":"px","default":16},
+    {"type":"text","id":"sans_font","label":"Sans font stack","default":"Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial"},
+    {"type":"text","id":"display_font","label":"Display font stack","default":"\"Playfair Display\", Georgia, Times New Roman, Times, serif"},
+    {"type":"color","id":"bg","label":"Background","default":"#f8fafc"},
+    {"type":"color","id":"card_bg","label":"Card background","default":"#ffffff"},
+    {"type":"color","id":"text_color","label":"Text color","default":"#0f172a"},
+    {"type":"color","id":"muted_color","label":"Muted color","default":"#6b7280"},
+    {"type":"color","id":"accent","label":"Accent color","default":"#eab308"}
+  ],
+  "blocks": [
+    {
+      "type":"image_card",
+      "name":"Image card",
+      "limit":20,
+      "settings":[
+        {"type":"image_picker","id":"image","label":"Image"},
+        {"type":"text","id":"alt","label":"Alt text"},
+        {"type":"select","id":"ratio_override","label":"Aspect ratio","default":"auto","options":[{"value":"auto","label":"Natural"},{"value":"1 / 1","label":"Square"},{"value":"4 / 5","label":"Portrait"},{"value":"3 / 2","label":"Landscape"},{"value":"16 / 9","label":"Cinematic"}]},
+        {"type":"range","id":"span","label":"Column span","min":1,"max":4,"step":1,"default":1},
+        {"type":"checkbox","id":"frameless","label":"Frameless image","default":false},
+        {"type":"text","id":"badge","label":"Badge"},
+        {"type":"text","id":"overlay_subhead","label":"Overlay subhead"},
+        {"type":"text","id":"overlay_title","label":"Overlay title"},
+        {"type":"richtext","id":"overlay_body","label":"Overlay body"},
+        {"type":"select","id":"overlay_style","label":"Overlay style","default":"gradient","options":[{"value":"gradient","label":"Gradient"},{"value":"solid","label":"Solid card"}]},
+        {"type":"text","id":"overlay_button_text","label":"Overlay button text"},
+        {"type":"url","id":"overlay_button_url","label":"Overlay button link"},
+        {"type":"select","id":"overlay_button_style","label":"Overlay button style","default":"primary","options":[{"value":"primary","label":"Primary"},{"value":"outline","label":"Outline"},{"value":"ghost","label":"Ghost"},{"value":"link","label":"Link"}]},
+        {"type":"checkbox","id":"enable_lightbox","label":"Enable lightbox button","default":true},
+        {"type":"text","id":"lightbox_label","label":"Lightbox label","default":"View larger"},
+        {"type":"checkbox","id":"enable_link","label":"Make image clickable","default":false},
+        {"type":"url","id":"link_url","label":"Image link"},
+        {"type":"text","id":"subhead","label":"Card subhead"},
+        {"type":"text","id":"title","label":"Card title","default":"Photo story"},
+        {"type":"richtext","id":"body","label":"Description"},
+        {"type":"text","id":"tag_one","label":"Tag one"},
+        {"type":"text","id":"tag_two","label":"Tag two"},
+        {"type":"text","id":"caption","label":"Caption"},
+        {"type":"select","id":"text_align","label":"Text alignment","default":"left","options":[{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}]},
+        {"type":"text","id":"button_text","label":"Primary button"},
+        {"type":"url","id":"button_url","label":"Primary button link"},
+        {"type":"select","id":"button_style","label":"Primary style","default":"primary","options":[{"value":"primary","label":"Primary"},{"value":"outline","label":"Outline"},{"value":"ghost","label":"Ghost"},{"value":"link","label":"Link"}]},
+        {"type":"text","id":"secondary_text","label":"Secondary button"},
+        {"type":"url","id":"secondary_url","label":"Secondary link"},
+        {"type":"select","id":"secondary_style","label":"Secondary style","default":"outline","options":[{"value":"primary","label":"Primary"},{"value":"outline","label":"Outline"},{"value":"ghost","label":"Ghost"},{"value":"link","label":"Link"}]},
+        {"type":"select","id":"button_align","label":"Button alignment","default":"left","options":[{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}]}
+      ]
+    },
+    {
+      "type":"text_block",
+      "name":"Text / promo card",
+      "settings":[
+        {"type":"range","id":"span","label":"Column span","min":1,"max":4,"step":1,"default":2},
+        {"type":"color","id":"background","label":"Background","default":"#f8fafc"},
+        {"type":"text","id":"kicker","label":"Kicker"},
+        {"type":"text","id":"headline","label":"Headline","default":"Curated sets"},
+        {"type":"richtext","id":"body","label":"Body"},
+        {"type":"text","id":"button_text","label":"Primary button"},
+        {"type":"url","id":"button_url","label":"Primary link"},
+        {"type":"select","id":"button_style","label":"Primary style","default":"primary","options":[{"value":"primary","label":"Primary"},{"value":"outline","label":"Outline"},{"value":"ghost","label":"Ghost"},{"value":"link","label":"Link"}]},
+        {"type":"text","id":"link_text","label":"Text link"},
+        {"type":"url","id":"link_url","label":"Text link url"}
+      ]
+    },
+    {
+      "type":"spacer",
+      "name":"Spacer",
+      "settings":[
+        {"type":"range","id":"span","label":"Column span","min":1,"max":4,"step":1,"default":1},
+        {"type":"range","id":"height","label":"Height","min":10,"max":120,"step":5,"unit":"px","default":30}
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Creative photo gallery",
+      "blocks": [
+        {"type":"image_card"},
+        {"type":"image_card"},
+        {"type":"text_block"}
+      ]
+    }
+  ]
+}
+{% endschema %}

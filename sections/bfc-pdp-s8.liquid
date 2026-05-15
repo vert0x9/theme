@@ -1,0 +1,1415 @@
+{{- 'section-product.css' | asset_url | stylesheet_tag -}}
+<script src="{{ 'product-variants.js' | asset_url }}" defer="defer"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet"/></noscript>
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+
+  assign g1 = product.metafields.custom.gallery_1.value
+  assign g2 = product.metafields.custom.gallery_2.value
+  assign g3 = product.metafields.custom.gallery_3.value
+  assign g4 = product.metafields.custom.gallery_4.value
+  assign g5 = product.metafields.custom.gallery_5.value
+  assign g6 = product.metafields.custom.gallery_6.value
+
+  assign spec_lens    = product.metafields.custom.spec_lens.value
+  assign spec_fps     = product.metafields.custom.spec_fps.value
+  assign spec_film    = product.metafields.custom.spec_filmformat.value
+  assign spec_sound   = product.metafields.custom.spec_sound.value
+  assign spec_battery = product.metafields.custom.spec_battery.value
+  assign spec_meter   = product.metafields.custom.spec_meter.value
+  assign spec_focus   = product.metafields.custom.spec_focus.value
+  assign spec_filter  = product.metafields.custom.spec_filtersize.value
+  assign spec_speeds  = product.metafields.custom.spec_shutterspeeds.value
+  assign spec_zoom    = product.metafields.custom.spec_zoom.value
+  assign spec_weight  = product.metafields.custom.spec_weight.value
+  assign spec_cart    = product.metafields.custom.spec_cartridge.value
+-%}
+
+<style>
+.bfc4 *, .bfc4 *::before, .bfc4 *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.bfc4 {
+  --or: #E36E15;
+  --go: #F4A027;
+  --ce: #ABCC99;
+  --cv: #F8F6EE;
+  --bk: #202009;
+  --ch: #4E4741;
+  --gr: #E3DDDA;
+  --sr: 'Cormorant Garamond', Georgia, serif;
+  --sn: 'Poppins', sans-serif;
+  --t:  0.2s ease;
+  font-family: var(--sn);
+  color: var(--bk);
+  background: var(--cv);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── SPLIT LAYOUT ──────────────────────────── */
+.bfc4-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+}
+
+/* ── LEFT: STICKY SLIDER ─────────────────── */
+.bfc4-left {
+  position: sticky;
+  top: 0;
+  width: 50vw;
+  height: 50vw;
+  max-height: 100vh;
+  overflow: hidden;
+  background: var(--gr);
+}
+.bfc4-slides {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+.bfc4-slide {
+  min-width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+  position: relative;
+}
+.bfc4-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+.bfc4-arrow {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(32,32,9,0.3);
+  border: none;
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background var(--t);
+  backdrop-filter: blur(4px);
+}
+.bfc4-arrow:hover { background: rgba(32,32,9,0.6); }
+.bfc4-arrow.is-prev { left: 16px; visibility: hidden; }
+.bfc4-arrow.is-next { right: 16px; }
+.bfc4-arrow svg { display: block; }
+.bfc4-dots {
+  position: absolute;
+  bottom: 16px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 6px; z-index: 10;
+}
+.bfc4-dot {
+  width: 6px; height: 6px;
+  background: rgba(255,255,255,0.4);
+  border: none; cursor: pointer; padding: 0;
+  transition: background var(--t), transform var(--t);
+}
+.bfc4-dot.is-active { background: #fff; transform: scale(1.3); }
+
+/* ── RIGHT: SCROLLABLE CONTENT ───────────── */
+.bfc4-right {
+  background: var(--cv);
+  padding: 36px 40px 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── PRODUCT HEADER ──────────────────────── */
+.bfc4-eyebrow {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--ch); margin-bottom: 6px; display: block;
+}
+.bfc4-title {
+  font-family: var(--sn); font-size: 28px; font-weight: 600;
+  line-height: 1.1; letter-spacing: -0.3px; margin-bottom: 6px;
+}
+.bfc4-title em { font-style: normal; color: var(--ch); font-weight: 400; }
+.bfc4-warranty {
+  font-size: 10px; color: var(--ch); letter-spacing: 0.08em;
+  display: flex; align-items: center; gap: 6px;
+}
+.bfc4-warranty::before {
+  content: '';
+  width: 16px; height: 1px; background: var(--ch); display: block;
+}
+.bfc4-kit-desc {
+  font-size: 12px; color: var(--ch); line-height: 1.6; margin-top: 4px;
+}
+
+/* ── 24FPS BADGE ─────────────────────────── */
+.bfc4-fps-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: linear-gradient(135deg, #2a4820 0%, #3a6230 100%);
+  padding: 6px 12px; margin-top: 10px;
+  font-size: 10px; font-weight: 600; color: #fff;
+  letter-spacing: 0.06em;
+}
+.bfc4-fps-badge svg { flex-shrink: 0; }
+
+/* ── MINI SPECS (right rail) ─────────────── */
+.bfc4-mini-specs {
+  border-top: 1px solid rgba(32,32,9,0.08);
+  padding-top: 16px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+}
+.bfc4-mini-spec {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(32,32,9,0.06);
+  display: flex; flex-direction: column; gap: 2px;
+}
+.bfc4-mini-spec:nth-child(odd) { padding-right: 16px; }
+.bfc4-mini-spec:nth-child(even) { padding-left: 16px; border-left: 1px solid rgba(32,32,9,0.06); }
+.bfc4-mini-spec:nth-last-child(-n+2) { border-bottom: none; }
+.bfc4-spec-key { font-size: 8px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(32,32,9,0.3); }
+.bfc4-spec-val { font-size: 11.5px; font-weight: 500; }
+
+/* ── ADD FILM SECTION ────────────────────── */
+.bfc4-film-head {
+  border-top: 1px solid rgba(32,32,9,0.1);
+  padding-top: 16px;
+}
+.bfc4-film-eyebrow {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--or); margin-bottom: 4px; display: block;
+}
+.bfc4-film-note {
+  font-size: 11px; color: var(--ch); line-height: 1.5;
+}
+.bfc4-film-tiles {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+}
+.bfc4-film-tile {
+  display: flex; flex-direction: column;
+  background: #fff;
+  border: 1px solid rgba(32,32,9,0.08);
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  transition: border-color var(--t), box-shadow var(--t);
+}
+.bfc4-film-tile:hover { border-color: rgba(227,110,21,0.3); }
+.bfc4-film-tile.is-sel { border: 2px solid var(--or); box-shadow: 0 0 0 1px rgba(227,110,21,0.15); }
+.bfc4-film-tile-img {
+  aspect-ratio: 1/1;
+  overflow: hidden;
+  background: var(--gr);
+}
+.bfc4-film-tile-img img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform 0.4s ease;
+}
+.bfc4-film-tile:hover .bfc4-film-tile-img img { transform: scale(1.04); }
+.bfc4-film-tile-body {
+  padding: 8px 8px 6px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.bfc4-film-tile-name {
+  font-size: 10px; font-weight: 600; line-height: 1.3;
+  overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.bfc4-film-tile-price {
+  font-size: 10px; font-weight: 700; color: var(--or);
+}
+.bfc4-film-tile-sel-check {
+  position: absolute; top: 6px; right: 6px;
+  width: 18px; height: 18px; background: var(--or); color: #fff;
+  font-size: 10px; font-weight: 700; display: none; align-items: center; justify-content: center;
+}
+.bfc4-film-tile.is-sel .bfc4-film-tile-sel-check { display: flex; }
+
+/* Out of stock — film tiles */
+.bfc4-film-tile.is-oos {
+  opacity: 0.5; cursor: not-allowed; pointer-events: none;
+}
+.bfc4-film-tile.is-oos .bfc4-film-tile-img img { filter: grayscale(60%); }
+.bfc4-film-tile-oos {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  font-size: 7px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  background: rgba(32,32,9,0.55); color: rgba(255,255,255,0.8); padding: 2px 0; text-align: center;
+}
+
+/* ── GRADE + BUY ─────────────────────────── */
+.bfc4-grade-compact {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 4px;
+}
+.bfc4-grade-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ch); white-space: nowrap;
+}
+.bfc4-grade-compact .bfc4-grade-row { flex: 1; }
+.bfc4-grade-compact .bfc4-var-btn { padding: 7px 8px; font-size: 10px; }
+
+.bfc4-grade-row {
+  display: flex; gap: 6px;
+}
+.bfc4-var-btn {
+  flex: 1; padding: 10px 8px;
+  border: 1px solid rgba(32,32,9,0.15);
+  background: #fff; cursor: pointer; font-family: var(--sn);
+  font-size: 11px; font-weight: 600; color: var(--bk);
+  transition: all var(--t); text-align: center;
+}
+.bfc4-var-btn:hover { border-color: var(--or); }
+.bfc4-var-btn.is-active { border: 2px solid var(--or); color: var(--or); background: rgba(227,110,21,0.05); }
+.bfc4-var-btn[disabled] {
+  opacity: 0.5; cursor: not-allowed;
+  border-color: rgba(32,32,9,0.08); color: rgba(32,32,9,0.3);
+  background: rgba(32,32,9,0.03);
+}
+.bfc4-var-btn[disabled]:hover { border-color: rgba(32,32,9,0.08); }
+.bfc4-var-btn-oos {
+  display: block; font-size: 8px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(32,32,9,0.3); margin-top: 2px;
+}
+
+.bfc4-price-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 6px;
+}
+.bfc4-price-label { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ch); }
+.bfc4-price {
+  font-family: var(--sr); font-size: 40px; font-weight: 300; color: var(--bk); line-height: 1;
+}
+
+.bfc4-atc {
+  width: 100%; padding: 14px;
+  background: var(--or); color: #fff; border: none;
+  cursor: pointer; font-family: var(--sn); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  transition: background var(--t); display: block; text-align: center; margin-bottom: 8px;
+}
+.bfc4-atc:hover:not([disabled]) { background: #c9600f; }
+.bfc4-atc[disabled] { opacity: 0.5; cursor: not-allowed; }
+.bfc4-atc.is-success { background: #2a4820 !important; }
+.bfc4-cam-only {
+  width: 100%; font-size: 9px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(32,32,9,0.3); background: none;
+  border: none; cursor: pointer; transition: color var(--t); font-family: var(--sn);
+  text-align: center; padding: 4px 0; display: block;
+}
+.bfc4-cam-only:hover { color: var(--bk); }
+
+/* ── KIT SUMMARY ─────────────────────────── */
+.bfc4-kit-summary {
+  border-top: 1px solid rgba(32,32,9,0.08);
+  padding-top: 14px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.bfc4-ks-label { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ch); margin-bottom: 4px; }
+.bfc4-ks-line {
+  display: flex; align-items: center; gap: 8px;
+}
+.bfc4-ks-img { width: 24px; height: 24px; object-fit: cover; background: var(--gr); flex-shrink: 0; }
+.bfc4-ks-name { font-size: 10.5px; color: var(--ch); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bfc4-ks-price { font-size: 10.5px; font-weight: 700; color: var(--or); }
+.bfc4-ks-remove {
+  background: none; border: none; cursor: pointer; color: rgba(32,32,9,0.2);
+  font-size: 13px; padding: 0; flex-shrink: 0; transition: color var(--t);
+}
+.bfc4-ks-remove:hover { color: var(--bk); }
+
+/* ── BELOW FOLD ───────────────────────────── */
+.bfc4-below { background: var(--cv); }
+
+/* Shot on */
+.bfc4 .ba-shot { background: var(--cv); border-top: 1px solid rgba(32,32,9,0.1); }
+.bfc4 .ba-shot-head { padding: 48px 48px 24px; display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid rgba(32,32,9,0.1); }
+.bfc4 .ba-shot-title { font-family: var(--sr); font-size: 40px; font-weight: 300; }
+.bfc4 .ba-shot-sub { font-size: 11px; color: var(--ch); font-style: italic; }
+.bfc4 .ba-shot-grid { display: grid; grid-template-columns: repeat(6, 1fr); }
+.bfc4 .ba-shot-grid a { display: block; overflow: hidden; border-right: 1px solid rgba(32,32,9,0.08); line-height: 0; font-size: 0; }
+.bfc4 .ba-shot-grid a:last-child { border-right: none; }
+.bfc4 .ba-shot-grid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; transition: transform 0.4s ease; }
+.bfc4 .ba-shot-grid a:hover img { transform: scale(1.04); }
+
+/* Restoration */
+.bfc4 .ba-restore { background: var(--bk); }
+.bfc4 .ba-restore-top { display: grid; grid-template-columns: 1fr 1fr; padding: 56px 48px 40px; gap: 48px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.bfc4 .ba-restore-headline { display: flex; flex-direction: column; justify-content: flex-end; }
+.bfc4 .ba-restore-ey { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--go); margin-bottom: 16px; display: block; }
+.bfc4 .ba-restore-title { font-family: var(--sr); font-size: 42px; font-weight: 300; color: #fff; line-height: 1.05; }
+.bfc4 .ba-restore-title em { font-style: italic; color: rgba(255,255,255,0.3); }
+.bfc4 .ba-restore-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+.bfc4 .ba-r-stat { padding: 0 24px; border-left: 1px solid rgba(255,255,255,0.07); display: flex; flex-direction: column; justify-content: center; }
+.bfc4 .ba-r-stat:first-child { border-left: none; padding-left: 0; }
+.bfc4 .ba-r-stat-num { font-family: var(--sr); font-size: 52px; font-weight: 300; color: #fff; line-height: 1; margin-bottom: 8px; }
+.bfc4 .ba-r-stat-num span { color: var(--go); font-size: 0.6em; }
+.bfc4 .ba-r-stat-label { font-size: 10.5px; color: rgba(255,255,255,0.3); line-height: 1.5; max-width: 100px; }
+.bfc4 .ba-restore-body {
+  padding: 0 48px 56px;
+}
+.bfc4 .ba-restore-list {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+}
+.bfc4 .ba-restore-item {
+  padding: 20px 32px 20px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.bfc4 .ba-restore-item:nth-child(even) {
+  padding-left: 32px; padding-right: 0;
+  border-left: 1px solid rgba(255,255,255,0.06);
+}
+.bfc4 .ba-restore-item-title {
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.75);
+  margin-bottom: 4px;
+}
+.bfc4 .ba-restore-item-title.is-highlight { color: var(--go); }
+.bfc4 .ba-restore-item-desc {
+  font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.6;
+}
+
+/* Extended Warranty */
+.bfc4 .ba-ext-warranty { border-top: 1px solid rgba(32,32,9,0.08); padding-top: 16px; }
+.bfc4 .ba-ext-w-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.bfc4 .ba-ext-w-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--or); }
+.bfc4 .ba-ext-w-baseline { font-size: 10px; color: var(--ch); margin-bottom: 10px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.5; }
+.bfc4 .ba-ext-w-baseline svg { flex-shrink: 0; color: #2a4820; margin-top: 2px; }
+.bfc4 .ba-ext-w-baseline strong { color: var(--bk); }
+.bfc4 .ba-ext-w-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.bfc4 .ba-ext-w-btn { border: 1px solid rgba(32,32,9,0.1); background: #fff; padding: 10px 8px; cursor: pointer; font-family: var(--sn); text-align: center; transition: border-color var(--t), box-shadow var(--t); display: flex; flex-direction: column; gap: 3px; position: relative; }
+.bfc4 .ba-ext-w-btn:hover { border-color: var(--or); }
+.bfc4 .ba-ext-w-btn.is-sel { border: 2px solid var(--or); box-shadow: 0 0 0 1px rgba(227,110,21,0.15); }
+.bfc4 .ba-ext-w-btn.is-sel::after { content: '✓'; position: absolute; top: 4px; right: 5px; font-size: 8px; font-weight: 700; color: var(--or); }
+.bfc4 .ba-ext-w-extend { font-size: 11px; font-weight: 700; color: var(--or); line-height: 1; }
+.bfc4 .ba-ext-w-months { font-size: 9px; color: var(--ch); letter-spacing: 0.04em; line-height: 1; }
+.bfc4 .ba-ext-w-price { font-size: 11px; font-weight: 700; color: var(--bk); margin-top: 2px; }
+.bfc4 .ba-ext-w-acc { font-size: 7.5px; color: #2a4820; font-weight: 600; letter-spacing: 0.04em; margin-top: 1px; }
+.bfc4 .ba-ext-w-none { font-size: 8.5px; color: rgba(32,32,9,0.4); margin-top: 8px; text-align: left; cursor: pointer; background: none; border: none; font-family: var(--sn); transition: color var(--t); padding: 0; display: none; }
+.bfc4 .ba-ext-w-none.is-vis { display: block; }
+.bfc4 .ba-ext-w-none:hover { color: var(--bk); }
+
+/* Warranty & Returns Policy */
+.bfc4 .ba-policy { display: grid; grid-template-columns: 1fr 1fr; background: var(--cv); border-top: 1px solid rgba(32,32,9,0.06); }
+.bfc4 .ba-policy-col { padding: 48px; }
+.bfc4 .ba-policy-col:first-child { border-right: 1px solid rgba(32,32,9,0.06); }
+.bfc4 .ba-policy-ey { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--go); display: block; margin-bottom: 12px; }
+.bfc4 .ba-policy-title { font-family: var(--sr); font-size: 28px; font-weight: 300; color: var(--bk); line-height: 1.1; margin: 0 0 16px; }
+.bfc4 .ba-policy-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: rgba(171,204,153,0.2); color: var(--or); font-size: 10px; font-weight: 600; letter-spacing: 0.06em; margin-bottom: 20px; }
+.bfc4 .ba-policy-body { font-size: 13px; line-height: 1.6; color: var(--ch); }
+.bfc4 .ba-policy-body p { margin: 0; }
+.bfc4 .ba-policy-body strong { color: var(--bk); }
+
+/* Full specs */
+.bfc4 .ba-specs { background: var(--bk); border-top: 1px solid rgba(255,255,255,0.06); display: grid; grid-template-columns: 280px 1fr; }
+.bfc4 .ba-specs-head { padding: 48px 40px 48px 48px; border-right: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; justify-content: flex-start; }
+.bfc4 .ba-specs-title { font-family: var(--sr); font-size: 36px; font-weight: 300; color: #fff; line-height: 1; margin-bottom: 10px; }
+.bfc4 .ba-specs-note { font-size: 10px; color: rgba(255,255,255,0.2); line-height: 1.5; }
+.bfc4 .ba-specs-body { padding: 48px 48px 48px 40px; }
+.bfc4 .ba-specs-table { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.bfc4 .ba-spec { display: flex; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.bfc4 .ba-spec:nth-child(odd) { padding-right: 32px; }
+.bfc4 .ba-spec:nth-child(even) { padding-left: 32px; border-left: 1px solid rgba(255,255,255,0.05); }
+.bfc4 .ba-spec:nth-last-child(-n+2) { border-bottom: none; }
+.bfc4 .ba-spec-key { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.2); flex-shrink: 0; min-width: 100px; }
+.bfc4 .ba-spec-val { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.7); }
+
+/* Popup */
+.bfc4 .ba-popup-overlay {
+  position: fixed; inset: 0;
+  background: rgba(32,32,9,0.55); z-index: 200; display: none;
+  align-items: center; justify-content: center; backdrop-filter: blur(3px);
+}
+.bfc4 .ba-popup-overlay.is-open { display: flex; }
+.bfc4 .ba-popup { background: #fff; max-width: 680px; width: 90%; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; animation: bfc4-popup-in 0.2s ease; }
+@keyframes bfc4-popup-in { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+.bfc4 .ba-popup-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid rgba(32,32,9,0.1); flex-shrink: 0; }
+.bfc4 .ba-popup-title { font-size: 14px; font-weight: 700; }
+.bfc4 .ba-popup-close { background: none; border: none; cursor: pointer; padding: 4px; color: var(--ch); display: flex; align-items: center; }
+.bfc4 .ba-popup-body { overflow-y: auto; flex: 1; }
+.bfc4 .ba-popup-imgs { display: grid; grid-template-columns: repeat(3, 1fr); }
+.bfc4 .ba-popup-imgs img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; border-right: 1px solid rgba(32,32,9,0.07); border-bottom: 1px solid rgba(32,32,9,0.07); }
+.bfc4 .ba-popup-desc { padding: 20px; font-size: 12.5px; color: var(--ch); line-height: 1.7; border-top: 1px solid rgba(32,32,9,0.08); }
+.bfc4 .ba-popup-desc p { margin-bottom: 10px; }
+
+/* ── MOBILE ───────────────────────────────── */
+@media (max-width: 900px) {
+  .bfc4-split { grid-template-columns: 1fr; min-height: 0; }
+  .bfc4-left { position: relative; width: 100%; height: 100vw; max-height: 520px; }
+  .bfc4-arrow { display: none; }
+  .bfc4-right { padding: 28px 20px 48px; gap: 24px; overflow-y: visible; }
+  .bfc4-title { font-size: 36px; }
+  .bfc4-film-tiles { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .bfc4-film-tile-body { padding: 6px 6px 5px; }
+  .bfc4-film-tile-name { font-size: 9px; }
+  .bfc4-film-tile-price { font-size: 9px; }
+  .bfc4-mini-specs { grid-template-columns: 1fr; }
+  .bfc4-mini-spec:nth-child(odd) { padding-right: 0; }
+  .bfc4-mini-spec:nth-child(even) { padding-left: 0; border-left: none; }
+  .bfc4 .ba-shot-head { padding: 36px 20px 16px; flex-direction: column; gap: 4px; }
+  .bfc4 .ba-shot-title { font-size: 28px; }
+  .bfc4 .ba-shot-grid { grid-template-columns: repeat(3, 1fr); }
+  .bfc4 .ba-restore-top { grid-template-columns: 1fr; gap: 24px; padding: 32px 20px 24px; }
+  .bfc4 .ba-restore-stats { grid-template-columns: repeat(3, 1fr); }
+  .bfc4 .ba-restore-body { padding: 0 20px 40px; }
+  .bfc4 .ba-restore-list { grid-template-columns: 1fr; }
+  .bfc4 .ba-restore-item:nth-child(even) { padding-left: 0; border-left: none; }
+  .bfc4 .ba-policy { grid-template-columns: 1fr; }
+  .bfc4 .ba-policy-col { padding: 32px 20px; }
+  .bfc4 .ba-policy-col:first-child { border-right: none; border-bottom: 1px solid rgba(32,32,9,0.06); }
+  .bfc4 .ba-policy-title { font-size: 22px; }
+  .bfc4 .ba-specs { grid-template-columns: 1fr; }
+  .bfc4 .ba-specs-head { padding: 24px 20px 16px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .bfc4 .ba-specs-body { padding: 16px 20px 24px; }
+  .bfc4 .ba-specs-table { grid-template-columns: 1fr; }
+  .bfc4 .ba-spec:nth-child(odd) { padding-right: 0; }
+  .bfc4 .ba-spec:nth-child(even) { padding-left: 0; border-left: none; }
+  .bfc4 .ba-spec:nth-last-child(-n+2) { border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .bfc4 .ba-spec:last-child { border-bottom: none; }
+  .bfc4 .ba-ext-w-options { grid-template-columns: repeat(2, 1fr); }
+  .bfc4 .ba-policy { grid-template-columns: 1fr; }
+  .bfc4 .ba-policy-col { padding: 32px 20px; }
+}
+
+/* ── Sticky Mobile ATC Bar ────────────────── */
+.bfc4-sticky-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--cv); border-top: 1px solid rgba(32,32,9,0.15); padding: 10px 16px; z-index: 100; align-items: center; gap: 12px; box-shadow: 0 -2px 12px rgba(0,0,0,0.08); }
+.bfc4-sticky-info { flex: 1; min-width: 0; }
+.bfc4-sticky-name { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--bk); }
+.bfc4-sticky-meta { display: flex; align-items: center; gap: 6px; margin-top: 1px; }
+.bfc4-sticky-grade { font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ch); }
+.bfc4-sticky-price { font-size: 13px; font-weight: 700; color: var(--or); }
+.bfc4-sticky-btn { background: var(--or); color: #fff; border: none; padding: 12px 24px; font-size: 10px; font-weight: 700; font-family: var(--sn); text-transform: uppercase; letter-spacing: 0.14em; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.bfc4-sticky-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+@media (max-width: 900px) {
+  .bfc4-sticky-bar.is-visible { display: flex; }
+}
+</style>
+
+<div class="bfc4">
+
+{%- comment -%} ── Collect film add-on blocks ── {%- endcomment -%}
+{%- assign film_blocks = section.blocks | where: 'type', 'film_item' -%}
+
+{%- comment -%} ── SPLIT: left image + right content ── {%- endcomment -%}
+<div class="bfc4-split">
+
+  {%- comment -%} LEFT: sticky slider {%- endcomment -%}
+  <div class="bfc4-left" id="bfc4-top">
+    {%- assign has_section_imgs = false -%}
+    {%- for i in (1..5) -%}
+      {%- assign img_key = 'slide_' | append: i -%}
+      {%- if section.settings[img_key] != blank -%}{%- assign has_section_imgs = true -%}{%- endif -%}
+    {%- endfor -%}
+
+    {%- if has_section_imgs -%}
+      {%- assign slide_images = '' -%}
+      {%- for i in (1..5) -%}
+        {%- assign img_key = 'slide_' | append: i -%}
+        {%- if section.settings[img_key] != blank -%}{%- assign slide_images = slide_images | append: '1' -%}{%- endif -%}
+      {%- endfor -%}
+      {%- assign total_slides = slide_images | size -%}
+
+      <div class="bfc4-slides" id="bfc4-slides">
+        {%- for i in (1..5) -%}
+          {%- assign img_key = 'slide_' | append: i -%}
+          {%- assign img_mob_key = 'slide_' | append: i | append: '_mobile' -%}
+          {%- assign img_val = section.settings[img_key] -%}
+          {%- assign img_mob = section.settings[img_mob_key] -%}
+          {%- if img_val != blank -%}
+            <div class="bfc4-slide">
+              <picture>
+                {%- if img_mob != blank -%}
+                  <source media="(max-width: 767px)" srcset="{{ img_mob | image_url: width: 900 }}"/>
+                {%- endif -%}
+                <img
+                  src="{{ img_val | image_url: width: 900 }}"
+                  srcset="{{ img_val | image_url: width: 600 }} 600w, {{ img_val | image_url: width: 900 }} 900w, {{ img_val | image_url: width: 1200 }} 1200w"
+                  sizes="(max-width: 900px) 100vw, 50vw"
+                  alt="{{ product.title | escape }}"
+                  width="900" height="900"
+                  {%- if i == 1 -%}loading="eager" fetchpriority="high"{%- else -%}loading="lazy"{%- endif -%}
+                />
+              </picture>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+    {%- else -%}
+      {%- assign media_images = product.media | where: 'media_type', 'image' -%}
+      {%- assign total_slides = media_images | size -%}
+
+      <div class="bfc4-slides" id="bfc4-slides">
+        {%- for media in media_images limit: 8 -%}
+          <div class="bfc4-slide">
+            <img
+              src="{{ media | image_url: width: 900 }}"
+              srcset="{{ media | image_url: width: 600 }} 600w, {{ media | image_url: width: 900 }} 900w, {{ media | image_url: width: 1200 }} 1200w"
+              sizes="(max-width: 900px) 100vw, 50vw"
+              alt="{{ product.title | escape }}"
+              width="900" height="900"
+              {%- if forloop.first -%}loading="eager" fetchpriority="high"{%- else -%}loading="lazy"{%- endif -%}
+            />
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if total_slides > 1 -%}
+      <button class="bfc4-arrow is-prev" onclick="bfc4Slide(-1)" aria-label="Previous">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="white" stroke-width="1.5" stroke-linecap="square"/></svg>
+      </button>
+      <button class="bfc4-arrow is-next" onclick="bfc4Slide(1)" aria-label="Next">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="white" stroke-width="1.5" stroke-linecap="square"/></svg>
+      </button>
+      <div class="bfc4-dots" id="bfc4-dots">
+        {%- for i in (1..total_slides) -%}
+          <button class="bfc4-dot{% if forloop.first %} is-active{% endif %}" onclick="bfc4GoTo({{ forloop.index0 }})"></button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} RIGHT: product content {%- endcomment -%}
+  <div class="bfc4-right">
+
+    {%- comment -%} 1. Product header {%- endcomment -%}
+    <div class="bfc4-header">
+      <span class="bfc4-eyebrow">Super 8 Camera — Professionally Refurbished &middot; 6-Month Warranty</span>
+      <h1 class="bfc4-title">{{ product.title }}</h1>
+      {%- liquid
+        assign desc_text = ''
+        assign desc_full = ''
+        if product.description contains 'bfc-desc-specs__desc'
+          assign desc_full = product.description | split: 'bfc-desc-specs__desc">' | last | split: '</div>' | first | strip_html | strip
+        endif
+        if desc_full == blank
+          assign desc_full = product.description | split: 'bfc-desc-specs__grid' | first | strip_html | strip
+        endif
+        if desc_full == blank
+          assign desc_full = product.description | strip_html | strip
+        endif
+
+        assign desc_text = desc_full
+
+        comment
+          Parse inline spec values from description as fallbacks.
+          Format: "Label: value" terminated by next "Label:" or end of string.
+        endcomment
+
+        assign d_film_type = ''
+        if desc_full contains 'Film Type:'
+          assign d_film_type = desc_full | split: 'Film Type:' | last
+          assign d_chop = 'FPS:,Lens:,Shutter Speed:,Aperture:,Focus:,Battery:,Frame Rate:,Metering:,Filter Size:,Weight:,Zoom:,Sound:,Cartridge:' | split: ','
+          for c in d_chop
+            if d_film_type contains c
+              assign d_film_type = d_film_type | split: c | first
+            endif
+          endfor
+          assign d_film_type = d_film_type | strip
+        endif
+
+        assign d_fps = ''
+        if desc_full contains 'FPS:'
+          assign d_fps = desc_full | split: 'FPS:' | last
+          assign d_chop = 'Lens:,Shutter Speed:,Aperture:,Focus:,Battery:,Film Type:,Frame Rate:,Metering:,Filter Size:,Weight:,Zoom:,Sound:,Cartridge:' | split: ','
+          for c in d_chop
+            if d_fps contains c
+              assign d_fps = d_fps | split: c | first
+            endif
+          endfor
+          assign d_fps = d_fps | strip
+        endif
+
+        assign d_lens = ''
+        if desc_full contains 'Lens:'
+          assign d_lens = desc_full | split: 'Lens:' | last
+          assign d_chop = 'FPS:,Shutter Speed:,Aperture:,Focus:,Battery:,Film Type:,Frame Rate:,Metering:,Filter Size:,Weight:,Zoom:,Sound:,Cartridge:' | split: ','
+          for c in d_chop
+            if d_lens contains c
+              assign d_lens = d_lens | split: c | first
+            endif
+          endfor
+          assign d_lens = d_lens | strip
+        endif
+
+        assign d_shutter = ''
+        if desc_full contains 'Shutter Speed:'
+          assign d_shutter = desc_full | split: 'Shutter Speed:' | last
+          assign d_chop = 'FPS:,Lens:,Aperture:,Focus:,Battery:,Film Type:,Frame Rate:,Metering:,Filter Size:,Weight:,Zoom:,Sound:,Cartridge:' | split: ','
+          for c in d_chop
+            if d_shutter contains c
+              assign d_shutter = d_shutter | split: c | first
+            endif
+          endfor
+          assign d_shutter = d_shutter | strip
+        endif
+
+        assign d_aperture = ''
+        if desc_full contains 'Aperture:'
+          assign d_aperture = desc_full | split: 'Aperture:' | last
+          assign d_chop = 'FPS:,Lens:,Shutter Speed:,Focus:,Battery:,Film Type:,Frame Rate:,Metering:,Filter Size:,Weight:,Zoom:,Sound:,Cartridge:' | split: ','
+          for c in d_chop
+            if d_aperture contains c
+              assign d_aperture = d_aperture | split: c | first
+            endif
+          endfor
+          assign d_aperture = d_aperture | strip
+        endif
+
+        assign d_focus = ''
+        if desc_full contains 'Focus:'
+          assign d_focus = desc_full | split: 'Focus:' | last
+          assign d_chop = 'FPS:,Lens:,Shutter Speed:,Aperture:,Battery:,Film Type:,Frame Rate:,Metering:,Filter Size:,Weight:,Zoom:,Sound:,Cartridge:' | split: ','
+          for c in d_chop
+            if d_focus contains c
+              assign d_focus = d_focus | split: c | first
+            endif
+          endfor
+          assign d_focus = d_focus | strip
+        endif
+
+        assign d_battery = ''
+        if desc_full contains 'Battery:'
+          assign d_battery = desc_full | split: 'Battery:' | last
+          assign d_chop = 'FPS:,Lens:,Shutter Speed:,Aperture:,Focus:,Film Type:,Frame Rate:,Metering:,Filter Size:,Weight:,Zoom:,Sound:,Cartridge:' | split: ','
+          for c in d_chop
+            if d_battery contains c
+              assign d_battery = d_battery | split: c | first
+            endif
+          endfor
+          assign d_battery = d_battery | strip
+        endif
+
+        assign d_metering = ''
+        if desc_full contains 'Metering:'
+          assign d_metering = desc_full | split: 'Metering:' | last
+          assign d_chop = 'FPS:,Lens:,Shutter Speed:,Aperture:,Focus:,Battery:,Film Type:,Frame Rate:,Filter Size:,Weight:,Zoom:,Sound:,Cartridge:' | split: ','
+          for c in d_chop
+            if d_metering contains c
+              assign d_metering = d_metering | split: c | first
+            endif
+          endfor
+          assign d_metering = d_metering | strip
+        endif
+
+        assign d_zoom = ''
+        if desc_full contains 'Zoom:'
+          assign d_zoom = desc_full | split: 'Zoom:' | last
+          assign d_chop = 'FPS:,Lens:,Shutter Speed:,Aperture:,Focus:,Battery:,Film Type:,Frame Rate:,Metering:,Filter Size:,Weight:,Sound:,Cartridge:' | split: ','
+          for c in d_chop
+            if d_zoom contains c
+              assign d_zoom = d_zoom | split: c | first
+            endif
+          endfor
+          assign d_zoom = d_zoom | strip
+        endif
+
+        assign d_sound = ''
+        if desc_full contains 'Sound:'
+          assign d_sound = desc_full | split: 'Sound:' | last
+          assign d_chop = 'FPS:,Lens:,Shutter Speed:,Aperture:,Focus:,Battery:,Film Type:,Frame Rate:,Metering:,Filter Size:,Weight:,Zoom:,Cartridge:' | split: ','
+          for c in d_chop
+            if d_sound contains c
+              assign d_sound = d_sound | split: c | first
+            endif
+          endfor
+          assign d_sound = d_sound | strip
+        endif
+
+        comment
+          Now apply fallbacks: if metafield is blank, use parsed value
+        endcomment
+        if spec_lens == blank and d_lens != ''
+          assign spec_lens = d_lens
+        endif
+        if spec_fps == blank and d_fps != ''
+          assign spec_fps = d_fps
+        endif
+        if spec_film == blank and d_film_type != ''
+          assign spec_film = d_film_type
+        endif
+        if spec_sound == blank and d_sound != ''
+          assign spec_sound = d_sound
+        endif
+        if spec_battery == blank and d_battery != ''
+          assign spec_battery = d_battery
+        endif
+        if spec_meter == blank and d_metering != ''
+          assign spec_meter = d_metering
+        endif
+        if spec_focus == blank and d_focus != ''
+          assign spec_focus = d_focus
+        endif
+        if spec_zoom == blank and d_zoom != ''
+          assign spec_zoom = d_zoom
+        endif
+        if spec_speeds == blank and d_shutter != ''
+          assign spec_speeds = d_shutter
+        endif
+
+        comment
+          Also store aperture parsed from desc (no metafield for it by default)
+        endcomment
+        assign spec_aperture = d_aperture
+
+        comment
+          Trim desc_text at the first spec label so only prose shows
+        endcomment
+        assign trim_labels = 'Film Type:,FPS:,Lens:,Shutter Speed:,Aperture:,Focus:,Battery:,Frame Rate:,Metering:,Filter Size:,Weight:,Zoom:,Sound:,Cartridge:,Film Format:' | split: ','
+        for label in trim_labels
+          if desc_text contains label
+            assign desc_text = desc_text | split: label | first | strip
+          endif
+        endfor
+      -%}
+      <p class="bfc4-kit-desc">{{ desc_text }}</p>
+      <div class="bfc4-fps-badge">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#fff" stroke-width="1"/><circle cx="8" cy="8" r="2" fill="#fff"/><path d="M8 1.5V4M8 12V14.5M1.5 8H4M12 8H14.5" stroke="#fff" stroke-width="0.8"/></svg>
+        True 24 FPS &mdash; Modified &amp; calibrated for cinema-standard frame rate
+      </div>
+    </div>
+
+    {%- comment -%} 2. Add Film section — compact tiles {%- endcomment -%}
+    {%- if film_blocks.size > 0 -%}
+      <div class="bfc4-film-head">
+        <span class="bfc4-film-eyebrow">Add Film</span>
+        <span class="bfc4-film-note">Grab a cartridge so you're ready to shoot on arrival.</span>
+      </div>
+
+      <div class="bfc4-film-tiles" id="bfc4-film-tiles">
+        {%- for block in film_blocks -%}
+          {%- if block.settings.product == blank -%}{% continue %}{%- endif -%}
+          {%- assign fp = block.settings.product -%}
+          {%- assign fv = fp.variants.first -%}
+          {%- unless fv.available -%}
+            {%- for v in fp.variants -%}
+              {%- if v.available -%}{%- assign fv = v -%}{%- break -%}{%- endif -%}
+            {%- endfor -%}
+          {%- endunless -%}
+          {%- assign f_disc = block.settings.discount_percent -%}
+          {%- if f_disc > 0 -%}
+            {%- assign f_df = f_disc | times: 1.0 | divided_by: 100 -%}
+            {%- assign f_sv = fv.price | times: f_df | floor -%}
+            {%- assign f_sale = fv.price | minus: f_sv -%}
+          {%- else -%}
+            {%- assign f_sale = fv.price -%}
+          {%- endif -%}
+          {%- assign f_tile_id = 'bfc4-film-' | append: forloop.index -%}
+          {%- assign f_popup_imgs = '' -%}
+          {%- for media in fp.media limit: 4 -%}
+            {%- if media.media_type == 'image' -%}
+              {%- assign f_img_url = media | image_url: width: 600 -%}
+              {%- if f_popup_imgs == '' -%}{%- assign f_popup_imgs = f_img_url -%}
+              {%- else -%}{%- assign f_popup_imgs = f_popup_imgs | append: '||' | append: f_img_url -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          <div class="bfc4-film-tile{% unless fv.available %} is-oos{% endunless %}"
+            id="{{ f_tile_id }}"
+            data-variant-id="{{ fv.id }}"
+            data-product-title="{{ fp.title | escape }}"
+            data-orig="{{ fv.price | default: 0 }}"
+            data-sale="{{ f_sale | default: 0 }}"
+            data-disc="{{ f_disc | default: 0 }}"
+            data-img="{{ fp.featured_image | image_url: width: 400 }}"
+            {% if fv.available %}onclick="bfc4FilmToggle(this)"{% endif %}
+            {{ block.shopify_attributes }}
+          >
+            <div class="bfc4-film-tile-img">
+              {%- if fp.featured_image -%}
+                <img src="{{ fp.featured_image | image_url: width: 400 }}" alt="{{ fp.title | escape }}" loading="lazy"/>
+              {%- endif -%}
+              {%- unless fv.available -%}<span class="bfc4-film-tile-oos">Out of Stock</span>{%- endunless -%}
+            </div>
+            <div class="bfc4-film-tile-body">
+              <span class="bfc4-film-tile-name">{{ block.settings.custom_label | default: fp.title }}</span>
+              <span class="bfc4-film-tile-price">{{ fv.price | money }}</span>
+            </div>
+            <div class="bfc4-film-tile-sel-check">&#10003;</div>
+          </div>
+          <div id="ba-popup-data-{{ f_tile_id }}" style="display:none"
+            data-title="{{ fp.title | escape }}"
+            data-desc="{{ fp.description | strip_html | escape }}"
+            data-imgs="{{ f_popup_imgs | escape }}"
+          ></div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} 4. Grade selector + price + ATC {%- endcomment -%}
+    <div class="bfc4-buy">
+      {%- if product.variants.size > 1 -%}
+        <div class="bfc4-grade-compact">
+          <span class="bfc4-grade-label">Grade</span>
+          <div class="bfc4-grade-row">
+            {%- for variant in product.variants -%}
+              <button
+                class="bfc4-var-btn{% if variant.id == current_variant.id %} is-active{% endif %}"
+                data-variant-id="{{ variant.id }}"
+                data-variant-price="{{ variant.price }}"
+                data-variant-price-fmt="{{ variant.price | money }}"
+                data-variant-available="{{ variant.available }}"
+                onclick="bfc4SelectVariant(this)"
+                {%- unless variant.available -%}disabled{%- endunless -%}
+              >{{ variant.title }}{%- unless variant.available -%}<span class="bfc4-var-btn-oos">Out of Stock</span>{%- endunless -%}</button>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+      <div class="bfc4-price-row">
+        <span class="bfc4-price-label">Total</span>
+        <span class="bfc4-price" id="bfc4-total">{{ current_variant.price | money }}</span>
+      </div>
+
+      <button class="bfc4-atc" id="bfc4-atc" onclick="bfc4AddToCart()">
+        <span id="bfc4-atc-text">Add to Cart</span>
+      </button>
+      {%- if film_blocks.size > 0 -%}
+        <button class="bfc4-cam-only" onclick="bfc4CameraOnly()">Camera Only &mdash; {{ current_variant.price | money }}</button>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Extended Warranty
+        Tier pricing/variant IDs from snippets/bfc-warranty-tiers.liquid.
+        Super 8 PDPs use SLR/Rangefinder pricing — same modal shape (2-button,
+        6mo base, +3 / +6 extensions) and similar mechanical risk profile. {%- endcomment -%}
+    {%- assign cam_price = current_variant.price -%}
+    {% include 'bfc-warranty-tiers', category: 'slr', cam_price: cam_price %}
+    {%- liquid
+      assign w9_vid = w_w9_vid
+      assign w9_price = w_w9_price
+      assign w12_vid = w_w12_vid
+      assign w12_price = w_w12_price
+    -%}
+    <div class="ba-ext-warranty">
+      <div class="ba-ext-w-head">
+        <span class="ba-ext-w-eyebrow">Extended Warranty</span>
+        <button class="bfc4-tile-info" onclick="baOpenPopup('ba-ext-w-popup')" aria-label="Extended warranty details" style="position:relative;bottom:auto;right:auto;flex-shrink:0;">
+          <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><line x1="7" y1="6.5" x2="7" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="4" r="0.7" fill="currentColor"/></svg>
+        </button>
+      </div>
+      <div class="ba-ext-w-baseline">
+        <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M2 7L5.5 10.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Your camera includes a <strong>6-month warranty</strong> &mdash; extend your total coverage below:</span>
+      </div>
+      <div class="ba-ext-w-options">
+        <button class="ba-ext-w-btn" data-months="3" data-total="9" data-price="{{ w9_price }}" data-variant-id="{{ w9_vid }}" onclick="bfc4SelectWarranty(this)">
+          <span class="ba-ext-w-extend">+3 months</span>
+          <span class="ba-ext-w-months">9 mo total</span>
+          <span class="ba-ext-w-price">+{{ w9_price | money_without_trailing_zeros }}</span>
+          <span class="ba-ext-w-acc">+ Accidental</span>
+        </button>
+        <button class="ba-ext-w-btn" data-months="6" data-total="12" data-price="{{ w12_price }}" data-variant-id="{{ w12_vid }}" onclick="bfc4SelectWarranty(this)">
+          <span class="ba-ext-w-extend">+6 months</span>
+          <span class="ba-ext-w-months">1 year total</span>
+          <span class="ba-ext-w-price">+{{ w12_price | money_without_trailing_zeros }}</span>
+          <span class="ba-ext-w-acc">+ Accidental</span>
+        </button>
+      </div>
+      <button class="ba-ext-w-none" id="ba-ext-w-clear" onclick="bfc4ClearWarranty()">&times; Remove Extended Warranty</button>
+    </div>
+    <div id="ba-popup-data-ba-ext-w-popup" style="display:none"
+      data-title="Extended Warranty"
+      data-desc="Your camera includes a 6-month warranty. Extended warranty adds months on top — select +3 months for 9 months total, or +6 months for a full year, all from your purchase date. Extended warranty covers any issues including accidental damage, which the standard warranty does not cover. Approved claims are repaired at no cost. If the camera cannot be repaired, you will receive a BFC gift card at the value you paid, redeemable on any camera in our shop. Warranties are non-transferable and apply to the original purchaser only. Must be purchased within 30 days of your camera purchase."
+      data-imgs=""
+    ></div>
+
+  </div>{%- comment -%} /bfc4-right {%- endcomment -%}
+</div>{%- comment -%} /bfc4-split {%- endcomment -%}
+
+<div class="bfc4-below">
+
+  {%- comment -%} Shot on / filmed with {%- endcomment -%}
+  {%- if g1 or g2 or g3 -%}
+  <div class="ba-shot">
+    <div class="ba-shot-head">
+      <h2 class="ba-shot-title">Filmed with {{ product.title }}</h2>
+      <span class="ba-shot-sub">Stills from Super 8 footage shot on this model</span>
+    </div>
+    <div class="ba-shot-grid">
+      {%- if g1 -%}<a href="{{ g1 | image_url: width: 1200 }}" target="_blank"><img src="{{ g1 | image_url: width: 600 }}" alt="" loading="lazy"/></a>{%- endif -%}
+      {%- if g2 -%}<a href="{{ g2 | image_url: width: 1200 }}" target="_blank"><img src="{{ g2 | image_url: width: 600 }}" alt="" loading="lazy"/></a>{%- endif -%}
+      {%- if g3 -%}<a href="{{ g3 | image_url: width: 1200 }}" target="_blank"><img src="{{ g3 | image_url: width: 600 }}" alt="" loading="lazy"/></a>{%- endif -%}
+      {%- if g4 -%}<a href="{{ g4 | image_url: width: 1200 }}" target="_blank"><img src="{{ g4 | image_url: width: 600 }}" alt="" loading="lazy"/></a>{%- endif -%}
+      {%- if g5 -%}<a href="{{ g5 | image_url: width: 1200 }}" target="_blank"><img src="{{ g5 | image_url: width: 600 }}" alt="" loading="lazy"/></a>{%- endif -%}
+      {%- if g6 -%}<a href="{{ g6 | image_url: width: 1200 }}" target="_blank"><img src="{{ g6 | image_url: width: 600 }}" alt="" loading="lazy"/></a>{%- endif -%}
+    </div>
+  </div>
+  {%- endif -%}
+
+  {%- comment -%} Restoration — Super 8 narrative {%- endcomment -%}
+  <div class="ba-restore" id="ba-restore">
+    <div class="ba-restore-top">
+      <div class="ba-restore-headline">
+        <span class="ba-restore-ey">Our Process</span>
+        <h2 class="ba-restore-title">Fully refurbished<br/><em>&amp; ready to shoot</em></h2>
+      </div>
+      <div class="ba-restore-stats">
+        <div class="ba-r-stat"><div class="ba-r-stat-num">6<span>mo</span></div><div class="ba-r-stat-label">Warranty on every camera sold</div></div>
+        <div class="ba-r-stat"><div class="ba-r-stat-num">5K<span>+</span></div><div class="ba-r-stat-label">Cameras restored since 2018</div></div>
+        <div class="ba-r-stat"><div class="ba-r-stat-num">24<span>fps</span></div><div class="ba-r-stat-label">Cinema-standard frame rate on every Super 8</div></div>
+      </div>
+    </div>
+    <div class="ba-restore-body">
+      <div class="ba-restore-list">
+        <div class="ba-restore-item">
+          <div class="ba-restore-item-title">Complete Disassembly &amp; Cleaning</div>
+          <div class="ba-restore-item-desc">Every camera is fully taken apart, cleaned inside and out, and carefully reassembled. No spot-checks, no shortcuts.</div>
+        </div>
+        <div class="ba-restore-item">
+          <div class="ba-restore-item-title is-highlight">True 24fps Modification</div>
+          <div class="ba-restore-item-desc">Most vintage Super 8 cameras were never built to shoot at cinema-standard 24fps. We modify and calibrate every camera so yours does.</div>
+        </div>
+        <div class="ba-restore-item">
+          <div class="ba-restore-item-title">Full Mechanical &amp; Electrical Inspection</div>
+          <div class="ba-restore-item-desc">Every component is tested and verified &mdash; motor, metering, optics, film path. If it's not working properly, we fix it before it ships.</div>
+        </div>
+        <div class="ba-restore-item">
+          <div class="ba-restore-item-title">Ready to Shoot</div>
+          <div class="ba-restore-item-desc">Load a cartridge and go. Every camera leaves our shop ready to film from the moment it arrives at your door.</div>
+        </div>
+        <div class="ba-restore-item">
+          <div class="ba-restore-item-title">6-Month Warranty</div>
+          <div class="ba-restore-item-desc">We stand behind our work. Every Super 8 camera we sell is backed by a full 6-month warranty covering mechanical and electrical defects.</div>
+        </div>
+        <div class="ba-restore-item">
+          <div class="ba-restore-item-title">Tested with Professional Equipment</div>
+          <div class="ba-restore-item-desc">Frame rate, exposure, and film path are all verified using professional testing equipment before we pack and ship.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Full specs {%- endcomment -%}
+  <div class="ba-specs">
+    <div class="ba-specs-head">
+      <h2 class="ba-specs-title">Specs</h2>
+      <div class="ba-specs-note">{{ product.title }}<br/>Super 8 Camera</div>
+    </div>
+    <div class="ba-specs-body">
+      <div class="ba-specs-table">
+        {%- if spec_lens    != blank -%}<div class="ba-spec"><span class="ba-spec-key">Lens</span><span class="ba-spec-val">{{ spec_lens }}</span></div>{%- endif -%}
+        {%- if spec_zoom    != blank -%}<div class="ba-spec"><span class="ba-spec-key">Zoom</span><span class="ba-spec-val">{{ spec_zoom }}</span></div>{%- endif -%}
+        {%- if spec_fps     != blank -%}<div class="ba-spec"><span class="ba-spec-key">Frame Rate</span><span class="ba-spec-val">{{ spec_fps }}</span></div>{%- endif -%}
+        {%- if spec_film    != blank -%}<div class="ba-spec"><span class="ba-spec-key">Film Format</span><span class="ba-spec-val">{{ spec_film }}</span></div>{%- endif -%}
+        {%- if spec_cart    != blank -%}<div class="ba-spec"><span class="ba-spec-key">Cartridge</span><span class="ba-spec-val">{{ spec_cart }}</span></div>{%- endif -%}
+        {%- if spec_sound   != blank -%}<div class="ba-spec"><span class="ba-spec-key">Sound</span><span class="ba-spec-val">{{ spec_sound }}</span></div>{%- endif -%}
+        {%- if spec_speeds  != blank -%}<div class="ba-spec"><span class="ba-spec-key">Shutter</span><span class="ba-spec-val">{{ spec_speeds }}</span></div>{%- endif -%}
+        {%- if spec_meter   != blank -%}<div class="ba-spec"><span class="ba-spec-key">Metering</span><span class="ba-spec-val">{{ spec_meter }}</span></div>{%- endif -%}
+        {%- if spec_focus   != blank -%}<div class="ba-spec"><span class="ba-spec-key">Focus</span><span class="ba-spec-val">{{ spec_focus }}</span></div>{%- endif -%}
+        {%- if spec_aperture != blank -%}<div class="ba-spec"><span class="ba-spec-key">Aperture</span><span class="ba-spec-val">{{ spec_aperture }}</span></div>{%- endif -%}
+        {%- if spec_filter  != blank -%}<div class="ba-spec"><span class="ba-spec-key">Filter Size</span><span class="ba-spec-val">{{ spec_filter }}</span></div>{%- endif -%}
+        {%- if spec_battery != blank -%}<div class="ba-spec"><span class="ba-spec-key">Battery</span><span class="ba-spec-val">{{ spec_battery }}</span></div>{%- endif -%}
+        {%- if spec_weight  != blank -%}<div class="ba-spec"><span class="ba-spec-key">Weight</span><span class="ba-spec-val">{{ spec_weight }}</span></div>{%- endif -%}
+        <div class="ba-spec"><span class="ba-spec-key">Condition</span><span class="ba-spec-val">Professionally Refurbished &mdash; 24fps Calibrated</span></div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Warranty & Returns Policy {%- endcomment -%}
+  <div class="ba-policy">
+    <div class="ba-policy-col">
+      <span class="ba-policy-ey">Warranty</span>
+      <h2 class="ba-policy-title">We stand behind every camera.</h2>
+      <div class="ba-policy-pill">
+        <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><path d="M2 7L5.5 10.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        6-Month Warranty Included
+      </div>
+      <div class="ba-policy-body">
+        <p>Every Super 8 camera we sell includes a <strong>6-month warranty</strong> covering mechanical and electrical defects. If something goes wrong, we'll repair or replace it at no cost.</p>
+        <p style="margin-top:10px;color:rgba(78,71,65,0.6);font-size:11px">Warranty does not cover cosmetic wear or accidental damage.</p>
+        <p style="margin-top:12px"><a href="https://brooklynfilmcamera.com/pages/warranty" style="font-size:11px;color:var(--or);font-weight:600;letter-spacing:0.06em;text-decoration:underline;text-underline-offset:2px;">View full warranty policy &rsaquo;</a></p>
+      </div>
+    </div>
+    <div class="ba-policy-col">
+      <span class="ba-policy-ey">Returns</span>
+      <h2 class="ba-policy-title">14-day return window.</h2>
+      <div class="ba-policy-pill" style="background:rgba(32,32,9,0.05);color:var(--ch);">
+        <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><line x1="7" y1="6.5" x2="7" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="4" r="0.7" fill="currentColor"/></svg>
+        Conditions Apply
+      </div>
+      <div class="ba-policy-body">
+        <p>If you change your mind, you have <strong>14 days from delivery</strong> to return your camera. The camera must be returned in the same condition it was received. A restocking fee may apply.</p>
+        <p style="margin-top:10px">We recommend taking advantage of the warranty rather than returning &mdash; if the camera has a functional issue within 6 months, we'll fix or replace it at no cost.</p>
+        <p style="margin-top:10px;color:rgba(78,71,65,0.6);font-size:11px">To initiate a return or warranty claim, contact us at <a href="mailto:hello@brooklynfilmcamera.com" style="color:inherit">hello@brooklynfilmcamera.com</a> with your order number.</p>
+      </div>
+    </div>
+  </div>
+
+</div>{%- comment -%} /bfc4-below {%- endcomment -%}
+
+{%- comment -%} Sticky Mobile ATC Bar {%- endcomment -%}
+<div class="bfc4-sticky-bar" id="bfc4-sticky-bar">
+  <div class="bfc4-sticky-info">
+    <div class="bfc4-sticky-name">{{ product.title }}</div>
+    <div class="bfc4-sticky-meta">
+      {%- unless current_variant.title == 'Default Title' -%}
+        <span class="bfc4-sticky-grade" id="bfc4-sticky-grade">{{ current_variant.title }}</span>
+      {%- endunless -%}
+      <span class="bfc4-sticky-price" id="bfc4-sticky-price">{{ current_variant.price | money }}</span>
+    </div>
+  </div>
+  <button class="bfc4-sticky-btn" id="bfc4-sticky-btn" onclick="bfc4AddToCart()"{% unless current_variant.available %} disabled{% endunless %}><span id="bfc4-sticky-btn-text">Add to Cart</span></button>
+</div>
+
+{%- comment -%} Popup {%- endcomment -%}
+<div class="ba-popup-overlay" id="ba-popup-overlay" onclick="baClosePopup()">
+  <div class="ba-popup" onclick="event.stopPropagation()">
+    <div class="ba-popup-head">
+      <span class="ba-popup-title" id="ba-popup-title"></span>
+      <button class="ba-popup-close" onclick="baClosePopup()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+      </button>
+    </div>
+    <div class="ba-popup-body">
+      <div class="ba-popup-imgs" id="ba-popup-imgs"></div>
+      <div class="ba-popup-desc" id="ba-popup-desc"></div>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} Hidden product form {%- endcomment -%}
+{%- assign bfc4_form_id = 'bfc4-form-' | append: section.id -%}
+<div style="display:none">
+  <product-form class="product-form" data-hide-errors="false" data-section-id="{{ section.id }}">
+    {%- form 'product', product, id: bfc4_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+      <input type="hidden" name="id" value="{{ current_variant.id }}" class="product-variant-id" id="bfc4-variant-input"/>
+      <div class="product-form__buttons" data-display-quantity="false" data-display-layout="seperate" data-display-dynamics="false">
+        <button id="ProductSubmitButton-{{ section.id }}" type="submit" name="add" class="product-form__submit button button--filled">
+          <span>Add to Cart</span>
+          <div class="loading__spinner hidden">
+            <svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66"><circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle></svg>
+          </div>
+        </button>
+      </div>
+      <div class="product-form__error-message-wrapper" role="alert" hidden>
+        <span class="product-form__error-message"></span>
+      </div>
+    {%- endform -%}
+  </product-form>
+</div>
+
+</div>{%- comment -%} /bfc4 {%- endcomment -%}
+
+<script>
+(function() {
+  'use strict';
+
+  // ── XHR helper (bypasses Judge.me monkey-patching of window.fetch) ─────
+  function bfc4Xhr(url, opts) {
+    opts = opts || {};
+    return new Promise(function(resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open(opts.method || 'GET', url, true);
+      xhr.withCredentials = true;
+      if (opts.headers) Object.keys(opts.headers).forEach(function(k){xhr.setRequestHeader(k, opts.headers[k]);});
+      xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
+      xhr.onload = function() {
+        resolve({
+          ok: xhr.status>=200 && xhr.status<300,
+          status: xhr.status,
+          json: function(){ try{return Promise.resolve(JSON.parse(xhr.responseText));}catch(e){return Promise.resolve({});} },
+          text: function(){ return Promise.resolve(xhr.responseText); }
+        });
+      };
+      xhr.onerror = function(){ reject(new Error('Network error')); };
+      xhr.send(opts.body || null);
+    });
+  }
+
+  var STATE = {
+    variantId:    {{ current_variant.id }},
+    variantPrice: {{ current_variant.price }},
+    film: {},
+    extWarranty: null
+  };
+
+  // ── Film tile toggle ──────────────────────────
+  window.bfc4FilmToggle = function(tile) {
+    var id = tile.id;
+    var wasSel = tile.classList.contains('is-sel');
+    if (wasSel) {
+      tile.classList.remove('is-sel');
+      delete STATE.film[id];
+    } else {
+      tile.classList.add('is-sel');
+      STATE.film[id] = {
+        variantId: tile.dataset.variantId,
+        name:      tile.dataset.productTitle,
+        orig:      parseInt(tile.dataset.orig, 10),
+        sale:      parseInt(tile.dataset.sale, 10),
+        disc:      parseInt(tile.dataset.disc, 10),
+        img:       tile.dataset.img || null
+      };
+    }
+    bfc4Render();
+  };
+
+  // ── Variant selector ──────────────────────────
+  window.bfc4SelectVariant = function(btn) {
+    document.querySelectorAll('.bfc4-var-btn').forEach(function(b) { b.classList.remove('is-active'); });
+    btn.classList.add('is-active');
+    STATE.variantId    = parseInt(btn.dataset.variantId, 10);
+    STATE.variantPrice = parseInt(btn.dataset.variantPrice, 10);
+    var input = document.getElementById('bfc4-variant-input');
+    if (input) input.value = btn.dataset.variantId;
+    var url = new URL(window.location);
+    url.searchParams.set('variant', btn.dataset.variantId);
+    window.history.replaceState({}, '', url);
+    var stickyGrade = document.getElementById('bfc4-sticky-grade');
+    if (stickyGrade) stickyGrade.textContent = btn.textContent.trim();
+    bfc4UpdateWarrantyTier(STATE.variantPrice);
+  };
+
+  // ── Render total ──────────────────────────────
+  function bfc4Render() {
+    var total = STATE.variantPrice;
+    var filmCount = 0;
+    Object.values(STATE.film).forEach(function(sel) {
+      total += sel.sale;
+      filmCount++;
+    });
+    if (STATE.extWarranty) total += STATE.extWarranty.price;
+    var totalEl = document.getElementById('bfc4-total');
+    if (totalEl) totalEl.textContent = fmt(total);
+    var stickyPrice = document.getElementById('bfc4-sticky-price');
+    if (stickyPrice) stickyPrice.textContent = fmt(STATE.variantPrice);
+
+    // Update ATC button text
+    var textEl = document.getElementById('bfc4-atc-text');
+    if (textEl) {
+      textEl.textContent = filmCount > 0 ? 'Add Camera + Film' : 'Add to Cart';
+    }
+
+    // Show/hide camera-only button
+    var camOnly = document.querySelector('.bfc4-cam-only');
+    if (camOnly) {
+      camOnly.style.display = filmCount > 0 ? 'block' : 'none';
+      camOnly.textContent = 'Camera Only \u2014 ' + fmt(STATE.variantPrice);
+    }
+  }
+
+  // ── ATC ─────────────────────────────────────────
+  window.bfc4AddToCart = async function() {
+    var btn    = document.getElementById('bfc4-atc');
+    var textEl = document.getElementById('bfc4-atc-text');
+    var stickyBtn  = document.getElementById('bfc4-sticky-btn');
+    var stickyText = document.getElementById('bfc4-sticky-btn-text');
+    if (btn) { btn.disabled = true; }
+    if (stickyBtn) { stickyBtn.disabled = true; }
+    if (textEl) { textEl.textContent = 'Adding\u2026'; }
+    if (stickyText) { stickyText.textContent = 'Adding\u2026'; }
+
+    var items = [];
+    Object.values(STATE.film).forEach(function(sel) {
+      if (!sel.variantId) return;
+      var vid = parseInt(sel.variantId, 10);
+      if (isNaN(vid) || vid === 0) return;
+      items.push({ id: vid, quantity: 1, properties: { _s8_bundle: 'true' } });
+    });
+
+    // Add extended warranty if selected
+    if (STATE.extWarranty && STATE.extWarranty.variantId) {
+      items.push({ id: parseInt(STATE.extWarranty.variantId, 10), quantity: 1, properties: { _extended_warranty: 'true' } });
+    }
+
+    try {
+      if (items.length > 0) {
+        var res = await bfc4Xhr('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+          body: JSON.stringify({ items: items })
+        });
+        if (!res.ok) {
+          var errBody = await res.json().catch(function() { return {}; });
+          console.error('[BFC4-S8] cart/add.js error:', res.status, errBody);
+          throw new Error(res.status);
+        }
+      }
+      // Add the camera via native form submit (triggers cart drawer)
+      var submitBtn = document.getElementById('ProductSubmitButton-{{ section.id }}');
+      if (submitBtn) submitBtn.click();
+      if (btn) { btn.classList.add('is-success'); }
+      if (textEl) { textEl.textContent = 'Added!'; }
+      if (stickyText) { stickyText.textContent = 'Added!'; }
+      setTimeout(function() {
+        if (btn) { btn.classList.remove('is-success'); btn.disabled = false; }
+        if (stickyBtn) { stickyBtn.disabled = false; }
+        if (textEl) { textEl.textContent = 'Add to Cart'; }
+        if (stickyText) { stickyText.textContent = 'Add to Cart'; }
+        bfc4Render();
+      }, 2400);
+    } catch(e) {
+      console.error('[BFC4-S8] ATC error:', e);
+      if (btn) { btn.disabled = false; }
+      if (stickyBtn) { stickyBtn.disabled = false; }
+      if (textEl) { textEl.textContent = 'Add to Cart'; }
+      if (stickyText) { stickyText.textContent = 'Add to Cart'; }
+      bfc4Render();
+    }
+  };
+
+  window.bfc4CameraOnly = function() {
+    // Clear film selections
+    STATE.film = {};
+    document.querySelectorAll('.bfc4-film-tile.is-sel').forEach(function(t) { t.classList.remove('is-sel'); });
+    bfc4Render();
+    var submitBtn = document.getElementById('ProductSubmitButton-{{ section.id }}');
+    if (submitBtn) submitBtn.click();
+  };
+
+  // ── Popup ────────────────────────────────────────
+  window.baOpenPopup = function(catId) {
+    var data = document.getElementById('ba-popup-data-' + catId);
+    if (!data) return;
+    document.getElementById('ba-popup-title').textContent = data.dataset.title;
+    var desc = data.dataset.desc;
+    document.getElementById('ba-popup-desc').innerHTML = desc ? '<p>' + desc.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br/>') + '</p>' : '';
+    var imgs = data.dataset.imgs ? data.dataset.imgs.split('||') : [];
+    document.getElementById('ba-popup-imgs').innerHTML = imgs.map(function(src) { return '<img src="' + src + '" loading="lazy"/>'; }).join('');
+    document.getElementById('ba-popup-overlay').classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  };
+  window.baClosePopup = function() {
+    document.getElementById('ba-popup-overlay').classList.remove('is-open');
+    document.body.style.overflow = '';
+  };
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') baClosePopup(); });
+
+  // ── Image slider ─────────────────────────────────
+  var bfc4Slide_current = 0;
+  var bfc4Slide_total   = document.querySelectorAll('.bfc4-slide').length;
+  window.bfc4Slide = function(dir) {
+    bfc4GoTo((bfc4Slide_current + dir + bfc4Slide_total) % bfc4Slide_total);
+  };
+  window.bfc4GoTo = function(idx) {
+    bfc4Slide_current = idx;
+    var slides = document.getElementById('bfc4-slides');
+    if (slides) slides.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    document.querySelectorAll('.bfc4-dot').forEach(function(d, i) { d.classList.toggle('is-active', i === idx); });
+    var prev = document.querySelector('.bfc4-arrow.is-prev');
+    if (prev) prev.style.visibility = idx === 0 ? 'hidden' : 'visible';
+  };
+  (function() {
+    var left = document.querySelector('.bfc4-left');
+    if (!left || bfc4Slide_total <= 1) return;
+    var startX = 0;
+    left.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, { passive: true });
+    left.addEventListener('touchend', function(e) {
+      var dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40) bfc4Slide(dx < 0 ? 1 : -1);
+    });
+  })();
+
+  function fmt(cents) { return '$' + (cents / 100).toFixed(2).replace(/\.00$/, ''); }
+
+  // ── Extended Warranty ─────────────────────────
+  // Warranty tier table — sourced from snippets/bfc-warranty-tiers-js.liquid.
+  // Super 8 uses SLR/Rangefinder pricing (same modal shape, similar risk profile).
+  {% render 'bfc-warranty-tiers-js', category: 'slr' %}
+  function bfc4GetWarrantyTier(price) {
+    for (var i = 0; i < BFC_WARRANTY_TIERS.length; i++) {
+      if (price <= BFC_WARRANTY_TIERS[i].max) return BFC_WARRANTY_TIERS[i];
+    }
+    return BFC_WARRANTY_TIERS[BFC_WARRANTY_TIERS.length - 1];
+  }
+  function bfc4UpdateWarrantyTier(variantPrice) {
+    var tier = bfc4GetWarrantyTier(variantPrice);
+    var td = [{ vid: tier.v9, price: tier.p9 }, { vid: tier.v12, price: tier.p12 }];
+    document.querySelectorAll('.ba-ext-w-btn').forEach(function(btn, i) {
+      if (!td[i]) return;
+      btn.dataset.variantId = td[i].vid;
+      btn.dataset.price = td[i].price;
+      var el = btn.querySelector('.ba-ext-w-price');
+      if (el) el.textContent = '+$' + (td[i].price / 100).toFixed(0);
+      if (btn.classList.contains('is-sel') && STATE.extWarranty) {
+        STATE.extWarranty.variantId = td[i].vid;
+        STATE.extWarranty.price = td[i].price;
+      }
+    });
+    bfc4Render();
+  }
+  window.bfc4SelectWarranty = function(btn) {
+    var wasSelected = btn.classList.contains('is-sel');
+    document.querySelectorAll('.ba-ext-w-btn').forEach(function(b) { b.classList.remove('is-sel'); });
+    var clearBtn = document.getElementById('ba-ext-w-clear');
+    if (wasSelected) {
+      STATE.extWarranty = null;
+      if (clearBtn) clearBtn.classList.remove('is-vis');
+    } else {
+      btn.classList.add('is-sel');
+      STATE.extWarranty = {
+        months: parseInt(btn.dataset.months, 10),
+        total:  parseInt(btn.dataset.total, 10),
+        price:  parseInt(btn.dataset.price, 10),
+        variantId: btn.dataset.variantId || null
+      };
+      if (clearBtn) clearBtn.classList.add('is-vis');
+    }
+    bfc4Render();
+  };
+  window.bfc4ClearWarranty = function() {
+    document.querySelectorAll('.ba-ext-w-btn').forEach(function(b) { b.classList.remove('is-sel'); });
+    STATE.extWarranty = null;
+    var clearBtn = document.getElementById('ba-ext-w-clear');
+    if (clearBtn) clearBtn.classList.remove('is-vis');
+    bfc4Render();
+  };
+  bfc4UpdateWarrantyTier(STATE.variantPrice);
+
+  bfc4Render();
+
+  // ── Sticky Mobile ATC Bar ──────────────────────
+  var stickyBar = document.getElementById('bfc4-sticky-bar');
+  var mainAtc   = document.getElementById('bfc4-atc');
+  if (stickyBar && mainAtc && window.innerWidth <= 900) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        stickyBar.classList.toggle('is-visible', !e.isIntersecting);
+      });
+    }, { threshold: 0 }).observe(mainAtc);
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "BFC Super 8 PDP",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "slide_1", "label": "Hero slide 1" },
+    { "type": "image_picker", "id": "slide_2", "label": "Hero slide 2" },
+    { "type": "image_picker", "id": "slide_3", "label": "Hero slide 3" },
+    { "type": "image_picker", "id": "slide_4", "label": "Hero slide 4" },
+    { "type": "image_picker", "id": "slide_5", "label": "Hero slide 5" },
+    { "type": "header", "content": "Mobile slides (optional)" },
+    { "type": "image_picker", "id": "slide_1_mobile", "label": "Mobile slide 1" },
+    { "type": "image_picker", "id": "slide_2_mobile", "label": "Mobile slide 2" },
+    { "type": "image_picker", "id": "slide_3_mobile", "label": "Mobile slide 3" },
+    { "type": "image_picker", "id": "slide_4_mobile", "label": "Mobile slide 4" },
+    { "type": "image_picker", "id": "slide_5_mobile", "label": "Mobile slide 5" }
+  ],
+  "blocks": [
+    {
+      "type": "film_item",
+      "name": "Film Cartridge",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Film product" },
+        { "type": "text", "id": "custom_label", "label": "Custom display name", "info": "Overrides the product title. Leave blank to use product title." },
+        { "type": "range", "id": "discount_percent", "min": 0, "max": 50, "step": 5, "unit": "%", "label": "Discount %", "default": 0 }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Super 8 PDP",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,810 @@
+{% comment %}
+  ============================================================
+  BFC SX-70 Family Guide  (v3 — collapsible)
+  ------------------------------------------------------------
+  Compact, collapsible explainer section for the SX-70
+  collection page. Renders as a thin bar by default; expands
+  on click to show the full lineup reference.
+
+  v3 changes:
+    - Wrapped in <details>/<summary> for native, JS-free toggle
+    - Thin banner state (~72px tall) as the default
+    - Fixed framework grid layout issue (columns were squishing
+      in theme containers) by switching to minmax(0, 1fr) and
+      a 2-col grid with border-divider
+    - Defensive typography: word-break: normal, min-width: 0
+      on grid children to prevent text fragmenting in parent
+      containers with unusual widths
+    - Expand/collapse plus-to-minus icon via pure CSS
+    - Subtle fade-in animation on reveal
+  ============================================================
+{% endcomment %}
+
+<section
+  class="bfc-sx70-guide"
+  data-section-id="{{ section.id }}"
+  data-section-type="bfc-sx70-guide"
+>
+  <details class="bfc-sx70-guide__details">
+
+    {%- comment -%} ---------- Thin summary bar (collapsed state) ---------- {%- endcomment -%}
+    <summary class="bfc-sx70-guide__summary">
+      <div class="bfc-sx70-guide__summary-text">
+        <span class="bfc-sx70-guide__summary-eyebrow">{{ section.settings.eyebrow }}</span>
+        <span class="bfc-sx70-guide__summary-title">{{ section.settings.heading }}</span>
+      </div>
+      <div class="bfc-sx70-guide__summary-toggle">
+        <span class="bfc-sx70-guide__summary-cta-open">{{ section.settings.open_label }}</span>
+        <span class="bfc-sx70-guide__summary-cta-close">{{ section.settings.close_label }}</span>
+        <span class="bfc-sx70-guide__summary-icon" aria-hidden="true"></span>
+      </div>
+    </summary>
+
+    {%- comment -%} ---------- Expanded body ---------- {%- endcomment -%}
+    <div class="bfc-sx70-guide__body">
+      <div class="bfc-sx70-guide__inner">
+
+        {%- if section.settings.intro != blank -%}
+          <div class="bfc-sx70-guide__lede">{{ section.settings.intro }}</div>
+        {%- endif -%}
+
+        {%- comment -%} ---------- Framework ---------- {%- endcomment -%}
+        <div class="bfc-sx70-guide__framework">
+          <div class="bfc-sx70-guide__framework-col">
+            <span class="bfc-sx70-guide__col-eyebrow">First, two generations</span>
+            <h3 class="bfc-sx70-guide__col-title">Original-gen &amp; Alpha-gen</h3>
+            <p>
+              Polaroid released the SX-70 in <strong>1972</strong>. Five years later, in
+              <strong>1977</strong>, they refined it with the Alpha 1 &mdash; adding strap lugs,
+              a tripod socket, and a brighter viewfinder. Everything after is a variation on one
+              of these two bodies.
+            </p>
+          </div>
+          <div class="bfc-sx70-guide__framework-col">
+            <span class="bfc-sx70-guide__col-eyebrow">Then, two trim levels</span>
+            <h3 class="bfc-sx70-guide__col-title">Premium &amp; Model 2</h3>
+            <p>
+              Within each generation, Polaroid offered a premium trim (chrome-plated metal body,
+              real leather) and a budget trim called the <strong>Model 2</strong> (plastic body,
+              vinyl covering). The optics and mechanics are <em>identical</em> &mdash; only the
+              shell differs.
+            </p>
+          </div>
+        </div>
+
+        {%- comment -%} ---------- Timeline ---------- {%- endcomment -%}
+        <div class="bfc-sx70-guide__timeline">
+          <div class="bfc-sx70-guide__timeline-track" aria-hidden="true"></div>
+          <ul class="bfc-sx70-guide__timeline-list">
+            <li class="bfc-sx70-guide__timeline-item">
+              <span class="bfc-sx70-guide__timeline-year">1972</span>
+              <span class="bfc-sx70-guide__timeline-label">Original</span>
+            </li>
+            <li class="bfc-sx70-guide__timeline-item">
+              <span class="bfc-sx70-guide__timeline-year">1974</span>
+              <span class="bfc-sx70-guide__timeline-label">Model 2</span>
+            </li>
+            <li class="bfc-sx70-guide__timeline-item">
+              <span class="bfc-sx70-guide__timeline-year">1977</span>
+              <span class="bfc-sx70-guide__timeline-label">Alpha 1 &amp; Alpha 1 M2</span>
+            </li>
+            <li class="bfc-sx70-guide__timeline-item">
+              <span class="bfc-sx70-guide__timeline-year">1978</span>
+              <span class="bfc-sx70-guide__timeline-label">Sonar</span>
+            </li>
+            <li class="bfc-sx70-guide__timeline-item">
+              <span class="bfc-sx70-guide__timeline-year">1981</span>
+              <span class="bfc-sx70-guide__timeline-label">SLR 680</span>
+            </li>
+          </ul>
+        </div>
+
+        {%- comment -%} ---------- Model reference grid ---------- {%- endcomment -%}
+        <div class="bfc-sx70-guide__models">
+
+          <article class="bfc-sx70-guide__model">
+            <header class="bfc-sx70-guide__model-head">
+              <span class="bfc-sx70-guide__model-year">1972</span>
+              <span class="bfc-sx70-guide__model-tag bfc-sx70-guide__model-tag--premium">Premium</span>
+            </header>
+            <h4 class="bfc-sx70-guide__model-name">SX-70 Original</h4>
+            <p class="bfc-sx70-guide__model-copy">
+              The first folding instant SLR. Chrome-plated body in real leather. Through-the-lens
+              viewing, four-element glass lens.
+            </p>
+            <dl class="bfc-sx70-guide__model-specs">
+              <div><dt>Body</dt><dd>Chrome + leather</dd></div>
+              <div><dt>Colors</dt><dd>Tan, Black</dd></div>
+            </dl>
+            {%- if section.settings.url_original != blank -%}
+              <a href="{{ section.settings.url_original }}" class="bfc-sx70-guide__model-link">
+                Shop <span aria-hidden="true">&rarr;</span>
+              </a>
+            {%- endif -%}
+          </article>
+
+          <article class="bfc-sx70-guide__model">
+            <header class="bfc-sx70-guide__model-head">
+              <span class="bfc-sx70-guide__model-year">1974</span>
+              <span class="bfc-sx70-guide__model-tag bfc-sx70-guide__model-tag--budget">Model 2</span>
+            </header>
+            <h4 class="bfc-sx70-guide__model-name">SX-70 Model 2</h4>
+            <p class="bfc-sx70-guide__model-copy">
+              Same camera inside, different jacket. Plastic body with vinyl covering. Shoots
+              identically to the Original.
+            </p>
+            <dl class="bfc-sx70-guide__model-specs">
+              <div><dt>Body</dt><dd>Plastic + vinyl</dd></div>
+              <div><dt>Colors</dt><dd>White Tan, Black Tan, Black Black</dd></div>
+            </dl>
+            {%- if section.settings.url_model_2 != blank -%}
+              <a href="{{ section.settings.url_model_2 }}" class="bfc-sx70-guide__model-link">
+                Shop <span aria-hidden="true">&rarr;</span>
+              </a>
+            {%- endif -%}
+          </article>
+
+          <article class="bfc-sx70-guide__model">
+            <header class="bfc-sx70-guide__model-head">
+              <span class="bfc-sx70-guide__model-year">1977</span>
+              <span class="bfc-sx70-guide__model-tag bfc-sx70-guide__model-tag--premium">Premium</span>
+            </header>
+            <h4 class="bfc-sx70-guide__model-name">SX-70 Alpha 1</h4>
+            <p class="bfc-sx70-guide__model-copy">
+              The refinement. Original design plus strap lugs, tripod socket, and a brighter matte
+              viewfinder.
+            </p>
+            <dl class="bfc-sx70-guide__model-specs">
+              <div><dt>Body</dt><dd>Chrome + leather</dd></div>
+              <div><dt>Added</dt><dd>Strap lugs, tripod socket</dd></div>
+            </dl>
+            {%- if section.settings.url_alpha_1 != blank -%}
+              <a href="{{ section.settings.url_alpha_1 }}" class="bfc-sx70-guide__model-link">
+                Shop <span aria-hidden="true">&rarr;</span>
+              </a>
+            {%- endif -%}
+          </article>
+
+          <article class="bfc-sx70-guide__model bfc-sx70-guide__model--highlight">
+            <header class="bfc-sx70-guide__model-head">
+              <span class="bfc-sx70-guide__model-year">1977</span>
+              <span class="bfc-sx70-guide__model-tag bfc-sx70-guide__model-tag--budget">Model 2</span>
+            </header>
+            <h4 class="bfc-sx70-guide__model-name">SX-70 Alpha 1 Model 2</h4>
+            <p class="bfc-sx70-guide__model-copy">
+              Easy to mistake for a black Alpha 1, but different. All Alpha features, in a
+              plastic-and-vinyl Model 2 body. Black on Black colorway.
+            </p>
+            <dl class="bfc-sx70-guide__model-specs">
+              <div><dt>Body</dt><dd>Plastic + vinyl</dd></div>
+              <div><dt>Has</dt><dd>All Alpha features</dd></div>
+            </dl>
+            {%- if section.settings.url_alpha_1_m2 != blank -%}
+              <a href="{{ section.settings.url_alpha_1_m2 }}" class="bfc-sx70-guide__model-link">
+                Shop <span aria-hidden="true">&rarr;</span>
+              </a>
+            {%- endif -%}
+          </article>
+
+          <article class="bfc-sx70-guide__model">
+            <header class="bfc-sx70-guide__model-head">
+              <span class="bfc-sx70-guide__model-year">1978</span>
+              <span class="bfc-sx70-guide__model-tag bfc-sx70-guide__model-tag--feature">Autofocus</span>
+            </header>
+            <h4 class="bfc-sx70-guide__model-name">SX-70 Sonar</h4>
+            <p class="bfc-sx70-guide__model-copy">
+              The first-ever autofocus SLR. Ultrasonic transducer measures distance with sound
+              waves. Works in total darkness.
+            </p>
+            <dl class="bfc-sx70-guide__model-specs">
+              <div><dt>Body</dt><dd>Chrome + black leather</dd></div>
+              <div><dt>Focus</dt><dd>Sonar AF, switchable</dd></div>
+            </dl>
+            {%- if section.settings.url_sonar != blank -%}
+              <a href="{{ section.settings.url_sonar }}" class="bfc-sx70-guide__model-link">
+                Shop <span aria-hidden="true">&rarr;</span>
+              </a>
+            {%- endif -%}
+          </article>
+
+          <article class="bfc-sx70-guide__model">
+            <header class="bfc-sx70-guide__model-head">
+              <span class="bfc-sx70-guide__model-year">1981</span>
+              <span class="bfc-sx70-guide__model-tag bfc-sx70-guide__model-tag--feature">Final form</span>
+            </header>
+            <h4 class="bfc-sx70-guide__model-name">SLR 680</h4>
+            <p class="bfc-sx70-guide__model-copy">
+              The final folding evolution. Native 600 film, built-in electronic flash, sonar
+              autofocus retained.
+            </p>
+            <dl class="bfc-sx70-guide__model-specs">
+              <div><dt>Film</dt><dd>600, native</dd></div>
+              <div><dt>Flash</dt><dd>Built-in</dd></div>
+            </dl>
+            {%- if section.settings.url_slr_680 != blank -%}
+              <a href="{{ section.settings.url_slr_680 }}" class="bfc-sx70-guide__model-link">
+                Shop <span aria-hidden="true">&rarr;</span>
+              </a>
+            {%- endif -%}
+          </article>
+
+        </div>
+
+        {%- comment -%} ---------- Footnote + CTA ---------- {%- endcomment -%}
+        <footer class="bfc-sx70-guide__footer">
+          <p class="bfc-sx70-guide__footnote">
+            Every folding SX-70 shares the same four-element glass lens and shutter &mdash; the
+            variant you choose is a question of feel, finish, and feature set, not optical
+            performance. Each one we sell is bench-tested, recalibrated, and backed by a six-month
+            warranty.
+          </p>
+          {%- if section.settings.cta_url != blank and section.settings.cta_label != blank -%}
+            <a href="{{ section.settings.cta_url }}" class="bfc-sx70-guide__cta">
+              {{ section.settings.cta_label }}
+              <span aria-hidden="true">&nbsp;&rarr;</span>
+            </a>
+          {%- endif -%}
+        </footer>
+
+      </div>
+    </div>
+
+  </details>
+</section>
+
+<style>
+  /* ------------------------------------------------------------
+     BFC SX-70 Guide v3 — collapsible
+     ------------------------------------------------------------ */
+  .bfc-sx70-guide {
+    --bfc-orange: #E36E15;
+    --bfc-canvas: #F8F6EE;
+    --bfc-black:  #202009;
+    --bfc-char:   #4E4741;
+    --bfc-gray:   #E3DDDA;
+
+    font-family: 'Poppins', sans-serif;
+    color: var(--bfc-black);
+    background: var(--bfc-canvas);
+  }
+
+  /* Defensive: prevent parent theme styles from fragmenting text */
+  .bfc-sx70-guide,
+  .bfc-sx70-guide * {
+    word-break: normal;
+    overflow-wrap: break-word;
+    hyphens: none;
+  }
+
+  .bfc-sx70-guide__details {
+    border-top: 1px solid var(--bfc-black);
+    border-bottom: 1px solid var(--bfc-black);
+  }
+
+  /* ---------- Collapsed summary bar ---------- */
+  .bfc-sx70-guide__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 32px;
+    cursor: pointer;
+    list-style: none;
+    transition: background 0.2s ease;
+    user-select: none;
+  }
+  .bfc-sx70-guide__summary::-webkit-details-marker { display: none; }
+  .bfc-sx70-guide__summary:hover { background: rgba(227, 110, 21, 0.04); }
+
+  .bfc-sx70-guide__summary-text {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+  .bfc-sx70-guide__summary-eyebrow {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--bfc-orange);
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+  .bfc-sx70-guide__summary-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--bfc-black);
+    min-width: 0;
+  }
+
+  .bfc-sx70-guide__summary-toggle {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 0 0 auto;
+  }
+  .bfc-sx70-guide__summary-cta-open,
+  .bfc-sx70-guide__summary-cta-close {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bfc-char);
+    white-space: nowrap;
+  }
+  .bfc-sx70-guide__summary-cta-close { display: none; }
+  .bfc-sx70-guide__details[open] .bfc-sx70-guide__summary-cta-open { display: none; }
+  .bfc-sx70-guide__details[open] .bfc-sx70-guide__summary-cta-close { display: inline; }
+
+  .bfc-sx70-guide__summary-icon {
+    position: relative;
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    color: var(--bfc-black);
+  }
+  .bfc-sx70-guide__summary-icon::before,
+  .bfc-sx70-guide__summary-icon::after {
+    content: '';
+    position: absolute;
+    background: currentColor;
+    transition: transform 0.3s ease;
+  }
+  .bfc-sx70-guide__summary-icon::before {
+    top: 50%; left: 0; right: 0; height: 1px;
+    transform: translateY(-50%);
+  }
+  .bfc-sx70-guide__summary-icon::after {
+    top: 0; bottom: 0; left: 50%; width: 1px;
+    transform: translateX(-50%);
+  }
+  .bfc-sx70-guide__details[open] .bfc-sx70-guide__summary-icon::after {
+    transform: translateX(-50%) scaleY(0);
+  }
+
+  /* ---------- Expanded body ---------- */
+  .bfc-sx70-guide__body {
+    border-top: 1px solid var(--bfc-gray);
+    animation: bfcSx70Reveal 0.35s ease-out;
+  }
+  @keyframes bfcSx70Reveal {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .bfc-sx70-guide__inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 56px 32px 64px;
+  }
+
+  .bfc-sx70-guide__lede {
+    max-width: 680px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--bfc-char);
+    margin-bottom: 48px;
+  }
+  .bfc-sx70-guide__lede p { margin: 0; }
+
+  /* ---------- Framework (fixed grid) ---------- */
+  .bfc-sx70-guide__framework {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 48px;
+    padding: 36px 0;
+    margin-bottom: 56px;
+    border-top: 1px solid var(--bfc-gray);
+    border-bottom: 1px solid var(--bfc-gray);
+  }
+  .bfc-sx70-guide__framework-col {
+    min-width: 0;
+  }
+  .bfc-sx70-guide__framework-col + .bfc-sx70-guide__framework-col {
+    padding-left: 48px;
+    border-left: 1px solid var(--bfc-gray);
+  }
+  .bfc-sx70-guide__framework-col p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--bfc-char);
+    margin: 0;
+  }
+  .bfc-sx70-guide__framework-col p strong {
+    color: var(--bfc-black);
+    font-weight: 500;
+  }
+  .bfc-sx70-guide__col-eyebrow {
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--bfc-orange);
+    margin-bottom: 10px;
+  }
+  .bfc-sx70-guide__col-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1.15;
+    margin: 0 0 14px 0;
+    color: var(--bfc-black);
+  }
+
+  /* ---------- Timeline ---------- */
+  .bfc-sx70-guide__timeline {
+    position: relative;
+    padding: 24px 0;
+    margin-bottom: 56px;
+  }
+  .bfc-sx70-guide__timeline-track {
+    position: absolute;
+    left: 0; right: 0; top: 50%;
+    height: 1px;
+    background: var(--bfc-char);
+    transform: translateY(-50%);
+  }
+  .bfc-sx70-guide__timeline-list {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .bfc-sx70-guide__timeline-item {
+    position: relative;
+    text-align: center;
+    padding: 16px 4px;
+    background: var(--bfc-canvas);
+    min-width: 0;
+  }
+  .bfc-sx70-guide__timeline-item::before {
+    content: '';
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 8px; height: 8px;
+    background: var(--bfc-orange);
+    transform: translate(-50%, -50%);
+  }
+  .bfc-sx70-guide__timeline-year {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--bfc-black);
+    margin-bottom: 18px;
+  }
+  .bfc-sx70-guide__timeline-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bfc-char);
+    margin-top: 18px;
+  }
+
+  /* ---------- Model grid ---------- */
+  .bfc-sx70-guide__models {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--bfc-gray);
+    border: 1px solid var(--bfc-gray);
+    margin-bottom: 48px;
+  }
+  .bfc-sx70-guide__model {
+    background: var(--bfc-canvas);
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    min-width: 0;
+  }
+  .bfc-sx70-guide__model--highlight::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 2px; height: 100%;
+    background: var(--bfc-orange);
+  }
+  .bfc-sx70-guide__model-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .bfc-sx70-guide__model-year {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    color: var(--bfc-orange);
+  }
+  .bfc-sx70-guide__model-tag {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid currentColor;
+  }
+  .bfc-sx70-guide__model-tag--premium { color: var(--bfc-black); }
+  .bfc-sx70-guide__model-tag--budget  { color: var(--bfc-char); }
+  .bfc-sx70-guide__model-tag--feature {
+    color: var(--bfc-canvas);
+    background: var(--bfc-orange);
+    border-color: var(--bfc-orange);
+  }
+  .bfc-sx70-guide__model-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.15;
+    margin: 0 0 12px 0;
+    color: var(--bfc-black);
+  }
+  .bfc-sx70-guide__model-copy {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--bfc-char);
+    margin: 0 0 20px 0;
+  }
+  .bfc-sx70-guide__model-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: auto 0 0 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--bfc-gray);
+  }
+  .bfc-sx70-guide__model-specs > div {
+    display: grid;
+    grid-template-columns: 70px minmax(0, 1fr);
+    gap: 10px;
+    align-items: baseline;
+  }
+  .bfc-sx70-guide__model-specs dt {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bfc-char);
+  }
+  .bfc-sx70-guide__model-specs dd {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    line-height: 1.3;
+    color: var(--bfc-black);
+    margin: 0;
+  }
+  .bfc-sx70-guide__model-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 14px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--bfc-black);
+    text-decoration: none;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--bfc-black);
+    align-self: flex-start;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .bfc-sx70-guide__model-link:hover {
+    color: var(--bfc-orange);
+    border-color: var(--bfc-orange);
+  }
+
+  /* ---------- Footer ---------- */
+  .bfc-sx70-guide__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    padding-top: 32px;
+    border-top: 1px solid var(--bfc-gray);
+  }
+  .bfc-sx70-guide__footnote {
+    flex: 1 1 auto;
+    max-width: 680px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--bfc-char);
+    margin: 0;
+  }
+  .bfc-sx70-guide__cta {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bfc-black);
+    text-decoration: none;
+    padding: 14px 24px;
+    border: 1px solid var(--bfc-black);
+    background: transparent;
+    transition: background 0.2s ease, color 0.2s ease;
+    white-space: nowrap;
+  }
+  .bfc-sx70-guide__cta:hover {
+    background: var(--bfc-black);
+    color: var(--bfc-canvas);
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    .bfc-sx70-guide__summary { padding: 18px 20px; }
+    .bfc-sx70-guide__summary-text { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .bfc-sx70-guide__summary-title { font-size: 18px; }
+    .bfc-sx70-guide__summary-cta-open,
+    .bfc-sx70-guide__summary-cta-close { display: none !important; }
+
+    .bfc-sx70-guide__inner { padding: 40px 20px 48px; }
+    .bfc-sx70-guide__lede { font-size: 17px; margin-bottom: 32px; }
+
+    .bfc-sx70-guide__framework {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 28px;
+      padding: 28px 0;
+      margin-bottom: 40px;
+    }
+    .bfc-sx70-guide__framework-col + .bfc-sx70-guide__framework-col {
+      padding-left: 0;
+      border-left: none;
+      padding-top: 28px;
+      border-top: 1px solid var(--bfc-gray);
+    }
+
+    .bfc-sx70-guide__timeline { margin-bottom: 40px; padding: 16px 0; }
+    .bfc-sx70-guide__timeline-list { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .bfc-sx70-guide__timeline-track {
+      top: 0; bottom: 0; left: 16px; right: auto;
+      width: 1px; height: auto; transform: none;
+    }
+    .bfc-sx70-guide__timeline-item {
+      display: flex; align-items: baseline; gap: 14px;
+      text-align: left;
+      padding: 12px 0 12px 34px;
+      background: transparent;
+    }
+    .bfc-sx70-guide__timeline-item::before { left: 16px; top: 50%; }
+    .bfc-sx70-guide__timeline-year { margin: 0; font-size: 18px; }
+    .bfc-sx70-guide__timeline-label { margin: 0; }
+
+    .bfc-sx70-guide__models {
+      grid-template-columns: minmax(0, 1fr);
+      margin-bottom: 32px;
+    }
+    .bfc-sx70-guide__model { padding: 24px 20px; }
+
+    .bfc-sx70-guide__footer { flex-direction: column; align-items: flex-start; gap: 20px; }
+  }
+
+  @media (min-width: 901px) and (max-width: 1100px) {
+    .bfc-sx70-guide__models { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "SX-70 Family Guide",
+  "tag": "section",
+  "class": "bfc-sx70-guide-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Collapsed bar"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "A Field Guide"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Title",
+      "default": "Understanding the SX-70 Family"
+    },
+    {
+      "type": "text",
+      "id": "open_label",
+      "label": "Expand label",
+      "default": "Learn the lineup"
+    },
+    {
+      "type": "text",
+      "id": "close_label",
+      "label": "Collapse label",
+      "default": "Close"
+    },
+    {
+      "type": "header",
+      "content": "Expanded content"
+    },
+    {
+      "type": "richtext",
+      "id": "intro",
+      "label": "Intro paragraph",
+      "default": "<p>Six folding cameras, nine years, a handful of naming conventions that can make the whole lineup feel like a puzzle. Here's how the pieces fit together.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Per-model shop links (optional)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Paste a filtered collection URL for each model. If blank, the 'Shop' link hides on that card."
+    },
+    {
+      "type": "url",
+      "id": "url_original",
+      "label": "Original shop link"
+    },
+    {
+      "type": "url",
+      "id": "url_model_2",
+      "label": "Model 2 shop link"
+    },
+    {
+      "type": "url",
+      "id": "url_alpha_1",
+      "label": "Alpha 1 shop link"
+    },
+    {
+      "type": "url",
+      "id": "url_alpha_1_m2",
+      "label": "Alpha 1 Model 2 shop link"
+    },
+    {
+      "type": "url",
+      "id": "url_sonar",
+      "label": "Sonar shop link"
+    },
+    {
+      "type": "url",
+      "id": "url_slr_680",
+      "label": "SLR 680 shop link"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label",
+      "default": "Read the full SX-70 Buyer's Guide"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "SX-70 Family Guide"
+    }
+  ]
+}
+{% endschema %}

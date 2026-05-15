@@ -1,0 +1,1007 @@
+{%- comment -%}
+  BFC PDP Reviews Snippet — Judge.me powered (via shop metafield)
+  Usage: {% render 'bfc-pdp-reviews', pdp_handle: product.handle, pdp_title: product.title, cust: customer %}
+
+  Note on `cust`: snippets rendered with {% render %} get an isolated
+  variable scope, so globals like `customer` may not always pass through
+  reliably depending on the parent template. To guarantee the followup
+  modal can read the customer's name/email/address, the parent must pass
+  `cust: customer` explicitly. The snippet falls back to `customer`
+  directly if `cust` isn't passed, but the explicit form is more reliable.
+
+  Data source:
+    shop.metafields.bfc.reviews_json  (populated hourly by Base44 syncJudgemeReviews)
+    product.metafields.reviews.rating / .rating_count  (auto-synced by Judge.me)
+    shop.metafields.judgeme.all_reviews_rating / all_reviews_count  (auto-synced by Judge.me)
+
+  All rendering is server-side. JS handles tab switching, carousel nav, drag,
+  and the Leave a Review button triggering Judge.me's form.
+{%- endcomment -%}
+
+{%- comment -%} ── Resolve customer (passed in as `cust` or fallback to global) ── {%- endcomment -%}
+{%- if cust == nil -%}{%- assign cust = customer -%}{%- endif -%}
+
+{%- comment -%} ── Resolve product + stats ── {%- endcomment -%}
+{%- assign bfc_rv_product = all_products[pdp_handle] -%}
+{%- assign bfc_rv_product_id = bfc_rv_product.id -%}
+{%- capture bfc_rv_pid_str -%}{{ bfc_rv_product.id }}{%- endcapture -%}
+{%- assign bfc_rv_match_handle = pdp_handle -%}
+
+{%- comment -%} ── Pull full review array from shop metafield FIRST (we'll compute product stats from it) ── {%- endcomment -%}
+{%- assign bfc_reviews_blob = shop.metafields.bfc.reviews_json.value -%}
+{%- assign all_reviews = bfc_reviews_blob.reviews -%}
+
+{%- comment -%} ── Compute product-specific count + average from the blob itself ── {%- endcomment -%}
+{%- assign product_review_count = 0 -%}
+{%- assign product_rating_sum = 0 -%}
+{%- if all_reviews != blank -%}
+  {%- for review in all_reviews -%}
+    {%- capture bfc_rv_this_pid -%}{{ review.product_id }}{%- endcapture -%}
+    {%- assign bfc_rv_is_match = false -%}
+    {%- if review.product_handle != blank and review.product_handle == bfc_rv_match_handle -%}
+      {%- assign bfc_rv_is_match = true -%}
+    {%- elsif bfc_rv_this_pid == bfc_rv_pid_str -%}
+      {%- assign bfc_rv_is_match = true -%}
+    {%- endif -%}
+    {%- if bfc_rv_is_match -%}
+      {%- assign product_review_count = product_review_count | plus: 1 -%}
+      {%- assign product_rating_sum = product_rating_sum | plus: review.rating -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- if product_review_count > 0 -%}
+  {%- assign product_rating_x10 = product_rating_sum | times: 10 | divided_by: product_review_count -%}
+  {%- assign product_avg_whole = product_rating_x10 | divided_by: 10 -%}
+  {%- assign product_avg_frac = product_rating_x10 | modulo: 10 -%}
+{%- else -%}
+  {%- assign product_avg_whole = 0 -%}
+  {%- assign product_avg_frac = 0 -%}
+{%- endif -%}
+
+{%- assign all_review_count = shop.metafields.judgeme.all_reviews_count | plus: 0 -%}
+{%- capture shop_rating_str -%}{{ shop.metafields.judgeme.all_reviews_rating | default: 0 }}{%- endcapture -%}
+{%- assign shop_rating_num = shop_rating_str | plus: 0.0 -%}
+{%- assign shop_rating_x10 = shop_rating_num | times: 10 | round -%}
+{%- assign all_avg_whole = shop_rating_x10 | divided_by: 10 -%}
+{%- assign all_avg_frac = shop_rating_x10 | modulo: 10 -%}
+
+{%- comment -%} ── Fallback: if Judge.me shop metafield is missing, use the blob count ── {%- endcomment -%}
+{%- if all_review_count == 0 and all_reviews != blank -%}
+  {%- assign blob_count = 0 -%}
+  {%- assign blob_sum = 0 -%}
+  {%- for review in all_reviews -%}
+    {%- assign blob_count = blob_count | plus: 1 -%}
+    {%- assign blob_sum = blob_sum | plus: review.rating -%}
+  {%- endfor -%}
+  {%- assign all_review_count = blob_count -%}
+  {%- if blob_count > 0 -%}
+    {%- assign shop_rating_x10 = blob_sum | times: 10 | divided_by: blob_count -%}
+    {%- assign all_avg_whole = shop_rating_x10 | divided_by: 10 -%}
+    {%- assign all_avg_frac = shop_rating_x10 | modulo: 10 -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- assign has_product_reviews = false -%}
+{%- if product_review_count > 0 -%}{%- assign has_product_reviews = true -%}{%- endif -%}
+
+{%- if all_review_count > 0 and all_reviews != blank -%}
+
+<div class="bfc-rv" id="bfc-rv-section">
+<style>
+.bfc-rv { background: var(--bk, #202009); border-top: 1px solid rgba(255,255,255,0.06); padding: 56px 48px 64px; }
+.bfc-rv-head { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; margin-bottom: 8px; }
+.bfc-rv-title { font-family: var(--sr, 'Cormorant Garamond', Georgia, serif); font-size: 36px; font-weight: 300; color: #fff; line-height: 1; margin: 0; }
+.bfc-rv-summary { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.bfc-rv-avg { font-family: var(--sr, 'Cormorant Garamond', Georgia, serif); font-size: 28px; font-weight: 300; color: #fff; }
+.bfc-rv-stars-inline { display: flex; gap: 2px; color: var(--or, #E36E15); }
+.bfc-rv-count { font-size: 11px; color: rgba(255,255,255,0.45); letter-spacing: 0.04em; }
+
+/* ── Leave a Review CTA ── */
+.bfc-rv-cta { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 0 0 28px; padding: 20px 28px; background: rgba(227,110,21,0.06); border-top: 1px solid rgba(227,110,21,0.22); border-bottom: 1px solid rgba(227,110,21,0.22); flex-wrap: wrap; }
+.bfc-rv-cta-text { font-family: var(--sr, 'Cormorant Garamond', Georgia, serif); font-size: 17px; color: rgba(255,255,255,0.82); margin: 0; line-height: 1.4; flex: 1; min-width: 220px; }
+a.bfc-rv-cta-btn { display: inline-block; background: var(--or, #E36E15) !important; color: var(--cn, #F8F6EE) !important; font-family: var(--sn, 'Poppins', Helvetica, sans-serif); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none !important; padding: 13px 28px; border: 2px solid var(--or, #E36E15) !important; border-radius: 2px; cursor: pointer; transition: all 0.2s ease; line-height: 1; opacity: 1 !important; white-space: nowrap; }
+a.bfc-rv-cta-btn:hover, a.bfc-rv-cta-btn:focus, a.bfc-rv-cta-btn:active { background: var(--gh, #F4A027) !important; border-color: var(--gh, #F4A027) !important; color: var(--cn, #F8F6EE) !important; opacity: 1 !important; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(227,110,21,0.35); }
+
+.bfc-rv-tabs { display: flex; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 28px; }
+.bfc-rv-tab { background: none; border: none; border-bottom: 2px solid transparent; padding: 10px 20px; font-family: var(--sn, 'Poppins', sans-serif); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); cursor: pointer; transition: color 0.2s, border-color 0.2s; }
+.bfc-rv-tab:hover { color: rgba(255,255,255,0.7); }
+.bfc-rv-tab.is-active { color: #fff; border-bottom-color: var(--or, #E36E15); }
+.bfc-rv-tab-count { font-size: 9px; font-weight: 700; color: var(--or, #E36E15); margin-left: 4px; }
+.bfc-rv-panel { display: none; }
+.bfc-rv-panel.is-active { display: block; }
+.bfc-rv-track-wrap { position: relative; overflow: hidden; }
+.bfc-rv-track { display: flex; gap: 16px; transition: transform 400ms ease; cursor: grab; }
+.bfc-rv-track.is-dragging { cursor: grabbing; transition: none; }
+.bfc-rv-card { flex: 0 0 calc((100% - 32px) / 3); min-width: 280px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); padding: 24px 22px 20px; display: flex; flex-direction: column; gap: 12px; }
+.bfc-rv-card-stars { display: flex; gap: 2px; color: var(--or, #E36E15); font-size: 14px; line-height: 1; }
+.bfc-rv-card-body { font-size: 13px; line-height: 1.65; color: rgba(255,255,255,0.7); flex: 1; margin: 0; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; }
+.bfc-rv-card-product { display: block; font-size: 10px; color: var(--ce, #ABCC99); text-decoration: none; margin-top: -4px; font-family: var(--sn, 'Poppins', sans-serif); letter-spacing: 0.04em; text-transform: uppercase; }
+.bfc-rv-card-product:hover { text-decoration: underline; }
+.bfc-rv-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); margin-top: auto; }
+.bfc-rv-card-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.85); }
+.bfc-rv-card-verified { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ce, #ABCC99); }
+.bfc-rv-nav { display: flex; gap: 8px; flex-shrink: 0; }
+.bfc-rv-arrow { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.15); background: transparent; color: rgba(255,255,255,0.6); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: background 0.15s, color 0.15s; padding: 0; }
+.bfc-rv-arrow:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.bfc-rv-empty { font-size: 12px; color: rgba(255,255,255,0.35); font-style: italic; padding: 20px 0; }
+@media (max-width: 900px) {
+  .bfc-rv { padding: 36px 20px 48px; }
+  .bfc-rv-title { font-size: 28px; }
+  .bfc-rv-card { flex: 0 0 calc((100% - 16px) / 2); min-width: 260px; }
+  .bfc-rv-tab { padding: 8px 14px; font-size: 10px; }
+}
+@media (max-width: 599px) {
+  .bfc-rv-card { flex: 0 0 85%; min-width: 0; }
+  .bfc-rv-head { flex-direction: column; gap: 12px; align-items: flex-start; }
+  .bfc-rv-cta { flex-direction: column; padding: 18px 16px; text-align: center; }
+  .bfc-rv-cta-text { font-size: 15px; }
+  a.bfc-rv-cta-btn { width: 100%; padding: 14px 24px; text-align: center; }
+}
+</style>
+
+  <div class="bfc-rv-head">
+    <h2 class="bfc-rv-title">Reviews</h2>
+    <div class="bfc-rv-nav">
+      <button type="button" class="bfc-rv-arrow" data-bfc-rv-prev aria-label="Previous reviews">&larr;</button>
+      <button type="button" class="bfc-rv-arrow" data-bfc-rv-next aria-label="Next reviews">&rarr;</button>
+    </div>
+  </div>
+
+  {%- comment -%} ── Summary ── {%- endcomment -%}
+  <div class="bfc-rv-summary">
+    {%- if has_product_reviews -%}
+      <span class="bfc-rv-avg">{{ product_avg_whole }}.{{ product_avg_frac }}</span>
+      <span class="bfc-rv-stars-inline">
+        {%- assign partial_pct = product_avg_frac | times: 10 -%}
+        {%- assign partial_star = product_avg_whole | plus: 1 -%}
+        {%- for s in (1..5) -%}
+          {%- if s <= product_avg_whole -%}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          {%- elsif s == partial_star and product_avg_frac > 0 -%}
+            <svg width="14" height="14" viewBox="0 0 24 24"><defs><linearGradient id="rv-partial-p"><stop offset="{{ partial_pct }}%" stop-color="currentColor"/><stop offset="{{ partial_pct }}%" stop-color="transparent"/></linearGradient></defs><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#rv-partial-p)" stroke="currentColor" stroke-width="1"/></svg>
+          {%- else -%}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          {%- endif -%}
+        {%- endfor -%}
+      </span>
+      <span class="bfc-rv-count">{{ product_review_count }} review{%- if product_review_count != 1 -%}s{%- endif -%} for this product</span>
+    {%- else -%}
+      <span class="bfc-rv-avg">{{ all_avg_whole }}.{{ all_avg_frac }}</span>
+      <span class="bfc-rv-stars-inline">
+        {%- assign all_partial_pct = all_avg_frac | times: 10 -%}
+        {%- assign all_partial_star = all_avg_whole | plus: 1 -%}
+        {%- for s in (1..5) -%}
+          {%- if s <= all_avg_whole -%}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          {%- elsif s == all_partial_star and all_avg_frac > 0 -%}
+            <svg width="14" height="14" viewBox="0 0 24 24"><defs><linearGradient id="rv-partial-s"><stop offset="{{ all_partial_pct }}%" stop-color="currentColor"/><stop offset="{{ all_partial_pct }}%" stop-color="transparent"/></linearGradient></defs><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#rv-partial-s)" stroke="currentColor" stroke-width="1"/></svg>
+          {%- else -%}
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          {%- endif -%}
+        {%- endfor -%}
+      </span>
+      <span class="bfc-rv-count">{{ all_review_count }} shop reviews</span>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} ── Leave a Review CTA ── {%- endcomment -%}
+  <div class="bfc-rv-cta">
+    <p class="bfc-rv-cta-text">Shot something beautiful? Share it &mdash; your review helps other film folks find the good stuff.</p>
+    <a href="#"
+       class="jdgm-write-rev-link bfc-rv-cta-btn"
+       data-product-id="{{ bfc_rv_product.id }}"
+       data-product-title="{{ bfc_rv_product.title | escape }}"
+       data-product-handle="{{ pdp_handle }}"
+       onclick="event.preventDefault();">Leave a Review</a>
+  </div>
+
+  {%- comment -%} ── Tabs ── {%- endcomment -%}
+  <div class="bfc-rv-tabs">
+    {%- if has_product_reviews -%}
+      <button class="bfc-rv-tab is-active" data-bfc-rv-tab="product">This Product<span class="bfc-rv-tab-count">{{ product_review_count }}</span></button>
+    {%- endif -%}
+    <button class="bfc-rv-tab{% unless has_product_reviews %} is-active{% endunless %}" data-bfc-rv-tab="shop">Shop Reviews<span class="bfc-rv-tab-count">{{ all_review_count }}</span></button>
+  </div>
+
+  {%- comment -%} ── Product panel (filtered to this product) ── {%- endcomment -%}
+  {%- if has_product_reviews -%}
+  <div class="bfc-rv-panel is-active" data-bfc-rv-panel="product">
+    <div class="bfc-rv-track-wrap">
+      <div class="bfc-rv-track" data-bfc-rv-track="product">
+        {%- assign product_matches_found = 0 -%}
+        {%- for review in all_reviews -%}
+          {%- capture bfc_rv_this_pid -%}{{ review.product_id }}{%- endcapture -%}
+          {%- assign bfc_rv_is_match = false -%}
+          {%- if review.product_handle != blank and review.product_handle == bfc_rv_match_handle -%}
+            {%- assign bfc_rv_is_match = true -%}
+          {%- elsif bfc_rv_this_pid == bfc_rv_pid_str -%}
+            {%- assign bfc_rv_is_match = true -%}
+          {%- endif -%}
+          {%- if bfc_rv_is_match -%}
+            {%- assign product_matches_found = product_matches_found | plus: 1 -%}
+            <div class="bfc-rv-card" data-bfc-rv-card data-rv-rating="{{ review.rating }}">
+              <div class="bfc-rv-card-stars" aria-label="{{ review.rating }} out of 5 stars">
+                {%- for s in (1..5) -%}
+                  {%- if s <= review.rating -%}
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  {%- else -%}
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              <p class="bfc-rv-card-body">{{ review.body | escape }}</p>
+              <div class="bfc-rv-card-footer">
+                <span class="bfc-rv-card-name">{{ review.author | escape }}</span>
+                {%- if review.verified -%}
+                  <span class="bfc-rv-card-verified">Verified Buyer</span>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if product_matches_found == 0 -%}
+          <div class="bfc-rv-empty">Reviews syncing &mdash; check back shortly.</div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+  {%- endif -%}
+
+  {%- comment -%} ── Shop panel (up to 60 most recent/top reviews — Base44 pre-sorts) ── {%- endcomment -%}
+  <div class="bfc-rv-panel{% unless has_product_reviews %} is-active{% endunless %}" data-bfc-rv-panel="shop">
+    <div class="bfc-rv-track-wrap">
+      <div class="bfc-rv-track" data-bfc-rv-track="shop">
+        {%- for review in all_reviews limit: 60 -%}
+          <div class="bfc-rv-card" data-bfc-rv-card data-rv-rating="{{ review.rating }}">
+            <div class="bfc-rv-card-stars" aria-label="{{ review.rating }} out of 5 stars">
+              {%- for s in (1..5) -%}
+                {%- if s <= review.rating -%}
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                {%- else -%}
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+            <p class="bfc-rv-card-body">{{ review.body | escape }}</p>
+            {%- if review.product_title != blank -%}
+              {%- if review.product_handle != blank -%}
+                <a class="bfc-rv-card-product" href="/products/{{ review.product_handle }}">{{ review.product_title | escape }}</a>
+              {%- else -%}
+                <span class="bfc-rv-card-product" style="cursor:default">{{ review.product_title | escape }}</span>
+              {%- endif -%}
+            {%- endif -%}
+            <div class="bfc-rv-card-footer">
+              <span class="bfc-rv-card-name">{{ review.author | escape }}</span>
+              {%- if review.verified -%}
+                <span class="bfc-rv-card-verified">Verified Buyer</span>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} ── Inject star rating into PDP header placeholder ── {%- endcomment -%}
+{%- liquid
+  if has_product_reviews
+    assign hdr_whole = product_avg_whole
+    assign hdr_frac = product_avg_frac
+    assign hdr_partial_star = partial_star
+    assign hdr_is_shop = false
+  else
+    assign hdr_whole = all_avg_whole
+    assign hdr_frac = all_avg_frac
+    assign hdr_partial_star = all_partial_star
+    assign hdr_is_shop = true
+  endif
+  assign h_pct = hdr_frac | times: 10
+-%}
+<script>
+(function(){
+  var ph = document.getElementById('bfc4-star-placeholder');
+  if (!ph) return;
+  ph.innerHTML = '<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--ch,#4E4741);letter-spacing:0.04em;cursor:pointer" onclick="document.getElementById(\'bfc-rv-section\').scrollIntoView({behavior:\'smooth\'})">'
+    + '<span style="display:flex;gap:1px;color:var(--or,#E36E15)">'
+    + '{%- for s in (1..5) -%}{%- if s <= hdr_whole -%}<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>{%- elsif s == hdr_partial_star and hdr_frac > 0 -%}<svg width="12" height="12" viewBox="0 0 24 24"><defs><linearGradient id="rv-hdr-partial"><stop offset="{{ h_pct }}%" stop-color="currentColor"/><stop offset="{{ h_pct }}%" stop-color="transparent"/></linearGradient></defs><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#rv-hdr-partial)" stroke="currentColor" stroke-width="1"/></svg>{%- else -%}<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(32,32,9,0.2)" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>{%- endif -%}{%- endfor -%}'
+    + '</span>'
+    + '{{ hdr_whole }}.{{ hdr_frac }}{%- if hdr_is_shop and all_review_count > 0 %} ({{ all_review_count }} review{% if all_review_count != 1 %}s{% endif %}){%- elsif product_review_count >= 1 %} ({{ product_review_count }} review{% if product_review_count != 1 %}s{% endif %}){%- endif -%}'
+    + '</span>';
+})();
+</script>
+
+<script>
+(function(){
+  var sec = document.getElementById('bfc-rv-section');
+  if (!sec) return;
+
+  var pos = 0;
+
+  /* ── Tab switching ── */
+  var tabs = sec.querySelectorAll('[data-bfc-rv-tab]');
+  var panels = sec.querySelectorAll('[data-bfc-rv-panel]');
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      var target = tab.dataset.bfcRvTab;
+      tabs.forEach(function(t) { t.classList.toggle('is-active', t.dataset.bfcRvTab === target); });
+      panels.forEach(function(p) { p.classList.toggle('is-active', p.dataset.bfcRvPanel === target); });
+      pos = 0;
+      var t = activeTrack();
+      if (t) t.style.transform = 'translateX(0)';
+    });
+  });
+
+  /* ── Leave a Review button — find Judge.me's hidden trigger and click it ── */
+  var cta = sec.querySelector('.bfc-rv-cta-btn');
+  if (cta) {
+    cta.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      /* Judge.me's new widget renders a "Write a review" button.
+         Find it by class first, fall back to text-content matching. */
+      var trigger = document.querySelector('.jdgm-widget .jm-action-buttons__button')
+                 || document.querySelector('.jdgm-widget .jm-button--primary')
+                 || document.querySelector('#judgeme_product_reviews .jm-button--primary');
+
+      /* If class match failed, find by visible text "Write a review" */
+      if (!trigger) {
+        var allBtns = document.querySelectorAll('.jdgm-widget button, #judgeme_product_reviews button');
+        for (var i = 0; i < allBtns.length; i++) {
+          var t = allBtns[i].textContent.trim().toLowerCase();
+          if (t === 'write a review' || t === 'leave a review' || t.indexOf('write a review') !== -1) {
+            trigger = allBtns[i];
+            break;
+          }
+        }
+      }
+
+      if (trigger) {
+        trigger.click();
+        return;
+      }
+
+      /* Old class fallbacks (legacy Judge.me) */
+      var legacyTrigger = document.querySelector('.jdgm-write-rev-link')
+                       || document.querySelector('[data-review-form-trigger]');
+      if (legacyTrigger) {
+        legacyTrigger.click();
+        return;
+      }
+
+      /* Last resort: navigate to PDP with review anchor */
+      window.location.href = '/products/' + cta.dataset.productHandle + '#judgeme_product_reviews';
+    });
+  }
+
+  /* ── Carousel navigation ── */
+  function activeTrack() {
+    var active = sec.querySelector('.bfc-rv-panel.is-active [data-bfc-rv-track]');
+    return active || sec.querySelector('[data-bfc-rv-track="shop"]');
+  }
+  function getStep() {
+    var w = sec.offsetWidth;
+    if (w < 600) return 1;
+    if (w < 900) return 2;
+    return 3;
+  }
+  function slide(dir) {
+    var track = activeTrack();
+    if (!track) return;
+    var cards = track.querySelectorAll('[data-bfc-rv-card]');
+    if (!cards.length) return;
+    var step = getStep();
+    pos += dir * step;
+    if (pos >= cards.length) pos = 0;
+    if (pos < 0) pos = Math.max(0, cards.length - step);
+    var card = cards[pos];
+    if (!card) { pos = 0; card = cards[0]; }
+    if (card) track.style.transform = 'translateX(-' + card.offsetLeft + 'px)';
+  }
+
+  var prevBtn = sec.querySelector('[data-bfc-rv-prev]');
+  var nextBtn = sec.querySelector('[data-bfc-rv-next]');
+  if (prevBtn) prevBtn.addEventListener('click', function() { slide(-1); });
+  if (nextBtn) nextBtn.addEventListener('click', function() { slide(1); });
+
+  /* ── Touch/drag on both tracks ── */
+  var tracks = sec.querySelectorAll('[data-bfc-rv-track]');
+  tracks.forEach(function(track) {
+    var startX = 0, startTx = 0, dragging = false;
+    function getTx() {
+      var st = getComputedStyle(track).transform;
+      if (!st || st === 'none') return 0;
+      var m = st.match(/matrix\((.+)\)/);
+      return m ? parseFloat(m[1].split(',')[4]) : 0;
+    }
+    track.addEventListener('mousedown', function(e) { dragging = true; startX = e.clientX; startTx = getTx(); track.classList.add('is-dragging'); });
+    track.addEventListener('touchstart', function(e) { dragging = true; startX = e.touches[0].clientX; startTx = getTx(); track.classList.add('is-dragging'); }, { passive: true });
+    window.addEventListener('mousemove', function(e) { if (!dragging) return; track.style.transform = 'translateX(' + (startTx + e.clientX - startX) + 'px)'; });
+    window.addEventListener('touchmove', function(e) { if (!dragging) return; track.style.transform = 'translateX(' + (startTx + e.touches[0].clientX - startX) + 'px)'; }, { passive: true });
+    function end(e) {
+      if (!dragging) return;
+      dragging = false;
+      track.classList.remove('is-dragging');
+      var x = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+      if (Math.abs(x - startX) > 40) slide(x - startX < 0 ? 1 : -1);
+      else track.style.transform = 'translateX(' + startTx + 'px)';
+    }
+    window.addEventListener('mouseup', end);
+    window.addEventListener('touchend', end);
+  });
+})();
+</script>
+
+{%- endif -%}
+
+{%- comment -%} ═══════════════════════════════════════════════════════════════
+    BFC REVIEW FOLLOWUP — Free Expired Film Offer
+
+    Customers who arrive via a Judge.me review-request email and submit
+    a review are offered a free roll of expired 35mm film.
+
+    Flow:
+      1. Customer clicks "Write a review" in their Judge.me email
+      2. URL contains judgeme_token=... — we stash it in sessionStorage
+      3. They submit the review (we count 3 Next clicks → product saved)
+      4. We watch for Judge.me's modal to disappear from the DOM
+      5. Our modal opens with a small form
+      6. Form POSTs natively to Base44 (no fetch — sidesteps CORS)
+      7. Base44 validates against Shopify orders + checks for duplicates
+
+    No customer pre-fill — Shopify's new Customer Accounts (CAO) system
+    keeps `customer` nil in storefront Liquid and blocks /account.json
+    with CORS. Users type their email, which Base44 verifies against
+    their Shopify order history server-side.
+
+    The "use my default address on file" checkbox is just a flag passed
+    to Base44 — when checked, the backend looks up the customer's address
+    from Shopify using the verified email.
+═══════════════════════════════════════════════════════════════ {%- endcomment -%}
+
+<style>
+  .bfc-rvf-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(32,32,9,0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .bfc-rvf-modal.is-open { display: flex; }
+  .bfc-rvf-card {
+    background: #F8F6EE;
+    width: 100%;
+    max-width: 440px;
+    max-height: 92vh;
+    overflow-y: auto;
+    padding: 28px 28px 24px;
+    border: 1px solid rgba(32,32,9,0.15);
+    box-shadow: 0 20px 60px rgba(32,32,9,0.25);
+    position: relative;
+  }
+  @media (max-width: 600px) {
+    .bfc-rvf-card { padding: 24px 20px 20px; }
+  }
+  .bfc-rvf-close {
+    position: absolute;
+    top: 16px; right: 18px;
+    background: none; border: none; padding: 0;
+    font-family: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+    font-size: 11px; letter-spacing: 0.14em;
+    color: rgba(32,32,9,0.45);
+    cursor: pointer;
+  }
+  .bfc-rvf-close:hover { color: #E36E15; }
+  .bfc-rvf-ey {
+    font-family: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+    font-size: 10px; letter-spacing: 0.18em;
+    color: #E36E15;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .bfc-rvf-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    line-height: 1.3;
+    font-weight: 500;
+    color: #202009;
+    margin: 0 0 8px 0;
+  }
+  .bfc-rvf-lead {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #4E4741;
+    margin: 0 0 6px 0;
+  }
+  .bfc-rvf-fineprint {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #6B655F;
+    margin: 0 0 20px 0;
+    font-style: italic;
+  }
+  .bfc-rvf-field {
+    margin-bottom: 12px;
+  }
+  .bfc-rvf-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .bfc-rvf-label {
+    font-family: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: #4E4741;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    display: block;
+  }
+  .bfc-rvf-input {
+    width: 100%;
+    background: #fff;
+    border: 1px solid rgba(32,32,9,0.18);
+    padding: 9px 11px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: #202009;
+    box-sizing: border-box;
+  }
+  .bfc-rvf-input:focus {
+    outline: none;
+    border-color: #E36E15;
+  }
+
+  /* Delivery radio cards */
+  .bfc-rvf-radio-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .bfc-rvf-radio-opt {
+    border: 1px solid rgba(32,32,9,0.2);
+    padding: 10px 12px;
+    cursor: pointer;
+    background: #fff;
+    transition: all 0.15s ease;
+  }
+  .bfc-rvf-radio-opt input { display: none; }
+  .bfc-rvf-radio-opt.is-active {
+    border-color: #E36E15;
+    background: rgba(227,110,21,0.06);
+  }
+  .bfc-rvf-radio-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: #202009;
+    margin-bottom: 1px;
+  }
+  .bfc-rvf-radio-sub {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    color: #6B655F;
+  }
+
+  /* Use-default-address checkbox row */
+  .bfc-rvf-default-addr {
+    margin-top: 14px;
+    margin-bottom: 12px;
+  }
+  .bfc-rvf-default-label {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    cursor: pointer;
+    padding: 10px 12px;
+    border: 1px solid rgba(32,32,9,0.18);
+    background: rgba(227,110,21,0.04);
+    transition: background 0.15s ease;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: #202009;
+  }
+  .bfc-rvf-default-label:hover {
+    background: rgba(227,110,21,0.08);
+  }
+  .bfc-rvf-default-label input[type="checkbox"] {
+    accent-color: #E36E15;
+    flex-shrink: 0;
+    margin: 0;
+  }
+
+  /* Address fields — shown when "use default" is unchecked */
+  .bfc-rvf-ship-fields {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed rgba(32,32,9,0.15);
+  }
+  .bfc-rvf-ship-fields.is-hidden { display: none; }
+
+  /* Pickup mode hides everything address-related */
+  .bfc-rvf-ship-only.is-hidden { display: none; }
+
+  .bfc-rvf-error {
+    background: rgba(180,40,40,0.06);
+    border: 1px solid rgba(180,40,40,0.3);
+    color: #8a2020;
+    padding: 9px 12px;
+    margin-top: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 12px;
+    display: none;
+  }
+  .bfc-rvf-error.is-shown { display: block; }
+
+  .bfc-rvf-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .bfc-rvf-submit {
+    flex: 1;
+    background: #E36E15;
+    color: #fff;
+    border: none;
+    padding: 12px 18px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .bfc-rvf-submit:hover { background: #c75c0d; }
+  .bfc-rvf-submit:disabled {
+    background: rgba(32,32,9,0.3);
+    cursor: not-allowed;
+  }
+  .bfc-rvf-cancel {
+    background: none;
+    border: 1px solid rgba(32,32,9,0.25);
+    padding: 12px 18px;
+    font-family: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: #4E4741;
+    cursor: pointer;
+  }
+  .bfc-rvf-cancel:hover { color: #202009; border-color: rgba(32,32,9,0.5); }
+
+  .bfc-rvf-success {
+    text-align: center;
+    padding: 16px 0;
+  }
+  .bfc-rvf-success-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: #202009;
+    margin: 10px 0 6px;
+  }
+  .bfc-rvf-success-body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: #4E4741;
+    line-height: 1.5;
+  }
+</style>
+
+<div class="bfc-rvf-modal" id="bfc-rvf-modal" role="dialog" aria-modal="true" aria-labelledby="bfc-rvf-title" aria-hidden="true">
+  <div class="bfc-rvf-card">
+    <button type="button" class="bfc-rvf-close" aria-label="Close" data-bfc-rvf-close>[ CLOSE ]</button>
+
+    <div id="bfc-rvf-form-view">
+      <span class="bfc-rvf-ey">// THANK YOU FOR YOUR REVIEW</span>
+      <h2 class="bfc-rvf-title" id="bfc-rvf-title">Claim a free roll of expired film</h2>
+      <p class="bfc-rvf-lead">As a thank-you for your review, we'd like to send you a free roll of expired 35mm film.</p>
+      <p class="bfc-rvf-fineprint">* One roll per reviewed product. Duplicate or edited reviews do not count.</p>
+
+      {%- comment -%} Form posts natively to Base44 (no fetch — sidesteps CORS).
+          Hidden iframe absorbs the response so the page doesn't navigate. {%- endcomment -%}
+      <iframe name="bfc-rvf-iframe" id="bfc-rvf-iframe" style="display:none;width:0;height:0;border:0;" aria-hidden="true"></iframe>
+      <form id="bfc-rvf-form"
+            method="POST"
+            action="https://time-tracker-03f66780.base44.app/functions/freeFilmRequest"
+            target="bfc-rvf-iframe"
+            novalidate>
+        <input type="hidden" name="judgeme_token" id="bfc-rvf-token" value="">
+        <input type="hidden" name="product_handle" value="{{ pdp_handle }}">
+        <input type="hidden" name="product_title" value="{{ pdp_title | escape }}">
+        <input type="hidden" name="use_default_address" id="bfc-rvf-use-default-hidden" value="0">
+
+        <div class="bfc-rvf-field-row">
+          <div>
+            <label class="bfc-rvf-label" for="bfc-rvf-name">Name</label>
+            <input class="bfc-rvf-input" type="text" id="bfc-rvf-name" name="name" required>
+          </div>
+          <div>
+            <label class="bfc-rvf-label" for="bfc-rvf-email">Email</label>
+            <input class="bfc-rvf-input" type="email" id="bfc-rvf-email" name="email" required>
+          </div>
+        </div>
+
+        <div class="bfc-rvf-field">
+          <span class="bfc-rvf-label">Delivery</span>
+          <div class="bfc-rvf-radio-group">
+            <label class="bfc-rvf-radio-opt is-active" data-bfc-rvf-radio="ship">
+              <input type="radio" name="delivery" value="ship" checked>
+              <div class="bfc-rvf-radio-title">Ship to me</div>
+              <div class="bfc-rvf-radio-sub">USPS, 1-2 weeks</div>
+            </label>
+            <label class="bfc-rvf-radio-opt" data-bfc-rvf-radio="pickup">
+              <input type="radio" name="delivery" value="pickup">
+              <div class="bfc-rvf-radio-title">In-store pickup</div>
+              <div class="bfc-rvf-radio-sub">855 Grand St</div>
+            </label>
+          </div>
+        </div>
+
+        <div class="bfc-rvf-ship-only" id="bfc-rvf-ship-only">
+          <div class="bfc-rvf-default-addr">
+            <label class="bfc-rvf-default-label">
+              <input type="checkbox" id="bfc-rvf-use-default" checked>
+              <span>Use my default address on file</span>
+            </label>
+          </div>
+
+          <div class="bfc-rvf-ship-fields is-hidden" id="bfc-rvf-ship-fields">
+            <div class="bfc-rvf-field">
+              <label class="bfc-rvf-label" for="bfc-rvf-addr1">Address line 1</label>
+              <input class="bfc-rvf-input" type="text" id="bfc-rvf-addr1" name="address1">
+            </div>
+            <div class="bfc-rvf-field">
+              <label class="bfc-rvf-label" for="bfc-rvf-addr2">Address line 2 (optional)</label>
+              <input class="bfc-rvf-input" type="text" id="bfc-rvf-addr2" name="address2">
+            </div>
+            <div class="bfc-rvf-field-row">
+              <div>
+                <label class="bfc-rvf-label" for="bfc-rvf-city">City</label>
+                <input class="bfc-rvf-input" type="text" id="bfc-rvf-city" name="city">
+              </div>
+              <div>
+                <label class="bfc-rvf-label" for="bfc-rvf-zip">ZIP</label>
+                <input class="bfc-rvf-input" type="text" id="bfc-rvf-zip" name="zip">
+              </div>
+            </div>
+            <div class="bfc-rvf-field-row">
+              <div>
+                <label class="bfc-rvf-label" for="bfc-rvf-province">State</label>
+                <input class="bfc-rvf-input" type="text" id="bfc-rvf-province" name="province">
+              </div>
+              <div>
+                <label class="bfc-rvf-label" for="bfc-rvf-country">Country</label>
+                <input class="bfc-rvf-input" type="text" id="bfc-rvf-country" name="country" value="United States">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bfc-rvf-error" id="bfc-rvf-error"></div>
+
+        <div class="bfc-rvf-actions">
+          <button type="button" class="bfc-rvf-cancel" data-bfc-rvf-close>No thanks</button>
+          <button type="submit" class="bfc-rvf-submit" id="bfc-rvf-submit">Claim my free roll</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="bfc-rvf-success-view" style="display:none;">
+      <div class="bfc-rvf-success">
+        <span class="bfc-rvf-ey">// CLAIM RECEIVED</span>
+        <h2 class="bfc-rvf-success-title">Thank you. We'll be in touch.</h2>
+        <p class="bfc-rvf-success-body" id="bfc-rvf-success-message">You'll receive a confirmation email when we process your free roll.</p>
+        <div class="bfc-rvf-actions" style="justify-content:center;">
+          <button type="button" class="bfc-rvf-cancel" data-bfc-rvf-close>Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var STORAGE_KEY = 'bfcReviewFollowupToken';
+  var SUBMITTED_KEY = 'bfcReviewFollowupSubmitted';
+
+  /* Stash judgeme_token if URL contains it. */
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var token = params.get('judgeme_token');
+    if (token) sessionStorage.setItem(STORAGE_KEY, token);
+  } catch (e) {}
+
+  var storedToken = null;
+  try { storedToken = sessionStorage.getItem(STORAGE_KEY); } catch (e) {}
+  if (!storedToken) return;
+
+  var alreadySubmitted = false;
+  try { alreadySubmitted = sessionStorage.getItem(SUBMITTED_KEY) === '1'; } catch (e) {}
+  if (alreadySubmitted) return;
+
+  var modal = document.getElementById('bfc-rvf-modal');
+  if (!modal) return;
+
+  window._bfcRvfArmed = true;
+  console.log('[BFC review followup] Armed. Token:', storedToken);
+
+  /* ── Detect Judge.me review submission ──
+     Judge.me's review form is a multi-step wizard. The 3rd "Next" click
+     submits the product review; step 4 is an optional shop-review prompt.
+     We trigger our followup AFTER Judge.me's modal disappears entirely
+     from the DOM — so the user can engage with the shop prompt (or skip
+     it) without our modal popping over theirs. */
+  var hasOpened = false;
+  function openModalIfNew() {
+    if (hasOpened) return;
+    hasOpened = true;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    setTimeout(function() {
+      var nameInput = document.getElementById('bfc-rvf-name');
+      if (nameInput) nameInput.focus();
+    }, 200);
+  }
+
+  var jdgmNextClicks = 0;
+  var productReviewSubmitted = false;
+  var jdgmCloseInterval = null;
+
+  document.addEventListener('click', function(ev) {
+    if (hasOpened || productReviewSubmitted) return;
+    var target = ev.target;
+    if (!target || target.nodeType !== 1) return;
+    var nextBtn = target.closest('.jdgm-write-review-modal__nav-btn-next');
+    if (!nextBtn) return;
+
+    jdgmNextClicks++;
+    console.log('[BFC review followup] Judge.me Next click #' + jdgmNextClicks);
+
+    if (jdgmNextClicks >= 3) {
+      productReviewSubmitted = true;
+      console.log('[BFC review followup] Product review submitted, polling for Judge.me modal to close');
+
+      var checks = 0;
+      jdgmCloseInterval = setInterval(function() {
+        checks++;
+        var jdgmModal = document.querySelector('.jdgm-write-review-modal');
+        var isGone = !jdgmModal ||
+                     getComputedStyle(jdgmModal).display === 'none' ||
+                     getComputedStyle(jdgmModal).visibility === 'hidden';
+        if (isGone) {
+          console.log('[BFC review followup] Judge.me modal is gone — opening followup');
+          clearInterval(jdgmCloseInterval);
+          setTimeout(function() { openModalIfNew(); }, 600);
+        } else if (checks > 600) {
+          clearInterval(jdgmCloseInterval);
+        }
+      }, 500);
+    }
+  }, true);
+
+  /* ── Modal interactions ── */
+  function closeModal() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+  modal.querySelectorAll('[data-bfc-rvf-close]').forEach(function(btn) {
+    btn.addEventListener('click', closeModal);
+  });
+  modal.addEventListener('click', function(ev) {
+    if (ev.target === modal) closeModal();
+  });
+  document.addEventListener('keydown', function(ev) {
+    if (ev.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+  });
+
+  /* ── Ship/pickup radio toggle ── */
+  var shipOnly = document.getElementById('bfc-rvf-ship-only');
+  modal.querySelectorAll('[data-bfc-rvf-radio]').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      modal.querySelectorAll('.bfc-rvf-radio-opt').forEach(function(o) {
+        o.classList.remove('is-active');
+      });
+      opt.classList.add('is-active');
+      var val = opt.getAttribute('data-bfc-rvf-radio');
+      opt.querySelector('input[type="radio"]').checked = true;
+      if (val === 'pickup') {
+        shipOnly.classList.add('is-hidden');
+      } else {
+        shipOnly.classList.remove('is-hidden');
+      }
+    });
+  });
+
+  /* ── "Use my default address" checkbox toggle ── */
+  var useDefaultCheckbox = document.getElementById('bfc-rvf-use-default');
+  var useDefaultHidden = document.getElementById('bfc-rvf-use-default-hidden');
+  var shipFields = document.getElementById('bfc-rvf-ship-fields');
+  function syncDefaultAddrState() {
+    if (useDefaultCheckbox.checked) {
+      shipFields.classList.add('is-hidden');
+      useDefaultHidden.value = '1';
+    } else {
+      shipFields.classList.remove('is-hidden');
+      useDefaultHidden.value = '0';
+    }
+  }
+  if (useDefaultCheckbox) {
+    useDefaultCheckbox.addEventListener('change', syncDefaultAddrState);
+    syncDefaultAddrState();
+  }
+
+  /* ── Form submission ── */
+  var form = document.getElementById('bfc-rvf-form');
+  var submitBtn = document.getElementById('bfc-rvf-submit');
+  var errorEl = document.getElementById('bfc-rvf-error');
+  var formView = document.getElementById('bfc-rvf-form-view');
+  var successView = document.getElementById('bfc-rvf-success-view');
+
+  function showError(msg) {
+    errorEl.textContent = msg;
+    errorEl.classList.add('is-shown');
+  }
+
+  form.addEventListener('submit', function(ev) {
+    /* Validate first; if anything's missing, block submission. Otherwise
+       allow the native POST to fire through the hidden iframe. */
+    errorEl.classList.remove('is-shown');
+
+    var fd = new FormData(form);
+    var delivery = fd.get('delivery');
+    var name = (fd.get('name') || '').trim();
+    var email = (fd.get('email') || '').trim();
+
+    if (!name || !email) {
+      ev.preventDefault();
+      showError('Please provide your name and email.');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      ev.preventDefault();
+      showError('Please enter a valid email address.');
+      return;
+    }
+
+    /* Address validation only applies when:
+       - Delivery is "ship", AND
+       - "Use my default address" is unchecked */
+    if (delivery === 'ship' && !useDefaultCheckbox.checked) {
+      var addr1 = (fd.get('address1') || '').trim();
+      var city  = (fd.get('city') || '').trim();
+      var zip   = (fd.get('zip') || '').trim();
+      if (!addr1 || !city || !zip) {
+        ev.preventDefault();
+        showError('Please complete your shipping address.');
+        return;
+      }
+    }
+
+    /* Populate the judgeme_token hidden input from sessionStorage. */
+    var tokenInput = document.getElementById('bfc-rvf-token');
+    if (tokenInput) tokenInput.value = storedToken || '';
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+
+    /* Native form POST fires now (we didn't preventDefault). Since the
+       response goes to the hidden iframe and we can't read it cross-origin,
+       we just show success after a brief delay. Base44 validates server-
+       side and notifies addie@ on real submissions; rejected attempts
+       (duplicates, no matching order) are visible in Base44 admin. */
+    setTimeout(function() {
+      try { sessionStorage.setItem(SUBMITTED_KEY, '1'); } catch (e) {}
+      formView.style.display = 'none';
+      successView.style.display = 'block';
+    }, 1500);
+  });
+})();
+</script>

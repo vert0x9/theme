@@ -1,0 +1,843 @@
+
+{% liquid
+  assign base_text = section.settings.text_color | default: '#111111'
+  assign base_bg = section.settings.background_color | default: '#F7F4F0'
+  assign page_width_px = settings.page_width | default: 1200
+  assign horizontal_pad = section.settings.horizontal_padding | default: 24
+  assign heading_size_preset = section.settings.heading_size_preset | default: 'default'
+  case heading_size_preset
+    when 'sm'
+      assign header_size_mobile = '1.4'
+      assign header_size_desktop = '2.0'
+    when 'md'
+      assign header_size_mobile = '1.6'
+      assign header_size_desktop = '2.4'
+    when 'lg'
+      assign header_size_mobile = '2.0'
+      assign header_size_desktop = '3.2'
+    when 'xl'
+      assign header_size_mobile = '2.4'
+      assign header_size_desktop = '3.8'
+    when 'xxl'
+      assign header_size_mobile = '2.8'
+      assign header_size_desktop = '4.4'
+    else
+      assign header_size_mobile = '1.75'
+      assign header_size_desktop = '2.75'
+  endcase
+  assign header_weight = section.settings.header_font_weight | default: 600
+  assign body_weight = section.settings.body_font_weight | default: 400
+  assign body_size = section.settings.body_font_size | default: 16
+  assign body_size_small = section.settings.body_font_size_small | default: 12
+  assign header_line_height = section.settings.header_line_height | default: '1.05'
+  assign header_letter_spacing = section.settings.header_letter_spacing | default: 0
+  assign heading_color = section.settings.heading_color | default: base_text
+  assign body_line_height = section.settings.body_line_height | default: '1.5'
+  assign body_letter_spacing = section.settings.body_letter_spacing | default: 0
+  assign section_pad_top = section.settings.section_padding_top | default: 40
+  assign section_pad_bottom = section.settings.section_padding_bottom | default: 40
+  assign accent_color = section.settings.accent_color | default: '#E36E15'
+  assign secondary_text_color = section.settings.secondary_text_color | default: '#82906B'
+  assign item_title_font = section.settings.item_title_font
+%}
+<section id="bfc-developing-membership-cta-{{ section.id }}" class="bfc-combined" aria-label="{{ section.settings.section_label | default: 'BFC Developing Membership CTA' }}">
+  <style>
+    {{ item_title_font | font_face: font_display: 'swap' }}
+
+    /* Fix shopify-section wrapper background & spacing */
+    #shopify-section-{{ section.id }} {
+      background-color: {{ base_bg }};
+      margin: 0;
+      padding: {{ section_pad_top }}px 0 {{ section_pad_bottom }}px;
+      width: 100%;
+    }
+    #bfc-developing-membership-cta-{{ section.id }}{
+      --bfc-header-family: var(--font-heading-family, inherit);
+      --bfc-body-family: var(--font-body-family, inherit);
+      --bfc-header-weight: {{ header_weight }};
+      --bfc-body-weight: {{ body_weight }};
+      --bfc-header-size-mobile: {{ header_size_mobile }}rem;
+      --bfc-header-size-desktop: {{ header_size_desktop }}rem;
+      --bfc-horizontal-pad: {{ horizontal_pad }}px;
+      --bfc-page-width: {{ page_width_px }}px;
+      --bfc-align-pad: clamp(
+        var(--bfc-horizontal-pad),
+        calc((100vw - min(100vw, var(--bfc-page-width))) / 2 + var(--bfc-horizontal-pad)),
+        120px
+      );
+      --bfc-body-size: {{ body_size }}px;
+      --bfc-body-size-small: {{ body_size_small }}px;
+      --bfc-text: {{ base_text }};
+      --bfc-bg: {{ base_bg }};
+      --bfc-heading-color: {{ heading_color }};
+      --bfc-header-letter-spacing: {{ header_letter_spacing }}px;
+      --bfc-header-line-height: {{ header_line_height }};
+      --bfc-body-letter-spacing: {{ body_letter_spacing }}px;
+      --bfc-body-line-height: {{ body_line_height }};
+      --bfc-accent: {{ accent_color }};
+      --bfc-secondary-text: {{ secondary_text_color }};
+      --bfc-item-title-family: {{ item_title_font.family | default: 'Poppins' }}, {{ item_title_font.fallback_families | default: 'sans-serif' }};
+      --bfc-item-title-weight: {{ item_title_font.weight | default: 500 }};
+      color: var(--bfc-text);
+      background: var(--bfc-bg);
+      font-family: var(--bfc-body-family);
+      font-weight: var(--bfc-body-weight);
+      font-size: var(--bfc-body-size);
+    }
+    #bfc-developing-membership-cta-{{ section.id }} .bfc-heading{
+      font-family: var(--bfc-header-family, inherit);
+      font-size: clamp(var(--bfc-header-size-mobile, 1.75rem), 3.5vw, var(--bfc-header-size-desktop, 2.75rem));
+      font-weight: var(--bfc-header-weight, 300);
+      line-height: var(--bfc-header-line-height, 1.05);
+      letter-spacing: var(--bfc-header-letter-spacing, -0.02em);
+      margin: 0;
+      color: var(--bfc-heading-color, #111111);
+    }
+        #bfc-developing-membership-cta-{{ section.id }} .bfc-block{
+      margin: 0 auto;
+    }
+    #bfc-developing-membership-cta-{{ section.id }} .bfc-block + .bfc-block{
+      margin-top: 24px;
+    }
+    #bfc-developing-membership-cta-{{ section.id }} .visually-hidden{
+      position: absolute;width: 1px;height: 1px;padding: 0;margin: -1px;overflow: hidden;clip: rect(0,0,0,0);white-space: nowrap;border: 0;
+    }
+    #bfc-developing-membership-cta-{{ section.id }} a:focus-visible,
+    #bfc-developing-membership-cta-{{ section.id }} button:focus-visible,
+    #bfc-developing-membership-cta-{{ section.id }} input:focus-visible{
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce){
+      #bfc-developing-membership-cta-{{ section.id }} *{
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  
+    #bfc-developing-membership-cta-{{ section.id }} .bfc-eyebrow{
+      font-family: var(--bfc-body-family);
+      font-size: var(--bfc-body-size-small);
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--bfc-secondary-text);
+      margin: 0 0 10px;
+    }
+    #bfc-developing-membership-cta-{{ section.id }} .bfc-item-title{
+      font-family: var(--bfc-item-title-family);
+      font-weight: var(--bfc-item-title-weight);
+      font-size: var(--bfc-body-size);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      color: var(--bfc-text);
+    }
+
+    #bfc-developing-membership-cta-{{ section.id }} .bfc-detail-text{
+      font-family: var(--bfc-body-family);
+      font-size: var(--bfc-body-size-small);
+      font-weight: var(--bfc-body-weight);
+      letter-spacing: var(--bfc-body-letter-spacing);
+      line-height: var(--bfc-body-line-height);
+      color: var(--bfc-secondary-text);
+      margin: 0;
+    }
+
+  </style>
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'developing_membership_cta' %}
+        {% liquid
+          assign dmc_id = 'bfc-dmc-' | append: section.id | append: '-' | append: block.id
+          assign dmc_has_image = false
+          if block.settings.image != blank
+            assign dmc_has_image = true
+          endif
+          assign dmc_flip = block.settings.flip_layout
+          assign dmc_per_roll = block.settings.per_roll_price | default: 18
+          assign dmc_mem_monthly = block.settings.membership_price_monthly | default: 29
+          assign dmc_mem_yearly = block.settings.membership_price_yearly | default: 279
+          assign dmc_rolls_included = block.settings.rolls_included_monthly | default: 3
+          assign dmc_extra_roll_price = block.settings.extra_roll_price | default: 14
+        %}
+        <section
+          id="{{ dmc_id }}"
+          class="bfc-block bfc-dmc{% if dmc_flip %} bfc-dmc--flip{% endif %}"
+          style="
+            --dmc-bg: {{ block.settings.bg }};
+            --dmc-fg: {{ block.settings.fg }};
+            --dmc-border: {{ block.settings.border_color }};
+            --dmc-accent: {{ block.settings.accent }};
+            --dmc-calc-bg: {{ block.settings.calc_bg }};
+            --dmc-max: {{ page_width_px }}px;
+            --dmc-pt: {{ block.settings.padding_top }}px;
+            --dmc-pb: {{ block.settings.padding_bottom }}px;
+            --bfc-block-pad: calc(var(--bfc-align-pad) + {{ block.settings.side_padding_vw }}vw);
+          "
+          data-per-roll="{{ dmc_per_roll }}"
+          data-mem-monthly="{{ dmc_mem_monthly }}"
+          data-mem-yearly="{{ dmc_mem_yearly }}"
+          data-rolls-included="{{ dmc_rolls_included }}"
+          data-extra-roll="{{ dmc_extra_roll_price }}"
+          {{ block.shopify_attributes }}
+        >
+          <div class="bfc-dmc__inner{% unless dmc_has_image %} bfc-dmc__inner--full{% endunless %}">
+            <div class="bfc-dmc__content">
+              {% if block.settings.eyebrow != blank %}
+                <p class="bfc-dmc__eyebrow">{{ block.settings.eyebrow | escape }}</p>
+              {% endif %}
+              {% if block.settings.heading != blank %}
+                <h2 class="bfc-dmc__heading bfc-heading">{{ block.settings.heading | escape }}</h2>
+              {% endif %}
+              {% if block.settings.body != blank %}
+                <p class="bfc-dmc__body">{{ block.settings.body | escape }}</p>
+              {% endif %}
+              <div class="bfc-dmc__sc-wrap">
+                <p class="bfc-dmc__sc-label">{{ block.settings.calc_heading | default: "See how much you'd save" | escape }}</p>
+                <div class="bfc-dmc__sc-track">
+                  <input class="bfc-dmc__sc-slider" type="range" min="{{ block.settings.slider_min | default: 1 }}" max="{{ block.settings.slider_max | default: 12 }}" step="1" value="{{ block.settings.slider_default | default: 4 }}" id="bfc-sc-slider-{{ dmc_id }}" aria-label="Rolls per month" aria-describedby="bfc-sc-amount-{{ dmc_id }}">
+                  <span class="bfc-dmc__sc-count"><span class="bfc-dmc__sc-rolls" aria-live="polite" aria-atomic="true">4</span> rolls / mo</span>
+                </div>
+                <div class="bfc-dmc__sc-result" aria-live="polite" aria-atomic="true">
+                  <span class="bfc-dmc__sc-save-lbl">{{ block.settings.savings_prefix | default: "You save" | escape }}</span>
+                  <span class="bfc-dmc__sc-amount" id="bfc-sc-amount-{{ dmc_id }}">$144</span>
+                  <span class="bfc-dmc__sc-suffix">{{ block.settings.savings_suffix | default: "per year with membership" | escape }}</span>
+                </div>
+              </div>
+              <div class="bfc-dmc__ctas">
+                {% if block.settings.cta_label != blank and block.settings.cta_url != blank %}
+                  <a class="bfc-dmc__cta bfc-dmc__cta--primary" href="{{ block.settings.cta_url }}" aria-label="{{ block.settings.cta_label | escape }}">
+                    {{ block.settings.cta_label | escape }}
+                  </a>
+                {% endif %}
+                {% if block.settings.cta2_label != blank and block.settings.cta2_url != blank %}
+                  <a class="bfc-dmc__cta bfc-dmc__cta--ghost" href="{{ block.settings.cta2_url }}" aria-label="{{ block.settings.cta2_label | escape }}">
+                    {{ block.settings.cta2_label | escape }}
+                  </a>
+                {% endif %}
+              </div>
+              {% if block.settings.fine_print != blank %}
+                <p class="bfc-dmc__fine-print">{{ block.settings.fine_print | escape }}</p>
+              {% endif %}
+            </div>
+            {% if dmc_has_image %}
+            <div class="bfc-dmc__media-wrap">
+              <div class="bfc-dmc__media">
+                <img
+                  src="{{ block.settings.image | image_url: width: 1200 }}"
+                  srcset="{{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 900 }} 900w, {{ block.settings.image | image_url: width: 1200 }} 1200w"
+                  sizes="(min-width: 990px) 45vw, 100vw"
+                  alt="{{ block.settings.image.alt | default: block.settings.heading | escape }}"
+                  loading="lazy"
+                  width="{{ block.settings.image.width }}"
+                  height="{{ block.settings.image.height }}"
+                >
+              </div>
+            </div>
+            {% endif %}
+          </div>
+          <style>#{{dmc_id}}{background:var(--dmc-bg);color:var(--dmc-fg);padding:var(--dmc-pt,24px) 0 var(--dmc-pb,24px);} #{{dmc_id}} .bfc-dmc__inner{max-width:var(--dmc-max);margin:0 auto;padding:0 var(--bfc-block-pad);display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:center;} #{{dmc_id}} .bfc-dmc__inner--full{grid-template-columns:1fr;max-width:680px;} #{{dmc_id}} .bfc-dmc__eyebrow{margin:0 0 14px;font-size:var(--bfc-body-size-small);letter-spacing:.16em;text-transform:uppercase;opacity:.65;} #{{dmc_id}} .bfc-dmc__heading{margin:0 0 20px;} #{{dmc_id}} .bfc-dmc__body{font-size:var(--bfc-body-size);line-height:1.7;opacity:.82;margin:0 0 44px;} #{{dmc_id}} .bfc-dmc__sc-wrap{margin-bottom:36px;} #{{dmc_id}} .bfc-dmc__sc-label{font-size:var(--bfc-body-size-small);letter-spacing:.12em;text-transform:uppercase;opacity:.65;margin:0 0 22px;} #{{dmc_id}} .bfc-dmc__sc-track{display:flex;align-items:center;gap:14px;margin-bottom:20px;} #{{dmc_id}} .bfc-dmc__sc-slider{flex:1;-webkit-appearance:none;appearance:none;height:2px;background:color-mix(in srgb,var(--dmc-fg) 20%,transparent);outline:none;cursor:pointer;border-radius:0;min-width:0;} #{{dmc_id}} .bfc-dmc__sc-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--dmc-fg);cursor:pointer;} #{{dmc_id}} .bfc-dmc__sc-slider::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--dmc-fg);cursor:pointer;border:none;} #{{dmc_id}} .bfc-dmc__sc-count{font-size:var(--bfc-body-size-small);opacity:.55;white-space:nowrap;min-width:8ch;text-align:right;} #{{dmc_id}} .bfc-dmc__sc-result{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-top:18px;} #{{dmc_id}} .bfc-dmc__sc-save-lbl{font-size:var(--bfc-body-size-small);opacity:.65;letter-spacing:.06em;} #{{dmc_id}} .bfc-dmc__sc-amount{font-family:var(--font-heading-family,serif);font-size:clamp(1.8rem,3.5vw,2.4rem);font-weight:500;line-height:1;letter-spacing:-0.02em;color:var(--dmc-accent);opacity:.85;} #{{dmc_id}} .bfc-dmc__sc-suffix{font-size:var(--bfc-body-size-small);opacity:.65;} #{{dmc_id}} .bfc-dmc__ctas{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:32px;margin-bottom:24px;} #{{dmc_id}} .bfc-dmc__cta{text-decoration:none;font-size:var(--bfc-body-size-small);letter-spacing:.08em;text-transform:uppercase;display:inline-flex;align-items:center;transition:opacity .15s ease;} #{{dmc_id}} .bfc-dmc__cta--primary{background:var(--dmc-fg);color:var(--dmc-bg);padding:15px 28px;} #{{dmc_id}} .bfc-dmc__cta--ghost{color:var(--dmc-fg);border-bottom:1px solid currentColor;opacity:.68;padding-bottom:2px;} #{{dmc_id}} .bfc-dmc__cta:hover{opacity:.7;} #{{dmc_id}} .bfc-dmc__fine-print{margin:14px 0 0;font-size:10px;opacity:.45;line-height:1.5;} #{{dmc_id}} .bfc-dmc__media-wrap{display:flex;align-items:center;} #{{dmc_id}} .bfc-dmc__media{width:100%;overflow:hidden;aspect-ratio:{{block.settings.media_aspect | default:"1 / 1"}};background:rgba(0,0,0,.05);} #{{dmc_id}} .bfc-dmc__media img{width:100%;height:100%;object-fit:cover;display:block;}@media (max-width:900px){#{{dmc_id}} .bfc-dmc__inner,#{{dmc_id}}.bfc-dmc--flip .bfc-dmc__inner{grid-template-columns:1fr;padding:0 var(--bfc-block-pad);gap:20px;} #{{dmc_id}} .bfc-dmc__sc-track{max-width:100%;overflow:hidden;} #{{dmc_id}} .bfc-dmc__sc-slider{min-width:0;}{% if block.settings.ignore_padding_mobile %}#{{dmc_id}}{--bfc-block-pad:var(--bfc-horizontal-pad);}{% endif %}}</style>
+        </section>
+<script>
+(function(){
+document.querySelectorAll('.bfc-dmc').forEach(function(root){
+var sl=root.querySelector('.bfc-dmc__sc-slider'),re=root.querySelector('.bfc-dmc__sc-rolls'),ae=root.querySelector('[id^="bfc-sc-amount"]');
+if(!sl||!re||!ae)return;
+function c(r){
+var plan,inc;
+if(r<=2){plan=18;inc=1;}
+else if(r<=6){plan=45;inc=3;}
+else{plan=99;inc=7;}
+var without=r*20;
+var with_mem=plan+Math.max(0,r-inc)*16;
+re.textContent=r;
+ae.textContent='$'+Math.max(0,Math.round((without-with_mem)*12));
+}
+sl.addEventListener('input',function(){c(+sl.value);});c(+sl.value||4);
+});
+})();
+</script>
+
+
+    {% endcase %}
+  {% endfor %}
+</section>
+{% schema %}
+{
+  "name": "BFC Membership CTA",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "label": "Horizontal padding",
+      "min": 12,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "header_font_weight",
+      "label": "Header font weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "SemiBold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "300"
+    },
+    {
+      "type": "select",
+      "id": "body_font_weight",
+      "label": "Body font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "body_font_size",
+      "label": "Body font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "body_font_size_small",
+      "label": "Small text size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Base text color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Base background color",
+      "default": "#F7F4F0"
+    },
+    {
+      "type": "header",
+      "content": "Heading Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_size_preset",
+      "label": "Heading size",
+      "info": "Controls heading size at all screen widths consistently.",
+      "options": [
+        {
+          "value": "sm",
+          "label": "Small"
+        },
+        {
+          "value": "md",
+          "label": "Medium"
+        },
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "lg",
+          "label": "Large"
+        },
+        {
+          "value": "xl",
+          "label": "X-Large"
+        },
+        {
+          "value": "xxl",
+          "label": "XX-Large"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "header_line_height",
+      "label": "Heading line height",
+      "options": [
+        {
+          "value": "1.0",
+          "label": "1.0 (Tightest)"
+        },
+        {
+          "value": "1.05",
+          "label": "1.05 (Default)"
+        },
+        {
+          "value": "1.1",
+          "label": "1.1"
+        },
+        {
+          "value": "1.2",
+          "label": "1.2"
+        },
+        {
+          "value": "1.3",
+          "label": "1.3"
+        },
+        {
+          "value": "1.4",
+          "label": "1.4 (Loose)"
+        }
+      ],
+      "default": "1.05"
+    },
+    {
+      "type": "range",
+      "id": "header_letter_spacing",
+      "label": "Heading letter spacing",
+      "min": -2,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "default": -2
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "info": "Falls back to base text color if unset",
+      "default": "#111111"
+    },
+    {
+      "type": "header",
+      "content": "Body Typography"
+    },
+    {
+      "type": "select",
+      "id": "body_line_height",
+      "label": "Body line height",
+      "options": [
+        {
+          "value": "1.3",
+          "label": "1.3 (Tight)"
+        },
+        {
+          "value": "1.4",
+          "label": "1.4"
+        },
+        {
+          "value": "1.5",
+          "label": "1.5 (Default)"
+        },
+        {
+          "value": "1.6",
+          "label": "1.6"
+        },
+        {
+          "value": "1.8",
+          "label": "1.8 (Loose)"
+        }
+      ],
+      "default": "1.5"
+    },
+    {
+      "type": "range",
+      "id": "body_letter_spacing",
+      "label": "Body letter spacing",
+      "min": -1,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Section top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Section bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Section Colors"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "info": "Used for links and highlights",
+      "default": "#E36E15"
+    },
+    {
+      "type": "color",
+      "id": "secondary_text_color",
+      "label": "Secondary text color",
+      "info": "Used for eyebrows and small detail text",
+      "default": "#82906B"
+    },
+    {
+      "type": "font_picker",
+      "id": "item_title_font",
+      "label": "Item title font",
+      "info": "Font used for product/item titles (e.g. the old best-seller title font)",
+      "default": "poppins_n5"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "developing_membership_cta",
+      "name": "Developing Membership CTA",
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "Film Developing"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Develop from anywhere. Save every month."
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Body",
+          "default": "Mail in your rolls from anywhere in the US. Members get discounted developing, free scans, and priority turnaround \u2014 month after month."
+        },
+        {
+          "type": "header",
+          "content": "Calculator"
+        },
+        {
+          "type": "text",
+          "id": "calc_heading",
+          "label": "Calculator heading",
+          "default": "See what you'd save"
+        },
+        {
+          "type": "text",
+          "id": "rolls_label",
+          "label": "Slider label",
+          "default": "Rolls developed per month"
+        },
+        {
+          "type": "text",
+          "id": "rolls_unit",
+          "label": "Rolls unit label",
+          "default": "rolls"
+        },
+        {
+          "type": "range",
+          "id": "slider_min",
+          "label": "Slider min",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "slider_max",
+          "label": "Slider max",
+          "min": 6,
+          "max": 20,
+          "step": 1,
+          "default": 12
+        },
+        {
+          "type": "range",
+          "id": "slider_default",
+          "label": "Slider default value",
+          "min": 1,
+          "max": 12,
+          "step": 1,
+          "default": 4
+        },
+        {
+          "type": "text",
+          "id": "without_label",
+          "label": "Without column label",
+          "default": "Without membership"
+        },
+        {
+          "type": "text",
+          "id": "without_note",
+          "label": "Without sub-note",
+          "default": "per month"
+        },
+        {
+          "type": "text",
+          "id": "with_label",
+          "label": "With column label",
+          "default": "With membership"
+        },
+        {
+          "type": "text",
+          "id": "with_note",
+          "label": "With sub-note",
+          "default": "per month"
+        },
+        {
+          "type": "text",
+          "id": "savings_prefix",
+          "label": "Savings prefix",
+          "default": "You save"
+        },
+        {
+          "type": "text",
+          "id": "savings_suffix",
+          "label": "Savings suffix",
+          "default": "per year with membership"
+        },
+        {
+          "type": "header",
+          "content": "Pricing (used by calculator)"
+        },
+        {
+          "type": "number",
+          "id": "per_roll_price",
+          "label": "Per-roll price without membership ($)",
+          "default": 18
+        },
+        {
+          "type": "number",
+          "id": "membership_price_monthly",
+          "label": "Membership monthly price ($)",
+          "default": 45
+        },
+        {
+          "type": "number",
+          "id": "membership_price_yearly",
+          "label": "Membership yearly price ($)",
+          "default": 513
+        },
+        {
+          "type": "number",
+          "id": "rolls_included_monthly",
+          "label": "Credits included per month (1=Casual, 3=Enthu",
+          "default": 3
+        },
+        {
+          "type": "number",
+          "id": "extra_roll_price",
+          "label": "Extra rolls price for members ($)",
+          "default": 16
+        },
+        {
+          "type": "header",
+          "content": "CTAs"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Primary CTA",
+          "default": "Join the Membership"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "Primary CTA link"
+        },
+        {
+          "type": "text",
+          "id": "cta2_label",
+          "label": "Secondary CTA",
+          "default": "Learn more"
+        },
+        {
+          "type": "url",
+          "id": "cta2_url",
+          "label": "Secondary CTA link"
+        },
+        {
+          "type": "textarea",
+          "id": "fine_print",
+          "label": "Fine print",
+          "default": "Prices based on standard C-41 develop + scan. Extra rolls billed at member rate."
+        },
+        {
+          "type": "header",
+          "content": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "media_aspect",
+          "label": "Image aspect",
+          "default": "1 / 1",
+          "options": [
+            {
+              "value": "1 / 1",
+              "label": "Square"
+            },
+            {
+              "value": "4 / 5",
+              "label": "Portrait (4:5)"
+            },
+            {
+              "value": "3 / 4",
+              "label": "Portrait (3:4)"
+            },
+            {
+              "value": "4 / 3",
+              "label": "Landscape (4:3)"
+            },
+            {
+              "value": "3 / 2",
+              "label": "Landscape (3:2)"
+            },
+            {
+              "value": "16 / 9",
+              "label": "Landscape (16:9)"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "flush_media",
+          "label": "Flush image to edge (desktop)",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "flip_layout",
+          "label": "Image on left (flip layout)",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "bg",
+          "label": "Background",
+          "default": "#f7f4f0"
+        },
+        {
+          "type": "color",
+          "id": "fg",
+          "label": "Text",
+          "default": "#111111"
+        },
+        {
+          "type": "color",
+          "id": "accent",
+          "label": "Accent (savings price)",
+          "default": "#111111"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border",
+          "default": "#dedad5"
+        },
+        {
+          "type": "color",
+          "id": "calc_bg",
+          "label": "Calculator background",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "Spacing"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "label": "Padding top",
+          "min": 0,
+          "max": 140,
+          "step": 4,
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "label": "Padding bottom",
+          "min": 0,
+          "max": 140,
+          "step": 4,
+          "default": 24
+        },
+        {
+          "type": "range",
+          "id": "side_padding_vw",
+          "label": "Side padding add-on (vw)",
+          "min": 0,
+          "max": 10,
+          "step": 0.5,
+          "unit": "vw",
+          "default": 0
+        },
+        {
+          "type": "checkbox",
+          "id": "ignore_padding_mobile",
+          "label": "Ignore side padding on mobile",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Developing Membership CTA"
+    }
+  ]
+}
+{% endschema %}

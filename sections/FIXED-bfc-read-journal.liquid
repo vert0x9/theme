@@ -1,0 +1,919 @@
+
+{% liquid
+  assign base_text = section.settings.text_color | default: '#111111'
+  assign base_bg = section.settings.background_color | default: '#F7F4F0'
+  assign page_width_px = settings.page_width | default: 1200
+  assign horizontal_pad = section.settings.horizontal_padding | default: 24
+  assign heading_size_preset = section.settings.heading_size_preset | default: 'default'
+  case heading_size_preset
+    when 'sm'
+      assign header_size_mobile = '1.4'
+      assign header_size_desktop = '2.0'
+    when 'md'
+      assign header_size_mobile = '1.6'
+      assign header_size_desktop = '2.4'
+    when 'lg'
+      assign header_size_mobile = '2.0'
+      assign header_size_desktop = '3.2'
+    when 'xl'
+      assign header_size_mobile = '2.4'
+      assign header_size_desktop = '3.8'
+    when 'xxl'
+      assign header_size_mobile = '2.8'
+      assign header_size_desktop = '4.4'
+    else
+      assign header_size_mobile = '1.75'
+      assign header_size_desktop = '2.75'
+  endcase
+  assign header_weight = section.settings.header_font_weight | default: 600
+  assign body_weight = section.settings.body_font_weight | default: 400
+  assign body_size = section.settings.body_font_size | default: 16
+  assign body_size_small = section.settings.body_font_size_small | default: 12
+  assign header_line_height = section.settings.header_line_height | default: '1.05'
+  assign header_letter_spacing = section.settings.header_letter_spacing | default: 0
+  assign heading_color = section.settings.heading_color | default: base_text
+  assign body_line_height = section.settings.body_line_height | default: '1.5'
+  assign body_letter_spacing = section.settings.body_letter_spacing | default: 0
+  assign section_pad_top = section.settings.section_padding_top | default: 40
+  assign section_pad_bottom = section.settings.section_padding_bottom | default: 40
+  assign accent_color = section.settings.accent_color | default: '#E36E15'
+  assign secondary_text_color = section.settings.secondary_text_color | default: '#82906B'
+  assign item_title_font = section.settings.item_title_font
+%}
+<section id="bfc-read-journal-{{ section.id }}" class="bfc-combined" aria-label="{{ section.settings.section_label | default: 'BFC Read the Journal' }}">
+  <style>
+    {{ item_title_font | font_face: font_display: 'swap' }}
+
+    /* Fix shopify-section wrapper background & spacing */
+    #shopify-section-{{ section.id }} {
+      background-color: {{ base_bg }};
+      margin: 0;
+      padding: {{ section_pad_top }}px 0 {{ section_pad_bottom }}px;
+      width: 100%;
+    }
+    #bfc-read-journal-{{ section.id }}{
+      --bfc-header-family: var(--font-heading-family, inherit);
+      --bfc-body-family: var(--font-body-family, inherit);
+      --bfc-header-weight: {{ header_weight }};
+      --bfc-body-weight: {{ body_weight }};
+      --bfc-header-size-mobile: {{ header_size_mobile }}rem;
+      --bfc-header-size-desktop: {{ header_size_desktop }}rem;
+      --bfc-horizontal-pad: {{ horizontal_pad }}px;
+      --bfc-page-width: {{ page_width_px }}px;
+      --bfc-align-pad: clamp(
+        var(--bfc-horizontal-pad),
+        calc((100vw - min(100vw, var(--bfc-page-width))) / 2 + var(--bfc-horizontal-pad)),
+        120px
+      );
+      --bfc-body-size: {{ body_size }}px;
+      --bfc-body-size-small: {{ body_size_small }}px;
+      --bfc-text: {{ base_text }};
+      --bfc-bg: {{ base_bg }};
+      --bfc-heading-color: {{ heading_color }};
+      --bfc-header-letter-spacing: {{ header_letter_spacing }}px;
+      --bfc-header-line-height: {{ header_line_height }};
+      --bfc-body-letter-spacing: {{ body_letter_spacing }}px;
+      --bfc-body-line-height: {{ body_line_height }};
+      --bfc-accent: {{ accent_color }};
+      --bfc-secondary-text: {{ secondary_text_color }};
+      --bfc-item-title-family: {{ item_title_font.family | default: 'Poppins' }}, {{ item_title_font.fallback_families | default: 'sans-serif' }};
+      --bfc-item-title-weight: {{ item_title_font.weight | default: 500 }};
+      color: var(--bfc-text);
+      background: var(--bfc-bg);
+      font-family: var(--bfc-body-family);
+      font-weight: var(--bfc-body-weight);
+      font-size: var(--bfc-body-size);
+    }
+    #bfc-read-journal-{{ section.id }} .bfc-heading{
+      font-family: var(--bfc-header-family, inherit);
+      font-size: clamp(var(--bfc-header-size-mobile, 1.75rem), 3.5vw, var(--bfc-header-size-desktop, 2.75rem));
+      font-weight: var(--bfc-header-weight, 300);
+      line-height: var(--bfc-header-line-height, 1.05);
+      letter-spacing: var(--bfc-header-letter-spacing, -0.02em);
+      margin: 0;
+      color: var(--bfc-heading-color, #111111);
+    }
+        #bfc-read-journal-{{ section.id }} .bfc-block{
+      margin: 0 auto;
+    }
+    #bfc-read-journal-{{ section.id }} .bfc-block + .bfc-block{
+      margin-top: 24px;
+    }
+    #bfc-read-journal-{{ section.id }} .visually-hidden{
+      position: absolute;width: 1px;height: 1px;padding: 0;margin: -1px;overflow: hidden;clip: rect(0,0,0,0);white-space: nowrap;border: 0;
+    }
+    #bfc-read-journal-{{ section.id }} a:focus-visible,
+    #bfc-read-journal-{{ section.id }} button:focus-visible,
+    #bfc-read-journal-{{ section.id }} input:focus-visible{
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce){
+      #bfc-read-journal-{{ section.id }} *{
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  
+    #bfc-read-journal-{{ section.id }} .bfc-eyebrow{
+      font-family: var(--bfc-body-family);
+      font-size: var(--bfc-body-size-small);
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--bfc-secondary-text);
+      margin: 0 0 10px;
+    }
+    #bfc-read-journal-{{ section.id }} .bfc-item-title{
+      font-family: var(--bfc-item-title-family);
+      font-weight: var(--bfc-item-title-weight);
+      font-size: var(--bfc-body-size);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      color: var(--bfc-text);
+    }
+
+    #bfc-read-journal-{{ section.id }} .bfc-detail-text{
+      font-family: var(--bfc-body-family);
+      font-size: var(--bfc-body-size-small);
+      font-weight: var(--bfc-body-weight);
+      letter-spacing: var(--bfc-body-letter-spacing);
+      line-height: var(--bfc-body-line-height);
+      color: var(--bfc-secondary-text);
+      margin: 0;
+    }
+
+  </style>
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'read_journal' %}
+        {% liquid
+          assign journal_id = 'bfc-read-journal-' | append: section.id | append: '-' | append: block.id
+          assign journal_group = block.settings.group_id | default: block.id
+          assign journal_blog = block.settings.blog
+          assign journal_limit = block.settings.articles_limit
+          assign journal_show_tag = block.settings.show_tag
+          assign journal_show_author = block.settings.show_author
+          assign journal_show_date = block.settings.show_date
+          assign journal_show_excerpt = block.settings.show_excerpt
+          assign journal_excerpt_words = block.settings.excerpt_words
+          assign journal_has_blocks = false
+          for journal_block in section.blocks
+            if journal_block.type == 'read_journal_article' or journal_block.type == 'read_journal_card'
+              if journal_block.settings.group_id == journal_group
+                assign journal_has_blocks = true
+              endif
+            endif
+          endfor
+        %}
+        <section
+          id="{{ journal_id }}"
+          class="bfc-block bfc-read-journal"
+          style="
+            --bfc-bg: {{ block.settings.bg }};
+            --bfc-fg: {{ block.settings.fg }};
+            --bfc-border: {{ block.settings.border }};
+            --bfc-accent: {{ block.settings.accent }};
+            --bfc-pad-top: {{ block.settings.padding_top }}px;
+            --bfc-pad-bottom: {{ block.settings.padding_bottom }}px;
+            --bfc-left-w: {{ block.settings.left_col_width }}px;
+            --bfc-gap: {{ block.settings.gap }}px;
+            --bfc-card-w: {{ block.settings.card_min_width }}px;
+            --bfc-page-max: {{ page_width_px }}px;
+          "
+          {{ block.shopify_attributes }}
+        >
+          <div class="bfc-read-journal__wrap{% if block.settings.rail_flush_right %} is-flush-right{% endif %}">
+            <header class="bfc-read-journal__header">
+              {% if block.settings.heading != blank %}
+                <h2 class="bfc-read-journal__heading bfc-heading">{{ block.settings.heading | escape }}</h2>
+              {% endif %}
+              {% if block.settings.subheading != blank %}
+                <div class="bfc-read-journal__subheading rte">
+                  {{ block.settings.subheading }}
+                </div>
+              {% endif %}
+              {% if block.settings.cta_label != blank and block.settings.cta_url != blank %}
+                <a class="bfc-read-journal__cta" href="{{ block.settings.cta_url }}" aria-label="{{ block.settings.cta_label | escape }}">
+                  {{ block.settings.cta_label | escape }}
+                </a>
+              {% endif %}
+            </header>
+            <div class="bfc-read-journal__rail" role="list" aria-label="Journal articles">
+              {%- if journal_has_blocks -%}
+                {%- for journal_block in section.blocks -%}
+                  {%- case journal_block.type -%}
+                    {%- when 'read_journal_article' -%}
+                      {%- if journal_block.settings.group_id == journal_group -%}
+                        {%- assign a = journal_block.settings.article -%}
+                        {%- if a != blank -%}
+                          {%- assign img = journal_block.settings.image -%}
+                          {%- if img == blank -%}{%- assign img = a.image -%}{%- endif -%}
+                          <article class="bfc-read-journal__card" role="listitem" {{ journal_block.shopify_attributes }}>
+                            <a class="bfc-read-journal__cardlink" href="{{ a.url }}" aria-label="{{ a.title | escape }}">
+                              <div class="bfc-read-journal__media">
+                                {%- if img != blank -%}
+                                  {{
+                                    img
+                                    | image_url: width: 1200
+                                    | image_tag:
+                                      loading: 'lazy',
+                                      sizes: '(min-width: 990px) 320px, 70vw',
+                                      widths: '320, 480, 640, 800, 1000, 1200',
+                                      alt: img.alt | default: a.title
+                                 }}
+                                {%- else -%}
+                                  <div class="bfc-read-journal__placeholder" aria-hidden="true"></div>
+                                {%- endif -%}
+                              </div>
+                              <div class="bfc-read-journal__meta">
+                                {%- if journal_show_tag -%}
+                                  {%- assign eyebrow = journal_block.settings.eyebrow -%}
+                                  {%- if eyebrow == blank and a.tags.size > 0 -%}
+                                    {%- assign eyebrow = a.tags.first -%}
+                                  {%- elsif eyebrow == blank and journal_blog != blank -%}
+                                    {%- assign eyebrow = journal_blog.title -%}
+                                  {%- endif -%}
+                                  {%- if eyebrow != blank -%}
+                                    <div class="bfc-read-journal__eyebrow">{{ eyebrow | escape }}</div>
+                                  {%- endif -%}
+                                {%- endif -%}
+                                <h3 class="bfc-read-journal__title">
+                                  {{ journal_block.settings.title_override | default: a.title | escape }}
+                                </h3>
+                                {%- if journal_show_excerpt -%}
+                                  {%- assign ex = a.excerpt_or_content | strip_html | strip -%}
+                                  {%- if ex != blank -%}
+                                    <p class="bfc-read-journal__excerpt">{{ ex | truncatewords: journal_excerpt_words }}</p>
+                                  {%- endif -%}
+                                {%- endif -%}
+                                {%- if journal_show_author or journal_show_date -%}
+                                  <div class="bfc-read-journal__byline">
+                                    {%- if journal_show_author and a.author != blank -%}
+                                      <span class="bfc-read-journal__author">{{ a.author | escape }}</span>
+                                    {%- endif -%}
+                                    {%- if journal_show_author and journal_show_date -%}<span class="bfc-read-journal__dot" aria-hidden="true">•</span>{%- endif -%}
+                                    {%- if journal_show_date -%}
+                                      <time datetime="{{ a.published_at | date: '%Y-%m-%d' }}">
+                                        {{ a.published_at | date: block.settings.date_format }}
+                                      </time>
+                                    {%- endif -%}
+                                  </div>
+                                {%- endif -%}
+                              </div>
+                            </a>
+                          </article>
+                        {%- endif -%}
+                      {%- endif -%}
+                    {%- when 'read_journal_card' -%}
+                      {%- if journal_block.settings.group_id == journal_group -%}
+                        <article class="bfc-read-journal__card" role="listitem" {{ journal_block.shopify_attributes }}>
+                          <a class="bfc-read-journal__cardlink" href="{{ journal_block.settings.url | default: '#' }}" aria-label="{{ journal_block.settings.title | escape }}">
+                            <div class="bfc-read-journal__media">
+                              {%- if journal_block.settings.image != blank -%}
+                                {{
+                                  journal_block.settings.image
+                                  | image_url: width: 1200
+                                  | image_tag:
+                                    loading: 'lazy',
+                                    sizes: '(min-width: 990px) 320px, 70vw',
+                                    widths: '320, 480, 640, 800, 1000, 1200',
+                                    alt: journal_block.settings.image.alt | default: journal_block.settings.title
+                               }}
+                              {%- else -%}
+                                <div class="bfc-read-journal__placeholder" aria-hidden="true"></div>
+                              {%- endif -%}
+                            </div>
+                            <div class="bfc-read-journal__meta">
+                              {%- if journal_show_tag and journal_block.settings.eyebrow != blank -%}
+                                <div class="bfc-read-journal__eyebrow">{{ journal_block.settings.eyebrow | escape }}</div>
+                              {%- endif -%}
+                              {%- if journal_block.settings.title != blank -%}
+                                <h3 class="bfc-read-journal__title">{{ journal_block.settings.title | escape }}</h3>
+                              {%- endif -%}
+                              {%- if journal_show_excerpt and journal_block.settings.text != blank -%}
+                                <p class="bfc-read-journal__excerpt">{{ journal_block.settings.text | escape }}</p>
+                              {%- endif -%}
+                            </div>
+                          </a>
+                        </article>
+                      {%- endif -%}
+                  {%- endcase -%}
+                {%- endfor -%}
+              {%- elsif journal_blog != blank -%}
+                {%- for a in journal_blog.articles limit: journal_limit -%}
+                  <article class="bfc-read-journal__card" role="listitem">
+                    <a class="bfc-read-journal__cardlink" href="{{ a.url }}" aria-label="{{ a.title | escape }}">
+                      <div class="bfc-read-journal__media">
+                        {%- if a.image != blank -%}
+                          {{
+                            a.image
+                            | image_url: width: 1200
+                            | image_tag:
+                              loading: 'lazy',
+                              sizes: '(min-width: 990px) 320px, 70vw',
+                              widths: '320, 480, 640, 800, 1000, 1200',
+                              alt: a.image.alt | default: a.title
+                         }}
+                        {%- else -%}
+                          <div class="bfc-read-journal__placeholder" aria-hidden="true"></div>
+                        {%- endif -%}
+                      </div>
+                      <div class="bfc-read-journal__meta">
+                        {%- if journal_show_tag -%}
+                          {%- assign eyebrow = '' -%}
+                          {%- if a.tags.size > 0 -%}{%- assign eyebrow = a.tags.first -%}{%- else -%}{%- assign eyebrow = journal_blog.title -%}{%- endif -%}
+                          {%- if eyebrow != blank -%}
+                            <div class="bfc-read-journal__eyebrow">{{ eyebrow | escape }}</div>
+                          {%- endif -%}
+                        {%- endif -%}
+                        <h3 class="bfc-read-journal__title">{{ a.title | escape }}</h3>
+                        {%- if journal_show_excerpt -%}
+                          {%- assign ex = a.excerpt_or_content | strip_html | strip -%}
+                          {%- if ex != blank -%}
+                            <p class="bfc-read-journal__excerpt">{{ ex | truncatewords: journal_excerpt_words }}</p>
+                          {%- endif -%}
+                        {%- endif -%}
+                        {%- if journal_show_author or journal_show_date -%}
+                          <div class="bfc-read-journal__byline">
+                            {%- if journal_show_author and a.author != blank -%}
+                              <span class="bfc-read-journal__author">{{ a.author | escape }}</span>
+                            {%- endif -%}
+                            {%- if journal_show_author and journal_show_date -%}<span class="bfc-read-journal__dot" aria-hidden="true">•</span>{%- endif -%}
+                            {%- if journal_show_date -%}
+                              <time datetime="{{ a.published_at | date: '%Y-%m-%d' }}">
+                                {{ a.published_at | date: block.settings.date_format }}
+                              </time>
+                            {%- endif -%}
+                          </div>
+                        {%- endif -%}
+                      </div>
+                    </a>
+                  </article>
+                {%- endfor -%}
+              {%- else -%}
+                {%- for i in (1..4) -%}
+                  <article class="bfc-read-journal__card" role="listitem" aria-hidden="true">
+                    <div class="bfc-read-journal__cardlink is-disabled">
+                      <div class="bfc-read-journal__media">
+                        <div class="bfc-read-journal__placeholder"></div>
+                      </div>
+                      <div class="bfc-read-journal__meta">
+                        <div class="bfc-read-journal__eyebrow">Journal</div>
+                        <h3 class="bfc-read-journal__title">Add a blog or blocks</h3>
+                        <p class="bfc-read-journal__excerpt">This is a placeholder card.</p>
+                      </div>
+                    </div>
+                  </article>
+                {%- endfor -%}
+              {%- endif -%}
+            </div>
+          </div>
+        </section>
+    {% endcase %}
+  {% endfor %}
+</section>
+{% schema %}
+{
+  "name": "BFC Read the Journal",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "label": "Horizontal padding",
+      "min": 12,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "header_font_weight",
+      "label": "Header font weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "SemiBold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "300"
+    },
+    {
+      "type": "select",
+      "id": "body_font_weight",
+      "label": "Body font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "body_font_size",
+      "label": "Body font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "body_font_size_small",
+      "label": "Small text size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Base text color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Base background color",
+      "default": "#F7F4F0"
+    },
+    {
+      "type": "header",
+      "content": "Heading Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_size_preset",
+      "label": "Heading size",
+      "info": "Controls heading size at all screen widths consistently.",
+      "options": [
+        {
+          "value": "sm",
+          "label": "Small"
+        },
+        {
+          "value": "md",
+          "label": "Medium"
+        },
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "lg",
+          "label": "Large"
+        },
+        {
+          "value": "xl",
+          "label": "X-Large"
+        },
+        {
+          "value": "xxl",
+          "label": "XX-Large"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "header_line_height",
+      "label": "Heading line height",
+      "options": [
+        {
+          "value": "1.0",
+          "label": "1.0 (Tightest)"
+        },
+        {
+          "value": "1.05",
+          "label": "1.05 (Default)"
+        },
+        {
+          "value": "1.1",
+          "label": "1.1"
+        },
+        {
+          "value": "1.2",
+          "label": "1.2"
+        },
+        {
+          "value": "1.3",
+          "label": "1.3"
+        },
+        {
+          "value": "1.4",
+          "label": "1.4 (Loose)"
+        }
+      ],
+      "default": "1.05"
+    },
+    {
+      "type": "range",
+      "id": "header_letter_spacing",
+      "label": "Heading letter spacing",
+      "min": -2,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "default": -2
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "info": "Falls back to base text color if unset",
+      "default": "#111111"
+    },
+    {
+      "type": "header",
+      "content": "Body Typography"
+    },
+    {
+      "type": "select",
+      "id": "body_line_height",
+      "label": "Body line height",
+      "options": [
+        {
+          "value": "1.3",
+          "label": "1.3 (Tight)"
+        },
+        {
+          "value": "1.4",
+          "label": "1.4"
+        },
+        {
+          "value": "1.5",
+          "label": "1.5 (Default)"
+        },
+        {
+          "value": "1.6",
+          "label": "1.6"
+        },
+        {
+          "value": "1.8",
+          "label": "1.8 (Loose)"
+        }
+      ],
+      "default": "1.5"
+    },
+    {
+      "type": "range",
+      "id": "body_letter_spacing",
+      "label": "Body letter spacing",
+      "min": -1,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Section top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Section bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Section Colors"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "info": "Used for links and highlights",
+      "default": "#E36E15"
+    },
+    {
+      "type": "color",
+      "id": "secondary_text_color",
+      "label": "Secondary text color",
+      "info": "Used for eyebrows and small detail text",
+      "default": "#82906B"
+    },
+    {
+      "type": "font_picker",
+      "id": "item_title_font",
+      "label": "Item title font",
+      "info": "Font used for product/item titles (e.g. the old best-seller title font)",
+      "default": "poppins_n5"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "read_journal",
+      "name": "Read the Journal",
+      "settings": [
+        {
+          "type": "text",
+          "id": "group_id",
+          "label": "Group ID (match journal cards)",
+          "default": "read-journal-1"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Read the Journal"
+        },
+        {
+          "type": "richtext",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "<p>Fresh guides, camera notes, and film nerd stuff we actually use.</p>"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "CTA label",
+          "default": "All articles"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "CTA link"
+        },
+        {
+          "type": "blog",
+          "id": "blog",
+          "label": "Blog (used if no blocks are added)"
+        },
+        {
+          "type": "range",
+          "id": "articles_limit",
+          "label": "Auto articles count",
+          "min": 3,
+          "max": 10,
+          "step": 1,
+          "default": 6
+        },
+        {
+          "type": "checkbox",
+          "id": "show_tag",
+          "label": "Show category / tag line",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_author",
+          "label": "Show author",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_date",
+          "label": "Show date",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "date_format",
+          "label": "Date format",
+          "default": "%b %d, %Y"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_excerpt",
+          "label": "Show excerpt",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "excerpt_words",
+          "label": "Excerpt length (words)",
+          "min": 8,
+          "max": 40,
+          "step": 1,
+          "default": 18
+        },
+        {
+          "type": "header",
+          "content": "Layout"
+        },
+        {
+          "type": "checkbox",
+          "id": "rail_flush_right",
+          "label": "Flush rail to right edge (desktop)",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "left_col_width",
+          "label": "Left column width (desktop)",
+          "min": 240,
+          "max": 520,
+          "step": 10,
+          "default": 360
+        },
+        {
+          "type": "range",
+          "id": "card_min_width",
+          "label": "Card min width (desktop)",
+          "min": 220,
+          "max": 420,
+          "step": 10,
+          "default": 280
+        },
+        {
+          "type": "range",
+          "id": "gap",
+          "label": "Gap",
+          "min": 10,
+          "max": 32,
+          "step": 2,
+          "default": 16
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "bg",
+          "label": "Background",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "fg",
+          "label": "Text",
+          "default": "#111111"
+        },
+        {
+          "type": "color",
+          "id": "border",
+          "label": "Border",
+          "default": "#e5e5e5"
+        },
+        {
+          "type": "color",
+          "id": "accent",
+          "label": "Accent",
+          "default": "#111111"
+        },
+        {
+          "type": "header",
+          "content": "Spacing"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "label": "Padding top",
+          "min": 0,
+          "max": 120,
+          "step": 4,
+          "default": 44
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "label": "Padding bottom",
+          "min": 0,
+          "max": 160,
+          "step": 4,
+          "default": 56
+        },
+        {
+          "type": "range",
+          "id": "side_padding_vw",
+          "label": "Side padding add-on (vw)",
+          "min": 0,
+          "max": 10,
+          "step": 0.5,
+          "unit": "vw",
+          "default": 0
+        },
+        {
+          "type": "checkbox",
+          "id": "ignore_padding_mobile",
+          "label": "Ignore side padding on mobile",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "read_journal_article",
+      "name": "Journal Article",
+      "settings": [
+        {
+          "type": "text",
+          "id": "group_id",
+          "label": "Group ID (matches Read the Journal)",
+          "default": "read-journal-1"
+        },
+        {
+          "type": "article",
+          "id": "article",
+          "label": "Article"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Override image (optional)"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Override eyebrow (optional)",
+          "default": "Journal"
+        },
+        {
+          "type": "text",
+          "id": "title_override",
+          "label": "Override title (optional)",
+          "default": "New post"
+        }
+      ]
+    },
+    {
+      "type": "read_journal_card",
+      "name": "Journal Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "group_id",
+          "label": "Group ID (matches Read the Journal)",
+          "default": "read-journal-1"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "Journal"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "New post"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text (optional)",
+          "default": "Quick summary goes here."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Read the Journal"
+    }
+  ]
+}
+{% endschema %}

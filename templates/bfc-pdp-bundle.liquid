@@ -1,0 +1,1522 @@
+{{- 'section-product.css' | asset_url | stylesheet_tag -}}
+<script src="{{ 'product-variants.js' | asset_url }}" defer="defer"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet"/></noscript>
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+
+  assign g1 = product.metafields.custom.gallery_1.value
+  assign g2 = product.metafields.custom.gallery_2.value
+  assign g3 = product.metafields.custom.gallery_3.value
+  assign g4 = product.metafields.custom.gallery_4.value
+  assign g5 = product.metafields.custom.gallery_5.value
+  assign g6 = product.metafields.custom.gallery_6.value
+
+  assign spec_lens    = product.metafields.custom.spec_lens.value
+  assign spec_shutter = product.metafields.custom.spec_shutterspeeds.value
+  assign spec_mount   = product.metafields.custom.spec_lensmount.value
+  assign spec_battery = product.metafields.custom.spec_battery.value
+  assign spec_flash   = product.metafields.custom.spec_flash.value
+  assign spec_tripod  = product.metafields.custom.spec_tripodmount.value
+  assign spec_timer   = product.metafields.custom.spec_selftimer.value
+  assign spec_dx      = product.metafields.custom.spec_dxcodereader.value
+  assign spec_expcomp = product.metafields.custom.spec_exposurecompensation.value
+  assign spec_meter   = product.metafields.custom.spec_meter.value
+  assign spec_focus   = product.metafields.custom.spec_focus.value
+-%}
+
+<style>
+.bfc4 *, .bfc4 *::before, .bfc4 *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.bfc4 {
+  --or: #E36E15;
+  --go: #F4A027;
+  --ce: #ABCC99;
+  --cv: #F8F6EE;
+  --bk: #202009;
+  --ch: #4E4741;
+  --gr: #E3DDDA;
+  --sr: 'Cormorant Garamond', Georgia, serif;
+  --sn: 'Poppins', sans-serif;
+  --t:  0.2s ease;
+  font-family: var(--sn);
+  color: var(--bk);
+  background: var(--cv);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── SPLIT LAYOUT ──────────────────────────── */
+.bfc4-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+}
+
+/* ── LEFT: STICKY SLIDER ─────────────────── */
+.bfc4-left {
+  position: sticky;
+  top: 0;
+  width: 50vw;
+  height: 50vw;
+  max-height: 100vh;
+  overflow: hidden;
+  background: var(--gr);
+}
+.bfc4-slides {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+.bfc4-slide {
+  min-width: 100%;
+  height: 100%;
+  flex-shrink: 0;
+  position: relative;
+}
+.bfc4-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+.bfc4-arrow {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(32,32,9,0.3);
+  border: none;
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background var(--t);
+  backdrop-filter: blur(4px);
+}
+.bfc4-arrow:hover { background: rgba(32,32,9,0.6); }
+.bfc4-arrow.is-prev { left: 16px; visibility: hidden; }
+.bfc4-arrow.is-next { right: 16px; }
+.bfc4-arrow svg { display: block; }
+.bfc4-dots {
+  position: absolute;
+  bottom: 16px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 6px; z-index: 10;
+}
+.bfc4-dot {
+  width: 6px; height: 6px;
+  background: rgba(255,255,255,0.4);
+  border: none; cursor: pointer; padding: 0;
+  transition: background var(--t), transform var(--t);
+}
+.bfc4-dot.is-active { background: #fff; transform: scale(1.3); }
+
+/* ── RIGHT: SCROLLABLE CONTENT ───────────── */
+.bfc4-right {
+  background: var(--cv);
+  padding: 36px 40px 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── FREE DEV MINI NOTE ──────────────────── */
+.bfc4-free-dev-mini {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 10px; color: #ABCC99; font-weight: 600;
+  letter-spacing: 0.04em; margin-top: 8px;
+}
+
+/* ── GRADE COMPACT ───────────────────────── */
+.bfc4-grade-compact {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 4px;
+}
+.bfc4-grade-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ch); white-space: nowrap;
+}
+.bfc4-grade-compact .bfc4-grade-row { flex: 1; }
+.bfc4-grade-compact .bfc4-var-btn { padding: 7px 8px; font-size: 10px; }
+
+/* ── TILE SELECTION ──────────────────────── */
+.bfc4-tile { cursor: pointer; transition: border-color var(--t), box-shadow var(--t); }
+.bfc4-tile.is-sel { border: 2px solid var(--or); box-shadow: 0 0 0 1px rgba(227,110,21,0.15); }
+.bfc4-tile-sel-check {
+  position: absolute; top: 6px; right: 6px;
+  width: 18px; height: 18px; background: var(--or); color: #fff;
+  font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+
+/* ── SELECTED ROW + BELOW CHECKOUT ───────── */
+.bfc4-below-checkout {
+  padding: 24px 48px 48px;
+  background: var(--cv);
+
+}
+.bfc4-selected-row {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  align-items: flex-start;
+  padding-top: 24px;
+}
+.bfc4-selected-items {
+  flex: 1; min-width: 0;
+  display: flex; flex-wrap: nowrap; gap: 12px; align-items: flex-start;
+  overflow-x: auto; padding-bottom: 4px;
+  justify-content: flex-start;
+}
+.bfc4-sel-item {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  width: 120px; flex-shrink: 0; cursor: pointer;
+}
+.bfc4-sel-item-img {
+  width: 120px; height: 90px; object-fit: cover;
+  border: 2px solid transparent; background: var(--gr);
+  transition: border-color var(--t);
+}
+.bfc4-sel-item:not(.is-cam):hover .bfc4-sel-item-img { border-color: rgba(227,110,21,0.4); }
+.bfc4-sel-item.is-sel .bfc4-sel-item-img { border-color: var(--or); }
+.bfc4-sel-item.is-cam .bfc4-sel-item-img { border-color: var(--or); cursor: default; }
+.bfc4-sel-item-img.is-placeholder {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; background: var(--gr);
+}
+.bfc4-sel-item-name {
+  font-size: 9px; color: var(--ch); text-align: center;
+  line-height: 1.3; overflow: hidden; display: -webkit-box;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.bfc4-below-atc { width: 220px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; }
+
+/* ── PRODUCT HEADER ──────────────────────── */
+.bfc4-header {}
+.bfc4-eyebrow {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--ch); margin-bottom: 6px; display: block;
+}
+.bfc4-title {
+  font-family: var(--sn); font-size: 28px; font-weight: 600;
+  line-height: 1.1; letter-spacing: -0.3px; margin-bottom: 6px;
+}
+.bfc4-title em { font-style: normal; color: var(--ch); font-weight: 400; }
+.bfc4-warranty {
+  font-size: 10px; color: var(--ch); letter-spacing: 0.08em;
+  display: flex; align-items: center; gap: 6px;
+}
+.bfc4-warranty::before {
+  content: '';
+  width: 16px; height: 1px; background: var(--ch); display: block;
+}
+
+/* ── KIT HEADING ─────────────────────────── */
+.bfc4-kit-head {
+  border-top: 1px solid rgba(32,32,9,0.1);
+  padding-top: 16px;
+}
+.bfc4-kit-eyebrow {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--or); margin-bottom: 6px; display: block;
+}
+.bfc4-kit-desc {
+  font-size: 12px; color: var(--ch); line-height: 1.6; margin-top: 4px;
+}
+
+
+/* ── STARTER TILES ────────────────────────── */
+.bfc4-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.bfc4-tile {
+  display: flex; flex-direction: column;
+  background: #fff;
+  border: 1px solid rgba(32,32,9,0.08);
+  overflow: hidden;
+  cursor: default;
+  position: relative;
+}
+.bfc4-tile.is-cam { border: 2px solid var(--or); cursor: default; }
+.bfc4-tile-img-wrap {
+  aspect-ratio: 3/2;
+  overflow: hidden;
+  background: var(--gr);
+  position: relative;
+}
+.bfc4-tile-img-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform 0.4s ease;
+}
+.bfc4-tile:hover .bfc4-tile-img-wrap img { transform: scale(1.04); }
+.bfc4-tile-body {
+  padding: 10px 10px 8px;
+  flex: 1; display: flex; flex-direction: column; gap: 2px;
+}
+.bfc4-tile-label {
+  font-size: 8px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ch);
+}
+.bfc4-tile-name {
+  font-size: 11px; font-weight: 600; line-height: 1.3;
+  overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.bfc4-tile-price {
+  font-size: 11px; font-weight: 700; color: var(--or); margin-top: 2px;
+}
+.bfc4-tile-price.is-free { color: #2a4820; }
+.bfc4-tile-orig {
+  font-size: 9px; color: rgba(32,32,9,0.3); text-decoration: line-through;
+}
+.bfc4-tile-change {
+  margin-top: 6px;
+  font-size: 8.5px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: rgba(32,32,9,0.35);
+  background: none; border: none; cursor: pointer; font-family: var(--sn);
+  padding: 0; text-align: left; transition: color var(--t);
+  display: flex; align-items: center; gap: 3px;
+}
+.bfc4-tile-change:hover { color: var(--or); }
+.bfc4-tile-cam-badge {
+  position: absolute; top: 8px; left: 8px;
+  font-size: 7px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  background: var(--or); color: #fff; padding: 2px 6px;
+}
+.bfc4-tile-info {
+  position: absolute; bottom: 6px; right: 6px;
+  width: 18px; height: 18px;
+  background: rgba(255,255,255,0.85); border: none; cursor: pointer; padding: 0;
+  color: rgba(32,32,9,0.5); transition: color var(--t);
+  display: flex; align-items: center; justify-content: center;
+}
+.bfc4-tile-info:hover { color: var(--or); }
+
+/* ── GRADE + BUY ─────────────────────────── */
+.bfc4-grade-row {
+  display: flex; gap: 6px;
+}
+.bfc4-var-btn {
+  flex: 1; padding: 10px 8px;
+  border: 1px solid rgba(32,32,9,0.15);
+  background: #fff; cursor: pointer; font-family: var(--sn);
+  font-size: 11px; font-weight: 600; color: var(--bk);
+  transition: all var(--t); text-align: center;
+}
+.bfc4-var-btn:hover { border-color: var(--or); }
+.bfc4-var-btn.is-active { border: 2px solid var(--or); color: var(--or); background: rgba(227,110,21,0.05); }
+.bfc4-var-btn[disabled] {
+  opacity: 0.5; cursor: not-allowed;
+  border-color: rgba(32,32,9,0.08); color: rgba(32,32,9,0.3);
+  background: rgba(32,32,9,0.03);
+}
+.bfc4-var-btn[disabled]:hover { border-color: rgba(32,32,9,0.08); }
+.bfc4-var-btn-oos {
+  display: block; font-size: 8px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(32,32,9,0.3); margin-top: 2px;
+}
+
+.bfc4-buy {}
+.bfc4-price-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 6px;
+}
+.bfc4-price-label { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ch); }
+.bfc4-price {
+  font-family: var(--sr); font-size: 40px; font-weight: 300; color: var(--bk); line-height: 1;
+}
+
+.bfc4-atc {
+  width: 100%; padding: 14px;
+  background: var(--or); color: #fff; border: none;
+  cursor: pointer; font-family: var(--sn); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  transition: background var(--t); display: block; text-align: center; margin-bottom: 8px;
+}
+.bfc4-atc:hover:not([disabled]) { background: #c9600f; }
+.bfc4-atc[disabled] { opacity: 0.5; cursor: not-allowed; }
+.bfc4-atc.is-success { background: #2a4820 !important; }
+.bfc4-cam-only {
+  width: 100%; font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: rgba(32,32,9,0.55); background: none;
+  border: 1px solid rgba(32,32,9,0.15); cursor: pointer; transition: all var(--t); font-family: var(--sn);
+  text-align: center; padding: 10px 0; display: block;
+}
+.bfc4-cam-only:hover { color: var(--bk); border-color: rgba(32,32,9,0.4); }
+
+/* ── KIT SUMMARY (what's in it) ──────────── */
+.bfc4-kit-summary {
+  border-top: 1px solid rgba(32,32,9,0.08);
+  padding-top: 14px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.bfc4-ks-label { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ch); margin-bottom: 4px; }
+.bfc4-ks-line {
+  display: flex; align-items: center; gap: 8px;
+}
+.bfc4-ks-img { width: 24px; height: 24px; object-fit: cover; background: var(--gr); flex-shrink: 0; }
+.bfc4-ks-name { font-size: 10.5px; color: var(--ch); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bfc4-ks-price { font-size: 10.5px; font-weight: 700; color: var(--or); }
+.bfc4-ks-price.is-free { color: #2a4820; }
+.bfc4-ks-remove {
+  background: none; border: none; cursor: pointer; color: rgba(32,32,9,0.2);
+  font-size: 13px; padding: 0; flex-shrink: 0; transition: color var(--t);
+}
+.bfc4-ks-remove:hover { color: var(--bk); }
+.bfc4-ks-empty { font-size: 10px; color: rgba(32,32,9,0.25); font-style: italic; }
+
+/* ── MINI SPECS ──────────────────────────── */
+.bfc4-mini-specs {
+  border-top: 1px solid rgba(32,32,9,0.08);
+  padding-top: 16px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+}
+.bfc4-mini-spec {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(32,32,9,0.06);
+  display: flex; flex-direction: column; gap: 2px;
+}
+.bfc4-mini-spec:nth-child(odd) { padding-right: 16px; }
+.bfc4-mini-spec:nth-child(even) { padding-left: 16px; border-left: 1px solid rgba(32,32,9,0.06); }
+.bfc4-mini-spec:nth-last-child(-n+2) { border-bottom: none; }
+.bfc4-spec-key { font-size: 8px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(32,32,9,0.3); }
+.bfc4-spec-val { font-size: 11.5px; font-weight: 500; }
+
+/* ── CUSTOMIZE LINK ──────────────────────── */
+.bfc4-nav-links {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  overflow: hidden;
+}
+.bfc4-customize {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(32,32,9,0.4); cursor: pointer; background: none; border: none;
+  font-family: var(--sn); transition: color var(--t); padding: 0;
+  white-space: nowrap;
+}
+.bfc4-customize:hover { color: var(--or); }
+.bfc4-customize svg { transition: transform var(--t); }
+.bfc4-customize:hover svg { transform: translateY(3px); }
+
+/* ── BELOW FOLD CHECKOUT ─────────────────── */
+.bfc4-below-checkout {
+  padding: 32px 48px 48px;
+  background: var(--cv);
+  border-top: 1px solid rgba(32,32,9,0.1);
+}
+
+/* ── BELOW FOLD ───────────────────────────── */
+.bfc4-below { background: var(--cv); }
+
+/* Custom kit section */
+.bfc4-custom {
+  padding: 56px 48px 0;
+  border-top: 1px solid rgba(32,32,9,0.1);
+}
+.bfc4-custom-head {
+  margin-bottom: 24px;
+  padding-top: 8px;
+}
+.bfc4-custom-eyebrow {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--or); margin-bottom: 8px; display: block;
+}
+.bfc4-custom-title {
+  font-family: var(--sr); font-size: 36px; font-weight: 300; line-height: 1;
+}
+.bfc4-custom-title em { font-style: italic; color: var(--ch); }
+.bfc4-custom-note {
+  font-size: 11px; color: var(--ch); margin-top: 10px; line-height: 1.6;
+  max-width: 480px;
+}
+
+/* Reuse existing accordion column styles under .bfc4 namespace */
+/* ── DESKTOP: categories side by side, items 2-col grid below ── */
+.bfc4 .ba-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+.bfc4 .ba-col {
+  background: #fff;
+  border: 1px solid rgba(32,32,9,0.1);
+  display: flex; flex-direction: column;
+}
+.bfc4 .ba-col-head {
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid rgba(32,32,9,0.1);
+  background: transparent !important;
+  cursor: default;
+}
+.bfc4 .ba-col-head:hover { background: transparent !important; }
+.bfc4 .ba-col-chevron { display: none; }
+.bfc4 .ba-col-body {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: none;
+}
+/* Override base 52px grid layout for desktop square tiles */
+.bfc4 .ba-col-body .ba-mini-card {
+  display: flex !important;
+  flex-direction: column !important;
+  grid-template-columns: unset !important;
+  background: #fff;
+  border-bottom: 1px solid rgba(32,32,9,0.07) !important;
+  border-right: 1px solid rgba(32,32,9,0.07) !important;
+  cursor: pointer;
+  position: relative;
+}
+.bfc4 .ba-col-body .ba-mini-card:nth-child(3n) { border-right: none !important; }
+.bfc4 .ba-col-body .ba-mini-card:last-child { border-bottom: 1px solid rgba(32,32,9,0.07) !important; }
+.bfc4 .ba-col-body .ba-mini-img-wrap {
+  width: 100% !important;
+  aspect-ratio: 1/1 !important;
+  height: auto !important;
+  align-self: auto !important;
+  flex-shrink: 1 !important;
+  border-right: none !important;
+  border-bottom: 1px solid rgba(32,32,9,0.06) !important;
+  position: relative;
+}
+.bfc4 .ba-col-body .ba-mini-img {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: unset !important;
+  object-fit: cover;
+  display: block;
+  opacity: 1 !important;
+}
+.bfc4 .ba-col-body .ba-mini-img-ph {
+  width: 100% !important; height: 100% !important;
+}
+.bfc4 .ba-col-body .ba-mini-body {
+  flex-direction: column !important;
+  gap: 2px !important;
+  align-items: center !important;
+  padding: 8px 8px 10px !important;
+  justify-content: unset !important;
+}
+.bfc4 .ba-col-body .ba-mini-info { min-width: 0; width: 100%; }
+.bfc4 .ba-col-body .ba-mini-name {
+  white-space: normal;
+  text-align: center;
+  font-size: 10px;
+  overflow: hidden;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  width: 100%;
+  height: 1.4em;
+}
+.bfc4 .ba-col-body .ba-mini-right { text-align: center !important; }
+.bfc4 .ba-col-body .ba-mini-orig { display: block; text-align: center; }
+.bfc4 .ba-col-body .ba-mini-price { display: block; text-align: center; }
+.bfc4 .ba-col-body .ba-mini-info-icon { bottom: auto; top: 6px; right: 6px; }
+.bfc4 .ba-mini-card.is-hidden { display: flex !important; }
+.bfc4 .ba-col-more { display: none !important; }
+.bfc4 .ba-mini-vars { flex-wrap: wrap; }
+.bfc4 .ba-col.is-highlighted {
+  border-color: var(--or);
+  box-shadow: 0 0 0 2px rgba(227,110,21,0.15);
+}
+@keyframes bfc4-highlight {
+  0%   { border-color: var(--or); box-shadow: 0 0 0 4px rgba(227,110,21,0.3); }
+  100% { border-color: rgba(32,32,9,0.1); box-shadow: none; }
+}
+.bfc4 .ba-col.flash-highlight { animation: bfc4-highlight 1.5s ease forwards; }
+.bfc4 .ba-col-head {
+  padding: 14px 16px; cursor: pointer; user-select: none;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background var(--t);
+}
+.bfc4 .ba-col-head:hover { background: rgba(32,32,9,0.02); }
+.bfc4 .ba-col-title {
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--bk);
+  display: flex; align-items: center; gap: 8px;
+}
+.bfc4 .ba-col-count {
+  font-size: 9px; font-weight: 700; color: #fff;
+  background: var(--or); padding: 1px 7px; display: none;
+}
+.bfc4 .ba-col-count.is-visible { display: inline; }
+.bfc4 .ba-col-chevron { color: rgba(32,32,9,0.3); transition: transform var(--t); flex-shrink: 0; }
+.bfc4 .ba-col.is-open .ba-col-chevron { transform: rotate(180deg); }
+.bfc4 .ba-col-body { display: none; border-top: 1px solid rgba(32,32,9,0.08); }
+.bfc4 .ba-col.is-open .ba-col-body { display: block; }
+.bfc4 .ba-mini-card.is-hidden { display: none; }
+.bfc4 .ba-col.is-expanded .ba-mini-card.is-hidden { display: grid; }
+.bfc4 .ba-col-more {
+  display: none; width: 100%; padding: 9px 14px;
+  background: none; border: none; border-top: 1px solid rgba(32,32,9,0.07);
+  cursor: pointer; font-family: var(--sn); font-size: 10px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(32,32,9,0.4); transition: color var(--t); text-align: left;
+}
+.bfc4 .ba-col.is-open .ba-col-more { display: block; }
+.bfc4 .ba-col-more:hover { color: var(--or); }
+
+/* Mini card styles under bfc4 */
+.bfc4 .ba-mini-img-wrap {
+  position: relative; flex-shrink: 0;
+  width: 52px; align-self: stretch;
+  border-right: 1px solid rgba(32,32,9,0.06);
+}
+.bfc4 .ba-mini-card {
+  display: grid; grid-template-columns: 52px 1fr;
+  background: #fff; border-bottom: 1px solid rgba(32,32,9,0.07);
+  cursor: pointer; transition: background var(--t); position: relative;
+}
+.bfc4 .ba-mini-card:last-child { border-bottom: none; }
+.bfc4 .ba-mini-card:hover { background: rgba(227,110,21,0.025); }
+.bfc4 .ba-mini-card.is-sel { background: rgba(227,110,21,0.05); }
+.bfc4 .ba-mini-card.is-sel::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--or);
+}
+.bfc4 .ba-mini-img {
+  width: 52px; height: 100%; min-height: 52px; object-fit: cover; display: block;
+  opacity: 0.75; transition: opacity var(--t);
+}
+.bfc4 .ba-mini-card:hover .ba-mini-img,
+.bfc4 .ba-mini-card.is-sel .ba-mini-img { opacity: 1; }
+.bfc4 .ba-mini-img-ph { width: 52px; height: 52px; background: var(--gr); }
+.bfc4 .ba-mini-info-icon {
+  position: absolute; bottom: 4px; right: 4px;
+  width: 16px; height: 16px;
+  background: rgba(255,255,255,0.85); border: none; cursor: pointer; padding: 0;
+  color: rgba(32,32,9,0.4); transition: color var(--t);
+  display: flex; align-items: center; justify-content: center; z-index: 2;
+}
+.bfc4 .ba-mini-info-icon:hover { color: var(--or); }
+.bfc4 .ba-mini-body {
+  padding: 10px 12px; display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; min-width: 0;
+}
+.bfc4 .ba-mini-info { min-width: 0; flex: 1; }
+.bfc4 .ba-mini-name {
+  font-size: 11.5px; font-weight: 500; line-height: 1.3;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: var(--ch); transition: color var(--t);
+}
+.bfc4 .ba-mini-card:hover .ba-mini-name,
+.bfc4 .ba-mini-card.is-sel .ba-mini-name { color: var(--bk); font-weight: 600; }
+.bfc4 .ba-mini-right { flex-shrink: 0; text-align: right; }
+.bfc4 .ba-mini-price { font-size: 12px; font-weight: 700; color: var(--or); display: block; }
+.bfc4 .ba-mini-price.is-free { color: #2a4820; }
+.bfc4 .ba-mini-orig { font-size: 9px; color: rgba(32,32,9,0.3); text-decoration: line-through; display: block; }
+.bfc4 .ba-mini-vars {
+  display: none; padding: 6px 10px 8px; flex-wrap: wrap; gap: 4px;
+  background: rgba(227,110,21,0.03); border-top: 1px solid rgba(32,32,9,0.06);
+}
+.bfc4 .ba-mini-card.is-sel .ba-mini-vars { display: flex; }
+.bfc4 .ba-mini-var-btn {
+  font-size: 10px; font-weight: 500; padding: 3px 8px;
+  border: 1px solid rgba(32,32,9,0.12); background: #fff;
+  cursor: pointer; font-family: var(--sn); transition: all var(--t);
+}
+.bfc4 .ba-mini-var-btn:hover { border-color: var(--or); }
+.bfc4 .ba-mini-var-btn.is-sel { border-color: var(--or); background: rgba(227,110,21,0.06); font-weight: 600; }
+
+/* Out of stock — tiles */
+.bfc4-tile.is-oos {
+  opacity: 0.5; cursor: not-allowed; pointer-events: none;
+}
+.bfc4-tile.is-oos .bfc4-tile-img-wrap img { filter: grayscale(60%); }
+.bfc4-tile-oos-badge {
+  position: absolute; bottom: 6px; left: 6px;
+  font-size: 7px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  background: rgba(32,32,9,0.55); color: rgba(255,255,255,0.8); padding: 2px 6px;
+}
+
+/* Out of stock — mini accordion cards */
+.bfc4 .ba-mini-card.is-oos {
+  opacity: 0.5; cursor: not-allowed; pointer-events: none;
+}
+.bfc4 .ba-mini-card.is-oos .ba-mini-img { filter: grayscale(60%); }
+.bfc4 .ba-mini-card.is-oos .ba-mini-name { color: rgba(32,32,9,0.35); }
+.ba-mini-oos {
+  position: absolute; bottom: 4px; left: 0; right: 0;
+  font-size: 7px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,0.85); text-align: center;
+  background: rgba(32,32,9,0.55); padding: 2px 0;
+}
+
+/* Film promo banners */
+.bfc4-promos { padding: 0 48px; display: flex; flex-direction: column; gap: 0; }
+.bfc4 .ba-film-promo {
+  background: linear-gradient(135deg, #2a4820 0%, #3a6230 100%);
+  padding: 14px 20px; display: flex; align-items: center; gap: 12px;
+  box-sizing: border-box; width: 100%; overflow: hidden;
+  border-top: 1px solid rgba(32,32,9,0.08); border-bottom: 1px solid rgba(32,32,9,0.08);
+}
+.bfc4 .ba-film-promo-icon {
+  width: 32px; height: 32px; background: rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.bfc4 .ba-film-promo-text { flex: 1; min-width: 0; }
+.bfc4 .ba-film-promo-title { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 1px; overflow-wrap: break-word; }
+.bfc4 .ba-film-promo-sub   { font-size: 10.5px; color: rgba(255,255,255,0.7); overflow-wrap: break-word; }
+.bfc4 .ba-film-promo-status { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ce); flex-shrink: 0; }
+
+/* Shot on */
+.bfc4 .ba-shot { background: var(--cv); border-top: 1px solid rgba(32,32,9,0.1); }
+.bfc4 .ba-shot-head { padding: 48px 48px 24px; display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid rgba(32,32,9,0.1); }
+.bfc4 .ba-shot-title { font-family: var(--sr); font-size: 40px; font-weight: 300; }
+.bfc4 .ba-shot-sub { font-size: 11px; color: var(--ch); font-style: italic; }
+.bfc4 .ba-shot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+.bfc4 .ba-shot-grid a { display: block; overflow: hidden; border-right: 1px solid rgba(32,32,9,0.08); line-height: 0; font-size: 0; }
+.bfc4 .ba-shot-grid a:last-child { border-right: none; }
+.bfc4 .ba-shot-grid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; transition: transform 0.4s ease; }
+.bfc4 .ba-shot-grid a:hover img { transform: scale(1.04); }
+
+/* Restoration */
+.bfc4 .ba-restore { background: var(--bk); }
+.bfc4 .ba-restore-top { display: grid; grid-template-columns: 1fr 1fr; padding: 56px 48px 40px; gap: 48px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.bfc4 .ba-restore-headline { display: flex; flex-direction: column; justify-content: flex-end; }
+.bfc4 .ba-restore-ey { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--go); margin-bottom: 16px; display: block; }
+.bfc4 .ba-restore-title { font-family: var(--sr); font-size: 42px; font-weight: 300; color: #fff; line-height: 1.05; }
+.bfc4 .ba-restore-title em { font-style: italic; color: rgba(255,255,255,0.3); }
+.bfc4 .ba-restore-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+.bfc4 .ba-r-stat { padding: 0 24px; border-left: 1px solid rgba(255,255,255,0.07); display: flex; flex-direction: column; justify-content: center; }
+.bfc4 .ba-r-stat:first-child { border-left: none; padding-left: 0; }
+.bfc4 .ba-r-stat-num { font-family: var(--sr); font-size: 52px; font-weight: 300; color: #fff; line-height: 1; margin-bottom: 8px; }
+.bfc4 .ba-r-stat-num span { color: var(--go); font-size: 0.6em; }
+.bfc4 .ba-r-stat-label { font-size: 10.5px; color: rgba(255,255,255,0.3); line-height: 1.5; max-width: 100px; }
+.bfc4 .ba-restore-steps { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(255,255,255,0.06); }
+.bfc4 .ba-r-step { padding: 28px 32px 28px 48px; border-right: 1px solid rgba(255,255,255,0.06); }
+.bfc4 .ba-r-step:first-child { padding-left: 48px; }
+.bfc4 .ba-r-step:last-child { border-right: none; }
+.bfc4 .ba-r-num { font-family: var(--sr); font-size: 36px; font-weight: 300; color: rgba(255,255,255,0.08); line-height: 1; margin-bottom: 12px; display: block; }
+.bfc4 .ba-r-title { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.75); margin-bottom: 4px; }
+.bfc4 .ba-r-desc { font-size: 10.5px; color: rgba(255,255,255,0.3); line-height: 1.5; }
+
+/* Full specs */
+.bfc4 .ba-specs { background: var(--bk); border-top: 1px solid rgba(255,255,255,0.06); display: grid; grid-template-columns: 280px 1fr; }
+.bfc4 .ba-specs-head { padding: 48px 40px 48px 48px; border-right: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; justify-content: flex-start; }
+.bfc4 .ba-specs-title { font-family: var(--sr); font-size: 36px; font-weight: 300; color: #fff; line-height: 1; margin-bottom: 10px; }
+.bfc4 .ba-specs-note { font-size: 10px; color: rgba(255,255,255,0.2); line-height: 1.5; }
+.bfc4 .ba-specs-body { padding: 48px 48px 48px 40px; }
+.bfc4 .ba-specs-table { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.bfc4 .ba-spec { display: flex; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.bfc4 .ba-spec:nth-child(odd) { padding-right: 32px; }
+.bfc4 .ba-spec:nth-child(even) { padding-left: 32px; border-left: 1px solid rgba(255,255,255,0.05); }
+.bfc4 .ba-spec:nth-last-child(-n+2) { border-bottom: none; }
+.bfc4 .ba-spec-key { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.2); flex-shrink: 0; min-width: 100px; }
+.bfc4 .ba-spec-val { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.7); }
+
+/* Popup */
+.bfc4 .ba-popup-overlay {
+  position: fixed; inset: 0;
+  background: rgba(32,32,9,0.55); z-index: 200; display: none;
+  align-items: center; justify-content: center; backdrop-filter: blur(3px);
+}
+.bfc4 .ba-popup-overlay.is-open { display: flex; }
+.bfc4 .ba-popup { background: #fff; max-width: 680px; width: 90%; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden; animation: bfc4-popup-in 0.2s ease; }
+@keyframes bfc4-popup-in { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+.bfc4 .ba-popup-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid rgba(32,32,9,0.1); flex-shrink: 0; }
+.bfc4 .ba-popup-title { font-size: 14px; font-weight: 700; }
+.bfc4 .ba-popup-close { background: none; border: none; cursor: pointer; padding: 4px; color: var(--ch); display: flex; align-items: center; }
+.bfc4 .ba-popup-body { overflow-y: auto; flex: 1; }
+.bfc4 .ba-popup-imgs { display: grid; grid-template-columns: repeat(3, 1fr); }
+.bfc4 .ba-popup-imgs img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; border-right: 1px solid rgba(32,32,9,0.07); border-bottom: 1px solid rgba(32,32,9,0.07); }
+.bfc4 .ba-popup-desc { padding: 20px; font-size: 12.5px; color: var(--ch); line-height: 1.7; border-top: 1px solid rgba(32,32,9,0.08); }
+.bfc4 .ba-popup-desc p { margin-bottom: 10px; }
+
+
+.bfc4-nav-links {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  overflow: hidden;
+}
+.bfc4-ext-warranty { border-top: 1px solid rgba(32,32,9,0.08); padding-top: 16px; }
+.bfc4-ext-w-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.bfc4-ext-w-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--or); }
+.bfc4-ext-w-baseline { font-size: 10px; color: var(--ch); margin-bottom: 10px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.5; }
+.bfc4-ext-w-baseline svg { flex-shrink: 0; color: #2a4820; margin-top: 2px; }
+.bfc4-ext-w-baseline strong { color: var(--bk); }
+.bfc4-ext-w-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.bfc4-ext-w-btn { border: 1px solid rgba(32,32,9,0.1); background: #fff; padding: 10px 8px; cursor: pointer; font-family: var(--sn); text-align: center; transition: border-color var(--t), box-shadow var(--t); display: flex; flex-direction: column; gap: 3px; position: relative; }
+.bfc4-ext-w-btn:hover { border-color: var(--or); }
+.bfc4-ext-w-btn.is-sel { border: 2px solid var(--or); box-shadow: 0 0 0 1px rgba(227,110,21,0.15); }
+.bfc4-ext-w-btn.is-sel::after { content: '✓'; position: absolute; top: 4px; right: 5px; font-size: 8px; font-weight: 700; color: var(--or); }
+.bfc4-ext-w-extend { font-size: 11px; font-weight: 700; color: var(--or); line-height: 1; }
+.bfc4-ext-w-months { font-size: 9px; color: var(--ch); letter-spacing: 0.04em; line-height: 1; }
+.bfc4-ext-w-price { font-size: 11px; font-weight: 700; color: var(--bk); margin-top: 2px; }
+.bfc4-ext-w-acc { font-size: 7.5px; color: #2a4820; font-weight: 600; letter-spacing: 0.04em; margin-top: 1px; }
+.bfc4-ext-w-none { font-size: 8.5px; color: rgba(32,32,9,0.4); margin-top: 8px; text-align: left; cursor: pointer; background: none; border: none; font-family: var(--sn); transition: color var(--t); padding: 0; display: none; }
+.bfc4-ext-w-none.is-vis { display: block; }
+.bfc4-ext-w-none:hover { color: var(--bk); }
+.bfc4-policy { background: var(--cv); border-top: 1px solid rgba(32,32,9,0.1); display: grid; grid-template-columns: 1fr 1fr; }
+.bfc4-policy-col { padding: 48px 48px 56px; border-right: 1px solid rgba(32,32,9,0.08); }
+.bfc4-policy-col:last-child { border-right: none; }
+.bfc4-policy-ey { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--or); margin-bottom: 12px; display: block; }
+.bfc4-policy-title { font-family: var(--sr); font-size: 28px; font-weight: 300; line-height: 1.1; margin-bottom: 16px; }
+.bfc4-policy-body { font-size: 12px; color: var(--ch); line-height: 1.75; }
+.bfc4-policy-body strong { color: var(--bk); font-weight: 600; }
+.bfc4-policy-pill { display: inline-flex; align-items: center; gap: 5px; background: rgba(42,72,32,0.08); color: #2a4820; font-size: 10px; font-weight: 700; letter-spacing: 0.06em; padding: 4px 10px; margin-bottom: 14px; }
+@media (max-width: 900px) {
+  .bfc4-policy { grid-template-columns: 1fr; }
+  .bfc4-policy-col { padding: 32px 20px 36px; border-right: none; border-bottom: 1px solid rgba(32,32,9,0.08); }
+  .bfc4-policy-col:last-child { border-bottom: none; }
+  .bfc4-ext-w-options { grid-template-columns: repeat(2, 1fr); }
+}
+
+
+.bfc4-also {
+  background: var(--cv);
+  border-top: 1px solid rgba(32,32,9,0.1);
+  padding: 48px 0 56px;
+  overflow: hidden;
+}
+.bfc4-also-head {
+  padding: 0 48px 24px;
+  display: flex; align-items: baseline; justify-content: space-between;
+}
+.bfc4-also-title {
+  font-family: var(--sr); font-size: 36px; font-weight: 300; line-height: 1;
+}
+.bfc4-also-link {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--or); text-decoration: none;
+}
+.bfc4-also-link:hover { text-decoration: underline; }
+.bfc4-also-track-wrap {
+  position: relative;
+}
+.bfc4-also-track {
+  display: flex; gap: 0;
+  overflow-x: auto; scroll-behavior: smooth;
+  scrollbar-width: none; -ms-overflow-style: none;
+  padding: 0 48px;
+  gap: 12px;
+}
+.bfc4-also-track::-webkit-scrollbar { display: none; }
+.bfc4-also-card {
+  flex-shrink: 0; width: 200px;
+  background: #fff; border: 1px solid rgba(32,32,9,0.08);
+  text-decoration: none; color: var(--bk);
+  display: flex; flex-direction: column;
+  transition: border-color var(--t);
+}
+.bfc4-also-card:hover { border-color: rgba(32,32,9,0.25); }
+.bfc4-also-img-wrap {
+  aspect-ratio: 1/1; overflow: hidden; background: var(--gr);
+}
+.bfc4-also-img-wrap img {
+  width: 100%; height: 100%; object-fit: contain;
+  display: block; transition: transform 0.4s ease;
+}
+.bfc4-also-card:hover .bfc4-also-img-wrap img { transform: scale(1.04); }
+.bfc4-also-body {
+  padding: 12px 12px 14px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.bfc4-also-name {
+  font-size: 11px; font-weight: 600; line-height: 1.3;
+  overflow: hidden; display: -webkit-box;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.bfc4-also-price {
+  font-size: 12px; font-weight: 700; color: var(--or);
+}
+.bfc4-also-grade {
+  font-size: 8px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ch); margin-top: 1px;
+}
+.bfc4-also-arr {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: #fff; border: 1px solid rgba(32,32,9,0.12);
+  width: 36px; height: 36px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2; transition: border-color var(--t), box-shadow var(--t);
+  box-shadow: 0 2px 8px rgba(32,32,9,0.08);
+}
+.bfc4-also-arr:hover { border-color: var(--or); box-shadow: 0 2px 12px rgba(32,32,9,0.15); }
+.bfc4-also-arr.is-prev { left: 12px; }
+.bfc4-also-arr.is-next { right: 12px; }
+.bfc4-also-arr[disabled] { opacity: 0.3; pointer-events: none; }
+@media (max-width: 900px) {
+  .bfc4-also-head { padding: 0 20px 20px; }
+  .bfc4-also-track { padding: 0 20px; gap: 8px; }
+  .bfc4-also-card { width: 160px; }
+  .bfc4-also-arr { display: none; }
+  .bfc4-also { padding: 36px 0 40px; }
+}
+
+
+/* ── BUNDLE INCLUDES ─────────────────────────── */
+.bfc4-includes-head {
+  border-top: 1px solid rgba(32,32,9,0.1);
+  padding-top: 16px;
+}
+.bfc4-includes-eyebrow {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--or); margin-bottom: 12px; display: block;
+}
+.bfc4-includes-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+.bfc4-include-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; background: #fff;
+  border: 1px solid rgba(32,32,9,0.08);
+}
+.bfc4-include-dot {
+  width: 6px; height: 6px; background: var(--or);
+  flex-shrink: 0;
+}
+.bfc4-include-text { min-width: 0; }
+.bfc4-include-label {
+  font-size: 8px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ch); display: block;
+}
+.bfc4-include-val {
+  font-size: 11px; font-weight: 600; color: var(--bk);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* ── BUNDLE FEATURE BLOCKS ───────────────────── */
+.bfc4-features {
+  background: var(--cv);
+  border-top: 1px solid rgba(32,32,9,0.1);
+}
+.bfc4-feature-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.bfc4-feature-row:nth-child(even) { direction: rtl; }
+.bfc4-feature-row:nth-child(even) > * { direction: ltr; }
+.bfc4-feature-img {
+  aspect-ratio: 1/1; overflow: hidden; background: var(--gr);
+}
+.bfc4-feature-img img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.bfc4-feature-body {
+  padding: 48px 48px;
+  display: flex; flex-direction: column; justify-content: center; gap: 16px;
+}
+.bfc4-feature-eyebrow {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--or); display: block;
+}
+.bfc4-feature-title {
+  font-family: var(--sr); font-size: 32px; font-weight: 300; line-height: 1.1;
+}
+.bfc4-feature-desc {
+  font-size: 12px; color: var(--ch); line-height: 1.7;
+}
+.bfc4-bundle-savings {
+  background: rgba(42,72,32,0.07);
+  border: 1px solid rgba(42,72,32,0.15);
+  padding: 12px 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.bfc4-bundle-savings-icon { color: #2a4820; flex-shrink: 0; }
+.bfc4-bundle-savings-text { font-size: 11px; color: #2a4820; font-weight: 600; line-height: 1.4; }
+@media (max-width: 900px) {
+  .bfc4-feature-row { grid-template-columns: 1fr; direction: ltr !important; }
+  .bfc4-feature-row:nth-child(even) { direction: ltr; }
+  .bfc4-feature-row:nth-child(even) .bfc4-feature-img { order: -1; }
+  .bfc4-feature-body { padding: 28px 20px; }
+  .bfc4-includes-grid { grid-template-columns: 1fr; }
+}
+
+/* ── MOBILE ───────────────────────────────── */
+@media (max-width: 900px) {
+  .bfc4-split { grid-template-columns: 1fr; min-height: 0; }
+  .bfc4-left { position: relative; width: 100%; height: 100vw; max-height: 520px; }
+  .bfc4-arrow { display: none; }
+  .bfc4-right { padding: 28px 20px 48px; gap: 24px; overflow-y: visible; }
+  .bfc4-title { font-size: 36px; }
+  .bfc4-tiles { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .bfc4-tile-img-wrap { aspect-ratio: 1/1; }
+  .bfc4-tile-body { padding: 6px 6px 5px; gap: 1px; }
+  .bfc4-tile-name { font-size: 9px; }
+  .bfc4-tile-price { font-size: 9px; }
+  .bfc4-tile-orig { font-size: 8px; }
+  .bfc4-tile-change { display: none; }
+  .bfc4-custom { padding: 36px 20px 0; }
+  .bfc4 .ba-columns { display: flex; flex-direction: column; gap: 0; width: 100%; }
+  .bfc4 .ba-col { background: #fff; border: 1px solid rgba(32,32,9,0.1); margin-bottom: 8px; width: 100%; }
+  .bfc4 .ba-col-head { cursor: pointer; border-bottom: none; }
+  .bfc4 .ba-col-head:hover { background: rgba(32,32,9,0.02) !important; }
+  .bfc4 .ba-col-chevron { display: block !important; }
+  .bfc4 .ba-col-body { display: none !important; grid-template-columns: 1fr !important; padding: 0; border-top: 1px solid rgba(32,32,9,0.08); }
+  .bfc4 .ba-col.is-open .ba-col-body { display: block !important; }
+  .bfc4 .ba-mini-card { display: grid !important; grid-template-columns: 52px 1fr; flex-direction: unset; border: none; border-bottom: 1px solid rgba(32,32,9,0.07) !important; }
+  .bfc4 .ba-col-body .ba-mini-img-wrap { width: 52px !important; aspect-ratio: unset !important; height: 52px !important; min-height: 52px !important; border-right: 1px solid rgba(32,32,9,0.06) !important; border-bottom: none !important; flex-shrink: 0 !important; }
+  .bfc4 .ba-col-body .ba-mini-img { width: 52px !important; height: 52px !important; min-height: 52px !important; }
+  .bfc4 .ba-col-body .ba-mini-card { display: grid !important; flex-direction: unset !important; grid-template-columns: 52px 1fr !important; }
+  .bfc4 .ba-col-body .ba-mini-body { flex-direction: row !important; align-items: center !important; padding: 10px 12px !important; }
+  .bfc4 .ba-col-body .ba-mini-right { text-align: right !important; }
+  .bfc4 .ba-col-body .ba-mini-name { white-space: normal !important; text-align: left !important; height: auto !important; -webkit-line-clamp: 2 !important; }
+  .bfc4 .ba-mini-body { flex-direction: row; align-items: center; padding: 10px 12px; }
+  .bfc4 .ba-mini-right { text-align: right; }
+  .bfc4-promos { padding: 0 20px; }
+  .bfc4-below-checkout { padding: 24px 20px 40px; overflow: hidden; }
+  .bfc4-selected-row { flex-direction: column; gap: 16px; }
+  .bfc4-selected-items {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    overflow-x: visible;
+    flex-wrap: unset;
+  }
+  .bfc4-sel-item { width: 100%; }
+  .bfc4-sel-item-img { width: 100%; height: auto; aspect-ratio: 4/3; }
+  .bfc4-below-atc { width: 100%; max-width: 100%; }
+  .bfc4-below-atc .bfc4-price { font-size: 32px; }
+  .bfc4 .ba-shot-head { padding: 36px 20px 16px; flex-direction: column; gap: 4px; }
+  .bfc4 .ba-shot-title { font-size: 28px; }
+  .bfc4 .ba-shot-grid { grid-template-columns: repeat(3, 1fr); }
+  .bfc4 .ba-restore-top { grid-template-columns: 1fr; gap: 24px; padding: 32px 20px 24px; }
+  .bfc4 .ba-restore-stats { grid-template-columns: repeat(3, 1fr); }
+  .bfc4 .ba-restore-steps { grid-template-columns: 1fr 1fr; }
+  .bfc4 .ba-r-step { padding: 20px 16px; }
+  .bfc4 .ba-specs { grid-template-columns: 1fr; }
+  .bfc4 .ba-specs-head { padding: 24px 20px 16px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .bfc4 .ba-specs-body { padding: 16px 20px 24px; }
+  .bfc4 .ba-specs-table { grid-template-columns: 1fr; }
+  .bfc4 .ba-spec:nth-child(odd) { padding-right: 0; }
+  .bfc4 .ba-spec:nth-child(even) { padding-left: 0; border-left: none; }
+  .bfc4 .ba-spec:nth-last-child(-n+2) { border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .bfc4 .ba-spec:last-child { border-bottom: none; }
+  .bfc4-mini-specs { grid-template-columns: 1fr; }
+  .bfc4-mini-spec:nth-child(odd) { padding-right: 0; }
+  .bfc4-mini-spec:nth-child(even) { padding-left: 0; border-left: none; }
+  #bfc4-warranty-info > div { grid-template-columns: 1fr !important; padding: 32px 20px !important; }
+  #bfc4-warranty-info > div > div:first-child { padding-right: 0 !important; border-right: none !important; padding-bottom: 24px; border-bottom: 1px solid rgba(32,32,9,0.1); }
+  #bfc4-warranty-info > div > div:last-child { padding-left: 0 !important; padding-top: 24px; }
+  .bfc4 .ba-film-promo-icon { display: none; }
+  .bfc4-nav-links { flex-direction: column; gap: 0; }
+  .bfc4-customize { border-bottom: 1px solid rgba(32,32,9,0.07); padding: 10px 0; width: 100%; justify-content: space-between; }
+  .bfc4 .ba-film-promo-text { flex: 4; }
+  .bfc4 .ba-film-promo-status { flex: 1; text-align: right; font-size: 9px; }
+}
+/* ── Sticky Mobile ATC Bar ────────────────── */
+.bfc4-sticky-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--cv); border-top: 1px solid rgba(32,32,9,0.15); padding: 10px 16px; z-index: 9999; align-items: center; gap: 12px; box-shadow: 0 -2px 12px rgba(0,0,0,0.08); }
+.bfc4-sticky-info { flex: 1; min-width: 0; }
+.bfc4-sticky-name { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--bk); }
+.bfc4-sticky-meta { display: flex; align-items: center; gap: 6px; margin-top: 1px; }
+.bfc4-sticky-grade { font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ch); }
+.bfc4-sticky-price { font-size: 13px; font-weight: 700; color: var(--or); }
+.bfc4-sticky-btn { background: var(--or); color: #fff; border: none; padding: 12px 24px; font-size: 10px; font-weight: 700; font-family: var(--sn); text-transform: uppercase; letter-spacing: 0.14em; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.bfc4-sticky-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+@media (max-width: 900px) {
+  .bfc4-sticky-bar.is-visible { display: flex; }
+}
+</style>
+
+<div class="bfc4">
+
+{%- comment -%} ── Collect starter kit blocks ── {%- endcomment -%}
+{%- assign sk_blocks = section.blocks | where: 'type', 'kit_item' -%}
+{%- assign has_starter = false -%}
+{%- for block in sk_blocks -%}
+  {%- if block.settings.is_starter_kit and block.settings.product != blank -%}
+    {%- assign has_starter = true -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- comment -%} Compute kit total for starter {%- endcomment -%}
+{%- liquid
+  assign sk_total = current_variant.price
+  for block in sk_blocks
+    if block.settings.is_starter_kit and block.settings.product != blank
+      assign sk_bp  = block.settings.product
+      assign sk_dv  = sk_bp.variants.first
+      assign sk_d   = block.settings.discount_percent
+      assign sk_dev = block.settings.is_developing
+      if sk_dev
+        assign sk_sale = 0
+      elsif sk_d > 0
+        assign sk_df   = sk_d | times: 1.0 | divided_by: 100
+        assign sk_sv   = sk_dv.price | times: sk_df | floor
+        assign sk_sale = sk_dv.price | minus: sk_sv
+      else
+        assign sk_sale = sk_dv.price
+      endif
+      assign sk_total = sk_total | plus: sk_dv.price
+    endif
+  endfor
+-%}
+
+{%- comment -%} ── SPLIT: left image + right content ── {%- endcomment -%}
+<div class="bfc4-split">
+
+  {%- comment -%} LEFT: sticky slider — uses section image pickers if set, falls back to product.media {%- endcomment -%}
+  <div class="bfc4-left" id="bfc4-top">
+    {%- comment -%} Check if any section images are set {%- endcomment -%}
+    {%- assign has_section_imgs = false -%}
+    {%- for i in (1..5) -%}
+      {%- assign img_key = 'slide_' | append: i -%}
+      {%- if section.settings[img_key] != blank -%}{%- assign has_section_imgs = true -%}{%- endif -%}
+    {%- endfor -%}
+
+    {%- if has_section_imgs -%}
+      {%- comment -%} Count section slides {%- endcomment -%}
+      {%- assign slide_images = '' -%}
+      {%- for i in (1..5) -%}
+        {%- assign img_key = 'slide_' | append: i -%}
+        {%- if section.settings[img_key] != blank -%}{%- assign slide_images = slide_images | append: '1' -%}{%- endif -%}
+      {%- endfor -%}
+      {%- assign total_slides = slide_images | size -%}
+
+      <div class="bfc4-slides" id="bfc4-slides">
+        {%- for i in (1..5) -%}
+          {%- assign img_key = 'slide_' | append: i -%}
+          {%- assign img_mob_key = 'slide_' | append: i | append: '_mobile' -%}
+          {%- assign img_val = section.settings[img_key] -%}
+          {%- assign img_mob = section.settings[img_mob_key] -%}
+          {%- if img_val != blank -%}
+            <div class="bfc4-slide">
+              <picture>
+                {%- if img_mob != blank -%}
+                  <source media="(max-width: 767px)" srcset="{{ img_mob | image_url: width: 900 }}"/>
+                {%- endif -%}
+                <img
+                  src="{{ img_val | image_url: width: 900 }}"
+                  srcset="{{ img_val | image_url: width: 600 }} 600w, {{ img_val | image_url: width: 900 }} 900w, {{ img_val | image_url: width: 1200 }} 1200w"
+                  sizes="(max-width: 900px) 100vw, 50vw"
+                  alt="{{ product.title | escape }}"
+                  width="900" height="900"
+                  {%- if i == 1 -%}loading="eager" fetchpriority="high"{%- else -%}loading="lazy"{%- endif -%}
+                />
+              </picture>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+    {%- else -%}
+      {%- comment -%} Fallback: use product.media images {%- endcomment -%}
+      {%- assign media_images = product.media | where: 'media_type', 'image' -%}
+      {%- assign total_slides = media_images | size -%}
+
+      <div class="bfc4-slides" id="bfc4-slides">
+        {%- for media in media_images limit: 8 -%}
+          <div class="bfc4-slide">
+            <img
+              src="{{ media | image_url: width: 900 }}"
+              srcset="{{ media | image_url: width: 600 }} 600w, {{ media | image_url: width: 900 }} 900w, {{ media | image_url: width: 1200 }} 1200w"
+              sizes="(max-width: 900px) 100vw, 50vw"
+              alt="{{ product.title | escape }}"
+              width="900" height="900"
+              {%- if forloop.first -%}loading="eager" fetchpriority="high"{%- else -%}loading="lazy"{%- endif -%}
+            />
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if total_slides > 1 -%}
+      <button class="bfc4-arrow is-prev" onclick="bfc4Slide(-1)" aria-label="Previous">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="white" stroke-width="1.5" stroke-linecap="square"/></svg>
+      </button>
+      <button class="bfc4-arrow is-next" onclick="bfc4Slide(1)" aria-label="Next">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="white" stroke-width="1.5" stroke-linecap="square"/></svg>
+      </button>
+      <div class="bfc4-dots" id="bfc4-dots">
+        {%- for i in (1..total_slides) -%}
+          <button class="bfc4-dot{% if forloop.first %} is-active{% endif %}" onclick="bfc4GoTo({{ forloop.index0 }})"></button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+    {%- comment -%} RIGHT: product content {%- endcomment -%}
+  <div class="bfc4-right">
+
+    {%- comment -%} 1. Product header + description {%- endcomment -%}
+    <div class="bfc4-header">
+      <span class="bfc4-eyebrow">{{ product.type | default: 'Bundle' }} — Professionally Restored &middot; <a href="https://brooklynfilmcamera.com/pages/warranty" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">6-Month Warranty</a></span>
+      <h1 class="bfc4-title">{{ product.title }}</h1>
+      {%- comment -%} Extract description, stripping the bundle list block {%- endcomment -%}
+      {%- assign desc_inner = product.description | split: 'bfc-desc-specs__desc">' | last | split: '</div>' | first -%}
+      {%- if desc_inner == blank -%}
+        {%- assign desc_inner = product.description | split: '<div class="bfc-desc-specs__desc">' | last | split: '</div>' | first -%}
+      {%- endif -%}
+      {%- comment -%} Strip the bundle block from the description {%- endcomment -%}
+      {%- assign desc_no_bundle = desc_inner | split: '<div class="bfc-desc-specs__bundle">' | first -%}
+      {%- assign desc_text = desc_no_bundle | strip_html | strip -%}
+      {%- if desc_text != blank -%}<div class="bfc4-kit-desc">{{ desc_text }}</div>{%- endif -%}
+    </div>
+
+    {%- comment -%} 2. What's Included — parsed from description {%- endcomment -%}
+    {%- if product.description contains 'bfc-desc-specs__bundle-list' -%}
+      {%- assign bundle_chunk = product.description | split: 'bfc-desc-specs__bundle-list">' | last | split: '</ul>' | first -%}
+      {%- assign bundle_items = bundle_chunk | split: '<li>' -%}
+      {%- assign has_items = false -%}
+      {%- for item in bundle_items -%}
+        {%- assign item_text = item | split: '</li>' | first | strip_html | strip -%}
+        {%- if item_text != blank -%}{%- assign has_items = true -%}{%- endif -%}
+      {%- endfor -%}
+      {%- if has_items -%}
+    <div class="bfc4-includes-head">
+      <span class="bfc4-includes-eyebrow">What's Included</span>
+      <div class="bfc4-includes-grid">
+        {%- for item in bundle_items -%}
+          {%- assign item_text = item | split: '</li>' | first | strip_html | strip -%}
+          {%- if item_text != blank -%}
+          <div class="bfc4-include-item">
+            <div class="bfc4-include-dot"></div>
+            <div class="bfc4-include-text">
+              <span class="bfc4-include-val">{{ item_text }}</span>
+            </div>
+          </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- comment -%} 3. Bundle savings callout {%- endcomment -%}
+    {%- if section.settings.savings_text != blank -%}
+    <div class="bfc4-bundle-savings">
+      <svg class="bfc4-bundle-savings-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8L6 12L14 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="bfc4-bundle-savings-text">{{ section.settings.savings_text }}</div>
+    </div>
+    {%- endif -%}
+
+    {%- comment -%} 4. Grade + Price + ATC {%- endcomment -%}
+    <div class="bfc4-buy">
+      {%- if product.variants.size > 1 -%}
+        <div class="bfc4-grade-compact">
+          <span class="bfc4-grade-label">Grade</span>
+          <div class="bfc4-grade-row">
+            {%- for variant in product.variants -%}
+              <button
+                class="bfc4-var-btn{% if variant.id == current_variant.id %} is-active{% endif %}"
+                data-variant-id="{{ variant.id }}"
+                data-variant-price="{{ variant.price }}"
+                data-variant-price-fmt="{{ variant.price | money }}"
+                data-variant-available="{{ variant.available }}"
+                onclick="bfc4SelectVariant(this)"
+                {%- unless variant.available -%}disabled{%- endunless -%}
+              >{{ variant.title }}</button>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+      <div class="bfc4-price-row">
+        <span class="bfc4-price-label">Price</span>
+        <span class="bfc4-price" id="bfc4-total">{{ current_variant.price | money }}</span>
+      </div>
+      <button class="bfc4-atc" id="bfc4-atc" onclick="bfc4BundleATC()">
+        <span id="bfc4-atc-text">Add to Cart</span>
+      </button>
+    </div>
+
+    {%- comment -%} 5. Extended Warranty {%- endcomment -%}
+    {%- liquid
+      assign cam_price = current_variant.price
+      if cam_price <= 50000
+        assign w9_vid = '46108352184492'
+        assign w9_price = 3000
+        assign w12_vid = '46108352217260'
+        assign w12_price = 4500
+      elsif cam_price <= 100000
+        assign w9_vid = '46108381970604'
+        assign w9_price = 4000
+        assign w12_vid = '46108382068908'
+        assign w12_price = 8000
+      else
+        assign w9_vid = '46108382003372'
+        assign w9_price = 6000
+        assign w12_vid = '46108382101676'
+        assign w12_price = 12000
+      endif
+    -%}
+    <div class="bfc4-ext-warranty">
+      <div class="bfc4-ext-w-head">
+        <span class="bfc4-ext-w-eyebrow">Extended Warranty</span>
+        <button class="bfc4-tile-info" onclick="baOpenPopup('bfc4-ext-w-popup')" aria-label="Extended warranty details" style="position:relative;bottom:auto;right:auto;flex-shrink:0;">
+          <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><line x1="7" y1="6.5" x2="7" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="4" r="0.7" fill="currentColor"/></svg>
+        </button>
+      </div>
+      <div class="bfc4-ext-w-baseline">
+        <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M2 7L5.5 10.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Your bundle includes a <strong>6-month warranty</strong> — extend below:</span>
+      </div>
+      <div class="bfc4-ext-w-options">
+        <button class="bfc4-ext-w-btn" data-months="3" data-total="9" data-price="{{ w9_price }}" data-variant-id="{{ w9_vid }}" onclick="bfc4SelectWarranty(this)">
+          <span class="bfc4-ext-w-extend">+3 months</span>
+          <span class="bfc4-ext-w-months">9 mo total</span>
+          <span class="bfc4-ext-w-price">+{{ w9_price | money_without_trailing_zeros }}</span>
+          <span class="bfc4-ext-w-acc">+ Accidental</span>
+        </button>
+        <button class="bfc4-ext-w-btn" data-months="6" data-total="12" data-price="{{ w12_price }}" data-variant-id="{{ w12_vid }}" onclick="bfc4SelectWarranty(this)">
+          <span class="bfc4-ext-w-extend">+6 months</span>
+          <span class="bfc4-ext-w-months">1 year total</span>
+          <span class="bfc4-ext-w-price">+{{ w12_price | money_without_trailing_zeros }}</span>
+          <span class="bfc4-ext-w-acc">+ Accidental</span>
+        </button>
+      </div>
+      <button class="bfc4-ext-w-none" id="bfc4-ext-w-clear" onclick="bfc4ClearWarranty()">&times; Remove Extended Warranty</button>
+    </div>
+    <div id="ba-popup-data-bfc4-ext-w-popup" style="display:none"
+      data-title="Extended Warranty"
+      data-desc="Your bundle includes a 6-month warranty. Extended warranty adds months on top. Covers accidental damage. Approved claims repaired at no cost or replaced with a BFC gift card. Non-transferable. Must be purchased within 30 days."
+      data-imgs=""
+    ></div>
+
+    {%- comment -%} 6. Mini specs {%- endcomment -%}
+    <div class="bfc4-mini-specs">
+      {%- if product.description contains 'bfc-desc-specs__k' -%}
+        {%- assign spec_items = product.description | split: 'bfc-desc-specs__item"' -%}
+        {%- for item in spec_items -%}
+          {%- if forloop.first -%}{% continue %}{%- endif -%}
+          {%- assign k_raw = item | split: 'bfc-desc-specs__k">' | last | split: '</div>' | first | strip_html | strip -%}
+          {%- assign v_raw = item | split: 'bfc-desc-specs__v">' | last | split: '</div>' | first | strip_html | strip -%}
+          {%- if k_raw != blank and v_raw != blank -%}
+            <div class="bfc4-mini-spec"><span class="bfc4-spec-key">{{ k_raw }}</span><span class="bfc4-spec-val">{{ v_raw }}</span></div>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        <div class="bfc4-mini-spec"><span class="bfc4-spec-key">Condition</span><span class="bfc4-spec-val">{% if product.variants.size > 1 %}A &amp; B Grade — {% endif %}Every camera meets our strict quality benchmark</span></div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} 7. Nav links {%- endcomment -%}
+    <div class="bfc4-nav-links">
+      <button class="bfc4-customize" onclick="document.getElementById('bfc4-features').scrollIntoView({behavior:'smooth'})">
+        See the bundle
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false"><path d="M6 2v8M2 6l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="square"/></svg>
+      </button>
+      <button class="bfc4-customize" onclick="document.getElementById('ba-restore').scrollIntoView({behavior:'smooth'})">
+        Specs &amp; Photos
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false"><path d="M6 2v8M2 6l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="square"/></svg>
+      </button>
+      <button class="bfc4-customize" onclick="document.getElementById('bfc4-policy-section').scrollIntoView({behavior:'smooth'})">
+        Warranty &amp; Returns
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false"><path d="M6 2v8M2 6l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="square"/></svg>
+      </button>
+    </div>
+
+  </div>  {%- comment -%} /bfc4-right {%- endcomment -%}
+</div>{%- comment -%} /bfc4-split {%- endcomment -%}
+
+{%- comment -%} ── BELOW FOLD ── {%- endcomment -%}
+<div class="bfc4-below">
+  {%- comment -%} Feature photo blocks {%- endcomment -%}
+  {%- assign feature_blocks = section.blocks | where: 'type', 'feature_block' -%}
+  {%- if feature_blocks.size > 0 -%}
+  <div class="bfc4-features" id="bfc4-features">
+    {%- for block in feature_blocks -%}
+      {%- if block.settings.image != blank or block.settings.title != blank -%}
+      <div class="bfc4-feature-row" {{ block.shopify_attributes }}>
+        <div class="bfc4-feature-img">
+          {%- if block.settings.image != blank -%}
+            <img src="{{ block.settings.image | image_url: width: 900 }}"
+              srcset="{{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 900 }} 900w"
+              sizes="50vw" alt="{{ block.settings.title | escape }}" loading="lazy"/>
+          {%- endif -%}
+        </div>
+        <div class="bfc4-feature-body">
+          {%- if block.settings.eyebrow != blank -%}
+            <span class="bfc4-feature-eyebrow">{{ block.settings.eyebrow }}</span>
+          {%- endif -%}
+          {%- if block.settings.title != blank -%}
+            <h3 class="bfc4-feature-title">{{ block.settings.title }}</h3>
+          {%- endif -%}
+          {%- if block.settings.description != blank -%}
+            <p class="bfc4-feature-desc">{{ block.settings.description }}</p>
+          {%- endif -%}
+        </div>
+      </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+  {%- endif -%}
+
+  {%- comment -%} Shot on {%- endcomment -%}
+  {%- if g1 or g2 or g3 -%}
+  <div class="ba-shot">
+    <div class="ba-shot-head">
+      <h2 class="ba-shot-title">Shot on {{ product.title }}</h2>
+      <span class="ba-shot-sub">All Photos Taken on {{ product.title }}</span>
+    </div>
+    <div class="ba-shot-grid">
+      {%- if g1 -%}<a href="{{ g1 | image_url: width: 1200 }}" target="_blank"><img src="{{ g1 | image_url: width: 600 }}" alt="" loading="lazy"/></a>{%- endif -%}
+      {%- if g2 -%}<a href="{{ g2 | image_url: width: 1200 }}" target="_blank"><img src="{{ g2 | image_url: width: 600 }}" alt="" loading="lazy"/></a>{%- endif -%}
+      {%- if g3 -%}<a href="{{ g3 | image_url: width: 1200 }}" target="_blank"><img src="{{ g3 | image_url: width: 600 }}" alt="" loading="lazy"/></a>{%- endif -%}
+      {%- if g4 -%}<a href="{{ g4 | image_url: width: 1200 }}" target="_blank"><img src="{{ g4 | image_url: width: 600 }}" alt="" loading="lazy"/></a>{%- endif -%}
+      {%- if g5 -%}<a href="{{ g5 | image_url: width: 1200 }}" target="_blank"><img src="{{ g5 | image_url: width: 600 }}" alt="" loading="lazy"/></a>{%- endif -%}
+      {%- if g6 -%}<a href="{{ g6 | image_url: width: 1200 }}" target="_blank"><img src="{{ g6 | image_url: width: 600 }}" alt="" loading="lazy"/></a>{%- endif -%}
+    </div>
+  </div>
+  {%- endif -%}
+
+  {%- comment -%} Restoration {%- endcomment -%}
+  <div class="ba-restore" id="ba-restore">
+    <div class="ba-restore-top">
+      <div class="ba-restore-headline">
+        <span class="ba-restore-ey">Our Process</span>
+        <h2 class="ba-restore-title">Every camera<br/><em>hand-restored</em></h2>
+      </div>
+      <div class="ba-restore-stats">
+        <div class="ba-r-stat"><div class="ba-r-stat-num">6<span>mo</span></div><div class="ba-r-stat-label">Warranty on every camera sold</div></div>
+        <div class="ba-r-stat"><div class="ba-r-stat-num">5K<span>+</span></div><div class="ba-r-stat-label">Cameras restored since 2018</div></div>
+        <div class="ba-r-stat"><div class="ba-r-stat-num">4.9<span>★</span></div><div class="ba-r-stat-label">Average customer rating</div></div>
+      </div>
+    </div>
+    <div class="ba-restore-steps">
+      <div class="ba-r-step"><span class="ba-r-num">01</span><div class="ba-r-title">Mechanical Inspection</div><div class="ba-r-desc">Shutter, film advance, rewind — every function tested</div></div>
+      <div class="ba-r-step"><span class="ba-r-num">02</span><div class="ba-r-title">Light Seal Replacement</div><div class="ba-r-desc">Fresh seals on every camera, no exceptions</div></div>
+      <div class="ba-r-step"><span class="ba-r-num">03</span><div class="ba-r-title">Lens CLA</div><div class="ba-r-desc">Clean, lubricate and adjust for sharp, accurate shots</div></div>
+      <div class="ba-r-step"><span class="ba-r-num">04</span><div class="ba-r-title">Final QC</div><div class="ba-r-desc">Tested with professional equipment before it ships</div></div>
+    </div>
+  </div>
+
+  {%- comment -%} Full specs {%- endcomment -%}
+  <div class="ba-specs">
+    <div class="ba-specs-head">
+      <h2 class="ba-specs-title">Specs</h2>
+      <div class="ba-specs-note">{{ product.title }}<br/>{{ product.type }}</div>
+    </div>
+    <div class="ba-specs-body">
+      <div class="ba-specs-table">
+        {%- if spec_mount   != blank -%}<div class="ba-spec"><span class="ba-spec-key">Lens Mount</span><span class="ba-spec-val">{{ spec_mount }}</span></div>{%- endif -%}
+        {%- if spec_shutter != blank -%}<div class="ba-spec"><span class="ba-spec-key">Shutter</span><span class="ba-spec-val">{{ spec_shutter }}</span></div>{%- endif -%}
+        {%- if spec_lens    != blank -%}<div class="ba-spec"><span class="ba-spec-key">Lens</span><span class="ba-spec-val">{{ spec_lens }}</span></div>{%- endif -%}
+        {%- if spec_meter   != blank -%}<div class="ba-spec"><span class="ba-spec-key">Metering</span><span class="ba-spec-val">{{ spec_meter }}</span></div>{%- endif -%}
+        {%- if spec_battery != blank -%}<div class="ba-spec"><span class="ba-spec-key">Battery</span><span class="ba-spec-val">{{ spec_battery }}</span></div>{%- endif -%}
+        {%- if spec_flash   != blank -%}<div class="ba-spec"><span class="ba-spec-key">Flash</span><span class="ba-spec-val">{{ spec_flash }}</span></div>{%- endif -%}
+        {%- if spec_focus   != blank -%}<div class="ba-spec"><span class="ba-spec-key">Focus</span><span class="ba-spec-val">{{ spec_focus }}</span></div>{%- endif -%}
+        {%- if spec_timer   != blank -%}<div class="ba-spec"><span class="ba-spec-key">Self Timer</span><span class="ba-spec-val">{{ spec_timer }}</span></div>{%- endif -%}
+        {%- if spec_tripod  != blank -%}<div class="ba-spec"><span class="ba-spec-key">Tripod</span><span class="ba-spec-val">{{ spec_tripod }}</span></div>{%- endif -%}
+        {%- if spec_expcomp != blank -%}<div class="ba-spec"><span class="ba-spec-key">Exp. Comp.</span><span class="ba-spec-val">{{ spec_expcomp }}</span></div>{%- endif -%}
+        {%- if spec_dx      != blank -%}<div class="ba-spec"><span class="ba-spec-key">DX Reader</span><span class="ba-spec-val">{{ spec_dx }}</span></div>{%- endif -%}
+        {%- if product.variants.size > 1 -%}<div class="ba-spec"><span class="ba-spec-key">Condition</span><span class="ba-spec-val">A &amp; B Grade — every camera meets our strict quality benchmark before sale</span></div>{%- else -%}<div class="ba-spec"><span class="ba-spec-key">Condition</span><span class="ba-spec-val">Every camera meets our strict quality benchmark before sale</span></div>{%- endif -%}
+      </div>
+    </div>
+  </div
+
+  {%- comment -%} Also in this collection {%- endcomment -%}
+  {%- assign also_col = section.settings.also_collection -%}
+  {%- if also_col == blank -%}{%- assign also_col = product.collections | first -%}{%- endif -%}
+  {%- if also_col != blank -%}
+    {%- assign also_count = 0 -%}
+    {%- for p in also_col.products -%}{%- unless p.id == product.id -%}{%- assign also_count = also_count | plus: 1 -%}{%- endunless -%}{%- endfor -%}
+    {%- if also_count > 0 -%}
+  <div class="bfc4-also" id="bfc4-also">
+    <div class="bfc4-also-head">
+      <h2 class="bfc4-also-title">More from our shop</h2>
+      <a class="bfc4-also-link" href="{{ also_col.url }}">View all &rsaquo;</a>
+    </div>
+    <div class="bfc4-also-track-wrap">
+      <button class="bfc4-also-arr is-prev" aria-label="Previous" onclick="bfc4AlsoSlide(-1)" disabled>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M8 2L4 6L8 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+      </button>
+      <div class="bfc4-also-track" id="bfc4-also-track">
+        {%- for p in also_col.products limit: 20 -%}
+          {%- unless p.id == product.id -%}
+          {%- unless p.type != product.type -%}
+            {%- assign p_variant = p.selected_or_first_available_variant -%}
+            <a class="bfc4-also-card" href="{{ p.url }}">
+              <div class="bfc4-also-img-wrap">
+                {%- if p.featured_image -%}
+                  <img src="{{ p.featured_image | image_url: width: 400 }}" alt="{{ p.title | escape }}" loading="lazy" width="400" height="400"/>
+                {%- endif -%}
+              </div>
+              <div class="bfc4-also-body">
+                <div class="bfc4-also-name">{{ p.title }}</div>
+                <div class="bfc4-also-price">{{ p_variant.price | money }}</div>
+              </div>
+            </a>
+          {%- endunless -%}
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+      <button class="bfc4-also-arr is-next" aria-label="Next" onclick="bfc4AlsoSlide(1)">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M4 2L8 6L4 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+      </button>
+    </div>
+  </div>
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- comment -%} Warranty & Returns policy {%- endcomment -%}
+  <div class="bfc4-policy" id="bfc4-policy-section">
+    <div class="bfc4-policy-col">
+      <span class="bfc4-policy-ey">Warranty</span>
+      <h2 class="bfc4-policy-title">We stand behind every camera.</h2>
+      <div class="bfc4-policy-pill">
+        <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><path d="M2 7L5.5 10.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        6-Month Warranty Included
+      </div>
+      <div class="bfc4-policy-body">
+        <p>Every bundle we sell includes a <strong>6-month warranty</strong> covering mechanical defects. If something goes wrong, we'll repair it or replace it with the exact same camera you purchased.</p>
+        <p style="margin-top:10px">To open a claim, visit the Shipping Label tab in your <a href="https://account.brooklynfilmcamera.com" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">BFC account</a>, or come into the store anytime.</p>
+        <p style="margin-top:10px;color:rgba(78,71,65,0.6);font-size:11px">Return shipping is covered by BFC within the first 30 days. After 30 days, the buyer is responsible for return shipping on warranty claims.</p>
+        <p style="margin-top:12px"><a href="https://brooklynfilmcamera.com/pages/warranty" style="font-size:11px;color:var(--or);font-weight:600;letter-spacing:0.06em;text-decoration:underline;text-underline-offset:2px;">View full warranty policy &rsaquo;</a></p>
+      </div>
+    </div>
+    <div class="bfc4-policy-col">
+      <span class="bfc4-policy-ey">Returns</span>
+      <h2 class="bfc4-policy-title">14-day return window.</h2>
+      <div class="bfc4-policy-pill" style="background:rgba(32,32,9,0.05);color:var(--ch);">
+        <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><line x1="7" y1="6.5" x2="7" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="4" r="0.7" fill="currentColor"/></svg>
+        Conditions Apply
+      </div>
+      <div class="bfc4-policy-body">
+        <p>If you change your mind, you have <strong>14 days from delivery</strong> to return your bundle. Items must be returned in the same condition received. A restocking fee may apply.</p>
+        <p style="margin-top:10px">We recommend taking advantage of the warranty rather than returning — if the camera has a functional issue within 6 months, we'll fix or replace it at no cost.</p>
+        <p style="margin-top:10px;color:rgba(78,71,65,0.6);font-size:11px">To initiate a return, contact us at <a href="mailto:hello@brooklynfilmcamera.com" style="color:inherit">hello@brooklynfilmcamera.com</a> with your order number.</p>
+      </div>
+    </div>
+  </div>
+
+>
+
+{%- comment -%} Sticky Mobile ATC Bar {%- endcomment -%}
+<div class="bfc4-sticky-bar" id="bfc4-sticky-bar">
+  <div class="bfc4-sticky-info">
+    <div class="bfc4-sticky-name">{{ product.title }}</div>
+    <div class="bfc4-sticky-meta">
+      <span class="bfc4-sticky-grade" id="bfc4-sticky-grade">{{ current_variant.title }}</span>
+      <span class="bfc4-sticky-price" id="bfc4-sticky-price">{{ current_variant.price | money }}</span>
+    </div>
+  </div>
+  <button class="bfc4-sticky-btn" onclick="bfc4BundleATC()"{%- unless current_variant.available %} disabled{%- endunless %}>Add to Cart</button>
+</div>
+
+<script>
+(function() {
+  var stickyBar = document.getElementById('bfc4-sticky-bar');
+  var mainAtc   = document.getElementById('bfc4-atc');
+  if (stickyBar && mainAtc && window.innerWidth <= 900) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        stickyBar.classList.toggle('is-visible', !e.isIntersecting);
+      });
+    }, { threshold: 0 }).observe(mainAtc);
+  }
+
+  // Sync sticky price + grade when total/variant changes
+  var totalEl = document.getElementById('bfc4-total');
+  if (totalEl) {
+    new MutationObserver(function() {
+      var sp = document.getElementById('bfc4-sticky-price');
+      if (sp) sp.textContent = totalEl.textContent;
+    }).observe(totalEl, { childList: true, characterData: true, subtree: true });
+  }
+
+  // Sync grade on variant button clicks
+  document.querySelectorAll('.bfc4-var-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var sg = document.getElementById('bfc4-sticky-grade');
+      if (sg) sg.textContent = btn.textContent.trim();
+    });
+  });
+})();
+</script>

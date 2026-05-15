@@ -1,0 +1,1315 @@
+
+{% liquid
+  assign base_text = section.settings.text_color | default: '#111111'
+  assign base_bg = section.settings.background_color | default: '#F7F4F0'
+  assign page_width_px = settings.page_width | default: 1200
+  assign horizontal_pad = section.settings.horizontal_padding | default: 24
+  assign heading_size_preset = section.settings.heading_size_preset | default: 'default'
+  case heading_size_preset
+    when 'sm'
+      assign header_size_mobile = '1.4'
+      assign header_size_desktop = '2.0'
+    when 'md'
+      assign header_size_mobile = '1.6'
+      assign header_size_desktop = '2.4'
+    when 'lg'
+      assign header_size_mobile = '2.0'
+      assign header_size_desktop = '3.2'
+    when 'xl'
+      assign header_size_mobile = '2.4'
+      assign header_size_desktop = '3.8'
+    when 'xxl'
+      assign header_size_mobile = '2.8'
+      assign header_size_desktop = '4.4'
+    else
+      assign header_size_mobile = '1.75'
+      assign header_size_desktop = '2.75'
+  endcase
+  assign header_weight = section.settings.header_font_weight | default: 600
+  assign body_weight = section.settings.body_font_weight | default: 400
+  assign body_size = section.settings.body_font_size | default: 16
+  assign body_size_small = section.settings.body_font_size_small | default: 12
+  assign header_line_height = section.settings.header_line_height | default: '1.05'
+  assign header_letter_spacing = section.settings.header_letter_spacing | default: 0
+  assign heading_color = section.settings.heading_color | default: base_text
+  assign body_line_height = section.settings.body_line_height | default: '1.5'
+  assign body_letter_spacing = section.settings.body_letter_spacing | default: 0
+  assign section_pad_top = section.settings.section_padding_top | default: 40
+  assign section_pad_bottom = section.settings.section_padding_bottom | default: 40
+  assign accent_color = section.settings.accent_color | default: '#E36E15'
+  assign secondary_text_color = section.settings.secondary_text_color | default: '#82906B'
+  assign item_title_font = section.settings.item_title_font
+%}
+<section id="bfc-top-sellers-{{ section.id }}" class="bfc-combined" aria-label="{{ section.settings.section_label | default: 'BFC Top Sellers' }}">
+  <style>
+    {{ item_title_font | font_face: font_display: 'swap' }}
+
+    /* Fix shopify-section wrapper background & spacing */
+    #shopify-section-{{ section.id }} {
+      background-color: {{ base_bg }};
+      margin: 0;
+      padding: {{ section_pad_top }}px 0 {{ section_pad_bottom }}px;
+      width: 100%;
+    }
+    #bfc-top-sellers-{{ section.id }}{
+      --bfc-header-family: var(--font-heading-family, inherit);
+      --bfc-body-family: var(--font-body-family, inherit);
+      --bfc-header-weight: {{ header_weight }};
+      --bfc-body-weight: {{ body_weight }};
+      --bfc-header-size-mobile: {{ header_size_mobile }}rem;
+      --bfc-header-size-desktop: {{ header_size_desktop }}rem;
+      --bfc-horizontal-pad: {{ horizontal_pad }}px;
+      --bfc-page-width: {{ page_width_px }}px;
+      --bfc-align-pad: clamp(
+        var(--bfc-horizontal-pad),
+        calc((100vw - min(100vw, var(--bfc-page-width))) / 2 + var(--bfc-horizontal-pad)),
+        120px
+      );
+      --bfc-body-size: {{ body_size }}px;
+      --bfc-body-size-small: {{ body_size_small }}px;
+      --bfc-text: {{ base_text }};
+      --bfc-bg: {{ base_bg }};
+      --bfc-heading-color: {{ heading_color }};
+      --bfc-header-letter-spacing: {{ header_letter_spacing }}px;
+      --bfc-header-line-height: {{ header_line_height }};
+      --bfc-body-letter-spacing: {{ body_letter_spacing }}px;
+      --bfc-body-line-height: {{ body_line_height }};
+      --bfc-accent: {{ accent_color }};
+      --bfc-secondary-text: {{ secondary_text_color }};
+      --bfc-item-title-family: {{ item_title_font.family | default: 'Poppins' }}, {{ item_title_font.fallback_families | default: 'sans-serif' }};
+      --bfc-item-title-weight: {{ item_title_font.weight | default: 500 }};
+      color: var(--bfc-text);
+      background: var(--bfc-bg);
+      font-family: var(--bfc-body-family);
+      font-weight: var(--bfc-body-weight);
+      font-size: var(--bfc-body-size);
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-heading{
+      font-family: var(--bfc-header-family, inherit);
+      font-size: clamp(var(--bfc-header-size-mobile, 1.75rem), 3.5vw, var(--bfc-header-size-desktop, 2.75rem));
+      font-weight: var(--bfc-header-weight, 300);
+      line-height: var(--bfc-header-line-height, 1.05);
+      letter-spacing: var(--bfc-header-letter-spacing, -0.02em);
+      margin: 0;
+      color: var(--bfc-heading-color, #111111);
+    }
+        #bfc-top-sellers-{{ section.id }} .bfc-block{
+      margin: 0 auto;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-block + .bfc-block{
+      margin-top: 24px;
+    }
+    #bfc-top-sellers-{{ section.id }} .visually-hidden{
+      position: absolute;width: 1px;height: 1px;padding: 0;margin: -1px;overflow: hidden;clip: rect(0,0,0,0);white-space: nowrap;border: 0;
+    }
+    #bfc-top-sellers-{{ section.id }} a:focus-visible,
+    #bfc-top-sellers-{{ section.id }} button:focus-visible,
+    #bfc-top-sellers-{{ section.id }} input:focus-visible{
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce){
+      #bfc-top-sellers-{{ section.id }} *{
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  
+    #bfc-top-sellers-{{ section.id }} .bfc-eyebrow{
+      font-family: var(--bfc-body-family);
+      font-size: var(--bfc-body-size-small);
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--bfc-secondary-text);
+      margin: 0 0 10px;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-item-title{
+      font-family: var(--bfc-item-title-family);
+      font-weight: var(--bfc-item-title-weight);
+      font-size: var(--bfc-body-size);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      color: var(--bfc-text);
+    }
+
+    #bfc-top-sellers-{{ section.id }} .bfc-detail-text{
+      font-family: var(--bfc-body-family);
+      font-size: var(--bfc-body-size-small);
+      font-weight: var(--bfc-body-weight);
+      letter-spacing: var(--bfc-body-letter-spacing);
+      line-height: var(--bfc-body-line-height);
+      color: var(--bfc-secondary-text);
+      margin: 0;
+    }
+
+  </style>
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'top_sellers' %}
+        {% liquid
+          assign heading = block.settings.heading | default: 'Top Sellers'
+          assign collection = block.settings.collection
+          assign limit = block.settings.products_limit | default: 12
+          assign section_pad_y = block.settings.section_padding_y | default: 28
+          assign block_id = 'bfc-top-sellers-' | append: section.id | append: '-' | append: block.id
+          assign ts_radius = 18
+          assign ts_mobile_limit = block.settings.mobile_limit_enabled
+          assign ts_mobile_limit_count = block.settings.mobile_show_count
+          if block.settings.square_corners
+            assign ts_radius = 0
+          endif
+        %}
+        <section
+          id="{{ block_id }}"
+          class="bfc-block bfc-ts"
+          aria-label="{{ heading | escape }}"
+          style="
+            --bfc-ts-page-width: {{ page_width_px }}px;
+            --bfc-block-pad: calc(var(--bfc-align-pad) + {{ block.settings.side_padding_vw }}vw);
+            --bfc-ts-gutter: var(--bfc-block-pad);
+            --bfc-ts-pad-y: {{ section_pad_y }}px;
+            --bfc-ts-radius: {{ ts_radius }}px;
+          "
+          {{ block.shopify_attributes }}
+        >
+          <div class="bfc-ts__header">
+            <div class="bfc-ts__header-row">
+              {% if heading != blank %}
+                <h2 class="bfc-ts__title bfc-heading">{{ heading | escape }}</h2>
+              {% endif %}
+              {% if block.settings.show_view_all and collection != blank %}
+                <a class="bfc-ts__viewall" href="{{ collection.url }}">
+                  {{ block.settings.view_all_label | default: 'Shop all' | escape }}
+                </a>
+              {% endif %}
+            </div>
+            {% if block.settings.subheading != blank %}
+              <p class="bfc-ts__subheading">{{ block.settings.subheading | escape }}</p>
+            {% endif %}
+          </div>
+          <div class="bfc-ts__rail-wrap" data-bfc-ts>
+            {% if block.settings.show_arrows %}
+              <button
+                class="bfc-ts__arrow bfc-ts__arrow--prev"
+                type="button"
+                aria-label="Scroll left"
+                data-bfc-ts-prev
+              >
+                ‹
+              </button>
+              <button
+                class="bfc-ts__arrow bfc-ts__arrow--next"
+                type="button"
+                aria-label="Scroll right"
+                data-bfc-ts-next
+              >
+                ›
+              </button>
+            {% endif %}
+            <div class="bfc-ts__rail" role="list" data-bfc-ts-rail>
+              {% if collection != blank %}
+                {% assign ts_exclude_handles = block.settings.exclude_handles | remove: ' ' | downcase | split: ',' %}
+                {% for product in collection.products limit: limit %}
+                  {% if block.settings.hide_oos and product.available == false %}
+                    {% continue %}
+                  {% endif %}
+                  {% if ts_exclude_handles.size > 0 %}
+                    {% assign ts_product_handle = product.handle | downcase %}
+                    {% if ts_exclude_handles contains ts_product_handle %}
+                      {% continue %}
+                    {% endif %}
+                  {% endif %}
+                  {% liquid
+                    assign variant = product.selected_or_first_available_variant
+                    assign tags_down = product.tags | join: ',' | downcase
+                    assign badge = ''
+                    assign custom_text = ''
+                    if block.settings.enable_badges
+                      assign badge_tags_1 = block.settings.badge_tag_1 | downcase | split: ','
+                      assign badge_tags_2 = block.settings.badge_tag_2 | downcase | split: ','
+                      assign badge_tags_3 = block.settings.badge_tag_3 | downcase | split: ','
+                      if badge == ''
+                        for tag in badge_tags_1
+                          assign clean_tag = tag | strip
+                          if clean_tag != '' and tags_down contains clean_tag
+                            assign badge = block.settings.badge_label_1
+                            break
+                          endif
+                        endfor
+                      endif
+                      if badge == ''
+                        for tag in badge_tags_2
+                          assign clean_tag = tag | strip
+                          if clean_tag != '' and tags_down contains clean_tag
+                            assign badge = block.settings.badge_label_2
+                            break
+                          endif
+                        endfor
+                      endif
+                      if badge == ''
+                        for tag in badge_tags_3
+                          assign clean_tag = tag | strip
+                          if clean_tag != '' and tags_down contains clean_tag
+                            assign badge = block.settings.badge_label_3
+                            break
+                          endif
+                        endfor
+                      endif
+                    endif
+                    if block.settings.show_custom_text
+                      if block.settings.custom_text_use_tags
+                        assign custom_text_tags_1 = block.settings.custom_text_tag_1 | downcase | split: ','
+                        assign custom_text_tags_2 = block.settings.custom_text_tag_2 | downcase | split: ','
+                        assign custom_text_tags_3 = block.settings.custom_text_tag_3 | downcase | split: ','
+                        if custom_text == ''
+                          for tag in custom_text_tags_1
+                            assign clean_tag = tag | strip
+                            if clean_tag != '' and tags_down contains clean_tag
+                              assign custom_text = block.settings.custom_text_label_1
+                              break
+                            endif
+                          endfor
+                        endif
+                        if custom_text == ''
+                          for tag in custom_text_tags_2
+                            assign clean_tag = tag | strip
+                            if clean_tag != '' and tags_down contains clean_tag
+                              assign custom_text = block.settings.custom_text_label_2
+                              break
+                            endif
+                          endfor
+                        endif
+                        if custom_text == ''
+                          for tag in custom_text_tags_3
+                            assign clean_tag = tag | strip
+                            if clean_tag != '' and tags_down contains clean_tag
+                              assign custom_text = block.settings.custom_text_label_3
+                              break
+                            endif
+                          endfor
+                        endif
+                      endif
+                      if custom_text == ''
+                        assign custom_text = block.settings.custom_text
+                      endif
+                    endif
+                  %}
+                  <article class="bfc-ts__card" role="listitem">
+                    <a class="bfc-ts__img" href="{{ product.url }}" aria-label="{{ product.title | escape }}" tabindex="-1" aria-hidden="true">
+                      {% if product.featured_image %}
+                        <img
+                          src="{{ product.featured_image | image_url: width: 720 }}"
+                          srcset="
+                            {{ product.featured_image | image_url: width: 360 }} 360w,
+                            {{ product.featured_image | image_url: width: 540 }} 540w,
+                            {{ product.featured_image | image_url: width: 720 }} 720w
+                          "
+                          sizes="(min-width: 990px) 260px, 70vw"
+                          alt=""
+                          loading="lazy"
+                          width="{{ product.featured_image.width }}"
+                          height="{{ product.featured_image.height }}"
+                        >
+                      {% else %}
+                        <span aria-hidden="true">{{ 'product-1' | placeholder_svg_tag: 'bfc-ts__placeholder' }}</span>
+                      {% endif %}
+                      {% if badge != blank %}
+                        <span class="bfc-ts__badge" aria-hidden="true">{{ badge }}</span>
+                      {% endif %}
+                    </a>
+                    <div class="bfc-ts__meta">
+                      {% if block.settings.show_vendor and product.vendor != blank %}
+                        <div class="bfc-ts__vendor">{{ product.vendor | escape }}</div>
+                      {% endif %}
+                      {% if block.settings.show_custom_text and custom_text != blank %}
+                        <div class="bfc-ts__vendor">{{ custom_text | escape }}</div>
+                      {% endif %}
+                      <a class="bfc-ts__name" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+                        {{ product.title | escape }}
+                      </a>
+                      <div class="bfc-ts__subline">
+                        {% if block.settings.show_stock %}
+                          <span class="bfc-ts__stock">
+                            {% if product.available %}In stock{% else %}Sold out{% endif %}
+                          </span>
+                        {% endif %}
+                        {% if block.settings.show_variant_count %}
+                          <span class="bfc-ts__dot" aria-hidden="true">•</span>
+                          <span class="bfc-ts__variants">
+                            {{ product.variants.size }} option{% if product.variants.size != 1 %}s{% endif %}
+                          </span>
+                        {% endif %}
+                      </div>
+                      <div class="bfc-ts__bottom">
+                        {% if block.settings.show_price %}
+                          <div class="bfc-ts__price">
+                            {% if product.compare_at_price_max > product.price %}
+                              <span class="bfc-ts__price-now">{{ product.price | money }}</span>
+                              <span class="bfc-ts__price-was">{{ product.compare_at_price_max | money }}</span>
+                            {% else %}
+                              <span class="bfc-ts__price-now">{{ product.price | money }}</span>
+                            {% endif %}
+                          </div>
+                        {% endif %}
+                        {% if block.settings.show_quick_add %}
+                          {% if block.settings.show_two_variant_adds %}
+                            {% assign variant_one = product.variants[0] %}
+                            {% assign variant_two = product.variants[1] %}
+                            {% if variant_one and variant_two %}
+                              <form class="bfc-ts__add" method="post" action="{{ routes.cart_add_url }}" aria-label="Add {{ variant_one.title | escape }} to cart">
+                                <input type="hidden" name="id" value="{{ variant_one.id }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button
+                                  type="submit"
+                                  class="bfc-ts__add-btn"
+                                  {% unless variant_one.available %}disabled aria-disabled="true"{% endunless %}
+                                >
+                                  {{ block.settings.variant_add_label | default: 'Add' | escape }} {{ variant_one.title | escape }}
+                                </button>
+                              </form>
+                              <form class="bfc-ts__add" method="post" action="{{ routes.cart_add_url }}" aria-label="Add {{ variant_two.title | escape }} to cart">
+                                <input type="hidden" name="id" value="{{ variant_two.id }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button
+                                  type="submit"
+                                  class="bfc-ts__add-btn"
+                                  {% unless variant_two.available %}disabled aria-disabled="true"{% endunless %}
+                                >
+                                  {{ block.settings.variant_add_label | default: 'Add' | escape }} {{ variant_two.title | escape }}
+                                </button>
+                              </form>
+                            {% else %}
+                              <form class="bfc-ts__add" method="post" action="{{ routes.cart_add_url }}" aria-label="Add {{ product.title | escape }} to cart">
+                                <input type="hidden" name="id" value="{{ variant.id }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button
+                                  type="submit"
+                                  class="bfc-ts__add-btn"
+                                  {% unless product.available %}disabled aria-disabled="true"{% endunless %}
+                                >
+                                  {{ block.settings.add_label | default: 'Add' | escape }}
+                                </button>
+                              </form>
+                            {% endif %}
+                          {% else %}
+                            <form class="bfc-ts__add" method="post" action="{{ routes.cart_add_url }}" aria-label="Add {{ product.title | escape }} to cart">
+                              <input type="hidden" name="id" value="{{ variant.id }}">
+                              <input type="hidden" name="quantity" value="1">
+                              <button
+                                type="submit"
+                                class="bfc-ts__add-btn"
+                                {% unless product.available %}disabled aria-disabled="true"{% endunless %}
+                              >
+                                {{ block.settings.add_label | default: 'Add' | escape }}
+                              </button>
+                            </form>
+                          {% endif %}
+                        {% endif %}
+                      </div>
+                    </div>
+                  </article>
+                {% endfor %}
+              {% else %}
+                {% for i in (1..6) %}
+                  <article class="bfc-ts__card" role="listitem" aria-hidden="true">
+                    <div class="bfc-ts__img">
+                      <span aria-hidden="true">{{ 'product-1' | placeholder_svg_tag: 'bfc-ts__placeholder' }}</span>
+                    </div>
+                    <div class="bfc-ts__meta">
+                      <div class="bfc-ts__vendor">Vendor</div>
+                      {% if block.settings.show_custom_text and block.settings.custom_text != blank %}
+                        <div class="bfc-ts__vendor">{{ block.settings.custom_text | escape }}</div>
+                      {% endif %}
+                      <div class="bfc-ts__name">Choose a collection in the section settings</div>
+                      <div class="bfc-ts__bottom">
+                        <div class="bfc-ts__price"><span class="bfc-ts__price-now">$0</span></div>
+                        <button class="bfc-ts__add-btn" type="button" disabled>Add</button>
+                      </div>
+                    </div>
+                  </article>
+                {% endfor %}
+              {% endif %}
+            </div>
+            {% if block.settings.edge_fade %}
+              <span class="bfc-ts__fade bfc-ts__fade--left" aria-hidden="true"></span>
+              <span class="bfc-ts__fade bfc-ts__fade--right" aria-hidden="true"></span>
+            {% endif %}
+          </div>
+          <style>
+            #{{ block_id }}{
+              --bfc-ts-fg: var(--bfc-text);
+              --bfc-ts-bg: var(--bfc-bg);
+              --bfc-ts-border: color-mix(in srgb, var(--bfc-ts-fg) 12%, transparent);
+              --bfc-ts-muted: color-mix(in srgb, var(--bfc-ts-fg) 65%, transparent);
+              color: var(--bfc-ts-fg);
+              background: transparent;
+              padding: var(--bfc-ts-pad-y) 0;
+            }
+            #{{ block_id }} .bfc-ts__header{
+              width: min(calc(100% - (2 * var(--bfc-ts-gutter))), var(--bfc-ts-page-width));
+              max-width: var(--bfc-ts-page-width);
+              margin-left: var(--bfc-ts-gutter);
+              margin-right: var(--bfc-ts-gutter);
+              padding: 0;
+            }
+            #{{ block_id }} .bfc-ts__header-row{
+              display: flex;
+              align-items: baseline;
+              justify-content: space-between;
+              gap: 16px;
+            }
+            #{{ block_id }} .bfc-ts__title{
+              margin: 0;
+              letter-spacing: -0.02em;
+            }
+            #{{ block_id }} .bfc-ts__viewall{
+              color: var(--bfc-ts-fg);
+              text-decoration: none;
+              font-size: var(--bfc-body-size-small);
+              opacity: .85;
+            }
+            #{{ block_id }} .bfc-ts__viewall:hover{ opacity: 1; text-decoration: underline; }
+            #{{ block_id }} .bfc-ts__subheading{
+              margin: 10px 0 0;
+              color: var(--bfc-ts-muted);
+              font-size: var(--bfc-body-size);
+              line-height: 1.35;
+              max-width: 70ch;
+            }
+            #{{ block_id }} .bfc-ts__rail-wrap{
+              position: relative;
+              margin-top: 14px;
+              width: 100vw;
+              margin-left: calc(50% - 50vw);
+              margin-right: calc(50% - 50vw);
+              --bfc-ts-left-pad: var(--bfc-block-pad);
+            }
+            #{{ block_id }} .bfc-ts__rail{
+              display: grid;
+              grid-auto-flow: column;
+              grid-auto-columns: clamp(220px, 24vw, 280px);
+              gap: 16px;
+              overflow-x: auto;
+              overscroll-behavior-x: contain;
+              scroll-snap-type: x mandatory;
+              scroll-padding-left: var(--bfc-ts-left-pad);
+              padding-left: var(--bfc-ts-left-pad);
+              padding-right: 0;
+              padding-top: 6px;
+              padding-bottom: 8px;
+              -webkit-overflow-scrolling: touch;
+            }
+            #{{ block_id }} .bfc-ts__rail{
+              scrollbar-width: none;
+            }
+            #{{ block_id }} .bfc-ts__rail::-webkit-scrollbar{ display: none; }
+            #{{ block_id }} .bfc-ts__card{
+              scroll-snap-align: start;
+              scroll-snap-stop: always;
+              background: var(--bfc-ts-bg);
+              border: 0;
+              border-radius: var(--bfc-ts-radius);
+              overflow: hidden;
+              display: grid;
+              grid-template-rows: auto 1fr;
+              min-height: 100%;
+            }
+            #{{ block_id }} .bfc-ts__img{
+              position: relative;
+              display: block;
+              aspect-ratio: 4 / 3;
+              background: color-mix(in srgb, var(--bfc-ts-fg) 6%, transparent);
+              overflow: hidden;
+              text-decoration: none;
+            }
+            #{{ block_id }} .bfc-ts__img img{
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              display: block;
+              transform: scale(1);
+              transition: transform .25s ease;
+            }
+            #{{ block_id }} .bfc-ts__card:hover .bfc-ts__img img{
+              transform: scale(1.03);
+            }
+            #{{ block_id }} .bfc-ts__badge{
+              position: absolute;
+              left: 12px;
+              top: 12px;
+              font-size: 12px;
+              line-height: 1;
+              padding: 7px 9px;
+              border-radius: var(--bfc-ts-radius);
+              background: rgba(0,0,0,.72);
+              color: #fff;
+              backdrop-filter: blur(6px);
+            }
+            #{{ block_id }} .bfc-ts__meta{
+              padding: 10px 12px 12px;
+              display: grid;
+              gap: 2px;
+            }
+            #{{ block_id }} .bfc-ts__vendor{
+              font-size: var(--bfc-body-size-small);
+              color: var(--bfc-ts-muted);
+              text-transform: uppercase;
+              letter-spacing: .06em;
+            }
+            #{{ block_id }} .bfc-ts__name{
+              color: var(--bfc-ts-fg);
+              text-decoration: none;
+              font-size: var(--bfc-body-size);
+              line-height: 1.15;
+              font-weight: var(--bfc-item-title-weight);
+              letter-spacing: -0.01em;
+              font-family: var(--bfc-item-title-family);
+              margin: 0;
+            }
+            #{{ block_id }} .bfc-ts__name:hover{ text-decoration: underline; }
+            #{{ block_id }} .bfc-ts__subline{
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              color: var(--bfc-ts-muted);
+              font-size: var(--bfc-body-size-small);
+              line-height: 1.2;
+              margin-top: 1px;
+            }
+            #{{ block_id }} .bfc-ts__dot{ opacity: .7; }
+            #{{ block_id }} .bfc-ts__bottom{
+              margin-top: 2px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 10px;
+            }
+            #{{ block_id }} .bfc-ts__price{
+              display: flex;
+              align-items: baseline;
+              gap: 8px;
+              min-height: 18px;
+            }
+            #{{ block_id }} .bfc-ts__price-now{
+              font-size: var(--bfc-body-size);
+              font-weight: var(--bfc-header-weight);
+            }
+            #{{ block_id }} .bfc-ts__price-was{
+              font-size: var(--bfc-body-size-small);
+              color: var(--bfc-ts-muted);
+              text-decoration: line-through;
+            }
+            #{{ block_id }} .bfc-ts__add{ margin: 0; }
+            #{{ block_id }} .bfc-ts__add-btn{
+              appearance: none;
+              border: 0;
+              background: transparent;
+              color: var(--bfc-ts-fg);
+              border-radius: var(--bfc-ts-radius);
+              padding: 9px 12px;
+              font-size: var(--bfc-body-size-small);
+              line-height: 1;
+              cursor: pointer;
+              transition: background .18s ease, opacity .18s ease;
+              white-space: nowrap;
+            }
+            #{{ block_id }} .bfc-ts__add-btn:hover{
+              background: color-mix(in srgb, var(--bfc-ts-fg) 7%, transparent);
+            }
+            #{{ block_id }} .bfc-ts__add-btn[disabled]{
+              opacity: .45;
+              cursor: not-allowed;
+            }
+            #{{ block_id }} .bfc-ts__arrow{
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+              z-index: 3;
+              width: 40px;
+              height: 40px;
+              border-radius: var(--bfc-ts-radius);
+              border: 1px solid var(--bfc-ts-border);
+              background: {{ base_bg }};
+              opacity: .86;
+              backdrop-filter: blur(6px);
+              cursor: pointer;
+              display: none;
+              align-items: center;
+              justify-content: center;
+              font-size: 22px;
+              line-height: 1;
+              color: var(--bfc-ts-fg);
+            }
+            #{{ block_id }} .bfc-ts__arrow--prev{ left: 10px; }
+            #{{ block_id }} .bfc-ts__arrow--next{ right: 10px; }
+            @media (min-width: 990px){
+              #{{ block_id }} .bfc-ts__arrow{ display: flex; }
+              #{{ block_id }} .bfc-ts__rail{ padding-bottom: 10px; }
+            }
+            #{{ block_id }} .bfc-ts__fade{
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              width: 44px;
+              z-index: 2;
+              pointer-events: none;
+            }
+            #{{ block_id }} .bfc-ts__fade--left{
+              left: 0;
+              background: linear-gradient(to right, {{ base_bg }}, {{ base_bg }}00);
+            }
+            #{{ block_id }} .bfc-ts__fade--right{
+              right: 0;
+              background: linear-gradient(to left, {{ base_bg }}, {{ base_bg }}00);
+            }
+            @media (max-width: 749px){
+              #{{ block_id }} .bfc-ts__rail{
+                grid-auto-columns: 78vw;
+                gap: 12px;
+              }
+              {% if block.settings.ignore_padding_mobile %}
+                #{{ block_id }}{
+                  --bfc-block-pad: var(--bfc-horizontal-pad);
+                  --bfc-ts-gutter: var(--bfc-block-pad);
+                }
+              {% endif %}
+              {% if ts_mobile_limit %}
+                #{{ block_id }} .bfc-ts__card:nth-child(n+{{ ts_mobile_limit_count | plus: 1 }}){ display:none; }
+              {% endif %}
+            }
+          </style>
+          <script>
+            (function () {
+              const root = document.querySelector('#{{ block_id }} [data-bfc-ts]');
+              if (!root) return;
+              const rail = root.querySelector('[data-bfc-ts-rail]');
+              const prev = root.querySelector('[data-bfc-ts-prev]');
+              const next = root.querySelector('[data-bfc-ts-next]');
+              if (!rail) return;
+              const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+              const behavior = prefersReduced ? 'auto' : 'smooth';
+              function scrollByAmount(dir) {
+                const amount = Math.max(240, Math.floor(rail.clientWidth * 0.85));
+                rail.scrollBy({ left: dir * amount, behavior });
+              }
+              function updateArrows() {
+                if (!prev || !next) return;
+                const max = rail.scrollWidth - rail.clientWidth - 2;
+                prev.disabled = rail.scrollLeft <= 2;
+                next.disabled = rail.scrollLeft >= max;
+                prev.style.opacity = prev.disabled ? '0.35' : '1';
+                next.style.opacity = next.disabled ? '0.35' : '1';
+              }
+              if (prev) prev.addEventListener('click', () => scrollByAmount(-1));
+              if (next) next.addEventListener('click', () => scrollByAmount(1));
+              root.addEventListener('submit', function(event) {
+                const form = event.target;
+                if (!form.classList || !form.classList.contains('bfc-ts__add')) return;
+                event.preventDefault();
+                const button = form.querySelector('button');
+                if (button) {
+                  button.disabled = true;
+                  button.setAttribute('aria-busy', 'true');
+                }
+                const formData = new FormData(form);
+                if (!formData.get('quantity')) {
+                  formData.append('quantity', '1');
+                }
+                const body = new URLSearchParams(formData).toString();
+                fetch('{{ routes.cart_add_url }}.js', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    'X-Requested-With': 'XMLHttpRequest'
+                  },
+                  body: body,
+                  credentials: 'same-origin'
+                })
+                  .then(function(res) {
+                    if (!res.ok) throw new Error('Add to cart failed');
+                    return res.json();
+                  })
+                  .then(function() {
+                    return fetch('/cart/update.js', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                      },
+                      body: JSON.stringify({
+                        updates: {},
+                        sections: ['cart-drawer', 'cart-icon-bubble'],
+                        sections_url: window.location.pathname
+                      }),
+                      credentials: 'same-origin'
+                    });
+                  })
+                  .then(function(res) {
+                    if (!res.ok) throw new Error('Cart update fetch failed');
+                    return res.json();
+                  })
+                  .then(function(state) {
+                    const drawer = document.querySelector('cart-drawer');
+                    if (drawer && typeof drawer.renderContents === 'function') drawer.renderContents(state);
+                    if (drawer && typeof drawer.open === 'function') drawer.open();
+                  })
+                  .catch(function(error) {
+                    console.error('Quick add failed', error);
+                  })
+                  .finally(function() {
+                    if (button) {
+                      button.disabled = false;
+                      button.removeAttribute('aria-busy');
+                    }
+                  });
+              });
+              rail.addEventListener('scroll', () => window.requestAnimationFrame(updateArrows), { passive: true });
+              window.addEventListener('resize', () => window.requestAnimationFrame(updateArrows));
+              updateArrows();
+            })();
+          </script>
+        </section>
+    {% endcase %}
+  {% endfor %}
+</section>
+{% schema %}
+{
+  "name": "BFC Top Sellers",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "label": "Horizontal padding",
+      "min": 12,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "header_font_weight",
+      "label": "Header font weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "SemiBold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "300"
+    },
+    {
+      "type": "select",
+      "id": "body_font_weight",
+      "label": "Body font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "body_font_size",
+      "label": "Body font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "body_font_size_small",
+      "label": "Small text size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Base text color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Base background color",
+      "default": "#F7F4F0"
+    },
+    {
+      "type": "header",
+      "content": "Heading Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_size_preset",
+      "label": "Heading size",
+      "info": "Controls heading size at all screen widths consistently.",
+      "options": [
+        {
+          "value": "sm",
+          "label": "Small"
+        },
+        {
+          "value": "md",
+          "label": "Medium"
+        },
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "lg",
+          "label": "Large"
+        },
+        {
+          "value": "xl",
+          "label": "X-Large"
+        },
+        {
+          "value": "xxl",
+          "label": "XX-Large"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "header_line_height",
+      "label": "Heading line height",
+      "options": [
+        {
+          "value": "1.0",
+          "label": "1.0 (Tightest)"
+        },
+        {
+          "value": "1.05",
+          "label": "1.05 (Default)"
+        },
+        {
+          "value": "1.1",
+          "label": "1.1"
+        },
+        {
+          "value": "1.2",
+          "label": "1.2"
+        },
+        {
+          "value": "1.3",
+          "label": "1.3"
+        },
+        {
+          "value": "1.4",
+          "label": "1.4 (Loose)"
+        }
+      ],
+      "default": "1.05"
+    },
+    {
+      "type": "range",
+      "id": "header_letter_spacing",
+      "label": "Heading letter spacing",
+      "min": -2,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "default": -2
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "info": "Falls back to base text color if unset",
+      "default": "#111111"
+    },
+    {
+      "type": "header",
+      "content": "Body Typography"
+    },
+    {
+      "type": "select",
+      "id": "body_line_height",
+      "label": "Body line height",
+      "options": [
+        {
+          "value": "1.3",
+          "label": "1.3 (Tight)"
+        },
+        {
+          "value": "1.4",
+          "label": "1.4"
+        },
+        {
+          "value": "1.5",
+          "label": "1.5 (Default)"
+        },
+        {
+          "value": "1.6",
+          "label": "1.6"
+        },
+        {
+          "value": "1.8",
+          "label": "1.8 (Loose)"
+        }
+      ],
+      "default": "1.5"
+    },
+    {
+      "type": "range",
+      "id": "body_letter_spacing",
+      "label": "Body letter spacing",
+      "min": -1,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Section top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Section bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Section Colors"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "info": "Used for links and highlights",
+      "default": "#E36E15"
+    },
+    {
+      "type": "color",
+      "id": "secondary_text_color",
+      "label": "Secondary text color",
+      "info": "Used for eyebrows and small detail text",
+      "default": "#82906B"
+    },
+    {
+      "type": "font_picker",
+      "id": "item_title_font",
+      "label": "Item title font",
+      "info": "Font used for product/item titles (e.g. the old best-seller title font)",
+      "default": "poppins_n5"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "top_sellers",
+      "name": "Top Sellers Rail",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Top Sellers"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "Optional"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "range",
+          "id": "products_limit",
+          "label": "Products to show",
+          "min": 4,
+          "max": 24,
+          "step": 1,
+          "default": 12
+        },
+        {
+          "type": "checkbox",
+          "id": "show_vendor",
+          "label": "Show vendor",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_custom_text",
+          "label": "Show custom text",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "custom_text",
+          "label": "Custom text",
+          "default": "Custom text"
+        },
+        {
+          "type": "checkbox",
+          "id": "custom_text_use_tags",
+          "label": "Match custom text by tags",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "custom_text_tag_1",
+          "label": "Custom text 1 tag match (comma-separated)",
+          "default": "preorder, pre-order"
+        },
+        {
+          "type": "text",
+          "id": "custom_text_label_1",
+          "label": "Custom text 1 label",
+          "default": "Preorder"
+        },
+        {
+          "type": "text",
+          "id": "custom_text_tag_2",
+          "label": "Custom text 2 tag match (comma-separated)",
+          "default": "exclusive, limited"
+        },
+        {
+          "type": "text",
+          "id": "custom_text_label_2",
+          "label": "Custom text 2 label",
+          "default": "Exclusive"
+        },
+        {
+          "type": "text",
+          "id": "custom_text_tag_3",
+          "label": "Custom text 3 tag match (comma-separated)",
+          "default": "backorder, back-order"
+        },
+        {
+          "type": "text",
+          "id": "custom_text_label_3",
+          "label": "Custom text 3 label",
+          "default": "Backorder"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_stock",
+          "label": "Show stock status",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_variant_count",
+          "label": "Show variant count",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_price",
+          "label": "Show price",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_quick_add",
+          "label": "Show quick add button",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Inventory"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_oos",
+          "label": "Hide out-of-stock products",
+          "default": false
+        },
+        {
+          "type": "textarea",
+          "id": "exclude_handles",
+          "label": "Exclude products (handles, comma-separated)"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_two_variant_adds",
+          "label": "Show two variant quick-add buttons",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "variant_add_label",
+          "label": "Two-variant add label",
+          "default": "Add"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_badges",
+          "label": "Enable tag-based badges",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "badge_tag_1",
+          "label": "Badge 1 tag match (comma-separated)",
+          "default": "best seller, best-seller"
+        },
+        {
+          "type": "text",
+          "id": "badge_label_1",
+          "label": "Badge 1 label",
+          "default": "Best Seller"
+        },
+        {
+          "type": "text",
+          "id": "badge_tag_2",
+          "label": "Badge 2 tag match (comma-separated)",
+          "default": "just arrived, new"
+        },
+        {
+          "type": "text",
+          "id": "badge_label_2",
+          "label": "Badge 2 label",
+          "default": "Just Arrived"
+        },
+        {
+          "type": "text",
+          "id": "badge_tag_3",
+          "label": "Badge 3 tag match (comma-separated)",
+          "default": "limited, limited edition"
+        },
+        {
+          "type": "text",
+          "id": "badge_label_3",
+          "label": "Badge 3 label",
+          "default": "Limited"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_view_all",
+          "label": "Show 'Shop all' link",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "view_all_label",
+          "label": "View all label",
+          "default": "Shop all"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_arrows",
+          "label": "Show arrows on desktop",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "edge_fade",
+          "label": "Show edge fade overlays",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "square_corners",
+          "label": "Square corners",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "mobile_limit_enabled",
+          "label": "Limit items on mobile",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "mobile_show_count",
+          "label": "Show this many on mobile",
+          "min": 2,
+          "max": 12,
+          "step": 1,
+          "default": 6
+        },
+        {
+          "type": "range",
+          "id": "section_padding_y",
+          "label": "Section vertical padding (px)",
+          "min": 0,
+          "max": 72,
+          "step": 4,
+          "default": 28
+        },
+        {
+          "type": "range",
+          "id": "side_padding_vw",
+          "label": "Side padding add-on (vw)",
+          "min": 0,
+          "max": 10,
+          "step": 0.5,
+          "unit": "vw",
+          "default": 0
+        },
+        {
+          "type": "checkbox",
+          "id": "ignore_padding_mobile",
+          "label": "Ignore side padding on mobile",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "add_label",
+          "label": "Add button label",
+          "default": "Add"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Top Sellers"
+    }
+  ]
+}
+{% endschema %}

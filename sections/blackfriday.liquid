@@ -1,0 +1,986 @@
+{% comment %}
+BFC — Black Friday Landing Builder
+A NYT-inspired landing layout tuned for seasonal sales:
+- hero with dark overlay + dual CTAs
+- ticker/countdown banner for urgency
+- collection-driven product grid and featured product highlights
+- content rows for value props, FAQs, and promo blocks
+Drop this into: sections/bfc-black-friday-landing.liquid
+{% endcomment %}
+
+<section id="bfc-black-friday-{{ section.id }}" class="bfcbf">
+  <style>
+    #bfc-black-friday-{{ section.id }}{
+      --wrap:{{ section.settings.max_width }};
+      --g:{{ section.settings.gap }}px;
+      --pad:{{ section.settings.section_pad }}px;
+      --bg:{{ section.settings.bg }};
+      --fade:linear-gradient(120deg, rgba(226,169,79,.07), rgba(26,18,8,.03));
+      --panel-fade:linear-gradient(120deg, rgba(226,169,79,.16), rgba(26,18,8,.06));
+      --text:#111827;
+      --muted:#4b5563;
+      --rule:#e5e7eb;
+      --accent:{{ section.settings.accent }};
+      --accent-2:{{ section.settings.secondary_accent }};
+      --radius:{% if section.settings.square_corners %}0px{% else %}16px{% endif %};
+      --pill-radius:{% if section.settings.square_corners %}6px{% else %}999px{% endif %};
+      --card-img-height:{{ section.settings.card_image_height }}px;
+      --card-max-height:{{ section.settings.card_max_height }}px;
+      --sans:"{{ section.settings.sans_font | default: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial' }}";
+      --serif:"{{ section.settings.serif_font | default: 'Georgia, Times New Roman, Times, serif' }}";
+      background:var(--fade), var(--bg);
+      color:var(--text);
+    }
+    #bfc-black-friday-{{ section.id }} .wrap{max-width:var(--wrap);margin-inline:auto;padding:var(--pad) 16px;display:grid;gap:var(--g)}
+    #bfc-black-friday-{{ section.id }} .rule{border:0;border-top:1px solid var(--rule);margin:12px 0}
+    #bfc-black-friday-{{ section.id }} .grid{display:grid;gap:var(--g)}
+
+    /* Typography */
+    #bfc-black-friday-{{ section.id }} h1,#bfc-black-friday-{{ section.id }} h2,#bfc-black-friday-{{ section.id }} h3{font-family:var(--serif);margin:0;color:var(--text)}
+    #bfc-black-friday-{{ section.id }} p,#bfc-black-friday-{{ section.id }} li,#bfc-black-friday-{{ section.id }} a,#bfc-black-friday-{{ section.id }} button, #bfc-black-friday-{{ section.id }} span{font-family:var(--sans)}
+    #bfc-black-friday-{{ section.id }} .eyebrow{letter-spacing:.08em;text-transform:uppercase;font-weight:600;font-size:12px;color:var(--accent)}
+
+    /* Hero */
+    #bfc-black-friday-{{ section.id }} .hero{position:relative;border-radius:var(--radius);overflow:hidden;color:#f9fafb;min-height:340px}
+    #bfc-black-friday-{{ section.id }} .hero.full-bleed{border-radius:0;margin-inline:-16px;width:calc(100% + 32px);margin-top:calc(-1 * var(--pad))}
+    #bfc-black-friday-{{ section.id }} .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(0.55)}
+    #bfc-black-friday-{{ section.id }} .hero .content{position:relative;z-index:1;padding:48px 32px;max-width:720px}
+    #bfc-black-friday-{{ section.id }} .hero h1{font-size:clamp(32px,4vw,56px);line-height:1.05;color:#f9fafb}
+    #bfc-black-friday-{{ section.id }} .hero p{color:#e5e7eb;font-size:18px;max-width:640px}
+    #bfc-black-friday-{{ section.id }} .hero .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+
+    /* Buttons */
+    #bfc-black-friday-{{ section.id }} .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:var(--pill-radius);font-weight:600;text-decoration:none;border:2px solid transparent;transition:transform .15s ease,box-shadow .15s ease,background .15s ease,color .15s ease}
+    #bfc-black-friday-{{ section.id }} .btn-primary{background:var(--accent);color:#fff}
+    #bfc-black-friday-{{ section.id }} .btn-primary:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(0,0,0,.18)}
+    #bfc-black-friday-{{ section.id }} .btn-ghost{background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.35)}
+    #bfc-black-friday-{{ section.id }} .btn-ghost:hover{background:rgba(255,255,255,.22)}
+
+    /* Banner */
+    #bfc-black-friday-{{ section.id }} .banner{background:var(--accent-2);color:#1f1305;border-radius:var(--pill-radius);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-weight:600}
+    #bfc-black-friday-{{ section.id }} .banner .timer{display:flex;gap:12px;align-items:center;font-variant-numeric:tabular-nums}
+
+    /* Product grid */
+    #bfc-black-friday-{{ section.id }} .product-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));grid-auto-flow:row}
+    @media (min-width:1200px){
+      #bfc-black-friday-{{ section.id }} .product-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+    }
+    @media (min-width:900px) and (max-width:1199px){
+      #bfc-black-friday-{{ section.id }} .product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+    }
+    #bfc-black-friday-{{ section.id }} .card{background:#fff;border:1px solid var(--rule);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:transform .15s ease,box-shadow .15s ease;max-height:var(--card-max-height);position:relative}
+    #bfc-black-friday-{{ section.id }} .card:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(0,0,0,.08)}
+    #bfc-black-friday-{{ section.id }} .card img{width:100%;height:var(--card-img-height);object-fit:cover;background:#f3f4f6}
+    #bfc-black-friday-{{ section.id }} .card .body{padding:12px 14px;display:grid;gap:6px}
+    #bfc-black-friday-{{ section.id }} .price{display:flex;gap:8px;align-items:center;font-weight:700}
+    #bfc-black-friday-{{ section.id }} .price del{color:var(--muted);font-weight:400}
+    #bfc-black-friday-{{ section.id }} .badge{display:inline-flex;align-items:center;gap:6px;background:rgba(226,169,79,.14);color:var(--accent);padding:6px 10px;border-radius:var(--pill-radius);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em;width:max-content}
+
+    /* Featured row */
+    #bfc-black-friday-{{ section.id }} .feature-row{display:grid;gap:var(--g);grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:center;background:var(--panel-fade);color:var(--text);border-radius:var(--radius);overflow:hidden;position:relative}
+    #bfc-black-friday-{{ section.id }} .feature-row.image-right > img{order:2}
+    #bfc-black-friday-{{ section.id }} .feature-row.image-right > .copy{order:1}
+    #bfc-black-friday-{{ section.id }} .feature-row .copy{padding:28px;display:grid;gap:12px}
+    #bfc-black-friday-{{ section.id }} .feature-row img{width:100%;height:100%;object-fit:cover;min-height:260px}
+    #bfc-black-friday-{{ section.id }} .feature-row h2{color:var(--accent)}
+    #bfc-black-friday-{{ section.id }} .feature-row.dual{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+    #bfc-black-friday-{{ section.id }} .feature-row.dual .feature-item{display:grid;grid-template-rows:auto 1fr;background:var(--panel-fade);border-left:1px solid var(--rule)}
+    #bfc-black-friday-{{ section.id }} .feature-row.dual .feature-item:first-child{border-left:0}
+    #bfc-black-friday-{{ section.id }} .feature-row.dual .feature-item img{min-height:220px}
+    #bfc-black-friday-{{ section.id }} .feature-row.dual .copy{padding:20px}
+
+    /* Shared actions */
+    #bfc-black-friday-{{ section.id }} .feature-row .actions,
+    #bfc-black-friday-{{ section.id }} .collection-highlight .actions,
+    #bfc-black-friday-{{ section.id }} .spotlight-body .actions,
+    #bfc-black-friday-{{ section.id }} .two-up .actions{display:flex;flex-wrap:wrap;gap:12px}
+
+    /* Spotlight variants */
+    #bfc-black-friday-{{ section.id }} .spotlight-grid{display:grid;gap:var(--g);grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+    #bfc-black-friday-{{ section.id }} .spotlight-card{border:1px solid var(--rule);border-radius:var(--radius);overflow:hidden;display:grid;grid-template-columns:1fr 1.2fr;align-items:stretch;background:#fff;min-height:220px;position:relative}
+    #bfc-black-friday-{{ section.id }} .spotlight-card.reverse{grid-template-columns:1.2fr 1fr}
+    #bfc-black-friday-{{ section.id }} .spotlight-card img{width:100%;height:100%;object-fit:cover}
+    #bfc-black-friday-{{ section.id }} .spotlight-body{padding:18px;display:grid;gap:10px}
+    #bfc-black-friday-{{ section.id }} .spotlight-body h3{margin:0;font-size:22px}
+    #bfc-black-friday-{{ section.id }} .spotlight-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(202,138,71,.16);color:var(--accent);padding:8px 12px;border-radius:var(--pill-radius);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.04em;width:max-content}
+
+    /* Collection highlight */
+    #bfc-black-friday-{{ section.id }} .collection-highlight{border:1px solid var(--rule);border-radius:var(--radius);overflow:hidden;background:var(--panel-fade);display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));align-items:center;position:relative}
+    #bfc-black-friday-{{ section.id }} .collection-highlight img{width:100%;height:100%;object-fit:cover;min-height:240px}
+    #bfc-black-friday-{{ section.id }} .collection-highlight .copy{padding:20px;display:grid;gap:10px}
+    #bfc-black-friday-{{ section.id }} .collection-highlight .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;background:#fff;border:1px solid var(--rule);border-radius:var(--pill-radius);font-weight:600}
+
+    /* Sticker */
+    #bfc-black-friday-{{ section.id }} .sticker{position:absolute;top:12px;right:12px;background:#b91c1c;color:#fff;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:8px 10px;border-radius:var(--pill-radius);font-size:12px;box-shadow:0 10px 18px rgba(0,0,0,.12);z-index:4;pointer-events:none}
+
+    /* Two-up cards */
+    #bfc-black-friday-{{ section.id }} .two-up{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:var(--g)}
+    #bfc-black-friday-{{ section.id }} .two-up-card{position:relative;border:1px solid var(--rule);border-radius:var(--radius);overflow:hidden;background:#fff;display:grid;grid-template-rows:auto 1fr}
+    #bfc-black-friday-{{ section.id }} .two-up-card img{width:100%;height:220px;object-fit:cover}
+    #bfc-black-friday-{{ section.id }} .two-up-card .body{padding:16px;display:grid;gap:10px}
+
+    /* Mini grid (collection highlight variant) */
+    #bfc-black-friday-{{ section.id }} .mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:16px}
+    #bfc-black-friday-{{ section.id }} .mini-card{border:1px solid var(--rule);border-radius:var(--radius);overflow:hidden;background:#fff;display:grid;grid-template-rows:auto 1fr;position:relative}
+    #bfc-black-friday-{{ section.id }} .mini-card img{width:100%;height:var(--mini-img-height,120px);object-fit:cover;background:#f9fafb}
+    #bfc-black-friday-{{ section.id }} .mini-card .mini-body{padding:10px;display:grid;gap:6px}
+    #bfc-black-friday-{{ section.id }} .mini-card.minimal .mini-body{padding:6px}
+    #bfc-black-friday-{{ section.id }} .mini-card.minimal .mini-body p{font-size:13px}
+  
+    /* Info rows */
+    #bfc-black-friday-{{ section.id }} .pill-list{display:flex;flex-wrap:wrap;gap:8px}
+    #bfc-black-friday-{{ section.id }} .pill{padding:10px 14px;border-radius:var(--pill-radius);border:1px solid var(--rule);background:#fff;font-weight:600}
+    #bfc-black-friday-{{ section.id }} .faq{border:1px solid var(--rule);border-radius:var(--radius);padding:16px;background:#fff;display:grid;gap:8px}
+    #bfc-black-friday-{{ section.id }} .faq h3{font-size:18px}
+    #bfc-black-friday-{{ section.id }} .faq p{margin:0;color:var(--muted)}
+
+    /* Responsive tweaks */
+    @media (max-width:720px){
+      #bfc-black-friday-{{ section.id }} .hero .content{padding:32px 22px}
+      #bfc-black-friday-{{ section.id }} .collection-highlight .sticker{top:8px;right:8px;font-size:10px;padding:6px 8px}
+      #bfc-black-friday-{{ section.id }} .feature-row.dual{grid-template-columns:1fr}
+      #bfc-black-friday-{{ section.id }} .feature-row.dual .feature-item{border-left:0;border-top:1px solid var(--rule)}
+      #bfc-black-friday-{{ section.id }} .feature-row.dual .feature-item:first-child{border-top:0}
+      #bfc-black-friday-{{ section.id }} .feature-row.dual .feature-item img{min-height:180px}
+      #bfc-black-friday-{{ section.id }} .feature-row .actions{gap:10px}
+    }
+  </style>
+
+  <div class="wrap">
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'banner' %}
+          {% assign block_max = block.settings.max_height | default: 0 %}
+          {% assign block_style = '' %}
+          {% if block_max > 0 %}{% assign block_style = 'max-height:' | append: block_max | append: 'px;overflow:auto;' %}{% endif %}
+          <div class="banner" style="{{ block_style }}" {{ block.shopify_attributes }} data-countdown="{{ block.settings.countdown_iso }}" data-countdown-label="{{ block.settings.countdown_label }}" data-countdown-fallback="{{ block.settings.countdown_fallback }}"{% if block.settings.anchor_id != blank %} id="{{ block.settings.anchor_id | escape }}"{% endif %}>
+            <span class="eyebrow">{{ block.settings.eyebrow | escape }}</span>
+            <div class="timer" aria-live="polite">
+              <span class="label">{{ block.settings.message }}</span>
+              <span class="time" data-countdown-display>— {{ block.settings.countdown_label }}: {{ block.settings.countdown_fallback }}</span>
+            </div>
+            <span class="eyebrow">{{ block.settings.eyebrow | escape }}</span>
+          </div>
+
+        {% when 'hero' %}
+          {% assign block_max = block.settings.max_height | default: 0 %}
+          {% assign block_style = '' %}
+          {% if block_max > 0 %}{% assign block_style = 'max-height:' | append: block_max | append: 'px;overflow:auto;' %}{% endif %}
+          {% assign hero_classes = 'hero' %}
+          {% if block.settings.full_bleed %}{% assign hero_classes = hero_classes | append: ' full-bleed' %}{% endif %}
+          <article class="{{ hero_classes }}" style="{{ block_style }}" {{ block.shopify_attributes }}{% if block.settings.anchor_id != blank %} id="{{ block.settings.anchor_id | escape }}"{% endif %}>
+            {% if block.settings.image != blank %}
+              <img
+                src="{{ block.settings.image | image_url: width: 1600 }}"
+                alt="{{ block.settings.image.alt | escape }}"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+              >
+            {% endif %}
+            <div class="content">
+              {% if block.settings.eyebrow != blank %}<div class="eyebrow">{{ block.settings.eyebrow }}</div>{% endif %}
+              <h1>{{ block.settings.hed }}</h1>
+              {% if block.settings.dek != blank %}<p>{{ block.settings.dek }}</p>{% endif %}
+              <div class="actions">
+                {% assign cta_1_href = block.settings.cta_url %}
+                {% if block.settings.cta_scroll_target != blank %}{% assign cta_1_href = '#' | append: block.settings.cta_scroll_target %}{% endif %}
+                {% assign cta_2_href = block.settings.secondary_url %}
+                {% if block.settings.secondary_scroll_target != blank %}{% assign cta_2_href = '#' | append: block.settings.secondary_scroll_target %}{% endif %}
+                {% assign cta_3_href = block.settings.cta_3_url %}
+                {% if block.settings.cta_3_scroll_target != blank %}{% assign cta_3_href = '#' | append: block.settings.cta_3_scroll_target %}{% endif %}
+                {% assign cta_4_href = block.settings.cta_4_url %}
+                {% if block.settings.cta_4_scroll_target != blank %}{% assign cta_4_href = '#' | append: block.settings.cta_4_scroll_target %}{% endif %}
+
+                {% if block.settings.cta_label %}
+                  <a class="btn btn-primary" href="{{ cta_1_href }}"{% if block.settings.cta_scroll_target != blank %} data-scroll-target="{{ block.settings.cta_scroll_target | escape }}"{% endif %}>{{ block.settings.cta_label }}</a>
+                {% endif %}
+                {% if block.settings.secondary_label and block.settings.show_secondary_cta %}
+                  <a class="btn btn-ghost" href="{{ cta_2_href }}"{% if block.settings.secondary_scroll_target != blank %} data-scroll-target="{{ block.settings.secondary_scroll_target | escape }}"{% endif %}>{{ block.settings.secondary_label }}</a>
+                {% endif %}
+                {% if block.settings.cta_3_label %}
+                  <a class="btn btn-ghost" href="{{ cta_3_href }}"{% if block.settings.cta_3_scroll_target != blank %} data-scroll-target="{{ block.settings.cta_3_scroll_target | escape }}"{% endif %}>{{ block.settings.cta_3_label }}</a>
+                {% endif %}
+                {% if block.settings.cta_4_label %}
+                  <a class="btn btn-ghost" href="{{ cta_4_href }}"{% if block.settings.cta_4_scroll_target != blank %} data-scroll-target="{{ block.settings.cta_4_scroll_target | escape }}"{% endif %}>{{ block.settings.cta_4_label }}</a>
+                {% endif %}
+              </div>
+            </div>
+          </article>
+
+        {% when 'collection_grid' %}
+          {% assign block_max = block.settings.max_height | default: 0 %}
+          {% assign block_style = '' %}
+          {% if block_max > 0 %}{% assign block_style = 'max-height:' | append: block_max | append: 'px;overflow:auto;' %}{% endif %}
+          {% assign collection_obj = collections[block.settings.collection] %}
+          {% assign manual_handles = '' %}
+          {% if block.settings.product_source == 'manual' %}
+            {% for i in (1..8) %}
+              {% assign key = 'product_' | append: i %}
+              {% assign product_setting = block.settings[key] %}
+              {% assign handle = product_setting.handle | default: product_setting %}
+              {% if handle != blank %}
+                {% assign manual_handles = manual_handles | append: handle | append: ',' %}
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+          <div class="grid" style="position:relative;{{ block_style }}" {{ block.shopify_attributes }}{% if block.settings.anchor_id != blank %} id="{{ block.settings.anchor_id | escape }}"{% endif %}>
+            {% if block.settings.sticker_text != blank %}<span class="sticker">{{ block.settings.sticker_text }}</span>{% endif %}
+            <div class="grid" style="gap:8px">
+              {% if block.settings.eyebrow != blank %}<div class="eyebrow">{{ block.settings.eyebrow }}</div>{% endif %}
+              <h2>{{ block.settings.hed | default: collection_obj.title }}</h2>
+              {% if block.settings.dek != blank %}<p style="color:var(--muted);max-width:720px">{{ block.settings.dek }}</p>{% endif %}
+            </div>
+            <div class="product-grid">
+              {% if block.settings.product_source == 'manual' %}
+                {% assign handles = manual_handles | split: ',' %}
+                {% assign rendered = 0 %}
+                {% for handle in handles %}
+                  {% if rendered >= block.settings.limit %}
+                    {% break %}
+                  {% endif %}
+                  {% assign product = all_products[handle] %}
+                  {% if product %}
+                    {% assign rendered = rendered | plus: 1 %}
+                    <article class="card">
+                      {% if block.settings.sticker_text != blank %}<span class="sticker">{{ block.settings.sticker_text }}</span>{% endif %}
+                      <a href="{{ product.url }}" style="text-decoration:none;color:inherit">
+                        {% if product.featured_image %}
+                          <img
+                            loading="lazy"
+                            src="{{ product.featured_image | image_url: width: 540 }}"
+                            alt="{{ product.featured_image.alt | escape }}"
+                            width="{{ product.featured_image.width }}"
+                            height="{{ product.featured_image.height }}"
+                          >
+                        {% endif %}
+                        <div class="body">
+                          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+                            <p style="margin:0;font-weight:700">{{ product.title }}</p>
+                            {% if block.settings.show_badge and product.compare_at_price > product.price %}
+                              <span class="badge">{{ block.settings.badge_label | default: 'On Sale' }}</span>
+                            {% endif %}
+                          </div>
+                          {% if block.settings.show_vendor %}<p style="margin:0;color:var(--muted);font-size:13px">{{ product.vendor }}</p>{% endif %}
+                          <div class="price">
+                            <span>{{ product.price | money }}</span>
+                            {% if product.compare_at_price > product.price %}<del>{{ product.compare_at_price | money }}</del>{% endif %}
+                          </div>
+                        </div>
+                      </a>
+                    </article>
+                  {% endif %}
+                {% endfor %}
+                {% if rendered == 0 %}
+                  <p style="color:var(--muted)">Choose products above to populate this grid.</p>
+                {% endif %}
+              {% else %}
+                {% for product in collection_obj.products limit: block.settings.limit %}
+                  <article class="card">
+                    {% if block.settings.sticker_text != blank %}<span class="sticker">{{ block.settings.sticker_text }}</span>{% endif %}
+                    <a href="{{ product.url }}" style="text-decoration:none;color:inherit">
+                      {% if product.featured_image %}
+                        <img
+                          loading="lazy"
+                          src="{{ product.featured_image | image_url: width: 540 }}"
+                          alt="{{ product.featured_image.alt | escape }}"
+                          width="{{ product.featured_image.width }}"
+                          height="{{ product.featured_image.height }}"
+                        >
+                      {% endif %}
+                      <div class="body">
+                        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+                          <p style="margin:0;font-weight:700">{{ product.title }}</p>
+                          {% if block.settings.show_badge and product.compare_at_price > product.price %}
+                            <span class="badge">{{ block.settings.badge_label | default: 'On Sale' }}</span>
+                          {% endif %}
+                        </div>
+                        {% if block.settings.show_vendor %}<p style="margin:0;color:var(--muted);font-size:13px">{{ product.vendor }}</p>{% endif %}
+                        <div class="price">
+                          <span>{{ product.price | money }}</span>
+                          {% if product.compare_at_price > product.price %}<del>{{ product.compare_at_price | money }}</del>{% endif %}
+                        </div>
+                      </div>
+                    </a>
+                  </article>
+                {% else %}
+                  <p style="color:var(--muted)">Add products to {{ collection_obj.title }} to show them here.</p>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </div>
+
+        {% when 'featured_product' %}
+          {% assign block_max = block.settings.max_height | default: 0 %}
+          {% assign block_style = '' %}
+          {% if block_max > 0 %}{% assign block_style = 'max-height:' | append: block_max | append: 'px;overflow:auto;' %}{% endif %}
+          {% assign feature_handles = '' %}
+          {% assign primary_product = all_products[block.settings.product] %}
+          {% if primary_product %}
+            {% assign feature_handles = block.settings.product %}
+          {% endif %}
+          {% if block.settings.enable_second_product and block.settings.product_2 != blank %}
+            {% assign secondary_product = all_products[block.settings.product_2] %}
+            {% if secondary_product %}
+              {% if feature_handles != '' %}{% assign feature_handles = feature_handles | append: ',' %}{% endif %}
+              {% assign feature_handles = feature_handles | append: block.settings.product_2 %}
+            {% endif %}
+          {% endif %}
+          {% assign handles = feature_handles | split: ',' %}
+          {% if handles.size > 0 and handles.first != '' %}
+            {% assign dual_mode = false %}
+            {% if handles.size > 1 %}{% assign dual_mode = true %}{% endif %}
+            {% assign feature_class = 'feature-row' %}
+            {% if dual_mode %}
+              {% assign feature_class = feature_class | append: ' dual' %}
+            {% elsif block.settings.image_side == 'right' %}
+              {% assign feature_class = feature_class | append: ' image-right' %}
+            {% endif %}
+            {% assign feature_style = '' %}
+            {% if block.settings.feature_width and block.settings.feature_width > 0 %}
+              {% assign feature_style = 'max-width:' | append: block.settings.feature_width | append: 'px;margin-inline:auto;' %}
+            {% endif %}
+            <div class="{{ feature_class }}" style="{{ feature_style }}{{ block_style }}" {{ block.shopify_attributes }}{% if block.settings.anchor_id != blank %} id="{{ block.settings.anchor_id | escape }}"{% endif %}>
+              {% if dual_mode %}
+                {% for handle in handles %}
+                  {% assign product_obj = all_products[handle] %}
+                  {% if product_obj %}
+                    <div class="feature-item">
+                      {% if block.settings.sticker_text != blank %}<span class="sticker">{{ block.settings.sticker_text }}</span>{% endif %}
+                      {% if product_obj.featured_image %}
+                        <img
+                          src="{{ product_obj.featured_image | image_url: width: 900 }}"
+                          alt="{{ product_obj.featured_image.alt | escape }}"
+                          width="{{ product_obj.featured_image.width }}"
+                          height="{{ product_obj.featured_image.height }}"
+                        >
+                      {% endif %}
+                      <div class="copy">
+                        {% if block.settings.eyebrow != blank %}<div class="eyebrow" style="color:var(--accent-2)">{{ block.settings.eyebrow }}</div>{% endif %}
+                        {% assign item_hed = block.settings.hed %}
+                        {% if forloop.index == 2 and block.settings.hed_2 != blank %}{% assign item_hed = block.settings.hed_2 %}{% endif %}
+                        {% if item_hed == blank %}{% assign item_hed = product_obj.title %}{% endif %}
+                        <h2>{{ item_hed }}</h2>
+                        {% assign item_body = block.settings.dek %}
+                        {% if forloop.index == 2 and block.settings.dek_2 != blank %}{% assign item_body = block.settings.dek_2 %}{% endif %}
+                        {% if item_body == blank and block.settings.use_product_description_fallback %}
+                          {% assign item_body = product_obj.description | strip_html | truncate: 140 %}
+                        {% endif %}
+                        {% if item_body != blank %}<p style="margin:0;color:var(--muted)">{{ item_body }}</p>{% endif %}
+                        <div class="price" style="color:var(--text)">
+                          <span>{{ product_obj.price | money }}</span>
+                          {% if product_obj.compare_at_price > product_obj.price %}<del style="color:var(--muted)">{{ product_obj.compare_at_price | money }}</del>{% endif %}
+                        </div>
+                        <div class="actions">
+                          {% if block.settings.cta_label %}<a class="btn btn-primary" href="{{ product_obj.url }}">{{ block.settings.cta_label }}</a>{% endif %}
+                          {% if block.settings.secondary_label and block.settings.show_secondary_cta %}<a class="btn btn-ghost" href="{{ block.settings.secondary_url | default: product_obj.url }}">{{ block.settings.secondary_label }}</a>{% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                {% assign product_obj = all_products[handles.first] %}
+                {% if product_obj %}
+                  {% if block.settings.sticker_text != blank %}<span class="sticker">{{ block.settings.sticker_text }}</span>{% endif %}
+                  {% if product_obj.featured_image %}
+                    <img
+                      src="{{ product_obj.featured_image | image_url: width: 900 }}"
+                      alt="{{ product_obj.featured_image.alt | escape }}"
+                      width="{{ product_obj.featured_image.width }}"
+                      height="{{ product_obj.featured_image.height }}"
+                    >
+                  {% endif %}
+                  <div class="copy">
+                    {% if block.settings.eyebrow != blank %}<div class="eyebrow" style="color:var(--accent-2)">{{ block.settings.eyebrow }}</div>{% endif %}
+                    <h2>{{ block.settings.hed | default: product_obj.title }}</h2>
+                    {% assign feature_body = block.settings.dek %}
+                    {% if feature_body == blank and block.settings.use_product_description_fallback %}
+                      {% assign feature_body = product_obj.description | strip_html | truncate: 140 %}
+                    {% endif %}
+                    {% if feature_body != blank %}<p style="margin:0;color:var(--muted)">{{ feature_body }}</p>{% endif %}
+                    <div class="price" style="color:var(--text)">
+                      <span>{{ product_obj.price | money }}</span>
+                      {% if product_obj.compare_at_price > product_obj.price %}<del style="color:var(--muted)">{{ product_obj.compare_at_price | money }}</del>{% endif %}
+                    </div>
+                    <div class="actions">
+                      {% if block.settings.cta_label %}<a class="btn btn-primary" href="{{ product_obj.url }}">{{ block.settings.cta_label }}</a>{% endif %}
+                      {% if block.settings.secondary_label and block.settings.show_secondary_cta %}<a class="btn btn-ghost" href="{{ block.settings.secondary_url | default: product_obj.url }}">{{ block.settings.secondary_label }}</a>{% endif %}
+                    </div>
+                  </div>
+                {% endif %}
+              {% endif %}
+            </div>
+          {% endif %}
+
+        {% when 'product_spotlights' %}
+          {% assign block_max = block.settings.max_height | default: 0 %}
+          {% assign block_style = '' %}
+          {% if block_max > 0 %}{% assign block_style = 'max-height:' | append: block_max | append: 'px;overflow:auto;' %}{% endif %}
+          {% assign highlight_handles = '' %}
+          {% for i in (1..3) %}
+            {% assign key = 'product_' | append: i %}
+            {% assign product_setting = block.settings[key] %}
+            {% assign handle = product_setting.handle | default: product_setting %}
+            {% if handle != blank %}
+              {% assign highlight_handles = highlight_handles | append: handle | append: ',' %}
+            {% endif %}
+          {% endfor %}
+          <div class="grid" style="{{ block_style }}" {{ block.shopify_attributes }}{% if block.settings.anchor_id != blank %} id="{{ block.settings.anchor_id | escape }}"{% endif %}>
+            <div class="grid" style="gap:8px">
+              {% if block.settings.eyebrow != blank %}<div class="eyebrow">{{ block.settings.eyebrow }}</div>{% endif %}
+              <h2>{{ block.settings.hed }}</h2>
+              {% if block.settings.dek != blank %}<p style="color:var(--muted);max-width:760px">{{ block.settings.dek }}</p>{% endif %}
+            </div>
+            <div class="spotlight-grid">
+              {% assign handles = highlight_handles | split: ',' %}
+              {% assign card_index = 0 %}
+              {% assign rendered_spotlights = 0 %}
+              {% for handle in handles %}
+                {% assign product = all_products[handle] %}
+                {% if product %}
+                  {% assign card_index = card_index | plus: 1 %}
+                  {% assign rendered_spotlights = rendered_spotlights | plus: 1 %}
+                  {% assign even_card = card_index | modulo: 2 %}
+                  <article class="spotlight-card{% if block.settings.alt_image_side and even_card == 0 %} reverse{% endif %}">
+                    {% if block.settings.sticker_text != blank %}<span class="sticker">{{ block.settings.sticker_text }}</span>{% endif %}
+                    {% if product.featured_image %}
+                      <img
+                        src="{{ product.featured_image | image_url: width: 720 }}"
+                        alt="{{ product.featured_image.alt | escape }}"
+                        width="{{ product.featured_image.width }}"
+                        height="{{ product.featured_image.height }}"
+                        loading="lazy"
+                      >
+                    {% endif %}
+                    <div class="spotlight-body">
+                      {% if block.settings.show_badge and product.compare_at_price > product.price %}<span class="spotlight-pill">{{ block.settings.badge_label | default: 'Deal' }}</span>{% endif %}
+                      <h3>{{ product.title }}</h3>
+                      {% if block.settings.show_vendor %}<p style="margin:0;color:var(--muted);font-size:13px">{{ product.vendor }}</p>{% endif %}
+                      {% assign spotlight_body = block.settings.body_copy %}
+                      {% if spotlight_body == blank and block.settings.use_product_description_fallback %}
+                        {% assign spotlight_body = product.description | strip_html | truncate: 120 %}
+                      {% endif %}
+                      {% if spotlight_body != blank %}<p style="margin:0;color:var(--muted)">{{ spotlight_body }}</p>{% endif %}
+                      <div class="price">
+                        <span>{{ product.price | money }}</span>
+                        {% if product.compare_at_price > product.price %}<del>{{ product.compare_at_price | money }}</del>{% endif %}
+                      </div>
+                      <div class="actions">
+                        {% if block.settings.cta_label %}<a class="btn btn-primary" href="{{ product.url }}">{{ block.settings.cta_label }}</a>{% endif %}
+                        {% if block.settings.secondary_label and block.settings.show_secondary_cta %}<a class="btn btn-ghost" href="{{ product.url }}">{{ block.settings.secondary_label }}</a>{% endif %}
+                      </div>
+                    </div>
+                  </article>
+                {% endif %}
+              {% endfor %}
+              {% if rendered_spotlights == 0 %}
+                <p style="color:var(--muted)">Select up to three products to spotlight.</p>
+              {% endif %}
+            </div>
+          </div>
+
+        {% when 'collection_highlight' %}
+          {% assign block_max = block.settings.max_height | default: 0 %}
+          {% assign block_style = '' %}
+          {% if block_max > 0 %}{% assign block_style = 'max-height:' | append: block_max | append: 'px;overflow:auto;' %}{% endif %}
+          {% assign coll_obj = collections[block.settings.collection] %}
+          {% assign highlight_layout = block.settings.layout_style | default: 'single_image' %}
+          {% assign tile_height = block.settings.mini_image_height | default: 120 %}
+          <div class="collection-highlight" style="{{ block_style }}" {{ block.shopify_attributes }}{% if block.settings.anchor_id != blank %} id="{{ block.settings.anchor_id | escape }}"{% endif %}>
+            {% if block.settings.sticker_text != blank %}<span class="sticker">{{ block.settings.sticker_text }}</span>{% endif %}
+            {% if highlight_layout == 'product_grid' %}
+              <div class="mini-grid" style="--mini-img-height:{{ tile_height }}px">
+                {% assign tiles_rendered = 0 %}
+                {% for i in (1..6) %}
+                  {% assign image_key = 'tile_image_' | append: i %}
+                  {% assign link_key = 'tile_link_' | append: i %}
+                  {% assign label_key = 'tile_label_' | append: i %}
+                  {% assign tile_image = block.settings[image_key] %}
+                  {% assign tile_link = block.settings[link_key] %}
+                  {% assign tile_label = block.settings[label_key] %}
+                  {% if tile_image != blank %}
+                    {% assign tiles_rendered = tiles_rendered | plus: 1 %}
+                    <article class="mini-card minimal" style="--mini-img-height:{{ tile_height }}px">
+                      {% if tile_link != blank %}<a href="{{ tile_link }}" style="text-decoration:none;color:inherit;display:block">{% endif %}
+                        <img
+                          src="{{ tile_image | image_url: width: 360 }}"
+                          alt="{{ tile_image.alt | escape }}"
+                          width="{{ tile_image.width }}"
+                          height="{{ tile_image.height }}"
+                          loading="lazy"
+                        >
+                        {% if tile_label != blank %}
+                          <div class="mini-body">
+                            <p style="margin:0;font-weight:700;font-size:14px;text-align:center">{{ tile_label }}</p>
+                          </div>
+                        {% endif %}
+                      {% if tile_link != blank %}</a>{% endif %}
+                    </article>
+                  {% endif %}
+                {% endfor %}
+                {% if tiles_rendered == 0 %}
+                  <p style="margin:0;padding:10px;color:var(--muted)">Add images and links below to show a 6-up mini grid.</p>
+                {% endif %}
+              </div>
+            {% else %}
+              {% if block.settings.image != blank %}
+                <img
+                  src="{{ block.settings.image | image_url: width: 1200 }}"
+                  alt="{{ block.settings.image.alt | escape }}"
+                  width="{{ block.settings.image.width }}"
+                  height="{{ block.settings.image.height }}"
+                  loading="lazy"
+                >
+              {% elsif coll_obj.image %}
+                <img
+                  src="{{ coll_obj.image | image_url: width: 1200 }}"
+                  alt="{{ coll_obj.image.alt | escape }}"
+                  width="{{ coll_obj.image.width }}"
+                  height="{{ coll_obj.image.height }}"
+                  loading="lazy"
+                >
+              {% endif %}
+            {% endif %}
+            <div class="copy">
+              {% if block.settings.eyebrow != blank %}<div class="eyebrow">{{ block.settings.eyebrow }}</div>{% endif %}
+              <h2>{{ block.settings.hed | default: coll_obj.title }}</h2>
+              {% if block.settings.dek != blank %}<p style="margin:0;color:var(--muted)">{{ block.settings.dek }}</p>{% endif %}
+              {% if block.settings.chips != blank %}
+                {% assign chips = block.settings.chips | split: '\n' %}
+                <div class="pill-list">
+                  {% for chip in chips %}
+                    {% if chip != blank %}<span class="chip">{{ chip }}</span>{% endif %}
+                  {% endfor %}
+                </div>
+              {% endif %}
+              <div class="actions">
+                {% if block.settings.cta_label %}<a class="btn btn-primary" href="{{ coll_obj.url | default: block.settings.cta_url }}">{{ block.settings.cta_label }}</a>{% endif %}
+                {% if block.settings.secondary_label and block.settings.show_secondary_cta %}<a class="btn btn-ghost" href="{{ block.settings.secondary_url | default: coll_obj.url }}">{{ block.settings.secondary_label }}</a>{% endif %}
+              </div>
+            </div>
+          </div>
+
+        {% when 'two_up' %}
+          {% assign block_max = block.settings.max_height | default: 0 %}
+          {% assign block_style = '' %}
+          {% if block_max > 0 %}{% assign block_style = 'max-height:' | append: block_max | append: 'px;overflow:auto;' %}{% endif %}
+          <div class="grid" style="position:relative;{{ block_style }}" {{ block.shopify_attributes }}{% if block.settings.anchor_id != blank %} id="{{ block.settings.anchor_id | escape }}"{% endif %}>
+            {% if block.settings.sticker_text != blank %}<span class="sticker">{{ block.settings.sticker_text }}</span>{% endif %}
+            <div class="grid" style="gap:8px">
+              {% if block.settings.eyebrow != blank %}<div class="eyebrow">{{ block.settings.eyebrow }}</div>{% endif %}
+              <h2>{{ block.settings.hed }}</h2>
+              {% if block.settings.dek != blank %}<p style="color:var(--muted);max-width:760px">{{ block.settings.dek }}</p>{% endif %}
+            </div>
+            <div class="two-up">
+              {% for i in (1..2) %}
+                {% assign image_setting = 'image_' | append: i %}
+                {% assign hed_setting = 'hed_' | append: i %}
+                {% assign dek_setting = 'dek_' | append: i %}
+                {% assign eyebrow_setting = 'eyebrow_' | append: i %}
+                {% assign cta_label_setting = 'cta_label_' | append: i %}
+                {% assign cta_url_setting = 'cta_url_' | append: i %}
+                {% assign sticker_setting = 'card_sticker_' | append: i %}
+                <article class="two-up-card">
+                  {% if block.settings[image_setting] != blank %}
+                    <img
+                      src="{{ block.settings[image_setting] | image_url: width: 800 }}"
+                      alt="{{ block.settings[image_setting].alt | escape }}"
+                      width="{{ block.settings[image_setting].width }}"
+                      height="{{ block.settings[image_setting].height }}"
+                      loading="lazy"
+                    >
+                  {% endif %}
+                  {% if block.settings[sticker_setting] != blank %}<span class="sticker">{{ block.settings[sticker_setting] }}</span>{% endif %}
+                  <div class="body">
+                    {% if block.settings[eyebrow_setting] != blank %}<div class="eyebrow">{{ block.settings[eyebrow_setting] }}</div>{% endif %}
+                    <h3 style="margin:0">{{ block.settings[hed_setting] }}</h3>
+                    {% if block.settings[dek_setting] != blank %}<p style="margin:0;color:var(--muted)">{{ block.settings[dek_setting] }}</p>{% endif %}
+                    {% if block.settings[cta_label_setting] != blank %}
+                      <a class="btn btn-primary" href="{{ block.settings[cta_url_setting] }}">{{ block.settings[cta_label_setting] }}</a>
+                    {% endif %}
+                  </div>
+                </article>
+              {% endfor %}
+            </div>
+          </div>
+
+        {% when 'info_row' %}
+          {% assign block_max = block.settings.max_height | default: 0 %}
+          {% assign block_style = '' %}
+          {% if block_max > 0 %}{% assign block_style = 'max-height:' | append: block_max | append: 'px;overflow:auto;' %}{% endif %}
+          <div class="grid" style="gap:12px;{{ block_style }}" {{ block.shopify_attributes }}{% if block.settings.anchor_id != blank %} id="{{ block.settings.anchor_id | escape }}"{% endif %}>
+            {% if block.settings.eyebrow != blank %}<div class="eyebrow">{{ block.settings.eyebrow }}</div>{% endif %}
+            <h2>{{ block.settings.hed }}</h2>
+            {% if block.settings.dek != blank %}<p style="color:var(--muted);max-width:760px">{{ block.settings.dek }}</p>{% endif %}
+            {% if block.settings.list != blank %}
+              {% assign list_items = block.settings.list | split: '\n' %}
+              <div class="pill-list">
+                {% for item in list_items %}
+                  {% if item != blank %}<span class="pill">{{ item }}</span>{% endif %}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+        {% when 'faq_row' %}
+          {% assign block_max = block.settings.max_height | default: 0 %}
+          {% assign block_style = '' %}
+          {% if block_max > 0 %}{% assign block_style = 'max-height:' | append: block_max | append: 'px;overflow:auto;' %}{% endif %}
+          <div class="grid" style="gap:12px;{{ block_style }}" {{ block.shopify_attributes }}{% if block.settings.anchor_id != blank %} id="{{ block.settings.anchor_id | escape }}"{% endif %}>
+            {% if block.settings.eyebrow != blank %}<div class="eyebrow">{{ block.settings.eyebrow }}</div>{% endif %}
+            <h2>{{ block.settings.hed }}</h2>
+            <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px">
+              {% for i in (1..4) %}
+                {% assign q_setting = 'q' | append: i %}
+                {% assign a_setting = 'a' | append: i %}
+                {% assign q_value = block.settings[q_setting] %}
+                {% assign a_value = block.settings[a_setting] %}
+                {% if q_value != blank %}
+                  <div class="faq">
+                    <h3>{{ q_value }}</h3>
+                    <p>{{ a_value }}</p>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+
+        {% when 'cta_band' %}
+          {% assign block_max = block.settings.max_height | default: 0 %}
+          {% assign block_style = '' %}
+          {% if block_max > 0 %}{% assign block_style = 'max-height:' | append: block_max | append: 'px;overflow:auto;' %}{% endif %}
+          <div class="feature-row" style="background:var(--accent);color:#fff;{{ block_style }}" {{ block.shopify_attributes }}{% if block.settings.anchor_id != blank %} id="{{ block.settings.anchor_id | escape }}"{% endif %}>
+            {% if block.settings.sticker_text != blank %}<span class="sticker">{{ block.settings.sticker_text }}</span>{% endif %}
+            <div class="copy">
+              {% if block.settings.eyebrow != blank %}<div class="eyebrow" style="color:#fff">{{ block.settings.eyebrow }}</div>{% endif %}
+              <h2>{{ block.settings.hed }}</h2>
+              {% if block.settings.dek != blank %}<p style="margin:0;color:#f3f4f6">{{ block.settings.dek }}</p>{% endif %}
+              <div class="actions">
+                {% if block.settings.cta_label %}<a class="btn btn-primary" style="background:#1a1208" href="{{ block.settings.cta_url }}">{{ block.settings.cta_label }}</a>{% endif %}
+                {% if block.settings.secondary_label and block.settings.show_secondary_cta %}<a class="btn btn-ghost" style="color:#fff;border-color:rgba(255,255,255,.6)" href="{{ block.settings.secondary_url }}">{{ block.settings.secondary_label }}</a>{% endif %}
+              </div>
+            </div>
+            {% if block.settings.image != blank %}
+              <img
+                src="{{ block.settings.image | image_url: width: 900 }}"
+                alt="{{ block.settings.image.alt | escape }}"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+              >
+            {% endif %}
+          </div>
+      {% endcase %}
+    {% endfor %}
+  </div>
+
+  <script>
+    (() => {
+      const root = document.getElementById('bfc-black-friday-{{ section.id }}');
+      root?.querySelectorAll('[data-countdown]')?.forEach((el) => {
+        const target = el.getAttribute('data-countdown');
+        if (!target) return;
+        const out = el.querySelector('[data-countdown-display]');
+        const label = el.getAttribute('data-countdown-label') || 'Ends in';
+        const fallback = el.getAttribute('data-countdown-fallback') || 'Ends soon';
+        let timerId;
+        const tick = () => {
+          const end = Date.parse(target);
+          if (!end || !out) return;
+          const diff = end - Date.now();
+          if (diff <= 0) {
+            out.textContent = `— ${fallback}`;
+            if (timerId) clearInterval(timerId);
+            return;
+          }
+          const d = Math.floor(diff / 86400000);
+          const h = Math.floor((diff % 86400000) / 3600000);
+          const m = Math.floor((diff % 3600000) / 60000);
+          const s = Math.floor((diff % 60000) / 1000);
+          out.textContent = `— ${label}: ${d}d ${h}h ${m}m ${s}s`;
+        };
+        tick();
+        timerId = setInterval(tick, 1000);
+      });
+
+      root?.querySelectorAll('[data-scroll-target]')?.forEach((link) => {
+        link.addEventListener('click', (event) => {
+          const targetId = link.getAttribute('data-scroll-target');
+          if (!targetId) return;
+          const targetEl = document.getElementById(targetId);
+          if (!targetEl) return;
+          event.preventDefault();
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    })();
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "BFC Black Friday",
+  "tag": "section",
+  "settings": [
+    { "type": "color", "id": "bg", "label": "Background", "default": "#f8fafc" },
+    { "type": "color", "id": "accent", "label": "Primary accent", "default": "#E2A94F" },
+    { "type": "color", "id": "secondary_accent", "label": "Secondary accent", "default": "#CA8A47" },
+    { "type": "text", "id": "sans_font", "label": "Sans font stack", "default": "Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial" },
+    { "type": "text", "id": "serif_font", "label": "Serif font stack", "default": "Georgia, Times New Roman, Times, serif" },
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 900, "max": 1400, "step": 20, "unit": "px", "default": 1200 },
+    { "type": "range", "id": "gap", "label": "Grid gap", "min": 8, "max": 40, "step": 2, "unit": "px", "default": 20 },
+    { "type": "range", "id": "section_pad", "label": "Section padding", "min": 12, "max": 80, "step": 4, "unit": "px", "default": 28 },
+    { "type": "range", "id": "section_max_height", "label": "Section max height", "min": 0, "max": 1600, "step": 20, "unit": "px", "default": 0 },
+    { "type": "range", "id": "card_image_height", "label": "Card image height", "min": 180, "max": 520, "step": 10, "unit": "px", "default": 320 },
+    { "type": "range", "id": "card_max_height", "label": "Card max height", "min": 260, "max": 760, "step": 10, "unit": "px", "default": 560 },
+    { "type": "checkbox", "id": "square_corners", "label": "Square corners", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Countdown banner",
+      "settings": [
+        { "type":"text","id":"anchor_id","label":"Anchor ID (for smooth scroll)" },
+        { "type":"text","id":"eyebrow","label":"Eyebrow","default":"Black Friday" },
+        { "type":"text","id":"message","label":"Message","default":"Save up to 50% sitewide" },
+        { "type":"text","id":"countdown_label","label":"Countdown label","default":"Ends in" },
+        { "type":"text","id":"countdown_fallback","label":"Fallback text","default":"48 hours" },
+        { "type":"text","id":"countdown_iso","label":"Countdown ISO date","default":"2024-11-30T05:00:00Z" },
+        { "type":"text","id":"cta_label","label":"CTA label","default":"Shop deals" },
+        { "type":"url","id":"cta_url","label":"CTA link" },
+        { "type":"range","id":"max_height","label":"Max height (px, 0 = auto)","min":0,"max":1600,"step":20,"default":0 }
+      ]
+    },
+    {
+      "type": "hero",
+      "name": "Hero",
+      "settings": [
+        { "type":"text","id":"anchor_id","label":"Anchor ID (for smooth scroll)" },
+        { "type":"image_picker","id":"image","label":"Background image" },
+        { "type":"checkbox","id":"full_bleed","label":"Full-bleed (remove top padding)","default":false },
+        { "type":"text","id":"eyebrow","label":"Eyebrow","default":"Black Friday event" },
+        { "type":"text","id":"hed","label":"Headline","default":"Doorbusters all weekend" },
+        { "type":"textarea","id":"dek","label":"Dek","default":"Curated picks, limited-time bundles, and exclusive reader offers inspired by our NYT-style editorial layouts." },
+        { "type":"text","id":"cta_label","label":"Primary CTA label","default":"Shop the sale" },
+        { "type":"url","id":"cta_url","label":"Primary CTA link" },
+        { "type":"text","id":"cta_scroll_target","label":"Primary scroll target ID (overrides link when set)" },
+        { "type":"text","id":"secondary_label","label":"Secondary CTA label","default":"View gift guide" },
+        { "type":"url","id":"secondary_url","label":"Secondary CTA link" },
+        { "type":"text","id":"secondary_scroll_target","label":"Secondary scroll target ID" },
+        { "type":"checkbox","id":"show_secondary_cta","label":"Show secondary button","default":true },
+        { "type":"text","id":"cta_3_label","label":"Third CTA label" },
+        { "type":"url","id":"cta_3_url","label":"Third CTA link" },
+        { "type":"text","id":"cta_3_scroll_target","label":"Third CTA scroll target ID" },
+        { "type":"text","id":"cta_4_label","label":"Fourth CTA label" },
+        { "type":"url","id":"cta_4_url","label":"Fourth CTA link" },
+        { "type":"text","id":"cta_4_scroll_target","label":"Fourth CTA scroll target ID" },
+        { "type":"range","id":"max_height","label":"Max height (px, 0 = auto)","min":0,"max":1600,"step":20,"default":0 }
+      ]
+    },
+    {
+      "type": "collection_grid",
+      "name": "Collection grid",
+      "settings": [
+        { "type":"text","id":"anchor_id","label":"Anchor ID (for smooth scroll)" },
+        { "type":"collection","id":"collection","label":"Collection" },
+        { "type":"select","id":"product_source","label":"Product source","options":[{"value":"collection","label":"Use collection"},{"value":"manual","label":"Select products"}],"default":"collection" },
+        { "type":"text","id":"eyebrow","label":"Eyebrow","default":"Top picks" },
+        { "type":"text","id":"hed","label":"Headline","default":"Reader-loved bestsellers" },
+        { "type":"textarea","id":"dek","label":"Dek","default":"Mix NYT-inspired storytelling with product confidence. Swap collections to instantly restyle the grid." },
+        { "type":"text","id":"sticker_text","label":"Sticker text" },
+        { "type":"range","id":"limit","label":"Product limit","min":2,"max":12,"step":1,"default":6 },
+        { "type":"checkbox","id":"show_vendor","label":"Show vendor","default":false },
+        { "type":"checkbox","id":"show_badge","label":"Show sale badge when discounted","default":true },
+        { "type":"text","id":"badge_label","label":"Badge label","default":"Sale" },
+        { "type":"product","id":"product_1","label":"Product 1" },
+        { "type":"product","id":"product_2","label":"Product 2" },
+        { "type":"product","id":"product_3","label":"Product 3" },
+        { "type":"product","id":"product_4","label":"Product 4" },
+        { "type":"product","id":"product_5","label":"Product 5" },
+        { "type":"product","id":"product_6","label":"Product 6" },
+        { "type":"product","id":"product_7","label":"Product 7" },
+        { "type":"product","id":"product_8","label":"Product 8" },
+        { "type":"range","id":"max_height","label":"Max height (px, 0 = auto)","min":0,"max":1600,"step":20,"default":0 }
+      ]
+    },
+    {
+      "type": "featured_product",
+      "name": "Featured product",
+      "settings": [
+        { "type":"text","id":"anchor_id","label":"Anchor ID (for smooth scroll)" },
+        { "type":"product","id":"product","label":"Product" },
+        { "type":"checkbox","id":"enable_second_product","label":"Show second product","default":false },
+        { "type":"product","id":"product_2","label":"Second product" },
+        { "type":"text","id":"eyebrow","label":"Eyebrow","default":"Doorbuster" },
+        { "type":"text","id":"hed","label":"Headline","default":"The must-grab pick" },
+        { "type":"textarea","id":"dek","label":"Dek" },
+        { "type":"text","id":"hed_2","label":"Second headline override" },
+        { "type":"textarea","id":"dek_2","label":"Second dek" },
+        { "type":"checkbox","id":"use_product_description_fallback","label":"Use product description when dek is empty","default":true },
+        { "type":"text","id":"sticker_text","label":"Sticker text" },
+        { "type":"range","id":"feature_width","label":"Max width (px, 0 = auto)","min":0,"max":1600,"step":20,"unit":"px","default":1100 },
+        { "type":"select","id":"image_side","label":"Image side","options":[{"value":"left","label":"Left"},{"value":"right","label":"Right"}],"default":"left" },
+        { "type":"text","id":"cta_label","label":"CTA label","default":"Shop now" },
+        { "type":"text","id":"secondary_label","label":"Secondary label","default":"Learn more" },
+        { "type":"url","id":"secondary_url","label":"Secondary link" },
+        { "type":"checkbox","id":"show_secondary_cta","label":"Show secondary button","default":true },
+        { "type":"range","id":"max_height","label":"Max height (px, 0 = auto)","min":0,"max":1600,"step":20,"default":0 }
+      ]
+    },
+    {
+      "type": "product_spotlights",
+      "name": "Product spotlights",
+      "settings": [
+        { "type":"text","id":"anchor_id","label":"Anchor ID (for smooth scroll)" },
+        { "type":"text","id":"eyebrow","label":"Eyebrow","default":"Staff favorites" },
+        { "type":"text","id":"hed","label":"Headline","default":"Spotlight picks" },
+        { "type":"textarea","id":"dek","label":"Dek","default":"Rotate special drops or bundles with alternating imagery." },
+        { "type":"checkbox","id":"alt_image_side","label":"Alternate image side","default":true },
+        { "type":"checkbox","id":"show_vendor","label":"Show vendor","default":false },
+        { "type":"checkbox","id":"show_badge","label":"Show sale badge when discounted","default":true },
+        { "type":"text","id":"badge_label","label":"Badge label","default":"Deal" },
+        { "type":"text","id":"body_copy","label":"Fallback body copy" },
+        { "type":"checkbox","id":"use_product_description_fallback","label":"Use product description when empty","default":true },
+        { "type":"text","id":"sticker_text","label":"Sticker text" },
+        { "type":"text","id":"cta_label","label":"CTA label","default":"Shop" },
+        { "type":"text","id":"secondary_label","label":"Secondary label","default":"Details" },
+        { "type":"checkbox","id":"show_secondary_cta","label":"Show secondary button","default":true },
+        { "type":"product","id":"product_1","label":"Product 1" },
+        { "type":"product","id":"product_2","label":"Product 2" },
+        { "type":"product","id":"product_3","label":"Product 3" },
+        { "type":"range","id":"max_height","label":"Max height (px, 0 = auto)","min":0,"max":1600,"step":20,"default":0 }
+      ]
+    },
+    {
+      "type": "collection_highlight",
+      "name": "Collection highlight",
+      "settings": [
+        { "type":"text","id":"anchor_id","label":"Anchor ID (for smooth scroll)" },
+        { "type":"collection","id":"collection","label":"Collection" },
+        { "type":"select","id":"layout_style","label":"Layout","options":[{"value":"single_image","label":"Single image"},{"value":"product_grid","label":"6-image grid"}],"default":"single_image" },
+        { "type":"image_picker","id":"image","label":"Override image" },
+        { "type":"text","id":"eyebrow","label":"Eyebrow","default":"Curated" },
+        { "type":"text","id":"hed","label":"Headline","default":"Collection highlight" },
+        { "type":"textarea","id":"dek","label":"Dek","default":"A more editorial callout for a single collection." },
+        { "type":"text","id":"sticker_text","label":"Sticker text" },
+        { "type":"textarea","id":"chips","label":"Chips (one per line)","default":"Limited drop\nShips fast\nGreat for gifting" },
+        { "type":"text","id":"cta_label","label":"CTA label","default":"Explore" },
+        { "type":"url","id":"cta_url","label":"CTA link" },
+        { "type":"text","id":"secondary_label","label":"Secondary label","default":"View all" },
+        { "type":"url","id":"secondary_url","label":"Secondary link" },
+        { "type":"checkbox","id":"show_secondary_cta","label":"Show secondary button","default":true },
+        { "type":"range","id":"mini_image_height","label":"Mini tile height","min":60,"max":240,"step":10,"unit":"px","default":120 },
+        { "type":"image_picker","id":"tile_image_1","label":"Tile 1 image" },
+        { "type":"text","id":"tile_label_1","label":"Tile 1 label","default":"Tile one" },
+        { "type":"url","id":"tile_link_1","label":"Tile 1 link" },
+        { "type":"image_picker","id":"tile_image_2","label":"Tile 2 image" },
+        { "type":"text","id":"tile_label_2","label":"Tile 2 label","default":"Tile two" },
+        { "type":"url","id":"tile_link_2","label":"Tile 2 link" },
+        { "type":"image_picker","id":"tile_image_3","label":"Tile 3 image" },
+        { "type":"text","id":"tile_label_3","label":"Tile 3 label","default":"Tile three" },
+        { "type":"url","id":"tile_link_3","label":"Tile 3 link" },
+        { "type":"image_picker","id":"tile_image_4","label":"Tile 4 image" },
+        { "type":"text","id":"tile_label_4","label":"Tile 4 label","default":"Tile four" },
+        { "type":"url","id":"tile_link_4","label":"Tile 4 link" },
+        { "type":"image_picker","id":"tile_image_5","label":"Tile 5 image" },
+        { "type":"text","id":"tile_label_5","label":"Tile 5 label","default":"Tile five" },
+        { "type":"url","id":"tile_link_5","label":"Tile 5 link" },
+        { "type":"image_picker","id":"tile_image_6","label":"Tile 6 image" },
+        { "type":"text","id":"tile_label_6","label":"Tile 6 label","default":"Tile six" },
+        { "type":"url","id":"tile_link_6","label":"Tile 6 link" },
+        { "type":"range","id":"max_height","label":"Max height (px, 0 = auto)","min":0,"max":1600,"step":20,"default":0 }
+      ]
+    },
+    {
+      "type": "two_up",
+      "name": "Two-up promo",
+      "settings": [
+        { "type":"text","id":"anchor_id","label":"Anchor ID (for smooth scroll)" },
+        { "type":"text","id":"eyebrow","label":"Eyebrow","default":"Featured" },
+        { "type":"text","id":"hed","label":"Headline","default":"Double spotlight" },
+        { "type":"textarea","id":"dek","label":"Dek","default":"Highlight two offers or categories side by side." },
+        { "type":"text","id":"sticker_text","label":"Block sticker text" },
+        { "type":"image_picker","id":"image_1","label":"Left image" },
+        { "type":"text","id":"card_sticker_1","label":"Left sticker text" },
+        { "type":"text","id":"eyebrow_1","label":"Left eyebrow","default":"Pick one" },
+        { "type":"text","id":"hed_1","label":"Left headline","default":"Offer one" },
+        { "type":"textarea","id":"dek_1","label":"Left dek","default":"Tell the story for this spotlight." },
+        { "type":"text","id":"cta_label_1","label":"Left CTA label","default":"Shop" },
+        { "type":"url","id":"cta_url_1","label":"Left CTA link" },
+        { "type":"image_picker","id":"image_2","label":"Right image" },
+        { "type":"text","id":"card_sticker_2","label":"Right sticker text" },
+        { "type":"text","id":"eyebrow_2","label":"Right eyebrow","default":"Pick two" },
+        { "type":"text","id":"hed_2","label":"Right headline","default":"Offer two" },
+        { "type":"textarea","id":"dek_2","label":"Right dek","default":"Pair with a complementary feature." },
+        { "type":"text","id":"cta_label_2","label":"Right CTA label","default":"Explore" },
+        { "type":"url","id":"cta_url_2","label":"Right CTA link" },
+        { "type":"range","id":"max_height","label":"Max height (px, 0 = auto)","min":0,"max":1600,"step":20,"default":0 }
+      ]
+    },
+    {
+      "type": "info_row",
+      "name": "Value props / list",
+      "settings": [
+        { "type":"text","id":"anchor_id","label":"Anchor ID (for smooth scroll)" },
+        { "type":"text","id":"eyebrow","label":"Eyebrow","default":"Why shop with us" },
+        { "type":"text","id":"hed","label":"Headline","default":"NYT-inspired layout, ecommerce-ready" },
+        { "type":"textarea","id":"dek","label":"Dek","default":"Pair editorial storytelling with commerce intent for your Black Friday run." },
+        { "type":"textarea","id":"list","label":"Pills (one per line)","default":"Free shipping over $50\nExtended returns through January\nNYT-styled layouts\nExclusive bundles" },
+        { "type":"range","id":"max_height","label":"Max height (px, 0 = auto)","min":0,"max":1600,"step":20,"default":0 }
+      ]
+    },
+    {
+      "type": "faq_row",
+      "name": "FAQs",
+      "settings": [
+        { "type":"text","id":"anchor_id","label":"Anchor ID (for smooth scroll)" },
+        { "type":"text","id":"eyebrow","label":"Eyebrow","default":"Need to know" },
+        { "type":"text","id":"hed","label":"Headline","default":"Black Friday FAQs" },
+        { "type":"text","id":"q1","label":"Question 1","default":"When do deals end?" },
+        { "type":"textarea","id":"a1","label":"Answer 1","default":"Most offers end Sunday at midnight, with a few Monday-only surprises." },
+        { "type":"text","id":"q2","label":"Question 2","default":"Do discounts stack?" },
+        { "type":"textarea","id":"a2","label":"Answer 2","default":"Sitewide promos auto-apply; extra codes stack on full-price items only." },
+        { "type":"text","id":"q3","label":"Question 3","default":"How fast do you ship?" },
+        { "type":"textarea","id":"a3","label":"Answer 3","default":"Orders leave our warehouse within 1-2 business days." },
+        { "type":"text","id":"q4","label":"Question 4","default":"Giftable packaging?" },
+        { "type":"textarea","id":"a4","label":"Answer 4","default":"Add a gift note at checkout and we’ll include tissue + a notecard." },
+        { "type":"range","id":"max_height","label":"Max height (px, 0 = auto)","min":0,"max":1600,"step":20,"default":0 }
+      ]
+    },
+    {
+      "type": "cta_band",
+      "name": "CTA band",
+      "settings": [
+        { "type":"text","id":"anchor_id","label":"Anchor ID (for smooth scroll)" },
+        { "type":"text","id":"eyebrow","label":"Eyebrow","default":"Last call" },
+        { "type":"text","id":"hed","label":"Headline","default":"Deals disappear at midnight" },
+        { "type":"textarea","id":"dek","label":"Dek","default":"Secure your picks before the timer hits zero." },
+        { "type":"text","id":"cta_label","label":"Primary CTA label","default":"Shop bestsellers" },
+        { "type":"url","id":"cta_url","label":"Primary CTA link" },
+        { "type":"text","id":"secondary_label","label":"Secondary CTA label","default":"View all collections" },
+        { "type":"url","id":"secondary_url","label":"Secondary CTA link" },
+        { "type":"text","id":"sticker_text","label":"Sticker text" },
+        { "type":"image_picker","id":"image","label":"Side image" },
+        { "type":"checkbox","id":"show_secondary_cta","label":"Show secondary button","default":true },
+        { "type":"range","id":"max_height","label":"Max height (px, 0 = auto)","min":0,"max":1600,"step":20,"default":0 }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Black Friday",
+      "blocks": [
+        { "type": "banner" },
+        { "type": "hero" },
+        { "type": "collection_grid" },
+        { "type": "featured_product" },
+        { "type": "product_spotlights" },
+        { "type": "collection_highlight" },
+        { "type": "two_up" },
+        { "type": "info_row" },
+        { "type": "faq_row" },
+        { "type": "cta_band" }
+      ]
+    }
+  ]
+}
+{% endschema %}

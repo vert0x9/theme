@@ -1,0 +1,1027 @@
+{% comment %}
+  BFC — Tabs + Optional Image + Optional Gallery + Specs Grid (15 items)
+
+  Updates:
+  - Specs grid is 2 columns on desktop for even highlights (2 per row).
+  - Added "Max specs shown (cap)" slider per tab block (specs_max_shown).
+    - specs_count = how many you want available
+    - specs_max_shown = cap for how many actually render
+{% endcomment %}
+
+<section
+  id="bfc-tabs-{{ section.id }}"
+  class="bfc-tabs{% if section.settings.enable_background %} has-bg{% endif %}"
+  {% if section.settings.enable_background %}
+    style="background-color: {{ section.settings.background_color }};"
+  {% endif %}
+>
+  <div class="bfc-tabs__inner">
+    {% if section.settings.show_heading and section.settings.heading != blank %}
+      <h2 class="bfc-tabs__heading">{{ section.settings.heading | escape }}</h2>
+    {% endif %}
+
+    <div
+      class="bfc-tabs__nav-wrap{% if section.settings.sticky_tabs %} is-sticky{% endif %}"
+      {% if section.settings.sticky_tabs %}style="top: {{ section.settings.sticky_offset }}px;"{% endif %}
+    >
+      <div class="bfc-tabs__nav" role="tablist" aria-label="{{ section.settings.aria_label | escape }}">
+        {% for block in section.blocks %}
+          {% assign is_active = forloop.first %}
+          <button
+            class="bfc-tabs__tab{% if is_active %} is-active{% endif %}"
+            type="button"
+            role="tab"
+            aria-selected="{% if is_active %}true{% else %}false{% endif %}"
+            aria-controls="bfc-tabpanel-{{ section.id }}-{{ block.id }}"
+            id="bfc-tab-{{ section.id }}-{{ block.id }}"
+            tabindex="{% if is_active %}0{% else %}-1{% endif %}"
+            data-tab-target="bfc-tabpanel-{{ section.id }}-{{ block.id }}"
+            {{ block.shopify_attributes }}
+          >
+            <span class="bfc-tabs__tabtext">{{ block.settings.tab_label | default: 'Tab' | escape }}</span>
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="bfc-tabs__panels">
+      {% for block in section.blocks %}
+        {% assign is_active = forloop.first %}
+        {% assign has_image = false %}
+        {% if block.settings.image and block.settings.image_position != 'off' %}
+          {% assign has_image = true %}
+        {% endif %}
+
+        {% assign has_gallery = false %}
+        {% if block.settings.gallery_enabled %}
+          {% assign has_gallery = true %}
+        {% endif %}
+
+        <div
+          id="bfc-tabpanel-{{ section.id }}-{{ block.id }}"
+          class="bfc-tabs__panel"
+          role="tabpanel"
+          aria-labelledby="bfc-tab-{{ section.id }}-{{ block.id }}"
+          {% unless is_active %}hidden{% endunless %}
+        >
+          {%- comment -%} Optional gallery (up to 10 images) {%- endcomment -%}
+          {% if block.settings.gallery_enabled %}
+            <div class="bfc-tabs__gallery" style="--bfc-gallery-cols: {{ block.settings.gallery_cols }};">
+              {% for i in (1..10) %}
+                {% capture g_key %}g{{ i }}{% endcapture %}
+                {% capture gc_key %}g{{ i }}_caption{% endcapture %}
+                {% assign g_img = block.settings[g_key] %}
+                {% if g_img %}
+                  {% assign g_full = g_img | image_url: width: 2400 %}
+                  <figure
+                    class="bfc-tabs__gitem"
+                    data-bfc-gallery-item="true"
+                    data-bfc-full="{{ g_full }}"
+                    data-bfc-alt="{{ g_img.alt | default: '' | escape }}"
+                    data-bfc-caption="{% if block.settings[gc_key] != blank %}{{ block.settings[gc_key] | escape }}{% endif %}"
+                  >
+                    <button
+                      type="button"
+                      class="bfc-tabs__gbtn"
+                      aria-label="Open image{% if g_img.alt != blank %}: {{ g_img.alt | escape }}{% endif %}"
+                    >
+                      {{ g_img | image_url: width: 1800 | image_tag: loading: 'lazy', class: 'bfc-tabs__gimg', alt: g_img.alt }}
+                    </button>
+                    {% if block.settings[gc_key] != blank %}
+                      <figcaption class="bfc-tabs__gcap">{{ block.settings[gc_key] | escape }}</figcaption>
+                    {% endif %}
+                  </figure>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <div class="bfc-tabs__grid{% if has_image %} has-image{% endif %}">
+            {% if has_image and block.settings.image_position == 'left' %}
+              {% assign single_full = block.settings.image | image_url: width: 2400 %}
+              <figure
+                class="bfc-tabs__media"
+                data-bfc-single-item="true"
+                data-bfc-full="{{ single_full }}"
+                data-bfc-alt="{{ block.settings.image_alt | escape }}"
+                data-bfc-caption="{% if block.settings.image_caption != blank %}{{ block.settings.image_caption | escape }}{% endif %}"
+              >
+                <button
+                  type="button"
+                  class="bfc-tabs__imgbtn"
+                  aria-label="Open image{% if block.settings.image_alt != blank %}: {{ block.settings.image_alt | escape }}{% endif %}"
+                >
+                  {{ block.settings.image | image_url: width: 1800 | image_tag: loading: 'lazy', class: 'bfc-tabs__img', alt: block.settings.image_alt }}
+                </button>
+                {% if block.settings.image_caption != blank %}
+                  <figcaption class="bfc-tabs__caption">{{ block.settings.image_caption | escape }}</figcaption>
+                {% endif %}
+              </figure>
+            {% endif %}
+
+            {% if block.settings.col1_heading != blank or block.settings.col1_text != blank %}
+              <div class="bfc-tabs__col bfc-tabs__col--1">
+                {% if block.settings.col1_heading != blank %}
+                  <div class="bfc-tabs__col-title">{{ block.settings.col1_heading | escape }}</div>
+                {% endif %}
+                {% if block.settings.col1_text != blank %}
+                  <div class="bfc-tabs__col-body rte">{{ block.settings.col1_text }}</div>
+                {% endif %}
+              </div>
+            {% endif %}
+
+            {% if block.settings.col2_heading != blank or block.settings.col2_text != blank %}
+              <div class="bfc-tabs__col bfc-tabs__col--2">
+                {% if block.settings.col2_heading != blank %}
+                  <div class="bfc-tabs__col-title">{{ block.settings.col2_heading | escape }}</div>
+                {% endif %}
+                {% if block.settings.col2_text != blank %}
+                  <div class="bfc-tabs__col-body rte">{{ block.settings.col2_text }}</div>
+                {% endif %}
+              </div>
+            {% endif %}
+
+            {% if section.settings.desktop_cols == '3' %}
+              {% if block.settings.col3_heading != blank or block.settings.col3_text != blank %}
+                <div class="bfc-tabs__col bfc-tabs__col--3">
+                  {% if block.settings.col3_heading != blank %}
+                    <div class="bfc-tabs__col-title">{{ block.settings.col3_heading | escape }}</div>
+                  {% endif %}
+                  {% if block.settings.col3_text != blank %}
+                    <div class="bfc-tabs__col-body rte">{{ block.settings.col3_text }}</div>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endif %}
+
+            {% if has_image and block.settings.image_position == 'right' %}
+              {% assign single_full = block.settings.image | image_url: width: 2400 %}
+              <figure
+                class="bfc-tabs__media"
+                data-bfc-single-item="true"
+                data-bfc-full="{{ single_full }}"
+                data-bfc-alt="{{ block.settings.image_alt | escape }}"
+                data-bfc-caption="{% if block.settings.image_caption != blank %}{{ block.settings.image_caption | escape }}{% endif %}"
+              >
+                <button
+                  type="button"
+                  class="bfc-tabs__imgbtn"
+                  aria-label="Open image{% if block.settings.image_alt != blank %}: {{ block.settings.image_alt | escape }}{% endif %}"
+                >
+                  {{ block.settings.image | image_url: width: 1800 | image_tag: loading: 'lazy', class: 'bfc-tabs__img', alt: block.settings.image_alt }}
+                </button>
+                {% if block.settings.image_caption != blank %}
+                  <figcaption class="bfc-tabs__caption">{{ block.settings.image_caption | escape }}</figcaption>
+                {% endif %}
+              </figure>
+            {% endif %}
+          </div>
+
+          {% if block.settings.specs_enabled %}
+            {% assign specs_count = block.settings.specs_count | default: 0 %}
+            {% assign specs_max_shown = block.settings.specs_max_shown | default: 15 %}
+
+            {% if block.settings.specs_desc != blank or specs_count > 0 %}
+              <div class="bfc-tabs__specs">
+                {% if block.settings.specs_desc != blank %}
+                  <div class="bfc-tabs__specs-desc rte">{{ block.settings.specs_desc }}</div>
+                {% endif %}
+
+                {% if specs_count > 0 %}
+                  {% assign specs_to_render = specs_count %}
+                  {% if specs_to_render > specs_max_shown %}
+                    {% assign specs_to_render = specs_max_shown %}
+                  {% endif %}
+
+                  <div class="bfc-tabs__specs-grid" role="list" aria-label="Specs">
+                    {% for i in (1..15) %}
+                      {% if i <= specs_to_render %}
+                        {% capture k_key %}s{{ i }}_k{% endcapture %}
+                        {% capture v_key %}s{{ i }}_v{% endcapture %}
+                        <div class="bfc-tabs__spec" role="listitem">
+                          <div class="bfc-tabs__spec-k">{{ block.settings[k_key] | escape }}</div>
+                          <div class="bfc-tabs__spec-v">{{ block.settings[v_key] | escape }}</div>
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <style>
+    #bfc-tabs-{{ section.id }}{
+      background: transparent;
+
+      --bfc-max: {{ section.settings.max_width }}px;
+      --bfc-pad-y: {{ section.settings.pad_y }}px;
+      --bfc-pad-x: {{ section.settings.pad_x }}px;
+      --bfc-gap: {{ section.settings.column_gap }}px;
+
+      --bfc-rule: rgba(0,0,0,0.18);
+      --bfc-tab-inactive: rgba(0,0,0,0.45);
+      --bfc-tab-active: rgba(0,0,0,0.92);
+
+      --bfc-body-font: var(--font-body-family, var(--font-body-family-1, inherit));
+      --bfc-heading-font: var(--font-heading-family, var(--font-heading-family-1, inherit));
+
+      --bfc-body-size: var(--font-size-base, 14px);
+      --bfc-label-size: var(--font-size-small, 12px);
+      --bfc-tab-size: var(--font-size-h2, 34px);
+    }
+
+    #bfc-tabs-{{ section.id }} .bfc-tabs__inner{
+      max-width: var(--bfc-max);
+      margin: 0 auto;
+      padding: var(--bfc-pad-y) var(--bfc-pad-x);
+      font-family: var(--bfc-body-font);
+      font-size: var(--bfc-body-size);
+    }
+
+    #bfc-tabs-{{ section.id }} .bfc-tabs__heading{
+      font-family: var(--bfc-heading-font);
+      font-size: calc(var(--bfc-tab-size) * 0.9);
+      line-height: 1.05;
+      font-weight: 400;
+      margin: 0 0 14px 0;
+    }
+
+    #bfc-tabs-{{ section.id }} .bfc-tabs__nav-wrap{ position:relative; z-index:2; }
+    #bfc-tabs-{{ section.id }} .bfc-tabs__nav-wrap.is-sticky{ position:sticky; background:transparent; }
+
+    #bfc-tabs-{{ section.id }} .bfc-tabs__nav{
+      display:flex;
+      align-items:flex-end;
+      gap: 84px;
+      padding: 6px 0 12px 0;
+      border-bottom: 1px solid var(--bfc-rule);
+      margin-bottom: 18px;
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    #bfc-tabs-{{ section.id }} .bfc-tabs__tab{
+      appearance:none;
+      background:transparent;
+      border:0;
+      padding:0;
+      margin:0;
+      cursor:pointer;
+      border-radius:0;
+      white-space:nowrap;
+
+      font-family: var(--bfc-heading-font);
+      font-size: var(--bfc-tab-size);
+      line-height: 1.05;
+      font-weight: 400;
+      color: var(--bfc-tab-inactive);
+    }
+
+    #bfc-tabs-{{ section.id }} .bfc-tabs__tab.is-active{ color: var(--bfc-tab-active); }
+
+    #bfc-tabs-{{ section.id }} .bfc-tabs__tabtext{
+      display:inline-block;
+      padding-bottom: 2px;
+      border-bottom: 0;
+    }
+    #bfc-tabs-{{ section.id }} .bfc-tabs__tab.is-active .bfc-tabs__tabtext{
+      border-bottom: 1px solid currentColor;
+    }
+
+    /* Gallery (masonry-style auto packing) */
+    #bfc-tabs-{{ section.id }} .bfc-tabs__gallery{
+      display: grid;
+      grid-template-columns: repeat(var(--bfc-gallery-cols, 3), minmax(0, 1fr));
+      gap: 12px;
+      margin: 0 0 18px 0;
+      align-items: start;
+
+      grid-auto-flow: dense;
+      grid-auto-rows: 8px;
+      align-content: start;
+    }
+    #bfc-tabs-{{ section.id }} .bfc-tabs__gitem{ margin: 0; }
+    #bfc-tabs-{{ section.id }} .bfc-tabs__gbtn{
+      padding: 0;
+      margin: 0;
+      border: 0;
+      background: transparent;
+      width: 100%;
+      display: block;
+      cursor: zoom-in;
+      border-radius: 0;
+    }
+    #bfc-tabs-{{ section.id }} .bfc-tabs__gbtn:focus-visible,
+    #bfc-tabs-{{ section.id }} .bfc-tabs__imgbtn:focus-visible{
+      outline: 2px solid rgba(0,0,0,.6);
+      outline-offset: 3px;
+    }
+    #bfc-tabs-{{ section.id }} .bfc-tabs__gimg{
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 0;
+      pointer-events: none;
+    }
+    #bfc-tabs-{{ section.id }} .bfc-tabs__gcap{
+      margin-top: 8px;
+      font-size: var(--bfc-label-size);
+      opacity: 0.75;
+    }
+
+    /* Desktop grid */
+    #bfc-tabs-{{ section.id }} .bfc-tabs__grid{
+      display:grid;
+      grid-template-columns: repeat({{ section.settings.desktop_cols }}, minmax(0, 1fr));
+      gap: var(--bfc-gap);
+      align-items:start;
+    }
+
+    #bfc-tabs-{{ section.id }} .bfc-tabs__media{ margin: 0; }
+    #bfc-tabs-{{ section.id }} .bfc-tabs__imgbtn{
+      padding: 0;
+      margin: 0;
+      border: 0;
+      background: transparent;
+      width: 100%;
+      display: block;
+      cursor: zoom-in;
+      border-radius: 0;
+    }
+    #bfc-tabs-{{ section.id }} .bfc-tabs__img{
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 0;
+      pointer-events: none;
+    }
+    #bfc-tabs-{{ section.id }} .bfc-tabs__caption{
+      margin-top: 8px;
+      font-size: var(--bfc-label-size);
+      opacity: 0.75;
+    }
+
+    #bfc-tabs-{{ section.id }} .bfc-tabs__col-title{
+      font-size: var(--bfc-label-size);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin: 0 0 10px 0;
+    }
+    #bfc-tabs-{{ section.id }} .bfc-tabs__col-body{
+      font-size: var(--bfc-body-size);
+      line-height: 1.6;
+      color: rgba(0,0,0,0.85);
+      min-width: 0;
+    }
+
+    #bfc-tabs-{{ section.id }} .rte > *:first-child { margin-top:0; }
+    #bfc-tabs-{{ section.id }} .rte > *:last-child { margin-bottom:0; }
+
+    /* Specs */
+    #bfc-tabs-{{ section.id }} .bfc-tabs__specs{ margin-top: 18px; }
+    #bfc-tabs-{{ section.id }} .bfc-tabs__specs-desc{ margin: 0 0 12px 0; }
+
+    /* UPDATED: 2 columns on desktop for even highlights */
+    #bfc-tabs-{{ section.id }} .bfc-tabs__specs-grid{
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    #bfc-tabs-{{ section.id }} .bfc-tabs__spec{
+      border: 1px solid rgba(0,0,0,.14);
+      padding: 10px;
+      display: grid;
+      grid-template-rows: auto auto;
+      row-gap: 2px;
+      height: 68px;
+      box-sizing: border-box;
+      overflow: hidden;
+      border-radius: 0;
+    }
+
+    #bfc-tabs-{{ section.id }} .bfc-tabs__spec-k{
+      font-size: 11px;
+      line-height: 1.1;
+      opacity: .7;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 600;
+    }
+
+    #bfc-tabs-{{ section.id }} .bfc-tabs__spec-v{
+      font-size: 13px;
+      line-height: 1.15;
+      white-space: normal;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+
+    /* MOBILE: smaller tab titles + STACK content (no columns) */
+    @media (max-width: 900px){
+      #bfc-tabs-{{ section.id }}{
+        --bfc-tab-size: 18px;
+        --bfc-body-size: 14px;
+        --bfc-label-size: 11px;
+      }
+
+      #bfc-tabs-{{ section.id }} .bfc-tabs__nav{
+        gap: 16px;
+        padding-bottom: 10px;
+      }
+
+      /* Stack everything */
+      #bfc-tabs-{{ section.id }} .bfc-tabs__grid{
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      /* Gallery 2 cols on mobile */
+      #bfc-tabs-{{ section.id }} .bfc-tabs__gallery{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 749px){
+      #bfc-tabs-{{ section.id }}{
+        --bfc-tab-size: 16px;
+        --bfc-body-size: 13.5px;
+        --bfc-label-size: 11px;
+      }
+
+      #bfc-tabs-{{ section.id }} .bfc-tabs__specs-grid{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      #bfc-tabs-{{ section.id }} .bfc-tabs__spec{ padding: 8px; height: 62px; }
+      #bfc-tabs-{{ section.id }} .bfc-tabs__spec-k{ font-size: 10px; }
+      #bfc-tabs-{{ section.id }} .bfc-tabs__spec-v{ font-size: 12px; }
+    }
+
+    @media (max-width: 360px){
+      #bfc-tabs-{{ section.id }}{
+        --bfc-tab-size: 15px;
+      }
+
+      #bfc-tabs-{{ section.id }} .bfc-tabs__gallery{
+        grid-template-columns: 1fr;
+      }
+
+      #bfc-tabs-{{ section.id }} .bfc-tabs__specs-grid{
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Fullscreen lightbox */
+    #bfc-lightbox-{{ section.id }}{
+      position: fixed;
+      inset: 0;
+      z-index: 999999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.92);
+      touch-action: pan-y;
+    }
+    #bfc-lightbox-{{ section.id }}[data-open="true"]{ display: flex; }
+
+    #bfc-lightbox-{{ section.id }} .bfc-lb__stage{
+      position: relative;
+      width: min(96vw, 1400px);
+      height: min(88vh, 900px);
+      display: grid;
+      grid-template-rows: 1fr auto;
+      gap: 12px;
+    }
+
+    #bfc-lightbox-{{ section.id }} .bfc-lb__imgwrap{
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    #bfc-lightbox-{{ section.id }} img.bfc-lb__img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+      border-radius: 0;
+    }
+
+    #bfc-lightbox-{{ section.id }} .bfc-lb__meta{
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: flex-start;
+      color: rgba(255,255,255,.92);
+      font-family: var(--bfc-body-font);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    #bfc-lightbox-{{ section.id }} .bfc-lb__caption{ opacity: .9; max-width: 70ch; }
+    #bfc-lightbox-{{ section.id }} .bfc-lb__count{ opacity: .75; white-space: nowrap; }
+
+    #bfc-lightbox-{{ section.id }} .bfc-lb__btn{
+      position: absolute;
+      top: 12px;
+      border: 0;
+      background: rgba(255,255,255,.12);
+      color: rgba(255,255,255,.95);
+      padding: 10px 12px;
+      cursor: pointer;
+      font: inherit;
+      border-radius: 0;
+    }
+    #bfc-lightbox-{{ section.id }} .bfc-lb__btn:hover{ background: rgba(255,255,255,.18); }
+
+    #bfc-lightbox-{{ section.id }} .bfc-lb__close{ right: 12px; }
+    #bfc-lightbox-{{ section.id }} .bfc-lb__prev,
+    #bfc-lightbox-{{ section.id }} .bfc-lb__next{
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 12px 14px;
+    }
+    #bfc-lightbox-{{ section.id }} .bfc-lb__prev{ left: 12px; }
+    #bfc-lightbox-{{ section.id }} .bfc-lb__next{ right: 12px; }
+
+    @media (max-width: 749px){
+      #bfc-lightbox-{{ section.id }} .bfc-lb__stage{
+        width: 94vw;
+        height: 86vh;
+      }
+      #bfc-lightbox-{{ section.id }} .bfc-lb__prev,
+      #bfc-lightbox-{{ section.id }} .bfc-lb__next{
+        padding: 10px 12px;
+      }
+    }
+  </style>
+
+  <script>
+    (function(){
+      var root = document.getElementById("bfc-tabs-{{ section.id }}");
+      if (!root) return;
+
+      var tabs = root.querySelectorAll('[role="tab"]');
+      var panels = root.querySelectorAll('[role="tabpanel"]');
+
+      function layoutMasonryForGallery(gallery){
+        if (!gallery) return;
+
+        if (gallery.getBoundingClientRect().width === 0) return;
+
+        var cs = window.getComputedStyle(gallery);
+        var rowHeight = parseFloat(cs.getPropertyValue("grid-auto-rows")) || 8;
+        var gap = parseFloat(cs.getPropertyValue("gap")) || 12;
+
+        var items = gallery.querySelectorAll(".bfc-tabs__gitem");
+        items.forEach(function(item){
+          item.style.gridRowEnd = "auto";
+
+          var img = item.querySelector("img");
+          if (!img) return;
+
+          var cap = item.querySelector(".bfc-tabs__gcap");
+
+          var imgH = img.getBoundingClientRect().height || 0;
+          var capH = cap ? (cap.getBoundingClientRect().height || 0) : 0;
+
+          var total = imgH + capH + (cap ? 8 : 0);
+          var span = Math.ceil((total + gap) / (rowHeight + gap));
+
+          item.style.gridRowEnd = "span " + Math.max(1, span);
+        });
+      }
+
+      function layoutMasonryIn(panel){
+        if (!panel) return;
+        var galleries = panel.querySelectorAll(".bfc-tabs__gallery");
+        galleries.forEach(function(g){
+          layoutMasonryForGallery(g);
+        });
+      }
+
+      function bindGalleryImageLoads(panel){
+        if (!panel) return;
+
+        var imgs = panel.querySelectorAll(".bfc-tabs__gallery img");
+        imgs.forEach(function(img){
+          if (img.dataset.bfcMasonryBound) return;
+          img.dataset.bfcMasonryBound = "1";
+
+          if (!img.complete) {
+            img.addEventListener("load", function(){
+              layoutMasonryIn(panel);
+            }, { once: false });
+          }
+        });
+      }
+
+      function activate(panelId, focusTab){
+        if (!panelId) return;
+
+        tabs.forEach(function(t){
+          var isActive = (t.getAttribute("data-tab-target") === panelId);
+          t.classList.toggle("is-active", isActive);
+          t.setAttribute("aria-selected", isActive ? "true" : "false");
+          t.setAttribute("tabindex", isActive ? "0" : "-1");
+          if (isActive && focusTab) t.focus();
+        });
+
+        var activePanel = null;
+        panels.forEach(function(p){
+          if (p.id === panelId) {
+            p.removeAttribute("hidden");
+            activePanel = p;
+          } else {
+            p.setAttribute("hidden", "");
+          }
+        });
+
+        if (activePanel) {
+          bindGalleryImageLoads(activePanel);
+          requestAnimationFrame(function(){
+            layoutMasonryIn(activePanel);
+          });
+          setTimeout(function(){
+            layoutMasonryIn(activePanel);
+          }, 60);
+        }
+      }
+
+      tabs.forEach(function(tab){
+        tab.addEventListener("click", function(){
+          activate(tab.getAttribute("data-tab-target"), false);
+        });
+
+        tab.addEventListener("keydown", function(e){
+          var idx = Array.prototype.indexOf.call(tabs, tab);
+          if (e.key === "ArrowRight") {
+            e.preventDefault();
+            var next = tabs[idx + 1] || tabs[0];
+            activate(next.getAttribute("data-tab-target"), true);
+          }
+          if (e.key === "ArrowLeft") {
+            e.preventDefault();
+            var prev = tabs[idx - 1] || tabs[tabs.length - 1];
+            activate(prev.getAttribute("data-tab-target"), true);
+          }
+        });
+      });
+
+      var firstPanel = root.querySelector('[role="tabpanel"]:not([hidden])');
+      if (firstPanel) {
+        bindGalleryImageLoads(firstPanel);
+        requestAnimationFrame(function(){
+          layoutMasonryIn(firstPanel);
+        });
+        setTimeout(function(){
+          layoutMasonryIn(firstPanel);
+        }, 60);
+      }
+
+      window.addEventListener("resize", function(){
+        var active = root.querySelector('[role="tabpanel"]:not([hidden])');
+        if (!active) return;
+        layoutMasonryIn(active);
+      });
+
+      /* -----------------------
+         Lightbox (fullscreen + swipe, per tab panel)
+      ------------------------ */
+      var lbId = "bfc-lightbox-{{ section.id }}";
+      var overlay = document.getElementById(lbId);
+
+      if (!overlay){
+        overlay = document.createElement("div");
+        overlay.id = lbId;
+        overlay.setAttribute("role", "dialog");
+        overlay.setAttribute("aria-modal", "true");
+        overlay.setAttribute("aria-label", "Image viewer");
+        overlay.innerHTML = [
+          '<div class="bfc-lb__stage">',
+            '<div class="bfc-lb__imgwrap">',
+              '<img class="bfc-lb__img" alt="" />',
+              '<button type="button" class="bfc-lb__btn bfc-lb__close" aria-label="Close">×</button>',
+              '<button type="button" class="bfc-lb__btn bfc-lb__prev" aria-label="Previous">‹</button>',
+              '<button type="button" class="bfc-lb__btn bfc-lb__next" aria-label="Next">›</button>',
+            '</div>',
+            '<div class="bfc-lb__meta">',
+              '<div class="bfc-lb__caption"></div>',
+              '<div class="bfc-lb__count"></div>',
+            '</div>',
+          '</div>'
+        ].join("");
+        document.body.appendChild(overlay);
+      }
+
+      var lbImg = overlay.querySelector(".bfc-lb__img");
+      var lbCaption = overlay.querySelector(".bfc-lb__caption");
+      var lbCount = overlay.querySelector(".bfc-lb__count");
+      var btnClose = overlay.querySelector(".bfc-lb__close");
+      var btnPrev = overlay.querySelector(".bfc-lb__prev");
+      var btnNext = overlay.querySelector(".bfc-lb__next");
+
+      var state = { items: [], index: 0, open: false, lastFocus: null, startX: null, startY: null };
+
+      function lockScroll(lock){
+        if (lock){
+          document.documentElement.dataset.bfcScrollLock = "true";
+          document.documentElement.style.overflow = "hidden";
+        } else {
+          if (document.documentElement.dataset.bfcScrollLock === "true"){
+            document.documentElement.style.overflow = "";
+            delete document.documentElement.dataset.bfcScrollLock;
+          }
+        }
+      }
+
+      function setSlide(i){
+        if (!state.items.length) return;
+        state.index = (i + state.items.length) % state.items.length;
+        var item = state.items[state.index];
+        lbImg.src = item.src;
+        lbImg.alt = item.alt || "";
+        lbCaption.textContent = item.caption || "";
+        lbCount.textContent = (state.index + 1) + " / " + state.items.length;
+      }
+
+      function openLightbox(items, startIndex){
+        if (!items || !items.length) return;
+        state.items = items;
+        state.index = startIndex || 0;
+        state.open = true;
+        state.lastFocus = document.activeElement;
+        overlay.setAttribute("data-open", "true");
+        lockScroll(true);
+        setSlide(state.index);
+        btnClose.focus();
+      }
+
+      function closeLightbox(){
+        if (!state.open) return;
+        state.open = false;
+        overlay.removeAttribute("data-open");
+        lockScroll(false);
+        if (state.lastFocus && typeof state.lastFocus.focus === "function") state.lastFocus.focus();
+      }
+
+      function next(){ setSlide(state.index + 1); }
+      function prev(){ setSlide(state.index - 1); }
+
+      btnClose.addEventListener("click", closeLightbox);
+      btnNext.addEventListener("click", next);
+      btnPrev.addEventListener("click", prev);
+
+      overlay.addEventListener("click", function(e){
+        var isButton = e.target.closest && e.target.closest(".bfc-lb__btn");
+        var isImage = e.target.closest && e.target.closest(".bfc-lb__img");
+        if (!isButton && !isImage) closeLightbox();
+      });
+
+      document.addEventListener("keydown", function(e){
+        if (!state.open) return;
+        if (e.key === "Escape") { e.preventDefault(); closeLightbox(); }
+        if (e.key === "ArrowRight") { e.preventDefault(); next(); }
+        if (e.key === "ArrowLeft") { e.preventDefault(); prev(); }
+      });
+
+      overlay.addEventListener("touchstart", function(e){
+        if (!state.open) return;
+        if (!e.touches || !e.touches[0]) return;
+        state.startX = e.touches[0].clientX;
+        state.startY = e.touches[0].clientY;
+      }, { passive: true });
+
+      overlay.addEventListener("touchend", function(e){
+        if (!state.open) return;
+        if (state.startX == null) return;
+        var endX = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientX : null;
+        var endY = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientY : null;
+        if (endX == null) { state.startX = null; return; }
+        var dx = endX - state.startX;
+        var dy = endY == null ? 0 : endY - state.startY;
+        state.startX = null;
+        state.startY = null;
+        if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)){
+          if (dx < 0) next();
+          else prev();
+        }
+      });
+
+      function collectGalleryItems(panel){
+        var mediaItems = panel.querySelectorAll('[data-bfc-gallery-item="true"]');
+        if (!mediaItems || !mediaItems.length) return [];
+        return Array.prototype.map.call(mediaItems, function(media){
+          return {
+            src: media.getAttribute("data-bfc-full") || "",
+            alt: media.getAttribute("data-bfc-alt") || "",
+            caption: media.getAttribute("data-bfc-caption") || ""
+          };
+        });
+      }
+
+      function findPanelFor(el){
+        return el.closest ? el.closest('[role="tabpanel"]') : null;
+      }
+
+      function findGalleryItem(target){
+        return target.closest ? target.closest('[data-bfc-gallery-item="true"]') : null;
+      }
+
+      // CAPTURE-PHASE handler so other theme scripts don’t steal the click
+      root.addEventListener("click", function(e){
+        var galleryItem = findGalleryItem(e.target);
+
+        if (!galleryItem) return;
+
+        // Stop everything else from intercepting
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof e.stopImmediatePropagation === "function") e.stopImmediatePropagation();
+
+        var panel = findPanelFor(galleryItem);
+        if (!panel) return;
+
+        var items = collectGalleryItems(panel);
+        if (!items.length) return;
+
+        var startIndex = 0;
+        if (galleryItem){
+          var mediaItems = panel.querySelectorAll('[data-bfc-gallery-item="true"]');
+          startIndex = Array.prototype.indexOf.call(mediaItems, galleryItem);
+          if (startIndex < 0) startIndex = 0;
+        }
+
+        openLightbox(items, startIndex);
+      }, true);
+    })();
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "BFC — Tabs",
+  "settings": [
+    { "type": "text", "id": "aria_label", "label": "Accessibility label", "default": "Product information tabs" },
+
+    { "type": "checkbox", "id": "show_heading", "label": "Show heading above tabs", "default": false },
+    { "type": "text", "id": "heading", "label": "Heading text", "default": "Product details" },
+
+    { "type": "checkbox", "id": "enable_background", "label": "Enable background color", "default": false },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#ffffff" },
+
+    { "type": "checkbox", "id": "sticky_tabs", "label": "Sticky tabs", "default": true },
+    { "type": "range", "id": "sticky_offset", "label": "Sticky offset (px)", "min": 0, "max": 140, "step": 2, "default": 0 },
+
+    {
+      "type": "select",
+      "id": "desktop_cols",
+      "label": "Desktop columns",
+      "default": "3",
+      "options": [
+        { "value": "2", "label": "2 columns" },
+        { "value": "3", "label": "3 columns" }
+      ]
+    },
+
+    { "type": "range", "id": "max_width", "label": "Max width", "min": 700, "max": 1600, "step": 20, "default": 1200 },
+    { "type": "range", "id": "pad_y", "label": "Vertical padding", "min": 0, "max": 80, "step": 4, "default": 16 },
+    { "type": "range", "id": "pad_x", "label": "Side padding", "min": 0, "max": 80, "step": 4, "default": 16 },
+    { "type": "range", "id": "column_gap", "label": "Column gap", "min": 10, "max": 120, "step": 2, "default": 80 }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        { "type": "text", "id": "tab_label", "label": "Tab label", "default": "Details" },
+
+        { "type": "header", "content": "Gallery (optional, up to 10 images)" },
+        { "type": "checkbox", "id": "gallery_enabled", "label": "Show gallery", "default": false },
+        {
+          "type": "range",
+          "id": "gallery_cols",
+          "label": "Gallery columns (desktop)",
+          "min": 2,
+          "max": 5,
+          "step": 1,
+          "default": 3
+        },
+
+        { "type": "image_picker", "id": "g1", "label": "Gallery image 1" },
+        { "type": "text", "id": "g1_caption", "label": "Gallery caption 1", "default": "Default" },
+
+        { "type": "image_picker", "id": "g2", "label": "Gallery image 2" },
+        { "type": "text", "id": "g2_caption", "label": "Gallery caption 2", "default": "Default" },
+
+        { "type": "image_picker", "id": "g3", "label": "Gallery image 3" },
+        { "type": "text", "id": "g3_caption", "label": "Gallery caption 3", "default": "Default" },
+
+        { "type": "image_picker", "id": "g4", "label": "Gallery image 4" },
+        { "type": "text", "id": "g4_caption", "label": "Gallery caption 4", "default": "Default" },
+
+        { "type": "image_picker", "id": "g5", "label": "Gallery image 5" },
+        { "type": "text", "id": "g5_caption", "label": "Gallery caption 5", "default": "Default" },
+
+        { "type": "image_picker", "id": "g6", "label": "Gallery image 6" },
+        { "type": "text", "id": "g6_caption", "label": "Gallery caption 6", "default": "Default" },
+
+        { "type": "image_picker", "id": "g7", "label": "Gallery image 7" },
+        { "type": "text", "id": "g7_caption", "label": "Gallery caption 7", "default": "Default" },
+
+        { "type": "image_picker", "id": "g8", "label": "Gallery image 8" },
+        { "type": "text", "id": "g8_caption", "label": "Gallery caption 8", "default": "Default" },
+
+        { "type": "image_picker", "id": "g9", "label": "Gallery image 9" },
+        { "type": "text", "id": "g9_caption", "label": "Gallery caption 9", "default": "Default" },
+
+        { "type": "image_picker", "id": "g10", "label": "Gallery image 10" },
+        { "type": "text", "id": "g10_caption", "label": "Gallery caption 10", "default": "Default" },
+
+        { "type": "header", "content": "Optional single image (left/right)" },
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "image_alt", "label": "Image alt text", "default": "Default" },
+        { "type": "text", "id": "image_caption", "label": "Image caption", "default": "Default" },
+        {
+          "type": "select",
+          "id": "image_position",
+          "label": "Image position",
+          "default": "off",
+          "options": [
+            { "value": "off", "label": "No image" },
+            { "value": "right", "label": "Right" },
+            { "value": "left", "label": "Left" }
+          ]
+        },
+
+        { "type": "header", "content": "Text content" },
+        { "type": "text", "id": "col1_heading", "label": "Section 1 heading", "default": "Default" },
+        { "type": "richtext", "id": "col1_text", "label": "Section 1 text", "default": "<p>Default</p>" },
+
+        { "type": "text", "id": "col2_heading", "label": "Section 2 heading", "default": "Default" },
+        { "type": "richtext", "id": "col2_text", "label": "Section 2 text", "default": "<p>Default</p>" },
+
+        { "type": "text", "id": "col3_heading", "label": "Section 3 heading", "default": "Default" },
+        { "type": "richtext", "id": "col3_text", "label": "Section 3 text", "default": "<p>Default</p>" },
+
+        { "type": "header", "content": "Specs grid (no icons)" },
+        { "type": "checkbox", "id": "specs_enabled", "label": "Show specs grid", "default": false },
+        { "type": "richtext", "id": "specs_desc", "label": "Specs intro text", "default": "<p>Default</p>" },
+        { "type": "range", "id": "specs_count", "label": "How many specs to show", "min": 0, "max": 15, "step": 1, "default": 0 },
+        { "type": "range", "id": "specs_max_shown", "label": "Max specs shown (cap)", "min": 1, "max": 15, "step": 1, "default": 10 },
+
+        { "type": "header", "content": "Specs (up to 15)" },
+
+        { "type": "text", "id": "s1_k", "label": "Spec 1 label", "default": "Default" },
+        { "type": "text", "id": "s1_v", "label": "Spec 1 value", "default": "Default" },
+        { "type": "text", "id": "s2_k", "label": "Spec 2 label", "default": "Default" },
+        { "type": "text", "id": "s2_v", "label": "Spec 2 value", "default": "Default" },
+        { "type": "text", "id": "s3_k", "label": "Spec 3 label", "default": "Default" },
+        { "type": "text", "id": "s3_v", "label": "Spec 3 value", "default": "Default" },
+        { "type": "text", "id": "s4_k", "label": "Spec 4 label", "default": "Default" },
+        { "type": "text", "id": "s4_v", "label": "Spec 4 value", "default": "Default" },
+        { "type": "text", "id": "s5_k", "label": "Spec 5 label", "default": "Default" },
+        { "type": "text", "id": "s5_v", "label": "Spec 5 value", "default": "Default" },
+        { "type": "text", "id": "s6_k", "label": "Spec 6 label", "default": "Default" },
+        { "type": "text", "id": "s6_v", "label": "Spec 6 value", "default": "Default" },
+        { "type": "text", "id": "s7_k", "label": "Spec 7 label", "default": "Default" },
+        { "type": "text", "id": "s7_v", "label": "Spec 7 value", "default": "Default" },
+        { "type": "text", "id": "s8_k", "label": "Spec 8 label", "default": "Default" },
+        { "type": "text", "id": "s8_v", "label": "Spec 8 value", "default": "Default" },
+        { "type": "text", "id": "s9_k", "label": "Spec 9 label", "default": "Default" },
+        { "type": "text", "id": "s9_v", "label": "Spec 9 value", "default": "Default" },
+        { "type": "text", "id": "s10_k", "label": "Spec 10 label", "default": "Default" },
+        { "type": "text", "id": "s10_v", "label": "Spec 10 value", "default": "Default" },
+        { "type": "text", "id": "s11_k", "label": "Spec 11 label", "default": "Default" },
+        { "type": "text", "id": "s11_v", "label": "Spec 11 value", "default": "Default" },
+        { "type": "text", "id": "s12_k", "label": "Spec 12 label", "default": "Default" },
+        { "type": "text", "id": "s12_v", "label": "Spec 12 value", "default": "Default" },
+        { "type": "text", "id": "s13_k", "label": "Spec 13 label", "default": "Default" },
+        { "type": "text", "id": "s13_v", "label": "Spec 13 value", "default": "Default" },
+        { "type": "text", "id": "s14_k", "label": "Spec 14 label", "default": "Default" },
+        { "type": "text", "id": "s14_v", "label": "Spec 14 value", "default": "Default" },
+        { "type": "text", "id": "s15_k", "label": "Spec 15 label", "default": "Default" },
+        { "type": "text", "id": "s15_v", "label": "Spec 15 value", "default": "Default" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [
+    { "name": "BFC — Tabs + Specs (15) + Gallery", "blocks": [ { "type": "tab" }, { "type": "tab" }, { "type": "tab" } ] }
+  ]
+}
+{% endschema %}

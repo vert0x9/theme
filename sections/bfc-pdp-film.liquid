@@ -1,0 +1,940 @@
+{{- 'section-product.css' | asset_url | stylesheet_tag -}}
+<script src="{{ 'product-variants.js' | asset_url }}" defer="defer"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/></noscript>
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign membership_url = section.settings.membership_url | default: '/pages/membership'
+  assign film_collection = product.collections | first
+  assign sample_start = section.settings.sample_photo_start | default: 4
+  assign rec_limit = section.settings.rec_count | default: 8
+  assign camera_collection = collections[section.settings.camera_collection]
+-%}
+
+<style>
+.bfc4f *,.bfc4f *::before,.bfc4f *::after{box-sizing:border-box;margin:0;padding:0}
+.bfc4f{
+  --or:#E36E15;--go:#F4A027;--ce:#ABCC99;--cv:#F8F6EE;
+  --bk:#202009;--ch:#4E4741;--gr:#E3DDDA;
+  --sr:'Cormorant Garamond',Georgia,serif;
+  --sn:'Poppins',sans-serif;--t:0.2s ease;
+  font-family:var(--sn);color:var(--bk);background:var(--cv);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+
+/* ── SPLIT ─────────────────────────────────── */
+.bfc4f-split{display:grid;grid-template-columns:1fr 1fr;align-items:start}
+
+/* ── LEFT: SLIDER ──────────────────────────── */
+.bfc4f-left{
+  position:sticky;top:0;
+  width:50vw;height:50vw;max-height:100vh;
+  overflow:hidden;background:var(--gr);
+}
+.bfc4f-slides{
+  display:flex;height:100%;
+  transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);will-change:transform;
+}
+.bfc4f-slide{width:50vw;flex-shrink:0;height:100%;position:relative}
+.bfc4f-slide img{
+  width:100%;height:100%;
+  object-fit:contain;object-position:center;display:block;
+}
+.bfc4f-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:10;
+  background:rgba(32,32,9,0.3);border:none;
+  width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background var(--t);backdrop-filter:blur(4px);
+}
+.bfc4f-arrow:hover{background:rgba(32,32,9,0.6)}
+.bfc4f-arrow.is-prev{left:16px}
+.bfc4f-arrow.is-next{right:16px}
+.bfc4f-arrow svg{display:block}
+.bfc4f-dots{
+  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+  display:flex;gap:6px;z-index:10;
+}
+.bfc4f-dot{
+  width:6px;height:6px;background:rgba(255,255,255,0.4);
+  border:none;cursor:pointer;padding:0;transition:background var(--t),transform var(--t);
+}
+.bfc4f-dot.is-active{background:#fff;transform:scale(1.3)}
+
+/* ── RIGHT ─────────────────────────────────── */
+.bfc4f-right{
+  background:var(--cv);padding:36px 40px 56px;
+  display:flex;flex-direction:column;gap:16px;
+}
+.bfc4f-eyebrow{
+  font-size:9px;font-weight:700;letter-spacing:0.22em;
+  text-transform:uppercase;color:var(--or);margin-bottom:0;display:block;
+}
+.bfc4f-title{
+  font-family:var(--sn);font-size:28px;font-weight:600;
+  line-height:1.1;letter-spacing:-0.3px;margin-bottom:6px;
+}
+.bfc4f-price-row{display:flex;align-items:baseline;gap:12px;margin-bottom:2px}
+.bfc4f-price{font-family:var(--sr);font-size:40px;font-weight:300;color:var(--bk);line-height:1}
+.bfc4f-price-compare{font-family:var(--sr);font-size:24px;font-weight:300;color:rgba(32,32,9,0.25);text-decoration:line-through}
+
+/* ── VARIANTS ──────────────────────────────── */
+.bfc4f-var-label{font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ch);margin-bottom:8px;display:block}
+.bfc4f-var-row{display:flex;gap:6px;flex-wrap:wrap;width:100%}
+.bfc4f-var-btn{
+  flex:1 1 calc(20% - 6px);min-width:60px;max-width:140px;padding:8px 6px;border:1px solid rgba(32,32,9,0.15);
+  background:#fff;cursor:pointer;font-family:var(--sn);
+  font-size:10px;font-weight:600;color:var(--bk);transition:all var(--t);text-align:center;
+  word-break:break-word;line-height:1.2;
+}
+.bfc4f-var-btn:hover{border-color:var(--or)}
+.bfc4f-var-btn.is-active{border:2px solid var(--or);color:var(--or);background:rgba(227,110,21,0.05)}
+.bfc4f-var-btn[disabled]{opacity:0.5;cursor:not-allowed;border-color:rgba(32,32,9,0.08);color:rgba(32,32,9,0.3);background:rgba(32,32,9,0.03)}
+.bfc4f-var-btn[disabled]:hover{border-color:rgba(32,32,9,0.08)}
+.bfc4f-var-oos{display:block;font-size:8px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(32,32,9,0.3);margin-top:2px}
+
+/* ── BUY ───────────────────────────────────── */
+.bfc4f-qty-row{display:flex;gap:6px;margin-bottom:8px;align-items:stretch}
+.bfc4f-qty{display:flex;border:1px solid rgba(32,32,9,0.15);background:#fff;align-items:center}
+.bfc4f-qty button{width:36px;height:100%;background:none;border:none;font-size:16px;cursor:pointer;color:var(--bk);font-family:var(--sn);transition:background var(--t)}
+.bfc4f-qty button:hover{background:rgba(32,32,9,0.04)}
+.bfc4f-qty-val{width:40px;text-align:center;font-size:12px;font-weight:600;border:none;border-left:1px solid rgba(32,32,9,0.1);border-right:1px solid rgba(32,32,9,0.1);background:none;font-family:var(--sn);color:var(--bk);-moz-appearance:textfield}
+.bfc4f-qty-val::-webkit-inner-spin-button,.bfc4f-qty-val::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.bfc4f-atc{
+  flex:1;padding:14px;background:var(--or);color:#fff;border:none;
+  cursor:pointer;font-family:var(--sn);font-size:11px;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;transition:background var(--t);display:block;text-align:center;
+}
+.bfc4f-atc:hover:not([disabled]){background:#c9600f}
+.bfc4f-atc[disabled]{opacity:0.5;cursor:not-allowed}
+
+/* ── STOCK ─────────────────────────────────── */
+.bfc4f-stock{font-size:10px;font-weight:600;letter-spacing:0.08em;color:var(--ch);display:flex;align-items:center;gap:6px}
+.bfc4f-stock-dot{width:6px;height:6px;background:var(--ce);display:inline-block}
+.bfc4f-stock.is-low .bfc4f-stock-dot{background:var(--or)}
+.bfc4f-stock.is-low{color:var(--or)}
+
+/* ── MINI SPECS ────────────────────────────── */
+.bfc4f-mini-specs{border-top:1px solid rgba(32,32,9,0.08);padding-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:0}
+.bfc4f-mini-spec{padding:6px 0;border-bottom:1px solid rgba(32,32,9,0.06);display:flex;flex-direction:column;gap:2px}
+.bfc4f-mini-spec:nth-child(odd){padding-right:16px}
+.bfc4f-mini-spec:nth-child(even){padding-left:16px;border-left:1px solid rgba(32,32,9,0.06)}
+.bfc4f-mini-spec:nth-last-child(-n+2){border-bottom:none}
+.bfc4f-spec-key{font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(32,32,9,0.3)}
+.bfc4f-spec-val{font-size:11.5px;font-weight:500}
+
+/* ── DESCRIPTION ───────────────────────────── */
+.bfc4f-desc{border-top:1px solid rgba(32,32,9,0.08);padding-top:16px}
+.bfc4f-desc--top{border-top:none;padding-top:0}
+.bfc4f-desc-label{font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ch);margin-bottom:8px;display:block}
+.bfc4f-desc-text{font-size:12px;color:var(--ch);line-height:1.6}
+.bfc4f-desc-text p{margin:0 0 8px}.bfc4f-desc-text p:last-child{margin:0}
+
+/* ── TRUST ─────────────────────────────────── */
+.bfc4f-trust{display:flex;align-items:stretch;border:1px solid rgba(32,32,9,0.08);background:#fff}
+.bfc4f-trust-item{flex:1;padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.bfc4f-trust-item+.bfc4f-trust-item{border-left:1px solid rgba(32,32,9,0.08)}
+.bfc4f-trust-icon{width:24px;height:24px;background:rgba(227,110,21,0.08);display:flex;align-items:center;justify-content:center;color:var(--or)}
+.bfc4f-trust-label{font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--bk);line-height:1.3}
+
+/* ── POLICIES ──────────────────────────────── */
+.bfc4f-policies{border-top:1px solid rgba(32,32,9,0.08)}
+.bfc4f-policy{border-bottom:1px solid rgba(32,32,9,0.06)}
+.bfc4f-policy summary{display:flex;align-items:center;justify-content:space-between;padding:12px 0;font-size:10.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--bk);cursor:pointer;list-style:none;user-select:none}
+.bfc4f-policy summary::-webkit-details-marker{display:none}
+.bfc4f-policy summary::after{content:'+';font-size:14px;font-weight:400;opacity:.3}
+.bfc4f-policy[open] summary::after{content:'\2212'}
+.bfc4f-policy-body{padding:0 0 12px;font-size:11px;line-height:1.5;color:var(--ch)}
+
+/* ── APP BLOCKS ────────────────────────────── */
+.bfc4f-app-block{margin:0}
+
+/* ── BELOW FOLD ────────────────────────────── */
+.bfc4f-below{background:var(--cv)}
+
+/* ── SAMPLE PHOTOS ─────────────────────────── */
+.bfc4f-samples{border-top:1px solid rgba(32,32,9,0.1)}
+.bfc4f-samples-head{padding:48px 48px 24px;display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid rgba(32,32,9,0.1)}
+.bfc4f-samples-title{font-family:var(--sr);font-size:40px;font-weight:300}
+.bfc4f-samples-sub{font-size:11px;color:var(--ch);font-style:italic}
+.bfc4f-samples-wrap{position:relative;overflow:hidden}
+.bfc4f-samples-rail{
+  display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+.bfc4f-samples-rail::-webkit-scrollbar{display:none}
+.bfc4f-samples-rail a{
+  display:block;overflow:hidden;flex-shrink:0;scroll-snap-align:start;
+  border-right:1px solid rgba(32,32,9,0.08);line-height:0;font-size:0;
+  width:33.333%;
+}
+.bfc4f-samples-rail img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;transition:transform 0.4s ease}
+.bfc4f-samples-rail a:hover img{transform:scale(1.04)}
+.bfc4f-samples-arrow{
+  position:absolute;right:0;top:0;bottom:0;width:48px;
+  background:rgba(32,32,9,0.3);border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);transition:background 0.2s ease;z-index:2;
+}
+.bfc4f-samples-arrow:hover{background:rgba(32,32,9,0.6)}
+
+/* ── MEMBERSHIP CTA ────────────────────────── */
+.bfc4f-membership{border-top:1px solid rgba(32,32,9,0.1);background:var(--bk);display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center;padding:48px}
+.bfc4f-mem-eyebrow{font-size:9px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--go);margin-bottom:12px;display:block}
+.bfc4f-mem-title{font-family:var(--sr);font-size:36px;font-weight:300;color:#fff;line-height:1.05;margin-bottom:10px}
+.bfc4f-mem-body{font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;max-width:480px}
+.bfc4f-mem-cta{display:inline-block;border:1px solid rgba(255,255,255,0.2);color:#fff;text-decoration:none;padding:14px 32px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;font-family:var(--sn);transition:all var(--t);white-space:nowrap}
+.bfc4f-mem-cta:hover{background:#fff;color:var(--bk);border-color:#fff}
+
+/* ── RECOMMENDATIONS ───────────────────────── */
+.bfc4f-recs{border-top:1px solid rgba(32,32,9,0.1);padding:48px}
+.bfc4f-recs-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px}
+.bfc4f-recs-title{font-family:var(--sr);font-size:40px;font-weight:300}
+.bfc4f-recs-all{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(32,32,9,0.4);text-decoration:none;transition:color var(--t)}
+.bfc4f-recs-all:hover{color:var(--or)}
+.bfc4f-recs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.bfc4f-rec-card{
+  text-decoration:none;color:var(--bk);background:#fff;
+  border:1px solid rgba(32,32,9,0.08);overflow:hidden;
+  display:flex;flex-direction:column;transition:border-color var(--t);position:relative;
+}
+.bfc4f-rec-card:hover{border-color:rgba(227,110,21,0.3)}
+.bfc4f-rec-img-wrap{aspect-ratio:1/1;overflow:hidden;background:var(--gr);position:relative}
+.bfc4f-rec-img{width:100%;height:100%;object-fit:contain;display:block;transition:transform 0.4s ease}
+.bfc4f-rec-card:hover .bfc4f-rec-img{transform:scale(1.04)}
+.bfc4f-rec-info-btn{
+  position:absolute;top:6px;right:6px;width:22px;height:22px;
+  background:rgba(255,255,255,0.85);border:none;cursor:pointer;padding:0;
+  color:rgba(32,32,9,0.5);transition:color var(--t);
+  display:flex;align-items:center;justify-content:center;z-index:2;font-size:11px;font-weight:700;font-family:var(--sr);
+}
+.bfc4f-rec-info-btn:hover{color:var(--or)}
+.bfc4f-rec-body{padding:10px 10px 8px;flex:1;display:flex;flex-direction:column}
+.bfc4f-rec-name{font-size:11px;font-weight:600;line-height:1.3;margin-bottom:2px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;flex:1}
+.bfc4f-rec-price{font-size:11px;font-weight:700;color:var(--or);margin-bottom:6px}
+.bfc4f-rec-add{
+  width:100%;padding:8px;background:none;border:1px solid rgba(32,32,9,0.12);
+  cursor:pointer;font-family:var(--sn);font-size:9px;font-weight:700;
+  letter-spacing:0.1em;text-transform:uppercase;color:var(--ch);
+  transition:all var(--t);text-align:center;
+}
+.bfc4f-rec-add:hover{border-color:var(--or);color:var(--or)}
+.bfc4f-rec-add.is-added{background:var(--or);color:#fff;border-color:var(--or)}
+
+/* ── NEED A CAMERA? ────────────────────────── */
+.bfc4f-cameras{border-top:1px solid rgba(32,32,9,0.1);padding:48px 0 56px}
+.bfc4f-cameras-head{padding:0 48px;display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px}
+.bfc4f-cameras-title{font-family:var(--sr);font-size:40px;font-weight:300}
+.bfc4f-cameras-all{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(32,32,9,0.4);text-decoration:none;transition:color var(--t)}
+.bfc4f-cameras-all:hover{color:var(--or)}
+.bfc4f-cameras-rail{
+  display:flex;gap:12px;overflow-x:auto;padding:0 48px 12px;
+  scrollbar-width:none;-ms-overflow-style:none;scroll-snap-type:x mandatory;
+}
+.bfc4f-cameras-rail::-webkit-scrollbar{display:none}
+.bfc4f-cam-card{
+  min-width:200px;width:200px;flex-shrink:0;scroll-snap-align:start;
+  text-decoration:none;color:var(--bk);background:#fff;
+  border:1px solid rgba(32,32,9,0.08);overflow:hidden;
+  display:flex;flex-direction:column;transition:border-color var(--t);
+}
+.bfc4f-cam-card:hover{border-color:rgba(227,110,21,0.3)}
+.bfc4f-cam-img-wrap{aspect-ratio:4/3;overflow:hidden;background:var(--gr)}
+.bfc4f-cam-img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s ease}
+.bfc4f-cam-card:hover .bfc4f-cam-img{transform:scale(1.04)}
+.bfc4f-cam-body{padding:10px 10px 8px}
+.bfc4f-cam-name{font-size:11px;font-weight:600;line-height:1.3;margin-bottom:2px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.bfc4f-cam-price{font-size:11px;font-weight:700;color:var(--or)}
+
+/* ── POPUP ─────────────────────────────────── */
+.bfc4f-popup-overlay{
+  position:fixed;inset:0;background:rgba(32,32,9,0.55);z-index:200;
+  display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px);
+}
+.bfc4f-popup-overlay.is-open{display:flex}
+.bfc4f-popup{background:#fff;max-width:680px;width:90%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;animation:bfc4f-pop-in 0.2s ease}
+@keyframes bfc4f-pop-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.bfc4f-popup-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid rgba(32,32,9,0.1);flex-shrink:0}
+.bfc4f-popup-title{font-size:13px;font-weight:700}
+.bfc4f-popup-close{background:none;border:none;cursor:pointer;padding:4px;color:var(--ch);display:flex;align-items:center;font-size:18px}
+.bfc4f-popup-body{overflow-y:auto;flex:1}
+.bfc4f-popup-imgs{display:grid;grid-template-columns:repeat(3,1fr)}
+.bfc4f-popup-imgs img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;border-right:1px solid rgba(32,32,9,0.07);border-bottom:1px solid rgba(32,32,9,0.07)}
+.bfc4f-popup-imgs img:nth-child(3n){border-right:none}
+.bfc4f-popup-desc{padding:16px;font-size:12px;color:var(--ch);line-height:1.6}
+.bfc4f-popup-price{padding:0 16px 12px;font-size:14px;font-weight:700;color:var(--or)}
+.bfc4f-popup-atc{
+  margin:0 16px 16px;padding:12px;width:calc(100% - 32px);
+  background:var(--or);color:#fff;border:none;cursor:pointer;
+  font-family:var(--sn);font-size:10px;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;transition:background var(--t);
+}
+.bfc4f-popup-atc:hover{background:#c9600f}
+
+/* ── LIGHTBOX ──────────────────────────────── */
+.bfc4f-lightbox{display:none;position:fixed;inset:0;background:rgba(32,32,9,0.92);z-index:200;align-items:center;justify-content:center;cursor:zoom-out}
+.bfc4f-lightbox.is-open{display:flex}
+.bfc4f-lightbox img{max-width:90vw;max-height:90vh;object-fit:contain}
+.bfc4f-lightbox-close{position:absolute;top:16px;right:20px;background:none;border:none;color:rgba(255,255,255,0.6);font-size:28px;cursor:pointer;line-height:1}
+.bfc4f-lightbox-close:hover{color:#fff}
+
+/* ── MOBILE STICKY ─────────────────────────── */
+.bfc4f-sticky{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--cv);border-top:1px solid rgba(32,32,9,0.15);padding:10px 16px;z-index:100;align-items:center;gap:12px}
+.bfc4f-sticky-info{flex:1;min-width:0}
+.bfc4f-sticky-title{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bfc4f-sticky-price{font-size:11px;color:var(--ch)}
+.bfc4f-sticky-btn{background:var(--or);color:#fff;border:none;padding:12px 24px;font-size:10px;font-weight:700;font-family:var(--sn);text-transform:uppercase;letter-spacing:0.14em;cursor:pointer;white-space:nowrap}
+
+.bfc4f-desc-raw{display:none}
+
+/* ── MOBILE ────────────────────────────────── */
+@media(max-width:900px){
+  .bfc4f-split{grid-template-columns:1fr}
+  .bfc4f-left{position:relative;width:100%;height:100vw;max-height:520px}
+  .bfc4f-slide{width:100%}
+  .bfc4f-arrow{width:32px;height:32px}
+  .bfc4f-right{padding:24px 20px 40px;gap:14px}
+  .bfc4f-title{font-size:22px}
+  .bfc4f-price{font-size:32px}
+  .bfc4f-trust{flex-direction:column}
+  .bfc4f-trust-item{flex-direction:row;gap:8px;text-align:left;padding:10px 12px}
+  .bfc4f-trust-item+.bfc4f-trust-item{border-left:none;border-top:1px solid rgba(32,32,9,0.08)}
+  .bfc4f-samples-head{padding:32px 20px 16px;flex-direction:column;gap:4px}
+  .bfc4f-samples-title{font-size:28px}
+  .bfc4f-samples-rail a{width:50%}
+  .bfc4f-membership{grid-template-columns:1fr;gap:20px;padding:32px 20px}
+  .bfc4f-mem-title{font-size:26px}
+  .bfc4f-recs{padding:32px 20px}
+  .bfc4f-recs-title{font-size:28px}
+  .bfc4f-recs-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .bfc4f-cameras-head{padding:0 20px}
+  .bfc4f-cameras-title{font-size:28px}
+  .bfc4f-cameras-rail{padding:0 20px 12px;gap:10px}
+  .bfc4f-cam-card{min-width:160px;width:160px}
+  .bfc4f-cameras{padding:32px 0 40px}
+  .bfc4f-sticky.is-visible{display:flex}
+  .bfc4f{padding-bottom:64px}
+}
+</style>
+
+<div class="bfc4f" data-section-id="{{ section.id }}">
+
+  <!-- ═══ SPLIT ═══ -->
+  <div class="bfc4f-split">
+
+    <!-- LEFT: Slider -->
+    <div class="bfc4f-left" id="bfc4f-slider">
+      <div class="bfc4f-slides" id="bfc4f-slides">
+        {%- for image in product.images -%}
+          {%- if forloop.index <= sample_start -%}
+            <div class="bfc4f-slide">
+              <img
+                src="{{ image | image_url: width: 1200 }}"
+                alt="{{ image.alt | default: product.title }}"
+                {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}
+                onclick="bfc4fLightbox('{{ image | image_url: width: 2400 }}')"
+                style="cursor:zoom-in"
+              >
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <button class="bfc4f-arrow is-prev" id="bfc4f-prev" aria-label="Previous" style="visibility:hidden">
+        <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="2"><path d="M10 2L4 8l6 6"/></svg>
+      </button>
+      <button class="bfc4f-arrow is-next" id="bfc4f-next" aria-label="Next">
+        <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="2"><path d="M6 2l6 6-6 6"/></svg>
+      </button>
+      <div class="bfc4f-dots" id="bfc4f-dots">
+        {%- for image in product.images -%}
+          {%- if forloop.index <= sample_start -%}
+            <button class="bfc4f-dot{% if forloop.first %} is-active{% endif %}" data-idx="{{ forloop.index0 }}"></button>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <!-- RIGHT: Info -->
+    <div class="bfc4f-right">
+
+      {%- comment -%} Brand eyebrow removed per request {%- endcomment -%}
+
+      <div><h1 class="bfc4f-title">{{ product.title }}</h1>
+      <span id="bfc4-star-placeholder"></span></div>
+
+      <!-- Description + specs right below title -->
+      <div class="bfc4f-desc-raw" id="bfc4f-desc-raw">{{ product.description }}</div>
+      <div class="bfc4f-desc bfc4f-desc--top">
+        <div class="bfc4f-desc-text" id="bfc4f-desc-prose"></div>
+      </div>
+      <div class="bfc4f-mini-specs" id="bfc4f-specs"></div>
+
+      <div>
+        <div class="bfc4f-price-row">
+          <span class="bfc4f-price" id="bfc4f-price">{{ current_variant.price | money_without_trailing_zeros }}</span>
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            <span class="bfc4f-price-compare" id="bfc4f-compare">{{ current_variant.compare_at_price | money_without_trailing_zeros }}</span>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- if product.variants.size > 1 -%}
+        <div>
+          <span class="bfc4f-var-label">Format</span>
+          <div class="bfc4f-var-row" role="radiogroup" aria-label="Film format">
+            {%- for variant in product.variants -%}
+              <button type="button"
+                class="bfc4f-var-btn{% if variant == current_variant %} is-active{% endif %}"
+                data-vid="{{ variant.id }}"
+                data-price="{{ variant.price | money_without_trailing_zeros }}"
+                data-compare-price="{{ variant.compare_at_price | money_without_trailing_zeros }}"
+                data-has-compare="{% if variant.compare_at_price > variant.price %}1{% else %}0{% endif %}"
+                data-available="{{ variant.available }}"
+                data-url="{{ product.url }}?variant={{ variant.id }}"
+                data-inventory="{{ variant.inventory_quantity }}"
+                role="radio"
+                aria-checked="{% if variant == current_variant %}true{% else %}false{% endif %}"
+                {% unless variant.available %}disabled{% endunless %}
+              >
+                {{ variant.title }}
+                {%- unless variant.available -%}<span class="bfc4f-var-oos">Sold Out</span>{%- endunless -%}
+              </button>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      <div class="bfc4f-buy">
+          <input type="hidden" id="bfc4f-vid" value="{{ current_variant.id }}">
+          <div class="bfc4f-qty-row">
+            <div class="bfc4f-qty">
+              <button type="button" onclick="bfc4fQty(-1)" aria-label="Decrease">&minus;</button>
+              <input class="bfc4f-qty-val" type="number" value="1" min="1" max="99" id="bfc4f-qty" aria-label="Quantity">
+              <button type="button" onclick="bfc4fQty(1)" aria-label="Increase">+</button>
+            </div>
+            <button type="button" class="bfc4f-atc" id="bfc4f-atc" onclick="bfc4fAddToCart()" {% unless current_variant.available %}disabled{% endunless %}>
+              <span id="bfc4f-atc-text">{%- if current_variant.available -%}Add to Cart{%- else -%}Sold Out{%- endif -%}</span>
+            </button>
+          </div>
+
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              <div class="bfc4f-app-block" {{ block.shopify_attributes }}>{% render block %}</div>
+          {%- endcase -%}
+        {%- endfor -%}
+
+        {%- if current_variant.available and current_variant.inventory_management == 'shopify' -%}
+          <div class="bfc4f-stock{% if current_variant.inventory_quantity <= 20 %} is-low{% endif %}" id="bfc4f-stock" style="margin-top:6px">
+            <span class="bfc4f-stock-dot"></span>
+            {%- if current_variant.inventory_quantity <= 20 -%}
+              Only {{ current_variant.inventory_quantity }} left
+            {%- else -%}
+              In stock
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="bfc4f-trust">
+        <div class="bfc4f-trust-item">
+          <div class="bfc4f-trust-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 14c0 5-8 8-8 8s-8-3-8-8V6l8-4 8 4z"/></svg></div>
+          <div class="bfc4f-trust-label">Fresh Stock</div>
+        </div>
+        <div class="bfc4f-trust-item">
+          <div class="bfc4f-trust-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16"/><path d="M2 10h20"/></svg></div>
+          <div class="bfc4f-trust-label">Ships Fast</div>
+        </div>
+        <div class="bfc4f-trust-item">
+          <div class="bfc4f-trust-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+          <div class="bfc4f-trust-label">Free Pickup</div>
+        </div>
+      </div>
+
+      <div class="bfc4f-policies">
+        <details class="bfc4f-policy">
+          <summary>Return Policy</summary>
+          <div class="bfc4f-policy-body">All film sales are final. Film is a perishable product and cannot be returned or exchanged. Please double-check your format (35mm vs 120) before ordering.</div>
+        </details>
+        <details class="bfc4f-policy">
+          <summary>Shipping</summary>
+          <div class="bfc4f-policy-body">Most orders ship same day. Domestic delivery via USPS or UPS typically arrives within 2-4 business days. Free shipping on US orders over $399. In-store pickup is always free.</div>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ BELOW FOLD ═══ -->
+  <div class="bfc4f-below">
+
+    {%- assign sample_count = 0 -%}
+    {%- for image in product.images -%}
+      {%- if forloop.index > sample_start -%}{%- assign sample_count = sample_count | plus: 1 -%}{%- endif -%}
+    {%- endfor -%}
+
+    {%- if sample_count > 0 -%}
+      <div class="bfc4f-samples">
+        <div class="bfc4f-samples-head">
+          <div class="bfc4f-samples-title">Shot on {{ product.title | split: '::' | first | split: ' - ' | first | strip }}</div>
+          <div class="bfc4f-samples-sub">Sample photos from our community</div>
+        </div>
+        <div class="bfc4f-samples-wrap">
+          <div class="bfc4f-samples-rail" id="bfc4f-samples-rail">
+          {%- for image in product.images -%}
+            {%- if forloop.index > sample_start -%}
+              <a href="javascript:void(0)" onclick="bfc4fLightbox('{{ image | image_url: width: 2400 }}')">
+                <img src="{{ image | image_url: width: 600 }}" alt="{{ image.alt | default: product.title | append: ' sample' }}" width="600" height="450" loading="lazy">
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+          </div>
+          {%- if sample_count > 3 -%}
+            <button class="bfc4f-samples-arrow" id="bfc4f-samples-arrow" aria-label="Scroll for more photos" onclick="document.getElementById('bfc4f-samples-rail').scrollBy({left:300,behavior:'smooth'})">
+              <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="2"><path d="M6 2l6 6-6 6"/></svg>
+            </button>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    <!-- Membership CTA — only for non-instant film -->
+    {%- assign is_instant = false -%}
+    {%- if product.metafields.custom.no_developing == true or product.tags contains 'no-developing' or product.tags contains 'instant-film' -%}
+      {%- assign is_instant = true -%}
+    {%- elsif product.type contains 'Instant' or product.type contains 'instant' -%}
+      {%- assign is_instant = true -%}
+    {%- elsif product.title contains 'SX-70' or product.title contains 'SX70' or product.title contains 'i-Type' or product.title contains 'I-Type' or product.title contains 'Polaroid 600' or product.title contains 'Polaroid Go' or product.title contains 'Instax' or product.title contains '600 Film' or product.title contains 'FP-100C' or product.title contains 'FP-100' or product.title contains 'FP-3000' or product.title contains 'FP-3000B' or product.title contains 'Pack Film' or product.title contains 'pack film' -%}
+      {%- assign is_instant = true -%}
+    {%- endif -%}
+    {%- unless is_instant -%}
+    <div class="bfc4f-membership">
+      <div>
+        <span class="bfc4f-mem-eyebrow">Developing Membership</span>
+        {%- assign mem_hl = section.settings.membership_headline -%}
+        {%- if mem_hl == blank -%}{%- assign mem_hl = "Shot your roll? We'll develop it." -%}{%- endif -%}
+        {%- assign mem_bd = section.settings.membership_body -%}
+        {%- if mem_bd == blank -%}{%- assign mem_bd = "BFC developing members save on every roll. Membership includes scans, credits toward prints, and priority turnaround." -%}{%- endif -%}
+        <div class="bfc4f-mem-title">{{ mem_hl }}</div>
+        <p class="bfc4f-mem-body">{{ mem_bd }}</p>
+      </div>
+      <a href="{{ membership_url }}" class="bfc4f-mem-cta">View Plans</a>
+    </div>
+    {%- endunless -%}
+
+    <!-- Have You Tried These? -->
+    {%- if film_collection -%}
+      {%- assign rec_count = 0 -%}
+      {%- assign has_recs = false -%}
+      {%- for p in film_collection.products -%}
+        {%- if p.handle != product.handle and p.available -%}{%- assign has_recs = true -%}{%- break -%}{%- endif -%}
+      {%- endfor -%}
+
+      {%- if has_recs -%}
+        {%- comment -%} Reviews {%- endcomment -%}
+        {% render 'bfc-pdp-reviews', pdp_handle: product.handle, pdp_title: product.title %}
+
+        <div class="bfc4f-recs">
+          <div class="bfc4f-recs-head">
+            <div class="bfc4f-recs-title">Have You Tried These?</div>
+            <a href="{{ film_collection.url }}" class="bfc4f-recs-all">Shop All Film</a>
+          </div>
+          <div class="bfc4f-recs-grid">
+            {%- for p in film_collection.products -%}
+              {%- if p.handle != product.handle and p.available and rec_count < rec_limit -%}
+                {%- assign rec_vid = p.selected_or_first_available_variant.id -%}
+                {%- assign rc_imgs = '' -%}
+                {%- for img in p.images -%}
+                  {%- assign img_url = img | image_url: width: 1000 -%}
+                  {%- if rc_imgs == '' -%}{%- assign rc_imgs = img_url -%}
+                  {%- else -%}{%- assign rc_imgs = rc_imgs | append: '||' | append: img_url -%}{%- endif -%}
+                {%- endfor -%}
+                <div class="bfc4f-rec-card"
+                  data-rc-title="{{ p.title | escape }}"
+                  data-rc-imgs="{{ rc_imgs | escape }}"
+                  data-rc-desc="{{ p.description | strip_html | truncate: 200 | escape }}"
+                  data-rc-price="{{ p.price | money_without_trailing_zeros }}"
+                  data-rc-vid="{{ rec_vid }}"
+                  data-rc-url="{{ p.url }}"
+                >
+                  <div class="bfc4f-rec-img-wrap">
+                    <a href="{{ p.url }}">
+                      <img class="bfc4f-rec-img" src="{{ p.featured_image | image_url: width: 1000 }}" alt="{{ p.title }}" width="1000" height="1000" loading="lazy">
+                    </a>
+                    <button type="button" class="bfc4f-rec-info-btn" data-action="info" aria-label="Info about {{ p.title | escape }}">i</button>
+                  </div>
+                  <div class="bfc4f-rec-body">
+                    <a href="{{ p.url }}" style="text-decoration:none;color:inherit">
+                      <div class="bfc4f-rec-name">{{ p.title }}</div>
+                      <div class="bfc4f-rec-price">{{ p.price | money_without_trailing_zeros }}</div>
+                    </a>
+                    <button type="button" class="bfc4f-rec-add" data-action="add" data-vid="{{ rec_vid }}">Add to Cart</button>
+                  </div>
+                </div>
+                {%- assign rec_count = rec_count | plus: 1 -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+
+    <!-- Need a Camera? -->
+    {%- if camera_collection and camera_collection.products.size > 0 -%}
+      <div class="bfc4f-cameras">
+        <div class="bfc4f-cameras-head">
+          <div class="bfc4f-cameras-title">Need a Camera?</div>
+          <a href="{{ camera_collection.url }}" class="bfc4f-cameras-all">Shop All Cameras</a>
+        </div>
+        <div class="bfc4f-cameras-rail">
+          {%- for p in camera_collection.products limit: 20 -%}
+            {%- if p.available -%}
+              <a href="{{ p.url }}" class="bfc4f-cam-card">
+                <div class="bfc4f-cam-img-wrap">
+                  <img class="bfc4f-cam-img" src="{{ p.featured_image | image_url: width: 400 }}" alt="{{ p.title }}" width="400" height="300" loading="lazy">
+                </div>
+                <div class="bfc4f-cam-body">
+                  <div class="bfc4f-cam-name">{{ p.title }}</div>
+                  <div class="bfc4f-cam-price">{{ p.price | money_without_trailing_zeros }}</div>
+                </div>
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+  </div>
+
+  <!-- Popup -->
+  <div class="bfc4f-popup-overlay" id="bfc4f-popup" onclick="bfc4fClosePopup()">
+    <div class="bfc4f-popup" onclick="event.stopPropagation()">
+      <div class="bfc4f-popup-head">
+        <div class="bfc4f-popup-title" id="bfc4f-popup-title"></div>
+        <button class="bfc4f-popup-close" onclick="bfc4fClosePopup()">&times;</button>
+      </div>
+      <div class="bfc4f-popup-body">
+        <div class="bfc4f-popup-imgs" id="bfc4f-popup-imgs"></div>
+        <div class="bfc4f-popup-price" id="bfc4f-popup-price"></div>
+        <div class="bfc4f-popup-desc" id="bfc4f-popup-desc"></div>
+        <button class="bfc4f-popup-atc" id="bfc4f-popup-atc" onclick="bfc4fQuickAddPopup()">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="bfc4f-lightbox" id="bfc4f-lightbox" onclick="this.classList.remove('is-open')">
+    <button class="bfc4f-lightbox-close" aria-label="Close">&times;</button>
+    <img src="" alt="" id="bfc4f-lb-img">
+  </div>
+
+  <!-- Mobile Sticky -->
+  <div class="bfc4f-sticky" id="bfc4f-sticky">
+    <div class="bfc4f-sticky-info">
+      <div class="bfc4f-sticky-title">{{ product.title }}</div>
+      <div class="bfc4f-sticky-price" id="bfc4f-sticky-price">{{ current_variant.price | money_without_trailing_zeros }}</div>
+    </div>
+    <button class="bfc4f-sticky-btn" onclick="bfc4fAddToCart()">Add to Cart</button>
+  </div>
+
+  {%- comment -%} Hidden Shopify product form (for cart drawer integration) {%- endcomment -%}
+  {%- assign bfc4f_form_id = 'bfc4f-form-' | append: section.id -%}
+  <div style="display:none">
+    <product-form class="product-form" data-hide-errors="false" data-section-id="{{ section.id }}">
+      {%- form 'product', product, id: bfc4f_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}" class="product-variant-id" id="bfc4f-hidden-vid"/>
+        <div class="product-form__buttons" data-display-quantity="false" data-display-layout="seperate" data-display-dynamics="false">
+          <button id="ProductSubmitButton-{{ section.id }}" type="submit" name="add" class="product-form__submit button button--filled">
+            <span>Add to Cart</span>
+            <div class="loading__spinner hidden">
+              <svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66"><circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle></svg>
+            </div>
+          </button>
+        </div>
+        <div class="product-form__error-message-wrapper" role="alert" hidden>
+          <span class="product-form__error-message"></span>
+        </div>
+      {%- endform -%}
+    </product-form>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  /* Slider */
+  var idx=0,slides=document.getElementById('bfc4f-slides'),
+  dots=document.querySelectorAll('.bfc4f-dot'),total=dots.length,
+  prev=document.getElementById('bfc4f-prev'),next=document.getElementById('bfc4f-next');
+  function goTo(i){if(i<0)i=0;if(i>=total)i=total-1;idx=i;
+    slides.style.transform='translateX(-'+(idx*100)+'%)';
+    dots.forEach(function(d,j){d.classList.toggle('is-active',j===idx);});
+    if(prev)prev.style.visibility=idx===0?'hidden':'visible';
+    if(next)next.style.visibility=idx>=total-1?'hidden':'visible';
+  }
+  if(prev)prev.onclick=function(){goTo(idx-1);};
+  if(next)next.onclick=function(){goTo(idx+1);};
+  dots.forEach(function(d){d.onclick=function(){goTo(+this.dataset.idx);};});
+  if(total<=1&&next)next.style.visibility='hidden';
+
+  var sx=0,sl=document.getElementById('bfc4f-slider');
+  if(sl){
+    sl.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;},{passive:true});
+    sl.addEventListener('touchend',function(e){var d=sx-e.changedTouches[0].clientX;if(Math.abs(d)>40){d>0?goTo(idx+1):goTo(idx-1);}},{passive:true});
+  }
+
+  /* Variants */
+  document.querySelectorAll('.bfc4f-var-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      if(this.disabled)return;
+      document.querySelectorAll('.bfc4f-var-btn').forEach(function(b){b.classList.remove('is-active');b.setAttribute('aria-checked','false');});
+      this.classList.add('is-active');this.setAttribute('aria-checked','true');
+      var vid=this.dataset.vid;
+      document.getElementById('bfc4f-vid').value=vid;
+      document.getElementById('bfc4f-hidden-vid').value=vid;
+      document.getElementById('bfc4f-price').textContent=this.dataset.price;
+      var ce=document.getElementById('bfc4f-compare');
+      if(this.dataset.hasCompare==='1'){if(ce){ce.textContent=this.dataset.comparePrice;ce.style.display='';}}else if(ce){ce.style.display='none';}
+      var sp=document.getElementById('bfc4f-sticky-price');if(sp)sp.textContent=this.dataset.price;
+      var atc=document.getElementById('bfc4f-atc'),av=this.dataset.available==='true';
+      var atcText=document.getElementById('bfc4f-atc-text');
+      atc.disabled=!av;if(atcText)atcText.textContent=av?'Add to Cart':'Sold Out';
+      var inv=parseInt(this.dataset.inventory)||0,se=document.getElementById('bfc4f-stock');
+      if(se){if(!av){se.style.display='none';}else{se.style.display='flex';se.className=inv<=20?'bfc4f-stock is-low':'bfc4f-stock';se.innerHTML='<span class="bfc4f-stock-dot"></span>'+(inv<=20?'Only '+inv+' left':'In stock');}}
+      if(this.dataset.url)window.history.replaceState({},'',this.dataset.url);
+    });
+  });
+
+  window.bfc4fQty=function(d){var i=document.getElementById('bfc4f-qty'),v=parseInt(i.value)+d;if(v<1)v=1;if(v>99)v=99;i.value=v;};
+  window.bfc4fLightbox=function(src){document.getElementById('bfc4f-lb-img').src=src;document.getElementById('bfc4f-lightbox').classList.add('is-open');};
+
+  /* Mobile sticky */
+  var sticky=document.getElementById('bfc4f-sticky'),atcB=document.getElementById('bfc4f-atc');
+  if(sticky&&atcB&&window.innerWidth<=900){
+    new IntersectionObserver(function(e){e.forEach(function(x){sticky.classList.toggle('is-visible',!x.isIntersecting);});},{threshold:0}).observe(atcB);
+  }
+
+  /* ── Cart refresh (XHR — bypasses fetch monkey-patching by apps) ── */
+  var ajaxHeaders={'Content-Type':'application/json','X-Requested-With':'XMLHttpRequest'};
+
+  function bfc4fRefreshCart(){
+    var xhr=new XMLHttpRequest();
+    xhr.open('GET',window.location.pathname+'?sections=cart-drawer,cart-icon-bubble&_='+Date.now(),true);
+    xhr.withCredentials=true;
+    xhr.setRequestHeader('Accept','application/json');
+    xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
+    xhr.onload=function(){
+      if(xhr.status<200||xhr.status>=300){console.error('[BFC4F] refresh status',xhr.status);return;}
+      var sections;
+      try{sections=JSON.parse(xhr.responseText);}catch(e){console.error('[BFC4F] refresh parse error',e);return;}
+      if(sections['cart-drawer']){
+        var el=document.getElementById('cart-drawer');
+        if(el){var t=document.createElement('div');t.innerHTML=sections['cart-drawer'];var n=t.querySelector('#cart-drawer');if(n)el.innerHTML=n.innerHTML;}
+        var drawer=document.querySelector('cart-drawer');
+        if(drawer&&typeof drawer.open==='function')drawer.open();
+      }
+      if(sections['cart-icon-bubble']){
+        document.querySelectorAll('#cart-icon-bubble').forEach(function(b){
+          var t=document.createElement('div');t.innerHTML=sections['cart-icon-bubble'];
+          var n=t.querySelector('#cart-icon-bubble');if(n)b.innerHTML=n.innerHTML;
+        });
+      }
+    };
+    xhr.onerror=function(){console.error('[BFC4F] Cart refresh network error');};
+    xhr.send();
+  }
+
+  /* ── Main ATC ── */
+  window.bfc4fAddToCart=async function(){
+    var btn=document.getElementById('bfc4f-atc');
+    var textEl=document.getElementById('bfc4f-atc-text');
+    var vid=parseInt(document.getElementById('bfc4f-vid').value,10);
+    var qty=parseInt(document.getElementById('bfc4f-qty').value,10)||1;
+    if(btn)btn.disabled=true;
+    if(textEl)textEl.textContent='Adding\u2026';
+    try{
+      /* Sync hidden form variant */
+      var hiddenVid=document.getElementById('bfc4f-hidden-vid');
+      if(hiddenVid)hiddenVid.value=vid;
+      /* Use hidden product-form submit (handles AJAX + cart drawer natively) */
+      var submitBtn=document.getElementById('ProductSubmitButton-{{ section.id }}');
+      if(submitBtn)submitBtn.click();
+      if(textEl)textEl.textContent='Added!';
+      if(btn)btn.style.background='#2a4820';
+      setTimeout(function(){if(textEl)textEl.textContent='Add to Cart';if(btn){btn.disabled=false;btn.style.background='';}},2400);
+    }catch(e){
+      console.error('[BFC4F] ATC error:',e);
+      if(textEl)textEl.textContent='Add to Cart';
+      if(btn)btn.disabled=false;
+    }
+  };
+
+  /* ── Quick Add (AJAX + cart section refresh) ── */
+  function bfc4fQuickAdd(btn,vid){
+    btn.disabled=true;btn.textContent='Adding...';
+    fetch('/cart/add.js',{method:'POST',headers:ajaxHeaders,body:JSON.stringify({items:[{id:vid,quantity:1}]})})
+    .then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
+    .then(function(){
+      bfc4fRefreshCart();
+      btn.textContent='Added';btn.classList.add('is-added');
+      setTimeout(function(){btn.textContent='Add to Cart';btn.classList.remove('is-added');btn.disabled=false;},1500);
+    })
+    .catch(function(){btn.textContent='Error';setTimeout(function(){btn.textContent='Add to Cart';btn.disabled=false;},1500);});
+  }
+
+  /* ── Popup ── */
+  var popupVid=0;
+  window.bfc4fClosePopup=function(){
+    document.getElementById('bfc4f-popup').classList.remove('is-open');
+    document.body.style.overflow='';
+  };
+  function openPopup(card){
+    popupVid=parseInt(card.dataset.rcVid,10);
+    document.getElementById('bfc4f-popup-title').textContent=card.dataset.rcTitle;
+    var imgs=card.dataset.rcImgs?card.dataset.rcImgs.split('||'):[];
+    document.getElementById('bfc4f-popup-imgs').innerHTML=imgs.map(function(src){return '<img src="'+src+'" loading="lazy"/>';}).join('');
+    document.getElementById('bfc4f-popup-desc').textContent=card.dataset.rcDesc;
+    document.getElementById('bfc4f-popup-price').textContent=card.dataset.rcPrice;
+    document.getElementById('bfc4f-popup').classList.add('is-open');
+    document.body.style.overflow='hidden';
+  }
+  window.bfc4fQuickAddPopup=function(){
+    var btn=document.getElementById('bfc4f-popup-atc');
+    btn.disabled=true;btn.textContent='Adding...';
+    fetch('/cart/add.js',{method:'POST',headers:ajaxHeaders,body:JSON.stringify({items:[{id:popupVid,quantity:1}]})})
+    .then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
+    .then(function(){
+      bfc4fRefreshCart();
+      btn.textContent='Added!';
+      setTimeout(function(){btn.textContent='Add to Cart';btn.disabled=false;bfc4fClosePopup();},1000);
+    })
+    .catch(function(){btn.textContent='Error';setTimeout(function(){btn.textContent='Add to Cart';btn.disabled=false;},1500);});
+  };
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')bfc4fClosePopup();});
+
+  /* ── Rec card event delegation (avoids inline onclick + quote escaping) ── */
+  document.querySelectorAll('.bfc4f-rec-card').forEach(function(card){
+    /* Info button */
+    var infoBtn=card.querySelector('[data-action="info"]');
+    if(infoBtn){
+      infoBtn.addEventListener('click',function(e){
+        e.preventDefault();e.stopPropagation();
+        openPopup(card);
+      });
+    }
+    /* Quick add button */
+    var addBtn=card.querySelector('[data-action="add"]');
+    if(addBtn){
+      addBtn.addEventListener('click',function(e){
+        e.preventDefault();e.stopPropagation();
+        bfc4fQuickAdd(addBtn,parseInt(addBtn.dataset.vid,10));
+      });
+    }
+  });
+
+  /* Description + Spec Parsing */
+  var rawEl=document.getElementById('bfc4f-desc-raw'),proseEl=document.getElementById('bfc4f-desc-prose'),specsEl=document.getElementById('bfc4f-specs');
+  if(rawEl){
+    var raw=rawEl.innerHTML.trim(),specKeys=['Size','Type','Balance','ISO','Exposures','Process','Grain','DX Code','Base'],hasHtml=raw.indexOf('data-bfc-desc-specs')!==-1;
+    if(hasHtml){
+      var tmp=document.createElement('div');tmp.innerHTML=raw;
+      var dd=tmp.querySelector('.bfc-desc-specs__desc');if(dd)proseEl.innerHTML=dd.innerHTML;
+      var items=tmp.querySelectorAll('.bfc-desc-specs__item'),sp=[];
+      items.forEach(function(it){var k=it.querySelector('.bfc-desc-specs__k'),v=it.querySelector('.bfc-desc-specs__v');if(k&&v)sp.push({key:k.textContent.trim(),val:v.textContent.trim()});});
+      rs(sp);
+    }else{
+      var td=document.createElement('div');td.innerHTML=raw;var tc=(td.textContent||td.innerText||'').replace(/[\r\n]+/g,' ').replace(/\s{2,}/g,' ').trim();
+      var sp=[],pt=tc;
+      /* Build one big regex that captures all Key: Value pairs, allowing zero whitespace between them */
+      var keyPattern=specKeys.join('|');
+      var allRx=new RegExp('('+keyPattern+')\\s*:\\s*([\\s\\S]+?)(?=(?:'+keyPattern+')\\s*:|\\s*$)','gi');
+      var match;
+      while((match=allRx.exec(tc))!==null){
+        sp.push({key:match[1],val:match[2].trim()});
+      }
+      /* Remove all matched specs from prose */
+      pt=tc.replace(allRx,'').replace(/\s{2,}/g,' ').trim();
+      if(pt)proseEl.innerHTML='<p>'+pt.replace(/\.\s+/g,'.</p><p>')+'</p>';
+      if(sp.length)rs(sp);
+    }
+  }
+  function rs(sp){var h='';sp.forEach(function(s){h+='<div class="bfc4f-mini-spec"><div class="bfc4f-spec-key">'+s.key+'</div><div class="bfc4f-spec-val">'+s.val+'</div></div>';});specsEl.innerHTML=h;}
+
+  /* Samples rail arrow — hide when scrolled to end */
+  var sampRail=document.getElementById('bfc4f-samples-rail');
+  var sampArrow=document.getElementById('bfc4f-samples-arrow');
+  if(sampRail&&sampArrow){
+    function checkSampArrow(){
+      var atEnd=sampRail.scrollLeft+sampRail.clientWidth>=sampRail.scrollWidth-4;
+      sampArrow.style.display=atEnd?'none':'flex';
+    }
+    sampRail.addEventListener('scroll',checkSampArrow,{passive:true});
+    checkSampArrow();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "BFC Film PDP",
+  "tag": "section",
+  "class": "bfc-film-section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "sample_photo_start",
+      "label": "Sample photos start after image #",
+      "info": "Product images before this number show in the main slider; images after show in the 'Shot on...' grid below.",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "rec_count",
+      "label": "Recommended films to show",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "url",
+      "id": "membership_url",
+      "label": "Membership page URL",
+      "info": "Default: /pages/membership"
+    },
+    {
+      "type": "text",
+      "id": "membership_headline",
+      "label": "Membership CTA headline",
+      "default": "Shot your roll? We'll develop it."
+    },
+    {
+      "type": "textarea",
+      "id": "membership_body",
+      "label": "Membership CTA body",
+      "default": "BFC developing members save on every roll. Membership includes scans, credits toward prints, and priority turnaround."
+    },
+    {
+      "type": "collection",
+      "id": "camera_collection",
+      "label": "Camera collection for 'Need a Camera?' rail",
+      "info": "Pick a camera collection to show below film recommendations."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Film PDP"
+    }
+  ],
+  "templates": ["product"]
+}
+{% endschema %}

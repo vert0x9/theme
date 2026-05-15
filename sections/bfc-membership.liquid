@@ -1,0 +1,1576 @@
+{{ 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Poppins:wght@300;400;500;600&display=swap' | stylesheet_tag }}
+
+<style>
+/* ─────────────────────────────────────────
+   RELEASE THEME HEADER FIX
+   The dark hero triggers overlay/expanded
+   header mode — this forces normal padding.
+───────────────────────────────────────── */
+.js-header {
+  --header-padding-top: 0px !important;
+  --header-padding-bottom: 0px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+/* ─────────────────────────────────────────
+   BFC MEMBERSHIP SECTION
+   All styles scoped to .bfc-mem to avoid
+   conflicts with existing theme CSS.
+───────────────────────────────────────── */
+
+.bfc-mem {
+  --bfc-canvas:      #F8F6EE;
+  --bfc-black:       #202009;
+  --bfc-charcoal:    #4E4741;
+  --bfc-gray:        #E3DDDA;
+  --bfc-manila:      #FFEACC;
+  --bfc-brown:       #5A3E2D;
+  --bfc-olive-lt:    #82906B;
+  --bfc-olive:       #525741;
+  --bfc-celadon:     #ABCC99;
+  --bfc-border:      rgba(78,71,65,0.13);
+  --bfc-border-md:   rgba(78,71,65,0.24);
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--bfc-black);
+}
+
+.bfc-mem *, .bfc-mem *::before, .bfc-mem *::after {
+  box-sizing: border-box;
+}
+
+/* ── LAYOUT ── */
+.bfc-wrap {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+/* ── EYEBROW ── */
+.bfc-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bfc-charcoal);
+  display: block;
+  margin-bottom: 14px;
+}
+
+/* ── SECTION HEADING ── */
+.bfc-s-hed {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(30px, 3.6vw, 48px);
+  font-weight: 500;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+.bfc-s-hed em { font-style: italic; }
+
+/* ── DIVIDER ── */
+hr.bfc-rule {
+  border: none;
+  border-top: 1px solid var(--bfc-border);
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────
+   HERO
+───────────────────────────────────────── */
+.bfc-hero {
+  background: var(--bfc-black);
+  color: var(--bfc-canvas);
+  padding: 100px 0 88px;
+  position: relative;
+  overflow: hidden;
+}
+.bfc-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.028;
+  pointer-events: none;
+}
+.bfc-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 80px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.bfc-hero .bfc-eyebrow { color: rgba(227,221,218,0.42); margin-bottom: 20px; }
+
+.bfc-hero-hed {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(52px, 6.8vw, 88px);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--bfc-canvas);
+  margin-bottom: 28px;
+}
+.bfc-hero-hed em { font-style: italic; color: var(--bfc-manila); }
+
+.bfc-hero-body {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: rgba(227,221,218,0.62);
+  max-width: 480px;
+}
+.bfc-mem .bfc-hero-body p {
+  margin: 0 0 80px;
+}
+.bfc-hero-body strong { color: var(--bfc-canvas); font-weight: 500; }
+
+.bfc-hero-ctas { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.bfc-btn-hero-primary {
+  background: var(--bfc-canvas);
+  color: var(--bfc-black);
+  font-family: 'Poppins', sans-serif;
+  font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  text-decoration: none; padding: 14px 32px;
+  display: inline-block; border: none; cursor: pointer;
+  transition: background 0.18s;
+}
+.bfc-btn-hero-primary:hover { background: var(--bfc-gray); color: var(--bfc-black); text-decoration: none; }
+
+.bfc-btn-hero-ghost {
+  background: transparent;
+  color: rgba(227,221,218,0.62);
+  font-family: 'Poppins', sans-serif;
+  font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  text-decoration: none; padding: 13px 30px;
+  border: 1px solid rgba(255,255,255,0.16);
+  display: inline-block; cursor: pointer;
+  transition: border-color 0.18s, color 0.18s;
+}
+.bfc-btn-hero-ghost:hover { border-color: rgba(255,255,255,0.45); color: var(--bfc-canvas); text-decoration: none; }
+
+/* Stats panel */
+.bfc-hero-panel {
+  border: 1px solid rgba(255,255,255,0.09);
+  overflow: hidden;
+}
+.bfc-panel-head {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.22em;
+  text-transform: uppercase; color: rgba(227,221,218,0.32);
+  padding: 16px 22px 15px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.bfc-sr {
+  display: flex; justify-content: space-between;
+  align-items: center; padding: 12px 22px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: background 0.15s;
+}
+.bfc-sr:last-child { border-bottom: none; }
+.bfc-sr:hover { background: rgba(255,255,255,0.03); }
+.bfc-sr-lbl { font-size: 11.5px; font-weight: 300; color: rgba(227,221,218,0.75); }
+.bfc-sr-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 23px; font-weight: 500;
+  color: var(--bfc-canvas); letter-spacing: -0.01em;
+}
+
+/* Entrance animation */
+@keyframes bfcFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.bfc-hero-left > * { opacity: 0; animation: bfcFadeUp 0.6s ease forwards; }
+.bfc-hero-left > *:nth-child(1) { animation-delay: 0.08s; }
+.bfc-hero-left > *:nth-child(2) { animation-delay: 0.19s; }
+.bfc-hero-left > *:nth-child(3) { animation-delay: 0.30s; }
+.bfc-hero-left > *:nth-child(4) { animation-delay: 0.41s; }
+
+/* ─────────────────────────────────────────
+   TICKER
+───────────────────────────────────────── */
+.bfc-ticker { background: var(--bfc-charcoal); padding: 12px 0; overflow: hidden; }
+.bfc-t-track {
+  display: flex; gap: 52px; white-space: nowrap;
+  animation: bfcTick 28s linear infinite; width: max-content;
+}
+.bfc-t-item {
+  font-size: 9.5px; font-weight: 600; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(255,255,255,0.85);
+  display: flex; align-items: center; gap: 9px;
+}
+.bfc-t-item::before {
+  content: ''; width: 3px; height: 3px; border-radius: 50%;
+  background: rgba(255,255,255,0.4); display: block; flex-shrink: 0;
+}
+@keyframes bfcTick {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ─────────────────────────────────────────
+   PERKS
+───────────────────────────────────────── */
+.bfc-perks { padding: 88px 0; background: var(--bfc-canvas); }
+
+.bfc-s-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: end;
+  margin-bottom: 52px;
+}
+.bfc-s-intro {
+  font-size: 13.5px; font-weight: 300; line-height: 1.78;
+  color: var(--bfc-charcoal); align-self: end;
+}
+
+/* "Included with every plan" pill */
+.bfc-all-plans-pill {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: var(--bfc-black); color: var(--bfc-canvas);
+  font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 8px 14px; margin-bottom: 16px;
+}
+.bfc-all-plans-pill::before {
+  content: ''; width: 5px; height: 5px;
+  background: var(--bfc-celadon); display: block; flex-shrink: 0;
+}
+
+.bfc-perks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--bfc-border);
+  border-left: 1px solid var(--bfc-border);
+}
+.bfc-perk {
+  border-right: 1px solid var(--bfc-border);
+  border-bottom: 1px solid var(--bfc-border);
+  padding: 24px 26px;
+  transition: background 0.18s;
+}
+.bfc-perk:hover { background: var(--bfc-gray); }
+.bfc-perk-idx {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.16em;
+  color: var(--bfc-olive-lt); display: block; margin-bottom: 10px;
+}
+.bfc-perk-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px; font-weight: 600; line-height: 1.2;
+  margin-bottom: 6px; color: var(--bfc-black);
+}
+.bfc-perk-body {
+  font-size: 12px; font-weight: 300; line-height: 1.65; color: var(--bfc-charcoal);
+}
+
+/* ─────────────────────────────────────────
+   COMPARISON TABLE
+───────────────────────────────────────── */
+.bfc-compare { padding: 88px 0; background: var(--bfc-gray); }
+.bfc-compare .bfc-s-hed { margin-bottom: 32px; }
+
+.bfc-ctable-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.bfc-ctable {
+  width: 100%; border-collapse: collapse; background: var(--bfc-canvas);
+}
+.bfc-ctable th, .bfc-ctable td {
+  padding: 15px 20px; text-align: left;
+  border-bottom: 1px solid var(--bfc-border);
+  vertical-align: middle;
+}
+.bfc-ctable th {
+  font-size: 9.5px; font-weight: 600; letter-spacing: 0.17em;
+  text-transform: uppercase; color: var(--bfc-charcoal); background: var(--bfc-canvas);
+}
+.bfc-ctable th.bfc-cm {
+  color: var(--bfc-olive); background: rgba(82,87,65,0.05);
+  border-bottom: 2px solid var(--bfc-olive);
+}
+.bfc-ctable tbody tr:last-child td { border-bottom: none; }
+.bfc-ctable td { font-size: 13px; font-weight: 400; }
+.bfc-ctable td.bfc-cf { color: var(--bfc-charcoal); }
+.bfc-ctable td.bfc-cm {
+  background: rgba(82,87,65,0.04); color: var(--bfc-olive); font-weight: 500;
+}
+.bfc-ck { color: var(--bfc-olive); font-weight: 600; }
+.bfc-dim { color: var(--bfc-olive-lt); }
+.bfc-ctable tbody tr:hover td { background: rgba(78,71,65,0.025); }
+.bfc-ctable tbody tr:hover td.bfc-cm { background: rgba(82,87,65,0.07); }
+
+/* ─────────────────────────────────────────
+   PRICING
+───────────────────────────────────────── */
+.bfc-pricing {
+  background: var(--bfc-brown);
+  color: var(--bfc-canvas);
+  padding: 88px 0;
+}
+.bfc-pricing-hd { text-align: center; margin-bottom: 14px; }
+.bfc-pricing-hd .bfc-eyebrow { color: rgba(227,221,218,0.45); }
+.bfc-pricing-hed {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 500; line-height: 1.05;
+  letter-spacing: -0.01em; color: var(--bfc-canvas);
+}
+.bfc-pricing-hed em { font-style: italic; }
+.bfc-pricing-sub {
+  font-size: 13px; font-weight: 300;
+  color: rgba(227,221,218,0.55); margin-top: 10px;
+}
+
+/* Billing toggle */
+.bfc-tog-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 13px; margin: 34px 0 48px;
+}
+.bfc-tog-lbl {
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(227,221,218,0.4);
+  cursor: pointer; transition: color 0.15s;
+}
+.bfc-tog-lbl.on { color: var(--bfc-canvas); }
+.bfc-tog-pill {
+  width: 42px; height: 22px; border-radius: 11px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.18);
+  position: relative; cursor: pointer; transition: background 0.2s;
+}
+.bfc-tog-pill.on { background: var(--bfc-celadon); border-color: var(--bfc-celadon); }
+.bfc-tog-knob {
+  position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; border-radius: 50%; background: #fff;
+  transition: transform 0.22s cubic-bezier(0.4,0,0.2,1);
+}
+.bfc-tog-pill.on .bfc-tog-knob { transform: translateX(20px); }
+.bfc-save-pill {
+  font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; background: var(--bfc-celadon);
+  color: var(--bfc-olive); padding: 3px 9px;
+}
+
+/* Plan cards */
+.bfc-plans {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+.bfc-p-card {
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 36px 28px; position: relative;
+  transition: border-color 0.2s, transform 0.18s;
+}
+.bfc-p-card:hover { border-color: rgba(255,255,255,0.22); transform: translateY(-3px); }
+.bfc-p-card.hi    { border-color: var(--bfc-celadon); background: rgba(171,204,153,0.05); }
+
+.bfc-p-badge {
+  position: absolute; top: 0; right: 28px;
+  background: var(--bfc-celadon); color: var(--bfc-olive);
+  font-size: 9px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; padding: 4px 11px;
+  transform: translateY(-50%);
+}
+.bfc-p-name {
+  font-size: 9.5px; font-weight: 600; letter-spacing: 0.2em;
+  text-transform: uppercase; color: rgba(227,221,218,0.5); margin-bottom: 18px;
+}
+.bfc-p-price {
+  display: flex; align-items: baseline; gap: 3px; margin-bottom: 5px;
+}
+.bfc-p-sym  { font-size: 17px; font-weight: 300; color: rgba(248,246,238,0.4); margin-top: 7px; }
+.bfc-p-num  {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 54px; font-weight: 500; line-height: 1; color: var(--bfc-canvas);
+}
+.bfc-p-freq { font-size: 11px; font-weight: 300; color: rgba(227,221,218,0.45); }
+
+.bfc-p-mo {}
+.bfc-p-yr  { display: none; }
+.bfc-show-yr .bfc-p-mo { display: none; }
+.bfc-show-yr .bfc-p-yr { display: flex; }
+
+.bfc-p-val {
+  font-size: 11.5px; font-weight: 400; color: var(--bfc-celadon); margin-bottom: 24px;
+}
+.bfc-p-div { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 24px 0; }
+.bfc-p-tag {
+  font-size: 13px; font-weight: 300; line-height: 1.68;
+  color: rgba(227,221,218,0.6); margin-bottom: 26px;
+}
+.bfc-p-feats {
+  list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 34px;
+  padding: 0;
+}
+.bfc-p-feats li {
+  font-size: 12.5px; font-weight: 400;
+  color: rgba(248,246,238,0.78);
+  display: flex; align-items: baseline; gap: 9px; line-height: 1.5;
+}
+.bfc-p-feats li::before { content: '+'; color: var(--bfc-celadon); font-weight: 600; font-size: 13px; flex-shrink: 0; }
+.bfc-fs { color: var(--bfc-canvas); font-weight: 500; }
+
+.bfc-btn-plan {
+  display: block; width: 100%; text-align: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.15em;
+  text-transform: uppercase; padding: 14px 20px;
+  text-decoration: none; cursor: pointer; border: none; transition: all 0.18s;
+}
+.bfc-btn-plan:hover { text-decoration: none; }
+.bfc-btn-ghost { background: transparent; color: var(--bfc-canvas); border: 1px solid rgba(255,255,255,0.2); }
+.bfc-btn-ghost:hover { border-color: var(--bfc-canvas); color: var(--bfc-canvas); }
+.bfc-btn-cel   { background: var(--bfc-celadon); color: var(--bfc-olive); }
+.bfc-btn-cel:hover { background: #bdd9aa; color: var(--bfc-olive); }
+
+.bfc-p-note {
+  text-align: center; margin-top: 28px;
+  font-size: 11px; font-weight: 300;
+  color: rgba(227,221,218,0.35); letter-spacing: 0.04em;
+}
+
+/* ─────────────────────────────────────────
+   FORMATS
+───────────────────────────────────────── */
+.bfc-formats { padding: 88px 0; background: var(--bfc-canvas); }
+.bfc-fmt-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+}
+.bfc-fmt-left .bfc-s-hed { margin-bottom: 18px; }
+.bfc-fmt-body {
+  font-size: 13.5px; font-weight: 300; line-height: 1.76;
+  color: var(--bfc-charcoal); margin-bottom: 28px;
+}
+.bfc-live-pill {
+  display: inline-flex; align-items: center; gap: 9px;
+  background: var(--bfc-gray); padding: 9px 16px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.04em; color: var(--bfc-black);
+}
+.bfc-live-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #5fa64a;
+  flex-shrink: 0;
+  animation: bfcBlink 2.3s infinite;
+}
+@keyframes bfcBlink { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+.bfc-ftags { display: flex; flex-wrap: wrap; gap: 6px; }
+.bfc-ftag {
+  font-size: 10.5px; font-weight: 500; letter-spacing: 0.07em;
+  padding: 7px 13px; border: 1px solid var(--bfc-border-md);
+  color: var(--bfc-charcoal); background: transparent; transition: all 0.15s; cursor: default;
+}
+.bfc-ftag:hover { background: var(--bfc-black); color: var(--bfc-canvas); border-color: var(--bfc-black); }
+
+/* ─────────────────────────────────────────
+   MAIL-IN
+───────────────────────────────────────── */
+.bfc-mailin {
+  padding: 80px 0; background: var(--bfc-canvas);
+  border-top: 1px solid var(--bfc-border);
+}
+.bfc-mailin-top {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 32px; margin-bottom: 52px; flex-wrap: wrap;
+}
+.bfc-mailin-hed {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(26px, 3vw, 40px);
+  font-weight: 500; line-height: 1.08; margin: 10px 0 0;
+}
+.bfc-mailin-hed em { font-style: italic; }
+.bfc-mailin-steps {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--bfc-border);
+  border-left: 1px solid var(--bfc-border);
+}
+.bfc-mstep {
+  border-right: 1px solid var(--bfc-border);
+  border-bottom: 1px solid var(--bfc-border);
+  padding: 32px 28px 28px;
+}
+.bfc-mstep-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 64px; font-weight: 500; line-height: 1;
+  color: var(--bfc-border-md); display: block;
+  margin-bottom: 18px; letter-spacing: -0.02em;
+}
+.bfc-mstep-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; font-weight: 600; line-height: 1.2;
+  color: var(--bfc-black); margin-bottom: 8px;
+}
+.bfc-mstep-body {
+  font-size: 12.5px; font-weight: 300; line-height: 1.68; color: var(--bfc-charcoal);
+}
+@media screen and (max-width: 880px) {
+  .bfc-mailin-top { margin-bottom: 36px; }
+  .bfc-mailin-steps { grid-template-columns: 1fr; }
+  .bfc-mailin { padding: 60px 0; }
+}
+@media screen and (max-width: 540px) {
+  .bfc-mailin { padding: 48px 0; }
+  .bfc-mstep  { padding: 24px 18px; }
+  .bfc-mstep-num { font-size: 52px; margin-bottom: 12px; }
+}
+
+.bfc-btn-solid {
+  display: inline-block;
+  background: var(--bfc-black); color: var(--bfc-canvas);
+  font-family: 'Poppins', sans-serif;
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.15em;
+  text-transform: uppercase; text-decoration: none;
+  padding: 13px 30px; border: none; cursor: pointer;
+  transition: background 0.18s;
+}
+.bfc-btn-solid:hover { background: var(--bfc-charcoal); color: var(--bfc-canvas); text-decoration: none; }
+
+/* ─────────────────────────────────────────
+   CTA FOOTER
+───────────────────────────────────────── */
+.bfc-footer-cta {
+  background: var(--bfc-black); color: var(--bfc-canvas);
+  padding: 88px 0; text-align: center;
+}
+.bfc-footer-cta .bfc-eyebrow { color: rgba(227,221,218,0.38); }
+.bfc-footer-hed {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(34px, 4.4vw, 58px);
+  font-weight: 500; line-height: 1.05;
+  letter-spacing: -0.01em; color: var(--bfc-canvas); margin-bottom: 14px;
+}
+.bfc-footer-hed em { font-style: italic; }
+.bfc-footer-sub {
+  font-size: 13px; font-weight: 300;
+  color: rgba(227,221,218,0.55); max-width: 480px;
+  margin: 0 auto 36px; line-height: 1.78;
+}
+.bfc-footer-btns { display: flex; gap: 11px; justify-content: center; }
+
+.bfc-btn-canvas {
+  display: inline-block;
+  background: var(--bfc-canvas); color: var(--bfc-black);
+  font-family: 'Poppins', sans-serif;
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.15em;
+  text-transform: uppercase; text-decoration: none;
+  padding: 13px 30px; border: none; cursor: pointer;
+  transition: background 0.18s;
+}
+.bfc-btn-canvas:hover { background: var(--bfc-gray); color: var(--bfc-black); text-decoration: none; }
+
+.bfc-btn-ghost-light {
+  display: inline-block;
+  background: transparent; color: var(--bfc-canvas);
+  font-family: 'Poppins', sans-serif;
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.15em;
+  text-transform: uppercase; text-decoration: none;
+  padding: 13px 30px; border: 1px solid rgba(255,255,255,0.3); cursor: pointer;
+  transition: border-color 0.18s;
+}
+.bfc-btn-ghost-light:hover { border-color: var(--bfc-canvas); color: var(--bfc-canvas); text-decoration: none; }
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
+@media screen and (max-width: 880px) {
+  .bfc-wrap { padding: 0 24px; }
+  .bfc-hero-grid, .bfc-s-header, .bfc-fmt-grid {
+    grid-template-columns: 1fr; gap: 28px;
+  }
+  .bfc-plans { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .bfc-hero-panel { display: none; }
+  .bfc-mem .bfc-hero-body p { margin-bottom: 40px; }
+  .bfc-hero       { padding: 64px 0 56px; }
+  .bfc-mailin-inner { grid-template-columns: 1fr; gap: 36px; }  .bfc-perks      { padding: 60px 0; }
+  .bfc-compare    { padding: 60px 0; }
+  .bfc-pricing    { padding: 60px 0; }
+  .bfc-formats    { padding: 60px 0; }
+  .bfc-mailin     { padding: 48px 0; }
+  .bfc-footer-cta { padding: 64px 0; }
+  .bfc-perks-grid { grid-template-columns: 1fr 1fr; }
+  .bfc-footer-btns { flex-direction: column; align-items: center; }
+  .bfc-ctable { min-width: 480px; }
+}
+
+@media screen and (max-width: 540px) {
+  .bfc-wrap       { padding: 0 18px; }
+  .bfc-perks-grid { grid-template-columns: 1fr; }
+  .bfc-hero-hed   { font-size: 44px; letter-spacing: -0.015em; }
+  .bfc-mem .bfc-hero-body  { font-size: 13.5px; }
+  .bfc-mem .bfc-hero-body p { margin-bottom: 32px; }
+  .bfc-btn-hero-primary,
+  .bfc-btn-hero-ghost { display: block; text-align: center; }
+  .bfc-s-header   { gap: 16px; margin-bottom: 36px; }
+  .bfc-s-hed      { font-size: 30px; }
+  .bfc-perk       { padding: 20px 18px; }
+
+  /* ── TABLE: mobile — allow wrapping, contain within viewport ── */
+  .bfc-ctable-wrap {
+    border: 1px solid var(--bfc-border);
+    margin-top: 24px;
+    overflow-x: hidden;
+    width: 100%;
+  }
+  .bfc-ctable {
+    min-width: 0; width: 100%; table-layout: fixed;
+    border-collapse: collapse;
+  }
+  .bfc-ctable th,
+  .bfc-ctable td {
+    padding: 11px 8px;
+    font-size: 10.5px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    vertical-align: middle;
+  }
+  .bfc-ctable th:first-child,
+  .bfc-ctable td:first-child {
+    width: 44%;
+    text-align: left;
+    padding-left: 12px;
+    font-size: 10.5px;
+  }
+  .bfc-ctable th:not(:first-child),
+  .bfc-ctable td:not(:first-child) {
+    width: 28%;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 0;
+    white-space: normal;
+  }
+  .bfc-ctable th:not(:first-child) {
+    letter-spacing: 0.1em;
+    font-size: 9px;
+  }
+  .bfc-compare .bfc-s-hed { margin-bottom: 20px; }
+
+  /* ── PLANS: horizontal swipe slider ── */
+  .bfc-plans-slider-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 18px;
+    margin: 0 -18px;
+    padding: 0 18px 16px;
+    /* hide scrollbar */
+    scrollbar-width: none;
+  }
+  .bfc-plans-slider-wrap::-webkit-scrollbar { display: none; }
+  .bfc-plans {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 12px;
+    width: max-content;
+  }
+  .bfc-p-card {
+    scroll-snap-align: start;
+    width: 78vw;
+    max-width: 320px;
+    flex-shrink: 0;
+    padding: 28px 22px;
+  }
+
+  .bfc-p-num      { font-size: 44px; }
+  .bfc-ftag       { font-size: 10px; padding: 6px 11px; }
+  .bfc-t-track    { gap: 36px; }
+  .bfc-t-item     { font-size: 9px; }
+  .bfc-footer-hed { font-size: 34px; }
+  .bfc-footer-btns { gap: 8px; }
+  .bfc-btn-canvas,
+  .bfc-btn-ghost-light { display: block; text-align: center; }
+  .bfc-mailin     { padding: 48px 0; }
+  .bfc-tog-row    { gap: 10px; flex-wrap: wrap; justify-content: center; }
+
+  /* "Included with every plan" pill shrink */
+  .bfc-all-plans-pill { font-size: 9px; padding: 7px 12px; letter-spacing: 0.12em; }
+}
+
+@media screen and (max-width: 375px) {
+  .bfc-wrap     { padding: 0 14px; }
+  .bfc-hero-hed { font-size: 38px; }
+  .bfc-ctable   { min-width: 0; }
+  .bfc-ctable th, .bfc-ctable td { padding: 10px 6px; font-size: 10px; }
+  .bfc-ctable th:not(:first-child) { font-size: 8.5px; }
+  .bfc-ctable th:not(:first-child),
+  .bfc-ctable td:not(:first-child) { font-size: 9.5px; }
+  .bfc-plans-slider-wrap { margin: 0 -14px; padding: 0 14px 16px; }
+  .bfc-p-card   { width: 84vw; }
+}
+/* ─────────────────────────────────────────
+   CALCULATOR
+───────────────────────────────────────── */
+.bfc-calc { background: var(--bfc-canvas); padding: 72px 0; border-top: 1px solid var(--bfc-border); }
+.bfc-calc-inner {
+  border: 1px solid var(--bfc-border-md);
+  background: #fff;
+}
+.bfc-calc-head {
+  padding: 22px 28px;
+  border-bottom: 1px solid var(--bfc-border);
+  background: var(--bfc-gray);
+}
+.bfc-calc-title {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--bfc-black); margin-bottom: 3px;
+}
+.bfc-calc-sub { font-size: 11.5px; font-weight: 300; color: var(--bfc-charcoal); }
+.bfc-calc-body { padding: 28px; }
+.bfc-calc-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 20px;
+}
+.bfc-calc-field label {
+  display: block; font-size: 9px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--bfc-charcoal); margin-bottom: 7px;
+}
+.bfc-calc-field input,
+.bfc-calc-field select {
+  width: 100%; padding: 10px 13px;
+  border: 1px solid var(--bfc-border-md);
+  font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--bfc-black);
+  background: var(--bfc-canvas); appearance: none; -webkit-appearance: none;
+  transition: border-color 0.15s;
+}
+.bfc-calc-field input:focus,
+.bfc-calc-field select:focus { outline: none; border-color: var(--bfc-black); }
+.bfc-calc-addons-label {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--bfc-charcoal); margin-bottom: 9px;
+}
+.bfc-calc-addons { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.bfc-calc-addon {
+  padding: 7px 14px; border: 1px solid var(--bfc-border-md);
+  font-family: 'Poppins', sans-serif; font-size: 9.5px; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+  color: var(--bfc-charcoal); transition: all 0.12s;
+}
+.bfc-calc-addon.on { background: var(--bfc-black); border-color: var(--bfc-black); color: #fff; }
+.bfc-calc-results {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+  border-top: 1px solid var(--bfc-border); padding-top: 24px;
+}
+.bfc-calc-result {
+  padding: 16px 14px; border: 1px solid var(--bfc-border);
+}
+.bfc-calc-result.bfc-cr-hi  { border-color: var(--bfc-celadon); background: rgba(171,204,153,0.08); }
+.bfc-calc-result.bfc-cr-best { background: var(--bfc-black); border-color: var(--bfc-black); color: var(--bfc-canvas); }
+.bfc-cr-name { font-size: 9px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px; opacity: 0.55; }
+.bfc-cr-total { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 500; line-height: 1; margin-bottom: 3px; }
+.bfc-cr-period { font-size: 9.5px; font-weight: 300; opacity: 0.45; margin-bottom: 9px; }
+.bfc-cr-save { font-size: 11px; font-weight: 500; color: var(--bfc-charcoal); opacity: 0.6; margin-top: 4px; }
+.bfc-cr-save-lbl {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.16em;
+  text-transform: uppercase; opacity: 0.5; margin-bottom: 2px;
+}
+.bfc-cr-save-amt {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 600; line-height: 1;
+  color: var(--bfc-olive); margin-bottom: 2px;
+}
+.bfc-calc-result.bfc-cr-hi .bfc-cr-save-amt { color: var(--bfc-olive); }
+.bfc-calc-result.bfc-cr-best .bfc-cr-save { color: rgba(248,246,238,0.6); }
+.bfc-calc-result.bfc-cr-best .bfc-cr-save-amt { color: var(--bfc-celadon); }
+.bfc-cr-total-sm {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px !important; font-weight: 500; line-height: 1;
+  margin-top: 6px; margin-bottom: 1px; opacity: 0.5;
+}
+.bfc-cr-tag {
+  display: inline-block; background: var(--bfc-celadon); color: var(--bfc-olive);
+  font-size: 7.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 2px 8px; margin-bottom: 7px;
+}
+@media screen and (max-width: 880px) {
+  .bfc-calc-results { grid-template-columns: 1fr 1fr; }
+}
+@media screen and (max-width: 540px) {
+  .bfc-calc-row    { grid-template-columns: 1fr; }
+  .bfc-calc-body   { padding: 20px 18px; }
+  .bfc-calc-head   { padding: 16px 18px; }
+  .bfc-calc-results { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .bfc-cr-total    { font-size: 26px; }
+}
+
+/* "Not sure?" button — canvas section */
+.bfc-calc-nudge {
+  text-align: center; margin-top: 20px;
+}
+.bfc-btn-nudge {
+  display: inline-block;
+  font-family: 'Poppins', sans-serif;
+  font-size: 10px; font-weight: 500; letter-spacing: 0.08em;
+  color: rgba(227,221,218,0.55); text-decoration: underline;
+  text-underline-offset: 3px; cursor: pointer; background: none; border: none;
+  transition: color 0.15s;
+}
+.bfc-btn-nudge:hover { color: var(--bfc-canvas); text-decoration: underline; }
+
+/* "Buy Membership" CTA after table */
+.bfc-compare-cta {
+  text-align: center; padding: 40px 0 16px;
+}
+
+</style>
+
+
+<div class="bfc-mem">
+
+  {%- comment -%} ═══════════════ HERO ═══════════════ {%- endcomment -%}
+  <section class="bfc-hero">
+    <div class="bfc-wrap">
+      <div class="bfc-hero-grid">
+
+        <div class="bfc-hero-left">
+          <span class="bfc-eyebrow">{{ section.settings.hero_eyebrow }}</span>
+          <h1 class="bfc-hero-hed">
+            {{ section.settings.hero_headline | newline_to_br }}
+          </h1>
+          <div class="bfc-hero-body">
+            {{ section.settings.hero_body }}
+          </div>
+          <div class="bfc-hero-ctas">
+            <a href="{{ section.settings.cta_primary_url }}" class="bfc-btn-hero-primary">
+              {{ section.settings.cta_primary_label }}
+            </a>
+            <a href="{{ section.settings.cta_secondary_url }}" class="bfc-btn-hero-ghost">
+              {{ section.settings.cta_secondary_label }}
+            </a>
+          </div>
+        </div>
+
+        <div class="bfc-hero-panel">
+          <div class="bfc-panel-head">{{ section.settings.panel_heading }}</div>
+          <div class="bfc-sr"><span class="bfc-sr-lbl">{{ section.settings.panel_row2_label }}</span><span class="bfc-sr-val">{{ section.settings.panel_row2_value }}</span></div>
+          <div class="bfc-sr"><span class="bfc-sr-lbl">{{ section.settings.panel_row3_label }}</span><span class="bfc-sr-val">{{ section.settings.panel_row3_value }}</span></div>
+          <div class="bfc-sr"><span class="bfc-sr-lbl">{{ section.settings.panel_row4_label }}</span><span class="bfc-sr-val">{{ section.settings.panel_row4_value }}</span></div>
+          <div class="bfc-sr"><span class="bfc-sr-lbl">{{ section.settings.panel_row5_label }}</span><span class="bfc-sr-val">{{ section.settings.panel_row5_value }}</span></div>
+          <div class="bfc-sr"><span class="bfc-sr-lbl">{{ section.settings.panel_row6_label }}</span><span class="bfc-sr-val">{{ section.settings.panel_row6_value }}</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ═══════════════ TICKER ═══════════════ {%- endcomment -%}
+  <div class="bfc-ticker" aria-hidden="true">
+    <div class="bfc-t-track">
+      <span class="bfc-t-item">35mm</span>
+      <span class="bfc-t-item">120 Medium Format</span>
+      <span class="bfc-t-item">C-41 Color</span>
+      <span class="bfc-t-item">Black &amp; White</span>
+      <span class="bfc-t-item">Push / Pull</span>
+      <span class="bfc-t-item">E-6 Slide Film</span>
+      <span class="bfc-t-item">Disposable Cameras</span>
+      <span class="bfc-t-item">Free Sleeving</span>
+      <span class="bfc-t-item">Free TIFFs</span>
+      <span class="bfc-t-item">Dev + Scan Credits</span>
+      <span class="bfc-t-item">Mail-In Worldwide</span>
+      {%- comment -%} Duplicate for seamless loop {%- endcomment -%}
+      <span class="bfc-t-item">35mm</span>
+      <span class="bfc-t-item">120 Medium Format</span>
+      <span class="bfc-t-item">C-41 Color</span>
+      <span class="bfc-t-item">Black &amp; White</span>
+      <span class="bfc-t-item">Push / Pull</span>
+      <span class="bfc-t-item">E-6 Slide Film</span>
+      <span class="bfc-t-item">Disposable Cameras</span>
+      <span class="bfc-t-item">Free Sleeving</span>
+      <span class="bfc-t-item">Free TIFFs</span>
+      <span class="bfc-t-item">Dev + Scan Credits</span>
+      <span class="bfc-t-item">Mail-In Worldwide</span>
+    </div>
+  </div>
+
+  {%- comment -%} ═══════════════ PRICING ═══════════════ {%- endcomment -%}
+  <section class="bfc-pricing" id="bfc-plans">
+    <div class="bfc-wrap">
+      <div class="bfc-pricing-hd">
+        <span class="bfc-eyebrow">{{ section.settings.pricing_eyebrow }}</span>
+        <h2 class="bfc-pricing-hed"><em>{{ section.settings.pricing_heading }}</em></h2>
+        <p class="bfc-pricing-sub">{{ section.settings.pricing_sub }}</p>
+      </div>
+
+      <div class="bfc-tog-row">
+        <span class="bfc-tog-lbl on" id="bfc-lm">Monthly</span>
+        <div class="bfc-tog-pill" id="bfc-tog"><div class="bfc-tog-knob"></div></div>
+        <span class="bfc-tog-lbl" id="bfc-ly">Yearly</span>
+        <span class="bfc-save-pill">{{ section.settings.yearly_save_label }}</span>
+      </div>
+
+      <div class="bfc-plans-slider-wrap">
+      <div class="bfc-plans" id="bfc-plans-grid">
+
+        {%- comment -%} CASUAL {%- endcomment -%}
+        <div class="bfc-p-card">
+          <div class="bfc-p-name">{{ section.settings.casual_name }}</div>
+          <div class="bfc-p-mo bfc-p-price">
+            <span class="bfc-p-sym">$</span>
+            <span class="bfc-p-num">{{ section.settings.casual_price_mo }}</span>
+            <span class="bfc-p-freq">&nbsp;/ month</span>
+          </div>
+          <div class="bfc-p-yr bfc-p-price">
+            <span class="bfc-p-sym">$</span>
+            <span class="bfc-p-num">{{ section.settings.casual_price_yr }}</span>
+            <span class="bfc-p-freq">&nbsp;/ mo &middot; {{ section.settings.casual_yr_note }}</span>
+          </div>
+          <div class="bfc-p-val" id="bfc-val-casual">{{ section.settings.casual_value_note }}</div>
+          <hr class="bfc-p-div">
+          <p class="bfc-p-tag">{{ section.settings.casual_tagline }}</p>
+          <ul class="bfc-p-feats">
+            <li><span>{{ section.settings.casual_feat1 }}</span></li>
+            <li><span>{{ section.settings.casual_feat2 }}</span></li>
+            <li><span>{{ section.settings.casual_feat3 }}</span></li>
+            <li><span>{{ section.settings.casual_feat4 }}</span></li>
+            <li><span>{{ section.settings.casual_feat5 }}</span></li>
+            <li><span>{{ section.settings.casual_feat6 }}</span></li>
+          </ul>
+          <a
+            class="bfc-btn-plan bfc-btn-ghost bfc-plan-cta"
+            data-mo="https://brooklyn-film-camera.myshopify.com/cart/clear?return_to=/cart/add?items[][id]=44631474307244%26items[][quantity]=1%26items[][selling_plan]=2967437484%26return_to=/checkout"
+            data-yr="https://brooklyn-film-camera.myshopify.com/cart/clear?return_to=/cart/add?items[][id]=44631474307244%26items[][quantity]=1%26items[][selling_plan]=3007905964%26return_to=/checkout"
+            href="https://brooklyn-film-camera.myshopify.com/cart/clear?return_to=/cart/add?items[][id]=44631474307244%26items[][quantity]=1%26items[][selling_plan]=2967437484%26return_to=/checkout">
+            {{ section.settings.casual_cta }}
+          </a>
+        </div>
+
+        {%- comment -%} ENTHUSIAST {%- endcomment -%}
+        <div class="bfc-p-card hi">
+          <div class="bfc-p-badge">{{ section.settings.enthusiast_badge }}</div>
+          <div class="bfc-p-name">{{ section.settings.enthusiast_name }}</div>
+          <div class="bfc-p-mo bfc-p-price">
+            <span class="bfc-p-sym">$</span>
+            <span class="bfc-p-num">{{ section.settings.enthusiast_price_mo }}</span>
+            <span class="bfc-p-freq">&nbsp;/ month</span>
+          </div>
+          <div class="bfc-p-yr bfc-p-price">
+            <span class="bfc-p-sym">$</span>
+            <span class="bfc-p-num">{{ section.settings.enthusiast_price_yr }}</span>
+            <span class="bfc-p-freq">&nbsp;/ mo &middot; {{ section.settings.enthusiast_yr_note }}</span>
+          </div>
+          <div class="bfc-p-val" id="bfc-val-enth">{{ section.settings.enthusiast_value_note }}</div>
+          <hr class="bfc-p-div">
+          <p class="bfc-p-tag">{{ section.settings.enthusiast_tagline }}</p>
+          <ul class="bfc-p-feats">
+            <li><span>{{ section.settings.enthusiast_feat1 }}</span></li>
+            <li><span>{{ section.settings.enthusiast_feat2 }}</span></li>
+            <li><span>{{ section.settings.enthusiast_feat3 }}</span></li>
+            <li><span>{{ section.settings.enthusiast_feat4 }}</span></li>
+            <li><span>{{ section.settings.enthusiast_feat5 }}</span></li>
+            <li><span>{{ section.settings.enthusiast_feat6 }}</span></li>
+          </ul>
+          <a
+            class="bfc-btn-plan bfc-btn-cel bfc-plan-cta"
+            data-mo="https://brooklyn-film-camera.myshopify.com/cart/clear?return_to=/cart/add?items[][id]=44631474340012%26items[][quantity]=1%26items[][selling_plan]=2967437484%26return_to=/checkout"
+            data-yr="https://brooklyn-film-camera.myshopify.com/cart/clear?return_to=/cart/add?items[][id]=44631474340012%26items[][quantity]=1%26items[][selling_plan]=3007905964%26return_to=/checkout"
+            href="https://brooklyn-film-camera.myshopify.com/cart/clear?return_to=/cart/add?items[][id]=44631474340012%26items[][quantity]=1%26items[][selling_plan]=2967437484%26return_to=/checkout">
+            {{ section.settings.enthusiast_cta }}
+          </a>
+        </div>
+
+        {%- comment -%} SERIOUS SHOOTER {%- endcomment -%}
+        <div class="bfc-p-card">
+          <div class="bfc-p-name">{{ section.settings.serious_name }}</div>
+          <div class="bfc-p-mo bfc-p-price">
+            <span class="bfc-p-sym">$</span>
+            <span class="bfc-p-num">{{ section.settings.serious_price_mo }}</span>
+            <span class="bfc-p-freq">&nbsp;/ month</span>
+          </div>
+          <div class="bfc-p-yr bfc-p-price">
+            <span class="bfc-p-sym">$</span>
+            <span class="bfc-p-num">{{ section.settings.serious_price_yr }}</span>
+            <span class="bfc-p-freq">&nbsp;/ mo &middot; {{ section.settings.serious_yr_note }}</span>
+          </div>
+          <div class="bfc-p-val" id="bfc-val-serious">{{ section.settings.serious_value_note }}</div>
+          <hr class="bfc-p-div">
+          <p class="bfc-p-tag">{{ section.settings.serious_tagline }}</p>
+          <ul class="bfc-p-feats">
+            <li><span>{{ section.settings.serious_feat1 }}</span></li>
+            <li><span>{{ section.settings.serious_feat2 }}</span></li>
+            <li><span>{{ section.settings.serious_feat3 }}</span></li>
+            <li><span>{{ section.settings.serious_feat4 }}</span></li>
+            <li><span>{{ section.settings.serious_feat5 }}</span></li>
+            <li><span>{{ section.settings.serious_feat6 }}</span></li>
+          </ul>
+          <a
+            class="bfc-btn-plan bfc-btn-ghost bfc-plan-cta"
+            data-mo="https://brooklyn-film-camera.myshopify.com/cart/clear?return_to=/cart/add?items[][id]=45493018951852%26items[][quantity]=1%26items[][selling_plan]=2967437484%26return_to=/checkout"
+            data-yr="https://brooklyn-film-camera.myshopify.com/cart/clear?return_to=/cart/add?items[][id]=45493018951852%26items[][quantity]=1%26items[][selling_plan]=3007905964%26return_to=/checkout"
+            href="https://brooklyn-film-camera.myshopify.com/cart/clear?return_to=/cart/add?items[][id]=45493018951852%26items[][quantity]=1%26items[][selling_plan]=2967437484%26return_to=/checkout">
+            {{ section.settings.serious_cta }}
+          </a>
+        </div>
+
+      </div>{%- comment -%} /bfc-plans-grid {%- endcomment -%}
+      </div>{%- comment -%} /bfc-plans-slider-wrap {%- endcomment -%}
+
+      <p class="bfc-p-note">{{ section.settings.pricing_footnote }}</p>
+
+      <div class="bfc-calc-nudge">
+        <a href="#bfc-calculator" class="bfc-btn-nudge">Not sure which plan? Use our savings calculator &darr;</a>
+      </div>
+
+    </div>
+  </section>
+
+  {%- comment -%} ═══════════════ CALCULATOR ═══════════════ {%- endcomment -%}
+  <section class="bfc-calc" id="bfc-calculator">
+    <div class="bfc-wrap">
+      <span class="bfc-eyebrow">Savings Calculator</span>
+      <h2 class="bfc-s-hed" style="margin-bottom:28px;">How much would<br><em>you save?</em></h2>
+      <div class="bfc-calc-inner">
+        <div class="bfc-calc-head">
+          <div class="bfc-calc-title">Tell us how you shoot</div>
+          <div class="bfc-calc-sub">We'll show you your monthly cost at every tier vs. paying as a guest.</div>
+        </div>
+        <div class="bfc-calc-body">
+          <div class="bfc-calc-row">
+            <div class="bfc-calc-field">
+              <label for="bfc-calc-rolls">Rolls per month</label>
+              <input type="number" id="bfc-calc-rolls" min="1" max="50" value="4">
+            </div>
+            <div class="bfc-calc-field">
+              <label for="bfc-calc-scan">Scan quality</label>
+              <select id="bfc-calc-scan">
+                <option value="0" data-member="0">Medium (included)</option>
+                <option value="12" data-member="6">High 4K (+$12 guest / +$6 member, +$4 Serious)</option>
+                <option value="18" data-member="15">Pro (+$18 guest / +$15 member)</option>
+              </select>
+            </div>
+          </div>
+          <p class="bfc-calc-addons-label">Add-ons</p>
+          <div class="bfc-calc-addons">
+            <div class="bfc-calc-addon" id="bfc-addon-tiff">TIFF +$1 / Free for members</div>
+            <div class="bfc-calc-addon" id="bfc-addon-sleeves">Sleeving +$2 / Free for members</div>
+          </div>
+          <div class="bfc-calc-results" id="bfc-calc-results"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ═══════════════ COMPARISON TABLE ═══════════════ {%- endcomment -%}
+  <section class="bfc-compare">
+    <div class="bfc-wrap">
+      <span class="bfc-eyebrow">{{ section.settings.compare_eyebrow }}</span>
+      <h2 class="bfc-s-hed">{{ section.settings.compare_heading }}</h2>
+      <div class="bfc-ctable-wrap">
+        <table class="bfc-ctable" aria-label="Member vs. Guest pricing comparison">
+          <thead>
+            <tr>
+              <th style="width:42%">Feature</th>
+              <th class="bfc-cm">Member</th>
+              <th>Guest</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="bfc-cf">Standard developing (C-41 / B&amp;W)</td>
+              <td class="bfc-cm bfc-ck">{{ section.settings.dev_price_member }}</td>
+              <td>{{ section.settings.dev_price_guest }}</td>
+            </tr>
+            <tr>
+              <td class="bfc-cf">Dev + Scan credits</td>
+              <td class="bfc-cm bfc-ck">{{ section.settings.credits_member }}</td>
+              <td class="bfc-dim">—</td>
+            </tr>
+            <tr>
+              <td class="bfc-cf">4K scan upgrade</td>
+              <td class="bfc-cm bfc-ck">{{ section.settings.scan4k_member }}</td>
+              <td>{{ section.settings.scan4k_guest }}</td>
+            </tr>
+            <tr>
+              <td class="bfc-cf">TIFF scan upgrade</td>
+              <td class="bfc-cm bfc-ck">{{ section.settings.tiff_member }}</td>
+              <td>{{ section.settings.tiff_guest }}</td>
+            </tr>
+            <tr>
+              <td class="bfc-cf">Archival sleeving</td>
+              <td class="bfc-cm bfc-ck">{{ section.settings.sleeve_member }}</td>
+              <td>{{ section.settings.sleeve_guest }}</td>
+            </tr>
+            <tr>
+              <td class="bfc-cf">Credits roll over</td>
+              <td class="bfc-cm bfc-ck">{{ section.settings.rollover_member }}</td>
+              <td class="bfc-dim">—</td>
+            </tr>
+            <tr>
+              <td class="bfc-cf">All film formats &amp; processes</td>
+              <td class="bfc-cm bfc-ck">Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td class="bfc-cf">Online scan portal</td>
+              <td class="bfc-cm bfc-ck">Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td class="bfc-cf">Mail-in from anywhere</td>
+              <td class="bfc-cm bfc-ck">Yes</td>
+              <td>Yes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="bfc-compare-cta">
+        <a href="https://brooklynfilmcamera.com/pages/film-developing-membership" class="bfc-btn-solid">Buy Membership</a>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ═══════════════ PERKS ═══════════════ {%- endcomment -%}
+  <section class="bfc-perks">
+    <div class="bfc-wrap">
+      <div class="bfc-s-header">
+        <div>
+          <span class="bfc-all-plans-pill">All plans. All benefits. Every month.</span>
+          <span class="bfc-eyebrow">{{ section.settings.perks_eyebrow }}</span>
+          <h2 class="bfc-s-hed">{{ section.settings.perks_heading }}</h2>
+        </div>
+        <p class="bfc-s-intro">{{ section.settings.perks_intro }}</p>
+      </div>
+
+      <div class="bfc-perks-grid">
+        <div class="bfc-perk">
+          <span class="bfc-perk-idx">01</span>
+          <h3 class="bfc-perk-title">{{ section.settings.perk1_title }}</h3>
+          <p class="bfc-perk-body">{{ section.settings.perk1_body }}</p>
+        </div>
+        <div class="bfc-perk">
+          <span class="bfc-perk-idx">02</span>
+          <h3 class="bfc-perk-title">{{ section.settings.perk2_title }}</h3>
+          <p class="bfc-perk-body">{{ section.settings.perk2_body }}</p>
+        </div>
+        <div class="bfc-perk">
+          <span class="bfc-perk-idx">03</span>
+          <h3 class="bfc-perk-title">{{ section.settings.perk3_title }}</h3>
+          <p class="bfc-perk-body">{{ section.settings.perk3_body }}</p>
+        </div>
+        <div class="bfc-perk">
+          <span class="bfc-perk-idx">04</span>
+          <h3 class="bfc-perk-title">{{ section.settings.perk4_title }}</h3>
+          <p class="bfc-perk-body">{{ section.settings.perk4_body }}</p>
+        </div>
+        <div class="bfc-perk">
+          <span class="bfc-perk-idx">05</span>
+          <h3 class="bfc-perk-title">{{ section.settings.perk5_title }}</h3>
+          <p class="bfc-perk-body">{{ section.settings.perk5_body }}</p>
+        </div>
+        <div class="bfc-perk">
+          <span class="bfc-perk-idx">06</span>
+          <h3 class="bfc-perk-title">{{ section.settings.perk6_title }}</h3>
+          <p class="bfc-perk-body">{{ section.settings.perk6_body }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="bfc-rule">
+
+  {%- comment -%} ═══════════════ FORMATS ═══════════════ {%- endcomment -%}
+  <section class="bfc-formats">
+    <div class="bfc-wrap">
+      <div class="bfc-fmt-grid">
+        <div class="bfc-fmt-left">
+          <span class="bfc-eyebrow">{{ section.settings.formats_eyebrow }}</span>
+          <h2 class="bfc-s-hed">{{ section.settings.formats_heading }}</h2>
+          <p class="bfc-fmt-body">{{ section.settings.formats_body }}</p>
+          <div class="bfc-live-pill">
+            <span class="bfc-live-dot"></span>
+            {{ section.settings.turnaround_text }}
+          </div>
+        </div>
+        <div class="bfc-ftags">
+          <span class="bfc-ftag">35mm</span>
+          <span class="bfc-ftag">120 Medium Format</span>
+          <span class="bfc-ftag">Disposable Cameras</span>
+          <span class="bfc-ftag">C-41 Color</span>
+          <span class="bfc-ftag">Black &amp; White</span>
+          <span class="bfc-ftag">Push Processing</span>
+          <span class="bfc-ftag">Pull Processing</span>
+          <span class="bfc-ftag">E-6 Slide Film</span>
+          <span class="bfc-ftag">Standard Scans</span>
+          <span class="bfc-ftag">4K Scans</span>
+          <span class="bfc-ftag">TIFF Files</span>
+          <span class="bfc-ftag">Archival Sleeving</span>
+          <span class="bfc-ftag">Return Shipping</span>
+          <span class="bfc-ftag">Mail-In Worldwide</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} ═══════════════ MAIL-IN ═══════════════ {%- endcomment -%}
+  <div class="bfc-mailin">
+    <div class="bfc-wrap">
+      <div class="bfc-mailin-top">
+        <div>
+          <span class="bfc-eyebrow">{{ section.settings.mailin_eyebrow }}</span>
+          <h3 class="bfc-mailin-hed">{{ section.settings.mailin_heading }}</h3>
+        </div>
+        <a href="{{ section.settings.mailin_portal_url }}" class="bfc-btn-solid">
+          {{ section.settings.mailin_cta_label }}
+        </a>
+      </div>
+      <div class="bfc-mailin-steps">
+        <div class="bfc-mstep">
+          <span class="bfc-mstep-num">1</span>
+          <div class="bfc-mstep-title">{{ section.settings.mailin_feat1_title }}</div>
+          <p class="bfc-mstep-body">{{ section.settings.mailin_feat1_body }}</p>
+        </div>
+        <div class="bfc-mstep">
+          <span class="bfc-mstep-num">2</span>
+          <div class="bfc-mstep-title">{{ section.settings.mailin_feat2_title }}</div>
+          <p class="bfc-mstep-body">{{ section.settings.mailin_feat2_body }}</p>
+        </div>
+        <div class="bfc-mstep">
+          <span class="bfc-mstep-num">3</span>
+          <div class="bfc-mstep-title">{{ section.settings.mailin_feat3_title }}</div>
+          <p class="bfc-mstep-body">{{ section.settings.mailin_feat3_body }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ═══════════════ CTA FOOTER ═══════════════ {%- endcomment -%}
+  <section class="bfc-footer-cta">
+    <div class="bfc-wrap">
+      <span class="bfc-eyebrow">{{ section.settings.footer_eyebrow }}</span>
+      <h2 class="bfc-footer-hed">{{ section.settings.footer_heading }}</h2>
+      <p class="bfc-footer-sub">{{ section.settings.footer_body }}</p>
+      <div class="bfc-footer-btns">
+        <a href="{{ section.settings.cta_primary_url }}" class="bfc-btn-canvas">
+          {{ section.settings.cta_primary_label }}
+        </a>
+        <a href="{{ section.settings.cta_secondary_url }}" class="bfc-btn-ghost-light">
+          {{ section.settings.cta_secondary_label }}
+        </a>
+      </div>
+    </div>
+  </section>
+
+</div>{%- comment -%} /bfc-mem {%- endcomment -%}
+
+
+<script>
+(function() {
+  var yr = false;
+  var tog   = document.getElementById('bfc-tog');
+  var grid  = document.getElementById('bfc-plans-grid');
+  var lblMo = document.getElementById('bfc-lm');
+  var lblYr = document.getElementById('bfc-ly');
+
+  function apply() {
+    // Toggle billing display
+    if (yr) {
+      tog.classList.add('on');
+      grid.classList.add('bfc-show-yr');
+      lblMo.classList.remove('on');
+      lblYr.classList.add('on');
+    } else {
+      tog.classList.remove('on');
+      grid.classList.remove('bfc-show-yr');
+      lblMo.classList.add('on');
+      lblYr.classList.remove('on');
+    }
+    // Update checkout URLs on plan CTA buttons
+    document.querySelectorAll('.bfc-plan-cta').forEach(function(a) {
+      a.href = yr ? a.dataset.yr : a.dataset.mo;
+    });
+    // Update credit value notes (monthly vs yearly = 12×)
+    var credits = {
+      casual:  { mo: 'Includes 1 Dev + Scan credit — an $18 value',    yr: 'Includes 12 Dev + Scan credits — a $216 value' },
+      enth:    { mo: 'Includes 3 Dev + Scan credits — a $54 value',    yr: 'Includes 36 Dev + Scan credits — a $648 value' },
+      serious: { mo: 'Includes 7 Dev + Scan credits — a $126 value',   yr: 'Includes 84 Dev + Scan credits — a $1,512 value' }
+    };
+    ['casual','enth','serious'].forEach(function(k) {
+      var el = document.getElementById('bfc-val-' + k);
+      if (el) el.textContent = yr ? credits[k].yr : credits[k].mo;
+    });
+    calcSavings();
+  }
+
+  if (tog)   tog.addEventListener('click',   function() { yr = !yr;  apply(); });
+  if (lblMo) lblMo.addEventListener('click', function() { yr = false; apply(); });
+  if (lblYr) lblYr.addEventListener('click', function() { yr = true;  apply(); });
+
+  // Smooth scroll for #bfc-plans and #bfc-calculator anchors
+  document.querySelectorAll('a[href^="#bfc-"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      var id = a.getAttribute('href').replace('#', '');
+      var target = document.getElementById(id);
+      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
+
+  /* ── CALCULATOR ── */
+  var calcAddons = { tiff: false, sleeves: true }; // sleeves on by default
+
+  // Apply default visual state for sleeves
+  var sleevesEl = document.getElementById('bfc-addon-sleeves');
+  if (sleevesEl) sleevesEl.classList.add('on');
+
+  document.querySelectorAll('.bfc-calc-addon').forEach(function(el) {
+    el.addEventListener('click', function() {
+      var key = el.id.replace('bfc-addon-', '');
+      calcAddons[key] = !calcAddons[key];
+      el.classList.toggle('on', calcAddons[key]);
+      calcSavings();
+    });
+  });
+
+  var rollsInput = document.getElementById('bfc-calc-rolls');
+  var scanSel    = document.getElementById('bfc-calc-scan');
+  if (rollsInput) rollsInput.addEventListener('input', calcSavings);
+  if (scanSel)    scanSel.addEventListener('change', calcSavings);
+
+  function fmt(n) { return '$' + n.toFixed(2); }
+
+  function calcSavings() {
+    var res = document.getElementById('bfc-calc-results');
+    if (!res) return;
+
+    var rolls      = Math.max(1, parseInt((rollsInput && rollsInput.value) || 4));
+    var scanGuest  = parseFloat((scanSel && scanSel.value) || 0);
+    var scanMember = parseFloat((scanSel && scanSel.options[scanSel.selectedIndex].dataset.member) || 0);
+    var tiffGuest  = calcAddons.tiff    ? 1 : 0;
+    var slvGuest   = calcAddons.sleeves ? 2 : 0;
+
+    // Guest: pays full price every roll (tiff + sleeves add-ons if selected)
+    var guestPerRoll = 18 + scanGuest + tiffGuest + slvGuest;
+    var guestTotal   = guestPerRoll * rolls;
+
+    // Member model:
+    //   - Each credit covers 1 full roll at guest price ($18 value)
+    //   - Credited rolls cost: $0
+    //   - Extra rolls cost: $16/roll (member developing rate)
+    //   - Tiff + sleeves always free for members
+    //   - scan addon at member rate applies to all rolls
+    function memberTotal(fee, credits, scanAddon) {
+      var credited = Math.min(credits, rolls);
+      var extra    = rolls - credited;
+      return fee + extra * 16 + rolls * scanAddon;
+    }
+
+    var casualFee  = yr ? 17.10 : 18;
+    var enthFee    = yr ? 42.75 : 45;   // $45/mo: 3 credits @ $15 each — cheaper than $16 extra rate
+    var seriousFee = yr ? 94.05 : 99;
+
+    // Serious Shooter gets $4 for 4K (others pay $6, scanMember is 6 for 4K option)
+    var seriousScanAddon = (scanMember === 6) ? 4 : scanMember;
+
+    var casualCost  = memberTotal(casualFee,  1, scanMember);
+    var enthCost    = memberTotal(enthFee,    3, scanMember);
+    var seriousCost = memberTotal(seriousFee, 7, seriousScanAddon);
+
+    var scores = [
+      { k: 'guest',   save: 0 },
+      { k: 'casual',  save: guestTotal - casualCost },
+      { k: 'enth',    save: guestTotal - enthCost },
+      { k: 'serious', save: guestTotal - seriousCost }
+    ];
+    scores.sort(function(a, b) { return b.save - a.save; });
+    var best = scores[0].save > 0 ? scores[0].k : 'guest';
+
+    function card(key, name, total, save) {
+      var isBest = best === key;
+      var cls    = isBest ? 'bfc-cr-best' : (save > 0 ? 'bfc-cr-hi' : '');
+
+      var body = '';
+      if (key === 'guest') {
+        // Guest: just show the price as before
+        body = '<div class="bfc-cr-total">' + fmt(total) + '</div>' +
+               '<div class="bfc-cr-period">per month</div>' +
+               '<div class="bfc-cr-save">No membership</div>';
+      } else if (save > 0) {
+        // Member cards: Save amount big on top, total price smaller below
+        body = '<div class="bfc-cr-save-lbl">Save</div>' +
+               '<span class="bfc-cr-save-amt">' + fmt(save) + '</span>' +
+               '<div class="bfc-cr-total bfc-cr-total-sm">' + fmt(total) + '</div>' +
+               '<div class="bfc-cr-period">/ month total</div>';
+      } else {
+        body = '<div class="bfc-cr-total">' + fmt(total) + '</div>' +
+               '<div class="bfc-cr-period">per month</div>';
+      }
+
+      return '<div class="bfc-calc-result ' + cls + '">' +
+        (isBest && key !== 'guest' ? '<div class="bfc-cr-tag">Best for you</div>' : '') +
+        '<div class="bfc-cr-name">' + name + '</div>' +
+        body +
+        '</div>';
+    }
+
+    res.innerHTML =
+      card('guest',   'Guest',           guestTotal,  0) +
+      card('casual',  'Casual Shooter',  casualCost,  guestTotal - casualCost) +
+      card('enth',    'Enthusiast',      enthCost,    guestTotal - enthCost) +
+      card('serious', 'Serious Shooter', seriousCost, guestTotal - seriousCost);
+  }
+
+  calcSavings();
+})();
+</script>
+
+
+{% schema %}
+{
+  "name": "BFC Membership",
+  "tag": "div",
+  "class": "bfc-membership-section",
+  "settings": [
+
+    { "type": "header", "content": "─── Hero ───" },
+    { "type": "text",     "id": "hero_eyebrow",    "label": "Eyebrow",        "default": "Film Developing & Membership" },
+    { "type": "textarea", "id": "hero_headline",   "label": "Headline",       "default": "Develop more.\nSpend less." },
+    { "type": "richtext", "id": "hero_body",       "label": "Body",           "default": "<p>Perfect if you shoot a roll or two a month. <strong>Your included credit alone covers the membership cost — and then some.</strong> Members also unlock $2 off every additional roll, 4K scans from $4, free sleeving, and unlimited TIFF files.</p>" },
+
+    { "type": "header", "content": "Hero — Stats Panel" },
+    { "type": "text", "id": "panel_heading",    "label": "Panel heading",    "default": "At a Glance" },
+    { "type": "text", "id": "panel_row1_label", "label": "Row 1 label",      "default": "Membership from" },
+    { "type": "text", "id": "panel_row1_value", "label": "Row 1 value",      "default": "$18 / mo" },
+    { "type": "text", "id": "panel_row2_label", "label": "Row 2 label",      "default": "Included credit value" },
+    { "type": "text", "id": "panel_row2_value", "label": "Row 2 value",      "default": "$18" },
+    { "type": "text", "id": "panel_row3_label", "label": "Row 3 label",      "default": "Member rate per roll" },
+    { "type": "text", "id": "panel_row3_value", "label": "Row 3 value",      "default": "$18" },
+    { "type": "text", "id": "panel_row4_label", "label": "Row 4 label",      "default": "4K scan (member)" },
+    { "type": "text", "id": "panel_row4_value", "label": "Row 4 value",      "default": "$6 / $4 Serious" },
+    { "type": "text", "id": "panel_row5_label", "label": "Row 5 label",      "default": "Typical turnaround" },
+    { "type": "text", "id": "panel_row5_value", "label": "Row 5 value",      "default": "4–5 days" },
+    { "type": "text", "id": "panel_row6_label", "label": "Row 6 label",      "default": "Credit rollover cap" },
+    { "type": "text", "id": "panel_row6_value", "label": "Row 6 value",      "default": "50" },
+
+    { "type": "header", "content": "─── CTAs (shared) ───" },
+    { "type": "text", "id": "cta_primary_label",   "label": "Primary button label",   "default": "Join the Membership" },
+    { "type": "url",  "id": "cta_primary_url",     "label": "Primary button URL" },
+    { "type": "text", "id": "cta_secondary_label", "label": "Secondary button label", "default": "Develop as a Guest" },
+    { "type": "url",  "id": "cta_secondary_url",   "label": "Secondary button URL" },
+
+    { "type": "header", "content": "─── Perks Section ───" },
+    { "type": "text",     "id": "perks_eyebrow", "label": "Eyebrow",  "default": "Every Plan. Every Perk." },
+    { "type": "textarea", "id": "perks_heading", "label": "Heading",  "default": "Every benefit below.\nIncluded in every plan." },
+    { "type": "textarea", "id": "perks_intro",   "label": "Intro paragraph", "default": "Casual, Enthusiast, or Serious Shooter — you get every single perk on this list, every month. The only difference between plans is how many Dev + Scan credits you get (and a deeper 4K discount on Serious)." },
+
+    { "type": "header", "content": "Perk 1" },
+    { "type": "text",     "id": "perk1_title", "label": "Title", "default": "Dev + Scan Credits, Monthly" },
+    { "type": "textarea", "id": "perk1_body",  "label": "Body",  "default": "An $18 Dev + Scan credit deposited automatically every month. Casual gets 1, Enthusiast gets 3. Rolls over up to 50." },
+    { "type": "header", "content": "Perk 2" },
+    { "type": "text",     "id": "perk2_title", "label": "Title", "default": "$2 Off Every Roll, Forever" },
+    { "type": "textarea", "id": "perk2_body",  "label": "Body",  "default": "Members pay $18/roll on every develop beyond their credits. Non-members pay $18." },
+    { "type": "header", "content": "Perk 3" },
+    { "type": "text",     "id": "perk3_title", "label": "Title", "default": "4K Scans from $4" },
+    { "type": "textarea", "id": "perk3_body",  "label": "Body",  "default": "Member 4K scans for $6/roll (Serious Shooters: $4). Non-members pay $12." },
+    { "type": "header", "content": "Perk 4" },
+    { "type": "text",     "id": "perk4_title", "label": "Title", "default": "Free Archival Sleeving" },
+    { "type": "textarea", "id": "perk4_body",  "label": "Body",  "default": "Negatives returned neatly sleeved on every order, at no charge. Non-members pay $2." },
+    { "type": "header", "content": "Perk 5" },
+    { "type": "text",     "id": "perk5_title", "label": "Title", "default": "Unlimited Free TIFFs" },
+    { "type": "textarea", "id": "perk5_body",  "label": "Body",  "default": "Full-resolution TIFF files on every order, included. Non-members pay $1/roll." },
+    { "type": "header", "content": "Perk 6" },
+    { "type": "text",     "id": "perk6_title", "label": "Title", "default": "Credits That Stack" },
+    { "type": "textarea", "id": "perk6_body",  "label": "Body",  "default": "Unused credits roll over each month and accumulate up to 50. Nothing wasted." },
+
+    { "type": "header", "content": "─── Comparison Table ───" },
+    { "type": "text", "id": "compare_eyebrow", "label": "Eyebrow", "default": "Member vs. Guest" },
+    { "type": "text", "id": "compare_heading", "label": "Heading", "default": "Why pay full price every time?" },
+    { "type": "text", "id": "dev_price_guest",  "label": "Dev price — Guest",         "default": "$18 / roll" },
+    { "type": "text", "id": "dev_price_member", "label": "Dev price — Member",        "default": "$18 / roll" },
+    { "type": "text", "id": "credits_member",   "label": "Credits — Member",          "default": "1 / 3 / 7 per month" },
+    { "type": "text", "id": "scan4k_guest",     "label": "4K scan — Guest",           "default": "$12 / roll" },
+    { "type": "text", "id": "scan4k_member",    "label": "4K scan — Member",          "default": "$6 ($4 Serious)" },
+    { "type": "text", "id": "tiff_guest",       "label": "TIFF upgrade — Guest",      "default": "$1 / roll" },
+    { "type": "text", "id": "tiff_member",      "label": "TIFF upgrade — Member",     "default": "Free" },
+    { "type": "text", "id": "sleeve_guest",     "label": "Sleeving — Guest",          "default": "$2 / order" },
+    { "type": "text", "id": "sleeve_member",    "label": "Sleeving — Member",         "default": "Free" },
+    { "type": "text", "id": "rollover_member",  "label": "Credit rollover — Member",  "default": "Up to 50" },
+
+    { "type": "header", "content": "─── Pricing Section ───" },
+    { "type": "text", "id": "pricing_eyebrow",    "label": "Eyebrow",       "default": "Membership Plans" },
+    { "type": "text", "id": "pricing_heading",    "label": "Heading",       "default": "Choose your plan." },
+    { "type": "text", "id": "pricing_sub",        "label": "Subheading",    "default": "Cancel anytime. Credits roll over. No hidden fees." },
+    { "type": "text", "id": "yearly_save_label",  "label": "Yearly savings badge", "default": "Save 5%" },
+    { "type": "textarea", "id": "pricing_footnote", "label": "Footnote",   "default": "Cancel anytime · Unused credits roll over monthly and cap at 50 · Yearly plans billed upfront at 5% off" },
+
+    { "type": "header", "content": "Casual Plan" },
+    { "type": "text",     "id": "casual_name",       "label": "Plan name",       "default": "Casual Shooter" },
+    { "type": "text",     "id": "casual_price_mo",   "label": "Monthly price",   "default": "18" },
+    { "type": "text",     "id": "casual_price_yr",   "label": "Yearly price",    "default": "17.10" },
+    { "type": "text",     "id": "casual_yr_note",    "label": "Yearly billing note", "default": "billed $205/yr" },
+    { "type": "text",     "id": "casual_value_note", "label": "Credit value note",   "default": "Includes 1 Dev + Scan credit — an $18 value" },
+    { "type": "textarea", "id": "casual_tagline",    "label": "Tagline",         "default": "Perfect if you shoot a roll or two a month. Your credit alone covers the membership cost — and then some." },
+    { "type": "text",     "id": "casual_feat1",      "label": "Feature 1",       "default": "1 Dev + Scan credit every month ($18 value)" },
+    { "type": "text",     "id": "casual_feat2",      "label": "Feature 2",       "default": "$18/roll on all additional developing (non-members: $18)" },
+    { "type": "text",     "id": "casual_feat3",      "label": "Feature 3",       "default": "4K scans for $6/roll (non-members: $12)" },
+    { "type": "text",     "id": "casual_feat4",      "label": "Feature 4",       "default": "Free archival sleeving on every order" },
+    { "type": "text",     "id": "casual_feat5",      "label": "Feature 5",       "default": "Unlimited free TIFF scan files" },
+    { "type": "text",     "id": "casual_feat6",      "label": "Feature 6",       "default": "Credits roll over up to 50" },
+    { "type": "text",     "id": "casual_cta",        "label": "Button label",    "default": "Start Casual Membership" },
+    { "type": "url",      "id": "casual_url",        "label": "Button URL" },
+
+    { "type": "header", "content": "Enthusiast Plan" },
+    { "type": "text",     "id": "enthusiast_badge",      "label": "Badge text",      "default": "Most Popular" },
+    { "type": "text",     "id": "enthusiast_name",       "label": "Plan name",       "default": "Enthusiast" },
+    { "type": "text",     "id": "enthusiast_price_mo",   "label": "Monthly price",   "default": "45" },
+    { "type": "text",     "id": "enthusiast_price_yr",   "label": "Yearly price",    "default": "42.75" },
+    { "type": "text",     "id": "enthusiast_yr_note",    "label": "Yearly billing note", "default": "billed $513/yr" },
+    { "type": "text",     "id": "enthusiast_value_note", "label": "Credit value note",   "default": "Includes 3 Dev + Scan credits — a $54 value" },
+    { "type": "textarea", "id": "enthusiast_tagline",    "label": "Tagline",         "default": "Three credits is $54 in developing value every month, for $50. Every perk, every time." },
+    { "type": "text",     "id": "enthusiast_feat1",      "label": "Feature 1",       "default": "3 Dev + Scan credits every month ($54 value)" },
+    { "type": "text",     "id": "enthusiast_feat2",      "label": "Feature 2",       "default": "$18/roll on all additional developing (non-members: $18)" },
+    { "type": "text",     "id": "enthusiast_feat3",      "label": "Feature 3",       "default": "4K scans for $6/roll (non-members: $12)" },
+    { "type": "text",     "id": "enthusiast_feat4",      "label": "Feature 4",       "default": "Free archival sleeving on every order" },
+    { "type": "text",     "id": "enthusiast_feat5",      "label": "Feature 5",       "default": "Unlimited free TIFF scan files" },
+    { "type": "text",     "id": "enthusiast_feat6",      "label": "Feature 6",       "default": "Credits roll over up to 50" },
+    { "type": "text",     "id": "enthusiast_cta",        "label": "Button label",    "default": "Start Enthusiast Membership" },
+    { "type": "url",      "id": "enthusiast_url",        "label": "Button URL" },
+
+    { "type": "header", "content": "─── What We Process ───" },
+    { "type": "text",     "id": "formats_eyebrow", "label": "Eyebrow",         "default": "What We Process" },
+    { "type": "text",     "id": "formats_heading", "label": "Heading",         "default": "We handle whatever you shoot." },
+    { "type": "textarea", "id": "formats_body",    "label": "Body",            "default": "35mm, medium format, disposables — color negative, black & white, slide film, cinematic ECN-2. If it's on film, we develop it." },
+    { "type": "text",     "id": "turnaround_text", "label": "Turnaround badge","default": "Typical turnaround: 4–5 business days" },
+
+    { "type": "header", "content": "─── Mail-In Strip ───" },
+    { "type": "text",     "id": "mailin_eyebrow",     "label": "Eyebrow",          "default": "Mail-In Repairs" },
+    { "type": "text",     "id": "mailin_heading",     "label": "Heading",          "default": "Secure Shipping & Handling" },
+    { "type": "url",      "id": "mailin_portal_url",  "label": "Portal URL" },
+    { "type": "text",     "id": "mailin_cta_label",   "label": "Button label",     "default": "Purchase a Shipping Label" },
+    { "type": "text",     "id": "mailin_feat1_title", "label": "Step 1 title",     "default": "Place your order" },
+    { "type": "text",     "id": "mailin_feat1_body",  "label": "Step 1 body",      "default": "Start your repair order on our website so we know your camera is on its way." },
+    { "type": "text",     "id": "mailin_feat2_title", "label": "Step 2 title",     "default": "Buy a label on the portal" },
+    { "type": "text",     "id": "mailin_feat2_body",  "label": "Step 2 body",      "default": "Head to our shipping portal, find your order, and purchase a prepaid label instantly." },
+    { "type": "text",     "id": "mailin_feat3_title", "label": "Step 3 title",     "default": "Download and ship" },
+    { "type": "text",     "id": "mailin_feat3_body",  "label": "Step 3 body",      "default": "Download your label, pack your camera securely, and drop it off. We'll take it from there." },
+
+    { "type": "header", "content": "Serious Shooter Plan" },
+    { "type": "text",     "id": "serious_name",       "label": "Plan name",       "default": "Serious Shooter" },
+    { "type": "text",     "id": "serious_price_mo",   "label": "Monthly price",   "default": "99" },
+    { "type": "text",     "id": "serious_price_yr",   "label": "Yearly price",    "default": "94.05" },
+    { "type": "text",     "id": "serious_yr_note",    "label": "Yearly billing note", "default": "billed $1,129/yr" },
+    { "type": "text",     "id": "serious_value_note", "label": "Credit value note",   "default": "Includes 7 Dev + Scan credits — a $126 value" },
+    { "type": "textarea", "id": "serious_tagline",    "label": "Tagline",         "default": "Seven credits a month, $4 for every 4K scan. For the shooter who goes through film like it's free." },
+    { "type": "text",     "id": "serious_feat1",      "label": "Feature 1",       "default": "7 Dev + Scan credits every month ($126 value)" },
+    { "type": "text",     "id": "serious_feat2",      "label": "Feature 2",       "default": "$18/roll on all additional developing (non-members: $18)" },
+    { "type": "text",     "id": "serious_feat3",      "label": "Feature 3",       "default": "4K scans for $4/roll (non-members: $12)" },
+    { "type": "text",     "id": "serious_feat4",      "label": "Feature 4",       "default": "Free archival sleeving on every order" },
+    { "type": "text",     "id": "serious_feat5",      "label": "Feature 5",       "default": "Unlimited free TIFF scan files" },
+    { "type": "text",     "id": "serious_feat6",      "label": "Feature 6",       "default": "Credits roll over up to 50" },
+    { "type": "text",     "id": "serious_cta",        "label": "Button label",    "default": "Start Serious Membership" },
+    { "type": "url",      "id": "serious_url",        "label": "Button URL" },
+
+    { "type": "header", "content": "─── Footer CTA ───" },
+    { "type": "text",     "id": "footer_eyebrow", "label": "Eyebrow", "default": "Get Started" },
+    { "type": "text",     "id": "footer_heading", "label": "Heading", "default": "Ready to shoot more?" },
+    { "type": "textarea", "id": "footer_body",    "label": "Body",    "default": "$18/month. One Dev + Scan credit included. $2 off every additional roll, 4K scans from $4, and free sleeving and TIFFs every time." }
+
+  ],
+  "presets": [
+    {
+      "name": "BFC Membership"
+    }
+  ]
+}
+{% endschema %}

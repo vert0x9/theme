@@ -1,0 +1,1543 @@
+{% comment %} BFC Repair Section — self-contained (CSS + JS inline, no Instant dependency) {% endcomment %}
+<section class="bfc-repair" data-section-id="{{ section.id }}">
+
+{%- style -%}
+/* ============================================================
+   BFC REPAIR SECTION — Brand Tokens & Base
+   ============================================================ */
+.bfc-repair {
+  --orange:      #E36E15;
+  --golden:      #F4A027;
+  --canvas:      #F8F6EE;
+  --dusty-brown: #5A3E2D;
+  --blank-black: #202009;
+  --celadon:     #ABCC99;
+  --charcoal:    #4E4741;
+  --mech-gray:   #E3DDDA;
+  --manila:      #FFEACC;
+  --deep-olive:  #525741;
+  --ease:        cubic-bezier(.22, 1, .36, 1);
+
+  font-family: 'Poppins', sans-serif;
+  color: var(--blank-black);
+  background: var(--canvas);
+}
+
+.bfc-repair *,
+.bfc-repair *::before,
+.bfc-repair *::after { box-sizing: border-box; }
+
+/* ── Shared layout helpers ── */
+.bfc-repair .bfc-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+@media (max-width: 768px) {
+  .bfc-repair .bfc-inner { padding: 0 24px; }
+}
+
+.bfc-repair .bfc-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--orange);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.bfc-repair .bfc-section-label::before {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 1.5px;
+  background: var(--orange);
+  flex-shrink: 0;
+}
+
+.bfc-repair h2.bfc-h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: clamp(34px, 4vw, 52px);
+  line-height: 1.05;
+  color: var(--blank-black);
+  margin: 0 0 16px;
+}
+
+.bfc-repair h3.bfc-h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: clamp(22px, 2.5vw, 30px);
+  line-height: 1.15;
+  margin: 0 0 8px;
+}
+
+.bfc-repair p.bfc-body {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--charcoal);
+  margin: 0;
+}
+
+/* ── Buttons ── */
+.bfc-repair .bfc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 14px 32px;
+  min-height: 44px;
+  border: 2px solid currentColor;
+  cursor: pointer;
+  transition: background 180ms var(--ease), color 180ms var(--ease);
+  white-space: nowrap;
+}
+.bfc-repair .bfc-btn--primary {
+  background: var(--orange);
+  color: #fff;
+  border-color: var(--orange);
+}
+.bfc-repair .bfc-btn--primary:hover {
+  background: var(--dusty-brown);
+  border-color: var(--dusty-brown);
+}
+.bfc-repair .bfc-btn--outline {
+  background: transparent;
+  color: var(--blank-black);
+  border-color: var(--blank-black);
+}
+.bfc-repair .bfc-btn--outline:hover {
+  background: var(--blank-black);
+  color: var(--canvas);
+}
+.bfc-repair .bfc-btn--outline-light {
+  background: transparent;
+  color: var(--canvas);
+  border-color: var(--canvas);
+}
+.bfc-repair .bfc-btn--outline-light:hover {
+  background: var(--canvas);
+  color: var(--blank-black);
+}
+
+/* ── Scroll reveal ── */
+.bfc-repair .bfc-reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 650ms var(--ease) var(--bfc-delay, 0ms),
+    transform 650ms var(--ease) var(--bfc-delay, 0ms);
+  will-change: opacity, transform;
+}
+.bfc-repair .bfc-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .bfc-repair .bfc-reveal {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ============================================================
+   1. HOW IT WORKS — Steps
+   ============================================================ */
+.bfc-steps {
+  padding: 56px 0;
+  background: var(--canvas);
+  color: var(--blank-black);
+  border-bottom: 1px solid var(--mech-gray);
+}
+
+/* ── Desktop grid: 2 columns × 3 rows ── */
+.bfc-steps__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--mech-gray);
+  border: 1px solid var(--mech-gray);
+}
+
+/* ── Desktop step card — compact two-column layout ── */
+.bfc-step {
+  background: var(--canvas);
+  padding: 22px 24px;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  column-gap: 14px;
+  row-gap: 4px;
+  align-items: start;
+}
+
+/* Orange left-border reveal on hover */
+.bfc-step::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 3px;
+  background: var(--orange);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 280ms var(--ease);
+}
+.bfc-step:hover::before { transform: scaleY(1); }
+
+/* Number — left column, spans both text rows */
+.bfc-step__num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--orange);
+  opacity: 0.6;
+  display: block;
+  grid-column: 1;
+  grid-row: 1 / 3;
+  padding-top: 3px;
+}
+
+.bfc-step__title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--blank-black);
+  display: block;
+  grid-column: 2;
+  align-self: end;
+}
+
+.bfc-step__body {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--charcoal);
+  display: block;
+  grid-column: 2;
+}
+
+/* Desktop: accordion trigger hidden — not needed */
+.bfc-step__header { display: none; }
+
+.bfc-steps__cta {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--mech-gray);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.bfc-steps__cta-note {
+  font-size: 12px;
+  color: var(--charcoal);
+}
+
+/* ── Mobile: single column accordion ── */
+@media (max-width: 900px) {
+  .bfc-steps {
+    padding: 40px 0;
+  }
+
+  .bfc-steps__grid {
+    grid-template-columns: 1fr;
+    background: none;
+    border: none;
+    gap: 0;
+  }
+
+  /* Reset the desktop inner grid back to plain block */
+  .bfc-step {
+    display: block;
+    padding: 0;
+    border-top: 1px solid var(--mech-gray);
+    background: transparent;
+  }
+  .bfc-step:first-child { border-top: 0; }
+  .bfc-step::before { display: none; }
+
+  /* Show the accordion trigger on mobile */
+  .bfc-step__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 0;
+    cursor: pointer;
+    background: none;
+    border: 0;
+    width: 100%;
+    text-align: left;
+    color: var(--blank-black);
+  }
+
+  .bfc-step__header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Num in header */
+  .bfc-step__header .bfc-step__num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--orange);
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  /* Title in header */
+  .bfc-step__header .bfc-step__title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--blank-black);
+    white-space: normal;
+    line-height: 1.3;
+  }
+
+  .bfc-step__toggle {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    transition: transform 220ms var(--ease);
+    color: var(--orange);
+  }
+  .bfc-step.is-open .bfc-step__toggle {
+    transform: rotate(45deg);
+  }
+
+  /* Hide the standalone desktop num/title/body — header handles them */
+  .bfc-step > .bfc-step__num,
+  .bfc-step > .bfc-step__title { display: none; }
+
+  /* Body: collapsed by default */
+  .bfc-step__body {
+    display: block;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    padding: 0;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--charcoal);
+    transition:
+      max-height 300ms var(--ease),
+      opacity    220ms ease,
+      padding    220ms var(--ease);
+  }
+  .bfc-step.is-open .bfc-step__body {
+    max-height: 500px;
+    opacity: 1;
+    padding-bottom: 18px;
+  }
+}
+
+/* ============================================================
+   2. WHAT WE REPAIR — Capability Matrix + Image
+   ============================================================ */
+.bfc-what {
+  padding: 64px 0;
+  background: var(--canvas);
+}
+
+.bfc-what__layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.bfc-what__desc {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--charcoal);
+  margin: 0 0 32px;
+}
+
+/* Clean service list */
+.bfc-service-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--mech-gray);
+}
+
+.bfc-service-list__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--mech-gray);
+}
+
+.bfc-service-list__name {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--blank-black);
+  flex-shrink: 0;
+}
+
+.bfc-service-list__note {
+  font-size: 12px;
+  color: var(--charcoal);
+  text-align: right;
+}
+
+/* Right image — square-ish, self-sizing to match text height */
+.bfc-what__image {
+  position: relative;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  max-height: 420px;
+  width: 100%;
+  justify-self: end;
+}
+.bfc-what__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .bfc-what__layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .bfc-what__image {
+    aspect-ratio: 4/3;
+    max-height: 280px;
+    order: -1;
+  }
+  .bfc-service-list__item {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .bfc-service-list__note { text-align: left; }
+}
+
+/* ============================================================
+   3 & 4. CAMERA CARDS — Full CLA + Other Repairs
+   ============================================================ */
+.bfc-cameras {
+  padding: 80px 0;
+  border-top: 1px solid var(--mech-gray);
+}
+
+.bfc-cameras__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.bfc-cameras__head h2.bfc-h2 { margin: 0; }
+
+.bfc-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--mech-gray);
+  border: 1px solid var(--mech-gray);
+}
+
+.bfc-card {
+  background: var(--canvas);
+  padding: 32px 28px;
+}
+
+.bfc-card__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: 22px;
+  margin: 0 0 10px;
+  color: var(--blank-black);
+}
+
+.bfc-card__body {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--charcoal);
+}
+
+@media (max-width: 900px) {
+  .bfc-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 540px) {
+  .bfc-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Alt cameras block — subtle mech-gray tint to visually separate from Full CLA */
+.bfc-cameras--alt {
+  background: var(--mech-gray);
+}
+.bfc-cameras--alt .bfc-card {
+  background: var(--canvas);
+}
+
+/* ── Camera section CTA ── */
+.bfc-cameras__cta {
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--mech-gray);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.bfc-cameras--alt .bfc-cameras__cta {
+  border-top-color: rgba(255,255,255,0.5);
+}
+
+/* ============================================================
+   5. PRICING
+   ============================================================ */
+.bfc-pricing {
+  padding: 96px 0;
+  background: var(--blank-black);
+  color: var(--canvas);
+}
+
+.bfc-pricing__head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: end;
+  margin-bottom: 56px;
+}
+
+.bfc-pricing__head .bfc-section-label { color: var(--golden); }
+.bfc-pricing__head .bfc-section-label::before { background: var(--golden); }
+.bfc-pricing__head h2.bfc-h2 { color: var(--canvas); margin-bottom: 0; }
+
+.bfc-pricing__note {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(248, 246, 238, 0.6);
+  align-self: end;
+}
+
+.bfc-pricing__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-bottom: 40px;
+  background: rgba(255,255,255,0.06);
+}
+
+.bfc-price-card {
+  background: rgba(248, 246, 238, 0.04);
+  padding: 36px 28px;
+  border-top: 3px solid rgba(255,255,255,0.08);
+  transition: border-color 200ms;
+}
+.bfc-price-card:hover {
+  border-color: var(--orange);
+}
+
+.bfc-price-card__price {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: 40px;
+  line-height: 1;
+  color: var(--golden);
+  margin-bottom: 12px;
+}
+
+.bfc-price-card__service {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--canvas);
+}
+
+.bfc-pricing__cta {
+  display: flex;
+  justify-content: flex-start;
+}
+
+@media (max-width: 900px) {
+  .bfc-pricing__head {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .bfc-pricing__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .bfc-pricing__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   6. FAQ
+   ============================================================ */
+.bfc-faq {
+  padding: 96px 0;
+  background: var(--canvas);
+}
+
+.bfc-faq__layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.bfc-faq__sidebar {
+  position: sticky;
+  top: 32px;
+}
+
+.bfc-faq__sidebar h2.bfc-h2 { margin-bottom: 16px; }
+
+.bfc-faq__sidebar-note {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--charcoal);
+  margin-bottom: 32px;
+}
+
+.bfc-accordion { border-top: 1px solid var(--mech-gray); }
+
+.bfc-accordion__item {
+  border-bottom: 1px solid var(--mech-gray);
+}
+
+.bfc-accordion__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  background: none;
+  border: 0;
+  padding: 22px 0;
+  text-align: left;
+  cursor: pointer;
+  color: var(--blank-black);
+}
+
+.bfc-accordion__question {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--blank-black);
+}
+
+.bfc-accordion__icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  color: var(--orange);
+  transition: transform 220ms var(--ease);
+}
+.bfc-accordion__item.is-open .bfc-accordion__icon {
+  transform: rotate(45deg);
+}
+
+.bfc-accordion__body {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 300ms var(--ease), padding 260ms var(--ease);
+}
+.bfc-accordion__item.is-open .bfc-accordion__body {
+  max-height: 800px;
+}
+
+.bfc-accordion__answer {
+  padding: 0 0 22px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--charcoal);
+}
+
+@media (max-width: 900px) {
+  .bfc-faq__layout {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .bfc-faq__sidebar { position: static; }
+}
+
+/* ============================================================
+   7. SHIPPING
+   ============================================================ */
+.bfc-shipping {
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  min-height: 480px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.bfc-shipping__image {
+  position: relative;
+  overflow: hidden;
+}
+.bfc-shipping__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.bfc-shipping__copy {
+  background: var(--dusty-brown);
+  color: var(--canvas);
+  padding: 80px 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.bfc-shipping__copy .bfc-section-label { color: var(--golden); }
+.bfc-shipping__copy .bfc-section-label::before { background: var(--golden); }
+
+.bfc-shipping__copy h2.bfc-h2 {
+  color: var(--canvas);
+  margin-bottom: 24px;
+}
+
+.bfc-shipping__copy p {
+  font-size: 15px;
+  line-height: 1.75;
+  color: rgba(248, 246, 238, 0.75);
+  margin-bottom: 16px;
+}
+.bfc-shipping__copy p:last-of-type { margin-bottom: 0; }
+
+/* ── Shipping callouts ── */
+.bfc-shipping__callouts {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 32px 0 36px;
+  padding: 28px 0;
+  border-top: 1px solid rgba(248, 246, 238, 0.15);
+  border-bottom: 1px solid rgba(248, 246, 238, 0.15);
+}
+
+.bfc-shipping__callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.bfc-shipping__callout svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  color: var(--golden);
+  margin-top: 2px;
+}
+
+.bfc-shipping__callout div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.bfc-shipping__callout strong {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--canvas);
+  letter-spacing: 0.02em;
+}
+
+.bfc-shipping__callout span {
+  font-size: 12px;
+  color: rgba(248, 246, 238, 0.6);
+  line-height: 1.5;
+}
+
+.bfc-shipping__label-btn {
+  margin-top: 4px;
+}
+
+@media (max-width: 900px) {
+  .bfc-shipping {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .bfc-shipping__image {
+    aspect-ratio: 16/9;
+  }
+  .bfc-shipping__copy {
+    padding: 48px 28px;
+  }
+}
+{%- endstyle -%}
+
+{%- liquid
+  assign preload = true
+  if section.location == 'footer'
+    assign preload = false
+  elsif section.location == 'template' and section.index > 2
+    assign preload = false
+  endif
+-%}
+
+{%- liquid
+  assign repair_handle = '35mm-and-medium-format-repair'
+  assign repair_url = all_products[repair_handle].url | default: '/products/35mm-and-medium-format-repair'
+  assign repair_btn_text = section.settings['text_OGVmSdENOpRpSm1q-1'] | strip_html | default: 'Start a Repair'
+  assign repair_btn_url = section.settings.url_44r2z7TSjcGHkDEt-1 | default: repair_url
+-%}
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<!-- ══════════════════════════════════════════════════════════
+     1. HOW IT WORKS
+     ══════════════════════════════════════════════════════════ -->
+<div class="bfc-steps">
+  <div class="bfc-inner">
+
+    <div class="bfc-steps__grid">
+
+      <!-- Step 1 -->
+      <div class="bfc-step bfc-reveal" style="--bfc-delay:60ms">
+        <button class="bfc-step__header" type="button" aria-expanded="false">
+          <div class="bfc-step__header-left">
+            <span class="bfc-step__num">01</span>
+            <span class="bfc-step__title">{{ section.settings['text_b1ethHm88r6HXMAG-1'] | strip_html | replace: 'Step 1: ', '' }}</span>
+          </div>
+          <svg class="bfc-step__toggle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+            <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/>
+          </svg>
+        </button>
+        <div class="bfc-step__num">01</div>
+        <div class="bfc-step__title">{{ section.settings['text_b1ethHm88r6HXMAG-1'] | strip_html | replace: 'Step 1: ', '' }}</div>
+        <div class="bfc-step__body">{{ section.settings['text_zK5b4fQevS7bQERJ-1'] }}</div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="bfc-step bfc-reveal" style="--bfc-delay:120ms">
+        <button class="bfc-step__header" type="button" aria-expanded="false">
+          <div class="bfc-step__header-left">
+            <span class="bfc-step__num">02</span>
+            <span class="bfc-step__title">{{ section.settings['text_0si98RFp5joWJ1B8-1'] | strip_html | replace: 'Step 2: ', '' }}</span>
+          </div>
+          <svg class="bfc-step__toggle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+            <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/>
+          </svg>
+        </button>
+        <div class="bfc-step__num">02</div>
+        <div class="bfc-step__title">{{ section.settings['text_0si98RFp5joWJ1B8-1'] | strip_html | replace: 'Step 2: ', '' }}</div>
+        <div class="bfc-step__body">{{ section.settings['text_3lXcPM5OEDXNzDbL-1'] }}</div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="bfc-step bfc-reveal" style="--bfc-delay:180ms">
+        <button class="bfc-step__header" type="button" aria-expanded="false">
+          <div class="bfc-step__header-left">
+            <span class="bfc-step__num">03</span>
+            <span class="bfc-step__title">{{ section.settings['text_uoM6sBLNDaHyMRgg-1'] | strip_html | replace: 'Step 3 : ', '' | replace: 'Step 3: ', '' }}</span>
+          </div>
+          <svg class="bfc-step__toggle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+            <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/>
+          </svg>
+        </button>
+        <div class="bfc-step__num">03</div>
+        <div class="bfc-step__title">{{ section.settings['text_uoM6sBLNDaHyMRgg-1'] | strip_html | replace: 'Step 3 : ', '' | replace: 'Step 3: ', '' }}</div>
+        <div class="bfc-step__body">{{ section.settings['text_RPTUdA1bfP1WKHbf-1'] }}</div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="bfc-step bfc-reveal" style="--bfc-delay:240ms">
+        <button class="bfc-step__header" type="button" aria-expanded="false">
+          <div class="bfc-step__header-left">
+            <span class="bfc-step__num">04</span>
+            <span class="bfc-step__title">{{ section.settings['text_bWF9lADjf58RmD6y-1'] | strip_html | replace: 'Step 4: ', '' }}</span>
+          </div>
+          <svg class="bfc-step__toggle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+            <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/>
+          </svg>
+        </button>
+        <div class="bfc-step__num">04</div>
+        <div class="bfc-step__title">{{ section.settings['text_bWF9lADjf58RmD6y-1'] | strip_html | replace: 'Step 4: ', '' }}</div>
+        <div class="bfc-step__body">{{ section.settings['text_IdTYOB7FDYASZcxP-1'] }}</div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="bfc-step bfc-reveal" style="--bfc-delay:300ms">
+        <button class="bfc-step__header" type="button" aria-expanded="false">
+          <div class="bfc-step__header-left">
+            <span class="bfc-step__num">05</span>
+            <span class="bfc-step__title">{{ section.settings['text_HrsD7nsiZ51a7coM-1'] | strip_html | replace: 'Step 5: ', '' }}</span>
+          </div>
+          <svg class="bfc-step__toggle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+            <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/>
+          </svg>
+        </button>
+        <div class="bfc-step__num">05</div>
+        <div class="bfc-step__title">{{ section.settings['text_HrsD7nsiZ51a7coM-1'] | strip_html | replace: 'Step 5: ', '' }}</div>
+        <div class="bfc-step__body">{{ section.settings['text_T4nRNJtWXNje3fMK-1'] }}</div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="bfc-step bfc-reveal" style="--bfc-delay:360ms">
+        <button class="bfc-step__header" type="button" aria-expanded="false">
+          <div class="bfc-step__header-left">
+            <span class="bfc-step__num">06</span>
+            <span class="bfc-step__title">{{ section.settings['text_kxIcPYlQOEUWoLHz-1'] | strip_html | replace: 'Step 6: ', '' }}</span>
+          </div>
+          <svg class="bfc-step__toggle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor">
+            <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/>
+          </svg>
+        </button>
+        <div class="bfc-step__num">06</div>
+        <div class="bfc-step__title">{{ section.settings['text_kxIcPYlQOEUWoLHz-1'] | strip_html | replace: 'Step 6: ', '' }}</div>
+        <div class="bfc-step__body">{{ section.settings['text_dAmEcKiEXHxfrQ9v-1'] }}</div>
+      </div>
+
+    </div><!-- /.bfc-steps__grid -->
+
+    <div class="bfc-steps__cta bfc-reveal" style="--bfc-delay:400ms">
+      <p class="bfc-steps__cta-note">No work begins until you approve the quote — bench fee applied toward your repair.</p>
+      <a href="{{ repair_btn_url }}" class="bfc-btn bfc-btn--primary">{{ repair_btn_text }}</a>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     2. WHAT WE REPAIR
+     ══════════════════════════════════════════════════════════ -->
+<div class="bfc-what">
+  <div class="bfc-inner">
+
+    <div class="bfc-what__layout">
+      <div class="bfc-reveal">
+        <p class="bfc-section-label">Services</p>
+        <h2 class="bfc-h2">{{ section.settings['text_N7qzcLWFQqCVBAbv-1'] | strip_html | default: 'What We Repair' }}</h2>
+        <p class="bfc-what__desc">{{ section.settings['text_nsHGXN0PI3XSWcih-1'] | strip_html }}</p>
+
+        <ul class="bfc-service-list">
+          <li class="bfc-service-list__item">
+            <div class="bfc-service-list__name">Full CLA &amp; Complex Repairs</div>
+            <div class="bfc-service-list__note">Select models — Canon, Pentax, Nikon, Contax, Hasselblad &amp; more</div>
+          </li>
+          <li class="bfc-service-list__item">
+            <div class="bfc-service-list__name">Unjams &amp; Minor Mechanical</div>
+            <div class="bfc-service-list__note">Most mechanical cameras</div>
+          </li>
+          <li class="bfc-service-list__item">
+            <div class="bfc-service-list__name">Cleaning &amp; Light Seals</div>
+            <div class="bfc-service-list__note">All cameras</div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bfc-what__image bfc-reveal" style="--bfc-delay:120ms; justify-self:end;">
+        {%- liquid
+          assign fetchpriority = 'auto'
+          assign loading = 'lazy'
+          if section.location == 'template' and section.index == 1
+            assign fetchpriority = 'high'
+            assign loading = 'eager'
+          endif
+        -%}
+        {%- if section.settings['image_9jKvCfXeB3zjhs3M-1'] != blank -%}
+          {{ section.settings['image_9jKvCfXeB3zjhs3M-1'] | image_url: width: 900 | image_tag: loading: loading, fetchpriority: fetchpriority, alt: 'Film camera repair at Brooklyn Film Camera' }}
+        {%- else -%}
+          <img src="https://cdn.instant.so/sites/vmtACb1rp8N2aQE8/assets/JDNeBfKHRncTHkuE/TVqpLWievcfsg2vT.png?width=900" alt="Film camera technician at work" loading="{{ loading }}" fetchpriority="{{ fetchpriority }}" width="900" height="672">
+        {%- endif -%}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     3. FULL CLA SERVICE — Featured Cameras
+     ══════════════════════════════════════════════════════════ -->
+<div class="bfc-cameras">
+  <div class="bfc-inner">
+
+    <div class="bfc-cameras__head bfc-reveal">
+      <div>
+        <p class="bfc-section-label">Full CLA</p>
+        <h2 class="bfc-h2">{{ section.settings['text_MbFTa8lVxtxk1MyV-1'] | strip_html | default: 'Full CLA Service' }}</h2>
+      </div>
+    </div>
+
+    <div class="bfc-card-grid">
+      <div class="bfc-card bfc-reveal" style="--bfc-delay:60ms">
+        <div class="bfc-card__title">{{ section.settings['text_e3IgUtmnx0JCNiDZ-1'] | strip_html | default: 'Canon AE-1 Program' }}</div>
+        <div class="bfc-card__body">{{ section.settings['text_nSvnmtcQ01027Xj7-1'] | strip_html }}</div>
+      </div>
+      <div class="bfc-card bfc-reveal" style="--bfc-delay:100ms">
+        <div class="bfc-card__title">{{ section.settings['text_0GXley78XRccVff6-1'] | strip_html | default: 'K1000' }}</div>
+        <div class="bfc-card__body">{{ section.settings['text_4V3mnOu74Winkojf-1'] | strip_html }}</div>
+      </div>
+      <div class="bfc-card bfc-reveal" style="--bfc-delay:140ms">
+        <div class="bfc-card__title">{{ section.settings['text_P6UogtMNA3NTe4iU-1'] | strip_html | default: 'Hasselblad 500 Series' }}</div>
+        <div class="bfc-card__body">{{ section.settings['text_xj27KEgUVzPLcNGZ-1'] | strip_html }}</div>
+      </div>
+      <div class="bfc-card bfc-reveal" style="--bfc-delay:180ms">
+        <div class="bfc-card__title">{{ section.settings['text_huNJv1FaXJPXBXne-1'] | strip_html | default: 'Contax T' }}</div>
+        <div class="bfc-card__body">{{ section.settings['text_fpHh06dolmevW9rt-1'] | strip_html }}</div>
+      </div>
+      <div class="bfc-card bfc-reveal" style="--bfc-delay:220ms">
+        <div class="bfc-card__title">{{ section.settings['text_pXhOtTQSfrgaTNZM-1'] | strip_html | default: 'Contax G2' }}</div>
+        <div class="bfc-card__body">{{ section.settings['text_wTI1WAcR4j4D1JgN-1'] | strip_html }}</div>
+      </div>
+      <div class="bfc-card bfc-reveal" style="--bfc-delay:260ms">
+        <div class="bfc-card__title">{{ section.settings['text_zj5YYBoqEAS4JhTb-1'] | strip_html | default: 'Other Cameras' }}</div>
+        <div class="bfc-card__body">{{ section.settings['text_AnBPyLkv0Y3ci8Wo-1'] | strip_html }}</div>
+      </div>
+    </div>
+
+    <div class="bfc-cameras__cta bfc-reveal" style="--bfc-delay:300ms">
+      <a href="{{ repair_btn_url }}" class="bfc-btn bfc-btn--primary">{{ repair_btn_text }}</a>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     4. OTHER REPAIRS
+     ══════════════════════════════════════════════════════════ -->
+<div class="bfc-cameras bfc-cameras--alt">
+  <div class="bfc-inner">
+
+    <div class="bfc-cameras__head bfc-reveal">
+      <div>
+        <p class="bfc-section-label">À La Carte Services</p>
+        <h2 class="bfc-h2">Individual Repairs, Most Cameras</h2>
+        <p style="font-size:14px;line-height:1.7;color:var(--charcoal);margin-top:12px;max-width:600px;">These standalone services can be performed on most cameras regardless of brand or model — no full CLA required.</p>
+      </div>
+    </div>
+
+    <div class="bfc-card-grid">
+      <div class="bfc-card bfc-reveal" style="--bfc-delay:60ms">
+        <div class="bfc-card__title">{{ section.settings['text_f4piqP05EzMfEZYr-1'] | strip_html | default: 'Light Seals' }}</div>
+        <div class="bfc-card__body">{{ section.settings['text_OanafuXt1OjroSZu-1'] | strip_html }}</div>
+      </div>
+      <div class="bfc-card bfc-reveal" style="--bfc-delay:100ms">
+        <div class="bfc-card__title">{{ section.settings['text_OXdu84QbSBevWBqf-1'] | strip_html | default: 'Unjam & Stuck Shutters' }}</div>
+        <div class="bfc-card__body">{{ section.settings['text_ZjVPrYjV4ny7YV5h-1'] | strip_html }}</div>
+      </div>
+      <div class="bfc-card bfc-reveal" style="--bfc-delay:140ms">
+        <div class="bfc-card__title">{{ section.settings['text_3ubSAIis1Z8OAXms-1'] | strip_html | default: 'Door Replacement' }}</div>
+        <div class="bfc-card__body">{{ section.settings['text_rgCiunvUGsyflbjz-1'] | strip_html }}</div>
+      </div>
+      <div class="bfc-card bfc-reveal" style="--bfc-delay:180ms">
+        <div class="bfc-card__title">{{ section.settings['text_GbMFJFCngCgXVmer-1'] | strip_html | default: 'Lens CLA' }}</div>
+        <div class="bfc-card__body">{{ section.settings['text_IO0SzTfLrMc9Hmjy-1'] | strip_html }}</div>
+      </div>
+      <div class="bfc-card bfc-reveal" style="--bfc-delay:220ms">
+        <div class="bfc-card__title">{{ section.settings['text_Rz7yyO07IB3auE3t-1'] | strip_html | default: 'Parts Replacement' }}</div>
+        <div class="bfc-card__body">{{ section.settings['text_GFGnDjbsSg1sSZmu-1'] | strip_html }}</div>
+      </div>
+      <div class="bfc-card bfc-reveal" style="--bfc-delay:260ms">
+        <div class="bfc-card__title">{{ section.settings['text_UGmDsnOqjIyIyy3i-1'] | strip_html | default: 'Other Cameras' }}</div>
+        <div class="bfc-card__body">{{ section.settings['text_K5rgZXTlX3nGlRJF-1'] | strip_html }}</div>
+      </div>
+    </div>
+
+    <div class="bfc-cameras__cta bfc-reveal" style="--bfc-delay:300ms">
+      <a href="{{ repair_btn_url }}" class="bfc-btn bfc-btn--primary">{{ repair_btn_text }}</a>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     5. PRICING
+     ══════════════════════════════════════════════════════════ -->
+<div class="bfc-pricing">
+  <div class="bfc-inner">
+
+    <div class="bfc-pricing__head bfc-reveal">
+      <div>
+        <p class="bfc-section-label">{{ section.settings['text_cQqIVEgqDtrrxC69-1'] | strip_html | default: 'Transparent Pricing' }}</p>
+        <h2 class="bfc-h2">{{ section.settings['text_qP8N4jH6z2NMGl9a-1'] | strip_html | default: 'Sample Repair Price Ranges' }}</h2>
+      </div>
+      <p class="bfc-pricing__note">{{ section.settings['text_tX5jvewh0rqW2AIv-1'] | strip_html }}</p>
+    </div>
+
+    <div class="bfc-pricing__grid">
+      <div class="bfc-price-card bfc-reveal" style="--bfc-delay:60ms">
+        <div class="bfc-price-card__price">{{ section.settings['text_pjrwESGDUEHrdTL5-1'] | strip_html | default: '$85–150' }}</div>
+        <div class="bfc-price-card__service">{{ section.settings['text_faarjtbb0IW5JBxo-1'] | strip_html | default: 'Light Seals' }}</div>
+      </div>
+      <div class="bfc-price-card bfc-reveal" style="--bfc-delay:110ms">
+        <div class="bfc-price-card__price">{{ section.settings['text_A7hnSbkawoWazFh9-1'] | strip_html | default: '~$50–300' }}</div>
+        <div class="bfc-price-card__service">{{ section.settings['text_6HLaDCdaTccEYJs6-1'] | strip_html | default: 'Full Lens CLA' }}</div>
+      </div>
+      <div class="bfc-price-card bfc-reveal" style="--bfc-delay:160ms">
+        <div class="bfc-price-card__price">{{ section.settings['text_jPpNrAJEvHro8fGY-1'] | strip_html | default: '$~325' }}</div>
+        <div class="bfc-price-card__service">{{ section.settings['text_4tRf1aJI5bUz2mCE-1'] | strip_html | default: 'CLA' }}</div>
+      </div>
+      <div class="bfc-price-card bfc-reveal" style="--bfc-delay:210ms">
+        <div class="bfc-price-card__price">{{ section.settings['text_vdrhx0h7YdsU1RYN-1'] | strip_html | default: '$90' }}</div>
+        <div class="bfc-price-card__service">{{ section.settings['text_5SQU26miURpbtVBd-1'] | strip_html | default: 'Unjam' }}</div>
+      </div>
+    </div>
+
+    <div class="bfc-pricing__cta bfc-reveal" style="--bfc-delay:280ms">
+      <a href="{{ section.settings.url_vXX8izTIbPsVDqLd-1 | default: repair_url }}" class="bfc-btn bfc-btn--outline-light">
+        {{ section.settings['text_ZSSb2jGJ33AH7IaV-1'] | strip_html | default: 'See Full Price List' }}
+      </a>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     6. FAQ
+     ══════════════════════════════════════════════════════════ -->
+<div class="bfc-faq">
+  <div class="bfc-inner">
+    <div class="bfc-faq__layout">
+
+      <!-- Sidebar -->
+      <div class="bfc-faq__sidebar bfc-reveal">
+        <p class="bfc-section-label">Support</p>
+        <h2 class="bfc-h2">{{ section.settings['text_7aESZrg5i4gIDe2I-1'] | strip_html | default: 'Frequently Asked Questions' }}</h2>
+        <p class="bfc-faq__sidebar-note">{{ section.settings['text_9eTXhF2Jl59s8a6I-1'] | strip_html }}</p>
+        {%- liquid
+          assign visit_handle = 'visit'
+          assign visit_url = pages[visit_handle].url | default: '/pages/visit'
+        -%}
+        <a href="{{ section.settings.url_hkfu6CK8SSCaCMoo-1 | default: visit_url }}" class="bfc-btn bfc-btn--outline">
+          {{ section.settings['text_suzeb1nmUompX5cX-1'] | strip_html | default: 'Contact Us' }}
+        </a>
+        <a href="{{ repair_btn_url }}" class="bfc-btn bfc-btn--primary" style="margin-top:12px;">{{ repair_btn_text }}</a>
+      </div>
+
+      <!-- Accordion -->
+      <div class="bfc-accordion bfc-reveal" style="--bfc-delay:100ms">
+
+        <div class="bfc-accordion__item">
+          <button class="bfc-accordion__trigger" type="button" aria-expanded="false">
+            <span class="bfc-accordion__question">{{ section.settings['text_yPOfQDQyudoffbEH-1'] | strip_html }}</span>
+            <svg class="bfc-accordion__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+              <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/>
+            </svg>
+          </button>
+          <div class="bfc-accordion__body"><div class="bfc-accordion__answer">{{ section.settings['text_DyX1AepcieaXngSX-1'] | strip_html }}</div></div>
+        </div>
+
+        <div class="bfc-accordion__item">
+          <button class="bfc-accordion__trigger" type="button" aria-expanded="false">
+            <span class="bfc-accordion__question">{{ section.settings['text_2uvk73piGaJVfSA1-1'] | strip_html }}</span>
+            <svg class="bfc-accordion__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+              <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/>
+            </svg>
+          </button>
+          <div class="bfc-accordion__body"><div class="bfc-accordion__answer">{{ section.settings['text_ENPmwIUdsO9w8ai3-1'] | strip_html }}</div></div>
+        </div>
+
+        <div class="bfc-accordion__item">
+          <button class="bfc-accordion__trigger" type="button" aria-expanded="false">
+            <span class="bfc-accordion__question">{{ section.settings['text_m9G2IMZMMGgH3J3w-1'] | strip_html }}</span>
+            <svg class="bfc-accordion__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+              <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/>
+            </svg>
+          </button>
+          <div class="bfc-accordion__body"><div class="bfc-accordion__answer">{{ section.settings['text_1YqXpD4kvhmSlv9K-1'] | strip_html }}</div></div>
+        </div>
+
+        <div class="bfc-accordion__item">
+          <button class="bfc-accordion__trigger" type="button" aria-expanded="false">
+            <span class="bfc-accordion__question">{{ section.settings['text_JUKnHXd2MfaYQ4lL-1'] | strip_html }}</span>
+            <svg class="bfc-accordion__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+              <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/>
+            </svg>
+          </button>
+          <div class="bfc-accordion__body"><div class="bfc-accordion__answer">{{ section.settings['text_nKyOLcNCxQ9BU6Lx-1'] | strip_html }}</div></div>
+        </div>
+
+        <div class="bfc-accordion__item">
+          <button class="bfc-accordion__trigger" type="button" aria-expanded="false">
+            <span class="bfc-accordion__question">{{ section.settings['text_9SpfQZ8nomRE73wp-1'] | strip_html }}</span>
+            <svg class="bfc-accordion__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+              <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/>
+            </svg>
+          </button>
+          <div class="bfc-accordion__body"><div class="bfc-accordion__answer">{{ section.settings['text_Ek5DbpeAU9rLi2mh-1'] | strip_html }}</div></div>
+        </div>
+
+        <div class="bfc-accordion__item">
+          <button class="bfc-accordion__trigger" type="button" aria-expanded="false">
+            <span class="bfc-accordion__question">{{ section.settings['text_ReexIItutqMaLTuP-1'] | strip_html }}</span>
+            <svg class="bfc-accordion__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+              <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/>
+            </svg>
+          </button>
+          <div class="bfc-accordion__body"><div class="bfc-accordion__answer">{{ section.settings['text_U5chG9FSxzdJdnk9-1'] | strip_html }}</div></div>
+        </div>
+
+        <div class="bfc-accordion__item">
+          <button class="bfc-accordion__trigger" type="button" aria-expanded="false">
+            <span class="bfc-accordion__question">{{ section.settings['text_YIEerFC852DhgYeL-1'] | strip_html }}</span>
+            <svg class="bfc-accordion__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+              <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/>
+            </svg>
+          </button>
+          <div class="bfc-accordion__body"><div class="bfc-accordion__answer">{{ section.settings['text_Xqgk9OZXuw21n0iY-1'] | strip_html }}</div></div>
+        </div>
+
+        <div class="bfc-accordion__item">
+          <button class="bfc-accordion__trigger" type="button" aria-expanded="false">
+            <span class="bfc-accordion__question">{{ section.settings['text_QNSMFgbyON2JQ9sv-1'] | strip_html }}</span>
+            <svg class="bfc-accordion__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+              <path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/>
+            </svg>
+          </button>
+          <div class="bfc-accordion__body"><div class="bfc-accordion__answer">{{ section.settings['text_FAZaZxa8kpRb1gbS-1'] | strip_html }}</div></div>
+        </div>
+
+      </div><!-- /.bfc-accordion -->
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     7. SHIPPING
+     ══════════════════════════════════════════════════════════ -->
+<div class="bfc-shipping">
+  <div class="bfc-shipping__image">
+    {%- liquid
+      assign s_loading = 'lazy'
+      assign s_fetch = 'auto'
+    -%}
+    {%- if section.settings['image_ZGC0Rvijr6dtTfOn-1'] != blank -%}
+      {{ section.settings['image_ZGC0Rvijr6dtTfOn-1'] | image_url: width: 1280 | image_tag: loading: s_loading, fetchpriority: s_fetch, alt: 'Film camera shipping' }}
+    {%- else -%}
+      <img src="https://cdn.instant.so/sites/vmtACb1rp8N2aQE8/assets/a1lP5zhWvxTs72TX/deconstructedk1000tp.png?width=1280" alt="Deconstructed K1000 film camera" loading="lazy" width="1280" height="854">
+    {%- endif -%}
+  </div>
+
+  <div class="bfc-shipping__copy">
+    <div class="bfc-reveal">
+      <p class="bfc-section-label">Mail-In Repairs</p>
+      <h2 class="bfc-h2">{{ section.settings['text_B6eNUe5cX9LOchif-1'] | strip_html | default: 'Secure Shipping &amp; Handling' }}</h2>
+      {{ section.settings['text_9RZitkmjBUPjFcoq-1'] }}
+
+      <div class="bfc-shipping__callouts">
+        <div class="bfc-shipping__callout">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+            <path d="M247.42,117l-14-35A15.93,15.93,0,0,0,218.58,72H184V64a8,8,0,0,0-8-8H24A16,16,0,0,0,8,72V184a16,16,0,0,0,16,16H41a32,32,0,0,0,62,0h50a32,32,0,0,0,62,0h17a16,16,0,0,0,16-16V120A7.94,7.94,0,0,0,247.42,117ZM72,208a16,16,0,1,1,16-16A16,16,0,0,1,72,208Zm112,0a16,16,0,1,1,16-16A16,16,0,0,1,184,208Zm0-112H184V88h34.58l9.6,24Z"/>
+          </svg>
+          <div>
+            <strong>Label via Portal</strong>
+            <span>Buy a prepaid label instantly — no printer required at purchase</span>
+          </div>
+        </div>
+        <div class="bfc-shipping__callout">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+            <path d="M208,56H180.28A48,48,0,0,0,80,56H52A16,16,0,0,0,36,72V200a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V72A16,16,0,0,0,208,56ZM128,24a32,32,0,1,1-32,32A32,32,0,0,1,128,24Zm72,176H56V72H82.75A48.14,48.14,0,0,0,80,88a8,8,0,0,0,16,0,32,32,0,0,1,64,0,8,8,0,0,0,16,0,48.14,48.14,0,0,0-2.75-16H200Z"/>
+          </svg>
+          <div>
+            <strong>Condition Documented on Arrival</strong>
+            <span>Every camera photographed before we touch it</span>
+          </div>
+        </div>
+        <div class="bfc-shipping__callout">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+            <path d="M190.13,34.18a8,8,0,0,0-7.94-.29L128,61.89,73.81,33.89a8,8,0,0,0-11.6,7.16V179.13a8,8,0,0,0,4.47,7.17l56,28a8,8,0,0,0,7.18,0l56-28a8,8,0,0,0,4.47-7.17V41.05A8,8,0,0,0,190.13,34.18Z"/>
+          </svg>
+          <div>
+            <strong>Fully Insured Return</strong>
+            <span>USPS Priority, UPS Ground, or expedited — your choice</span>
+          </div>
+        </div>
+      </div>
+
+      {%- liquid
+        assign label_url = section.settings.url_shipping_label
+        if label_url == blank
+          assign label_url = 'https://account.brooklynfilmcamera.com/pages/019ccd8c-834a-7d0b-b938-3c82132d5654'
+        endif
+      -%}
+      <a href="{{ label_url }}" class="bfc-btn bfc-btn--outline-light bfc-shipping__label-btn" target="_blank" rel="noopener">
+        {{ section.settings['text_shipping_label_btn'] | strip_html | default: 'Purchase a Shipping Label' }}
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="width:14px;height:14px;margin-left:8px;flex-shrink:0;">
+          <path d="M224,104a8,8,0,0,1-16,0V59.32l-82.34,82.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT — Accordion + Scroll Reveal (no external deps)
+     ══════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+  'use strict';
+
+  const EASE = 'cubic-bezier(.22, 1, .36, 1)';
+  const MQ   = window.matchMedia('(max-width: 900px)');
+
+  /* ─── Scroll Reveal ───────────────────────────────────── */
+  function initReveal() {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const els    = document.querySelectorAll('.bfc-repair .bfc-reveal');
+
+    if (reduce) {
+      els.forEach(el => el.classList.add('is-visible'));
+      return;
+    }
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -8% 0px' });
+
+    els.forEach(el => {
+      // Immediately reveal anything already in viewport
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight * 0.95) {
+        el.classList.add('is-visible');
+      } else {
+        io.observe(el);
+      }
+    });
+  }
+
+  /* ─── FAQ Accordion ───────────────────────────────────── */
+  function initFaqAccordion() {
+    const container = document.querySelector('.bfc-repair .bfc-accordion');
+    if (!container) return;
+
+    container.querySelectorAll('.bfc-accordion__item').forEach(item => {
+      const trigger = item.querySelector('.bfc-accordion__trigger');
+      const body    = item.querySelector('.bfc-accordion__body');
+      if (!trigger || !body) return;
+
+      trigger.addEventListener('click', () => {
+        const isOpen = item.classList.contains('is-open');
+
+        // Close all siblings
+        container.querySelectorAll('.bfc-accordion__item.is-open').forEach(open => {
+          if (open !== item) {
+            open.classList.remove('is-open');
+            open.querySelector('.bfc-accordion__trigger')?.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        // Toggle current
+        item.classList.toggle('is-open', !isOpen);
+        trigger.setAttribute('aria-expanded', String(!isOpen));
+      });
+    });
+  }
+
+  /* ─── Steps Accordion (mobile only) ──────────────────── */
+  function initStepsAccordion() {
+    const grid = document.querySelector('.bfc-repair .bfc-steps__grid');
+    if (!grid) return;
+
+    grid.querySelectorAll('.bfc-step').forEach(step => {
+      const header = step.querySelector('.bfc-step__header');
+      const body   = step.querySelector('.bfc-step__body');
+      if (!header || !body) return;
+
+      header.addEventListener('click', () => {
+        if (!MQ.matches) return; // desktop: no-op
+
+        const isOpen = step.classList.contains('is-open');
+
+        // Close siblings
+        grid.querySelectorAll('.bfc-step.is-open').forEach(s => {
+          if (s !== step) s.classList.remove('is-open');
+        });
+
+        step.classList.toggle('is-open', !isOpen);
+        header.setAttribute('aria-expanded', String(!isOpen));
+      });
+
+      // Allow keyboard activation
+      header.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          header.click();
+        }
+      });
+    });
+  }
+
+  /* ─── Boot ────────────────────────────────────────────── */
+  function boot() {
+    initReveal();
+    initFaqAccordion();
+    initStepsAccordion();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+
+})();
+</script>
+
+</section>
+
+{% schema %}
+{
+  "name": "BFC Repair Page",
+  "tag": "section",
+  "enabled_on": { "templates": ["*"] },
+  "settings": [
+    { "type": "header", "content": "Step 1" },
+    { "type": "richtext", "id": "text_b1ethHm88r6HXMAG-1", "label": "Step 1 Title", "default": "<h4><strong>Step 1: Purchase Repair Quote</strong></h4>" },
+    { "type": "richtext", "id": "text_zK5b4fQevS7bQERJ-1", "label": "Step 1 Body", "default": "<p>Complete our online form with your camera details above, describe the issues you're experiencing, and upload photos if available.</p>" },
+    { "type": "header", "content": "Step 2" },
+    { "type": "richtext", "id": "text_0si98RFp5joWJ1B8-1", "label": "Step 2 Title", "default": "<h4><strong>Step 2: Ship Your Camera to Brooklyn</strong></h4>" },
+    { "type": "richtext", "id": "text_3lXcPM5OEDXNzDbL-1", "label": "Step 2 Body", "default": "<p>Pack your camera securely and ship it to our workshop. Labels are easily purchased via our service portal.</p>" },
+    { "type": "header", "content": "Step 3" },
+    { "type": "richtext", "id": "text_uoM6sBLNDaHyMRgg-1", "label": "Step 3 Title", "default": "<h4><strong>Step 3: Assessment</strong></h4>" },
+    { "type": "richtext", "id": "text_RPTUdA1bfP1WKHbf-1", "label": "Step 3 Body", "default": "<p>Our technician performs a comprehensive diagnostic assessment. The bench fee is applied toward your final repair cost.</p>" },
+    { "type": "header", "content": "Step 4" },
+    { "type": "richtext", "id": "text_bWF9lADjf58RmD6y-1", "label": "Step 4 Title", "default": "<h4><strong>Step 4: Receive Your Repair Quote</strong></h4>" },
+    { "type": "richtext", "id": "text_IdTYOB7FDYASZcxP-1", "label": "Step 4 Body", "default": "<p>We'll contact you with a detailed breakdown of what needs to be repaired. No work proceeds until you approve the estimate.</p>" },
+    { "type": "header", "content": "Step 5" },
+    { "type": "richtext", "id": "text_HrsD7nsiZ51a7coM-1", "label": "Step 5 Title", "default": "<h4><strong>Step 5: Expert Repair Work</strong></h4>" },
+    { "type": "richtext", "id": "text_T4nRNJtWXNje3fMK-1", "label": "Step 5 Body", "default": "<p>Once approved, our skilled technicians perform the necessary repairs using quality parts and time-tested techniques.</p>" },
+    { "type": "header", "content": "Step 6" },
+    { "type": "richtext", "id": "text_kxIcPYlQOEUWoLHz-1", "label": "Step 6 Title", "default": "<h4><strong>Step 6: Quality Testing &amp; Return</strong></h4>" },
+    { "type": "richtext", "id": "text_dAmEcKiEXHxfrQ9v-1", "label": "Step 6 Body", "default": "<p>Your camera undergoes thorough testing to ensure everything functions perfectly, then ships back to you.</p>" },
+    { "type": "url", "id": "url_44r2z7TSjcGHkDEt-1", "label": "Start Repair Button URL" },
+    { "type": "richtext", "id": "text_OGVmSdENOpRpSm1q-1", "label": "Start Repair Button Text", "default": "<p>Start a Repair</p>" },
+    { "type": "header", "content": "What We Repair" },
+    { "type": "richtext", "id": "text_N7qzcLWFQqCVBAbv-1", "label": "Section Title", "default": "<h3>What We Repair</h3>" },
+    { "type": "richtext", "id": "text_nsHGXN0PI3XSWcih-1", "label": "Section Description", "default": "<p>We are actively expanding our menu. If you don't see your camera listed, book through Unlisted for a quote.</p>" },
+    { "type": "richtext", "id": "text_6JvkZISk15Bqlgxg-1", "label": "Row 1: Service", "default": "<p>Full CLA &amp; Complex Repairs</p>" },
+    { "type": "richtext", "id": "text_SLsE9eGYVTapAVsT-1", "label": "Column 1 Header", "default": "<p>Select Models</p>" },
+    { "type": "richtext", "id": "text_Xnf3rDE7I6jdSF6e-1", "label": "Column 2 Header", "default": "<p>Most Models</p>" },
+    { "type": "richtext", "id": "text_p16dy95MBPo29XDR-1", "label": "Column 3 Header", "default": "<p>All Models</p>" },
+    { "type": "richtext", "id": "text_2Ia3UGzMFDRiRyHP-1", "label": "Row 2: Service", "default": "<p>Unjams / Minor Mechanical Failures</p>" },
+    { "type": "richtext", "id": "text_HaY04RxLvTzJest3-1", "label": "Row 3: Service", "default": "<p>Cleaning &amp; Light Seals</p>" },
+    { "type": "image_picker", "id": "image_9jKvCfXeB3zjhs3M-1", "label": "What We Repair — Image" },
+    { "type": "header", "content": "Full CLA Service" },
+    { "type": "richtext", "id": "text_MbFTa8lVxtxk1MyV-1", "label": "Section Title", "default": "<h3>Full CLA Service</h3>" },
+    { "type": "richtext", "id": "text_e3IgUtmnx0JCNiDZ-1", "label": "Camera 1 Name", "default": "<h3>Canon AE-1 Program</h3>" },
+    { "type": "richtext", "id": "text_nSvnmtcQ01027Xj7-1", "label": "Camera 1 Description", "default": "<p>One of our most popular services — we can perform everything on a Canon AE-1 Program.</p>" },
+    { "type": "richtext", "id": "text_0GXley78XRccVff6-1", "label": "Camera 2 Name", "default": "<h3>K1000</h3>" },
+    { "type": "richtext", "id": "text_4V3mnOu74Winkojf-1", "label": "Camera 2 Description", "default": "<p>Another popular service — we are set up to handle every issue with the K1000.</p>" },
+    { "type": "richtext", "id": "text_P6UogtMNA3NTe4iU-1", "label": "Camera 3 Name", "default": "<h3>Hasselblad 500 Series</h3>" },
+    { "type": "richtext", "id": "text_xj27KEgUVzPLcNGZ-1", "label": "Camera 3 Description", "default": "<p>Our dedicated Hasselblad tech can perform a full CLA on any 500 series body.</p>" },
+    { "type": "richtext", "id": "text_huNJv1FaXJPXBXne-1", "label": "Camera 4 Name", "default": "<h3>Contax T</h3>" },
+    { "type": "richtext", "id": "text_fpHh06dolmevW9rt-1", "label": "Camera 4 Description", "default": "<p>Specializing in Contax for years, our technicians can perform thorough repairs on the Contax T.</p>" },
+    { "type": "richtext", "id": "text_pXhOtTQSfrgaTNZM-1", "label": "Camera 5 Name", "default": "<h3>Contax G2</h3>" },
+    { "type": "richtext", "id": "text_wTI1WAcR4j4D1JgN-1", "label": "Camera 5 Description", "default": "<p>Calibration, full CLAs, repairs, and more — if it's acting up, just bring it in!</p>" },
+    { "type": "richtext", "id": "text_zj5YYBoqEAS4JhTb-1", "label": "Camera 6 Name", "default": "<h3>Other Cameras</h3>" },
+    { "type": "richtext", "id": "text_AnBPyLkv0Y3ci8Wo-1", "label": "Camera 6 Description", "default": "<p>We also CLA Contax T, TVS, T2s, Canonets, Canon Ps. Don't see yours? Email us — we do more!</p>" },
+    { "type": "header", "content": "Other Repairs" },
+    { "type": "richtext", "id": "text_AmElW6xnkWf22Fkd-1", "label": "Section Title", "default": "<h3>Other Repairs — Most Models</h3>" },
+    { "type": "richtext", "id": "text_f4piqP05EzMfEZYr-1", "label": "Service 1 Name", "default": "<h3>Light Seals</h3>" },
+    { "type": "richtext", "id": "text_OanafuXt1OjroSZu-1", "label": "Service 1 Description", "default": "<p>Light seals can be replaced on all models.</p>" },
+    { "type": "richtext", "id": "text_OXdu84QbSBevWBqf-1", "label": "Service 2 Name", "default": "<h3>Unjam &amp; Stuck Shutters</h3>" },
+    { "type": "richtext", "id": "text_ZjVPrYjV4ny7YV5h-1", "label": "Service 2 Description", "default": "<p>Most mechanical cameras — we can perform unjam and stuck shutter repairs.</p>" },
+    { "type": "richtext", "id": "text_3ubSAIis1Z8OAXms-1", "label": "Service 3 Name", "default": "<h3>Door Replacement</h3>" },
+    { "type": "richtext", "id": "text_rgCiunvUGsyflbjz-1", "label": "Service 3 Description", "default": "<p>Model &amp; part dependent, but many mechanical point &amp; shoots can have doors replaced.</p>" },
+    { "type": "richtext", "id": "text_GbMFJFCngCgXVmer-1", "label": "Service 4 Name", "default": "<h3>Lens CLA</h3>" },
+    { "type": "richtext", "id": "text_IO0SzTfLrMc9Hmjy-1", "label": "Service 4 Description", "default": "<p>We can CLA almost every lens out there, as well as all lens-specific repairs.</p>" },
+    { "type": "richtext", "id": "text_Rz7yyO07IB3auE3t-1", "label": "Service 5 Name", "default": "<h3>Parts Replacement</h3>" },
+    { "type": "richtext", "id": "text_GFGnDjbsSg1sSZmu-1", "label": "Service 5 Description", "default": "<p>Depending on the model and part, we can perform many exterior parts replacements.</p>" },
+    { "type": "richtext", "id": "text_UGmDsnOqjIyIyy3i-1", "label": "Service 6 Name", "default": "<h3>Other Cameras</h3>" },
+    { "type": "richtext", "id": "text_K5rgZXTlX3nGlRJF-1", "label": "Service 6 Description", "default": "<p>There is a vast array of other issues we can solve. Select Other Camera, or contact us!</p>" },
+    { "type": "header", "content": "Pricing" },
+    { "type": "richtext", "id": "text_cQqIVEgqDtrrxC69-1", "label": "Pricing Label", "default": "<p>Transparent Pricing</p>" },
+    { "type": "richtext", "id": "text_qP8N4jH6z2NMGl9a-1", "label": "Pricing Title", "default": "<h1>Sample Repair Price Ranges</h1>" },
+    { "type": "richtext", "id": "text_tX5jvewh0rqW2AIv-1", "label": "Pricing Note", "default": "<p>Every camera is unique, so all repairs are quote-based after our bench inspection. Below are example price ranges to help you plan.</p>" },
+    { "type": "richtext", "id": "text_pjrwESGDUEHrdTL5-1", "label": "Price 1", "default": "<h3>$85–150</h3>" },
+    { "type": "richtext", "id": "text_faarjtbb0IW5JBxo-1", "label": "Service 1", "default": "<h4>Light Seals</h4>" },
+    { "type": "richtext", "id": "text_A7hnSbkawoWazFh9-1", "label": "Price 2", "default": "<h3>~$50–300</h3>" },
+    { "type": "richtext", "id": "text_6HLaDCdaTccEYJs6-1", "label": "Service 2", "default": "<h4>Full Lens CLA</h4>" },
+    { "type": "richtext", "id": "text_jPpNrAJEvHro8fGY-1", "label": "Price 3", "default": "<h3>$~325</h3>" },
+    { "type": "richtext", "id": "text_4tRf1aJI5bUz2mCE-1", "label": "Service 3", "default": "<h4>CLA</h4>" },
+    { "type": "richtext", "id": "text_vdrhx0h7YdsU1RYN-1", "label": "Price 4", "default": "<h3>$90</h3>" },
+    { "type": "richtext", "id": "text_5SQU26miURpbtVBd-1", "label": "Service 4", "default": "<h4>Unjam</h4>" },
+    { "type": "url", "id": "url_vXX8izTIbPsVDqLd-1", "label": "See More Button URL" },
+    { "type": "richtext", "id": "text_ZSSb2jGJ33AH7IaV-1", "label": "See More Button Text", "default": "<p>See Full Price List</p>" },
+    { "type": "header", "content": "FAQ" },
+    { "type": "richtext", "id": "text_7aESZrg5i4gIDe2I-1", "label": "FAQ Title", "default": "<h3>Frequently Asked Questions</h3>" },
+    { "type": "richtext", "id": "text_9eTXhF2Jl59s8a6I-1", "label": "FAQ Subtitle", "default": "<p>Everything you need to know about our camera repair service. Can't find your answer? Reach out directly.</p>" },
+    { "type": "url", "id": "url_hkfu6CK8SSCaCMoo-1", "label": "Contact Us Button URL" },
+    { "type": "richtext", "id": "text_suzeb1nmUompX5cX-1", "label": "Contact Button Text", "default": "<p>Contact Us</p>" },
+    { "type": "richtext", "id": "text_yPOfQDQyudoffbEH-1", "label": "FAQ Q1", "default": "<h4>What is the bench fee and is it refundable?</h4>" },
+    { "type": "richtext", "id": "text_DyX1AepcieaXngSX-1", "label": "FAQ A1", "default": "<p>The bench fee is a non-refundable inspection charge that covers our technician's time to thoroughly assess your camera. This fee is applied toward your final repair cost if you proceed with the repair.</p>" },
+    { "type": "richtext", "id": "text_2uvk73piGaJVfSA1-1", "label": "FAQ Q2", "default": "<h4>How long will my repair take?</h4>" },
+    { "type": "richtext", "id": "text_ENPmwIUdsO9w8ai3-1", "label": "FAQ A2", "default": "<p>Standard repair turnaround is 2–4 weeks from when we receive your camera. Complex repairs or situations requiring special parts may take longer.</p>" },
+    { "type": "richtext", "id": "text_m9G2IMZMMGgH3J3w-1", "label": "FAQ Q3", "default": "<h4>What cameras do you repair?</h4>" },
+    { "type": "richtext", "id": "text_1YqXpD4kvhmSlv9K-1", "label": "FAQ A3", "default": "<p>We specialize in 35mm and medium format film cameras including Canon, Nikon, Pentax, Olympus, Minolta, Contax, Leica, Hasselblad, Mamiya, Bronica, Rolleiflex, Yashica, and many more.</p>" },
+    { "type": "richtext", "id": "text_JUKnHXd2MfaYQ4lL-1", "label": "FAQ Q4", "default": "<h4>Do you repair Polaroid cameras?</h4>" },
+    { "type": "richtext", "id": "text_nKyOLcNCxQ9BU6Lx-1", "label": "FAQ A4", "default": "<p>Polaroid cameras require specialized service. Please visit our dedicated Polaroid Repairs page for information on instant camera repair options and pricing.</p>" },
+    { "type": "richtext", "id": "text_9SpfQZ8nomRE73wp-1", "label": "FAQ Q5", "default": "<h4>How should I pack my camera for shipping?</h4>" },
+    { "type": "richtext", "id": "text_Ek5DbpeAU9rLi2mh-1", "label": "FAQ A5", "default": "<p>Wrap your camera in bubble wrap or foam and place it in a sturdy box with additional packing material. Remove batteries and any detachable lenses.</p>" },
+    { "type": "richtext", "id": "text_ReexIItutqMaLTuP-1", "label": "FAQ Q6", "default": "<h4>Will I receive a quote before any work is done?</h4>" },
+    { "type": "richtext", "id": "text_U5chG9FSxzdJdnk9-1", "label": "FAQ A6", "default": "<p>Absolutely. After the bench inspection, we'll contact you with a detailed quote. No repair work proceeds until you approve the estimate.</p>" },
+    { "type": "richtext", "id": "text_YIEerFC852DhgYeL-1", "label": "FAQ Q7", "default": "<h4>What payment methods do you accept?</h4>" },
+    { "type": "richtext", "id": "text_Xqgk9OZXuw21n0iY-1", "label": "FAQ A7", "default": "<p>We accept all major credit cards, PayPal, and Shop Pay. The bench fee is collected when you submit your repair request.</p>" },
+    { "type": "richtext", "id": "text_QNSMFgbyON2JQ9sv-1", "label": "FAQ Q8", "default": "<h4>Can I drop off my camera in person?</h4>" },
+    { "type": "richtext", "id": "text_FAZaZxa8kpRb1gbS-1", "label": "FAQ A8", "default": "<p>Yes! Submit your repair request online first, then drop off your camera at 855 Grand St, Brooklyn any day we are open.</p>" },
+    { "type": "header", "content": "Shipping Section" },
+    { "type": "image_picker", "id": "image_ZGC0Rvijr6dtTfOn-1", "label": "Shipping Image" },
+    { "type": "richtext", "id": "text_B6eNUe5cX9LOchif-1", "label": "Shipping Title", "default": "<h3>Secure Shipping &amp; Handling</h3>" },
+    { "type": "richtext", "id": "text_9RZitkmjBUPjFcoq-1", "label": "Shipping Body", "default": "<p>Getting your camera to us has never been easier. Simply buy a label on our portal and get it instantly.</p><p>Your camera is handled with the utmost care throughout the repair process. We photograph every camera upon arrival to document its condition. Return shipping options include USPS Priority, UPS Ground, or expedited services. All shipments are fully insured for your peace of mind.</p>" },
+    { "type": "url", "id": "url_shipping_label", "label": "Shipping Label Portal URL" },
+    { "type": "richtext", "id": "text_shipping_label_btn", "label": "Label Button Text", "default": "<p>Purchase a Shipping Label</p>" },
+    { "type": "header", "content": "Section Padding" },
+    { "type": "range", "id": "padding_top", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Top padding", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "min": 0, "max": 100, "step": 4, "unit": "px", "label": "Bottom padding", "default": 0 }
+  ],
+  "presets": [
+    { "name": "BFC Repair Page" }
+  ]
+}
+{% endschema %}

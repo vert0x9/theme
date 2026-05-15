@@ -1,0 +1,488 @@
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet"/></noscript>
+
+<style>
+.bwp *, .bwp *::before, .bwp *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.bwp {
+  --or: #E36E15;
+  --go: #F4A027;
+  --cv: #F8F6EE;
+  --bk: #202009;
+  --ch: #4E4741;
+  --gr: #E3DDDA;
+  --sr: 'Cormorant Garamond', Georgia, serif;
+  --sn: 'Poppins', sans-serif;
+  --t: 0.2s ease;
+  font-family: var(--sn);
+  color: var(--bk);
+  background: var(--cv);
+  -webkit-font-smoothing: antialiased;
+}
+.bwp p { margin: 0; }
+
+/* TOP */
+.bwp-top { padding: 56px 48px 40px; border-bottom: 1px solid rgba(32,32,9,0.1); }
+.bwp-eyebrow {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--or); margin-bottom: 14px; display: block;
+}
+.bwp-top-title {
+  font-family: var(--sr); font-size: 40px; font-weight: 300;
+  line-height: 1.1; margin-bottom: 16px; max-width: 720px;
+}
+.bwp-top-sub {
+  font-size: 13px; color: var(--ch); line-height: 1.7; max-width: 640px; margin-bottom: 36px;
+}
+.bwp-terms { border-top: 1px solid rgba(32,32,9,0.12); }
+.bwp-term {
+  display: grid; grid-template-columns: 260px 1fr 110px;
+  gap: 24px; padding: 18px 0;
+  border-bottom: 1px solid rgba(32,32,9,0.08);
+  align-items: center;
+}
+.bwp-term-cat { font-family: var(--sr); font-size: 22px; font-weight: 400; line-height: 1.2; }
+.bwp-term-models { font-size: 12px; color: var(--ch); line-height: 1.6; }
+.bwp-term-dur {
+  font-size: 13px; font-weight: 700; color: var(--or);
+  letter-spacing: 0.04em; white-space: nowrap; text-align: right;
+}
+.bwp-top-meta { margin-top: 26px; font-size: 11px; color: rgba(32,32,9,0.5); line-height: 1.6; }
+
+/* DISCLAIMER */
+.bwp-disclaimer {
+  background: rgba(32,32,9,0.03);
+  border-bottom: 1px solid rgba(32,32,9,0.1);
+  padding: 20px 48px;
+  font-size: 11.5px; color: var(--ch); line-height: 1.7;
+}
+.bwp-disclaimer strong { color: var(--bk); font-weight: 600; }
+
+/* SCOPE */
+.bwp-scope { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid rgba(32,32,9,0.1); }
+.bwp-scope-col { padding: 48px; border-right: 1px solid rgba(32,32,9,0.08); }
+.bwp-scope-col:last-child { border-right: none; }
+.bwp-scope-title { font-family: var(--sr); font-size: 24px; font-weight: 400; margin-bottom: 20px; line-height: 1.1; }
+.bwp-scope-list { display: flex; flex-direction: column; gap: 10px; }
+.bwp-scope-item { display: flex; gap: 10px; font-size: 12px; color: var(--ch); line-height: 1.5; }
+.bwp-scope-icon {
+  width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+}
+.bwp-scope-icon.yes { background: rgba(42,72,32,0.1); color: #2a4820; }
+.bwp-scope-icon.no { background: rgba(32,32,9,0.06); color: rgba(32,32,9,0.4); }
+
+/* CLAIMS */
+.bwp-claims { padding: 48px; border-bottom: 1px solid rgba(32,32,9,0.1); }
+.bwp-section-title { font-family: var(--sr); font-size: 28px; font-weight: 300; line-height: 1.1; margin-bottom: 6px; }
+.bwp-section-sub { font-size: 12px; color: var(--ch); margin-bottom: 28px; }
+.bwp-claims-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+  border-top: 1px solid rgba(32,32,9,0.1); padding-top: 28px;
+}
+.bwp-claim { display: flex; flex-direction: column; gap: 8px; }
+.bwp-claim-num { font-family: var(--sr); font-size: 22px; font-weight: 400; color: var(--or); line-height: 1; }
+.bwp-claim-title { font-size: 13px; font-weight: 600; }
+.bwp-claim-desc { font-size: 11.5px; color: var(--ch); line-height: 1.6; }
+.bwp-claims-note { margin-top: 28px; font-size: 11.5px; color: var(--ch); line-height: 1.6; }
+.bwp-claims-note a { color: var(--or); }
+
+/* EXTENDED */
+.bwp-ext {
+  padding: 40px 48px;
+  display: grid; grid-template-columns: 1fr auto;
+  align-items: center; gap: 32px;
+  border-bottom: 1px solid rgba(32,32,9,0.1);
+  background: rgba(244,160,39,0.06);
+}
+.bwp-ext-title { font-family: var(--sr); font-size: 24px; font-weight: 400; line-height: 1.2; margin: 8px 0; }
+.bwp-ext-desc { font-size: 12px; color: var(--ch); line-height: 1.7; max-width: 580px; }
+.bwp-ext-pills { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+.bwp-ext-pill {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.04em;
+  border: 1px solid rgba(32,32,9,0.15); padding: 5px 10px; color: var(--ch);
+}
+.bwp-ext-pill strong { color: var(--or); }
+.bwp-ext-cta {
+  display: inline-block; background: var(--or); color: #fff;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; padding: 13px 24px; text-decoration: none;
+  white-space: nowrap; transition: background var(--t);
+}
+.bwp-ext-cta:hover { background: #c9600f; }
+
+/* RETURNS */
+.bwp-returns { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid rgba(32,32,9,0.1); }
+.bwp-ret-col { padding: 48px; border-right: 1px solid rgba(32,32,9,0.08); }
+.bwp-ret-col:last-child { border-right: none; }
+.bwp-ret-title { font-family: var(--sr); font-size: 24px; font-weight: 400; margin-bottom: 6px; }
+.bwp-ret-sub { font-size: 11px; color: rgba(32,32,9,0.5); margin-bottom: 18px; }
+.bwp-ret-body { font-size: 12px; color: var(--ch); line-height: 1.75; }
+.bwp-ret-body p + p { margin-top: 10px; }
+.bwp-ret-body strong { color: var(--bk); font-weight: 600; }
+.bwp-ret-body a { color: var(--or); }
+
+/* PROCESS */
+.bwp-process { padding: 48px; border-bottom: 1px solid rgba(32,32,9,0.1); }
+.bwp-tabs { display: flex; gap: 0; border-bottom: 1px solid rgba(32,32,9,0.1); margin: 8px 0 0; }
+.bwp-tab {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 10px 18px; cursor: pointer; background: none; border: none;
+  font-family: var(--sn); color: rgba(32,32,9,0.4);
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color var(--t), border-color var(--t);
+}
+.bwp-tab.is-active { color: var(--or); border-color: var(--or); }
+.bwp-panel { display: none; padding-top: 24px; }
+.bwp-panel.is-active { display: block; }
+.bwp-step {
+  display: grid; grid-template-columns: 36px 1fr;
+  gap: 20px; padding: 18px 0;
+  border-bottom: 1px solid rgba(32,32,9,0.06);
+}
+.bwp-step:last-child { border-bottom: none; }
+.bwp-step-num {
+  font-family: var(--sr); font-size: 22px; font-weight: 400;
+  color: rgba(32,32,9,0.25); line-height: 1; padding-top: 2px;
+}
+.bwp-step-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.bwp-step-desc { font-size: 11.5px; color: var(--ch); line-height: 1.6; }
+
+/* QA */
+.bwp-qa { padding: 48px; border-bottom: 1px solid rgba(32,32,9,0.1); }
+.bwp-qa-list { margin-top: 8px; }
+.bwp-qa-item { border-bottom: 1px solid rgba(32,32,9,0.08); }
+.bwp-qa-q {
+  width: 100%; background: none; border: none; padding: 16px 0;
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: var(--sn); font-size: 13px; font-weight: 600;
+  color: var(--bk); cursor: pointer; text-align: left; gap: 16px;
+}
+.bwp-qa-q:hover { color: var(--or); }
+.bwp-qa-icon { font-size: 16px; color: var(--ch); flex-shrink: 0; line-height: 1; }
+.bwp-qa-item.is-open .bwp-qa-icon { color: var(--or); }
+.bwp-qa-a {
+  display: none; padding-bottom: 18px;
+  font-size: 12px; color: var(--ch); line-height: 1.75; max-width: 720px;
+}
+.bwp-qa-item.is-open .bwp-qa-a { display: block; }
+.bwp-qa-a a { color: var(--or); }
+
+/* LEGAL */
+.bwp-legal {
+  padding: 48px;
+  border-bottom: 1px solid rgba(32,32,9,0.1);
+  background: rgba(32,32,9,0.03);
+}
+.bwp-legal-body { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 8px; }
+.bwp-legal-p { font-size: 11px; color: var(--ch); line-height: 1.8; margin-bottom: 14px; }
+.bwp-legal-p:last-child { margin-bottom: 0; }
+.bwp-legal-p a { color: var(--or); }
+
+/* CTA */
+.bwp-cta { padding: 48px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.bwp-cta-title { font-family: var(--sr); font-size: 26px; font-weight: 300; line-height: 1.1; }
+.bwp-cta-sub { font-size: 12px; color: var(--ch); margin-top: 6px; }
+.bwp-cta-links { display: flex; gap: 10px; flex-shrink: 0; }
+.bwp-cta-btn {
+  display: inline-block; padding: 13px 22px; font-size: 10px;
+  font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  font-family: var(--sn); text-decoration: none; transition: all var(--t); cursor: pointer;
+  border: none;
+}
+.bwp-cta-btn.is-primary { background: var(--or); color: #fff; }
+.bwp-cta-btn.is-primary:hover { background: #c9600f; }
+.bwp-cta-btn.is-secondary { background: none; border: 1px solid rgba(32,32,9,0.2); color: var(--bk); }
+.bwp-cta-btn.is-secondary:hover { border-color: var(--or); color: var(--or); }
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .bwp-top { padding: 36px 20px 28px; }
+  .bwp-top-title { font-size: 30px; }
+  .bwp-term { grid-template-columns: 1fr; gap: 4px; padding: 16px 0; }
+  .bwp-term-dur { text-align: left; }
+  .bwp-disclaimer { padding: 16px 20px; }
+  .bwp-scope { grid-template-columns: 1fr; }
+  .bwp-scope-col { padding: 32px 20px; border-right: none; border-bottom: 1px solid rgba(32,32,9,0.08); }
+  .bwp-scope-col:last-child { border-bottom: none; }
+  .bwp-claims { padding: 32px 20px; }
+  .bwp-claims-grid { grid-template-columns: 1fr; gap: 24px; }
+  .bwp-ext { grid-template-columns: 1fr; padding: 32px 20px; gap: 20px; }
+  .bwp-ext-cta { width: 100%; text-align: center; display: block; }
+  .bwp-returns { grid-template-columns: 1fr; }
+  .bwp-ret-col { padding: 32px 20px; border-right: none; border-bottom: 1px solid rgba(32,32,9,0.08); }
+  .bwp-ret-col:last-child { border-bottom: none; }
+  .bwp-process { padding: 32px 20px; }
+  .bwp-tabs { overflow-x: auto; }
+  .bwp-qa { padding: 32px 20px; }
+  .bwp-legal { padding: 32px 20px; }
+  .bwp-legal-body { grid-template-columns: 1fr; gap: 20px; }
+  .bwp-cta { flex-direction: column; align-items: flex-start; padding: 32px 20px; }
+  .bwp-cta-links { flex-direction: column; width: 100%; }
+  .bwp-cta-btn { text-align: center; }
+}
+</style>
+
+<div class="bwp">
+
+  {%- comment -%} TOP {%- endcomment -%}
+  <div class="bwp-top">
+    <span class="bwp-eyebrow">Warranty &amp; Service</span>
+    <h1 class="bwp-top-title">We stand behind every camera we sell.</h1>
+    <p class="bwp-top-sub">Every camera we sell is professionally restored by our in-house team and backed by a warranty. If something goes wrong within the coverage period, we'll repair it or replace it with the same model at no cost.</p>
+
+    <div class="bwp-terms">
+      <div class="bwp-term">
+        <div class="bwp-term-cat">Point &amp; Shoot</div>
+        <div class="bwp-term-models">All 35mm point and shoot cameras. Compact, automatic, fixed lens.</div>
+        <div class="bwp-term-dur">3 months</div>
+      </div>
+      <div class="bwp-term">
+        <div class="bwp-term-cat">SLR, Rangefinder &amp; Medium Format</div>
+        <div class="bwp-term-models">35mm SLRs, rangefinders, and all medium format cameras including TLRs.</div>
+        <div class="bwp-term-dur">6 months</div>
+      </div>
+      <div class="bwp-term">
+        <div class="bwp-term-cat">Vintage Polaroid &amp; Instant</div>
+        <div class="bwp-term-models">All vintage Polaroid models restored by BFC: SX-70, 600-series, folding cameras, OneStep.</div>
+        <div class="bwp-term-dur">6 months</div>
+      </div>
+    </div>
+
+    <div class="bwp-top-meta">Coverage starts on the date of purchase. Some products may have different terms, check the individual product listing.</div>
+  </div>
+
+  {%- comment -%} DISCLAIMER {%- endcomment -%}
+  <div class="bwp-disclaimer">
+    <strong>Warranty applies to BFC-restored products only.</strong> The coverage listed here is for cameras sold and restored by Brooklyn Film Camera. Modern cameras (including new Polaroid Now, Go, and other current-production instant cameras) and accessories may be covered by manufacturer warranties rather than the BFC warranty. BFC is not responsible for manufacturer warranty claims on new or non-restored products.
+  </div>
+
+  {%- comment -%} COVERED / NOT COVERED {%- endcomment -%}
+  <div class="bwp-scope">
+    <div class="bwp-scope-col">
+      <h2 class="bwp-scope-title">What warranty covers</h2>
+      <div class="bwp-scope-list">
+        <div class="bwp-scope-item"><div class="bwp-scope-icon yes">&#10003;</div><span>Mechanical defects: shutter, metering, film transport, focus, flash</span></div>
+        <div class="bwp-scope-item"><div class="bwp-scope-icon yes">&#10003;</div><span>Electrical issues arising from normal use</span></div>
+        <div class="bwp-scope-item"><div class="bwp-scope-icon yes">&#10003;</div><span>All labor costs for approved repairs</span></div>
+        <div class="bwp-scope-item"><div class="bwp-scope-icon yes">&#10003;</div><span>Return shipping within the first 30 days of purchase</span></div>
+        <div class="bwp-scope-item"><div class="bwp-scope-icon yes">&#10003;</div><span>Replacement with the same camera if repair is not possible</span></div>
+        <div class="bwp-scope-item"><div class="bwp-scope-icon yes">&#10003;</div><span>Small parts at our discretion, based on availability</span></div>
+      </div>
+    </div>
+    <div class="bwp-scope-col">
+      <h2 class="bwp-scope-title">What warranty does not cover</h2>
+      <div class="bwp-scope-list">
+        <div class="bwp-scope-item"><div class="bwp-scope-icon no">&#10007;</div><span>Liquid damage of any kind</span></div>
+        <div class="bwp-scope-item"><div class="bwp-scope-icon no">&#10007;</div><span>Accidental or impact damage</span></div>
+        <div class="bwp-scope-item"><div class="bwp-scope-icon no">&#10007;</div><span>Intentional damage or misuse</span></div>
+        <div class="bwp-scope-item"><div class="bwp-scope-icon no">&#10007;</div><span>Tampering, or repairs attempted by anyone outside BFC</span></div>
+        <div class="bwp-scope-item"><div class="bwp-scope-icon no">&#10007;</div><span>Cosmetic wear: scratches, brassing, or body wear from use</span></div>
+        <div class="bwp-scope-item"><div class="bwp-scope-icon no">&#10007;</div><span>Return shipping after 30 days (buyer's responsibility both ways)</span></div>
+        <div class="bwp-scope-item"><div class="bwp-scope-icon no">&#10007;</div><span>Cameras sold "as-is" or from garage sales</span></div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} CLAIMS {%- endcomment -%}
+  <div class="bwp-claims">
+    <h2 class="bwp-section-title">How warranty claims work</h2>
+    <p class="bwp-section-sub">Three steps from claim to resolution.</p>
+    <div class="bwp-claims-grid">
+      <div class="bwp-claim">
+        <span class="bwp-claim-num">01</span>
+        <div class="bwp-claim-title">Submit your claim</div>
+        <div class="bwp-claim-desc">Log in to your BFC account and use the Shipping Label tab to open a warranty claim, or come into the store at 855 Grand St. Do not ship anything before receiving authorization.</div>
+      </div>
+      <div class="bwp-claim">
+        <span class="bwp-claim-num">02</span>
+        <div class="bwp-claim-title">We inspect</div>
+        <div class="bwp-claim-desc">We reserve up to 5 business days to inspect the camera and determine the cause. We may void a warranty if evidence of tampering, liquid damage, or misuse is found.</div>
+      </div>
+      <div class="bwp-claim">
+        <span class="bwp-claim-num">03</span>
+        <div class="bwp-claim-title">Repair or replace</div>
+        <div class="bwp-claim-desc">Approved claims are repaired at no cost. If the camera cannot be repaired, we replace it with the same model. Cameras are not exchanged on the spot, we contact you once resolved.</div>
+      </div>
+    </div>
+    <div class="bwp-claims-note">Questions? Reach out at <a href="mailto:hello@brooklynfilmcamera.com">hello@brooklynfilmcamera.com</a> or visit us at 855 Grand St, Brooklyn, NY. Open every day.</div>
+  </div>
+
+  {%- comment -%} EXTENDED {%- endcomment -%}
+  <div class="bwp-ext">
+    <div>
+      <span class="bwp-eyebrow">Extended Warranty</span>
+      <h2 class="bwp-ext-title">Add more coverage, including accidental damage</h2>
+      <p class="bwp-ext-desc">Our standard warranty doesn't cover accidental damage. Extended warranty does, and it extends your total coverage period on top of what's already included. Available for cameras up to $2,500.</p>
+      <div class="bwp-ext-pills">
+        <div class="bwp-ext-pill">6 mo total <strong>from $15</strong></div>
+        <div class="bwp-ext-pill">9 mo total <strong>from $30</strong></div>
+        <div class="bwp-ext-pill">1 year total <strong>from $45</strong></div>
+      </div>
+    </div>
+    <a href="/products/bfc-extended-warranty" class="bwp-ext-cta">View Extended Warranty</a>
+  </div>
+
+  {%- comment -%} RETURNS {%- endcomment -%}
+  <div class="bwp-returns">
+    <div class="bwp-ret-col">
+      <h2 class="bwp-ret-title">Returns</h2>
+      <p class="bwp-ret-sub">14-day window. Same condition required.</p>
+      <div class="bwp-ret-body">
+        <p>If you change your mind, you have <strong>14 days from delivery</strong> to return your camera. The camera must be returned in the same condition it was received. A <strong>15% restocking fee</strong> is deducted from your refund.</p>
+        <p>All returns must be authorized before shipping anything to us. Contact us at <a href="mailto:hello@brooklynfilmcamera.com">hello@brooklynfilmcamera.com</a> with your order number to start the process. Do not ship without authorization.</p>
+        <p>If a camera has a functional issue within its warranty period, we recommend using the warranty instead of returning, since we'll fix or replace it at no cost.</p>
+      </div>
+    </div>
+    <div class="bwp-ret-col">
+      <h2 class="bwp-ret-title">Shipping</h2>
+      <p class="bwp-ret-sub">Coverage depends on timing.</p>
+      <div class="bwp-ret-body">
+        <p><strong>Within 30 days:</strong> BFC covers return shipping on warranty claims and approved returns.</p>
+        <p><strong>After 30 days:</strong> The buyer is responsible for return shipping both ways on all warranty claims. We recommend a tracked shipping method.</p>
+        <p>Do not ship any gear until you've spoken with us and received a return authorization. Brooklyn Film Camera reserves the right to deny refund or warranty claims made without prior authorization.</p>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} PROCESS {%- endcomment -%}
+  <div class="bwp-process">
+    <h2 class="bwp-section-title">How every camera is restored</h2>
+    <p class="bwp-section-sub">Each model goes through a process tuned to its design.</p>
+    <div class="bwp-tabs">
+      <button class="bwp-tab is-active" onclick="bwpTab(this, 'ps')">Point &amp; Shoot</button>
+      <button class="bwp-tab" onclick="bwpTab(this, 'slr')">SLR &amp; Rangefinder</button>
+      <button class="bwp-tab" onclick="bwpTab(this, 'pol')">Polaroid</button>
+    </div>
+
+    <div class="bwp-panel is-active" id="bwp-panel-ps">
+      <div class="bwp-step"><div class="bwp-step-num">01</div><div><div class="bwp-step-title">Intake and functional check</div><div class="bwp-step-desc">We verify shutter operation, exposure and metering behavior, flash readiness, autofocus (if equipped), film transport, and all buttons and switches. Results are evaluated against factory specifications for the model.</div></div></div>
+      <div class="bwp-step"><div class="bwp-step-num">02</div><div><div class="bwp-step-title">Seals and maintenance</div><div class="bwp-step-desc">Old foam and light seals are removed and replaced. We clean the door channel and contact areas, and service hinges and latches to improve closing and ensure a light-tight fit.</div></div></div>
+      <div class="bwp-step"><div class="bwp-step-num">03</div><div><div class="bwp-step-title">Restoration</div><div class="bwp-step-desc">High-wear areas are cleaned and exercised: door mechanism, rewind and release, switches, and levers. Any parts that are worn or damaged are replaced as needed.</div></div></div>
+      <div class="bwp-step"><div class="bwp-step-num">04</div><div><div class="bwp-step-title">Final detail and QC</div><div class="bwp-step-desc">The camera is detail-cleaned inside and out (lens, viewfinder, body) and run through a final functional check using professional calibration equipment before it ships.</div></div></div>
+    </div>
+
+    <div class="bwp-panel" id="bwp-panel-slr">
+      <div class="bwp-step"><div class="bwp-step-num">01</div><div><div class="bwp-step-title">Intake and functional check</div><div class="bwp-step-desc">Shutter speeds are tested across all settings. Metering, mirror operation, film advance, rewind, self-timer, and all mechanical controls are evaluated against factory specifications.</div></div></div>
+      <div class="bwp-step"><div class="bwp-step-num">02</div><div><div class="bwp-step-title">Seals and maintenance</div><div class="bwp-step-desc">Mirror bumper and light seals are replaced throughout. The door channel, hinge points, and contact areas are cleaned. Where applicable, the shutter and aperture blades are inspected and cleaned.</div></div></div>
+      <div class="bwp-step"><div class="bwp-step-num">03</div><div><div class="bwp-step-title">CLA (Clean, Lubricate, Adjust)</div><div class="bwp-step-desc">Mechanical cameras receive a full CLA where needed. Internal mechanisms are cleaned, lubricated, and adjusted to factory tolerances. Shutter speeds are calibrated.</div></div></div>
+      <div class="bwp-step"><div class="bwp-step-num">04</div><div><div class="bwp-step-title">Final detail and QC</div><div class="bwp-step-desc">Lens, viewfinder, and body are cleaned. A final functional check is run with professional equipment before the camera is graded and shipped.</div></div></div>
+    </div>
+
+    <div class="bwp-panel" id="bwp-panel-pol">
+      <div class="bwp-step"><div class="bwp-step-num">01</div><div><div class="bwp-step-title">Intake and mechanism check</div><div class="bwp-step-desc">We test the entire film path, ejection mechanism, shutter, flash, and folding mechanism (where applicable). SX-70 and folding models receive particular attention to hinge and bellows condition.</div></div></div>
+      <div class="bwp-step"><div class="bwp-step-num">02</div><div><div class="bwp-step-title">Rollers and film path</div><div class="bwp-step-desc">Ejection rollers are cleaned thoroughly. A dirty roller is the most common cause of failed Polaroid development. The film door, dark slide mechanism, and contacts are all cleaned and tested.</div></div></div>
+      <div class="bwp-step"><div class="bwp-step-num">03</div><div><div class="bwp-step-title">Electronics and flash</div><div class="bwp-step-desc">The flash circuit, electronic shutter, and battery contacts are tested and cleaned. Sonar autofocus (where present) is verified for correct operation.</div></div></div>
+      <div class="bwp-step"><div class="bwp-step-num">04</div><div><div class="bwp-step-title">Test and QC</div><div class="bwp-step-desc">Each Polaroid is run through a full test before shipping. We verify that film ejects cleanly and the exposure is correct before it leaves the shop.</div></div></div>
+    </div>
+  </div>
+
+  {%- comment -%} QA {%- endcomment -%}
+  <div class="bwp-qa">
+    <h2 class="bwp-section-title">Common warranty questions</h2>
+    <div class="bwp-qa-list">
+
+      <div class="bwp-qa-item">
+        <button class="bwp-qa-q" onclick="bwpToggleQa(this)">How long is my warranty?<span class="bwp-qa-icon">+</span></button>
+        <div class="bwp-qa-a">Point and shoot cameras come with a 3-month warranty. SLRs, rangefinders, medium format, and Polaroid cameras come with a 6-month warranty. Coverage begins from the date of purchase. Some products may have different warranty terms, check the individual product listing for details.</div>
+      </div>
+
+      <div class="bwp-qa-item">
+        <button class="bwp-qa-q" onclick="bwpToggleQa(this)">Are your cameras actually tested?<span class="bwp-qa-icon">+</span></button>
+        <div class="bwp-qa-a">Yes. Every camera goes through our full restoration and inspection process. We don't just clean and relist. Each camera is tested against factory specifications using professional calibration equipment before it leaves the shop.</div>
+      </div>
+
+      <div class="bwp-qa-item">
+        <button class="bwp-qa-q" onclick="bwpToggleQa(this)">What if I have an issue with my camera?<span class="bwp-qa-icon">+</span></button>
+        <div class="bwp-qa-a">Log in to your BFC account at <a href="https://account.brooklynfilmcamera.com">account.brooklynfilmcamera.com</a> and use the Shipping Label tab to open a claim, or come into the store at 855 Grand St, Brooklyn. Do not ship anything without receiving authorization first.</div>
+      </div>
+
+      <div class="bwp-qa-item">
+        <button class="bwp-qa-q" onclick="bwpToggleQa(this)">Can I exchange my camera for a different model?<span class="bwp-qa-icon">+</span></button>
+        <div class="bwp-qa-a">Warranty coverage only applies to the camera you purchased. If the camera cannot be repaired, we will replace it with the same model, not a different one. If you'd like to switch to a different camera, that would be a separate purchase.</div>
+      </div>
+
+      <div class="bwp-qa-item">
+        <button class="bwp-qa-q" onclick="bwpToggleQa(this)">Who covers shipping on a warranty claim?<span class="bwp-qa-icon">+</span></button>
+        <div class="bwp-qa-a">Within the first 30 days of purchase, BFC covers return shipping on warranty claims. After 30 days, the buyer is responsible for shipping both ways. We recommend using a tracked service. Do not ship anything until you've received authorization from us.</div>
+      </div>
+
+      <div class="bwp-qa-item">
+        <button class="bwp-qa-q" onclick="bwpToggleQa(this)">Does warranty cover accidental damage?<span class="bwp-qa-icon">+</span></button>
+        <div class="bwp-qa-a">The standard warranty does not cover accidental or impact damage. If you want accidental damage coverage, we offer an <a href="/products/bfc-extended-warranty">Extended Warranty</a> that covers it, available at the time of camera purchase.</div>
+      </div>
+
+      <div class="bwp-qa-item">
+        <button class="bwp-qa-q" onclick="bwpToggleQa(this)">Is the warranty transferable?<span class="bwp-qa-icon">+</span></button>
+        <div class="bwp-qa-a">No. The warranty is non-transferable and applies only to the original purchaser. Proof of purchase is required for all warranty claims.</div>
+      </div>
+
+    </div>
+  </div>
+
+  {%- comment -%} LEGAL {%- endcomment -%}
+  <div class="bwp-legal">
+    <h2 class="bwp-section-title">Full warranty terms</h2>
+    <div class="bwp-legal-body">
+      <div>
+        <p class="bwp-legal-p">SLR cameras, rangefinders, medium format cameras, and all Polaroid models (including SX-70 and other folding cameras) come with a six-month mechanical warranty. Point and shoot cameras come with a three-month mechanical warranty. Some products have extended or limited warranties, check each product listing for exact terms.</p>
+        <p class="bwp-legal-p">Warranties are non-transferable and apply to the original purchaser only. Proof of purchase is required for all claims. Warranty is void if the camera has been tampered with, repaired, or modified by anyone outside of Brooklyn Film Camera.</p>
+        <p class="bwp-legal-p">Warranty does not cover liquid damage, tampering, impact damage, accidental damage, intentional damage, misuse, cosmetic wear, or any problems caused by outside repairs or attempted repairs not performed by Brooklyn Film Camera. Cameras sold as-is or through garage sale events are not eligible for warranty coverage.</p>
+        <p class="bwp-legal-p">Brooklyn Film Camera reserves the right to inspect any warranty claim for up to five business days before determining whether to repair or replace the camera. We may void a warranty if evidence of damage or tampering not covered under our policy is found upon inspection.</p>
+      </div>
+      <div>
+        <p class="bwp-legal-p">Return shipping on warranty claims is covered by BFC within the first 30 days of purchase. After 30 days, the buyer is responsible for shipping both ways. We recommend insured, tracked shipping for all returns. Brooklyn Film Camera is not responsible for items lost or damaged in transit.</p>
+        <p class="bwp-legal-p">We do not issue refunds for cameras after 14 days. Cameras returned within 14 days are subject to a 15% restocking fee and must be in the same condition as received. All returns must be authorized before shipment. Do not ship any item without first contacting us and receiving a return authorization.</p>
+        <p class="bwp-legal-p">Warranty cameras are not exchanged on the spot. If a camera cannot be repaired, Brooklyn Film Camera will replace it with the same model. If an identical replacement is not available, we will work with you on a suitable resolution. No cash refunds are issued under the standard warranty.</p>
+        <p class="bwp-legal-p">If you are having an issue with a camera purchased from or serviced by us, contact us at <a href="mailto:hello@brooklynfilmcamera.com">hello@brooklynfilmcamera.com</a>, or visit us at 855 Grand St, Brooklyn, NY. Brooklyn Film Camera reserves the right to deny refund or warranty claims at our discretion.</p>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} CTA {%- endcomment -%}
+  <div class="bwp-cta">
+    <div>
+      <h2 class="bwp-cta-title">Have a warranty claim?</h2>
+      <p class="bwp-cta-sub">Open a claim through your account or visit us at 855 Grand St, Brooklyn. Open every day.</p>
+    </div>
+    <div class="bwp-cta-links">
+      <a href="https://account.brooklynfilmcamera.com" class="bwp-cta-btn is-primary">Open a Claim</a>
+      <a href="mailto:hello@brooklynfilmcamera.com" class="bwp-cta-btn is-secondary">Email Us</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function bwpTab(btn, panelId) {
+  document.querySelectorAll('.bwp-tab').forEach(function(t) { t.classList.remove('is-active'); });
+  document.querySelectorAll('.bwp-panel').forEach(function(p) { p.classList.remove('is-active'); });
+  btn.classList.add('is-active');
+  var panel = document.getElementById('bwp-panel-' + panelId);
+  if (panel) panel.classList.add('is-active');
+}
+
+function bwpToggleQa(btn) {
+  var item = btn.closest('.bwp-qa-item');
+  var isOpen = item.classList.contains('is-open');
+  document.querySelectorAll('.bwp-qa-item.is-open').forEach(function(el) {
+    el.classList.remove('is-open');
+    el.querySelector('.bwp-qa-icon').textContent = '+';
+  });
+  if (!isOpen) {
+    item.classList.add('is-open');
+    btn.querySelector('.bwp-qa-icon').textContent = '\u2212';
+  }
+}
+</script>
+
+{% schema %}
+{
+  "name": "BFC Warranty Page",
+  "tag": "div",
+  "settings": [],
+  "presets": [{ "name": "BFC Warranty Page" }]
+}
+{% endschema %}

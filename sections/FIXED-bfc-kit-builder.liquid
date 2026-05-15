@@ -1,0 +1,1731 @@
+
+{% liquid
+  assign base_text = section.settings.text_color | default: '#111111'
+  assign base_bg = section.settings.background_color | default: '#F7F4F0'
+  assign page_width_px = settings.page_width | default: 1200
+  assign horizontal_pad = section.settings.horizontal_padding | default: 24
+  assign heading_size_preset = section.settings.heading_size_preset | default: 'default'
+  case heading_size_preset
+    when 'sm'
+      assign header_size_mobile = '1.4'
+      assign header_size_desktop = '2.0'
+    when 'md'
+      assign header_size_mobile = '1.6'
+      assign header_size_desktop = '2.4'
+    when 'lg'
+      assign header_size_mobile = '2.0'
+      assign header_size_desktop = '3.2'
+    when 'xl'
+      assign header_size_mobile = '2.4'
+      assign header_size_desktop = '3.8'
+    when 'xxl'
+      assign header_size_mobile = '2.8'
+      assign header_size_desktop = '4.4'
+    else
+      assign header_size_mobile = '1.75'
+      assign header_size_desktop = '2.75'
+  endcase
+  assign header_weight = section.settings.header_font_weight | default: 600
+  assign body_weight = section.settings.body_font_weight | default: 400
+  assign body_size = section.settings.body_font_size | default: 16
+  assign body_size_small = section.settings.body_font_size_small | default: 12
+  assign header_line_height = section.settings.header_line_height | default: '1.05'
+  assign header_letter_spacing = section.settings.header_letter_spacing | default: 0
+  assign heading_color = section.settings.heading_color | default: base_text
+  assign body_line_height = section.settings.body_line_height | default: '1.5'
+  assign body_letter_spacing = section.settings.body_letter_spacing | default: 0
+  assign section_pad_top = section.settings.section_padding_top | default: 40
+  assign section_pad_bottom = section.settings.section_padding_bottom | default: 40
+  assign accent_color = section.settings.accent_color | default: '#E36E15'
+  assign secondary_text_color = section.settings.secondary_text_color | default: '#82906B'
+  assign item_title_font = section.settings.item_title_font
+%}
+<section id="bfc-kit-builder-mini-{{ section.id }}" class="bfc-combined" aria-label="{{ section.settings.section_label | default: 'BFC Kit Builder' }}">
+  <style>
+    {{ item_title_font | font_face: font_display: 'swap' }}
+
+    /* Fix shopify-section wrapper background & spacing */
+    #shopify-section-{{ section.id }} {
+      background-color: {{ base_bg }};
+      margin: 0;
+      padding: {{ section_pad_top }}px 0 {{ section_pad_bottom }}px;
+      width: 100%;
+    }
+    #bfc-kit-builder-mini-{{ section.id }}{
+      --bfc-header-family: var(--font-heading-family, inherit);
+      --bfc-body-family: var(--font-body-family, inherit);
+      --bfc-header-weight: {{ header_weight }};
+      --bfc-body-weight: {{ body_weight }};
+      --bfc-header-size-mobile: {{ header_size_mobile }}rem;
+      --bfc-header-size-desktop: {{ header_size_desktop }}rem;
+      --bfc-horizontal-pad: {{ horizontal_pad }}px;
+      --bfc-page-width: {{ page_width_px }}px;
+      --bfc-align-pad: clamp(
+        var(--bfc-horizontal-pad),
+        calc((100vw - min(100vw, var(--bfc-page-width))) / 2 + var(--bfc-horizontal-pad)),
+        120px
+      );
+      --bfc-body-size: {{ body_size }}px;
+      --bfc-body-size-small: {{ body_size_small }}px;
+      --bfc-text: {{ base_text }};
+      --bfc-bg: {{ base_bg }};
+      --bfc-heading-color: {{ heading_color }};
+      --bfc-header-letter-spacing: {{ header_letter_spacing }}px;
+      --bfc-header-line-height: {{ header_line_height }};
+      --bfc-body-letter-spacing: {{ body_letter_spacing }}px;
+      --bfc-body-line-height: {{ body_line_height }};
+      --bfc-accent: {{ accent_color }};
+      --bfc-secondary-text: {{ secondary_text_color }};
+      --bfc-item-title-family: {{ item_title_font.family | default: 'Poppins' }}, {{ item_title_font.fallback_families | default: 'sans-serif' }};
+      --bfc-item-title-weight: {{ item_title_font.weight | default: 500 }};
+      color: var(--bfc-text);
+      background: var(--bfc-bg);
+      font-family: var(--bfc-body-family);
+      font-weight: var(--bfc-body-weight);
+      font-size: var(--bfc-body-size);
+    }
+    #bfc-kit-builder-mini-{{ section.id }} .bfc-heading{
+      font-family: var(--bfc-header-family, inherit);
+      font-size: clamp(var(--bfc-header-size-mobile, 1.75rem), 3.5vw, var(--bfc-header-size-desktop, 2.75rem));
+      font-weight: var(--bfc-header-weight, 300);
+      line-height: var(--bfc-header-line-height, 1.05);
+      letter-spacing: var(--bfc-header-letter-spacing, -0.02em);
+      margin: 0;
+      color: var(--bfc-heading-color, #111111);
+    }
+        #bfc-kit-builder-mini-{{ section.id }} .bfc-block{
+      margin: 0 auto;
+    }
+    #bfc-kit-builder-mini-{{ section.id }} .bfc-block + .bfc-block{
+      margin-top: 24px;
+    }
+    #bfc-kit-builder-mini-{{ section.id }} .visually-hidden{
+      position: absolute;width: 1px;height: 1px;padding: 0;margin: -1px;overflow: hidden;clip: rect(0,0,0,0);white-space: nowrap;border: 0;
+    }
+    #bfc-kit-builder-mini-{{ section.id }} a:focus-visible,
+    #bfc-kit-builder-mini-{{ section.id }} button:focus-visible,
+    #bfc-kit-builder-mini-{{ section.id }} input:focus-visible{
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce){
+      #bfc-kit-builder-mini-{{ section.id }} *{
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  
+    #bfc-kit-builder-mini-{{ section.id }} .bfc-eyebrow{
+      font-family: var(--bfc-body-family);
+      font-size: var(--bfc-body-size-small);
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--bfc-secondary-text);
+      margin: 0 0 10px;
+    }
+    #bfc-kit-builder-mini-{{ section.id }} .bfc-item-title{
+      font-family: var(--bfc-item-title-family);
+      font-weight: var(--bfc-item-title-weight);
+      font-size: var(--bfc-body-size);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      color: var(--bfc-text);
+    }
+
+    #bfc-kit-builder-mini-{{ section.id }} .bfc-detail-text{
+      font-family: var(--bfc-body-family);
+      font-size: var(--bfc-body-size-small);
+      font-weight: var(--bfc-body-weight);
+      letter-spacing: var(--bfc-body-letter-spacing);
+      line-height: var(--bfc-body-line-height);
+      color: var(--bfc-secondary-text);
+      margin: 0;
+    }
+
+  </style>
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'kit_builder_mini' %}
+      {% when 'camera_bundle_hero' %}
+        {% liquid
+          assign cbh_id = 'bfc-cbh-' | append: section.id | append: '-' | append: block.id
+          assign cbh_product_a = block.settings.product_a
+          assign cbh_product_b = block.settings.product_b
+          assign cbh_has_a = false
+          assign cbh_has_b = false
+          if cbh_product_a != blank
+            assign cbh_has_a = true
+          endif
+          if cbh_product_b != blank
+            assign cbh_has_b = true
+          endif
+        %}
+        <section
+          id="{{ cbh_id }}"
+          class="bfc-block bfc-cbh"
+          style="
+            --cbh-bg: {{ block.settings.bg }};
+            --cbh-fg: {{ block.settings.fg }};
+            --cbh-border: {{ block.settings.border_color }};
+            --cbh-accent: {{ block.settings.accent_color }};
+            --cbh-card-bg: {{ block.settings.card_bg }};
+            --cbh-max: {{ page_width_px }}px;
+            --cbh-pt: {{ block.settings.padding_top }}px;
+            --cbh-pb: {{ block.settings.padding_bottom }}px;
+            --bfc-block-pad: calc(var(--bfc-align-pad) + {{ block.settings.side_padding_vw }}vw);
+          "
+          {{ block.shopify_attributes }}
+        >
+          <div class="bfc-cbh__wrap">
+            <div class="bfc-cbh__header">
+              {% if block.settings.eyebrow != blank %}
+                <p class="bfc-cbh__eyebrow">{{ block.settings.eyebrow | escape }}</p>
+              {% endif %}
+              {% if block.settings.heading != blank %}
+                <h2 class="bfc-cbh__heading bfc-heading">{{ block.settings.heading | escape }}</h2>
+              {% endif %}
+              {% if block.settings.subheading != blank %}
+                <p class="bfc-cbh__subheading">{{ block.settings.subheading | escape }}</p>
+              {% endif %}
+            </div>
+            <div class="bfc-cbh__grid">
+              <div class="bfc-cbh__camera">
+                <div class="bfc-cbh__img-wrap">
+                  {% if cbh_has_a and cbh_product_a.featured_image %}
+                    <img
+                      src="{{ cbh_product_a.featured_image | image_url: width: 800 }}"
+                      srcset="
+                        {{ cbh_product_a.featured_image | image_url: width: 400 }} 400w,
+                        {{ cbh_product_a.featured_image | image_url: width: 600 }} 600w,
+                        {{ cbh_product_a.featured_image | image_url: width: 800 }} 800w
+                      "
+                      sizes="(min-width: 990px) 30vw, 80vw"
+                      alt="{{ cbh_product_a.featured_image.alt | default: cbh_product_a.title | escape }}"
+                      loading="lazy"
+                      width="{{ cbh_product_a.featured_image.width }}"
+                      height="{{ cbh_product_a.featured_image.height }}"
+                    >
+                  {% elsif block.settings.image_a != blank %}
+                    <img
+                      src="{{ block.settings.image_a | image_url: width: 800 }}"
+                      alt="{{ block.settings.image_a.alt | default: block.settings.name_a | escape }}"
+                      loading="lazy"
+                      width="{{ block.settings.image_a.width }}"
+                      height="{{ block.settings.image_a.height }}"
+                    >
+                  {% else %}
+                    <div class="bfc-cbh__img-placeholder" aria-hidden="true"></div>
+                  {% endif %}
+                </div>
+                <div class="bfc-cbh__camera-info">
+                  {% if cbh_has_a %}
+                    <h3 class="bfc-cbh__camera-name"><a href="{{ cbh_product_a.url }}">{{ cbh_product_a.title | escape }}</a></h3>
+                    <p class="bfc-cbh__camera-price">{{ cbh_product_a.price | money }}</p>
+                  {% else %}
+                    <h3 class="bfc-cbh__camera-name">{{ block.settings.name_a | escape }}</h3>
+                    <p class="bfc-cbh__camera-price">{{ block.settings.price_a | escape }}</p>
+                  {% endif %}
+                  {% if block.settings.note_a != blank %}
+                    <p class="bfc-cbh__camera-note">{{ block.settings.note_a | escape }}</p>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="bfc-cbh__plus" aria-hidden="true">
+                <span class="bfc-cbh__plus-sign">+</span>
+                {% if block.settings.savings_label != blank %}
+                  <span class="bfc-cbh__savings">{{ block.settings.savings_label | escape }}</span>
+                {% endif %}
+              </div>
+              <div class="bfc-cbh__camera">
+                <div class="bfc-cbh__img-wrap">
+                  {% if cbh_has_b and cbh_product_b.featured_image %}
+                    <img
+                      src="{{ cbh_product_b.featured_image | image_url: width: 800 }}"
+                      srcset="
+                        {{ cbh_product_b.featured_image | image_url: width: 400 }} 400w,
+                        {{ cbh_product_b.featured_image | image_url: width: 600 }} 600w,
+                        {{ cbh_product_b.featured_image | image_url: width: 800 }} 800w
+                      "
+                      sizes="(min-width: 990px) 30vw, 80vw"
+                      alt="{{ cbh_product_b.featured_image.alt | default: cbh_product_b.title | escape }}"
+                      loading="lazy"
+                      width="{{ cbh_product_b.featured_image.width }}"
+                      height="{{ cbh_product_b.featured_image.height }}"
+                    >
+                  {% elsif block.settings.image_b != blank %}
+                    <img
+                      src="{{ block.settings.image_b | image_url: width: 800 }}"
+                      alt="{{ block.settings.image_b.alt | default: block.settings.name_b | escape }}"
+                      loading="lazy"
+                      width="{{ block.settings.image_b.width }}"
+                      height="{{ block.settings.image_b.height }}"
+                    >
+                  {% else %}
+                    <div class="bfc-cbh__img-placeholder" aria-hidden="true"></div>
+                  {% endif %}
+                </div>
+                <div class="bfc-cbh__camera-info">
+                  {% if cbh_has_b %}
+                    <h3 class="bfc-cbh__camera-name"><a href="{{ cbh_product_b.url }}">{{ cbh_product_b.title | escape }}</a></h3>
+                    <p class="bfc-cbh__camera-price">{{ cbh_product_b.price | money }}</p>
+                  {% else %}
+                    <h3 class="bfc-cbh__camera-name">{{ block.settings.name_b | escape }}</h3>
+                    <p class="bfc-cbh__camera-price">{{ block.settings.price_b | escape }}</p>
+                  {% endif %}
+                  {% if block.settings.note_b != blank %}
+                    <p class="bfc-cbh__camera-note">{{ block.settings.note_b | escape }}</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            <div class="bfc-cbh__footer">
+              {% if block.settings.footer_copy != blank %}
+                <p class="bfc-cbh__footer-copy">{{ block.settings.footer_copy | escape }}</p>
+              {% endif %}
+              <div class="bfc-cbh__ctas">
+                {% if block.settings.cta_label != blank and block.settings.cta_url != blank %}
+                  <a class="bfc-cbh__cta bfc-cbh__cta--primary" href="{{ block.settings.cta_url }}" aria-label="{{ block.settings.cta_label | escape }}">{{ block.settings.cta_label | escape }}</a>
+                {% endif %}
+                {% if block.settings.cta2_label != blank and block.settings.cta2_url != blank %}
+                  <a class="bfc-cbh__cta bfc-cbh__cta--ghost" href="{{ block.settings.cta2_url }}" aria-label="{{ block.settings.cta2_label | escape }}">{{ block.settings.cta2_label | escape }}</a>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <style>
+            #{{ cbh_id }}{
+              background: var(--cbh-bg);
+              color: var(--cbh-fg);
+              padding: var(--cbh-pt) 0 var(--cbh-pb);
+            }
+            #{{ cbh_id }} .bfc-cbh__wrap{
+              max-width: var(--cbh-max);
+              margin: 0 auto;
+              padding: 0 var(--bfc-block-pad);
+            }
+            #{{ cbh_id }} .bfc-cbh__header{
+              margin-bottom: clamp(28px, 4vw, 52px);
+              max-width: 60ch;
+            }
+            #{{ cbh_id }} .bfc-cbh__eyebrow{
+              margin: 0 0 8px;
+              font-size: var(--bfc-body-size-small);
+              letter-spacing: .16em;
+              text-transform: uppercase;
+              opacity: .65;
+            }
+            #{{ cbh_id }} .bfc-cbh__heading{ margin: 0 0 10px; letter-spacing: -0.02em; line-height: 1.04; }
+            #{{ cbh_id }} .bfc-cbh__subheading{ margin: 0; font-size: var(--bfc-body-size); line-height: 1.5; opacity: .8; }
+            #{{ cbh_id }} .bfc-cbh__grid{
+              display: grid;
+              grid-template-columns: 1fr auto 1fr;
+              gap: clamp(16px, 3vw, 48px);
+              align-items: center;
+              margin-bottom: clamp(28px, 4vw, 48px);
+            }
+            #{{ cbh_id }} .bfc-cbh__camera{
+              background: var(--cbh-card-bg);
+              overflow: hidden;
+              display: grid;
+              grid-template-rows: 1fr auto;
+            }
+            #{{ cbh_id }} .bfc-cbh__img-wrap{
+              aspect-ratio: 4 / 3;
+              overflow: hidden;
+              background: color-mix(in srgb, var(--cbh-fg) 5%, transparent);
+            }
+            #{{ cbh_id }} .bfc-cbh__img-wrap img{
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              display: block;
+              transform: scale(1.001);
+              transition: transform .25s ease;
+            }
+            #{{ cbh_id }} .bfc-cbh__camera:hover .bfc-cbh__img-wrap img{ transform: scale(1.04); }
+            #{{ cbh_id }} .bfc-cbh__img-placeholder{ width: 100%; height: 100%; background: rgba(0,0,0,.06); }
+            #{{ cbh_id }} .bfc-cbh__camera-info{
+              padding: 16px 18px 18px;
+              border-top: 1px solid var(--cbh-border);
+            }
+            #{{ cbh_id }} .bfc-cbh__camera-name{
+              margin: 0 0 4px;
+              font-size: var(--bfc-body-size);
+              font-weight: 600;
+              letter-spacing: -0.01em;
+              font-family: var(--bfc-body-family);
+            }
+            #{{ cbh_id }} .bfc-cbh__camera-name a{ color: inherit; text-decoration: none; }
+            #{{ cbh_id }} .bfc-cbh__camera-name a:hover{ text-decoration: underline; }
+            #{{ cbh_id }} .bfc-cbh__camera-price{
+              margin: 0 0 4px;
+              font-family: var(--font-heading-family, serif);
+              font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+              letter-spacing: -0.01em;
+            }
+            #{{ cbh_id }} .bfc-cbh__camera-note{ margin: 0; font-size: var(--bfc-body-size-small); opacity: .6; line-height: 1.35; }
+            #{{ cbh_id }} .bfc-cbh__plus{
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 12px;
+            }
+            #{{ cbh_id }} .bfc-cbh__plus-sign{
+              font-family: var(--font-heading-family, serif);
+              font-size: clamp(2rem, 5vw, 4rem);
+              line-height: 1;
+              opacity: .2;
+              letter-spacing: -0.02em;
+            }
+            #{{ cbh_id }} .bfc-cbh__savings{
+              background: var(--cbh-accent);
+              color: var(--cbh-bg);
+              font-size: 11px;
+              letter-spacing: .12em;
+              text-transform: uppercase;
+              padding: 6px 10px;
+              text-align: center;
+              white-space: nowrap;
+            }
+            #{{ cbh_id }} .bfc-cbh__footer{
+              display: flex;
+              align-items: center;
+              gap: 24px;
+              flex-wrap: wrap;
+              padding-top: clamp(20px, 3vw, 32px);
+              border-top: 1px solid var(--cbh-border);
+            }
+            #{{ cbh_id }} .bfc-cbh__footer-copy{ margin: 0; font-size: var(--bfc-body-size); opacity: .75; flex: 1; min-width: 180px; }
+            #{{ cbh_id }} .bfc-cbh__ctas{ display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+            #{{ cbh_id }} .bfc-cbh__cta{
+              text-decoration: none;
+              font-size: var(--bfc-body-size-small);
+              letter-spacing: .08em;
+              text-transform: uppercase;
+              display: inline-flex;
+              align-items: center;
+              transition: opacity .15s ease;
+            }
+            #{{ cbh_id }} .bfc-cbh__cta--primary{ background: var(--cbh-fg); color: var(--cbh-bg); padding: 13px 24px; }
+            #{{ cbh_id }} .bfc-cbh__cta--ghost{ color: var(--cbh-fg); border-bottom: 1px solid currentColor; opacity: .7; padding-bottom: 2px; }
+            #{{ cbh_id }} .bfc-cbh__cta:hover{ opacity: .72; }
+            @media (max-width: 700px){
+              #{{ cbh_id }} .bfc-cbh__grid{ grid-template-columns: 1fr; gap: 0; }
+              #{{ cbh_id }} .bfc-cbh__plus{ flex-direction: row; padding: 16px 0; justify-content: center; }
+              #{{ cbh_id }} .bfc-cbh__footer{ flex-direction: column; align-items: flex-start; }
+              {% if block.settings.ignore_padding_mobile %}
+                #{{ cbh_id }}{ --bfc-block-pad: var(--bfc-horizontal-pad); }
+              {% endif %}
+            }
+          </style>
+        </section>
+                          {% when 'kit_builder_mini' %}
+          {%- assign kb_id = 'kb-' | append: block.id -%}
+          {%- assign kb_seamless = block.settings.seamless_mode -%}
+        <section class="bfc-block bfc-kb{% if kb_seamless %} bfc-kb--seamless{% endif %}" id="{{ kb_id }}" aria-label="Kit builder" {{ block.shopify_attributes }}>
+          <div class="bfc-kb__head">
+            <p class="bfc-kb__eyebrow">{{ block.settings.eyebrow | default: "Build your kit" | escape }}</p>
+            <h2 class="bfc-kb__title">{{ block.settings.headline | default: "We'll pick your perfect setup." }}</h2>
+          </div>
+          <div class="bfc-kb__body">
+            <div class="bfc-kb__sidebar">
+              <nav class="bfc-kb__nav-bar" aria-label="Kit builder steps">
+            <div class="bfc-kb__crumb is-active" data-step="1" aria-current="step"><span class="bfc-kb__crumb-num" aria-hidden="true">1</span>Style</div>
+            <span class="bfc-kb__crumb-sep" aria-hidden="true">›</span>
+            <div class="bfc-kb__crumb" data-step="2"><span class="bfc-kb__crumb-num" aria-hidden="true">2</span>Camera</div>
+            <span class="bfc-kb__crumb-sep" aria-hidden="true">›</span>
+            <div class="bfc-kb__crumb" data-step="3"><span class="bfc-kb__crumb-num" aria-hidden="true">3</span>Extras</div>
+            <span class="bfc-kb__crumb-sep" aria-hidden="true">›</span>
+            <div class="bfc-kb__crumb" data-step="4"><span class="bfc-kb__crumb-num" aria-hidden="true">4</span>Review</div>
+              </nav>
+              <div class="bfc-kb__done-rows"></div>
+            </div>
+            <div class="bfc-kb__content">
+          {%- comment -%} STEP 1 — Style {%- endcomment -%}
+          <div class="bfc-kb__step is-active" data-step="1" role="group" aria-labelledby="kb-step-lbl-1">
+            <p class="bfc-kb__step-lbl" id="kb-step-lbl-1">Step 1</p>
+            <p class="bfc-kb__step-hed">How do you want <em>to shoot?</em></p>
+            <div class="bfc-kb__style-grid" role="group" aria-label="Choose your shooting style">
+              <button class="bfc-kb__style-card" type="button" data-pick-style="ps" aria-pressed="false">
+                <span class="bfc-kb__style-name">Point &amp; Shoot</span>
+                <span class="bfc-kb__style-hint">Auto everything · Great for beginners</span>
+              </button>
+              <button class="bfc-kb__style-card" type="button" data-pick-style="slr" aria-pressed="false">
+                <span class="bfc-kb__style-name">35mm SLR</span>
+                <span class="bfc-kb__style-hint">Full manual control · Learn as you shoot</span>
+              </button>
+              <button class="bfc-kb__style-card" type="button" data-pick-style="pol" aria-pressed="false">
+                <span class="bfc-kb__style-name">Polaroid</span>
+                <span class="bfc-kb__style-hint">Instant prints · Share straight away</span>
+              </button>
+            </div>
+          </div>
+          {%- comment -%} STEP 2 — Camera {%- endcomment -%}
+          <div class="bfc-kb__step" data-step="2" role="group" aria-labelledby="kb-step-lbl-2">
+            <p class="bfc-kb__step-lbl" id="kb-step-lbl-2">Step 2</p>
+            <p class="bfc-kb__step-hed">Choose your <em>camera</em></p>
+          {%- assign kb_types = 'ps,slr,pol' | split: ',' -%}
+          {%- for kb_type in kb_types -%}
+              <div class="bfc-kb__cam-group" data-cam-group="{{ kb_type }}" hidden>
+                <div class="bfc-kb__cam-grid">
+          {%- if kb_type == 'pol' -%}
+            {%- comment -%} Polaroid: pull from collections, in-stock only. One box camera + up to 2 SX-70. {%- endcomment -%}
+            {%- assign pol_cams_rendered = '' -%}
+
+            {%- comment -%} --- Box camera (600 film) — first in-stock from collection --- {%- endcomment -%}
+            {%- assign box_coll = section.settings.polaroid_box_collection -%}
+            {%- if box_coll != blank -%}
+              {%- for p in box_coll.products -%}
+                {%- if p.available -%}
+                  {%- assign kc_src = p -%}
+                  {%- assign kc_v = kc_src.first_available_variant | default: kc_src.variants.first -%}
+                  {%- assign kc_price = kc_v.price | money_without_trailing_zeros -%}
+                  {%- assign kc_name = kc_src.title -%}
+                  {%- assign kc_img = kc_src.featured_image | image_url: width: 600 -%}
+                  {%- assign kc_detail = kc_src.metafields.custom.subtitle -%}
+                  {%- assign kc_vid = kc_v.id -%}
+                      <button class="bfc-kb__cam-card" type="button" aria-pressed="false" aria-label="{{ kc_name | escape }}" data-cam-name="{{ kc_name | escape }}" data-cam-price="{{ kc_price }}" data-cam-price-raw="{{ kc_v.price | divided_by: 100.0 }}" data-cam-vid="{{ kc_vid }}" data-cam-format="600" data-cam-warranty="6" data-cam-camtype="pol" data-cam-subtype="box" data-cam-avail="true" data-cam-oos-url="/collections/all-polaroid-cameras" data-cam-url="{{ p.url }}">
+                        <div class="bfc-kb__cam-img">
+                          {%- if kc_img != blank -%}
+                            <img src="{{ kc_img }}" alt="{{ kc_name | escape }}" loading="lazy">
+                          {%- else -%}
+                            <div class="bfc-kb__cam-ph"></div>
+                          {%- endif -%}
+                        </div>
+                        <div class="bfc-kb__cam-body">
+                          <div class="bfc-kb__cam-tag">Box · 600 film</div>
+                          <div class="bfc-kb__cam-name">{{ kc_name }}</div>
+                          {%- if kc_detail != blank -%}<div class="bfc-kb__cam-detail">{{ kc_detail }}</div>{%- endif -%}
+                          <div class="bfc-kb__cam-price">{{ kc_price }}</div>
+                        </div>
+                      </button>
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+
+            {%- comment -%} --- SX-70 cameras — up to 2 in-stock from collection --- {%- endcomment -%}
+            {%- assign sx70_coll = section.settings.polaroid_sx70_collection -%}
+            {%- if sx70_coll != blank -%}
+              {%- assign sx70_shown = 0 -%}
+              {%- for p in sx70_coll.products -%}
+                {%- if p.available and sx70_shown < 2 -%}
+                  {%- assign kc_src = p -%}
+                  {%- assign kc_v = kc_src.first_available_variant | default: kc_src.variants.first -%}
+                  {%- assign kc_price = kc_v.price | money_without_trailing_zeros -%}
+                  {%- assign kc_name = kc_src.title -%}
+                  {%- assign kc_img = kc_src.featured_image | image_url: width: 600 -%}
+                  {%- assign kc_detail = kc_src.metafields.custom.subtitle -%}
+                  {%- assign kc_vid = kc_v.id -%}
+                      <button class="bfc-kb__cam-card" type="button" aria-pressed="false" aria-label="{{ kc_name | escape }}" data-cam-name="{{ kc_name | escape }}" data-cam-price="{{ kc_price }}" data-cam-price-raw="{{ kc_v.price | divided_by: 100.0 }}" data-cam-vid="{{ kc_vid }}" data-cam-format="sx70" data-cam-warranty="6" data-cam-camtype="pol" data-cam-subtype="sx70" data-cam-avail="true" data-cam-oos-url="/collections/all-polaroid-cameras" data-cam-url="{{ p.url }}">
+                        <div class="bfc-kb__cam-img">
+                          {%- if kc_img != blank -%}
+                            <img src="{{ kc_img }}" alt="{{ kc_name | escape }}" loading="lazy">
+                          {%- else -%}
+                            <div class="bfc-kb__cam-ph"></div>
+                          {%- endif -%}
+                        </div>
+                        <div class="bfc-kb__cam-body">
+                          <div class="bfc-kb__cam-tag">SX-70 · SX-70 or 600 film</div>
+                          <div class="bfc-kb__cam-name">{{ kc_name }}</div>
+                          {%- if kc_detail != blank -%}<div class="bfc-kb__cam-detail">{{ kc_detail }}</div>{%- endif -%}
+                          <div class="bfc-kb__cam-price">{{ kc_price }}</div>
+                        </div>
+                      </button>
+                  {%- assign sx70_shown = sx70_shown | plus: 1 -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+          {%- else -%}
+            {%- comment -%} ps / slr: manual kit_camera blocks (unchanged) {%- endcomment -%}
+            {%- for b in section.blocks -%}
+          {%- if b.type == 'kit_camera' and b.settings.camera_type == kb_type -%}
+          {%- assign kc_product = b.settings.camera_product -%}{%- assign kc_fb = b.settings.camera_fallback -%}{%- assign kc_src = kc_product -%}{%- assign kc_avail = true -%}{%- if kc_product != blank -%}{%- unless kc_product.available -%}{%- if kc_fb != blank and kc_fb.available -%}{%- assign kc_src = kc_fb -%}{%- else -%}{%- assign kc_avail = false -%}{%- endif -%}{%- endunless -%}{%- assign kc_v = kc_src.first_available_variant | default: kc_src.variants.first -%}{%- assign kc_price = kc_v.price | money_without_trailing_zeros -%}{%- if kc_src == kc_product -%}{%- assign kc_name = b.settings.camera_name | default: kc_src.title -%}{%- else -%}{%- assign kc_name = kc_src.title -%}{%- endif -%}{%- assign kc_img = kc_src.featured_image | image_url: width: 600 -%}{%- if kc_src == kc_product -%}{%- assign kc_detail = b.settings.camera_detail -%}{%- else -%}{%- assign kc_detail = kc_src.metafields.custom.subtitle | default: b.settings.camera_detail -%}{%- endif -%}{%- assign kc_vid = kc_v.id -%}
+{%- else -%}
+          {%- assign kc_price = b.settings.camera_price | prepend: '$' -%}
+          {%- assign kc_name = b.settings.camera_name -%}
+          {%- assign kc_img = b.settings.camera_image | image_url: width: 600 -%}
+          {%- assign kc_vid = '' -%}
+{%- endif -%}
+                      <button class="bfc-kb__cam-card" type="button" aria-pressed="false" aria-label="{{ kc_name | escape }}" data-cam-name="{{ kc_name | escape }}" data-cam-price="{{ kc_price }}" data-cam-price-raw="{% if kc_product != blank %}{{ kc_v.price | divided_by: 100.0 }}{% else %}{{ b.settings.camera_price }}{% endif %}" data-cam-vid="{{ kc_vid }}" data-cam-format="{{ b.settings.camera_film_format | default: 'any' }}" data-cam-warranty="{% if b.settings.camera_type == 'ps' %}3{% else %}6{% endif %}" data-cam-camtype="{{ b.settings.camera_type }}" data-cam-avail="{{ kc_avail }}" data-cam-oos-url="{%- if b.settings.camera_type == 'ps' -%}/collections/35mm-cameras{%- elsif b.settings.camera_type == 'slr' -%}/collections/35mm-cameras{%- else -%}/collections/all-polaroid-cameras{%- endif -%}" data-cam-url="{{ kc_src.url }}">
+                        <div class="bfc-kb__cam-img">
+          {%- if kc_img != blank -%}
+                            <img src="{{ kc_img }}" alt="{{ kc_name | escape }}" loading="lazy">
+          {%- else -%}
+                            <div class="bfc-kb__cam-ph"></div>
+          {%- endif -%}
+                        </div>
+                        <div class="bfc-kb__cam-body">
+          {%- if b.settings.camera_tag != blank -%}<div class="bfc-kb__cam-tag">{{ b.settings.camera_tag }}</div>{%- endif -%}
+                          <div class="bfc-kb__cam-name">{{ kc_name }}</div>
+          {%- if kc_detail != blank -%}<div class="bfc-kb__cam-detail">{{ kc_detail }}</div>{%- endif -%}
+                          <div class="bfc-kb__cam-price">{{ kc_price }}</div>
+                        </div>
+                      </button>
+          {%- endif -%}
+          {%- endfor -%}
+          {%- endif -%}
+                </div>
+              </div>
+          {%- endfor -%}
+            <div class="bfc-kb__nav"><button class="bfc-kb__btn-back" type="button" aria-label="Go back to style selection" data-go-back>← Back</button></div>
+          </div>
+          {%- comment -%} STEP 3 — Extras {%- endcomment -%}
+          <div class="bfc-kb__step" data-step="3" role="group" aria-labelledby="kb-step-lbl-3"><p class="bfc-kb__step-lbl" id="kb-step-lbl-3">Step 3</p><p class="bfc-kb__step-hed">Complete your <em>kit</em></p>
+          {%- assign addon_type_list = 'film_color,film_bw,strap,case' | split: ',' -%}
+          {%- assign addon_label_list = 'Film,B&W film,Strap,Case' | split: ',' -%}
+          {%- assign addon_note_list = 'Select all that apply,,Select all that apply,Select all that apply' | split: ',' -%}
+          {%- assign pol_600_coll = section.settings.polaroid_600_film_collection -%}
+          {%- assign pol_sx70_coll = section.settings.polaroid_sx70_film_collection -%}
+          {%- for at in addon_type_list -%}
+          {%- assign at_label = addon_label_list[forloop.index0] -%}
+          {%- assign at_note = addon_note_list[forloop.index0] -%}
+          {%- assign has_any_addon = false -%}
+          {%- for b in section.blocks -%}
+          {%- if b.type == 'kit_addon' and b.settings.addon_type == at -%}
+          {%- assign has_any_addon = true -%}
+          {%- endif -%}
+          {%- endfor -%}
+          {%- comment -%} Film group also renders when polaroid film collections have products {%- endcomment -%}
+          {%- if at == 'film_color' -%}
+            {%- if pol_600_coll != blank and pol_600_coll.products.size > 0 -%}
+              {%- assign has_any_addon = true -%}
+            {%- endif -%}
+            {%- if pol_sx70_coll != blank and pol_sx70_coll.products.size > 0 -%}
+              {%- assign has_any_addon = true -%}
+            {%- endif -%}
+          {%- endif -%}
+          {%- if has_any_addon -%}
+                <div class="bfc-kb__grp" data-addon-type="{{ at }}">
+                  <div class="bfc-kb__grp-lbl">{{ at_label }} <span class="bfc-kb__grp-note">{{ at_note }}</span></div>
+                  <div class="bfc-kb__pill-row-wrap"><button class="bfc-kb__scroll-btn bfc-kb__scroll-btn--left is-hidden" type="button" aria-label="Scroll left">‹</button><div class="bfc-kb__pill-row">
+          {%- for b in section.blocks -%}
+          {%- if b.type == 'kit_addon' and b.settings.addon_type == at -%}
+{%- assign ao_show_for = '' -%}{%- if b.settings.camera_types == 'pol' -%}{%- assign ao_show_for = 'pol,' -%}{%- elsif b.settings.camera_types == '35mm' -%}{%- assign ao_show_for = 'ps,slr,' -%}{%- else -%}{%- assign ao_show_for = 'ps,slr,pol,' -%}{%- endif -%}
+          {%- assign ao_product = b.settings.addon_product -%}
+          {%- if ao_product != blank -%}
+          {%- assign ao_v = ao_product.first_available_variant | default: ao_product.variants.first -%}
+          {%- assign ao_price = ao_v.price | money_without_trailing_zeros -%}
+          {%- assign ao_name = b.settings.addon_name | default: ao_product.title -%}
+          {%- assign ao_img = ao_product.featured_image | image_url: width: 400 -%}
+          {%- assign ao_img1 = ao_product.images[1] | image_url: width: 600 -%}
+          {%- assign ao_img2 = ao_product.images[2] | image_url: width: 600 -%}
+          {%- assign ao_desc = ao_product.description | strip_html | truncate: 200 -%}
+          {%- if b.settings.addon_variant_id != blank -%}
+          {%- assign ao_vid = b.settings.addon_variant_id -%}
+          {%- else -%}
+          {%- assign ao_vid = ao_v.id -%}
+          {%- endif -%}
+          {%- else -%}
+          {%- assign ao_price = b.settings.addon_price | prepend: '$' -%}
+          {%- assign ao_name = b.settings.addon_name -%}
+          {%- assign ao_img = b.settings.camera_image | image_url: width: 400 -%}
+          {%- assign ao_img1 = '' -%}
+          {%- assign ao_img2 = '' -%}
+          {%- assign ao_desc = '' -%}
+          {%- assign ao_vid = '' -%}
+          {%- endif -%}
+                        <div class="bfc-kb__pill" data-addon-group="{{ at }}" data-addon-show-for="{{ ao_show_for }}" data-addon-name="{{ ao_name | escape }}" data-addon-price="{{ ao_price }}" data-addon-price-raw="{% if ao_product != blank %}{{ ao_v.price | divided_by: 100.0 }}{% else %}{{ b.settings.addon_price }}{% endif %}" data-addon-vid="{{ ao_vid }}" data-addon-format="{{ b.settings.addon_film_format | default: 'any' }}" data-addon-img0="{{ ao_img }}" data-addon-img1="{{ ao_img1 }}" data-addon-img2="{{ ao_img2 }}" data-addon-desc="{{ ao_desc | escape }}">
+                          <div class="bfc-kb__pill-img">
+          {%- if b.settings.addon_recommended -%}<div class="bfc-kb__pill-rec">Recommended</div>{%- endif -%}
+          {%- if ao_img != blank -%}
+                              <img src="{{ ao_img }}" alt="{{ ao_name | escape }}" loading="lazy">
+          {%- else -%}
+                              <div class="bfc-kb__cam-ph" aria-hidden="true"></div>
+          {%- endif -%}
+                            <button class="bfc-kb__pill-info" type="button" aria-label="More info about {{ ao_name | escape }}" data-info>i</button>
+                          </div>
+                          <div class="bfc-kb__pill-body"><span class="bfc-kb__pill-name">{{ ao_name }}</span><span class="bfc-kb__pill-sub">{{ b.settings.addon_sub }}</span><span class="bfc-kb__pill-price">{{ ao_price }}</span></div>
+                        </div>
+          {%- endif -%}
+          {%- endfor -%}
+          {%- comment -%} --- Polaroid 600 film from collection (in-stock only) --- {%- endcomment -%}
+          {%- if at == 'film_color' and pol_600_coll != blank -%}
+            {%- for p in pol_600_coll.products -%}
+              {%- if p.available -%}
+                {%- assign pv = p.first_available_variant | default: p.variants.first -%}
+                        <div class="bfc-kb__pill" data-addon-group="film_color" data-addon-show-for="pol," data-addon-name="{{ p.title | escape }}" data-addon-price="{{ pv.price | money_without_trailing_zeros }}" data-addon-price-raw="{{ pv.price | divided_by: 100.0 }}" data-addon-vid="{{ pv.id }}" data-addon-format="600" data-addon-img0="{{ p.featured_image | image_url: width: 400 }}" data-addon-img1="{{ p.images[1] | image_url: width: 600 }}" data-addon-img2="{{ p.images[2] | image_url: width: 600 }}" data-addon-desc="{{ p.description | strip_html | truncate: 200 | escape }}">
+                          <div class="bfc-kb__pill-img">
+                            {%- if p.featured_image != blank -%}
+                              <img src="{{ p.featured_image | image_url: width: 400 }}" alt="{{ p.title | escape }}" loading="lazy">
+                            {%- else -%}
+                              <div class="bfc-kb__cam-ph" aria-hidden="true"></div>
+                            {%- endif -%}
+                            <button class="bfc-kb__pill-info" type="button" aria-label="More info about {{ p.title | escape }}" data-info>i</button>
+                          </div>
+                          <div class="bfc-kb__pill-body"><span class="bfc-kb__pill-name">{{ p.title }}</span><span class="bfc-kb__pill-sub">600 film</span><span class="bfc-kb__pill-price">{{ pv.price | money_without_trailing_zeros }}</span></div>
+                        </div>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+          {%- comment -%} --- Polaroid SX-70 film from collection (in-stock only) --- {%- endcomment -%}
+          {%- if at == 'film_color' and pol_sx70_coll != blank -%}
+            {%- for p in pol_sx70_coll.products -%}
+              {%- if p.available -%}
+                {%- assign pv = p.first_available_variant | default: p.variants.first -%}
+                        <div class="bfc-kb__pill" data-addon-group="film_color" data-addon-show-for="pol," data-addon-name="{{ p.title | escape }}" data-addon-price="{{ pv.price | money_without_trailing_zeros }}" data-addon-price-raw="{{ pv.price | divided_by: 100.0 }}" data-addon-vid="{{ pv.id }}" data-addon-format="sx70" data-addon-img0="{{ p.featured_image | image_url: width: 400 }}" data-addon-img1="{{ p.images[1] | image_url: width: 600 }}" data-addon-img2="{{ p.images[2] | image_url: width: 600 }}" data-addon-desc="{{ p.description | strip_html | truncate: 200 | escape }}">
+                          <div class="bfc-kb__pill-img">
+                            {%- if p.featured_image != blank -%}
+                              <img src="{{ p.featured_image | image_url: width: 400 }}" alt="{{ p.title | escape }}" loading="lazy">
+                            {%- else -%}
+                              <div class="bfc-kb__cam-ph" aria-hidden="true"></div>
+                            {%- endif -%}
+                            <button class="bfc-kb__pill-info" type="button" aria-label="More info about {{ p.title | escape }}" data-info>i</button>
+                          </div>
+                          <div class="bfc-kb__pill-body"><span class="bfc-kb__pill-name">{{ p.title }}</span><span class="bfc-kb__pill-sub">SX-70 film</span><span class="bfc-kb__pill-price">{{ pv.price | money_without_trailing_zeros }}</span></div>
+                        </div>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+                  </div><button class="bfc-kb__scroll-btn bfc-kb__scroll-btn--right" type="button" aria-label="Scroll right">›</button></div>
+                </div>
+          {%- endif -%}
+          {%- endfor -%}
+          {%- comment -%} Developing credits {%- endcomment -%}
+          {%- if block.settings.dev_credits_variant_id != blank -%}
+            <div class="bfc-kb__dev-credits">
+              <div class="bfc-kb__grp-lbl">Film developing <span class="bfc-kb__grp-note">Optional</span></div>
+              <div class="bfc-kb__dev-card">
+                <div class="bfc-kb__dev-copy">
+                  <div class="bfc-kb__dev-name">{{ block.settings.dev_credits_label | default: "Pre-buy developing credits" | escape }}</div>
+                  <div class="bfc-kb__dev-sub">{{ block.settings.dev_credits_sub | default: "Use them anytime. We handle the rest." | escape }}</div>
+                  <div class="bfc-kb__dev-price">${{ block.settings.dev_credits_price | default: "18.00" }} <span class="bfc-kb__dev-per">/ credit</span></div>
+                </div>
+                <div class="bfc-kb__dev-qty">
+                  <button class="bfc-kb__dev-minus" type="button" aria-label="Decrease developing credits" data-dev-minus>−</button>
+                  <span class="bfc-kb__dev-count" data-dev-count aria-live="polite" aria-label="Developing credits quantity">0</span>
+                  <button class="bfc-kb__dev-plus" type="button" aria-label="Increase developing credits" data-dev-plus>+</button>
+                </div>
+              </div>
+              <input type="hidden" data-dev-vid value="{{ block.settings.dev_credits_variant_id }}" data-dev-unit-price="{{ block.settings.dev_credits_price | default: '18.00' }}">
+            </div>
+          {%- endif -%}
+          {%- comment -%} Membership upsell {%- endcomment -%}
+          <div class="bfc-kb__membership-upsell"><div class="bfc-kb__mem-eyebrow">{{ block.settings.mem_eyebrow | default: "Film Developing Membership" | escape }}</div><div class="bfc-kb__mem-body">{{ block.settings.mem_body | default: "Save on every roll with discounted developing." | escape }}</div><a class="bfc-kb__mem-link" href="{{ block.settings.mem_url | default: 'https://brooklynfilmcamera.com/pages/membership' }}">{{ block.settings.mem_cta | default: "Learn about membership →" | escape }}</a></div>
+            <div class="bfc-kb__nav">
+              <button class="bfc-kb__btn-back" type="button" aria-label="Go back to camera selection" data-go-back>← Back</button>
+              <button class="bfc-kb__btn" type="button" aria-label="Proceed to review your kit" data-go-next>Review kit →</button>
+            </div>
+          </div>
+          {%- comment -%} STEP 4 — Review {%- endcomment -%}
+          <div class="bfc-kb__step" data-step="4" role="group" aria-labelledby="kb-step-lbl-4"><p class="bfc-kb__step-lbl" id="kb-step-lbl-4">Review</p><p class="bfc-kb__step-hed">Your <em>kit</em></p>
+            <div class="bfc-kb__review-lines" aria-live="polite" aria-label="Kit items"></div>
+            <div class="bfc-kb__total-row">
+              <span class="bfc-kb__total-lbl">Kit total</span>
+              <span class="bfc-kb__total-price" aria-live="polite">$0</span>
+            </div>
+            <div class="bfc-kb__atc-row">
+              <button class="bfc-kb__atc" type="button" aria-label="Add kit to cart" data-atc>Add kit to cart</button>
+              <span class="bfc-kb__warranty" aria-live="polite"></span>
+            </div>
+            <a class="bfc-kb__pdp-link" href="#" data-pdp-link hidden>View full product page for more add-ons, extended warranty &amp; details →</a>
+            <div class="bfc-kb__nav" style="margin-top:20px">
+              <button class="bfc-kb__btn-back" type="button" aria-label="Go back to extras selection" data-go-back>← Back</button>
+            </div>
+            </div>
+          </div>
+          </div>
+          </div>
+          {%- comment -%} MODAL {%- endcomment -%}
+          <div class="bfc-kb__modal-wrap" data-modal role="dialog" aria-modal="true" aria-labelledby="bfc-kb-modal-name-{{ kb_id }}" hidden>
+            <div class="bfc-kb__modal">
+              <button class="bfc-kb__modal-close" type="button" aria-label="Close product details" data-modal-close><span aria-hidden="true">×</span></button>
+              <div class="bfc-kb__modal-imgs" aria-hidden="true"></div>
+              <div class="bfc-kb__modal-body">
+                <div class="bfc-kb__modal-eyebrow" aria-hidden="true"></div>
+                <div class="bfc-kb__modal-name" id="bfc-kb-modal-name-{{ kb_id }}"></div>
+                <div class="bfc-kb__modal-desc"></div>
+                <div class="bfc-kb__modal-price"></div>
+                <button class="bfc-kb__modal-add" type="button" aria-label="Add this item to kit" data-modal-add>Add to kit</button>
+              </div>
+            </div>
+          </div>
+          <style>#{{kb_id}}{background:#F8F6EE;color:#202009;border-top:1px solid #E3DDDA}#{{kb_id}}*{box-sizing:border-box}.bfc-kb__head{padding:52px var(--bfc-align-pad,24px) 0}.bfc-kb__eyebrow{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#82906B;margin-bottom:10px}.bfc-kb__title{font-family:var(--bfc-header-family,inherit);font-size:clamp(28px,3.5vw,44px);font-weight:300;line-height:1.05;letter-spacing:-.02em;margin-bottom:32px;color:#202009}.bfc-kb__nav-bar{padding:0 0 16px;display:flex;flex-direction:column;gap:14px;border-bottom:1px solid #E3DDDA}.bfc-kb__crumb{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#C8C4BC;display:flex;align-items:center;gap:6px;cursor:default}.bfc-kb__crumb.is-done{color:#82906B;cursor:pointer}.bfc-kb__crumb.is-done:hover{color:#202009}.bfc-kb__crumb.is-active{color:#202009}.bfc-kb__crumb-num{width:18px;height:18px;border-radius:50%;border:1px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0}.bfc-kb__crumb.is-active .bfc-kb__crumb-num{background:#202009;border-color:#202009;color:#F8F6EE}.bfc-kb__crumb.is-done .bfc-kb__crumb-num{background:#ABCC99;border-color:#ABCC99;color:#202009}.bfc-kb__done-row{display:flex;flex-direction:column;gap:4px;padding:12px 0;border-top:1px solid #E3DDDA;cursor:pointer}.bfc-kb__done-row-lbl{font-size:9px;font-weight:600;text-transform:uppercase;color:#82906B}.bfc-kb__done-row-val{font-family:var(--bfc-header-family,inherit);font-size:14px;color:#202009}.bfc-kb__step{display:none;padding:32px 0 44px}.bfc-kb__step.is-active{display:block}.bfc-kb__step-lbl{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#82906B;margin-bottom:12px}.bfc-kb__step-hed{font-family:var(--bfc-header-family,inherit);font-size:clamp(22px,3vw,34px);font-weight:300;line-height:1.1;margin-bottom:28px;color:#202009}.bfc-kb__step-hed em{font-style:italic}.bfc-kb__style-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#D9D5CC}@media(max-width:600px){.bfc-kb__style-grid{grid-template-columns:1fr}}.bfc-kb__style-card{background:#F8F6EE;border:none;border-bottom:3px solid transparent;padding:22px 20px 20px;cursor:pointer;text-align:left;display:flex;flex-direction:column;gap:5px}.bfc-kb__style-card:hover{background:#F0EDE5;border-bottom-color:#ccc}.bfc-kb__style-name{font-family:var(--bfc-header-family,inherit);font-size:20px;font-weight:400;color:#202009}.bfc-kb__style-hint{font-size:10px;color:#82906B;line-height:1.5}.bfc-kb__cam-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:#D9D5CC}@media(max-width:640px){}.bfc-kb__cam-card{background:#F8F6EE;border:none;text-align:left;cursor:pointer;display:flex;flex-direction:column}.bfc-kb__cam-card:hover{background:#F0EDE5}.bfc-kb__cam-card.is-sel{background:#202009}.bfc-kb__cam-img{aspect-ratio:4/3;background:#EDEAE1;overflow:hidden;display:flex;align-items:center;justify-content:center}.bfc-kb__cam-card.is-sel .bfc-kb__cam-img{background:#19190a}.bfc-kb__cam-img img{width:100%;height:100%;object-fit:cover;display:block}.bfc-kb__cam-body{padding:12px 14px 14px;border-top:1px solid #E3DDDA;flex:1;display:flex;flex-direction:column}.bfc-kb__cam-card.is-sel .bfc-kb__cam-body{border-top-color:#333}.bfc-kb__cam-tag{font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#82906B;margin-bottom:3px}.bfc-kb__cam-name{font-family: var(--bfc-item-title-family);font-size:16px;color:#202009;line-height:1.2;margin-bottom:2px;flex:1
+              font-weight: var(--bfc-item-title-weight);
+            }.bfc-kb__cam-card.is-sel .bfc-kb__cam-name{color:#F8F6EE
+              font-family: var(--bfc-item-title-family);
+              font-weight: var(--bfc-item-title-weight);
+            }.bfc-kb__cam-detail{font-size:10px;color:#82906B;margin-bottom:7px}.bfc-kb__cam-card.is-sel .bfc-kb__cam-detail{color:#9a9880}.bfc-kb__cam-price{font-family:var(--bfc-header-family,inherit);font-size:17px;color:#202009}.bfc-kb__cam-card.is-sel .bfc-kb__cam-price{color:#F4A027}.bfc-kb__grp{margin-bottom:26px}.bfc-kb__grp-lbl{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#4E4741;margin-bottom:10px;display:flex;align-items:center;gap:8px}.bfc-kb__grp-note{font-size:10px;font-weight:400;text-transform:none;letter-spacing:.02em;color:#9a9880}.bfc-kb__pill-row-wrap{position:relative}.bfc-kb__pill-row{display:flex;gap:2px;background:#D9D5CC;overflow-x:auto;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none}.bfc-kb__pill-row::-webkit-scrollbar{display:none}.bfc-kb__pill{flex:0 0 180px;width:180px}@media(max-width:700px){.bfc-kb__pill{flex:0 0 140px;width:140px}.bfc-kb__cam-grid{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}.bfc-kb__cam-card{flex:0 0 140px;width:140px}}.bfc-kb__scroll-btn{position:absolute;top:50%;transform:translateY(-50%);width:32px;height:32px;background:#202009;color:#F8F6EE;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;z-index:2}.bfc-kb__scroll-btn.is-hidden{opacity:0;pointer-events:none}.bfc-kb__scroll-btn--right{right:0}.bfc-kb__pill{background:#F8F6EE;border-bottom:2px solid transparent;cursor:pointer;text-align:left;position:relative;display:flex;flex-direction:column}.bfc-kb__pill:hover{background:#F0EDE5}.bfc-kb__pill.is-on{background:#202009;border-bottom-color:#E36E15}.bfc-kb__pill-img{aspect-ratio:1/1;background:#EDEAE1;overflow:hidden;position:relative}.bfc-kb__pill-img img{width:100%;height:100%;object-fit:cover;display:block}.bfc-kb__pill.is-on .bfc-kb__pill-img{background:#19190a}.bfc-kb__pill-info{position:absolute;top:7px;right:7px;width:22px;height:22px;border-radius:50%;background:rgba(248,246,238,.9);border:1px solid rgba(32,32,9,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:var(--bfc-header-family,Georgia,serif);font-size:13px;font-style:italic;color:#202009;line-height:1;z-index:2}.bfc-kb__pill-info:hover{background:#fff;border-color:#82906B}.bfc-kb__pill.is-on .bfc-kb__pill-info{background:rgba(32,32,9,.7);border-color:rgba(248,246,238,.3);color:#F8F6EE}.bfc-kb__pill-rec{position:absolute;top:0;left:0;background:#ABCC99;color:#202009;font-size:8px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;z-index:1}.bfc-kb__pill.is-on .bfc-kb__pill-rec{background:#E36E15;color:#F8F6EE}.bfc-kb__pill-body{padding:11px 13px 12px}.bfc-kb__pill-name{font-family: var(--bfc-item-title-family);font-size:15px;color:#202009;display:block;line-height:1.2
+              font-weight: var(--bfc-item-title-weight);
+            }.bfc-kb__pill.is-on .bfc-kb__pill-name{color:#F8F6EE
+              font-family: var(--bfc-item-title-family);
+              font-weight: var(--bfc-item-title-weight);
+            }.bfc-kb__pill-sub{font-size:10px;color:#82906B;display:block;margin-top:2px}.bfc-kb__pill.is-on .bfc-kb__pill-sub{color:#9a9880}.bfc-kb__pill-price{font-family:var(--bfc-header-family,inherit);font-size:15px;color:#202009;display:block;margin-top:6px}.bfc-kb__pill.is-on .bfc-kb__pill-price{color:#F4A027}.bfc-kb__nav{display:flex;align-items:center;gap:20px;margin-top:28px}.bfc-kb__btn{background:#202009;color:#F8F6EE;border:none;padding:13px 26px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}.bfc-kb__btn:hover{background:#E36E15}.bfc-kb__btn-back{background:transparent;border:none;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#82906B;cursor:pointer;text-decoration:underline;padding:0}.bfc-kb__review-lines{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}.bfc-kb__rline{display:grid;grid-template-columns:60px 1fr auto;align-items:baseline;gap:12px;padding-bottom:10px;border-bottom:1px solid #E3DDDA}.bfc-kb__rline-lbl{font-size:9px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#9a9880;min-width:52px}.bfc-kb__rline-name{font-size:13px;color:#4E4741;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.bfc-kb__rline-price{font-family:var(--bfc-header-family,inherit);font-size:16px;color:#4E4741}.bfc-kb__total-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px}.bfc-kb__total-lbl{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#82906B}.bfc-kb__total-price{font-family:var(--bfc-header-family,inherit);font-size:36px;font-weight:300;color:#202009}.bfc-kb__atc-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}.bfc-kb__atc{background:#202009;color:#F8F6EE;border:none;padding:14px 32px;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}.bfc-kb__atc:hover{background:#E36E15}.bfc-kb__warranty{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#ABCC99}.bfc-kb__modal-wrap{position:fixed;inset:0;background:rgba(32,32,9,.6);display:flex;align-items:center;justify-content:center;z-index:9999;padding:24px;opacity:0;pointer-events:none}.bfc-kb__modal-wrap.is-open{opacity:1;pointer-events:all}.bfc-kb__modal{background:#F8F6EE;max-width:500px;width:100%;max-height:85vh;overflow-y:auto;position:relative}.bfc-kb__modal-close{position:absolute;top:12px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#82906B;line-height:1;z-index:2;padding:0}.bfc-kb__modal-close:hover{color:#202009}.bfc-kb__modal-imgs{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#D9D5CC}.bfc-kb__modal-img{aspect-ratio:1/1;background:#EDEAE1;overflow:hidden}.bfc-kb__modal-img img{width:100%;height:100%;object-fit:cover;display:block}.bfc-kb__modal-img.is-main{grid-column:1/-1;aspect-ratio:16/9}.bfc-kb__modal-body{padding:20px 22px 24px}.bfc-kb__modal-eyebrow{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#82906B;margin-bottom:5px}.bfc-kb__modal-name{font-family:var(--bfc-header-family,inherit);font-size:22px;font-weight:300;color:#202009;margin-bottom:4px;line-height:1.2}.bfc-kb__modal-desc{font-size:12px;color:#4E4741;line-height:1.7;margin-bottom:14px}.bfc-kb__modal-price{font-family:var(--bfc-header-family,inherit);font-size:24px;color:#202009;margin-bottom:16px}.bfc-kb__modal-add{background:#202009;color:#F8F6EE;border:none;padding:12px 24px;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;width:100%}.bfc-kb__modal-add:hover{background:#E36E15}.bfc-kb__dev-credits{margin-bottom:28px}.bfc-kb__dev-card{display:flex;align-items:center;justify-content:space-between;gap:20px;background:#F0EDE5;padding:18px 20px;border-bottom:2px solid transparent}.bfc-kb__dev-copy{flex:1;min-width:0}.bfc-kb__dev-name{font-family:var(--bfc-header-family,inherit);font-size:17px;color:#202009;margin-bottom:3px}.bfc-kb__dev-sub{font-size:11px;color:#82906B;margin-bottom:8px;line-height:1.5}.bfc-kb__dev-price{font-family:var(--bfc-header-family,inherit);font-size:18px;color:#202009}.bfc-kb__dev-per{font-family:var(--bfc-body-family,inherit);font-size:11px;color:#82906B}.bfc-kb__dev-qty{display:flex;align-items:center;gap:0;flex-shrink:0;background:#D9D5CC;gap:2px}.bfc-kb__dev-minus,.bfc-kb__dev-plus{width:36px;height:36px;background:#F8F6EE;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#202009}.bfc-kb__dev-minus:hover,.bfc-kb__dev-plus:hover{background:#E36E15;color:#F8F6EE}.bfc-kb__dev-count{width:40px;height:36px;background:#F8F6EE;display:flex;align-items:center;justify-content:center;font-family:var(--bfc-header-family,inherit);font-size:20px;color:#202009}.bfc-kb__membership-upsell{background:#202009;padding:20px 22px;margin-bottom:28px;display:flex;flex-direction:column;gap:8px}.bfc-kb__mem-eyebrow{font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#ABCC99}.bfc-kb__mem-body{font-size:12px;color:#9a9880;line-height:1.6}.bfc-kb__mem-link{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#F4A027;text-decoration:none;align-self:flex-start}.bfc-kb__mem-link:hover{color:#F8F6EE}.bfc-kb__body{display:grid;grid-template-columns:200px 1fr;gap:0;border-top:none}.bfc-kb__sidebar{padding:28px 24px 28px var(--bfc-align-pad,24px);border-right:1px solid #E3DDDA;background:#F0EDE5}.bfc-kb__content{padding:0 var(--bfc-align-pad,24px) 0 36px;min-width:0}.bfc-kb__crumb{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#C8C4BC;display:flex;align-items:center;gap:8px;cursor:default;padding:8px 0}.bfc-kb__crumb.is-done{color:#82906B;cursor:pointer}.bfc-kb__crumb.is-done:hover{color:#202009}.bfc-kb__crumb.is-active{color:#202009}.bfc-kb__crumb-num{width:20px;height:20px;border-radius:50%;border:1px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0}.bfc-kb__crumb.is-active .bfc-kb__crumb-num{background:#202009;border-color:#202009;color:#F8F6EE}.bfc-kb__crumb.is-done .bfc-kb__crumb-num{background:#ABCC99;border-color:#ABCC99;color:#202009}@media(max-width:700px){.bfc-kb__body{grid-template-columns:1fr}.bfc-kb__sidebar{border-right:none;border-bottom:1px solid #E3DDDA;padding:20px var(--bfc-align-pad,24px)}.bfc-kb__nav-bar{flex-direction:row;flex-wrap:wrap;gap:6px}.bfc-kb__crumb-sep{display:inline;color:#D9D5CC;font-size:12px}.bfc-kb__content{padding:0 var(--bfc-align-pad,24px)}}.bfc-kb__cam-card.is-oos{opacity:.5;cursor:not-allowed}.bfc-kb__cam-oos{font-size:10px;font-weight:600;text-transform:uppercase;color:#82906B;margin-top:6px;display:block}.bfc-kb__cam-oos a{color:#E36E15;text-decoration:underline}.bfc-kb__crumb-sep{display:none}.bfc-kb__pill[hidden]{display:none!important}.bfc-kb__grp[hidden]{display:none!important}.bfc-kb__dev-credits[hidden]{display:none!important}.bfc-kb__membership-upsell[hidden]{display:none!important}.bfc-kb__pdp-link{display:block;margin-top:16px;font-size:12px;color:#82906B;text-decoration:underline;text-underline-offset:0.15em;transition:color .15s}.bfc-kb__pdp-link:hover{color:#E36E15}.bfc-kb--seamless{background:var(--bfc-bg,#F7F4F0)!important;border-top:none!important}.bfc-kb--seamless .bfc-kb__nav-bar{border-bottom:none}.bfc-kb--seamless .bfc-kb__sidebar{background:transparent;border-right:none}.bfc-kb--seamless .bfc-kb__done-row{border-top:none}.bfc-kb--seamless .bfc-kb__style-grid,.bfc-kb--seamless .bfc-kb__cam-grid,.bfc-kb--seamless .bfc-kb__pill-row{background:transparent;gap:8px}.bfc-kb--seamless .bfc-kb__style-card,.bfc-kb--seamless .bfc-kb__cam-card,.bfc-kb--seamless .bfc-kb__pill{border:1px solid rgba(0,0,0,.08)}.bfc-kb--seamless .bfc-kb__style-card{background:transparent}.bfc-kb--seamless .bfc-kb__style-card:hover{background:rgba(0,0,0,.03)}.bfc-kb--seamless .bfc-kb__cam-card{background:transparent}.bfc-kb--seamless .bfc-kb__cam-card:hover{background:rgba(0,0,0,.03)}.bfc-kb--seamless .bfc-kb__cam-body{border-top:none}.bfc-kb--seamless .bfc-kb__pill{background:transparent}.bfc-kb--seamless .bfc-kb__pill:hover{background:rgba(0,0,0,.03)}.bfc-kb--seamless .bfc-kb__cam-card.is-sel{background:#202009;border-color:#202009}.bfc-kb--seamless .bfc-kb__pill.is-on{background:#202009;border-color:#E36E15}.bfc-kb--seamless .bfc-kb__cam-img,.bfc-kb--seamless .bfc-kb__pill-img{background:rgba(0,0,0,.03)}.bfc-kb--seamless .bfc-kb__dev-card{background:transparent;border:1px solid rgba(0,0,0,.08);border-bottom:2px solid transparent}.bfc-kb--seamless .bfc-kb__dev-qty{background:transparent;gap:4px}.bfc-kb--seamless .bfc-kb__dev-minus,.bfc-kb--seamless .bfc-kb__dev-plus,.bfc-kb--seamless .bfc-kb__dev-count{background:rgba(0,0,0,.04)}.bfc-kb--seamless .bfc-kb__rline{border-bottom-color:rgba(0,0,0,.06)}.bfc-kb--seamless .bfc-kb__modal-imgs{background:transparent;gap:4px}.bfc-kb--seamless .bfc-kb__modal{background:var(--bfc-bg,#F7F4F0);border:1px solid rgba(0,0,0,.1)}@media(max-width:700px){.bfc-kb--seamless .bfc-kb__sidebar{border-bottom:none}}</style>
+<script>(function(){
+var sec=document.getElementById('{{ kb_id }}');
+if(!sec) return;
+var step=1;
+var sel={type:null,cam:null,addons:{}};
+var pendingPill=null;
+function showStep(n){
+step=n;
+sec.querySelectorAll('.bfc-kb__step').forEach(function(el){
+el.classList.toggle('is-active',parseInt(el.dataset.step)===n);
+});
+sec.querySelectorAll('.bfc-kb__crumb').forEach(function(el){
+var s=parseInt(el.dataset.step);
+el.classList.toggle('is-active', s===n);
+el.classList.toggle('is-done', s<n);
+el.setAttribute('aria-current', s===n ? 'step' : 'false');
+el.querySelector('.bfc-kb__crumb-num').textContent=s<n?'✓':s;
+});
+renderDoneRows();
+}
+function renderDoneRows(){
+var c=sec.querySelector('.bfc-kb__done-rows');
+c.innerHTML='';
+[[1,'Style',sel.type?{ps:'Point & Shoot',slr:'35mm SLR',pol:'Polaroid'}[sel.type]:null],
+[2,'Camera',sel.cam?sel.cam.name:null],
+[3,'Extras',Object.keys(sel.addons).length?Object.values(sel.addons).map(function(a){return a.name;}).join(', '):null]
+].forEach(function(r){
+if(r[0]>=step||!r[2])return;
+var d=document.createElement('div');
+d.className='bfc-kb__done-row';
+d.innerHTML='<span class="bfc-kb__done-row-lbl">'+r[1]+'</span><span class="bfc-kb__done-row-val">'+r[2]+'</span>';
+d.onclick=(function(s){return function(){goBack(s);};})(r[0]);
+c.appendChild(d);
+});
+}
+function goBack(n){
+if(n<=1){sel.type=null;sel.cam=null;sel.addons={};}
+if(n<=2){sel.cam=null;sel.addons={};}
+if(n<=3){sel.addons={};}
+showStep(n);
+}
+sec.querySelectorAll('[data-pick-style]').forEach(function(btn){
+btn.onclick=function(){
+sec.querySelectorAll('[data-pick-style]').forEach(function(b){b.setAttribute('aria-pressed','false');});
+btn.setAttribute('aria-pressed','true');
+sel.type=btn.dataset.pickStyle;
+sel.cam=null; sel.addons={};
+sec.querySelectorAll('.bfc-kb__cam-group').forEach(function(g){
+g.hidden=g.dataset.camGroup!==sel.type;
+});
+showStep(2);
+};
+});
+sec.querySelectorAll('.bfc-kb__cam-card').forEach(function(card){
+if(card.dataset.camAvail==='false'){card.classList.add('is-oos');var t=card.dataset.camCamtype,b=card.querySelector('.bfc-kb__cam-body');if(b){var s=document.createElement('span');s.className='bfc-kb__cam-oos';s.innerHTML='OOS — <a href="'+(card.dataset.camOosUrl||'#')+'" onclick="event.stopPropagation()">See other →</a>';b.appendChild(s);}return;}
+card.onclick=function(){
+sec.querySelectorAll('.bfc-kb__cam-card').forEach(function(c){c.classList.remove('is-sel');c.setAttribute('aria-pressed','false');});
+card.classList.add('is-sel');
+card.setAttribute('aria-pressed','true');
+sel.cam={name:card.dataset.camName,price:card.dataset.camPrice,priceRaw:parseFloat(card.dataset.camPriceRaw)||0,vid:card.dataset.camVid,format:card.dataset.camFormat,warranty:card.dataset.camWarranty,type:card.dataset.camCamtype,url:card.dataset.camUrl||''};
+filterAddons();
+setTimeout(function(){showStep(3);},220);
+};
+});
+function filterAddons(){var fmt=sel.cam?sel.cam.format:'any',type=sel.cam?sel.cam.type:'';if(type==='ps'||type==='slr')fmt='35mm';sec.querySelectorAll('.bfc-kb__pill').forEach(function(pill){var pf=pill.dataset.addonFormat||'any',sf=(pill.dataset.addonShowFor||'').trim();var ef=sf||'ps,slr,';var fmtOk;if(fmt==='sx70'){fmtOk=(pf==='any'||pf==='sx70'||pf==='600');}else{fmtOk=(pf==='any'||fmt==='any'||pf===fmt);}var typeOk=(!type||ef.indexOf(type+',')>=0);pill.hidden=!fmtOk||!typeOk;if(pill.hidden)pill.classList.remove('is-on');});sec.querySelectorAll('.bfc-kb__grp').forEach(function(g){g.hidden=g.querySelectorAll('.bfc-kb__pill:not([hidden])').length===0;});var isPol=type==='pol';var devBlk=sec.querySelector('.bfc-kb__dev-credits');if(devBlk){devBlk.hidden=isPol;if(isPol){var devCnt=sec.querySelector('[data-dev-count]');if(devCnt)devCnt.textContent='0';}}var memBlk=sec.querySelector('.bfc-kb__membership-upsell');if(memBlk)memBlk.hidden=isPol;}
+sec.querySelectorAll('.bfc-kb__pill').forEach(function(pill){
+pill.querySelector('[data-info]').addEventListener('click',function(e){
+e.stopPropagation();
+openModal(pill);
+});
+pill.addEventListener('click',function(e){
+if(e.target.closest('[data-info]')) return;
+var grp=pill.dataset.addonGroup;
+var wasOn=pill.classList.contains('is-on');
+if(grp==='film_color'||grp==='strap'||grp==='case'){
+pill.classList.toggle('is-on');
+var key=grp+'_'+pill.dataset.addonVid;
+if(!wasOn){sel.addons[key]={name:pill.dataset.addonName,price:pill.dataset.addonPrice,priceRaw:parseFloat(pill.dataset.addonPriceRaw)||0,vid:pill.dataset.addonVid,group:grp};}
+else{delete sel.addons[key];}
+} else {
+sec.querySelectorAll('.bfc-kb__pill[data-addon-group="'+grp+'"]').forEach(function(p){p.classList.remove('is-on');});
+if(!wasOn){
+pill.classList.add('is-on');
+sel.addons[grp]={name:pill.dataset.addonName,price:pill.dataset.addonPrice,priceRaw:parseFloat(pill.dataset.addonPriceRaw)||0,vid:pill.dataset.addonVid,group:grp};
+} else {
+delete sel.addons[grp];
+}
+}
+});
+});
+sec.querySelectorAll('[data-go-back]').forEach(function(btn){
+btn.onclick=function(){goBack(step-1);};
+});
+sec.querySelector('[data-go-next]').onclick=function(){
+buildReview();
+showStep(4);
+sec.scrollIntoView({behavior:'smooth'});
+};
+sec.querySelectorAll('.bfc-kb__pill-row-wrap').forEach(function(wrap){
+var row=wrap.querySelector('.bfc-kb__pill-row');
+var btnL=wrap.querySelector('.bfc-kb__scroll-btn--left');
+var btnR=wrap.querySelector('.bfc-kb__scroll-btn--right');
+if(!row) return;
+function updateBtns(){
+var atLeft=row.scrollLeft<=4;
+var atRight=row.scrollLeft+row.clientWidth>=row.scrollWidth-4;
+if(btnL) btnL.classList.toggle('is-hidden',atLeft);
+if(btnR) btnR.classList.toggle('is-hidden',atRight);
+}
+updateBtns();
+row.addEventListener('scroll',updateBtns,{passive:true});
+if(btnL) btnL.onclick=function(){row.scrollBy({left:-row.clientWidth*0.75,behavior:'smooth'});};
+if(btnR) btnR.onclick=function(){row.scrollBy({left:row.clientWidth*0.75,behavior:'smooth'});};
+var dn=0,sx=0,ss=0;row.addEventListener('mousedown',function(e){dn=1;sx=e.pageX;ss=row.scrollLeft;row.style.cursor='grabbing';});['mouseleave','mouseup'].forEach(function(v){row.addEventListener(v,function(){dn=0;row.style.cursor='';});});row.addEventListener('mousemove',function(e){if(!dn)return;e.preventDefault();row.scrollLeft=ss-(e.pageX-sx)*1.2;});
+});
+function buildReview(){
+var lines=sec.querySelector('.bfc-kb__review-lines');
+lines.innerHTML='';
+var total=0;
+var lm={film_bw:'B&W film',strap:'Strap','case':'Case'};
+if(sel.cam){
+total+=sel.cam.priceRaw||parsePrice(sel.cam.price);
+lines.innerHTML+='<div class="bfc-kb__rline"><span class="bfc-kb__rline-lbl">Camera</span><span class="bfc-kb__rline-name">'+sel.cam.name+'</span><span class="bfc-kb__rline-price">'+sel.cam.price+'</span></div>';
+}
+var filmItems=Object.keys(sel.addons).filter(function(k){return k.indexOf('film_color')===0;}).map(function(k){return sel.addons[k];});
+if(filmItems.length){
+var filmTotal=filmItems.reduce(function(s,a){return s+(a.priceRaw||parsePrice(a.price));},0);total+=filmTotal;
+var filmNames=filmItems.map(function(a){return a.name;}).join(', ');
+lines.innerHTML+='<div class="bfc-kb__rline"><span class="bfc-kb__rline-lbl">Film</span><span class="bfc-kb__rline-name">'+filmNames+'</span><span class="bfc-kb__rline-price">'+filmItems.map(function(a){return a.price;}).join(' + ')+'</span></div>';
+}
+Object.keys(sel.addons).filter(function(k){return k.indexOf('film_color')!==0;}).forEach(function(k){
+var a=sel.addons[k];total+=a.priceRaw||parsePrice(a.price);
+var lbl=lm[k]||(k.indexOf('strap')===0?'Strap':k.indexOf('case')===0?'Case':k);
+lines.innerHTML+='<div class="bfc-kb__rline"><span class="bfc-kb__rline-lbl">'+lbl+'</span><span class="bfc-kb__rline-name">'+a.name+'</span><span class="bfc-kb__rline-price">'+a.price+'</span></div>';
+});
+if(devVidEl&&devCountEl){
+var devQty=parseInt(devCountEl.textContent)||0;
+if(devQty>0){
+var devUnit=parseFloat(devVidEl.dataset.devUnitPrice)||0;
+var devTotal=devQty*devUnit;total+=devTotal;
+lines.innerHTML+='<div class="bfc-kb__rline"><span class="bfc-kb__rline-lbl">Developing</span><span class="bfc-kb__rline-name">'+devQty+' credit'+(devQty>1?'s':'')+'</span><span class="bfc-kb__rline-price">$'+devTotal.toFixed(2).replace(/\.00$/,'')+'</span></div>';
+}
+}
+sec.querySelector('.bfc-kb__total-price').textContent='$'+total.toFixed(2).replace(/\.00$/,'');
+sec.querySelector('.bfc-kb__warranty').textContent=(sel.cam&&sel.cam.warranty?sel.cam.warranty:'6')+' month warranty included';
+var pdpLink=sec.querySelector('[data-pdp-link]');
+if(pdpLink){if(sel.cam&&sel.cam.url){pdpLink.href=sel.cam.url;pdpLink.hidden=false;}else{pdpLink.hidden=true;}}
+}
+function parsePrice(s){
+if(!s) return 0;
+return parseFloat(String(s).replace(/[^0-9.]/g,''))||0;
+}
+var devVidEl=sec.querySelector('[data-dev-vid]');
+var devCountEl=sec.querySelector('[data-dev-count]');
+var devCard=sec.querySelector('.bfc-kb__dev-card');
+if(devVidEl&&devCountEl){
+sec.querySelector('[data-dev-minus]').onclick=function(){
+var n=Math.max(0,parseInt(devCountEl.textContent)-1);
+devCountEl.textContent=n;
+};
+sec.querySelector('[data-dev-plus]').onclick=function(){
+var n=Math.min(12,parseInt(devCountEl.textContent)+1);
+devCountEl.textContent=n;
+};
+}
+sec.querySelector('[data-atc]').onclick=function(){
+var btn=this;
+var items=[];
+var camVid=parseInt(sel.cam&&sel.cam.vid);
+if(sel.cam&&!isNaN(camVid)&&camVid>0) items.push({id:camVid,quantity:1,properties:{_source:'kit-builder'}});
+Object.values(sel.addons).forEach(function(a){var vid=parseInt(a.vid);if(!isNaN(vid)&&vid>0)items.push({id:vid,quantity:1,properties:{_source:'kit-builder'}});});
+if(devVidEl&&devCountEl){
+var devQty=parseInt(devCountEl.textContent)||0;
+if(devQty>0) items.push({id:parseInt(devVidEl.value),quantity:devQty,properties:{_source:'kit-builder','Developing Credits':devQty}});
+}
+if(!items.length){btn.textContent='—';return;}
+console.log('BFC kit items:',items);
+btn.disabled=true;
+fetch('/cart/add.js',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:items})})
+.then(function(r){if(!r.ok)throw new Error(r.status);return r.json();})
+.then(function(){
+return fetch('/cart/update.js',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({updates:{},sections:['cart-drawer']})});
+}).then(function(r){return r.json();}).then(function(state){
+var drawer=document.querySelector('cart-drawer');
+if(drawer&&typeof drawer.renderContents==='function')drawer.renderContents(state);
+if(drawer&&typeof drawer.open==='function')drawer.open();
+if(!drawer)window.location.href='/cart';
+})
+.catch(function(){});
+};
+function openModal(pill){
+pendingPill=pill;
+var modal=sec.querySelector('.bfc-kb__modal-wrap');
+var imgs=[pill.dataset.addonImg0,pill.dataset.addonImg1,pill.dataset.addonImg2].filter(Boolean);
+var imgEl=sec.querySelector('.bfc-kb__modal-imgs');
+imgEl.innerHTML='';
+if(imgs[0]){var d=document.createElement('div');d.className='bfc-kb__modal-img is-main';d.innerHTML='<img src="'+imgs[0]+'" loading="lazy">';imgEl.appendChild(d);}
+for(var i=1;i<Math.min(imgs.length,3);i++){var d2=document.createElement('div');d2.className='bfc-kb__modal-img';d2.innerHTML='<img src="'+imgs[i]+'" loading="lazy">';imgEl.appendChild(d2);}
+sec.querySelector('.bfc-kb__modal-eyebrow').textContent={film_color:'Color film',film_bw:'B&W film',strap:'Strap','case':'Case'}[pill.dataset.addonGroup]||'';
+sec.querySelector('.bfc-kb__modal-name').textContent=pill.dataset.addonName;
+sec.querySelector('.bfc-kb__modal-desc').textContent=pill.dataset.addonDesc||'';
+sec.querySelector('.bfc-kb__modal-price').textContent=pill.dataset.addonPrice;
+modal.classList.add('is-open');
+}
+sec.querySelector('.bfc-kb__modal-wrap').onclick=function(e){if(e.target===this)closeModal();};
+sec.querySelector('[data-modal-close]').onclick=closeModal;
+sec.querySelector('[data-modal-add]').onclick=function(){
+if(pendingPill){
+var grp=pendingPill.dataset.addonGroup;
+pendingPill.classList.add('is-on');
+if(grp==='film_color'||grp==='strap'||grp==='case'){
+var key=grp+'_'+pendingPill.dataset.addonVid;
+sel.addons[key]={name:pendingPill.dataset.addonName,price:pendingPill.dataset.addonPrice,vid:pendingPill.dataset.addonVid,group:grp};
+} else {
+sec.querySelectorAll('.bfc-kb__pill[data-addon-group="'+grp+'"]').forEach(function(p){p.classList.remove('is-on');});
+pendingPill.classList.add('is-on');
+sel.addons[grp]={name:pendingPill.dataset.addonName,price:pendingPill.dataset.addonPrice,vid:pendingPill.dataset.addonVid,group:grp};
+}
+}
+closeModal();
+};
+function closeModal(){sec.querySelector('.bfc-kb__modal-wrap').classList.remove('is-open');pendingPill=null;}
+})();</script>
+        </section>
+    {% endcase %}
+  {% endfor %}
+</section>
+{% schema %}
+{
+  "name": "BFC Kit Builder",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "label": "Horizontal padding",
+      "min": 12,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "header_font_weight",
+      "label": "Header font weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "SemiBold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "300"
+    },
+    {
+      "type": "select",
+      "id": "body_font_weight",
+      "label": "Body font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "body_font_size",
+      "label": "Body font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "body_font_size_small",
+      "label": "Small text size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Base text color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Base background color",
+      "default": "#F7F4F0"
+    },
+    {
+      "type": "header",
+      "content": "Heading Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_size_preset",
+      "label": "Heading size",
+      "info": "Controls heading size at all screen widths consistently.",
+      "options": [
+        {
+          "value": "sm",
+          "label": "Small"
+        },
+        {
+          "value": "md",
+          "label": "Medium"
+        },
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "lg",
+          "label": "Large"
+        },
+        {
+          "value": "xl",
+          "label": "X-Large"
+        },
+        {
+          "value": "xxl",
+          "label": "XX-Large"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "header_line_height",
+      "label": "Heading line height",
+      "options": [
+        {
+          "value": "1.0",
+          "label": "1.0 (Tightest)"
+        },
+        {
+          "value": "1.05",
+          "label": "1.05 (Default)"
+        },
+        {
+          "value": "1.1",
+          "label": "1.1"
+        },
+        {
+          "value": "1.2",
+          "label": "1.2"
+        },
+        {
+          "value": "1.3",
+          "label": "1.3"
+        },
+        {
+          "value": "1.4",
+          "label": "1.4 (Loose)"
+        }
+      ],
+      "default": "1.05"
+    },
+    {
+      "type": "range",
+      "id": "header_letter_spacing",
+      "label": "Heading letter spacing",
+      "min": -2,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "default": -2
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "info": "Falls back to base text color if unset",
+      "default": "#111111"
+    },
+    {
+      "type": "header",
+      "content": "Body Typography"
+    },
+    {
+      "type": "select",
+      "id": "body_line_height",
+      "label": "Body line height",
+      "options": [
+        {
+          "value": "1.3",
+          "label": "1.3 (Tight)"
+        },
+        {
+          "value": "1.4",
+          "label": "1.4"
+        },
+        {
+          "value": "1.5",
+          "label": "1.5 (Default)"
+        },
+        {
+          "value": "1.6",
+          "label": "1.6"
+        },
+        {
+          "value": "1.8",
+          "label": "1.8 (Loose)"
+        }
+      ],
+      "default": "1.5"
+    },
+    {
+      "type": "range",
+      "id": "body_letter_spacing",
+      "label": "Body letter spacing",
+      "min": -1,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Section top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Section bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Section Colors"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "info": "Used for links and highlights",
+      "default": "#E36E15"
+    },
+    {
+      "type": "color",
+      "id": "secondary_text_color",
+      "label": "Secondary text color",
+      "info": "Used for eyebrows and small detail text",
+      "default": "#82906B"
+    },
+    {
+      "type": "font_picker",
+      "id": "item_title_font",
+      "label": "Item title font",
+      "info": "Font used for product/item titles (e.g. the old best-seller title font)",
+      "default": "poppins_n5"
+    },
+    {
+      "type": "header",
+      "content": "Polaroid Cameras (auto-populated)"
+    },
+    {
+      "type": "collection",
+      "id": "polaroid_box_collection",
+      "label": "Box camera collection (600 film)",
+      "info": "Shows the first in-stock camera from this collection as the Polaroid 600 / box option."
+    },
+    {
+      "type": "collection",
+      "id": "polaroid_sx70_collection",
+      "label": "SX-70 camera collection",
+      "info": "Shows up to 2 in-stock cameras from this collection as SX-70 options."
+    },
+    {
+      "type": "header",
+      "content": "Polaroid Film (auto-populated)"
+    },
+    {
+      "type": "collection",
+      "id": "polaroid_600_film_collection",
+      "label": "600 film collection",
+      "info": "In-stock 600 film shows for box (600) cameras and SX-70 cameras."
+    },
+    {
+      "type": "collection",
+      "id": "polaroid_sx70_film_collection",
+      "label": "SX-70 film collection",
+      "info": "In-stock SX-70 film shows for SX-70 cameras only."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "kit_builder_mini",
+      "name": "Kit Builder Mini",
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "Not sure what to get?"
+        },
+        {
+          "type": "text",
+          "id": "headline",
+          "label": "Headline",
+          "default": "We'll pick your kit."
+        },
+        {
+          "type": "textarea",
+          "id": "subtext",
+          "label": "Subtext",
+          "default": "Tell us how you want to shoot."
+        },
+        {
+          "type": "url",
+          "id": "full_builder_url",
+          "label": "Full Kit Builder link (optional)"
+        },
+        {
+          "type": "checkbox",
+          "id": "seamless_mode",
+          "label": "Seamless background (no borders)",
+          "info": "Matches the page background and removes dividing lines for a cleaner look.",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Developing Credits"
+        },
+        {
+          "type": "text",
+          "id": "dev_credits_variant_id",
+          "label": "Developing credit variant ID",
+          "info": "Paste the Shopify variant ID. Keep the product ..."
+        },
+        {
+          "type": "text",
+          "id": "dev_credits_price",
+          "label": "Price per credit (e.g. 18.00)",
+          "default": "18.00"
+        },
+        {
+          "type": "text",
+          "id": "dev_credits_label",
+          "label": "Credits label",
+          "default": "Pre-buy developing credits"
+        },
+        {
+          "type": "text",
+          "id": "dev_credits_sub",
+          "label": "Credits sub-line",
+          "default": "Normally $18 a roll \u2014 locked in cheaper here."
+        },
+        {
+          "type": "header",
+          "content": "Membership Upsell"
+        },
+        {
+          "type": "text",
+          "id": "mem_eyebrow",
+          "label": "Eyebrow",
+          "default": "Film Developing Membership"
+        },
+        {
+          "type": "textarea",
+          "id": "mem_body",
+          "label": "Body",
+          "default": "Save on every roll with discounted developing."
+        },
+        {
+          "type": "text",
+          "id": "mem_cta",
+          "label": "CTA label",
+          "default": "Learn about membership \u2192"
+        },
+        {
+          "type": "url",
+          "id": "mem_url",
+          "label": "Membership URL"
+        }
+      ]
+    },
+    {
+      "type": "camera_bundle_hero",
+      "name": "Camera Bundle Hero",
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "The Starter Bundle"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Two classics. One decision."
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "The Canon AE-1 and the Pentax K1000 are the two most popular 35mm film cameras ever made."
+        },
+        {
+          "type": "text",
+          "id": "savings_label",
+          "label": "Savings pill text",
+          "default": "Bundle & save"
+        },
+        {
+          "type": "header",
+          "content": "Camera A"
+        },
+        {
+          "type": "product",
+          "id": "product_a",
+          "label": "Product A (auto-pulls image + price)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_a",
+          "label": "Image A (if no product)"
+        },
+        {
+          "type": "text",
+          "id": "name_a",
+          "label": "Name A (if no product)",
+          "default": "Canon AE-1"
+        },
+        {
+          "type": "text",
+          "id": "price_a",
+          "label": "Price A (if no product)",
+          "default": "From $149"
+        },
+        {
+          "type": "text",
+          "id": "note_a",
+          "label": "Note A",
+          "default": "35mm SLR \u00b7 Auto-exposure \u00b7 Beginner favourite"
+        },
+        {
+          "type": "header",
+          "content": "Camera B"
+        },
+        {
+          "type": "product",
+          "id": "product_b",
+          "label": "Product B (auto-pulls image + price)"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_b",
+          "label": "Image B (if no product)"
+        },
+        {
+          "type": "text",
+          "id": "name_b",
+          "label": "Name B (if no product)",
+          "default": "Pentax K1000"
+        },
+        {
+          "type": "text",
+          "id": "price_b",
+          "label": "Price B (if no product)",
+          "default": "From $129"
+        },
+        {
+          "type": "text",
+          "id": "note_b",
+          "label": "Note B",
+          "default": "35mm SLR \u00b7 Full manual \u00b7 Built like a tank"
+        },
+        {
+          "type": "header",
+          "content": "Footer CTA"
+        },
+        {
+          "type": "text",
+          "id": "footer_copy",
+          "label": "Footer copy",
+          "default": "Can't decide? Both are great. Every camera is tested, cleaned, and guaranteed by us."
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "Primary CTA",
+          "default": "Shop the Bundle"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "Primary CTA link"
+        },
+        {
+          "type": "text",
+          "id": "cta2_label",
+          "label": "Secondary CTA",
+          "default": "Compare cameras"
+        },
+        {
+          "type": "url",
+          "id": "cta2_url",
+          "label": "Secondary CTA link"
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "bg",
+          "label": "Background",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "fg",
+          "label": "Text",
+          "default": "#111111"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Savings pill background",
+          "default": "#111111"
+        },
+        {
+          "type": "color",
+          "id": "card_bg",
+          "label": "Camera card background",
+          "default": "#f6f4f1"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border",
+          "default": "#e5e5e5"
+        },
+        {
+          "type": "header",
+          "content": "Spacing"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "label": "Padding top",
+          "min": 0,
+          "max": 140,
+          "step": 4,
+          "default": 64
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "label": "Padding bottom",
+          "min": 0,
+          "max": 140,
+          "step": 4,
+          "default": 64
+        },
+        {
+          "type": "range",
+          "id": "side_padding_vw",
+          "label": "Side padding add-on (vw)",
+          "min": 0,
+          "max": 10,
+          "step": 0.5,
+          "unit": "vw",
+          "default": 0
+        },
+        {
+          "type": "checkbox",
+          "id": "ignore_padding_mobile",
+          "label": "Ignore side padding on mobile",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "kit_camera",
+      "name": "Kit \u2014 Camera",
+      "settings": [
+        {
+          "type": "select",
+          "id": "camera_type",
+          "label": "Tab",
+          "info": "Polaroid cameras are now auto-populated from collections \u2014 see the section settings.",
+          "options": [
+            {
+              "value": "ps",
+              "label": "Point and Shoot"
+            },
+            {
+              "value": "slr",
+              "label": "35mm SLR"
+            }
+          ],
+          "default": "ps"
+        },
+        {
+          "type": "text",
+          "id": "camera_tag",
+          "label": "Tag"
+        },
+        {
+          "type": "text",
+          "id": "camera_name",
+          "label": "Name override (leave blank to use product title)",
+          "default": "Canon WP-1"
+        },
+        {
+          "type": "text",
+          "id": "camera_detail",
+          "label": "Detail"
+        },
+        {
+          "type": "product",
+          "id": "camera_product",
+          "label": "Product"
+        },
+        {
+          "type": "product",
+          "id": "camera_fallback",
+          "label": "Fallback if OOS"
+        }
+      ]
+    },
+    {
+      "type": "kit_addon",
+      "name": "Kit \u2014 Add-on",
+      "settings": [
+        {
+          "type": "select",
+          "id": "addon_type",
+          "label": "Type",
+          "options": [
+            {
+              "value": "film_color",
+              "label": "Color Film"
+            },
+            {
+              "value": "film_bw",
+              "label": "BW Film"
+            },
+            {
+              "value": "strap",
+              "label": "Strap"
+            },
+            {
+              "value": "case",
+              "label": "Case"
+            }
+          ],
+          "default": "film_color"
+        },
+        {
+          "type": "select",
+          "id": "addon_film_format",
+          "label": "Film format filter (Polaroid film only)",
+          "options": [
+            {
+              "value": "any",
+              "label": "Any / Show always"
+            },
+            {
+              "value": "sx70",
+              "label": "SX-70 only"
+            },
+            {
+              "value": "600",
+              "label": "600 only"
+            },
+            {
+              "value": "itype",
+              "label": "i-Type only"
+            }
+          ],
+          "default": "any"
+        },
+        {
+          "type": "select",
+          "id": "camera_types",
+          "label": "Show for",
+          "default": "all",
+          "options": [
+            {
+              "value": "all",
+              "label": "All cameras"
+            },
+            {
+              "value": "35mm",
+              "label": "35mm only (PS + SLR)"
+            },
+            {
+              "value": "pol",
+              "label": "Polaroid only"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "addon_recommended",
+          "label": "Recommended",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "addon_name",
+          "label": "Name override (leave blank to use product title)",
+          "default": "Kodak Gold 200"
+        },
+        {
+          "type": "text",
+          "id": "addon_sub",
+          "label": "Sub-line"
+        },
+        {
+          "type": "product",
+          "id": "addon_product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "addon_variant_id",
+          "label": "Specific variant ID (overrides product default)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Kit Builder"
+    }
+  ]
+}
+{% endschema %}

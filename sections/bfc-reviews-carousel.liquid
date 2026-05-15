@@ -1,0 +1,467 @@
+{% liquid
+  assign base_text = section.settings.text_color | default: '#111111'
+  assign base_bg = section.settings.background_color | default: '#F7F4F0'
+  assign page_width_px = settings.page_width | default: 1200
+  assign horizontal_pad = section.settings.horizontal_padding | default: 24
+  assign heading_size_preset = section.settings.heading_size_preset | default: 'default'
+  case heading_size_preset
+    when 'sm'
+      assign header_size_mobile = '1.4'
+      assign header_size_desktop = '2.0'
+    when 'md'
+      assign header_size_mobile = '1.6'
+      assign header_size_desktop = '2.4'
+    when 'lg'
+      assign header_size_mobile = '2.0'
+      assign header_size_desktop = '3.2'
+    when 'xl'
+      assign header_size_mobile = '2.4'
+      assign header_size_desktop = '3.8'
+    when 'xxl'
+      assign header_size_mobile = '2.8'
+      assign header_size_desktop = '4.4'
+    else
+      assign header_size_mobile = '1.75'
+      assign header_size_desktop = '2.75'
+  endcase
+  assign header_weight = section.settings.header_font_weight | default: 300
+  assign section_pad_top = section.settings.section_padding_top | default: 48
+  assign section_pad_bottom = section.settings.section_padding_bottom | default: 48
+  assign card_bg = section.settings.card_bg | default: '#FFFFFF'
+  assign star_color = section.settings.star_color | default: '#E36E15'
+  assign card_count = section.settings.cards_visible | default: 3
+  assign max_reviews = section.settings.max_reviews | default: 30
+
+  assign reviews_blob = shop.metafields.bfc.reviews_json.value
+  assign rv_reviews = reviews_blob.reviews
+%}
+
+{%- if rv_reviews != blank and rv_reviews.size > 0 -%}
+
+<section id="bfc-reviews-{{ section.id }}" class="bfc-reviews" aria-label="Customer Reviews">
+  <style>
+    #shopify-section-{{ section.id }}{
+      background-color: {{ base_bg }};
+      margin: 0;
+      padding: {{ section_pad_top }}px 0 {{ section_pad_bottom }}px;
+      width: 100%;
+    }
+    #bfc-reviews-{{ section.id }}{
+      --rv-bg: {{ base_bg }};
+      --rv-text: {{ base_text }};
+      --rv-card-bg: {{ card_bg }};
+      --rv-star: {{ star_color }};
+      --rv-pad: clamp({{ horizontal_pad }}px, calc((100vw - min(100vw, {{ page_width_px }}px)) / 2 + {{ horizontal_pad }}px), 120px);
+      --rv-max: {{ page_width_px }}px;
+      color: var(--rv-text);
+      background: var(--rv-bg);
+      font-family: var(--font-body-family, inherit);
+    }
+    #bfc-reviews-{{ section.id }} .rv__header{
+      max-width: var(--rv-max);
+      margin: 0 auto;
+      padding: 0 var(--rv-pad) 28px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    #bfc-reviews-{{ section.id }} .rv__heading{
+      font-family: var(--font-heading-family, inherit);
+      font-size: clamp({{ header_size_mobile }}rem, 3.5vw, {{ header_size_desktop }}rem);
+      font-weight: {{ header_weight }};
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin: 0;
+      color: var(--rv-text);
+    }
+    #bfc-reviews-{{ section.id }} .rv__nav{
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    #bfc-reviews-{{ section.id }} .rv__arrow{
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,.15);
+      background: transparent;
+      color: var(--rv-text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: background .15s, border-color .15s;
+      padding: 0;
+    }
+    #bfc-reviews-{{ section.id }} .rv__arrow:hover{
+      background: var(--rv-text);
+      color: var(--rv-bg);
+      border-color: var(--rv-text);
+    }
+    #bfc-reviews-{{ section.id }} .rv__track-wrap{
+      position: relative;
+      overflow: hidden;
+    }
+    #bfc-reviews-{{ section.id }} .rv__track{
+      display: flex;
+      gap: 16px;
+      padding: 0 var(--rv-pad);
+      transition: transform 400ms ease;
+      cursor: grab;
+    }
+    #bfc-reviews-{{ section.id }} .rv__track.is-dragging{
+      cursor: grabbing;
+      transition: none;
+    }
+    #bfc-reviews-{{ section.id }} .rv__card{
+      flex: 0 0 calc((100% - {{ card_count | minus: 1 | times: 16 }}px) / {{ card_count }});
+      min-width: 280px;
+      background: var(--rv-card-bg);
+      padding: 28px 26px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    #bfc-reviews-{{ section.id }} .rv__stars{
+      display: flex;
+      gap: 3px;
+      color: var(--rv-star);
+      font-size: 16px;
+      line-height: 1;
+    }
+    #bfc-reviews-{{ section.id }} .rv__body{
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--rv-text);
+      flex: 1;
+      margin: 0;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 8;
+      -webkit-box-orient: vertical;
+    }
+    #bfc-reviews-{{ section.id }} .rv__footer{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(0,0,0,.08);
+      margin-top: auto;
+    }
+    #bfc-reviews-{{ section.id }} .rv__name{
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--rv-text);
+    }
+    #bfc-reviews-{{ section.id }} .rv__verified{
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #82906B;
+    }
+    #bfc-reviews-{{ section.id }} .rv__product-link{
+      display: block;
+      font-size: 11px;
+      color: #82906B;
+      text-decoration: none;
+      margin-top: -4px;
+      letter-spacing: .02em;
+    }
+    #bfc-reviews-{{ section.id }} .rv__product-link:hover{
+      text-decoration: underline;
+    }
+    @media(max-width: 989px){
+      #bfc-reviews-{{ section.id }} .rv__card{
+        flex: 0 0 calc((100% - 16px) / 2);
+        min-width: 260px;
+      }
+      #bfc-reviews-{{ section.id }} .rv__arrow{
+        width: 36px;
+        height: 36px;
+        font-size: 15px;
+      }
+    }
+    @media(max-width: 599px){
+      #bfc-reviews-{{ section.id }} .rv__card{
+        flex: 0 0 85%;
+        min-width: 0;
+      }
+      #bfc-reviews-{{ section.id }} .rv__header{
+        padding-bottom: 20px;
+      }
+    }
+  </style>
+
+  <div class="rv__header">
+    {% if section.settings.heading != blank %}
+      <h2 class="rv__heading">{{ section.settings.heading | escape }}</h2>
+    {% endif %}
+    <div class="rv__nav">
+      <button type="button" class="rv__arrow" data-rv-prev aria-label="Previous reviews">&larr;</button>
+      <button type="button" class="rv__arrow" data-rv-next aria-label="Next reviews">&rarr;</button>
+    </div>
+  </div>
+
+  <div class="rv__track-wrap">
+    <div class="rv__track" data-rv-track>
+      {%- for review in rv_reviews limit: max_reviews -%}
+        <article class="rv__card" data-rv-card data-rv-rating="{{ review.rating }}">
+          <div class="rv__stars" aria-label="{{ review.rating }} out of 5 stars">
+            {%- for s in (1..5) -%}
+              {%- if s <= review.rating -%}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              {%- else -%}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-opacity="0.22" stroke-width="1.5" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          <p class="rv__body">{{ review.body | escape }}</p>
+          {%- if review.product_title != blank -%}
+            {%- if review.product_handle != blank -%}
+              <a class="rv__product-link" href="/products/{{ review.product_handle }}">{{ review.product_title | escape }}</a>
+            {%- else -%}
+              <span class="rv__product-link" style="cursor:default">{{ review.product_title | escape }}</span>
+            {%- endif -%}
+          {%- endif -%}
+          <div class="rv__footer">
+            <span class="rv__name">{{ review.author | escape }}</span>
+            {%- if review.verified -%}
+              <span class="rv__verified">Verified</span>
+            {%- endif -%}
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var sec = document.getElementById('bfc-reviews-{{ section.id }}');
+  if (!sec) return;
+  var track = sec.querySelector('[data-rv-track]');
+  var prevBtn = sec.querySelector('[data-rv-prev]');
+  var nextBtn = sec.querySelector('[data-rv-next]');
+  var cards = Array.prototype.slice.call(track.querySelectorAll('[data-rv-card]'));
+  if (!cards.length) return;
+
+  /* Fisher-Yates shuffle */
+  function shuffle(arr){
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+    }
+    return arr;
+  }
+
+  /* Separate into rating buckets */
+  var fiveStar = [], fourStar = [], rest = [];
+  cards.forEach(function(c){
+    var r = parseInt(c.dataset.rvRating, 10);
+    if (r === 5) fiveStar.push(c);
+    else if (r === 4) fourStar.push(c);
+    else rest.push(c);
+  });
+  shuffle(fiveStar);
+  shuffle(fourStar);
+
+  /* Place 5-star first, then 4-star — guarantees first visible slide is always 5-star */
+  var ordered = fiveStar.concat(fourStar).concat(rest);
+  ordered.forEach(function(c){ track.appendChild(c); });
+  cards = ordered;
+
+  var pos = 0;
+  function getStep(){
+    var w = sec.offsetWidth;
+    if (w < 600) return 1;
+    if (w < 990) return 2;
+    return {{ card_count }};
+  }
+  function slide(dir){
+    var step = getStep();
+    var total = cards.length;
+    pos += dir * step;
+    if (pos >= total) pos = 0;
+    if (pos < 0) pos = Math.max(0, total - step);
+    var card = track.children[pos];
+    if (!card) { pos = 0; card = track.children[0]; }
+    track.style.transform = 'translateX(-' + card.offsetLeft + 'px)';
+  }
+
+  prevBtn.addEventListener('click', function(){ slide(-1); });
+  nextBtn.addEventListener('click', function(){ slide(1); });
+
+  /* Touch/drag support */
+  var startX = 0, startTx = 0, dragging = false;
+  track.addEventListener('mousedown', dragStart);
+  track.addEventListener('touchstart', dragStart, {passive: true});
+  window.addEventListener('mousemove', dragMove);
+  window.addEventListener('touchmove', dragMove, {passive: true});
+  window.addEventListener('mouseup', dragEnd);
+  window.addEventListener('touchend', dragEnd);
+
+  function getTx(){
+    var st = getComputedStyle(track).transform;
+    if (!st || st === 'none') return 0;
+    var m = st.match(/matrix\((.+)\)/);
+    return m ? parseFloat(m[1].split(',')[4]) : 0;
+  }
+  function dragStart(e){
+    dragging = true;
+    startX = e.touches ? e.touches[0].clientX : e.clientX;
+    startTx = getTx();
+    track.classList.add('is-dragging');
+  }
+  function dragMove(e){
+    if (!dragging) return;
+    var x = e.touches ? e.touches[0].clientX : e.clientX;
+    var dx = x - startX;
+    track.style.transform = 'translateX(' + (startTx + dx) + 'px)';
+  }
+  function dragEnd(e){
+    if (!dragging) return;
+    dragging = false;
+    track.classList.remove('is-dragging');
+    var x = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+    var dx = x - startX;
+    if (Math.abs(dx) > 40) {
+      slide(dx < 0 ? 1 : -1);
+    } else {
+      track.style.transform = 'translateX(' + startTx + 'px)';
+    }
+  }
+})();
+</script>
+
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "BFC Reviews Carousel",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What people are saying"
+    },
+    {
+      "type": "range",
+      "id": "cards_visible",
+      "label": "Cards visible (desktop)",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "max_reviews",
+      "label": "Maximum reviews to show",
+      "min": 6,
+      "max": 60,
+      "step": 2,
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "label": "Horizontal padding",
+      "min": 12,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "heading_size_preset",
+      "label": "Heading size",
+      "options": [
+        { "value": "sm", "label": "Small" },
+        { "value": "md", "label": "Medium" },
+        { "value": "default", "label": "Default" },
+        { "value": "lg", "label": "Large" },
+        { "value": "xl", "label": "X-Large" },
+        { "value": "xxl", "label": "XX-Large" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "header_font_weight",
+      "label": "Heading weight",
+      "options": [
+        { "value": "300", "label": "Light" },
+        { "value": "400", "label": "Normal" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "SemiBold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "300"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background",
+      "default": "#F7F4F0"
+    },
+    {
+      "type": "color",
+      "id": "card_bg",
+      "label": "Card background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "Star color",
+      "default": "#E36E15"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Reviews Carousel"
+    }
+  ]
+}
+{% endschema %}

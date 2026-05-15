@@ -1,0 +1,528 @@
+{% comment %}
+  BFC — Top Sellers (left aligned to page content, full-bleed to the right)
+
+  - Header stays inside a normal max-width container
+  - Product rail breaks out to 100vw, with LEFT padding that matches the page gutter,
+    and NO right padding (flush to screen edge)
+  - Scroll-snap rail + optional arrow controls (desktop)
+
+  Inspired by Moment's "Top Sellers" rail below the hero. (See shopmoment.com homepage) 
+{% endcomment %}
+
+{% liquid
+  assign heading = section.settings.heading | default: 'Top Sellers'
+  assign collection = section.settings.collection
+  assign limit = section.settings.products_limit | default: 12
+
+  assign page_width_px = settings.page_width | default: 1200
+  assign gutter_px = section.settings.gutter | default: 24
+  assign section_pad_y = section.settings.section_padding_y | default: 28
+%}
+
+<section
+  id="bfc-top-sellers-{{ section.id }}"
+  class="bfc-ts"
+  style="
+    --bfc-ts-page-width: {{ page_width_px }}px;
+    --bfc-ts-gutter: {{ gutter_px }}px;
+    --bfc-ts-pad-y: {{ section_pad_y }}px;
+  "
+>
+  <div class="bfc-ts__header">
+    <div class="bfc-ts__header-row">
+      {% if heading != blank %}
+        <h2 class="bfc-ts__title">{{ heading | escape }}</h2>
+      {% endif %}
+
+      {% if section.settings.show_view_all and collection != blank %}
+        <a class="bfc-ts__viewall" href="{{ collection.url }}">
+          {{ section.settings.view_all_label | default: 'Shop all' | escape }}
+        </a>
+      {% endif %}
+    </div>
+
+    {% if section.settings.subheading != blank %}
+      <p class="bfc-ts__subheading">{{ section.settings.subheading | escape }}</p>
+    {% endif %}
+  </div>
+
+  <div class="bfc-ts__rail-wrap" data-bfc-ts>
+    {% if section.settings.show_arrows %}
+      <button
+        class="bfc-ts__arrow bfc-ts__arrow--prev"
+        type="button"
+        aria-label="Scroll left"
+        data-bfc-ts-prev
+      >
+        ‹
+      </button>
+      <button
+        class="bfc-ts__arrow bfc-ts__arrow--next"
+        type="button"
+        aria-label="Scroll right"
+        data-bfc-ts-next
+      >
+        ›
+      </button>
+    {% endif %}
+
+    <div class="bfc-ts__rail" role="list" data-bfc-ts-rail>
+      {% if collection != blank %}
+        {% for product in collection.products limit: limit %}
+          {% liquid
+            assign variant = product.selected_or_first_available_variant
+            assign tags_down = product.tags | join: ',' | downcase
+            assign badge = ''
+
+            if section.settings.enable_badges
+              if tags_down contains 'best seller' or tags_down contains 'best-seller'
+                assign badge = 'Best Seller'
+              elsif tags_down contains 'just arrived' or tags_down contains 'new'
+                assign badge = 'Just Arrived'
+              endif
+            endif
+          %}
+
+          <article class="bfc-ts__card" role="listitem">
+            <a class="bfc-ts__img" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+              {% if product.featured_image %}
+                <img
+                  src="{{ product.featured_image | image_url: width: 720 }}"
+                  srcset="
+                    {{ product.featured_image | image_url: width: 360 }} 360w,
+                    {{ product.featured_image | image_url: width: 540 }} 540w,
+                    {{ product.featured_image | image_url: width: 720 }} 720w
+                  "
+                  sizes="(min-width: 990px) 260px, 70vw"
+                  alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                  loading="lazy"
+                >
+              {% else %}
+                {{ 'product-1' | placeholder_svg_tag: 'bfc-ts__placeholder' }}
+              {% endif %}
+
+              {% if badge != blank %}
+                <span class="bfc-ts__badge">{{ badge }}</span>
+              {% endif %}
+            </a>
+
+            <div class="bfc-ts__meta">
+              {% if section.settings.show_vendor and product.vendor != blank %}
+                <div class="bfc-ts__vendor">{{ product.vendor | escape }}</div>
+              {% endif %}
+
+              <a class="bfc-ts__name" href="{{ product.url }}">
+                {{ product.title | escape }}
+              </a>
+
+              <div class="bfc-ts__subline">
+                {% if section.settings.show_stock %}
+                  <span class="bfc-ts__stock">
+                    {% if product.available %}In stock{% else %}Sold out{% endif %}
+                  </span>
+                {% endif %}
+
+                {% if section.settings.show_variant_count %}
+                  <span class="bfc-ts__dot">•</span>
+                  <span class="bfc-ts__variants">
+                    {{ product.variants.size }} option{% if product.variants.size != 1 %}s{% endif %}
+                  </span>
+                {% endif %}
+              </div>
+
+              <div class="bfc-ts__bottom">
+                {% if section.settings.show_price %}
+                  <div class="bfc-ts__price">
+                    {% if product.compare_at_price_max > product.price %}
+                      <span class="bfc-ts__price-now">{{ product.price | money }}</span>
+                      <span class="bfc-ts__price-was">{{ product.compare_at_price_max | money }}</span>
+                    {% else %}
+                      <span class="bfc-ts__price-now">{{ product.price | money }}</span>
+                    {% endif %}
+                  </div>
+                {% endif %}
+
+                {% if section.settings.show_quick_add %}
+                  <form class="bfc-ts__add" method="post" action="{{ routes.cart_add_url }}">
+                    <input type="hidden" name="id" value="{{ variant.id }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button
+                      type="submit"
+                      class="bfc-ts__add-btn"
+                      {% unless product.available %}disabled{% endunless %}
+                    >
+                      {{ section.settings.add_label | default: 'Add' | escape }}
+                    </button>
+                  </form>
+                {% endif %}
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      {% else %}
+        {% for i in (1..6) %}
+          <article class="bfc-ts__card" role="listitem" aria-hidden="true">
+            <div class="bfc-ts__img">
+              {{ 'product-1' | placeholder_svg_tag: 'bfc-ts__placeholder' }}
+            </div>
+            <div class="bfc-ts__meta">
+              <div class="bfc-ts__vendor">Vendor</div>
+              <div class="bfc-ts__name">Choose a collection in the section settings</div>
+              <div class="bfc-ts__bottom">
+                <div class="bfc-ts__price"><span class="bfc-ts__price-now">$0</span></div>
+                <button class="bfc-ts__add-btn" type="button" disabled>Add</button>
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    {% if section.settings.edge_fade %}
+      <span class="bfc-ts__fade bfc-ts__fade--left" aria-hidden="true"></span>
+      <span class="bfc-ts__fade bfc-ts__fade--right" aria-hidden="true"></span>
+    {% endif %}
+  </div>
+
+  <style>
+    #bfc-top-sellers-{{ section.id }}{
+      /* theme-friendly defaults */
+      --bfc-ts-fg: var(--color-foreground, #111);
+      --bfc-ts-bg: var(--color-background, #fff);
+      --bfc-ts-border: color-mix(in srgb, var(--bfc-ts-fg) 12%, transparent);
+      --bfc-ts-muted: color-mix(in srgb, var(--bfc-ts-fg) 65%, transparent);
+      color: var(--bfc-ts-fg);
+      background: transparent;
+      padding: var(--bfc-ts-pad-y) 0;
+    }
+
+    /* Header = centered container */
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__header{
+      max-width: var(--bfc-ts-page-width);
+      margin: 0 auto;
+      padding: 0 var(--bfc-ts-gutter);
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__header-row{
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__title{
+      margin: 0;
+      font-size: clamp(20px, 2vw, 26px);
+      letter-spacing: -0.02em;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__viewall{
+      color: var(--bfc-ts-fg);
+      text-decoration: none;
+      font-size: 14px;
+      opacity: .85;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__viewall:hover{ opacity: 1; text-decoration: underline; }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__subheading{
+      margin: 10px 0 0;
+      color: var(--bfc-ts-muted);
+      font-size: 14px;
+      line-height: 1.35;
+      max-width: 70ch;
+    }
+
+    /*
+      Rail wrap = break out to viewport width.
+      This is the trick that gives you:
+      - aligned left padding
+      - right edge flush to screen
+    */
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__rail-wrap{
+      position: relative;
+      margin-top: 14px;
+
+      /* full-bleed technique */
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+
+      /* compute the left padding that matches your centered container */
+      --bfc-ts-left-pad: max(
+        var(--bfc-ts-gutter),
+        calc((100vw - min(100vw, var(--bfc-ts-page-width))) / 2 + var(--bfc-ts-gutter))
+      );
+    }
+
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__rail{
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: clamp(220px, 24vw, 280px);
+      gap: 16px;
+
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scroll-padding-left: var(--bfc-ts-left-pad);
+
+      /* left aligned to content, right flush */
+      padding-left: var(--bfc-ts-left-pad);
+      padding-right: 0;
+      padding-top: 6px;
+      padding-bottom: 8px;
+
+      -webkit-overflow-scrolling: touch;
+    }
+
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__rail::-webkit-scrollbar{
+      height: 10px;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__rail::-webkit-scrollbar-thumb{
+      background: color-mix(in srgb, var(--bfc-ts-fg) 18%, transparent);
+      border-radius: 99px;
+    }
+
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__card{
+      scroll-snap-align: start;
+      background: var(--bfc-ts-bg);
+      border: 1px solid var(--bfc-ts-border);
+      border-radius: 18px;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-height: 100%;
+    }
+
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__img{
+      position: relative;
+      display: block;
+      aspect-ratio: 4 / 3;
+      background: color-mix(in srgb, var(--bfc-ts-fg) 6%, transparent);
+      overflow: hidden;
+      text-decoration: none;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__img img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1);
+      transition: transform .25s ease;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__card:hover .bfc-ts__img img{
+      transform: scale(1.03);
+    }
+
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__badge{
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      font-size: 12px;
+      line-height: 1;
+      padding: 7px 9px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.72);
+      color: #fff;
+      backdrop-filter: blur(6px);
+    }
+
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__meta{
+      padding: 12px 12px 14px;
+      display: grid;
+      gap: 8px;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__vendor{
+      font-size: 12px;
+      color: var(--bfc-ts-muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__name{
+      color: var(--bfc-ts-fg);
+      text-decoration: none;
+      font-size: 14px;
+      line-height: 1.25;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__name:hover{ text-decoration: underline; }
+
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__subline{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--bfc-ts-muted);
+      font-size: 12px;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__dot{ opacity: .7; }
+
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__bottom{
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__price{
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      min-height: 18px;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__price-now{
+      font-size: 14px;
+      font-weight: 650;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__price-was{
+      font-size: 12px;
+      color: var(--bfc-ts-muted);
+      text-decoration: line-through;
+    }
+
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__add{
+      margin: 0;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__add-btn{
+      appearance: none;
+      border: 1px solid var(--bfc-ts-border);
+      background: transparent;
+      color: var(--bfc-ts-fg);
+      border-radius: 999px;
+      padding: 9px 12px;
+      font-size: 13px;
+      line-height: 1;
+      cursor: pointer;
+      transition: background .18s ease, opacity .18s ease;
+      white-space: nowrap;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__add-btn:hover{
+      background: color-mix(in srgb, var(--bfc-ts-fg) 7%, transparent);
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__add-btn[disabled]{
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    /* Arrows */
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__arrow{
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 3;
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      border: 1px solid var(--bfc-ts-border);
+      background: rgba(255,255,255,.86);
+      backdrop-filter: blur(6px);
+      cursor: pointer;
+      display: none; /* enabled via media query */
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      line-height: 1;
+      color: var(--bfc-ts-fg);
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__arrow--prev{ left: 10px; }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__arrow--next{ right: 10px; }
+
+    @media (min-width: 990px){
+      #bfc-top-sellers-{{ section.id }} .bfc-ts__arrow{ display: flex; }
+      /* give the rail a tiny breathing room under arrows without adding right padding */
+      #bfc-top-sellers-{{ section.id }} .bfc-ts__rail{ padding-bottom: 10px; }
+    }
+
+    /* Optional edge fades */
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__fade{
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 44px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__fade--left{
+      left: 0;
+      background: linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0));
+    }
+    #bfc-top-sellers-{{ section.id }} .bfc-ts__fade--right{
+      right: 0;
+      background: linear-gradient(to left, rgba(255,255,255,1), rgba(255,255,255,0));
+    }
+
+    @media (max-width: 749px){
+      #bfc-top-sellers-{{ section.id }} .bfc-ts__rail{
+        grid-auto-columns: 78vw;
+        gap: 12px;
+      }
+    }
+  </style>
+
+  <script>
+    (function () {
+      const root = document.querySelector('#bfc-top-sellers-{{ section.id }} [data-bfc-ts]');
+      if (!root) return;
+
+      const rail = root.querySelector('[data-bfc-ts-rail]');
+      const prev = root.querySelector('[data-bfc-ts-prev]');
+      const next = root.querySelector('[data-bfc-ts-next]');
+      if (!rail) return;
+
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const behavior = prefersReduced ? 'auto' : 'smooth';
+
+      function scrollByAmount(dir) {
+        const amount = Math.max(240, Math.floor(rail.clientWidth * 0.85));
+        rail.scrollBy({ left: dir * amount, behavior });
+      }
+
+      function updateArrows() {
+        if (!prev || !next) return;
+        const max = rail.scrollWidth - rail.clientWidth - 2;
+        prev.disabled = rail.scrollLeft <= 2;
+        next.disabled = rail.scrollLeft >= max;
+        prev.style.opacity = prev.disabled ? '0.35' : '1';
+        next.style.opacity = next.disabled ? '0.35' : '1';
+      }
+
+      if (prev) prev.addEventListener('click', () => scrollByAmount(-1));
+      if (next) next.addEventListener('click', () => scrollByAmount(1));
+
+      rail.addEventListener('scroll', () => window.requestAnimationFrame(updateArrows), { passive: true });
+      window.addEventListener('resize', () => window.requestAnimationFrame(updateArrows));
+
+      updateArrows();
+    })();
+  </script>
+
+  {% schema %}
+  {
+    "name": "Top sellers — bleed right",
+    "settings": [
+      { "type": "text", "id": "heading", "label": "Heading", "default": "Top Sellers" },
+      { "type": "text", "id": "subheading", "label": "Subheading", "default": "Optional" },
+      { "type": "collection", "id": "collection", "label": "Collection" },
+      { "type": "range", "id": "products_limit", "label": "Products to show", "min": 4, "max": 24, "step": 1, "default": 12 },
+
+      { "type": "checkbox", "id": "show_vendor", "label": "Show vendor", "default": true },
+      { "type": "checkbox", "id": "show_stock", "label": "Show stock status", "default": true },
+      { "type": "checkbox", "id": "show_variant_count", "label": "Show variant count", "default": true },
+      { "type": "checkbox", "id": "show_price", "label": "Show price", "default": true },
+      { "type": "checkbox", "id": "show_quick_add", "label": "Show quick add button", "default": true },
+
+      { "type": "checkbox", "id": "enable_badges", "label": "Enable tag-based badges (Best Seller / Just Arrived)", "default": true },
+
+      { "type": "checkbox", "id": "show_view_all", "label": "Show 'Shop all' link", "default": true },
+      { "type": "text", "id": "view_all_label", "label": "View all label", "default": "Shop all" },
+
+      { "type": "checkbox", "id": "show_arrows", "label": "Show arrows on desktop", "default": true },
+      { "type": "checkbox", "id": "edge_fade", "label": "Show edge fade overlays", "default": true },
+
+      { "type": "range", "id": "gutter", "label": "Left spacing (px)", "min": 12, "max": 48, "step": 2, "default": 24 },
+      { "type": "range", "id": "section_padding_y", "label": "Section vertical padding (px)", "min": 0, "max": 72, "step": 4, "default": 28 },
+
+      { "type": "text", "id": "add_label", "label": "Add button label", "default": "Add" }
+    ],
+    "presets": [
+      { "name": "Top sellers — bleed right" }
+    ]
+  }
+  {% endschema %}
+</section>

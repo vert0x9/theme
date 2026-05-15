@@ -1,0 +1,323 @@
+{%- comment -%}
+  ============================================================
+  BFC ADD-ON ONLY PDP SECTION
+  ============================================================
+  Use this section in place of a normal product info section
+  for items that should NOT be purchasable on their own — for
+  example: extended warranty, class registration, developing
+  credits, gift wrap, repair add-ons.
+
+  Renders:
+    - The product title (so the PDP still feels like the right page)
+    - A clear notice explaining the item is an add-on
+    - A configurable "You may be looking for:" grid of links to
+      the pages where this add-on actually attaches
+
+  Does NOT render: ATC, price, variants, or any cart form. To
+  fully hide the cart on this PDP, also remove the default
+  theme product section from the matching product template
+  (or duplicate the template as e.g. product.addon-only.json
+  and reference only this section).
+
+  Block: "link" — add as many as you want via the theme editor.
+    Each link has: title, optional kicker, URL.
+============================================================
+{%- endcomment -%}
+
+{% style %}
+.bfc-addon {
+  --or: #E36E15;
+  --go: #F4A027;
+  --cv: #F8F6EE;
+  --bk: #202009;
+  --ch: #4E4741;
+  --gr: #E3DDDA;
+  --sr: 'Cormorant Garamond', Georgia, serif;
+  --sn: 'Poppins', sans-serif;
+  --t:  0.2s ease;
+  font-family: var(--sn);
+  color: var(--bk);
+  background: var(--cv);
+  -webkit-font-smoothing: antialiased;
+  padding: 64px 48px 80px;
+}
+.bfc-addon * { box-sizing: border-box; }
+.bfc-addon-inner {
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.bfc-addon-eyebrow {
+  display: inline-block;
+  font-family: var(--sn);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 16px;
+}
+.bfc-addon-title {
+  font-family: var(--sr);
+  font-size: clamp(32px, 4.2vw, 52px);
+  font-weight: 300; line-height: 1.05;
+  color: var(--bk);
+  margin: 0 0 18px;
+  letter-spacing: -0.01em;
+}
+.bfc-addon-title em { font-style: italic; color: var(--or); }
+.bfc-addon-product-name {
+  font-family: var(--sn);
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(32,32,9,0.45);
+  margin-bottom: 12px;
+}
+
+.bfc-addon-notice {
+  background: #fff;
+  border: 1px solid rgba(32,32,9,0.1);
+  padding: 28px 32px;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  margin: 28px 0 48px;
+}
+.bfc-addon-notice-icon {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(227,110,21,0.1);
+  color: var(--or);
+}
+.bfc-addon-notice-body { min-width: 0; }
+.bfc-addon-notice-title {
+  font-family: var(--sn);
+  font-size: 13px; font-weight: 600;
+  color: var(--bk);
+  letter-spacing: 0.02em;
+  margin-bottom: 6px;
+}
+.bfc-addon-notice-text {
+  font-family: var(--sn);
+  font-size: 13px; line-height: 1.6;
+  color: var(--ch);
+  margin: 0;
+}
+
+.bfc-addon-links-label {
+  font-family: var(--sn);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(32,32,9,0.5);
+  margin-bottom: 18px;
+  display: block;
+}
+.bfc-addon-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0;
+  border-top: 1px solid rgba(32,32,9,0.12);
+  border-left: 1px solid rgba(32,32,9,0.12);
+}
+.bfc-addon-link {
+  display: block;
+  padding: 24px 22px 26px;
+  background: #fff;
+  border-right: 1px solid rgba(32,32,9,0.12);
+  border-bottom: 1px solid rgba(32,32,9,0.12);
+  text-decoration: none;
+  color: var(--bk);
+  transition: background var(--t), transform var(--t);
+  position: relative;
+  min-height: 110px;
+}
+.bfc-addon-link:hover {
+  background: var(--cv);
+}
+.bfc-addon-link-kicker {
+  font-family: var(--sn);
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--or);
+  display: block;
+  margin-bottom: 10px;
+}
+.bfc-addon-link-title {
+  font-family: var(--sr);
+  font-size: 22px; font-weight: 400;
+  line-height: 1.15;
+  color: var(--bk);
+  letter-spacing: -0.005em;
+}
+.bfc-addon-link-title em { font-style: italic; color: rgba(32,32,9,0.55); }
+.bfc-addon-link-arrow {
+  position: absolute;
+  bottom: 22px; right: 22px;
+  color: rgba(32,32,9,0.3);
+  transition: color var(--t), transform var(--t);
+}
+.bfc-addon-link:hover .bfc-addon-link-arrow {
+  color: var(--or);
+  transform: translateX(3px);
+}
+
+.bfc-addon-empty {
+  font-family: var(--sn);
+  font-size: 12px;
+  color: rgba(32,32,9,0.45);
+  font-style: italic;
+  padding: 24px;
+  background: #fff;
+  border: 1px dashed rgba(32,32,9,0.18);
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .bfc-addon { padding: 40px 20px 56px; }
+  .bfc-addon-notice { padding: 22px 20px; gap: 14px; }
+  .bfc-addon-link { padding: 20px 18px 22px; min-height: 96px; }
+  .bfc-addon-link-title { font-size: 19px; }
+}
+{% endstyle %}
+
+<div class="bfc-addon">
+  <div class="bfc-addon-inner">
+
+    <div class="bfc-addon-product-name">{{ product.title }}</div>
+
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="bfc-addon-eyebrow">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+
+    <h1 class="bfc-addon-title">{{ section.settings.headline | default: 'This is an add-on item.' }}</h1>
+
+    <div class="bfc-addon-notice">
+      <div class="bfc-addon-notice-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 1.5A6.5 6.5 0 1 0 8 14.5A6.5 6.5 0 0 0 8 1.5ZM8 5v4M8 11h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="bfc-addon-notice-body">
+        <div class="bfc-addon-notice-title">Not available for direct purchase</div>
+        <p class="bfc-addon-notice-text">{{ section.settings.notice_text | default: 'This product can only be purchased on its applicable product page or as an add-on to another item.' }}</p>
+      </div>
+    </div>
+
+    {%- assign link_blocks = section.blocks | where: 'type', 'link' -%}
+    {%- if link_blocks.size > 0 -%}
+      <span class="bfc-addon-links-label">{{ section.settings.links_label | default: 'You may be looking for' }}</span>
+      <div class="bfc-addon-links">
+        {%- for block in link_blocks -%}
+          <a href="{{ block.settings.url | default: '#' }}" class="bfc-addon-link" {{ block.shopify_attributes }}>
+            {%- if block.settings.kicker != blank -%}
+              <span class="bfc-addon-link-kicker">{{ block.settings.kicker }}</span>
+            {%- endif -%}
+            <div class="bfc-addon-link-title">{{ block.settings.title | default: 'Untitled link' }}</div>
+            <span class="bfc-addon-link-arrow">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </a>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      {%- if request.design_mode -%}
+        <div class="bfc-addon-empty">Add one or more "Link" blocks in the theme editor to populate this section.</div>
+      {%- endif -%}
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "BFC Add-on Only PDP",
+  "tag": "section",
+  "class": "bfc-addon-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Use this section on PDPs for products that should NOT be purchased on their own (extended warranty, class registration, developing credits, gift wrap, repair add-ons). It replaces the normal buy box with a redirect message and links."
+    },
+    {
+      "type": "header",
+      "content": "Headline"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Add-on Product",
+      "info": "Small all-caps label above the headline. Leave blank to hide."
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "default": "This is an add-on item.",
+      "info": "Use <em>...</em> to italicize a word in orange."
+    },
+    {
+      "type": "header",
+      "content": "Notice"
+    },
+    {
+      "type": "textarea",
+      "id": "notice_text",
+      "label": "Notice text",
+      "default": "This product can only be purchased on its applicable product page or as an add-on to another item.",
+      "info": "Shown inside the white callout box beneath the headline."
+    },
+    {
+      "type": "header",
+      "content": "Redirect Links"
+    },
+    {
+      "type": "text",
+      "id": "links_label",
+      "label": "Links section label",
+      "default": "You may be looking for",
+      "info": "Small all-caps label above the link grid."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "kicker",
+          "label": "Kicker (optional)",
+          "info": "Small orange all-caps label above the link title. Leave blank to hide."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Link title",
+          "default": "Link title",
+          "info": "Use <em>...</em> to italicize a word."
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Add-on Only PDP",
+      "blocks": [
+        { "type": "link", "settings": { "kicker": "Cameras", "title": "Shop Cameras", "url": "/collections/cameras" } },
+        { "type": "link", "settings": { "kicker": "Film Lab", "title": "Develop Your Film", "url": "/pages/film-developing" } },
+        { "type": "link", "settings": { "kicker": "Classes", "title": "Workshops &amp; Classes", "url": "/collections/classes" } }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

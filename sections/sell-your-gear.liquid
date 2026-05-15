@@ -1,0 +1,515 @@
+{% comment %} sections/sell-your-gear.liquid {% endcomment %}
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Poppins:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bfc-bg:     #F8F6EE;
+    --bfc-black:  #202009;
+    --bfc-orange: #E36E15;
+    --bfc-muted:  rgba(32,32,9,0.42);
+    --bfc-border: rgba(32,32,9,0.11);
+    --bfc-tint:   #edeadf;
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-ui:      'Poppins', sans-serif;
+    color-scheme: light;
+  }
+
+  .syg-page {
+    background: var(--bfc-bg);
+    color: var(--bfc-black);
+    font-family: var(--font-ui);
+    min-height: 100vh;
+    padding: 0 0 80px;
+    color-scheme: light;
+  }
+
+  /* HERO */
+  .syg-hero { background: var(--bfc-bg); border-bottom: 1px solid var(--bfc-border); padding: 56px 40px 48px; }
+  .syg-hero-inner { max-width: 860px; margin: 0 auto; }
+  .syg-eyebrow { font-size: 9px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--bfc-muted); margin: 0 0 14px; }
+  .syg-hero h1 { font-family: var(--font-display); font-weight: 500; font-size: clamp(42px,7vw,72px); line-height: 1; color: var(--bfc-black); margin: 0 0 18px; }
+  .syg-hero h1 em { font-style: italic; font-weight: 400; }
+  .syg-hero-sub { font-size: 12px; font-weight: 300; line-height: 1.8; color: var(--bfc-muted); max-width: 480px; margin: 0; }
+
+  /* NOTICE */
+  .syg-notice { background: var(--bfc-tint); border-bottom: 1px solid var(--bfc-border); padding: 11px 40px; }
+  .syg-notice-inner { max-width: 860px; margin: 0 auto; }
+  .syg-notice p { font-size: 9px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--bfc-muted); margin: 0; }
+
+  /* LAYOUT */
+  .syg-body { max-width: 860px; margin: 0 auto; padding: 56px 40px 0; display: grid; grid-template-columns: 1fr 288px; gap: 56px; align-items: start; }
+
+  /* FORM ELEMENTS */
+  .syg-section-label { font-size: 9px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--bfc-muted); margin: 0 0 20px; padding-bottom: 10px; border-bottom: 1px solid var(--bfc-border); }
+  .syg-fieldset { margin: 0 0 40px; padding: 0; border: none; }
+  .syg-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+  .syg-field:last-child { margin-bottom: 0; }
+  .syg-field label { font-size: 9px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--bfc-muted); }
+  .syg-field label .req { color: var(--bfc-orange); }
+
+  .syg-field input,
+  .syg-field select,
+  .syg-field textarea {
+    color-scheme: light;
+    background: #ffffff !important;
+    border: 1px solid var(--bfc-border);
+    border-radius: 2px;
+    color: #202009 !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 300;
+    padding: 11px 14px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color .18s, box-shadow .18s;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .syg-field input::placeholder,
+  .syg-field textarea::placeholder { color: rgba(32,32,9,.28) !important; font-family: 'Poppins',sans-serif !important; font-size: 11px !important; }
+  .syg-field input:focus,
+  .syg-field select:focus,
+  .syg-field textarea:focus { border-color: #202009; box-shadow: 0 0 0 3px rgba(32,32,9,.05); }
+  .syg-field textarea { resize: vertical; min-height: 110px; line-height: 1.65; }
+  .syg-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7' viewBox='0 0 11 7'%3E%3Cpath d='M1 1l4.5 4.5L10 1' stroke='%23202009' stroke-width='1.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 12px center !important;
+    padding-right: 34px;
+    cursor: pointer;
+  }
+
+  .syg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* CONDITION PILLS */
+  .syg-condition-group { display: flex; flex-wrap: wrap; gap: 8px; }
+  .syg-condition-group input[type="radio"] { display: none; }
+  .syg-condition-group label { font-family: var(--font-ui); font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: rgba(32,32,9,.45); border: 1px solid var(--bfc-border); border-radius: 2px; padding: 8px 16px; cursor: pointer; transition: all .16s; background: #ffffff !important; }
+  .syg-condition-group label:hover { border-color: rgba(32,32,9,.35); color: var(--bfc-black); }
+  .syg-condition-group input[type="radio"]:checked + label { background: #202009 !important; border-color: #202009; color: #F8F6EE !important; }
+
+  /* PRICE */
+  .syg-price-wrap { position: relative; }
+  .syg-price-symbol { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); font-size: 11px; font-family: var(--font-ui); color: rgba(32,32,9,.28); pointer-events: none; }
+  .syg-price-wrap input { padding-left: 26px; }
+
+  /* TRADE IN FIELD */
+  .syg-trade-field { display: none; margin-top: 14px; }
+  .syg-trade-field.visible { display: flex; flex-direction: column; gap: 6px; }
+  .syg-trade-note { font-family: var(--font-ui); font-size: 11px; color: var(--bfc-muted); line-height: 1.65; margin-top: 6px; padding: 12px 14px; background: var(--bfc-tint); border-radius: 2px; }
+  .syg-trade-note strong { font-weight: 500; color: var(--bfc-black); }
+
+  /* OFFER NOTE */
+  .syg-offer-note { font-family: var(--font-ui); font-size: 11px; color: var(--bfc-muted); line-height: 1.65; margin-top: 12px; padding: 12px 14px; background: var(--bfc-tint); border-radius: 2px; }
+  .syg-offer-note strong { font-weight: 500; color: var(--bfc-black); }
+
+  /* UPLOAD */
+  .syg-upload-area { border: 1px dashed var(--bfc-border); border-radius: 2px; padding: 26px 20px; text-align: center; cursor: pointer; transition: border-color .18s; position: relative; background: #ffffff !important; }
+  .syg-upload-area:hover { border-color: rgba(32,32,9,.3); }
+  .syg-upload-area input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .syg-upload-icon { display: block; margin: 0 auto 10px; width: 24px; height: 24px; opacity: .22; color: var(--bfc-black); }
+  .syg-upload-text { font-family: var(--font-ui); font-size: 11px; color: rgba(32,32,9,.38); line-height: 1.6; }
+  .syg-upload-text strong { display: block; color: rgba(32,32,9,.58); font-weight: 500; margin-bottom: 3px; }
+
+  /* DIVIDER */
+  .syg-divider { border: none; border-top: 1px solid var(--bfc-border); margin: 0 0 40px; }
+
+  /* BANNERS */
+  .syg-success-banner,
+  .syg-photo-warn-banner,
+  .syg-error-banner { display: none; border-radius: 2px; padding: 14px 18px; margin-bottom: 28px; font-family: var(--font-ui); font-size: 12px; line-height: 1.6; }
+  .syg-success-banner   { background: rgba(171,204,153,.15); border: 1px solid rgba(171,204,153,.45); color: #3B6D11; }
+  .syg-photo-warn-banner { background: rgba(227,110,21,.06);  border: 1px solid rgba(227,110,21,.3);  color: #8a4200; }
+  .syg-error-banner     { background: rgba(227,110,21,.06);  border: 1px solid rgba(227,110,21,.3);  color: var(--bfc-orange); }
+
+  /* SUBMIT */
+  .syg-submit-row { display: flex; align-items: center; gap: 20px; margin-top: 8px; }
+  .syg-btn-submit {
+    -webkit-appearance: none; appearance: none; display: inline-block;
+    background: #202009; color: #F8F6EE;
+    font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 600;
+    letter-spacing: .18em; text-transform: uppercase;
+    border: none; border-radius: 0; padding: 14px 40px;
+    cursor: pointer; transition: background .18s, transform .12s;
+    flex-shrink: 0; line-height: 1;
+  }
+  .syg-btn-submit:hover   { background: #3a3a1a; transform: translateY(-1px); }
+  .syg-btn-submit:active  { transform: translateY(0); }
+  .syg-btn-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+  .syg-fine-print { font-family: var(--font-ui); font-size: 10px; color: var(--bfc-muted); line-height: 1.7; }
+
+  /* SIDEBAR */
+  .syg-sidebar { position: sticky; top: 32px; display: flex; flex-direction: column; gap: 12px; }
+  .syg-sidebar-card { background: #ffffff !important; border: 1px solid var(--bfc-border); border-radius: 2px; padding: 22px 20px; }
+  .syg-sidebar-card h3 { font-family: var(--font-display); font-size: 20px; font-weight: 500; color: #202009; margin: 0 0 12px; }
+  .syg-sidebar-card p { font-family: var(--font-ui); font-size: 11px; color: var(--bfc-muted); line-height: 1.7; margin: 0; }
+  .syg-sidebar-card p + p { margin-top: 7px; }
+
+  .syg-steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
+  .syg-steps li { display: flex; gap: 12px; align-items: flex-start; }
+  .syg-step-num { width: 20px; height: 20px; border-radius: 50%; border: 1px solid rgba(32,32,9,.25); color: var(--bfc-muted); font-family: var(--font-ui); font-size: 9px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .syg-step-text { font-family: var(--font-ui); font-size: 11px; color: var(--bfc-muted); line-height: 1.6; }
+  .syg-step-text strong { display: block; color: #202009; font-weight: 500; font-size: 11px; margin-bottom: 1px; }
+
+  .syg-accepted-tags { display: flex; flex-wrap: wrap; margin-top: 10px; }
+  .syg-accepted-tag { font-family: var(--font-ui); font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; border: 1px solid var(--bfc-border); border-radius: 2px; padding: 4px 8px; color: var(--bfc-muted); background: var(--bfc-bg); margin: 4px 4px 0 0; }
+
+  @media (max-width: 720px) {
+    .syg-hero   { padding: 44px 24px 40px; }
+    .syg-notice { padding: 10px 24px; }
+    .syg-body   { grid-template-columns: 1fr; padding: 44px 24px 0; gap: 44px; }
+    .syg-sidebar { position: static; }
+    .syg-row    { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="syg-page">
+
+  <div class="syg-hero">
+    <div class="syg-hero-inner">
+      <p class="syg-eyebrow">Brooklyn Film Camera — Gear Acquisition</p>
+      <h1>Sell Your <em>Analog</em><br>Camera Gear</h1>
+      <p class="syg-hero-sub">We buy quality film cameras, lenses, and accessories. Submit your gear below and we'll reply with a ballpark estimate within 1–3 business days.</p>
+    </div>
+  </div>
+
+  <div class="syg-notice">
+    <div class="syg-notice-inner">
+      <p>Analog only — we do not purchase digital cameras, phones, or computers.</p>
+    </div>
+  </div>
+
+  <div class="syg-body">
+
+    <div>
+      <div class="syg-success-banner" id="syg-success-banner">
+        Submission received — we'll review your gear and send a ballpark estimate within 1–3 business days. Final offers are made only when item is seen in person after our team inspects the gear.
+      </div>
+      <div class="syg-photo-warn-banner" id="syg-photo-warn-banner">
+        Your submission was received, but some photos failed to upload. Please email them directly to <a href="mailto:griffin@brooklynfilmcamera.com" style="color:#8a4200;">griffin@brooklynfilmcamera.com</a> and reference your submission.
+      </div>
+      <div class="syg-error-banner" id="syg-error-banner">
+        Something went wrong — please try again or email us at <a href="mailto:griffin@brooklynfilmcamera.com">griffin@brooklynfilmcamera.com</a>.
+      </div>
+
+      <form id="syg-form">
+
+        <fieldset class="syg-fieldset">
+          <p class="syg-section-label">01 — Your Gear</p>
+          <div class="syg-row">
+            <div class="syg-field">
+              <label for="syg-type">Gear Type <span class="req">*</span></label>
+              <select id="syg-type" name="gear_type" required>
+                <option value="" disabled selected>Select a type</option>
+                <option value="35mm Camera">35mm Camera</option>
+                <option value="Medium Format Camera">Medium Format Camera</option>
+                <option value="Large Format Camera">Large Format Camera</option>
+                <option value="Super 8 / 8mm Camera">Super 8 / 8mm Camera</option>
+                <option value="Lens">Lens</option>
+                <option value="Flash / Lighting">Flash / Lighting</option>
+                <option value="Darkroom Equipment">Darkroom Equipment</option>
+                <option value="Accessory / Other">Accessory / Other</option>
+              </select>
+            </div>
+            <div class="syg-field">
+              <label for="syg-brand">Brand <span class="req">*</span></label>
+              <input type="text" id="syg-brand" name="brand" placeholder="e.g. Nikon, Hasselblad" required>
+            </div>
+          </div>
+          <div class="syg-row">
+            <div class="syg-field">
+              <label for="syg-model">Model <span class="req">*</span></label>
+              <input type="text" id="syg-model" name="model" placeholder="e.g. FM2, 500C/M" required>
+            </div>
+            <div class="syg-field">
+              <label for="syg-serial">Serial Number</label>
+              <input type="text" id="syg-serial" name="serial_number" placeholder="Optional">
+            </div>
+          </div>
+          <div class="syg-field">
+            <label>Condition <span class="req">*</span></label>
+            <div class="syg-condition-group">
+              <input type="radio" id="cond-mint"  name="condition" value="Mint">
+              <label for="cond-mint">Mint</label>
+              <input type="radio" id="cond-exc"   name="condition" value="Excellent">
+              <label for="cond-exc">Excellent</label>
+              <input type="radio" id="cond-good"  name="condition" value="Good">
+              <label for="cond-good">Good</label>
+              <input type="radio" id="cond-fair"  name="condition" value="Fair">
+              <label for="cond-fair">Fair</label>
+              <input type="radio" id="cond-parts" name="condition" value="Parts / As-Is">
+              <label for="cond-parts">Parts / As-Is</label>
+            </div>
+          </div>
+          <div class="syg-field">
+            <label for="syg-desc">Description <span class="req">*</span></label>
+            <textarea id="syg-desc" name="description" placeholder="Describe the condition, any known issues, what's included (caps, straps, manuals, original box, etc.)…" required></textarea>
+          </div>
+        </fieldset>
+
+        <hr class="syg-divider">
+
+        <fieldset class="syg-fieldset">
+          <p class="syg-section-label">02 — What You Want</p>
+          <div class="syg-row">
+            <div class="syg-field">
+              <label for="syg-price">Asking Price</label>
+              <div class="syg-price-wrap">
+                <span class="syg-price-symbol">$</span>
+                <input type="number" id="syg-price" name="asking_price" placeholder="0.00" min="0" step="0.01">
+              </div>
+            </div>
+            <div class="syg-field">
+              <label for="syg-offer-pref">Payment Preference</label>
+              <select id="syg-offer-pref" name="payment_preference">
+                <option value="Check/Venmo">Check/Venmo</option>
+                <option value="Store Credit">Store Credit</option>
+                <option value="Trade In">Trade In</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="syg-trade-field syg-field" id="syg-trade-field">
+            <label for="syg-trade-item">What are you looking to trade for?</label>
+            <input type="text" id="syg-trade-item" name="trade_requested_item" placeholder="e.g. Hasselblad 500CM, Mamiya 7, Leica M6…">
+            <p class="syg-trade-note">Let us know what you have in mind and we'll value your store credit at a <strong>potentially higher rate</strong> to make the trade work. Final trade value confirmed in person.</p>
+          </div>
+
+          <p class="syg-offer-note">Leave the price blank and we'll estimate based on your description and photos. <strong>All final offers are confirmed only when item is seen in person</strong> after our team inspects the gear.</p>
+        </fieldset>
+
+        <hr class="syg-divider">
+
+        <fieldset class="syg-fieldset">
+          <p class="syg-section-label">03 — Your Info</p>
+          <div class="syg-row">
+            <div class="syg-field">
+              <label for="syg-name">Full Name <span class="req">*</span></label>
+              <input type="text" id="syg-name" name="name" placeholder="Your name" required>
+            </div>
+            <div class="syg-field">
+              <label for="syg-email">Email <span class="req">*</span></label>
+              <input type="email" id="syg-email" name="email" placeholder="you@email.com" required>
+            </div>
+          </div>
+          <div class="syg-field">
+            <label for="syg-phone">Phone</label>
+            <input type="tel" id="syg-phone" name="phone" placeholder="Optional">
+          </div>
+          <div class="syg-field">
+            <label>Photos</label>
+            <div class="syg-upload-area" id="syg-upload-area">
+              <input type="file" id="syg-photos" accept="image/*" multiple>
+              <svg class="syg-upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              <p class="syg-upload-text">
+                <strong id="syg-upload-label">Attach photos of your gear</strong>
+                Drag and drop, or click to browse — JPG, PNG
+              </p>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="syg-submit-row">
+          <button type="submit" class="syg-btn-submit" id="syg-submit-btn">Submit for Review</button>
+          <p class="syg-fine-print">Ballpark estimate in<br>1–3 business days.</p>
+        </div>
+
+      </form>
+    </div>
+
+    <aside class="syg-sidebar">
+      <div class="syg-sidebar-card">
+        <h3>How It Works</h3>
+        <ul class="syg-steps">
+          <li><span class="syg-step-num">1</span><span class="syg-step-text"><strong>Submit your gear</strong>Fill out the form with photos and condition details.</span></li>
+          <li><span class="syg-step-num">2</span><span class="syg-step-text"><strong>We send a range</strong>Our team replies with a ballpark estimate within 1–3 business days.</span></li>
+          <li><span class="syg-step-num">3</span><span class="syg-step-text"><strong>Come in or ship</strong>Bring your gear to our store or ship it to us for inspection. (Email for shipping instructions)</span></li>
+          <li><span class="syg-step-num">4</span><span class="syg-step-text"><strong>Final offer in person</strong>After we inspect the gear, we make a firm offer — cash, store credit, or trade.</span></li>
+        </ul>
+      </div>
+      <div class="syg-sidebar-card">
+        <h3>What We Accept</h3>
+        <p>Analog only — film cameras, lenses, and accessories in any condition.</p>
+        <div class="syg-accepted-tags">
+          <span class="syg-accepted-tag">35mm SLR</span>
+          <span class="syg-accepted-tag">Rangefinder</span>
+          <span class="syg-accepted-tag">Medium Format</span>
+          <span class="syg-accepted-tag">Large Format</span>
+          <span class="syg-accepted-tag">Super 8</span>
+          <span class="syg-accepted-tag">Lenses</span>
+          <span class="syg-accepted-tag">Darkroom</span>
+          <span class="syg-accepted-tag">Flash</span>
+          <span class="syg-accepted-tag">Accessories</span>
+        </div>
+      </div>
+      <div class="syg-sidebar-card">
+        <h3>Questions?</h3>
+        <p>Drop by the shop at<br><strong style="color:#202009;">855 Grand St, Brooklyn</strong></p>
+        <p>Or email us at<br><a href="mailto:hello@brooklynfilmcamera.com" style="color:#E36E15;font-size:11px;text-decoration:none;">hello@brooklynfilmcamera.com</a></p>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  var WEBHOOK   = 'https://time-tracker-03f66780.base44.app/api/functions/sellingGearWebhook';
+  var IMGBB_KEY = 'ab5d2ed62d2b2081d8fe6bf040b8b0a6';
+
+  /* upload label */
+  var photoInput  = document.getElementById('syg-photos');
+  var uploadLabel = document.getElementById('syg-upload-label');
+  if (photoInput && uploadLabel) {
+    photoInput.addEventListener('change', function () {
+      var n = this.files.length;
+      uploadLabel.textContent = n > 0
+        ? (n === 1 ? '1 photo selected' : n + ' photos selected')
+        : 'Attach photos of your gear';
+    });
+  }
+
+  /* drag highlight */
+  var area = document.getElementById('syg-upload-area');
+  if (area) {
+    area.addEventListener('dragover',  function (e) { e.preventDefault(); area.style.borderColor = 'rgba(32,32,9,.35)'; });
+    area.addEventListener('dragleave', function ()  { area.style.borderColor = ''; });
+  }
+
+  /* trade-in field toggle */
+  var offerPref  = document.getElementById('syg-offer-pref');
+  var tradeField = document.getElementById('syg-trade-field');
+  offerPref.addEventListener('change', function () {
+    tradeField.classList.toggle('visible', this.value === 'Trade In');
+  });
+
+  /* upload a single file to ImgBB — always resolves, never rejects */
+  function uploadToImgBB(file) {
+    return new Promise(function (resolve) {
+      var reader = new FileReader();
+      reader.onload = function () {
+        var base64 = reader.result.split(',')[1];
+        var body   = new FormData();
+        body.append('key',   IMGBB_KEY);
+        body.append('image', base64);
+        body.append('name',  file.name);
+        fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: body })
+          .then(function (r) { return r.json(); })
+          .then(function (data) { resolve(data.success ? data.data.url : null); })
+          .catch(function ()   { resolve(null); });
+      };
+      reader.onerror = function () { resolve(null); };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /* submit */
+  var form             = document.getElementById('syg-form');
+  var btn              = document.getElementById('syg-submit-btn');
+  var successBanner    = document.getElementById('syg-success-banner');
+  var photoWarnBanner  = document.getElementById('syg-photo-warn-banner');
+  var errorBanner      = document.getElementById('syg-error-banner');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    /* validation */
+    var valid = true;
+    ['syg-type', 'syg-brand', 'syg-model', 'syg-desc', 'syg-name', 'syg-email'].forEach(function (id) {
+      var el = document.getElementById(id);
+      if (!el || !el.value.trim()) {
+        if (el) { el.style.borderColor = '#E36E15'; el.style.boxShadow = '0 0 0 3px rgba(227,110,21,.08)'; }
+        valid = false;
+      } else {
+        el.style.borderColor = '';
+        el.style.boxShadow   = '';
+      }
+    });
+    if (!valid) return;
+
+    btn.textContent = 'Uploading photos…';
+    btn.disabled    = true;
+    successBanner.style.display   = 'none';
+    photoWarnBanner.style.display = 'none';
+    errorBanner.style.display     = 'none';
+
+    var files         = photoInput ? Array.from(photoInput.files) : [];
+    var hadPhotos     = files.length > 0;
+
+    Promise.all(files.map(uploadToImgBB))
+      .then(function (results) {
+        var photoUrls   = results.filter(Boolean);
+        var uploadFailed = hadPhotos && photoUrls.length < files.length;
+
+        btn.textContent = 'Sending…';
+
+        var paymentPref = offerPref.value;
+        var tradeItem   = document.getElementById('syg-trade-item').value.trim();
+        var notesVal    = 'Payment preference: ' + paymentPref;
+        if (paymentPref === 'Trade In' && tradeItem) {
+          notesVal += ' — Looking to trade for: ' + tradeItem;
+        }
+
+        var payload = {
+          seller_name:      document.getElementById('syg-name').value,
+          seller_email:     document.getElementById('syg-email').value,
+          seller_phone:     document.getElementById('syg-phone').value,
+          item_type:        document.getElementById('syg-type').value,
+          item_description: document.getElementById('syg-brand').value + ' ' + document.getElementById('syg-model').value + (document.getElementById('syg-serial').value ? ' (S/N: ' + document.getElementById('syg-serial').value + ')' : '') + ' — ' + document.getElementById('syg-desc').value,
+          condition:        (document.querySelector('input[name="condition"]:checked') || {}).value || '',
+          asking_price:     document.getElementById('syg-price').value || null,
+          notes:            notesVal,
+          photo_urls: photoUrls.join(', ')
+        };
+
+        return fetch(WEBHOOK, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(payload)
+        }).then(function (res) {
+          return { res: res, uploadFailed: uploadFailed };
+        });
+      })
+      .then(function (result) {
+        if (result.res.ok) {
+          form.reset();
+          tradeField.classList.remove('visible');
+          if (result.uploadFailed) {
+            photoWarnBanner.style.display = 'block';
+            photoWarnBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          } else {
+            successBanner.style.display = 'block';
+            successBanner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        } else {
+          errorBanner.style.display = 'block';
+        }
+      })
+      .catch(function () {
+        errorBanner.style.display = 'block';
+      })
+      .finally(function () {
+        btn.textContent = 'Submit for Review';
+        btn.disabled    = false;
+      });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Sell Your Gear",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Sell Your Gear"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,909 @@
+{% comment %}
+  ============================================================
+  BFC KIT BUILDER — sections/kit-builder.liquid
+  ============================================================
+  SETUP:
+  1. Upload to sections/
+  2. Create a page and assign template page.kit-builder
+  3. Search VARIANT_ID and swap in real Shopify variant IDs
+
+  GALLERY METAFIELDS:
+  Reads custom.gallery_1 / custom.gallery_2 / custom.gallery_3
+  from each product. As long as those metafields exist the popup
+  will pull them automatically — no manual URL copying needed.
+
+  WARRANTY:  Point & Shoot = 3 month  |  SLR + Polaroid = 6 month
+  ============================================================
+{% endcomment %}
+
+{%- comment -%}
+  ── LIQUID: Pre-load gallery metafields for every camera product.
+  We output a JS object so the runtime JS can reference them without
+  additional fetch calls. Adjust handles if products are renamed.
+{%- endcomment -%}
+<script>
+window.BFC_GALLERIES = {
+  {%- assign cam_handles = 'canon-wp-1,olympus-stylus-mjui,olympus-xa-2-flash,minolta-freedom-zoom,pentax-k1000,canon-ae-1-program,nikon-f3,polaroid-600-rainbow-stripe,polaroid-go-gen-2-black' | split: ',' -%}
+  {%- assign cam_ids     = 'cam-wp1,cam-mju,cam-xa2,cam-min,cam-k1000,cam-ae1,cam-f3,cam-p600,cam-go'                                                                                             | split: ',' -%}
+  {%- for handle in cam_handles -%}
+    {%- assign p = all_products[handle] -%}
+    "{{ cam_ids[forloop.index0] }}": [
+      "{%- if p.metafields.custom.gallery_1 != blank -%}{{ p.metafields.custom.gallery_1 | image_url: width: 900 }}{%- endif -%}",
+      "{%- if p.metafields.custom.gallery_2 != blank -%}{{ p.metafields.custom.gallery_2 | image_url: width: 900 }}{%- endif -%}",
+      "{%- if p.metafields.custom.gallery_3 != blank -%}{{ p.metafields.custom.gallery_3 | image_url: width: 900 }}{%- endif -%}"
+    ]{% unless forloop.last %},{% endunless %}
+  {%- endfor -%}
+};
+</script>
+
+<div class="bfc-kb" id="bfc-kb">
+
+  {%- comment -%} ── HERO ── {%- endcomment -%}
+  <div class="bfc-kb__hero">
+    <div class="bfc-kb__hero-inner">
+      <div class="bfc-kb__eyebrow">
+        <span class="bfc-kb__eyebrow-line"></span>
+        {{ section.settings.eyebrow | default: "Don't know what to get? Start here." }}
+      </div>
+      <h1 class="bfc-kb__hero-title">
+        {{ section.settings.headline | default: "Find your first" }}<br>
+        <em>{{ section.settings.headline_em | default: "film camera." }}</em>
+      </h1>
+      <p class="bfc-kb__hero-sub">
+        {{ section.settings.subtext | default: "Answer three quick questions — we'll put together a kit built around how you actually want to shoot. Every camera is professionally restored and backed by our warranty." }}
+      </p>
+    </div>
+    <div class="bfc-kb__trust">
+      <div class="bfc-kb__trust-item">
+        <span class="bfc-kb__trust-num">3–6</span>
+        <span class="bfc-kb__trust-label">Month warranty on every camera</span>
+      </div>
+      <div class="bfc-kb__trust-divider"></div>
+      <div class="bfc-kb__trust-item">
+        <span class="bfc-kb__trust-num">Free</span>
+        <span class="bfc-kb__trust-label">US shipping on orders over ${{ section.settings.free_shipping_threshold | default: 200 }}</span>
+      </div>
+      <div class="bfc-kb__trust-divider"></div>
+      <div class="bfc-kb__trust-item">
+        <span class="bfc-kb__trust-num">100%</span>
+        <span class="bfc-kb__trust-label">Film tested before every sale</span>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ── STEP 1: CAMERA TYPE ── {%- endcomment -%}
+  <div class="bfc-kb__section bfc-kb__section--visible" id="kb-sec-type">
+    <div class="bfc-kb__sec-head">
+      <div class="bfc-kb__sec-label"><span class="bfc-kb__sec-label-line"></span>Your shooting style</div>
+      <h2 class="bfc-kb__sec-h">How do you want <em>to shoot?</em></h2>
+    </div>
+    <div class="bfc-kb__type-row">
+      <button class="bfc-kb__type-card" data-type="ps" aria-pressed="false">
+        <span class="bfc-kb__type-tag">Beginner Friendly</span>
+        <span class="bfc-kb__type-name">Point &amp; Shoot</span>
+        <span class="bfc-kb__type-desc">Auto everything — just raise and press. Great results without any learning curve.</span>
+        <span class="bfc-kb__type-ideal">Best for travel, parties, everyday carry</span>
+        <span class="bfc-kb__type-check" aria-hidden="true"></span>
+      </button>
+      <button class="bfc-kb__type-card" data-type="slr" aria-pressed="false">
+        <span class="bfc-kb__type-tag">Full Control</span>
+        <span class="bfc-kb__type-name">35mm SLR</span>
+        <span class="bfc-kb__type-desc">Manual aperture, shutter, focus. The camera serious photographers learn on.</span>
+        <span class="bfc-kb__type-ideal">Best for learning, portraits, artistic work</span>
+        <span class="bfc-kb__type-check" aria-hidden="true"></span>
+      </button>
+      <button class="bfc-kb__type-card" data-type="pol" aria-pressed="false">
+        <span class="bfc-kb__type-tag">Instant Prints</span>
+        <span class="bfc-kb__type-name">Polaroid</span>
+        <span class="bfc-kb__type-desc">Watch your photo develop in your hands. A physical memory the moment it's taken.</span>
+        <span class="bfc-kb__type-ideal">Best for events, gifts, instant memories</span>
+        <span class="bfc-kb__type-check" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  {%- comment -%} ── STEP 2: CAMERA PICKER ── {%- endcomment -%}
+  <div class="bfc-kb__section" id="kb-sec-cam" aria-live="polite">
+    <div class="bfc-kb__sec-head">
+      <div class="bfc-kb__sec-label">
+        <span class="bfc-kb__sec-label-line"></span>
+        <span id="kb-cam-label">Choose your camera</span>
+      </div>
+      <h2 class="bfc-kb__sec-h">Pick your <em>camera</em></h2>
+      <p class="bfc-kb__sec-sub">Tap a camera to select it. Hit the <strong>i</strong> button to see sample shots, full specs, and what comes in the box.</p>
+    </div>
+    <div class="bfc-kb__cam-grid" id="kb-cam-grid" role="radiogroup" aria-label="Choose a camera"></div>
+  </div>
+
+  {%- comment -%} ── STEP 3: FILM ── {%- endcomment -%}
+  <div class="bfc-kb__section" id="kb-sec-film" aria-live="polite">
+    <div class="bfc-kb__sec-head">
+      <div class="bfc-kb__sec-label"><span class="bfc-kb__sec-label-line"></span>Film — optional</div>
+      <h2 class="bfc-kb__sec-h">Load up <em>your first rolls</em></h2>
+    </div>
+
+    <div class="bfc-kb__film-rec">
+      <div class="bfc-kb__film-rec-label">
+        <span class="bfc-kb__film-rec-dot"></span>Our recommendation for beginners
+      </div>
+      <p class="bfc-kb__film-rec-text">
+        Start with one roll of color and one of black &amp; white. Shooting both is the fastest way to find your style. We suggest <strong>Kodak Gold 200</strong> for color — warm, forgiving, and beautiful in natural light — and <strong>Ilford HP5</strong> for black &amp; white, a timeless classic that works in almost any situation.
+      </p>
+      <button class="bfc-kb__film-rec-btn" id="kb-film-rec-apply" type="button">
+        Add both recommended rolls
+      </button>
+    </div>
+
+    <div class="bfc-kb__addon-group">
+      <div class="bfc-kb__addon-group-label">
+        Color Film <span class="bfc-kb__addon-optional">Select one</span>
+      </div>
+      <div class="bfc-kb__addon-row" id="kb-film-color-row"></div>
+    </div>
+
+    <div class="bfc-kb__addon-group">
+      <div class="bfc-kb__addon-group-label">
+        Black &amp; White Film <span class="bfc-kb__addon-optional">Select one</span>
+      </div>
+      <div class="bfc-kb__addon-row" id="kb-film-bw-row"></div>
+    </div>
+
+    <div class="bfc-kb__film-nav">
+      <button class="bfc-kb__btn bfc-kb__btn--primary" id="kb-film-continue" type="button">Continue to accessories</button>
+      <button class="bfc-kb__skip-btn" id="kb-skip-film" type="button">Skip — no film for now</button>
+    </div>
+  </div>
+
+  {%- comment -%} ── STEP 4: ACCESSORIES ── {%- endcomment -%}
+  <div class="bfc-kb__section" id="kb-sec-add" aria-live="polite">
+    <div class="bfc-kb__sec-head">
+      <div class="bfc-kb__sec-label"><span class="bfc-kb__sec-label-line"></span>Accessories — optional</div>
+      <h2 class="bfc-kb__sec-h">Round out <em>your kit</em></h2>
+      <p class="bfc-kb__sec-sub">Tap to add, tap again to remove.</p>
+    </div>
+    <div id="kb-addon-strap" class="bfc-kb__addon-group"></div>
+    <div id="kb-addon-case" class="bfc-kb__addon-group"></div>
+    <div class="bfc-kb__skip-row">
+      <button class="bfc-kb__btn bfc-kb__btn--primary" id="kb-acc-continue" type="button">Review my kit</button>
+      <button class="bfc-kb__skip-btn" id="kb-skip-add" type="button">Skip accessories</button>
+    </div>
+  </div>
+
+  {%- comment -%} ── STEP 5: REVIEW ── {%- endcomment -%}
+  <div class="bfc-kb__section" id="kb-sec-review" aria-live="polite">
+    <div class="bfc-kb__sec-head">
+      <div class="bfc-kb__sec-label"><span class="bfc-kb__sec-label-line"></span>Your kit</div>
+      <h2 class="bfc-kb__sec-h">Ready to <em>shoot.</em></h2>
+    </div>
+    <div class="bfc-kb__review-grid" id="kb-review-grid"></div>
+    <div class="bfc-kb__review-total" id="kb-review-total"></div>
+    <div style="height:56px"></div>
+  </div>
+
+</div>
+
+{%- comment -%} ── CAMERA INFO MODAL ── {%- endcomment -%}
+<div class="bfc-kb__modal-overlay" id="kb-modal-overlay" aria-hidden="true">
+  <div class="bfc-kb__modal" role="dialog" aria-modal="true" aria-labelledby="kb-modal-title">
+    <button class="bfc-kb__modal-close" id="kb-modal-close" type="button" aria-label="Close">&#215;</button>
+    <div class="bfc-kb__modal-body" id="kb-modal-body"></div>
+  </div>
+</div>
+
+{%- comment -%} ── STICKY BAR ── {%- endcomment -%}
+<div class="bfc-kb__sticky" id="kb-sticky" hidden>
+  <div class="bfc-kb__sticky-items" id="kb-sticky-items"></div>
+  <div class="bfc-kb__sticky-right">
+    <span class="bfc-kb__sticky-total">$<span id="kb-sticky-price">0</span></span>
+    <button class="bfc-kb__btn bfc-kb__btn--primary" id="kb-sticky-cta" type="button">Continue</button>
+  </div>
+</div>
+
+<style>
+.bfc-kb *, .bfc-kb *::before, .bfc-kb *::after { box-sizing: border-box; }
+.bfc-kb button { font-family: inherit; cursor: pointer; }
+.bfc-kb { background: #F8F6EE; color: #202009; font-family: 'Poppins', sans-serif; }
+
+/* ── HERO ── */
+.bfc-kb__hero { background: #202009; padding: 64px 72px 60px; display: grid; grid-template-columns: 1fr auto; gap: 64px; align-items: center; }
+.bfc-kb__eyebrow { display: flex; align-items: center; gap: 14px; font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #E36E15; margin-bottom: 20px; }
+.bfc-kb__eyebrow-line { display: inline-block; width: 28px; height: 1px; background: #E36E15; flex-shrink: 0; }
+.bfc-kb__hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 6vw, 82px); font-weight: 300; line-height: .94; letter-spacing: -.02em; color: #F8F6EE; margin: 0; }
+.bfc-kb__hero-title em { font-style: italic; color: #F4A027; }
+.bfc-kb__hero-sub { margin-top: 22px; font-size: 15px; color: #6a6850; line-height: 1.7; max-width: 500px; }
+.bfc-kb__trust { display: flex; flex-direction: column; border-left: 1px solid #2e2d1a; padding-left: 52px; min-width: 200px; }
+.bfc-kb__trust-item { padding: 20px 0; border-bottom: 1px solid #2e2d1a; }
+.bfc-kb__trust-item:last-child { border-bottom: none; }
+.bfc-kb__trust-num { display: block; font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; color: #F4A027; line-height: 1; }
+.bfc-kb__trust-label { display: block; font-size: 13px; color: #6a6850; margin-top: 4px; max-width: 200px; line-height: 1.4; }
+.bfc-kb__trust-divider { display: none; }
+
+/* ── SECTIONS ── */
+.bfc-kb__section { padding: 56px 72px 0; opacity: 0; transform: translateY(14px); transition: opacity .38s ease, transform .38s ease; pointer-events: none; max-height: 0; overflow: hidden; }
+.bfc-kb__section--visible { opacity: 1; transform: none; pointer-events: all; max-height: none; overflow: visible; }
+.bfc-kb__sec-head { margin-bottom: 28px; }
+.bfc-kb__sec-label { display: flex; align-items: center; gap: 12px; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #E36E15; margin-bottom: 10px; }
+.bfc-kb__sec-label-line { display: inline-block; width: 18px; height: 1px; background: #E36E15; flex-shrink: 0; }
+.bfc-kb__sec-h { font-family: 'Cormorant Garamond', serif; font-size: clamp(34px, 4vw, 52px); font-weight: 300; letter-spacing: -.01em; line-height: 1; color: #202009; margin: 0 0 10px; }
+.bfc-kb__sec-h em { font-style: italic; color: #4E4741; }
+.bfc-kb__sec-sub { font-size: 14px; color: #82906B; line-height: 1.65; max-width: 540px; margin: 0; }
+
+/* ── TYPE CARDS ── */
+.bfc-kb__type-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: #E3DDDA; outline: 2px solid #E3DDDA; }
+.bfc-kb__type-card { background: #F8F6EE; border: none; border-bottom: 3px solid transparent; padding: 28px 26px 24px; text-align: left; display: flex; flex-direction: column; transition: background .15s, border-color .15s; cursor: pointer; }
+.bfc-kb__type-card:hover { background: #f0ede4; }
+.bfc-kb__type-card[aria-pressed="true"] { background: #202009; border-bottom-color: #E36E15; }
+.bfc-kb__type-tag { display: block; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #E36E15; margin-bottom: 10px; }
+.bfc-kb__type-name { display: block; font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 400; color: #202009; line-height: 1.1; margin-bottom: 12px; transition: color .15s; }
+.bfc-kb__type-card[aria-pressed="true"] .bfc-kb__type-name { color: #F8F6EE; }
+.bfc-kb__type-desc { display: block; font-size: 13px; color: #4E4741; line-height: 1.6; transition: color .15s; }
+.bfc-kb__type-card[aria-pressed="true"] .bfc-kb__type-desc { color: #6a6850; }
+.bfc-kb__type-ideal { display: block; font-size: 12px; color: #82906B; margin-top: 14px; padding-top: 14px; border-top: 1px solid #E3DDDA; transition: border-color .15s; }
+.bfc-kb__type-card[aria-pressed="true"] .bfc-kb__type-ideal { border-top-color: #2e2d1a; }
+.bfc-kb__type-check { display: inline-block; width: 18px; height: 18px; border: 1.5px solid #E3DDDA; margin-top: 14px; font-size: 10px; text-align: center; line-height: 16px; color: transparent; transition: all .15s; }
+.bfc-kb__type-card[aria-pressed="true"] .bfc-kb__type-check { background: #E36E15; border-color: #E36E15; color: #F8F6EE; }
+.bfc-kb__type-card[aria-pressed="true"] .bfc-kb__type-check::before { content: '✓'; }
+
+/* ── CAMERA GRID ── */
+.bfc-kb__cam-grid { display: grid; gap: 2px; background: #E3DDDA; outline: 2px solid #E3DDDA; }
+.bfc-kb__cam-card { background: #F8F6EE; border: none; border-bottom: 3px solid transparent; cursor: pointer; text-align: left; display: flex; flex-direction: column; padding: 0; transition: background .15s, border-color .15s; position: relative; }
+.bfc-kb__cam-card:hover { background: #f0ede4; }
+.bfc-kb__cam-card[aria-checked="true"] { background: #202009; border-bottom-color: #E36E15; }
+.bfc-kb__cam-img { aspect-ratio: 1; background: #eeebe3; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; transition: background .15s; }
+.bfc-kb__cam-card[aria-checked="true"] .bfc-kb__cam-img { background: #19190a; }
+.bfc-kb__cam-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .22s ease; }
+.bfc-kb__cam-card:hover .bfc-kb__cam-img img { transform: scale(1.04); }
+.bfc-kb__cam-body { padding: 16px 18px 20px; flex: 1; display: flex; flex-direction: column; border-top: 1px solid #E3DDDA; transition: border-color .15s; }
+.bfc-kb__cam-card[aria-checked="true"] .bfc-kb__cam-body { border-top-color: #2e2d1a; }
+.bfc-kb__cam-tag { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #E36E15; margin-bottom: 6px; }
+.bfc-kb__cam-name { font-family: 'Cormorant Garamond', serif; font-size: 21px; font-weight: 400; color: #202009; line-height: 1.2; margin-bottom: 5px; transition: color .15s; }
+.bfc-kb__cam-card[aria-checked="true"] .bfc-kb__cam-name { color: #F8F6EE; }
+.bfc-kb__cam-detail { font-size: 12px; color: #4E4741; line-height: 1.5; flex: 1; transition: color .15s; }
+.bfc-kb__cam-card[aria-checked="true"] .bfc-kb__cam-detail { color: #6a6850; }
+.bfc-kb__cam-price { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; color: #202009; margin-top: 14px; transition: color .15s; }
+.bfc-kb__cam-card[aria-checked="true"] .bfc-kb__cam-price { color: #F4A027; }
+
+/* Info button */
+.bfc-kb__cam-info-btn { position: absolute; top: 12px; right: 12px; width: 30px; height: 30px; background: rgba(248,246,238,0.92); border: 1px solid #E3DDDA; font-size: 13px; font-weight: 600; color: #4E4741; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .15s; z-index: 2; font-family: 'Poppins', sans-serif; }
+.bfc-kb__cam-info-btn:hover { background: #F8F6EE; border-color: #202009; color: #202009; }
+.bfc-kb__cam-card[aria-checked="true"] .bfc-kb__cam-info-btn { background: rgba(32,32,9,0.75); border-color: #3a3920; color: #F8F6EE; }
+.bfc-kb__cam-card[aria-checked="true"] .bfc-kb__cam-info-btn:hover { background: #E36E15; border-color: #E36E15; }
+
+/* ── MODAL ── */
+.bfc-kb__modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(32,32,9,0.7);
+  z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .25s ease;
+}
+.bfc-kb__modal-overlay.open { opacity: 1; pointer-events: all; }
+.bfc-kb__modal {
+  background: #F8F6EE;
+  width: 100%; max-width: 860px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+.bfc-kb__modal-close {
+  position: absolute; top: 16px; right: 20px;
+  width: 36px; height: 36px;
+  background: none; border: 1px solid #E3DDDA;
+  font-size: 22px; color: #4E4741; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; z-index: 10;
+  transition: border-color .15s, color .15s;
+  font-family: inherit;
+}
+.bfc-kb__modal-close:hover { border-color: #202009; color: #202009; }
+.bfc-kb__modal-body { display: grid; grid-template-columns: 1fr 1fr; }
+
+/* Modal – left: images */
+.bfc-kb__modal-images { background: #202009; padding: 36px 32px; display: flex; flex-direction: column; gap: 10px; }
+.bfc-kb__modal-images-label { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #6a6850; margin-bottom: 6px; }
+.bfc-kb__modal-img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.bfc-kb__modal-img-main { aspect-ratio: 4/3; overflow: hidden; margin-bottom: 0; grid-column: 1 / -1; }
+.bfc-kb__modal-img-thumb { aspect-ratio: 1; overflow: hidden; }
+.bfc-kb__modal-img-main img,
+.bfc-kb__modal-img-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.bfc-kb__modal-img-placeholder { width: 100%; height: 100%; background: #2a2918; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #4a4928; letter-spacing: .04em; }
+
+/* Modal – right: info */
+.bfc-kb__modal-info { padding: 40px 36px; overflow-y: auto; }
+.bfc-kb__modal-info-tag { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #E36E15; margin-bottom: 8px; }
+.bfc-kb__modal-info-name { font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 300; color: #202009; line-height: 1.05; margin-bottom: 4px; }
+.bfc-kb__modal-info-price { font-family: 'Cormorant Garamond', serif; font-size: 26px; color: #E36E15; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid #E3DDDA; }
+.bfc-kb__modal-specs { display: grid; grid-template-columns: auto 1fr; gap: 0 20px; margin-bottom: 24px; }
+.bfc-kb__modal-spec-key { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #82906B; padding: 6px 0; border-bottom: 1px solid #E3DDDA; white-space: nowrap; }
+.bfc-kb__modal-spec-val { font-size: 13px; color: #202009; padding: 6px 0; border-bottom: 1px solid #E3DDDA; }
+.bfc-kb__modal-loves-label { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #82906B; margin-bottom: 12px; }
+.bfc-kb__modal-loves { display: flex; flex-direction: column; gap: 10px; margin-bottom: 22px; }
+.bfc-kb__modal-love-item { display: flex; align-items: flex-start; gap: 12px; font-size: 13px; color: #4E4741; line-height: 1.55; }
+.bfc-kb__modal-love-item::before { content: ''; display: inline-block; width: 5px; height: 5px; background: #E36E15; margin-top: 7px; flex-shrink: 0; }
+.bfc-kb__modal-included { font-size: 12px; color: #82906B; padding-top: 16px; border-top: 1px solid #E3DDDA; line-height: 1.6; margin-bottom: 24px; }
+.bfc-kb__modal-included strong { color: #202009; font-weight: 600; }
+.bfc-kb__modal-select-btn { background: #E36E15; color: #F8F6EE; border: none; padding: 15px 32px; font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; transition: background .2s; width: 100%; }
+.bfc-kb__modal-select-btn:hover { background: #F4A027; color: #202009; }
+.bfc-kb__modal-select-btn.already-selected { background: #202009; }
+.bfc-kb__modal-select-btn.already-selected:hover { background: #E36E15; color: #F8F6EE; }
+
+/* ── FILM RECOMMENDATION ── */
+.bfc-kb__film-rec { background: #202009; padding: 32px 36px; margin-bottom: 36px; }
+.bfc-kb__film-rec-label { display: flex; align-items: center; gap: 10px; font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #ABCC99; margin-bottom: 14px; }
+.bfc-kb__film-rec-dot { display: inline-block; width: 7px; height: 7px; background: #ABCC99; flex-shrink: 0; }
+.bfc-kb__film-rec-text { font-size: 14px; color: #8a8870; line-height: 1.7; max-width: 660px; margin-bottom: 20px; }
+.bfc-kb__film-rec-text strong { color: #F8F6EE; font-weight: 600; }
+.bfc-kb__film-rec-btn { background: none; border: 1px solid #3a3920; color: #F8F6EE; padding: 12px 24px; font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; transition: border-color .2s, background .2s; }
+.bfc-kb__film-rec-btn:hover { border-color: #E36E15; background: rgba(227,110,21,.1); color: #F4A027; }
+
+/* ── ADDON GROUPS ── */
+.bfc-kb__addon-group { margin-bottom: 32px; }
+.bfc-kb__addon-group-label { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #4E4741; padding-bottom: 12px; border-bottom: 1px solid #E3DDDA; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+.bfc-kb__addon-optional { font-size: 11px; font-weight: 400; letter-spacing: .04em; text-transform: none; color: #82906B; }
+.bfc-kb__addon-row { display: grid; gap: 2px; background: #E3DDDA; outline: 2px solid #E3DDDA; }
+.bfc-kb__addon-card { background: #F8F6EE; border: none; border-bottom: 3px solid transparent; padding: 20px 18px 16px; text-align: left; cursor: pointer; display: flex; flex-direction: column; position: relative; transition: background .15s, border-color .15s; }
+.bfc-kb__addon-card:hover { background: #f0ede4; }
+.bfc-kb__addon-card[aria-pressed="true"] { background: #202009; border-bottom-color: #E36E15; }
+.bfc-kb__addon-rec-badge { position: absolute; top: 0; right: 0; background: #ABCC99; color: #202009; font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 4px 10px; }
+.bfc-kb__addon-card[aria-pressed="true"] .bfc-kb__addon-rec-badge { background: #E36E15; color: #F8F6EE; }
+.bfc-kb__addon-name { display: block; font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: #202009; line-height: 1.2; margin-bottom: 5px; transition: color .15s; }
+.bfc-kb__addon-card[aria-pressed="true"] .bfc-kb__addon-name { color: #F8F6EE; }
+.bfc-kb__addon-sub { display: block; font-size: 12px; color: #4E4741; line-height: 1.5; transition: color .15s; }
+.bfc-kb__addon-card[aria-pressed="true"] .bfc-kb__addon-sub { color: #6a6850; }
+.bfc-kb__addon-price { display: block; font-family: 'Cormorant Garamond', serif; font-size: 22px; color: #202009; margin-top: 14px; transition: color .15s; }
+.bfc-kb__addon-card[aria-pressed="true"] .bfc-kb__addon-price { color: #F4A027; }
+
+.bfc-kb__film-nav { display: flex; align-items: center; gap: 28px; padding: 20px 0 8px; }
+.bfc-kb__skip-row { display: flex; align-items: center; gap: 28px; padding: 12px 0 6px; }
+.bfc-kb__skip-btn { background: none; border: none; font-family: 'Poppins', sans-serif; font-size: 13px; color: #82906B; text-decoration: underline; cursor: pointer; padding: 0; }
+.bfc-kb__skip-btn:hover { color: #4E4741; }
+
+/* ── REVIEW ── */
+.bfc-kb__review-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: #E3DDDA; outline: 2px solid #E3DDDA; margin-bottom: 2px; }
+.bfc-kb__review-cell { background: #F8F6EE; padding: 36px 36px 32px; }
+.bfc-kb__review-cell-label { font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #E36E15; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #E3DDDA; display: block; }
+.bfc-kb__review-cam-row { display: flex; gap: 22px; align-items: flex-start; }
+.bfc-kb__review-cam-img { width: 88px; height: 88px; background: #eeebe3; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
+.bfc-kb__review-cam-img img { width: 100%; height: 100%; object-fit: cover; }
+.bfc-kb__review-cam-name { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 300; color: #202009; line-height: 1.15; margin: 0 0 5px; }
+.bfc-kb__review-cam-detail { font-size: 13px; color: #4E4741; margin-bottom: 12px; }
+.bfc-kb__review-warranty { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #ABCC99; }
+.bfc-kb__review-warranty::before { content: ''; display: inline-block; width: 6px; height: 6px; background: #ABCC99; flex-shrink: 0; }
+.bfc-kb__review-cam-price { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 300; color: #202009; display: block; margin-top: 14px; }
+.bfc-kb__review-addon-row { display: flex; gap: 16px; padding: 13px 0; border-bottom: 1px solid #E3DDDA; align-items: flex-start; }
+.bfc-kb__review-addon-row:last-child { border-bottom: none; }
+.bfc-kb__review-addon-info { flex: 1; }
+.bfc-kb__review-addon-cat { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #82906B; margin-bottom: 3px; }
+.bfc-kb__review-addon-name { font-size: 14px; font-weight: 500; color: #202009; }
+.bfc-kb__review-addon-sub { font-size: 12px; color: #4E4741; margin-top: 2px; }
+.bfc-kb__review-addon-price { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: #202009; flex-shrink: 0; margin-left: auto; }
+.bfc-kb__no-addons { font-size: 14px; color: #82906B; font-style: italic; }
+.bfc-kb__no-addons-link { background: none; border: none; font-family: 'Poppins', sans-serif; font-size: 14px; color: #E36E15; text-decoration: underline; cursor: pointer; padding: 0; }
+.bfc-kb__review-total { background: #202009; padding: 32px 36px; display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+.bfc-kb__review-breakdown { display: flex; flex-direction: column; gap: 5px; }
+.bfc-kb__review-line { display: flex; gap: 28px; justify-content: space-between; font-size: 13px; color: #6a6850; }
+.bfc-kb__review-line--total { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; color: #F8F6EE; margin-top: 10px; line-height: 1; }
+.bfc-kb__review-line--total span { color: #F4A027; }
+.bfc-kb__ship-badge { display: flex; align-items: center; gap: 9px; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #ABCC99; margin-top: 10px; }
+.bfc-kb__ship-badge::before { content: ''; display: inline-block; width: 6px; height: 6px; background: #ABCC99; flex-shrink: 0; }
+.bfc-kb__review-cta { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+.bfc-kb__review-cta-note { font-size: 12px; color: #6a6850; letter-spacing: .02em; }
+
+/* ── BUTTONS ── */
+.bfc-kb__btn { font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: background .2s, color .2s; padding: 15px 30px; }
+.bfc-kb__btn:disabled { opacity: .3; cursor: not-allowed; }
+.bfc-kb__btn--primary { background: #E36E15; color: #F8F6EE; }
+.bfc-kb__btn--primary:not(:disabled):hover { background: #F4A027; color: #202009; }
+.bfc-kb__btn--dark { background: #202009; color: #F8F6EE; padding: 20px 40px; font-size: 12px; }
+.bfc-kb__btn--dark:hover { background: #E36E15; }
+
+/* ── STICKY BAR ── */
+.bfc-kb__sticky { position: sticky; bottom: 0; background: #202009; border-top: 1px solid #2e2d1a; padding: 16px 72px; display: flex; align-items: center; justify-content: space-between; gap: 24px; z-index: 200; }
+.bfc-kb__sticky[hidden] { display: none; }
+.bfc-kb__sticky-items { display: flex; align-items: stretch; gap: 0; overflow: hidden; flex: 1; }
+.bfc-kb__sticky-item { display: flex; flex-direction: column; gap: 3px; padding-right: 28px; margin-right: 28px; border-right: 1px solid #2e2d1a; }
+.bfc-kb__sticky-item:last-child { border-right: none; margin-right: 0; padding-right: 0; }
+.bfc-kb__sticky-item-label { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #4a4928; }
+.bfc-kb__sticky-item-val { font-size: 13px; color: #F8F6EE; font-weight: 500; max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bfc-kb__sticky-item-val--empty { color: #3a3920; font-style: italic; font-weight: 400; }
+.bfc-kb__sticky-right { display: flex; align-items: center; gap: 24px; flex-shrink: 0; }
+.bfc-kb__sticky-total { font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 300; color: #F8F6EE; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 960px) {
+  .bfc-kb__hero { grid-template-columns: 1fr; padding: 48px 28px 44px; }
+  .bfc-kb__trust { flex-direction: row; border-left: none; border-top: 1px solid #2e2d1a; padding-left: 0; padding-top: 28px; }
+  .bfc-kb__trust-item { flex: 1; padding: 0 14px; border-bottom: none; border-right: 1px solid #2e2d1a; }
+  .bfc-kb__trust-item:last-child { border-right: none; }
+  .bfc-kb__section { padding: 44px 28px 0; }
+  .bfc-kb__type-row { grid-template-columns: 1fr; }
+  .bfc-kb__cam-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .bfc-kb__modal-body { grid-template-columns: 1fr; }
+  .bfc-kb__modal-images { padding: 28px; }
+  .bfc-kb__review-grid { grid-template-columns: 1fr; }
+  .bfc-kb__sticky { padding: 14px 28px; }
+  .bfc-kb__sticky-items { display: none; }
+}
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  /* WARRANTY per camera type */
+  var WARRANTY = { ps: '3 month', slr: '6 month', pol: '6 month' };
+
+  var DATA = {
+    cameras: {
+      ps: [
+        {
+          id: 'cam-wp1', variantId: 39890738413740,
+          tag: 'Weatherproof', name: 'Canon Sure Shot WP-1',
+          detail: 'Waterproof · Auto focus · 35mm f/2.8', price: 275,
+          img: 'https://brooklynfilmcamera.com/cdn/shop/files/Canon_WP1_35mm_Underwater.png?v=1762877144&width=600',
+          specs: [['Lens','35mm f/2.8'],['Focus','Auto'],['Exposure','Auto program'],['Flash','Built-in auto'],['Waterproof','Yes — to 5 metres'],['Film','35mm (DX coded)']],
+          loves: ['Take it anywhere — beach, rain, pool, concerts','Auto everything so you never miss a moment','Sharp f/2.8 lens that punches above its price'],
+          included: 'Camera body, tested &amp; CLA\'d. Batteries included.'
+        },
+        {
+          id: 'cam-mju', variantId: 39890739757228,
+          tag: 'Most Popular', name: 'Olympus Stylus MJU',
+          detail: 'Ultra-compact · Auto focus · 35mm f/2.8', price: 400,
+          img: 'https://brooklynfilmcamera.com/cdn/shop/files/Olympus_MJU.png?v=1765576705&width=600',
+          specs: [['Lens','35mm f/2.8'],['Focus','Auto'],['Exposure','Auto program'],['Flash','Auto / fill / off'],['Size','Pocketable — 115 × 60mm'],['Film','35mm (DX coded)']],
+          loves: ['One of the sharpest lenses ever put in a compact camera','Small enough to forget you\'re carrying it','The camera street photographers and editors actually use'],
+          included: 'Camera body, tested &amp; CLA\'d. Batteries included.'
+        },
+        {
+          id: 'cam-xa2', variantId: 39890737791148,
+          tag: 'Pocketable', name: 'Olympus XA2 + Flash',
+          detail: 'Clamshell · Zone focus · 35mm f/3.5', price: 325,
+          img: 'https://brooklynfilmcamera.com/cdn/shop/files/Olympus_XA2_Flash.png?v=1763416594&width=600',
+          specs: [['Lens','35mm f/3.5'],['Focus','Zone — 3 positions'],['Exposure','Auto aperture priority'],['Flash','A11 detachable unit'],['Body','Clamshell — always protected'],['Film','35mm (DX coded)']],
+          loves: ['Clamshell cover means the lens is always protected in a bag','Zone focus is often faster than autofocus in real situations','A11 flash unit included — hard to find complete'],
+          included: 'Camera body + A11 flash, tested. Batteries included.'
+        },
+        {
+          id: 'cam-min', variantId: 43070317166764,
+          tag: 'Best Value', name: 'Minolta Freedom Zoom',
+          detail: 'Zoom lens · Fully automatic · Most affordable', price: 215,
+          img: 'https://brooklynfilmcamera.com/cdn/shop/files/Minolta_Freedom_Zoom_3.png?v=1765318125&width=600',
+          specs: [['Lens','38–80mm zoom'],['Focus','Auto'],['Exposure','Auto program'],['Flash','Auto built-in'],['Zoom','Motorized button'],['Film','35mm (DX coded)']],
+          loves: ['Built-in zoom gives more framing flexibility than fixed-lens cameras','Fully automatic — zero settings to think about','Our most affordable warrantied compact camera'],
+          included: 'Camera body, tested. Batteries included.'
+        }
+      ],
+      slr: [
+        {
+          id: 'cam-k1000', variantId: 44728617369772,
+          tag: 'Most Popular', name: 'Pentax K1000',
+          detail: 'Fully mechanical · 50mm f/2 · Built-in meter', price: 350,
+          img: 'https://brooklynfilmcamera.com/cdn/shop/files/Pentax_K1000_35mm.png?v=1769112917&width=600',
+          specs: [['Lens','50mm f/2 (K-mount)'],['Shutter','Bulb to 1/1000s'],['Meter','Match-needle, LED display'],['Battery','LR44 — for meter only'],['Mount','Pentax K — huge lens selection'],['Film','35mm']],
+          loves: ['Fully mechanical — works even without a battery','Massive selection of affordable K-mount lenses to grow into','The camera photography students have learned on for 50 years'],
+          included: 'Body + 50mm f/2 lens, CLA\'d and film tested.'
+        },
+        {
+          id: 'cam-ae1', variantId: 44728606556332,
+          tag: 'Iconic', name: 'Canon AE-1 Program',
+          detail: 'Program auto + full manual · 50mm lens', price: 375,
+          img: 'https://brooklynfilmcamera.com/cdn/shop/files/Canon_AE-1_Program.png?v=1769726252&width=600',
+          specs: [['Lens','50mm f/1.8 (FD-mount)'],['Shutter','2s – 1/1000s'],['Modes','Program auto + shutter priority + manual'],['Meter','TTL centre-weighted'],['Mount','Canon FD'],['Film','35mm']],
+          loves: ['Program mode for beginners, full manual when you are ready to learn','Arguably the most iconic 35mm SLR ever made','Fast 50mm f/1.8 creates beautiful background blur'],
+          included: 'Body + 50mm f/1.8 lens, CLA\'d and film tested.'
+        },
+        {
+          id: 'cam-f3', variantId: 41483772199084,
+          tag: 'Pro Level', name: 'Nikon F3 + 50mm f/1.8',
+          detail: 'Professional body · 50mm f/1.8 · Legendary build', price: 830,
+          img: 'https://brooklynfilmcamera.com/cdn/shop/files/Nikon_F3_1.png?v=1762977637&width=600',
+          specs: [['Lens','50mm f/1.8 Nikkor (AI)'],['Shutter','8s – 1/2000s + Bulb'],['Modes','Aperture priority + manual'],['Meter','TTL, LED viewfinder readout'],['Build','Titanium shutter — near indestructible'],['Film','35mm']],
+          loves: ['Built to professional photojournalist standards','Works with a huge range of Nikkor F-mount lenses','Aperture priority makes it intuitive even for beginners'],
+          included: 'Body + 50mm f/1.8 Nikkor, CLA\'d and film tested.'
+        }
+      ],
+      pol: [
+        {
+          id: 'cam-p600', variantId: 0,
+          tag: 'Classic', name: 'Polaroid 600 Red Stripe',
+          detail: 'Auto flash · Iconic 600 format · Square prints', price: 130,
+          img: 'https://brooklynfilmcamera.com/cdn/shop/products/Polaroid_600_Red_Stripe_1.jpg?v=1647457732&width=600',
+          specs: [['Format','Polaroid 600 (integral)'],['Print size','3.1" × 3.1" image area'],['Focus','Fixed (0.6m+)'],['Flash','Auto built-in'],['ISO','Designed for 600 speed film'],['Film cost','~$2.75 per shot']],
+          loves: ['The original instant camera look — square prints with white border','Shoot it, hand it to someone. That moment cannot be replicated.','600 film is widely available in many color and b&w options'],
+          included: 'Camera body, tested.'
+        },
+        {
+          id: 'cam-go', variantId: 0,
+          tag: 'Best Value', name: 'Polaroid GO Gen 2',
+          detail: 'Smallest Polaroid · Double exposures · Mini prints', price: 89.99,
+          img: 'https://brooklynfilmcamera.com/cdn/shop/files/Polaroid_GO_Gen-2_Black_Front.jpg?v=1696364622&width=600',
+          specs: [['Format','Polaroid GO (proprietary)'],['Print size','1.85" × 1.85" image area'],['Focus','Fixed'],['Flash','Built-in'],['Double exposure','Yes — built-in mode'],['Film cost','~$1.88 per shot (16-pack)']],
+          loves: ['The smallest Polaroid ever made — fits in a coat pocket','Double exposure mode lets you layer two shots on one print','Most affordable way into instant film photography'],
+          included: 'Camera body, tested.'
+        }
+      ]
+    },
+    film: {
+      color: {
+        ps:  [
+          { id:'fc-gold', variantId:0, recommended:true,  name:'Kodak Gold 200',     sub:'36 exp · Warm, forgiving, beautiful in natural light', price:12 },
+          { id:'fc-umax', variantId:0, recommended:false, name:'Kodak UltraMax 400', sub:'36 exp · Versatile, handles low light well',           price:14 },
+          { id:'fc-port', variantId:0, recommended:false, name:'Kodak Portra 400',   sub:'36 exp · Pro portrait film, beautiful skin tones',     price:20 }
+        ],
+        slr: [
+          { id:'fc-gold', variantId:0, recommended:true,  name:'Kodak Gold 200',     sub:'36 exp · Warm everyday tones',       price:12 },
+          { id:'fc-umax', variantId:0, recommended:false, name:'Kodak UltraMax 400', sub:'36 exp · Versatile all-rounder',     price:14 },
+          { id:'fc-port', variantId:0, recommended:false, name:'Kodak Portra 400',   sub:'36 exp · Pro portrait film',         price:20 },
+          { id:'fc-cine', variantId:0, recommended:false, name:'Cinestill 800T',     sub:'36 exp · Cinematic, halation at night', price:26 }
+        ],
+        pol: [
+          { id:'fc-600c', variantId:0, recommended:true,  name:'Polaroid 600 Color', sub:'8 shots · Classic square prints',   price:22 },
+          { id:'fc-gof',  variantId:0, recommended:false, name:'Polaroid GO Film',   sub:'16 shots · Mini format',            price:20 }
+        ]
+      },
+      bw: {
+        ps:  [
+          { id:'fb-hp5',  variantId:0, recommended:true,  name:'Ilford HP5 Plus',  sub:'36 exp · The classic B&W starter, pushable to 3200', price:15 },
+          { id:'fb-tmax', variantId:0, recommended:false, name:'Kodak T-MAX 400',  sub:'36 exp · Fine grain, very sharp',                    price:16 }
+        ],
+        slr: [
+          { id:'fb-hp5',   variantId:0, recommended:true,  name:'Ilford HP5 Plus', sub:'36 exp · The classic B&W starter, pushable to 3200', price:15 },
+          { id:'fb-delta', variantId:0, recommended:false, name:'Ilford Delta 400', sub:'36 exp · Finer grain, beautiful in portrait',        price:16 },
+          { id:'fb-trix',  variantId:0, recommended:false, name:'Kodak Tri-X 400',  sub:'36 exp · High contrast, classic journalism grain',   price:15 }
+        ],
+        pol: [
+          { id:'fb-600b', variantId:0, recommended:true, name:'Polaroid 600 B&W', sub:'8 shots · Moody monochrome, timeless look', price:22 }
+        ]
+      }
+    },
+    straps: [
+      { id:'st-canvas',  variantId:0, name:'Canvas Strap',       sub:'Black · Adjustable · Everyday use', price:28 },
+      { id:'st-leather', variantId:0, name:'Waxed Leather',      sub:'Tan · Premium · Develops patina',   price:48 },
+      { id:'st-rope',    variantId:0, name:'Braided Rope',        sub:'Natural · Lightweight',             price:32 }
+    ],
+    cases: [
+      { id:'cs-neo', variantId:0, name:'Neoprene Pouch',    sub:'Slim protection · Fits most compacts', price:18 },
+      { id:'cs-lc',  variantId:0, name:'Leather Half-Case', sub:'Classic look · Adds grip to body',     price:55 }
+    ]
+  };
+
+  var state = { type:null, camera:null, filmColor:null, filmBW:null, strap:null, caseItem:null };
+  var FREE_SHIP = {{ section.settings.free_shipping_threshold | default: 200 }};
+
+  function $(id){ return document.getElementById(id); }
+  function getTotal(){ return [state.camera,state.filmColor,state.filmBW,state.strap,state.caseItem].reduce(function(s,i){return s+(i?i.price:0);},0); }
+  function revealSection(id){
+    var el=$(id);
+    if(!el||el.classList.contains('bfc-kb__section--visible'))return;
+    el.classList.add('bfc-kb__section--visible');
+    setTimeout(function(){el.scrollIntoView({behavior:'smooth',block:'nearest'});},60);
+  }
+
+  /* ── TYPE ── */
+  document.querySelectorAll('.bfc-kb__type-card').forEach(function(card){
+    card.addEventListener('click',function(){
+      document.querySelectorAll('.bfc-kb__type-card').forEach(function(c){c.setAttribute('aria-pressed','false');});
+      card.setAttribute('aria-pressed','true');
+      state.type=card.getAttribute('data-type');
+      state.camera=null;state.filmColor=null;state.filmBW=null;state.strap=null;state.caseItem=null;
+      buildCamGrid();revealSection('kb-sec-cam');updateSticky();
+    });
+  });
+
+  /* ── CAMERA GRID ── */
+  function buildCamGrid(){
+    var grid=$('kb-cam-grid'),label=$('kb-cam-label');
+    var cameras=DATA.cameras[state.type]||[];
+    label.textContent='Choose your '+({ps:'point & shoot',slr:'SLR',pol:'Polaroid'}[state.type]||'camera');
+    grid.style.gridTemplateColumns='repeat('+Math.min(cameras.length,4)+',1fr)';
+    grid.innerHTML='';
+    cameras.forEach(function(cam){
+      var btn=document.createElement('button');
+      btn.className='bfc-kb__cam-card';btn.type='button';
+      btn.setAttribute('role','radio');btn.setAttribute('aria-checked','false');
+      btn.setAttribute('data-cam-id',cam.id);
+      btn.innerHTML=
+        '<button class="bfc-kb__cam-info-btn" type="button" data-info-id="'+cam.id+'" aria-label="More info about '+cam.name+'">i</button>'+
+        '<div class="bfc-kb__cam-img"><img src="'+cam.img+'" alt="'+cam.name+'" loading="lazy" width="600" height="600"></div>'+
+        '<div class="bfc-kb__cam-body">'+
+          '<span class="bfc-kb__cam-tag">'+cam.tag+'</span>'+
+          '<span class="bfc-kb__cam-name">'+cam.name+'</span>'+
+          '<span class="bfc-kb__cam-detail">'+cam.detail+'</span>'+
+          '<span class="bfc-kb__cam-price">$'+cam.price+'</span>'+
+        '</div>';
+      btn.addEventListener('click',function(e){
+        if(e.target.closest('.bfc-kb__cam-info-btn'))return;
+        pickCamera(cam);
+      });
+      btn.querySelector('.bfc-kb__cam-info-btn').addEventListener('click',function(e){
+        e.stopPropagation();openModal(cam);
+      });
+      grid.appendChild(btn);
+    });
+  }
+
+  function pickCamera(cam){
+    state.camera=cam;
+    document.querySelectorAll('.bfc-kb__cam-card').forEach(function(c){
+      c.setAttribute('aria-checked',c.getAttribute('data-cam-id')===cam.id?'true':'false');
+    });
+    buildFilm();revealSection('kb-sec-film');updateSticky();
+  }
+
+  /* ── MODAL ── */
+  function openModal(cam){
+    var overlay=$('kb-modal-overlay');
+    var body=$('kb-modal-body');
+
+    /* Gallery: pull from Liquid-injected BFC_GALLERIES, fall back to empty */
+    var galleries=window.BFC_GALLERIES||{};
+    var imgs=galleries[cam.id]||['','',''];
+
+    /* Build image panel: first image large, next two as thumbs */
+    function imgEl(src,cls){
+      return '<div class="'+cls+'">'+
+        (src?'<img src="'+src+'" alt="Shot on '+cam.name+'" loading="lazy">'
+            :'<div class="bfc-kb__modal-img-placeholder">Sample photo</div>')+
+      '</div>';
+    }
+    var imgHtml=
+      imgEl(imgs[0],'bfc-kb__modal-img-main')+
+      imgEl(imgs[1],'bfc-kb__modal-img-thumb')+
+      imgEl(imgs[2],'bfc-kb__modal-img-thumb');
+
+    var specsHtml=cam.specs.map(function(r){
+      return '<span class="bfc-kb__modal-spec-key">'+r[0]+'</span><span class="bfc-kb__modal-spec-val">'+r[1]+'</span>';
+    }).join('');
+    var lovesHtml=cam.loves.map(function(l){return '<div class="bfc-kb__modal-love-item">'+l+'</div>';}).join('');
+    var isSel=state.camera&&state.camera.id===cam.id;
+    var warranty=WARRANTY[state.type]||'3–6 month';
+
+    body.innerHTML=
+      '<div class="bfc-kb__modal-images">'+
+        '<div class="bfc-kb__modal-images-label">Photos taken on this camera</div>'+
+        '<div class="bfc-kb__modal-img-grid">'+imgHtml+'</div>'+
+      '</div>'+
+      '<div class="bfc-kb__modal-info">'+
+        '<div class="bfc-kb__modal-info-tag">'+cam.tag+'</div>'+
+        '<div class="bfc-kb__modal-info-name" id="kb-modal-title">'+cam.name+'</div>'+
+        '<div class="bfc-kb__modal-info-price">$'+cam.price+'</div>'+
+        '<div class="bfc-kb__modal-specs">'+specsHtml+'</div>'+
+        '<div class="bfc-kb__modal-loves-label">Why people love it</div>'+
+        '<div class="bfc-kb__modal-loves">'+lovesHtml+'</div>'+
+        '<div class="bfc-kb__modal-included">'+cam.included+' <strong>'+warranty+' warranty included.</strong></div>'+
+        '<button class="bfc-kb__modal-select-btn'+(isSel?' already-selected':'')+'" type="button" id="kb-modal-select-btn">'+
+          (isSel?'Selected — this is your camera':'Select this camera')+
+        '</button>'+
+      '</div>';
+
+    $('kb-modal-select-btn').addEventListener('click',function(){
+      pickCamera(cam);
+      this.textContent='Selected — this is your camera';
+      this.classList.add('already-selected');
+      document.querySelectorAll('.bfc-kb__cam-card').forEach(function(c){
+        c.setAttribute('aria-checked',c.getAttribute('data-cam-id')===cam.id?'true':'false');
+      });
+      closeModal();
+    });
+
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  }
+
+  function closeModal(){
+    var overlay=$('kb-modal-overlay');
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  }
+
+  $('kb-modal-close').addEventListener('click',closeModal);
+  $('kb-modal-overlay').addEventListener('click',function(e){
+    if(e.target===this)closeModal();
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape')closeModal();
+  });
+
+  /* ── FILM ── */
+  function buildFilm(){
+    var colorFilms=DATA.film.color[state.type]||DATA.film.color.ps;
+    var bwFilms=DATA.film.bw[state.type]||DATA.film.bw.ps;
+    buildFilmRow('kb-film-color-row',colorFilms,'filmColor');
+    buildFilmRow('kb-film-bw-row',bwFilms,'filmBW');
+  }
+  function buildFilmRow(rowId,items,key){
+    var row=$(rowId);
+    row.style.gridTemplateColumns='repeat('+Math.min(items.length,4)+',1fr)';
+    row.innerHTML=items.map(function(f){return addonCardHtml(f,key);}).join('');
+    row.querySelectorAll('.bfc-kb__addon-card').forEach(function(card){
+      card.addEventListener('click',function(){
+        var item=items.find(function(f){return f.id===card.getAttribute('data-addon-id');});
+        toggleAddon(key,item,items);
+      });
+    });
+  }
+  $('kb-film-rec-apply').addEventListener('click',function(){
+    var cf=DATA.film.color[state.type]||DATA.film.color.ps;
+    var bf=DATA.film.bw[state.type]||DATA.film.bw.ps;
+    var rc=cf.find(function(f){return f.recommended;});
+    var rb=bf.find(function(f){return f.recommended;});
+    if(rc)selectAddon('filmColor',rc);
+    if(rb)selectAddon('filmBW',rb);
+    updateSticky();
+  });
+  $('kb-film-continue').addEventListener('click',function(){buildAccessories();revealSection('kb-sec-add');});
+  $('kb-skip-film').addEventListener('click',function(){buildAccessories();revealSection('kb-sec-add');});
+
+  /* ── ACCESSORIES ── */
+  function buildAccessories(){
+    buildAddonGroup('kb-addon-strap','Camera Strap',DATA.straps,'strap');
+    buildAddonGroup('kb-addon-case','Camera Case',DATA.cases,'caseItem');
+  }
+  function buildAddonGroup(containerId,label,items,key){
+    var el=$(containerId),cols=Math.min(items.length,4);
+    el.innerHTML=
+      '<div class="bfc-kb__addon-group-label">'+label+
+        '<span class="bfc-kb__addon-optional">Optional — tap to add</span>'+
+      '</div>'+
+      '<div class="bfc-kb__addon-row" style="grid-template-columns:repeat('+cols+',1fr)">'+
+        items.map(function(i){return addonCardHtml(i,key);}).join('')+
+      '</div>';
+    el.querySelectorAll('.bfc-kb__addon-card').forEach(function(card){
+      card.addEventListener('click',function(){
+        var item=items.find(function(i){return i.id===card.getAttribute('data-addon-id');});
+        toggleAddon(key,item,items);
+      });
+    });
+  }
+  function addonCardHtml(item,key){
+    return '<button class="bfc-kb__addon-card" type="button" aria-pressed="false" data-addon-key="'+key+'" data-addon-id="'+item.id+'">'+
+      (item.recommended?'<span class="bfc-kb__addon-rec-badge">Recommended</span>':'')+
+      '<span class="bfc-kb__addon-name">'+item.name+'</span>'+
+      '<span class="bfc-kb__addon-sub">'+item.sub+'</span>'+
+      '<span class="bfc-kb__addon-price">$'+item.price+'</span>'+
+    '</button>';
+  }
+  function toggleAddon(key,item){
+    if(!item)return;
+    if(state[key]&&state[key].id===item.id){
+      state[key]=null;
+      document.querySelectorAll('[data-addon-key="'+key+'"]').forEach(function(c){c.setAttribute('aria-pressed','false');});
+    } else { selectAddon(key,item); }
+    updateSticky();
+  }
+  function selectAddon(key,item){
+    state[key]=item;
+    document.querySelectorAll('[data-addon-key="'+key+'"]').forEach(function(c){
+      c.setAttribute('aria-pressed',c.getAttribute('data-addon-id')===item.id?'true':'false');
+    });
+  }
+  $('kb-acc-continue').addEventListener('click',goReview);
+  $('kb-skip-add').addEventListener('click',goReview);
+
+  /* ── REVIEW ── */
+  function goReview(){ buildReview(); revealSection('kb-sec-review'); updateSticky(); }
+  function buildReview(){
+    var cam=state.camera;
+    var warranty=(WARRANTY[state.type]||'3–6 month')+' Warranty Included';
+    var addons=[
+      state.filmColor&&Object.assign({},state.filmColor,{cat:'Color Film'}),
+      state.filmBW   &&Object.assign({},state.filmBW,   {cat:'B&W Film'}),
+      state.strap    &&Object.assign({},state.strap,    {cat:'Strap'}),
+      state.caseItem &&Object.assign({},state.caseItem, {cat:'Case'})
+    ].filter(Boolean);
+    var addonsHtml=addons.length
+      ?addons.map(function(a){
+        return '<div class="bfc-kb__review-addon-row">'+
+          '<div class="bfc-kb__review-addon-info">'+
+            '<div class="bfc-kb__review-addon-cat">'+a.cat+'</div>'+
+            '<div class="bfc-kb__review-addon-name">'+a.name+'</div>'+
+            '<div class="bfc-kb__review-addon-sub">'+a.sub+'</div>'+
+          '</div>'+
+          '<div class="bfc-kb__review-addon-price">$'+a.price+'</div>'+
+        '</div>';
+      }).join('')
+      :'<p class="bfc-kb__no-addons">No accessories added. <button class="bfc-kb__no-addons-link" type="button" id="kb-back-add">Add some?</button></p>';
+    $('kb-review-grid').innerHTML=
+      '<div class="bfc-kb__review-cell">'+
+        '<span class="bfc-kb__review-cell-label">Camera</span>'+
+        '<div class="bfc-kb__review-cam-row">'+
+          '<div class="bfc-kb__review-cam-img"><img src="'+cam.img+'" alt="'+cam.name+'" width="88" height="88"></div>'+
+          '<div>'+
+            '<div class="bfc-kb__review-cam-name">'+cam.name+'</div>'+
+            '<div class="bfc-kb__review-cam-detail">'+cam.detail+'</div>'+
+            '<div class="bfc-kb__review-warranty">'+warranty+'</div>'+
+            '<span class="bfc-kb__review-cam-price">$'+cam.price+'</span>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="bfc-kb__review-cell">'+
+        '<span class="bfc-kb__review-cell-label">Film &amp; Accessories</span>'+
+        addonsHtml+
+      '</div>';
+    var backLink=$('kb-back-add');
+    if(backLink)backLink.addEventListener('click',function(){$('kb-sec-add').scrollIntoView({behavior:'smooth',block:'start'});});
+    var total=getTotal();
+    var lines=[['Camera',cam.price]].concat(
+      [state.filmColor&&['Color Film',state.filmColor.price],
+       state.filmBW   &&['B&W Film',  state.filmBW.price],
+       state.strap    &&['Strap',     state.strap.price],
+       state.caseItem &&['Case',      state.caseItem.price]].filter(Boolean)
+    );
+    $('kb-review-total').innerHTML=
+      '<div class="bfc-kb__review-breakdown">'+
+        lines.map(function(l){return '<div class="bfc-kb__review-line"><span>'+l[0]+'</span><span>$'+l[1]+'</span></div>';}).join('')+
+        '<div class="bfc-kb__review-line bfc-kb__review-line--total">Total <span>$'+total.toFixed(2)+'</span></div>'+
+        (total>=FREE_SHIP?'<div class="bfc-kb__ship-badge">Free US shipping included</div>':'')+
+      '</div>'+
+      '<div class="bfc-kb__review-cta">'+
+        '<button class="bfc-kb__btn bfc-kb__btn--dark" id="kb-atc-btn" type="button">Add Kit to Cart</button>'+
+        '<span class="bfc-kb__review-cta-note">Ships within 1–3 business days</span>'+
+      '</div>';
+    $('kb-atc-btn').addEventListener('click',addKitToCart);
+  }
+
+  /* ── CART ── */
+  function addKitToCart(){
+    var btn=$('kb-atc-btn');
+    btn.textContent='Adding to cart…';btn.disabled=true;
+    var items=[state.camera,state.filmColor,state.filmBW,state.strap,state.caseItem]
+      .filter(function(i){return i&&i.variantId;})
+      .map(function(i){return{id:i.variantId,quantity:1,properties:{_kit_builder:'true'}};});
+    if(!items.length){btn.textContent='Add Kit to Cart';btn.disabled=false;return;}
+    fetch('/cart/add.js',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({items:items})
+    })
+    .then(function(r){if(!r.ok)throw new Error();return r.json();})
+    .then(function(){window.location.href='/cart';})
+    .catch(function(){btn.textContent='Something went wrong — try again';btn.disabled=false;});
+  }
+
+  /* ── STICKY ── */
+  function updateSticky(){
+    var sticky=$('kb-sticky'),items=$('kb-sticky-items'),price=$('kb-sticky-price'),cta=$('kb-sticky-cta');
+    if(!state.type){sticky.hidden=true;return;}
+    sticky.hidden=false;
+    price.textContent=getTotal().toFixed(2);
+    var filmVal=[state.filmColor&&state.filmColor.name,state.filmBW&&state.filmBW.name].filter(Boolean).join(' + ')||null;
+    var slots=[
+      {label:'Style',val:{ps:'Point & Shoot',slr:'35mm SLR',pol:'Polaroid'}[state.type]},
+      {label:'Camera',val:state.camera?state.camera.name:null},
+      {label:'Film',val:filmVal}
+    ];
+    items.innerHTML=slots.map(function(s){
+      var empty=!s.val;
+      return '<div class="bfc-kb__sticky-item">'+
+        '<span class="bfc-kb__sticky-item-label">'+s.label+'</span>'+
+        '<span class="bfc-kb__sticky-item-val'+(empty?' bfc-kb__sticky-item-val--empty':'')+'">'+
+          (s.val||(s.label==='Camera'?'Not selected yet':'Not added'))+
+        '</span></div>';
+    }).join('');
+    var rev=$('kb-sec-review').classList.contains('bfc-kb__section--visible');
+    if(!state.camera){cta.textContent='Choose camera';cta.onclick=function(){$('kb-sec-cam').scrollIntoView({behavior:'smooth',block:'start'});};}
+    else if(!rev){cta.textContent='Review kit →';cta.onclick=goReview;}
+    else{cta.textContent='Add to Cart →';cta.onclick=addKitToCart;}
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Kit Builder",
+  "tag": "section",
+  "class": "bfc-kit-builder",
+  "settings": [
+    { "type": "text",     "id": "eyebrow",                 "label": "Eyebrow text",                "default": "Don't know what to get? Start here." },
+    { "type": "text",     "id": "headline",                "label": "Hero headline",               "default": "Find your first" },
+    { "type": "text",     "id": "headline_em",             "label": "Hero headline (italic line)", "default": "film camera." },
+    { "type": "textarea", "id": "subtext",                 "label": "Hero subtext",                "default": "Answer three quick questions — we'll put together a kit built around how you actually want to shoot. Every camera is professionally restored and backed by our warranty." },
+    { "type": "number",   "id": "free_shipping_threshold", "label": "Free shipping threshold ($)", "default": 200 }
+  ],
+  "presets": [{ "name": "Kit Builder" }]
+}
+{% endschema %}

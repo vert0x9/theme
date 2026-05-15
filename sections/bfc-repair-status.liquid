@@ -1,0 +1,724 @@
+{%- comment -%}
+  BFC Repair Status — sections/bfc-repair-status.liquid
+
+  Public-facing order lookup widget. Customer enters their order #, widget
+  fetches status from Base44, displays the current stage + timeline + tracking.
+
+  Setup:
+    1. Create a page at /pages/repair-status in Shopify admin
+    2. Assign this section to that page (via template or add-to-page)
+    3. Update GET_REPAIR_URL + GET_DEV_URL below with your Base44 function URLs
+
+  Required Base44 response shape (added for tracking):
+    {
+      found: true,
+      order_number: "BFC52818",
+      current: {...},
+      flow: "...",
+      service: "...",
+      timeline: [...],
+      tracking_numbers: ["9400111899223197428347"]   // NEW — array of bare tracking numbers
+    }
+
+  See bottom of file for the Base44 snippet that extracts these from `tracking-*` tags.
+{%- endcomment -%}
+
+<section class="bfc-rs" aria-labelledby="bfc-rs-title">
+  <div class="bfc-rs-inner">
+    <header class="bfc-rs-header">
+      <span class="bfc-rs-eyebrow">Order Status</span>
+      <h1 class="bfc-rs-title" id="bfc-rs-title">Check your order.</h1>
+      <p class="bfc-rs-sub">Enter your Shopify order number to see where your repair or film developing order stands.</p>
+    </header>
+
+    <form class="bfc-rs-form" id="bfc-rs-form" onsubmit="return bfcRsLookup(event)">
+      <div class="bfc-rs-field">
+        <label for="bfc-rs-input" class="bfc-rs-label">Order #</label>
+        <div class="bfc-rs-input-row">
+          <input
+            type="text"
+            id="bfc-rs-input"
+            class="bfc-rs-input"
+            placeholder="e.g. BFC52818"
+            autocomplete="off"
+            required
+          />
+          <button type="submit" class="bfc-rs-btn" id="bfc-rs-btn">Look Up</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="bfc-rs-result" id="bfc-rs-result" aria-live="polite"></div>
+  </div>
+</section>
+
+<style>
+/* ── BFC namespace ──────────────────────────────── */
+.bfc-rs,
+.bfc-rs *,
+.bfc-rs *::before,
+.bfc-rs *::after { box-sizing: border-box; }
+
+.bfc-rs {
+  --or: #E36E15;
+  --go: #F4A027;
+  --ce: #ABCC99;
+  --cv: #F8F6EE;
+  --bk: #202009;
+  --ch: #4E4741;
+  --gr: #E3DDDA;
+  --gn: #2a4820;
+  --rd: #8B2121;
+  --sr: 'Cormorant Garamond', Georgia, serif;
+  --sn: 'Poppins', sans-serif;
+  --mono: 'SF Mono', Monaco, Menlo, Consolas, monospace;
+  --t: 0.2s ease;
+  font-family: var(--sn);
+  color: var(--bk);
+  background: var(--cv);
+  padding: 56px 24px 80px;
+  min-height: 60vh;
+}
+.bfc-rs-inner { max-width: 680px; margin: 0 auto; }
+
+.bfc-rs-header { margin-bottom: 32px; }
+.bfc-rs-eyebrow {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--or);
+  display: block; margin-bottom: 12px;
+}
+.bfc-rs-title {
+  font-family: var(--sr); font-size: 48px; font-weight: 300;
+  line-height: 1.05; margin: 0 0 12px; color: var(--bk);
+}
+.bfc-rs-sub {
+  font-size: 13px; color: var(--ch); line-height: 1.6;
+  margin: 0; max-width: 480px;
+}
+
+/* ── Form ───────────────────────────────────────── */
+.bfc-rs-form {
+  background: #fff;
+  border: 1px solid rgba(32,32,9,0.08);
+  padding: 24px;
+  margin-bottom: 32px;
+}
+.bfc-rs-label {
+  display: block; font-size: 9px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ch); margin-bottom: 10px;
+}
+.bfc-rs-input-row {
+  display: flex; gap: 0; align-items: stretch;
+}
+.bfc-rs-input {
+  flex: 1; padding: 12px 14px;
+  border: 1px solid rgba(32,32,9,0.15);
+  background: #fff; font-family: var(--sn);
+  font-size: 14px; color: var(--bk);
+  transition: border-color var(--t);
+  min-width: 0;
+}
+.bfc-rs-input:focus {
+  outline: none; border-color: var(--or);
+}
+.bfc-rs-btn {
+  border: none; background: var(--or); color: #fff;
+  padding: 0 28px; font-family: var(--sn);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  cursor: pointer; transition: background var(--t);
+  white-space: nowrap; flex-shrink: 0;
+}
+.bfc-rs-btn:hover:not(:disabled) { background: #c9600f; }
+.bfc-rs-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Result card ────────────────────────────────── */
+.bfc-rs-result:empty { display: none; }
+
+.bfc-rs-card {
+  background: #fff;
+  border: 1px solid rgba(32,32,9,0.08);
+  margin-bottom: 32px;
+}
+.bfc-rs-card.is-alert {
+  border-left: 4px solid var(--or);
+}
+.bfc-rs-card.is-terminal {
+  border-left: 4px solid var(--gn);
+}
+.bfc-rs-card.is-transit {
+  border-left: 4px solid var(--go);
+}
+.bfc-rs-card.is-notfound,
+.bfc-rs-card.is-error {
+  border-left: 4px solid var(--rd);
+}
+
+.bfc-rs-card-head {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid rgba(32,32,9,0.08);
+}
+.bfc-rs-card-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 8px;
+}
+.bfc-rs-order-num {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ch);
+}
+.bfc-rs-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 4px 10px;
+  background: rgba(32,32,9,0.06);
+  color: var(--ch);
+}
+.bfc-rs-badge.is-alert {
+  background: rgba(227,110,21,0.12); color: var(--or);
+}
+.bfc-rs-badge.is-terminal {
+  background: rgba(42,72,32,0.1); color: var(--gn);
+}
+.bfc-rs-badge.is-transit {
+  background: rgba(244,160,39,0.15); color: #9a6510;
+}
+
+.bfc-rs-current-label {
+  font-family: var(--sr); font-size: 28px; font-weight: 400;
+  line-height: 1.15; margin: 6px 0 4px; color: var(--bk);
+}
+.bfc-rs-current-msg {
+  font-size: 13px; color: var(--ch); line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Tracking banner ────────────────────────────── */
+.bfc-rs-tracking {
+  background: rgba(42,72,32,0.05);
+  border-bottom: 1px solid rgba(32,32,9,0.06);
+  padding: 16px 24px;
+}
+.bfc-rs-tracking-header {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--gn); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 7px;
+}
+.bfc-rs-tracking-header::before {
+  content: ''; width: 5px; height: 5px;
+  background: var(--gn); border-radius: 50%;
+  flex-shrink: 0;
+}
+.bfc-rs-tracking-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; flex-wrap: wrap;
+  padding: 8px 0;
+  border-top: 1px solid rgba(32,32,9,0.06);
+}
+.bfc-rs-tracking-row:first-of-type { border-top: none; padding-top: 0; }
+.bfc-rs-tracking-info {
+  flex: 1; min-width: 0;
+}
+.bfc-rs-tracking-carrier {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ch); margin-bottom: 2px;
+}
+.bfc-rs-tracking-num {
+  font-family: var(--mono);
+  font-size: 13px; color: var(--bk);
+  font-weight: 500;
+  word-break: break-all;
+  letter-spacing: 0.02em;
+}
+.bfc-rs-tracking-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--gn); color: #fff;
+  padding: 10px 18px; font-family: var(--sn);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  text-decoration: none;
+  transition: background var(--t);
+  white-space: nowrap; flex-shrink: 0;
+}
+.bfc-rs-tracking-btn:hover {
+  background: #1c301a; color: #fff; text-decoration: none;
+}
+.bfc-rs-tracking-btn::after {
+  content: '\2192';
+  font-size: 13px; line-height: 1;
+}
+
+/* ── Timeline ───────────────────────────────────── */
+.bfc-rs-timeline {
+  padding: 24px;
+  display: flex; flex-direction: column; gap: 0;
+}
+.bfc-rs-step {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 14px; align-items: flex-start;
+  padding: 10px 0;
+  position: relative;
+}
+.bfc-rs-step + .bfc-rs-step::before {
+  content: ''; position: absolute;
+  top: -6px; left: 11.5px; width: 1px; height: 16px;
+  background: rgba(32,32,9,0.12);
+}
+.bfc-rs-step.is-done + .bfc-rs-step::before,
+.bfc-rs-step.is-done + .bfc-rs-step.is-done::before,
+.bfc-rs-step.is-done + .bfc-rs-step.is-current::before {
+  background: var(--gn);
+}
+.bfc-rs-dot {
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid rgba(32,32,9,0.2);
+  background: #fff; flex-shrink: 0;
+  font-size: 10px; font-weight: 700;
+  color: rgba(32,32,9,0.3);
+}
+.bfc-rs-step.is-done .bfc-rs-dot {
+  border-color: var(--gn); background: var(--gn); color: #fff;
+}
+.bfc-rs-step.is-current .bfc-rs-dot {
+  border-color: var(--or); background: var(--or); color: #fff;
+  animation: bfcRsPulse 2s ease-in-out infinite;
+}
+@keyframes bfcRsPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(227,110,21,0.4); }
+  50% { box-shadow: 0 0 0 6px rgba(227,110,21,0); }
+}
+.bfc-rs-step-body { padding-top: 3px; }
+.bfc-rs-step-label {
+  font-size: 12px; font-weight: 600;
+  color: rgba(32,32,9,0.4); line-height: 1.3;
+}
+.bfc-rs-step.is-done .bfc-rs-step-label { color: var(--ch); }
+.bfc-rs-step.is-current .bfc-rs-step-label {
+  color: var(--bk); font-weight: 700;
+}
+.bfc-rs-step-state {
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  margin-top: 2px; color: rgba(32,32,9,0.4);
+}
+.bfc-rs-step.is-done .bfc-rs-step-state { color: var(--gn); }
+.bfc-rs-step.is-current .bfc-rs-step-state { color: var(--or); }
+
+/* ── Empty/not-found states ────────────────────── */
+.bfc-rs-empty {
+  padding: 28px 24px;
+  text-align: left;
+}
+.bfc-rs-empty-title {
+  font-family: var(--sr); font-size: 22px; font-weight: 400;
+  line-height: 1.2; margin: 0 0 8px; color: var(--bk);
+}
+.bfc-rs-empty-msg {
+  font-size: 12.5px; color: var(--ch); line-height: 1.6;
+  margin: 0;
+}
+.bfc-rs-empty-msg a {
+  color: var(--or); text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ── Loading skeleton ──────────────────────────── */
+.bfc-rs-loading {
+  padding: 28px 24px;
+  font-size: 11px; color: var(--ch);
+  letter-spacing: 0.1em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 10px;
+}
+.bfc-rs-loading::before {
+  content: ''; width: 12px; height: 12px;
+  border: 1.5px solid rgba(32,32,9,0.15);
+  border-top-color: var(--or);
+  border-radius: 50%;
+  animation: bfcRsSpin 0.8s linear infinite;
+}
+@keyframes bfcRsSpin { to { transform: rotate(360deg); } }
+
+/* ── Developing extras: rolls, notes ──────────── */
+.bfc-rs-rolls {
+  padding: 14px 24px;
+  border-bottom: 1px solid rgba(32,32,9,0.06);
+  display: flex; align-items: baseline; gap: 12px;
+}
+.bfc-rs-rolls-label {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ch); flex-shrink: 0;
+}
+.bfc-rs-rolls-value {
+  font-size: 13px; color: var(--bk);
+  font-weight: 500; line-height: 1.4;
+}
+.bfc-rs-notes {
+  padding: 14px 24px;
+  border-bottom: 1px solid rgba(32,32,9,0.06);
+  background: rgba(244,160,39,0.06);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.bfc-rs-note {
+  font-size: 12px; color: var(--ch);
+  line-height: 1.5;
+  position: relative; padding-left: 14px;
+}
+.bfc-rs-note::before {
+  content: '\2022';
+  position: absolute; left: 0; top: 0;
+  color: var(--go); font-weight: 700;
+}
+
+/* ── Mobile ─────────────────────────────────────── */
+@media (max-width: 600px) {
+  .bfc-rs { padding: 36px 16px 56px; }
+  .bfc-rs-title { font-size: 36px; }
+  .bfc-rs-form { padding: 18px; }
+  .bfc-rs-input-row { flex-direction: column; gap: 8px; }
+  .bfc-rs-btn { padding: 14px; }
+  .bfc-rs-card-head { padding: 18px 18px 14px; }
+  .bfc-rs-timeline { padding: 18px; }
+  .bfc-rs-current-label { font-size: 22px; }
+  .bfc-rs-rolls { padding: 12px 18px; flex-direction: column; gap: 4px; align-items: flex-start; }
+  .bfc-rs-notes { padding: 12px 18px; }
+  .bfc-rs-tracking { padding: 14px 18px; }
+  .bfc-rs-tracking-row { flex-direction: column; align-items: stretch; gap: 10px; }
+  .bfc-rs-tracking-btn { justify-content: center; padding: 12px 16px; }
+}
+</style>
+
+<script>
+(function() {
+  // ── Base44 function URLs ──────────────────────
+  var GET_REPAIR_URL = 'https://app--6910fd9136cfabdf03f66780.base44.app/api/apps/6910fd9136cfabdf03f66780/functions/getRepairOrder';
+  var GET_DEV_URL    = 'https://app--6910fd9136cfabdf03f66780.base44.app/api/apps/6910fd9136cfabdf03f66780/functions/getDevOrder';
+
+  var resultEl = document.getElementById('bfc-rs-result');
+  var inputEl  = document.getElementById('bfc-rs-input');
+  var btnEl    = document.getElementById('bfc-rs-btn');
+
+  // ── Escape HTML ────────────────────────────────
+  function esc(s) {
+    return String(s || '').replace(/[&<>"']/g, function(c) {
+      return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+    });
+  }
+
+  // ── Extract tracking numbers from response ────
+  // Prefers data.tracking_numbers if the Base44 function provides it directly.
+  // Falls back to extracting from data.tags array (which some functions return).
+  function getTrackingNumbers(data) {
+    if (!data) return [];
+
+    // Preferred: explicit tracking_numbers field from Base44
+    if (Array.isArray(data.tracking_numbers) && data.tracking_numbers.length) {
+      return data.tracking_numbers;
+    }
+
+    // Fallback: parse from tags array/string
+    var tags = data.tags;
+    var tagList = [];
+    if (Array.isArray(tags)) {
+      tagList = tags;
+    } else if (typeof tags === 'string') {
+      tagList = tags.split(',');
+    }
+
+    return tagList
+      .map(function(t) { return String(t || '').trim(); })
+      .filter(function(t) { return /^tracking[-_]?/i.test(t); })
+      .map(function(t) { return t.replace(/^tracking[-_]?/i, ''); })
+      .filter(Boolean);
+  }
+
+  // ── Carrier detection ──────────────────────────
+  // Given a tracking number, returns { name, url } for deep-linking.
+  // Falls back to a universal tracker if format is unrecognized.
+  function detectCarrier(num) {
+    var n = String(num || '').trim().replace(/\s+/g, '').toUpperCase();
+    if (!n) return null;
+
+    // UPS: 1Z + 16 alphanumeric
+    if (/^1Z[0-9A-Z]{16}$/.test(n)) {
+      return {
+        name: 'UPS',
+        url: 'https://www.ups.com/track?tracknum=' + encodeURIComponent(n)
+      };
+    }
+
+    // USPS: common prefixes (9400, 9205, 9361, 9303, 9270, 9208, 82, 70, 23)
+    // and 20-22 digit all-numeric IMpb labels
+    if (/^(94|92|93|95|82|70|23)\d{18,20}$/.test(n) || /^\d{20,22}$/.test(n)) {
+      return {
+        name: 'USPS',
+        url: 'https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=' + encodeURIComponent(n)
+      };
+    }
+
+    // FedEx: 12 or 15 digits (also accepts 20-digit door tags, but those overlap USPS)
+    if (/^\d{12}$/.test(n) || /^\d{15}$/.test(n)) {
+      return {
+        name: 'FedEx',
+        url: 'https://www.fedex.com/fedextrack/?trknbr=' + encodeURIComponent(n)
+      };
+    }
+
+    // DHL Express: 10 digits
+    if (/^\d{10}$/.test(n)) {
+      return {
+        name: 'DHL',
+        url: 'https://www.dhl.com/en/express/tracking.html?AWB=' + encodeURIComponent(n)
+      };
+    }
+
+    // Fallback: universal tracker (17track supports basically every carrier)
+    return {
+      name: 'Carrier',
+      url: 'https://t.17track.net/en#nums=' + encodeURIComponent(n)
+    };
+  }
+
+  // ── Render the tracking banner ─────────────────
+  function renderTracking(numbers) {
+    if (!numbers || !numbers.length) return '';
+
+    // Dedupe and clean
+    var clean = [];
+    var seen = {};
+    numbers.forEach(function(n) {
+      var t = String(n || '').trim();
+      if (t && !seen[t.toLowerCase()]) {
+        seen[t.toLowerCase()] = true;
+        clean.push(t);
+      }
+    });
+    if (!clean.length) return '';
+
+    var headerText = clean.length === 1 ? 'Your Package Is On Its Way' : clean.length + ' Packages Shipped';
+
+    var rows = clean.map(function(n) {
+      var carrier = detectCarrier(n) || { name: 'Carrier', url: '#' };
+      return (
+        '<div class="bfc-rs-tracking-row">' +
+          '<div class="bfc-rs-tracking-info">' +
+            '<div class="bfc-rs-tracking-carrier">' + esc(carrier.name) + '</div>' +
+            '<div class="bfc-rs-tracking-num">' + esc(n) + '</div>' +
+          '</div>' +
+          '<a href="' + esc(carrier.url) + '" target="_blank" rel="noopener noreferrer" class="bfc-rs-tracking-btn">' +
+            'Track Package' +
+          '</a>' +
+        '</div>'
+      );
+    }).join('');
+
+    return (
+      '<div class="bfc-rs-tracking">' +
+        '<div class="bfc-rs-tracking-header">' + esc(headerText) + '</div>' +
+        rows +
+      '</div>'
+    );
+  }
+
+  // ── Render a status card ───────────────────────
+  function renderCard(data) {
+    if (!data.found) {
+      return (
+        '<div class="bfc-rs-card is-notfound">' +
+          '<div class="bfc-rs-empty">' +
+            '<h2 class="bfc-rs-empty-title">No order found.</h2>' +
+            '<p class="bfc-rs-empty-msg">We couldn\u2019t find an order with that number in our repair or developing systems. Double-check your confirmation email, or <a href="mailto:hello@brooklynfilmcamera.com">email our team</a> and we\u2019ll help.</p>' +
+          '</div>' +
+        '</div>'
+      );
+    }
+
+    if (!data.current || !data.flow) {
+      // Order exists but no service status yet.
+      // If tracking exists, it means they shipped it in but it hasn't reached the lab — show a proper "In Transit" card.
+      // Otherwise fall back to the generic "no status" message.
+      var noStatusTracking = getTrackingNumbers(data);
+      var hasTracking = noStatusTracking.length > 0;
+
+      if (hasTracking) {
+        return (
+          '<div class="bfc-rs-card is-transit">' +
+            '<div class="bfc-rs-card-head">' +
+              '<div class="bfc-rs-card-meta">' +
+                '<span class="bfc-rs-order-num">Order \u00b7 #' + esc(data.order_number) + '</span>' +
+                '<span class="bfc-rs-badge is-transit">In Transit</span>' +
+              '</div>' +
+              '<h2 class="bfc-rs-current-label">On its way to the lab.</h2>' +
+              '<p class="bfc-rs-current-msg">We haven\u2019t received your package yet, but it\u2019s on the move. Check the tracking below for the latest carrier update \u2014 we\u2019ll update this page with a service status as soon as it arrives at Brooklyn Film Camera.</p>' +
+            '</div>' +
+            renderTracking(noStatusTracking) +
+          '</div>'
+        );
+      }
+
+      return (
+        '<div class="bfc-rs-card is-notfound">' +
+          '<div class="bfc-rs-empty">' +
+            '<h2 class="bfc-rs-empty-title">Order #' + esc(data.order_number) + '</h2>' +
+            '<p class="bfc-rs-empty-msg">This order doesn\u2019t have a service status yet. If you\u2019re expecting a repair or developing update, <a href="mailto:hello@brooklynfilmcamera.com">email our team</a>.</p>' +
+          '</div>' +
+        '</div>'
+      );
+    }
+
+    var cur = data.current;
+    var cardClass = 'bfc-rs-card';
+    if (cur.alert) cardClass += ' is-alert';
+    else if (cur.terminal) cardClass += ' is-terminal';
+
+    var badgeLabel, badgeClass;
+    if (cur.alert) { badgeLabel = 'Action Required'; badgeClass = 'is-alert'; }
+    else if (cur.terminal) { badgeLabel = 'Complete'; badgeClass = 'is-terminal'; }
+    else { badgeLabel = 'In Progress'; badgeClass = ''; }
+
+    var serviceLabel = data.service === 'developing' ? 'Film Developing'
+                     : data.flow === 'warranty' ? 'Warranty Service'
+                     : data.flow === 'sx70' ? 'SX-70 Restoration'
+                     : 'Camera Repair';
+
+    var timelineHtml = (data.timeline || []).map(function(s) {
+      var icon = s.state === 'done' ? '\u2713'
+               : s.state === 'current' ? s.step
+               : s.step;
+      var stateLabel = s.state === 'done' ? 'Complete'
+                     : s.state === 'current' ? 'Current'
+                     : 'Upcoming';
+      return (
+        '<div class="bfc-rs-step is-' + s.state + '">' +
+          '<div class="bfc-rs-dot">' + icon + '</div>' +
+          '<div class="bfc-rs-step-body">' +
+            '<div class="bfc-rs-step-label">' + esc(s.label) + '</div>' +
+            '<div class="bfc-rs-step-state">' + stateLabel + '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+
+    return (
+      '<div class="' + cardClass + '">' +
+        '<div class="bfc-rs-card-head">' +
+          '<div class="bfc-rs-card-meta">' +
+            '<span class="bfc-rs-order-num">' + esc(serviceLabel) + ' \u00b7 #' + esc(data.order_number) + '</span>' +
+            '<span class="bfc-rs-badge ' + badgeClass + '">' + badgeLabel + '</span>' +
+          '</div>' +
+          '<h2 class="bfc-rs-current-label">' + esc(cur.label) + '</h2>' +
+          '<p class="bfc-rs-current-msg">' + esc(cur.message) + '</p>' +
+        '</div>' +
+        renderTracking(getTrackingNumbers(data)) +
+        renderDevExtras(data) +
+        '<div class="bfc-rs-timeline">' + timelineHtml + '</div>' +
+      '</div>'
+    );
+  }
+
+  // ── Developing-specific extras (rolls summary, timing notes, pickup) ──
+  function renderDevExtras(data) {
+    if (data.service !== 'developing') return '';
+    var out = '';
+
+    // Rolls summary
+    if (data.rolls_summary) {
+      out += (
+        '<div class="bfc-rs-rolls">' +
+          '<div class="bfc-rs-rolls-label">Order Contents</div>' +
+          '<div class="bfc-rs-rolls-value">' + esc(data.rolls_summary) + '</div>' +
+        '</div>'
+      );
+    }
+
+    // Notes (B&W / E-6 / ECN-2 timing)
+    if (data.notes && data.notes.length) {
+      out += '<div class="bfc-rs-notes">';
+      data.notes.forEach(function(n) {
+        out += '<div class="bfc-rs-note">' + esc(n) + '</div>';
+      });
+      out += '</div>';
+    }
+
+    return out;
+  }
+
+  // ── Lookup handler ─────────────────────────────
+  window.bfcRsLookup = function(e) {
+    if (e) e.preventDefault();
+    var val = (inputEl.value || '').trim();
+    if (!val) return false;
+
+    resultEl.innerHTML = '<div class="bfc-rs-card"><div class="bfc-rs-loading">Looking up your order\u2026</div></div>';
+    if (btnEl) { btnEl.disabled = true; btnEl.textContent = 'Looking up\u2026'; }
+
+    var query = '?order_number=' + encodeURIComponent(val);
+    var repairPromise = fetch(GET_REPAIR_URL + query).then(function(r) { return r.json(); }).catch(function() { return { found: false }; });
+    var devPromise    = fetch(GET_DEV_URL    + query).then(function(r) { return r.json(); }).catch(function() { return { found: false }; });
+
+    Promise.all([repairPromise, devPromise])
+      .then(function(results) {
+        var repair = results[0];
+        var dev    = results[1];
+
+        // Prefer whichever one has actual status info
+        var repairHas = repair && repair.found && repair.current;
+        var devHas    = dev    && dev.found    && dev.current;
+
+        if (repairHas && devHas) {
+          // Both match — show both cards stacked
+          resultEl.innerHTML = renderCard(repair) + renderCard(dev);
+        } else if (repairHas) {
+          resultEl.innerHTML = renderCard(repair);
+        } else if (devHas) {
+          resultEl.innerHTML = renderCard(dev);
+        } else if (repair && repair.found) {
+          // Found but no status tags
+          resultEl.innerHTML = renderCard(repair);
+        } else if (dev && dev.found) {
+          resultEl.innerHTML = renderCard(dev);
+        } else {
+          resultEl.innerHTML = renderCard({ found: false, order_number: val });
+        }
+      })
+      .catch(function() {
+        resultEl.innerHTML = (
+          '<div class="bfc-rs-card is-error">' +
+            '<div class="bfc-rs-empty">' +
+              '<h2 class="bfc-rs-empty-title">Something went wrong.</h2>' +
+              '<p class="bfc-rs-empty-msg">Please try again in a moment, or <a href="mailto:hello@brooklynfilmcamera.com">email our team</a> directly.</p>' +
+            '</div>' +
+          '</div>'
+        );
+      })
+      .finally(function() {
+        if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'Look Up'; }
+      });
+    return false;
+  };
+
+  // Allow direct-linking via ?order=1234
+  var urlParams = new URLSearchParams(window.location.search);
+  var preset = urlParams.get('order') || urlParams.get('order_number');
+  if (preset) {
+    inputEl.value = preset;
+    setTimeout(function() { window.bfcRsLookup(); }, 100);
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "BFC Repair Status",
+  "settings": [],
+  "presets": [
+    { "name": "BFC Repair Status" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,1024 @@
+{{ 'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap' | stylesheet_tag }}
+
+<style>
+  .bfc-faq-section *,
+  .bfc-faq-section *::before,
+  .bfc-faq-section *::after {
+    box-sizing: border-box;
+  }
+
+  .bfc-faq-section {
+    position: relative;
+    background: {{ section.settings.bg_color }};
+    color: #E8E0D4;
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+  }
+
+  /* Grain overlay */
+  .bfc-faq-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+  }
+
+  .bfc-faq__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 80px 24px 120px;
+  }
+
+  .bfc-faq__eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #D4A853;
+    margin: 0 0 18px;
+  }
+
+  .bfc-faq__title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(38px, 6vw, 58px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: #F0E8DC;
+    margin: 0 0 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .bfc-faq__title em {
+    font-style: italic;
+    color: #D4A853;
+  }
+
+  .bfc-faq__subtitle {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 16px;
+    color: #7A7067;
+    line-height: 1.7;
+    margin: 0 0 52px;
+  }
+
+  .bfc-faq__subtitle a {
+    color: #D4A853;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(212, 168, 83, 0.3);
+    transition: border-color 0.2s;
+  }
+
+  .bfc-faq__subtitle a:hover {
+    border-color: #D4A853;
+  }
+
+  /* Search */
+  .bfc-faq__search-wrap {
+    position: relative;
+    margin-bottom: 40px;
+  }
+
+  .bfc-faq__search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #5A5048;
+    font-size: 18px;
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  .bfc-faq__search {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    padding: 14px 18px 14px 46px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: #E8E0D4;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-appearance: none;
+  }
+
+  .bfc-faq__search::placeholder {
+    color: #4A4440;
+  }
+
+  .bfc-faq__search:focus {
+    border-color: rgba(212, 168, 83, 0.35);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  /* Category filter */
+  .bfc-faq__cats {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .bfc-faq__cat-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border-radius: 100px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
+    color: #7A7067;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+    line-height: 1;
+  }
+
+  .bfc-faq__cat-btn:hover {
+    border-color: rgba(212, 168, 83, 0.35);
+    color: #D4A853;
+  }
+
+  .bfc-faq__cat-btn[aria-pressed="true"] {
+    background: #D4A853;
+    border-color: #D4A853;
+    color: #1A1714;
+  }
+
+  /* Count */
+  .bfc-faq__count {
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    color: #4A4440;
+    letter-spacing: 0.04em;
+    margin: 0 0 14px;
+    min-height: 18px;
+  }
+
+  /* Accordion */
+  .bfc-faq__list {
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 8px;
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .bfc-faq__item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    transition: background 0.2s;
+  }
+
+  .bfc-faq__item:last-child {
+    border-bottom: none;
+  }
+
+  .bfc-faq__item.is-open {
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .bfc-faq__item[aria-hidden="true"] {
+    display: none;
+  }
+
+  .bfc-faq__trigger {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 22px 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    gap: 16px;
+    color: inherit;
+  }
+
+  .bfc-faq__question {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: #E8E0D4;
+    line-height: 1.45;
+    transition: color 0.25s;
+    flex: 1;
+  }
+
+  .bfc-faq__item.is-open .bfc-faq__question {
+    color: #D4A853;
+  }
+
+  .bfc-faq__icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #7A7067;
+    font-size: 22px;
+    line-height: 1;
+    transition: color 0.25s, transform 0.3s ease;
+    transform: rotate(0deg);
+    user-select: none;
+  }
+
+  .bfc-faq__item.is-open .bfc-faq__icon {
+    color: #D4A853;
+    transform: rotate(45deg);
+  }
+
+  .bfc-faq__body {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .bfc-faq__item.is-open .bfc-faq__body {
+    max-height: 600px;
+  }
+
+  .bfc-faq__answer {
+    padding: 0 28px 24px;
+    font-family: 'Lora', Georgia, serif;
+    font-size: 15px;
+    line-height: 1.75;
+    color: #B8AFA5;
+    margin: 0;
+    max-width: 640px;
+  }
+
+  .bfc-faq__video-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 14px 0 0 28px;
+    margin-bottom: 24px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #D4A853;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(212, 168, 83, 0.3);
+    padding-bottom: 2px;
+    transition: border-color 0.2s;
+  }
+
+  .bfc-faq__video-link:hover {
+    border-color: #D4A853;
+  }
+
+  /* No results */
+  .bfc-faq__empty {
+    padding: 60px 28px;
+    text-align: center;
+    color: #4A4440;
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 16px;
+    display: none;
+  }
+
+  .bfc-faq__empty.is-visible {
+    display: block;
+  }
+
+  /* Contact strip */
+  .bfc-faq__contact {
+    margin-top: 52px;
+    padding: 28px 32px;
+    border: 1px solid rgba(212, 168, 83, 0.15);
+    border-radius: 8px;
+    background: rgba(212, 168, 83, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .bfc-faq__contact-text {
+    font-family: 'Lora', serif;
+    font-size: 15px;
+    color: #7A7067;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .bfc-faq__contact-text strong {
+    color: #C8C0B5;
+    font-weight: 500;
+  }
+
+  .bfc-faq__contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: #D4A853;
+    text-decoration: none;
+    white-space: nowrap;
+    padding: 10px 20px;
+    border: 1px solid rgba(212, 168, 83, 0.4);
+    border-radius: 4px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .bfc-faq__contact-link:hover {
+    background: rgba(212, 168, 83, 0.1);
+    border-color: #D4A853;
+  }
+
+  @media (max-width: 600px) {
+    .bfc-faq__inner {
+      padding: 56px 16px 80px;
+    }
+
+    .bfc-faq__trigger {
+      padding: 18px 20px;
+    }
+
+    .bfc-faq__answer {
+      padding: 0 20px 20px;
+    }
+
+    .bfc-faq__video-link {
+      margin-left: 20px;
+      margin-bottom: 20px;
+    }
+
+    .bfc-faq__contact {
+      padding: 22px 20px;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+
+<section
+  class="bfc-faq-section"
+  id="bfc-faq-{{ section.id }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="bfc-faq__inner">
+
+    <p class="bfc-faq__eyebrow">{{ section.settings.eyebrow }}</p>
+    <h1 class="bfc-faq__title">{{ section.settings.title }}</h1>
+    <p class="bfc-faq__subtitle">
+      {{ section.settings.subtitle }}
+      {% if section.settings.contact_email != blank %}
+        <a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_cta }}</a>
+      {% endif %}
+    </p>
+
+    <!-- Search -->
+    <div class="bfc-faq__search-wrap">
+      <span class="bfc-faq__search-icon" aria-hidden="true">&#x2315;</span>
+      <input
+        class="bfc-faq__search"
+        id="bfc-faq-search-{{ section.id }}"
+        type="search"
+        placeholder="Search questions..."
+        aria-label="Search FAQ"
+        autocomplete="off"
+      >
+    </div>
+
+    <!-- Category filters -->
+    <ul class="bfc-faq__cats" id="bfc-faq-cats-{{ section.id }}" role="list">
+      <li>
+        <button class="bfc-faq__cat-btn" data-cat="all" aria-pressed="true">All</button>
+      </li>
+      {% assign cats_used = '' %}
+      {% for block in section.blocks %}
+        {% assign cat_key = block.settings.category %}
+        {% unless cats_used contains cat_key %}
+          {% assign cats_used = cats_used | append: cat_key | append: ',' %}
+          <li>
+            <button class="bfc-faq__cat-btn" data-cat="{{ cat_key }}" aria-pressed="false">
+              {{ block.settings.category_label }}
+            </button>
+          </li>
+        {% endunless %}
+      {% endfor %}
+    </ul>
+
+    <!-- Count label -->
+    <p class="bfc-faq__count" id="bfc-faq-count-{{ section.id }}" aria-live="polite"></p>
+
+    <!-- Accordion list -->
+    <ul class="bfc-faq__list" id="bfc-faq-list-{{ section.id }}" role="list">
+      {% for block in section.blocks %}
+        <li
+          class="bfc-faq__item"
+          data-cat="{{ block.settings.category }}"
+          data-q="{{ block.settings.question | downcase | escape }}"
+          data-a="{{ block.settings.answer | downcase | escape }}"
+          {{ block.shopify_attributes }}
+        >
+          <button
+            class="bfc-faq__trigger"
+            aria-expanded="false"
+            aria-controls="bfc-faq-body-{{ section.id }}-{{ forloop.index }}"
+          >
+            <span class="bfc-faq__question">{{ block.settings.question }}</span>
+            <span class="bfc-faq__icon" aria-hidden="true">+</span>
+          </button>
+
+          <div
+            class="bfc-faq__body"
+            id="bfc-faq-body-{{ section.id }}-{{ forloop.index }}"
+            role="region"
+          >
+            <p class="bfc-faq__answer">{{ block.settings.answer }}</p>
+            {% if block.settings.video_url != blank %}
+              <a
+                class="bfc-faq__video-link"
+                href="{{ block.settings.video_url }}"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                &#x25BA; {{ block.settings.video_label | default: 'Watch video' }}
+              </a>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <div class="bfc-faq__empty" id="bfc-faq-empty-{{ section.id }}" aria-live="polite">
+      No results found &mdash; try a different search.
+    </div>
+
+    <!-- Contact strip -->
+    <div class="bfc-faq__contact">
+      <p class="bfc-faq__contact-text">
+        <strong>{{ section.settings.contact_heading }}</strong><br>
+        {{ section.settings.contact_subtext }}
+      </p>
+      {% if section.settings.contact_email != blank %}
+        <a class="bfc-faq__contact-link" href="mailto:{{ section.settings.contact_email }}">
+          {{ section.settings.contact_btn_label }} &rarr;
+        </a>
+      {% endif %}
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function() {
+  var sid = {{ section.id | json }};
+  var root  = document.getElementById('bfc-faq-' + sid);
+  if (!root) return;
+
+  var searchInput = document.getElementById('bfc-faq-search-' + sid);
+  var catStrip    = document.getElementById('bfc-faq-cats-' + sid);
+  var countEl     = document.getElementById('bfc-faq-count-' + sid);
+  var listEl      = document.getElementById('bfc-faq-list-' + sid);
+  var emptyEl     = document.getElementById('bfc-faq-empty-' + sid);
+  var items       = Array.from(listEl.querySelectorAll('.bfc-faq__item'));
+  var catBtns     = Array.from(catStrip.querySelectorAll('.bfc-faq__cat-btn'));
+
+  var activecat = 'all';
+  var searchVal = '';
+
+  // ---------- accordion ----------
+  listEl.addEventListener('click', function(e) {
+    var trigger = e.target.closest('.bfc-faq__trigger');
+    if (!trigger) return;
+    var item = trigger.closest('.bfc-faq__item');
+    var isOpen = item.classList.contains('is-open');
+
+    // close all
+    items.forEach(function(i) {
+      i.classList.remove('is-open');
+      i.querySelector('.bfc-faq__trigger').setAttribute('aria-expanded', 'false');
+    });
+
+    if (!isOpen) {
+      item.classList.add('is-open');
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+  });
+
+  // ---------- category filter ----------
+  catStrip.addEventListener('click', function(e) {
+    var btn = e.target.closest('.bfc-faq__cat-btn');
+    if (!btn) return;
+    activecat = btn.getAttribute('data-cat');
+    catBtns.forEach(function(b) {
+      b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+    });
+    applyFilters();
+  });
+
+  // ---------- search ----------
+  searchInput.addEventListener('input', function() {
+    searchVal = this.value.trim().toLowerCase();
+    applyFilters();
+  });
+
+  // ---------- filter logic ----------
+  function applyFilters() {
+    var visible = 0;
+
+    items.forEach(function(item) {
+      var catMatch  = activecat === 'all' || item.getAttribute('data-cat') === activecat;
+      var q = item.getAttribute('data-q') || '';
+      var a = item.getAttribute('data-a') || '';
+      var searchMatch = searchVal === '' || q.indexOf(searchVal) !== -1 || a.indexOf(searchVal) !== -1;
+      var show = catMatch && searchMatch;
+
+      item.setAttribute('aria-hidden', show ? 'false' : 'true');
+
+      if (!show) {
+        item.classList.remove('is-open');
+        item.querySelector('.bfc-faq__trigger').setAttribute('aria-expanded', 'false');
+      }
+
+      if (show) visible++;
+    });
+
+    // count label (only when not searching)
+    if (searchVal === '') {
+      countEl.textContent = visible + (visible === 1 ? ' question' : ' questions');
+    } else {
+      countEl.textContent = '';
+    }
+
+    // empty state
+    if (visible === 0) {
+      emptyEl.classList.add('is-visible');
+      listEl.style.display = 'none';
+    } else {
+      emptyEl.classList.remove('is-visible');
+      listEl.style.display = '';
+    }
+  }
+
+  // init count
+  applyFilters();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Brooklyn Film Camera"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title (use <em> for italic gold)",
+      "default": "Got a <em>question?</em>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Quick answers on repairs, film developing, cameras, and visiting us."
+    },
+    {
+      "type": "text",
+      "id": "contact_cta",
+      "label": "Subtitle link label",
+      "default": "Still stuck? Email us."
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#1A1714"
+    },
+    {
+      "type": "header",
+      "content": "Contact strip"
+    },
+    {
+      "type": "text",
+      "id": "contact_heading",
+      "label": "Heading",
+      "default": "Still have questions?"
+    },
+    {
+      "type": "text",
+      "id": "contact_subtext",
+      "label": "Subtext",
+      "default": "Our team is at 855 Grand St, Brooklyn — open every day 11–8."
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Contact email",
+      "default": "hello@brooklynfilmcamera.com"
+    },
+    {
+      "type": "text",
+      "id": "contact_btn_label",
+      "label": "Button label",
+      "default": "Contact Us"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq_item",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "category",
+          "label": "Category (used for filtering)",
+          "options": [
+            { "value": "info",    "label": "Store Info" },
+            { "value": "dev",     "label": "Film Dev" },
+            { "value": "repairs", "label": "Repairs" },
+            { "value": "sx70",    "label": "SX-70" },
+            { "value": "cameras", "label": "Cameras" }
+          ],
+          "default": "info"
+        },
+        {
+          "type": "text",
+          "id": "category_label",
+          "label": "Category button label",
+          "info": "Shown in the filter strip (e.g. 'Store Info', 'Film Dev')",
+          "default": "Store Info"
+        },
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer"
+        },
+        {
+          "type": "url",
+          "id": "video_url",
+          "label": "Video link (optional)"
+        },
+        {
+          "type": "text",
+          "id": "video_label",
+          "label": "Video link label",
+          "default": "Watch video"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "blocks": [
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "info",
+            "category_label": "Store Info",
+            "question": "Where are you located and what are your hours?",
+            "answer": "Open every day 11:00–8:00. Find us at 855 Grand Street, Brooklyn, NY 11211."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "info",
+            "category_label": "Store Info",
+            "question": "How does in-store order pickup work?",
+            "answer": "Pickup is available during all open hours. We'll email you when your order is fulfilled and ready to collect."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "info",
+            "category_label": "Store Info",
+            "question": "Do you ship internationally?",
+            "answer": "Yes — we ship to most regions worldwide. Free shipping on all US orders over $200."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "info",
+            "category_label": "Store Info",
+            "question": "Can I sell you my gear?",
+            "answer": "Absolutely. Bring your gear in person to our Brooklyn location. Please email photos first to hello@brooklynfilmcamera.com so we can give you a heads-up on interest before you make the trip."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "info",
+            "category_label": "Store Info",
+            "question": "What is your returns and warranty policy?",
+            "answer": "Polaroid cameras and SLRs include a 6-month warranty; point-and-shoots include a 3-month warranty. Warranty excludes body damage, drops, and water or moisture damage. See our full policy at brooklynfilmcamera.com/pages/warranty."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "dev",
+            "category_label": "Film Dev",
+            "question": "Can I mail in my film for developing?",
+            "answer": "Yes! Drop your film off in-store during open hours, or mail it in. To mail your film, purchase your developing service online first, then use our Service Portal to generate a pre-paid shipping label. Include your order number inside the package. Want your negatives returned? Select your preferred return shipping option at checkout. Prefer not to keep them? Choose 'Pick up in store' on the shipping page and we'll handle disposal."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "dev",
+            "category_label": "Film Dev",
+            "question": "What film formats do you develop?",
+            "answer": "We develop 35mm, 120, and other common formats. Check our Film Processing page for the full current menu."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "repairs",
+            "category_label": "Repairs",
+            "question": "What is the repair process?",
+            "answer": "Order a repair quote online and drop off your camera at our Grand Street workshop — or use our Service Portal to generate a pre-paid shipping label and mail it in. Our technician performs a thorough diagnostic assessment, then contacts you with a detailed quote. No work proceeds until you approve. Once approved, repairs are completed and the camera is fully tested before being returned to you."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "repairs",
+            "category_label": "Repairs",
+            "question": "What is the $50 bench fee and is it refundable?",
+            "answer": "The $50 bench fee covers our technician's time to thoroughly assess your camera. It is non-refundable, but is applied toward your final repair cost if you proceed. If a repair isn't possible for any reason, the bench fee is still non-refundable."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "repairs",
+            "category_label": "Repairs",
+            "question": "What cameras do you repair?",
+            "answer": "We repair most 35mm and medium format film cameras — Canon, Nikon, Pentax, Olympus, Minolta, Contax, Leica, Hasselblad, Mamiya, Bronica, Rolleiflex, Yashica, and many more. We service through two departments: Polaroid, and Everything Else. If you're unsure whether we service your model, contact us before submitting."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "repairs",
+            "category_label": "Repairs",
+            "question": "How long does a repair take?",
+            "answer": "Standard turnaround is 2–4 weeks from receipt. Complex repairs or parts sourcing may take longer. We don't guarantee a specific timeframe as multiple factors affect timing."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "repairs",
+            "category_label": "Repairs",
+            "question": "I shipped my camera — did you receive it?",
+            "answer": "If your tracking shows delivered, it's with us. For confirmation, include your order number inside the package, or reference it in your account. You can also reply to any of your order emails and we'll confirm."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "repairs",
+            "category_label": "Repairs",
+            "question": "What does your repair warranty cover?",
+            "answer": "All repairs are covered for 6 months from the repair date. The warranty covers additional repairs on the original issue. It does not cover body damage, drops, or water and moisture damage."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "repairs",
+            "category_label": "Repairs",
+            "question": "What if my camera develops a new issue after being serviced?",
+            "answer": "Contact us and we'll assess it quickly. All of our services come with warranty, and we stand behind our work."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "repairs",
+            "category_label": "Repairs",
+            "question": "What if my repair isn't possible?",
+            "answer": "We'll reach out to you directly to discuss your options and next steps. The bench fee is non-refundable in this case."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "repairs",
+            "category_label": "Repairs",
+            "question": "Why don't you repair Polaroid 600-series cameras?",
+            "answer": "Due to the low price point of 600-series cameras and their increasingly brittle aging plastic parts, repairs are typically not practical or cost-effective for the customer."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "repairs",
+            "category_label": "Repairs",
+            "question": "What payment methods do you accept for repairs?",
+            "answer": "We accept all major credit cards, PayPal, and Shop Pay. The bench fee is collected when you submit your repair request. The remaining balance is due upon receiving your quote and approving the repair."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "My SX-70 won't power on — what should I try?",
+            "answer": "The most common cause is a depleted film-pack battery. Try a fresh pack, clean the battery contacts inside the camera, and reseat the pack firmly. This often jump-starts the camera.",
+            "video_url": "https://www.youtube.com/watch?v=N3TTMkNE-jE",
+            "video_label": "Watch video"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "My exposures are too dark or too light — what's happening?",
+            "answer": "This may indicate a meter that needs service. In the meantime, learn your camera's tendencies and use the lighten/darken compensation wheel to correct. If it's consistently off by a large margin, it likely needs a CLA.",
+            "video_url": "https://www.youtube.com/watch?v=iNhyW7BJ5gA",
+            "video_label": "Watch video"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "My SX-70 won't close fully.",
+            "answer": "This is usually a mirror stuck mid-cycle. Carefully reset it by slowly cycling the mechanism with the camera open. Do not force the panels shut — you can damage the hinges.",
+            "video_url": "https://www.youtube.com/watch?v=kIhiuvZQ7MU",
+            "video_label": "Watch video"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "How do I properly open and close my SX-70?",
+            "answer": "Follow the correct sequence to protect the hinges and keep the linkage aligned. Opening and closing improperly is a common cause of mechanical issues over time.",
+            "video_url": "https://www.youtube.com/watch?v=zELr5wYLNYo",
+            "video_label": "Watch video"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "How do I clean my SX-70?",
+            "answer": "Keep the exterior clean and the rollers spotless. Dirty rollers are a leading cause of streaks, incomplete chemical spread, and ejection issues.",
+            "video_url": "https://www.youtube.com/watch?v=DB2jwIhosxE",
+            "video_label": "Watch video"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "My flash bar isn't working.",
+            "answer": "Clean the flash-port contacts on both the camera and the flash bar, and make sure the bar is firmly seated. Oxidation on the contacts is the most common culprit.",
+            "video_url": "https://www.youtube.com/watch?v=nqUFI3MlkTs",
+            "video_label": "Watch video"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "I'm seeing light leaks in my photos.",
+            "answer": "Light leaks on an SX-70 are often caused by bellows wear. Inspect in a dark room using a small flashlight held inside the open bellows — you'll see pinhole leaks if they're there.",
+            "video_url": "https://www.youtube.com/watch?v=-fekZBMoLcs",
+            "video_label": "Watch video"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "What is the 600 film mod?",
+            "answer": "The 600 mod allows your SX-70 to shoot Polaroid 600 film, which has a higher ISO of 640 and is widely available. This is a permanent board-level electronic modification — it cannot be undone. Benefits include better low-light performance, easier film sourcing, and access to Polaroid's many special edition 600 releases."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "cameras",
+            "category_label": "Cameras",
+            "question": "What is the difference between SX-70 and 600 film?",
+            "answer": "SX-70 film has an ISO of 160; 600 film has an ISO of 640. SX-70 film delivers higher contrast, richer saturation, and finer grain, but only works in SX-70 folding and box cameras. 600 film is compatible with all other integral Polaroid cameras, plus the SLR 680."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "cameras",
+            "category_label": "Cameras",
+            "question": "What is the difference between SX-70 and 600 cameras?",
+            "answer": "Most 600 cameras feature plastic lenses and fixed focal zones. The SX-70 is a precision instrument with glass optics and manual focus control. The exception is the SLR 680, which combines SX-70 build quality with 600 film compatibility."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "cameras",
+            "category_label": "Cameras",
+            "question": "How does exposure compensation work on a Polaroid?",
+            "answer": "Adjust the lighten/darken wheel toward white to increase exposure, toward black for less. This is especially useful in backlit situations where the meter may underexpose your subject."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "cameras",
+            "category_label": "Cameras",
+            "question": "Why does modern Polaroid film look different from vintage shots?",
+            "answer": "The original Polaroid Corporation went bankrupt in 2008. The Impossible Project (now rebranded as Polaroid) revived instant film using different chemistry due to supply constraints and environmental regulations. Today's film is constantly improving, but will not be an exact match for 1970s–90s stock."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "cameras",
+            "category_label": "Cameras",
+            "question": "Why do I need to shield my film after it ejects?",
+            "answer": "Modern instant film is more sensitive to light in the seconds immediately after ejection. Shield from strong light for at least 5 minutes to prevent burns, color shifts, or fading."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "cameras",
+            "category_label": "Cameras",
+            "question": "Can I use Instax film in a Polaroid camera?",
+            "answer": "No. Instax film is designed exclusively for Fujifilm Instax cameras and cannot be used in any Polaroid body."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "cameras",
+            "category_label": "Cameras",
+            "question": "Do you sell new Polaroid cameras?",
+            "answer": "Yes — we stock all current Polaroid models. Check our Polaroid collection for what's available."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "cameras",
+            "category_label": "Cameras",
+            "question": "Do you sell SLRs?",
+            "answer": "Yes! We stock models like the Pentax K1000, Nikon F3, Canon AE-1 Program, and more. Our inventory updates frequently — check back regularly or sign up for restock alerts."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "cameras",
+            "category_label": "Cameras",
+            "question": "What are the differences between Yashica TLR models?",
+            "answer": "Yashica A: 1/25–1/300s, f/3.5–f/22. Yashica C: Bulb–1/300s, f/3.5–f/22. Yashica D: 1–1/500s with bulb mode, plus lock and ergonomic upgrades. Yashica Mat-124: Modeled after the Rolleiflex, 4-element lens, built-in meter (now unreliable). Yashica Mat-124G: Final TLR iteration — cosmetic updates, 1–1/500s shutter, unreliable internal meter."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

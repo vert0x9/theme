@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "bfc-pdp-default",
+      "settings": {
+        "show_recs": true,
+        "rec_count": 4
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

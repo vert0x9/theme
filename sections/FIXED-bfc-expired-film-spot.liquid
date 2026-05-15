@@ -1,0 +1,826 @@
+
+{% liquid
+  assign base_text = section.settings.text_color | default: '#111111'
+  assign base_bg = section.settings.background_color | default: '#F7F4F0'
+  assign page_width_px = settings.page_width | default: 1200
+  assign horizontal_pad = section.settings.horizontal_padding | default: 24
+  assign heading_size_preset = section.settings.heading_size_preset | default: 'default'
+  case heading_size_preset
+    when 'sm'
+      assign header_size_mobile = '1.4'
+      assign header_size_desktop = '2.0'
+    when 'md'
+      assign header_size_mobile = '1.6'
+      assign header_size_desktop = '2.4'
+    when 'lg'
+      assign header_size_mobile = '2.0'
+      assign header_size_desktop = '3.2'
+    when 'xl'
+      assign header_size_mobile = '2.4'
+      assign header_size_desktop = '3.8'
+    when 'xxl'
+      assign header_size_mobile = '2.8'
+      assign header_size_desktop = '4.4'
+    else
+      assign header_size_mobile = '1.75'
+      assign header_size_desktop = '2.75'
+  endcase
+  assign header_weight = section.settings.header_font_weight | default: 600
+  assign body_weight = section.settings.body_font_weight | default: 400
+  assign body_size = section.settings.body_font_size | default: 16
+  assign body_size_small = section.settings.body_font_size_small | default: 12
+  assign header_line_height = section.settings.header_line_height | default: '1.05'
+  assign header_letter_spacing = section.settings.header_letter_spacing | default: 0
+  assign heading_color = section.settings.heading_color | default: base_text
+  assign body_line_height = section.settings.body_line_height | default: '1.5'
+  assign body_letter_spacing = section.settings.body_letter_spacing | default: 0
+  assign section_pad_top = section.settings.section_padding_top | default: 40
+  assign section_pad_bottom = section.settings.section_padding_bottom | default: 40
+  assign accent_color = section.settings.accent_color | default: '#E36E15'
+  assign secondary_text_color = section.settings.secondary_text_color | default: '#82906B'
+  assign item_title_font = section.settings.item_title_font
+%}
+<section id="bfc-expired-film-spot-{{ section.id }}" class="bfc-combined" aria-label="{{ section.settings.section_label | default: 'BFC Expired Film Spotlight' }}">
+  <style>
+    {{ item_title_font | font_face: font_display: 'swap' }}
+
+    /* Fix shopify-section wrapper background & spacing */
+    #shopify-section-{{ section.id }} {
+      background-color: {{ base_bg }};
+      margin: 0;
+      padding: {{ section_pad_top }}px 0 {{ section_pad_bottom }}px;
+      width: 100%;
+    }
+    #bfc-expired-film-spot-{{ section.id }}{
+      --bfc-header-family: var(--font-heading-family, inherit);
+      --bfc-body-family: var(--font-body-family, inherit);
+      --bfc-header-weight: {{ header_weight }};
+      --bfc-body-weight: {{ body_weight }};
+      --bfc-header-size-mobile: {{ header_size_mobile }}rem;
+      --bfc-header-size-desktop: {{ header_size_desktop }}rem;
+      --bfc-horizontal-pad: {{ horizontal_pad }}px;
+      --bfc-page-width: {{ page_width_px }}px;
+      --bfc-align-pad: clamp(
+        var(--bfc-horizontal-pad),
+        calc((100vw - min(100vw, var(--bfc-page-width))) / 2 + var(--bfc-horizontal-pad)),
+        120px
+      );
+      --bfc-body-size: {{ body_size }}px;
+      --bfc-body-size-small: {{ body_size_small }}px;
+      --bfc-text: {{ base_text }};
+      --bfc-bg: {{ base_bg }};
+      --bfc-heading-color: {{ heading_color }};
+      --bfc-header-letter-spacing: {{ header_letter_spacing }}px;
+      --bfc-header-line-height: {{ header_line_height }};
+      --bfc-body-letter-spacing: {{ body_letter_spacing }}px;
+      --bfc-body-line-height: {{ body_line_height }};
+      --bfc-accent: {{ accent_color }};
+      --bfc-secondary-text: {{ secondary_text_color }};
+      --bfc-item-title-family: {{ item_title_font.family | default: 'Poppins' }}, {{ item_title_font.fallback_families | default: 'sans-serif' }};
+      --bfc-item-title-weight: {{ item_title_font.weight | default: 500 }};
+      color: var(--bfc-text);
+      background: var(--bfc-bg);
+      font-family: var(--bfc-body-family);
+      font-weight: var(--bfc-body-weight);
+      font-size: var(--bfc-body-size);
+    }
+    #bfc-expired-film-spot-{{ section.id }} .bfc-heading{
+      font-family: var(--bfc-header-family, inherit);
+      font-size: clamp(var(--bfc-header-size-mobile, 1.75rem), 3.5vw, var(--bfc-header-size-desktop, 2.75rem));
+      font-weight: var(--bfc-header-weight, 300);
+      line-height: var(--bfc-header-line-height, 1.05);
+      letter-spacing: var(--bfc-header-letter-spacing, -0.02em);
+      margin: 0;
+      color: var(--bfc-heading-color, #111111);
+    }
+        #bfc-expired-film-spot-{{ section.id }} .bfc-block{
+      margin: 0 auto;
+    }
+    #bfc-expired-film-spot-{{ section.id }} .bfc-block + .bfc-block{
+      margin-top: 24px;
+    }
+    #bfc-expired-film-spot-{{ section.id }} .visually-hidden{
+      position: absolute;width: 1px;height: 1px;padding: 0;margin: -1px;overflow: hidden;clip: rect(0,0,0,0);white-space: nowrap;border: 0;
+    }
+    #bfc-expired-film-spot-{{ section.id }} a:focus-visible,
+    #bfc-expired-film-spot-{{ section.id }} button:focus-visible,
+    #bfc-expired-film-spot-{{ section.id }} input:focus-visible{
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+    @media (prefers-reduced-motion: reduce){
+      #bfc-expired-film-spot-{{ section.id }} *{
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  
+    #bfc-expired-film-spot-{{ section.id }} .bfc-eyebrow{
+      font-family: var(--bfc-body-family);
+      font-size: var(--bfc-body-size-small);
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--bfc-secondary-text);
+      margin: 0 0 10px;
+    }
+    #bfc-expired-film-spot-{{ section.id }} .bfc-item-title{
+      font-family: var(--bfc-item-title-family);
+      font-weight: var(--bfc-item-title-weight);
+      font-size: var(--bfc-body-size);
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      color: var(--bfc-text);
+    }
+
+    #bfc-expired-film-spot-{{ section.id }} .bfc-detail-text{
+      font-family: var(--bfc-body-family);
+      font-size: var(--bfc-body-size-small);
+      font-weight: var(--bfc-body-weight);
+      letter-spacing: var(--bfc-body-letter-spacing);
+      line-height: var(--bfc-body-line-height);
+      color: var(--bfc-secondary-text);
+      margin: 0;
+    }
+
+  </style>
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when 'expired_film_spot' %}
+        {% liquid
+          assign efc_id = 'bfc-efc-' | append: section.id | append: '-' | append: block.id
+          assign efc_photo_count = 0
+          for i in (1..6)
+            case i
+              when 1
+                if block.settings.photo_1 != blank
+                  assign efc_photo_count = efc_photo_count | plus: 1
+                endif
+              when 2
+                if block.settings.photo_2 != blank
+                  assign efc_photo_count = efc_photo_count | plus: 1
+                endif
+              when 3
+                if block.settings.photo_3 != blank
+                  assign efc_photo_count = efc_photo_count | plus: 1
+                endif
+              when 4
+                if block.settings.photo_4 != blank
+                  assign efc_photo_count = efc_photo_count | plus: 1
+                endif
+              when 5
+                if block.settings.photo_5 != blank
+                  assign efc_photo_count = efc_photo_count | plus: 1
+                endif
+              when 6
+                if block.settings.photo_6 != blank
+                  assign efc_photo_count = efc_photo_count | plus: 1
+                endif
+            endcase
+          endfor
+        %}
+        <section
+          id="{{ efc_id }}"
+          class="bfc-block bfc-efc"
+          style="
+            --efc-bg: {{ block.settings.bg }};
+            --efc-fg: {{ block.settings.fg }};
+            --efc-border: {{ block.settings.border_color }};
+            --efc-accent: {{ block.settings.accent }};
+            --efc-max: {{ page_width_px }}px;
+            --efc-pt: {{ block.settings.padding_top }}px;
+            --efc-pb: {{ block.settings.padding_bottom }}px;
+            --bfc-block-pad: calc(var(--bfc-align-pad) + {{ block.settings.side_padding_vw }}vw);
+          "
+          {{ block.shopify_attributes }}
+        >
+          <div class="bfc-efc__wrap">
+            <div class="bfc-efc__content">
+              {% if block.settings.eyebrow != blank %}
+                <p class="bfc-efc__eyebrow">{{ block.settings.eyebrow | escape }}</p>
+              {% endif %}
+              {% if block.settings.heading != blank %}
+                <h2 class="bfc-efc__heading bfc-heading">{{ block.settings.heading | escape }}</h2>
+              {% endif %}
+              {% if block.settings.body != blank %}
+                <p class="bfc-efc__body">{{ block.settings.body | escape }}</p>
+              {% endif %}
+              {% if block.settings.whats_included != blank %}
+                <div class="bfc-efc__detail">
+                  <p class="bfc-efc__detail-label">What's inside</p>
+                  <p class="bfc-efc__detail-text">{{ block.settings.whats_included | escape }}</p>
+                </div>
+              {% endif %}
+              {% if block.settings.price_note != blank %}
+                <p class="bfc-efc__price-note">{{ block.settings.price_note | escape }}</p>
+              {% endif %}
+              {% if block.settings.cta_label != blank and block.settings.cta_url != blank %}
+                <a class="bfc-efc__cta" href="{{ block.settings.cta_url }}" aria-label="{{ block.settings.cta_label | escape }}">{{ block.settings.cta_label | escape }}</a>
+              {% endif %}
+            </div>
+            <div class="bfc-efc__grid bfc-efc__grid--{{ efc_photo_count }}">
+              {% for i in (1..6) %}
+                {% liquid
+                  case i
+                    when 1
+                      assign efc_photo = block.settings.photo_1
+                    when 2
+                      assign efc_photo = block.settings.photo_2
+                    when 3
+                      assign efc_photo = block.settings.photo_3
+                    when 4
+                      assign efc_photo = block.settings.photo_4
+                    when 5
+                      assign efc_photo = block.settings.photo_5
+                    when 6
+                      assign efc_photo = block.settings.photo_6
+                  endcase
+                %}
+                {% if efc_photo != blank %}
+                  <div class="bfc-efc__photo">
+                    <img
+                      src="{{ efc_photo | image_url: width: 800 }}"
+                      srcset="
+                        {{ efc_photo | image_url: width: 400 }} 400w,
+                        {{ efc_photo | image_url: width: 600 }} 600w,
+                        {{ efc_photo | image_url: width: 800 }} 800w
+                      "
+                      sizes="(min-width: 990px) 22vw, 44vw"
+                      alt="{{ efc_photo.alt | default: 'Expired film shot' | escape }}"
+                      loading="lazy"
+                      width="{{ efc_photo.width }}"
+                      height="{{ efc_photo.height }}"
+                    >
+                  </div>
+                {% else %}
+                  <div class="bfc-efc__photo bfc-efc__photo--empty" aria-hidden="true"></div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+          <style>
+            #{{ efc_id }}{
+              background: var(--efc-bg);
+              color: var(--efc-fg);
+              padding: var(--efc-pt) 0 var(--efc-pb);
+            }
+            #{{ efc_id }} .bfc-efc__wrap{
+              max-width: var(--efc-max);
+              margin: 0 auto;
+              padding: 0 var(--bfc-block-pad);
+              display: grid;
+              grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+              gap: clamp(32px, 5vw, 80px);
+              align-items: center;
+            }
+            #{{ efc_id }} .bfc-efc__eyebrow{
+              margin: 0 0 10px;
+              font-size: var(--bfc-body-size-small);
+              letter-spacing: .18em;
+              text-transform: uppercase;
+              opacity: .55;
+            }
+            #{{ efc_id }} .bfc-efc__heading{
+              margin: 0 0 18px;
+              letter-spacing: -0.02em;
+              line-height: 1.04;
+            }
+            #{{ efc_id }} .bfc-efc__body{
+              font-size: var(--bfc-body-size);
+              line-height: 1.6;
+              opacity: .8;
+              margin: 0 0 22px;
+              max-width: 42ch;
+            }
+            #{{ efc_id }} .bfc-efc__detail{
+              border-left: 2px solid var(--efc-border);
+              padding-left: 14px;
+              margin: 0 0 22px;
+            }
+            #{{ efc_id }} .bfc-efc__detail-label{
+              margin: 0 0 4px;
+              font-size: var(--bfc-body-size-small);
+              letter-spacing: .08em;
+              text-transform: uppercase;
+              opacity: .55;
+            }
+            #{{ efc_id }} .bfc-efc__detail-text{
+              margin: 0;
+              font-size: var(--bfc-body-size);
+              line-height: 1.45;
+              opacity: .85;
+            }
+            #{{ efc_id }} .bfc-efc__price-note{
+              font-family: var(--font-heading-family, serif);
+              font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+              margin: 0 0 22px;
+              letter-spacing: -0.01em;
+              opacity: .9;
+            }
+            #{{ efc_id }} .bfc-efc__cta{
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              padding: 13px 24px;
+              background: var(--efc-fg);
+              color: var(--efc-bg);
+              text-decoration: none;
+              font-size: var(--bfc-body-size-small);
+              letter-spacing: .10em;
+              text-transform: uppercase;
+              transition: opacity .15s ease;
+            }
+            #{{ efc_id }} .bfc-efc__cta:hover{ opacity: .8; }
+            #{{ efc_id }} .bfc-efc__grid{
+              display: grid;
+              grid-template-columns: repeat(3, minmax(0,1fr));
+              grid-auto-rows: 1fr;
+              gap: 6px;
+            }
+            #{{ efc_id }} .bfc-efc__grid--4{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+            #{{ efc_id }} .bfc-efc__photo{
+              overflow: hidden;
+              background: rgba(255,255,255,.06);
+              aspect-ratio: 1 / 1;
+            }
+            #{{ efc_id }} .bfc-efc__photo--empty{ opacity: .25; }
+            #{{ efc_id }} .bfc-efc__photo img{
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              display: block;
+              filter: {{ block.settings.photo_filter }};
+              transform: scale(1.001);
+              transition: transform .3s ease, filter .3s ease;
+            }
+            #{{ efc_id }} .bfc-efc__photo:hover img{
+              transform: scale(1.04);
+              filter: none;
+            }
+            @media (max-width: 900px){
+              #{{ efc_id }} .bfc-efc__wrap{
+                grid-template-columns: 1fr;
+                gap: 32px;
+              }
+              #{{ efc_id }} .bfc-efc__body{ max-width: none; }
+              #{{ efc_id }} .bfc-efc__grid{ grid-template-columns: repeat(3, minmax(0,1fr)); }
+              #{{ efc_id }} .bfc-efc__grid--4{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+              {% if block.settings.ignore_padding_mobile %}
+                #{{ efc_id }}{ --bfc-block-pad: var(--bfc-horizontal-pad); }
+              {% endif %}
+            }
+          </style>
+        </section>
+    {% endcase %}
+  {% endfor %}
+</section>
+{% schema %}
+{
+  "name": "BFC Expired Film Spot",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "label": "Horizontal padding",
+      "min": 12,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "header_font_weight",
+      "label": "Header font weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "SemiBold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "300"
+    },
+    {
+      "type": "select",
+      "id": "body_font_weight",
+      "label": "Body font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "body_font_size",
+      "label": "Body font size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "body_font_size_small",
+      "label": "Small text size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Base text color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Base background color",
+      "default": "#F7F4F0"
+    },
+    {
+      "type": "header",
+      "content": "Heading Typography"
+    },
+    {
+      "type": "select",
+      "id": "heading_size_preset",
+      "label": "Heading size",
+      "info": "Controls heading size at all screen widths consistently.",
+      "options": [
+        {
+          "value": "sm",
+          "label": "Small"
+        },
+        {
+          "value": "md",
+          "label": "Medium"
+        },
+        {
+          "value": "default",
+          "label": "Default"
+        },
+        {
+          "value": "lg",
+          "label": "Large"
+        },
+        {
+          "value": "xl",
+          "label": "X-Large"
+        },
+        {
+          "value": "xxl",
+          "label": "XX-Large"
+        }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "select",
+      "id": "header_line_height",
+      "label": "Heading line height",
+      "options": [
+        {
+          "value": "1.0",
+          "label": "1.0 (Tightest)"
+        },
+        {
+          "value": "1.05",
+          "label": "1.05 (Default)"
+        },
+        {
+          "value": "1.1",
+          "label": "1.1"
+        },
+        {
+          "value": "1.2",
+          "label": "1.2"
+        },
+        {
+          "value": "1.3",
+          "label": "1.3"
+        },
+        {
+          "value": "1.4",
+          "label": "1.4 (Loose)"
+        }
+      ],
+      "default": "1.05"
+    },
+    {
+      "type": "range",
+      "id": "header_letter_spacing",
+      "label": "Heading letter spacing",
+      "min": -2,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "default": -2
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "info": "Falls back to base text color if unset",
+      "default": "#111111"
+    },
+    {
+      "type": "header",
+      "content": "Body Typography"
+    },
+    {
+      "type": "select",
+      "id": "body_line_height",
+      "label": "Body line height",
+      "options": [
+        {
+          "value": "1.3",
+          "label": "1.3 (Tight)"
+        },
+        {
+          "value": "1.4",
+          "label": "1.4"
+        },
+        {
+          "value": "1.5",
+          "label": "1.5 (Default)"
+        },
+        {
+          "value": "1.6",
+          "label": "1.6"
+        },
+        {
+          "value": "1.8",
+          "label": "1.8 (Loose)"
+        }
+      ],
+      "default": "1.5"
+    },
+    {
+      "type": "range",
+      "id": "body_letter_spacing",
+      "label": "Body letter spacing",
+      "min": -1,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing"
+    },
+    {
+      "type": "range",
+      "id": "section_padding_top",
+      "label": "Section top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "section_padding_bottom",
+      "label": "Section bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Section Colors"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Accent color",
+      "info": "Used for links and highlights",
+      "default": "#E36E15"
+    },
+    {
+      "type": "color",
+      "id": "secondary_text_color",
+      "label": "Secondary text color",
+      "info": "Used for eyebrows and small detail text",
+      "default": "#82906B"
+    },
+    {
+      "type": "font_picker",
+      "id": "item_title_font",
+      "label": "Item title font",
+      "info": "Font used for product/item titles (e.g. the old best-seller title font)",
+      "default": "poppins_n5"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "expired_film_spot",
+      "name": "Expired Film Spotlight",
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow",
+          "default": "Expired Film Club"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Shoot the unexpected."
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Body",
+          "default": "Every month we pull expired film from our archive and bundle it up for you to shoot."
+        },
+        {
+          "type": "textarea",
+          "id": "whats_included",
+          "label": "What's included text",
+          "default": "2\u20133 rolls of curated expired film, format of your choice, plus a surprise bonus item."
+        },
+        {
+          "type": "text",
+          "id": "price_note",
+          "label": "Price note",
+          "default": "Starting at $18 / month"
+        },
+        {
+          "type": "text",
+          "id": "cta_label",
+          "label": "CTA label",
+          "default": "Join the Club"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "CTA link"
+        },
+        {
+          "type": "header",
+          "content": "Example Photos (up to 6)"
+        },
+        {
+          "type": "image_picker",
+          "id": "photo_1",
+          "label": "Photo 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "photo_2",
+          "label": "Photo 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "photo_3",
+          "label": "Photo 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "photo_4",
+          "label": "Photo 4"
+        },
+        {
+          "type": "image_picker",
+          "id": "photo_5",
+          "label": "Photo 5"
+        },
+        {
+          "type": "image_picker",
+          "id": "photo_6",
+          "label": "Photo 6"
+        },
+        {
+          "type": "select",
+          "id": "photo_filter",
+          "label": "Photo filter (default tone)",
+          "default": "saturate(0.85) contrast(1.05)",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "saturate(0.85) contrast(1.05)",
+              "label": "Slightly desaturated"
+            },
+            {
+              "value": "grayscale(1)",
+              "label": "Grayscale"
+            },
+            {
+              "value": "sepia(0.3) contrast(1.05)",
+              "label": "Warm sepia"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "bg",
+          "label": "Background",
+          "default": "#1a1a1a"
+        },
+        {
+          "type": "color",
+          "id": "fg",
+          "label": "Text",
+          "default": "#f0ebe4"
+        },
+        {
+          "type": "color",
+          "id": "accent",
+          "label": "Accent",
+          "default": "#f0ebe4"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border",
+          "default": "#333333"
+        },
+        {
+          "type": "header",
+          "content": "Spacing"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "label": "Padding top",
+          "min": 0,
+          "max": 140,
+          "step": 4,
+          "default": 72
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "label": "Padding bottom",
+          "min": 0,
+          "max": 140,
+          "step": 4,
+          "default": 72
+        },
+        {
+          "type": "range",
+          "id": "side_padding_vw",
+          "label": "Side padding add-on (vw)",
+          "min": 0,
+          "max": 10,
+          "step": 0.5,
+          "unit": "vw",
+          "default": 0
+        },
+        {
+          "type": "checkbox",
+          "id": "ignore_padding_mobile",
+          "label": "Ignore side padding on mobile",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Expired Film Spotlight"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,38 @@
+<script>
+  window.GPOConfigs = window.GPOConfigs || {};
+  window.GPOConfigs.stayOnPdp = true;
+  window.GPOConfigs.customCartCountSelector = '.cart-count-badge';
+</script>
+
+<script>
+  document.addEventListener('gpoAddedToCart', function (e) {
+    const cartDrawer = document.querySelector('cart-drawer');
+    const cartIconBubble = document.querySelector('cart-notification') || document.querySelector('#cart-icon-bubble');
+
+    if (cartDrawer) {
+      fetch(`${window.routes.cart_url}?sections=cart-drawer,cart-icon-bubble`)
+        .then((response) => response.json())
+        .then((sections) => {
+          cartDrawer.renderContents({
+            sections: sections,
+          });
+
+          if (cartIconBubble && sections['cart-icon-bubble']) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = sections['cart-icon-bubble'];
+            const newIconBubble = tempDiv.querySelector('#cart-icon-bubble');
+            if (newIconBubble) {
+              cartIconBubble.innerHTML = newIconBubble.innerHTML;
+            }
+          }
+
+          if (cartDrawer && typeof cartDrawer.open === 'function') {
+            cartDrawer.open();
+          }
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    }
+  });
+</script>

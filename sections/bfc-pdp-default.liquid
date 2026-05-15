@@ -1,0 +1,936 @@
+{{- 'section-product.css' | asset_url | stylesheet_tag -}}
+<script src="{{ 'product-variants.js' | asset_url }}" defer="defer"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/></noscript>
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign rec_limit = section.settings.rec_count | default: 4
+  assign first_collection = product.collections | first
+-%}
+
+{%- comment -%} ── Judge.me rating parse ── {%- endcomment -%}
+{%- assign jm_count = 0 -%}
+{%- assign jm_avg = 0 -%}
+{%- assign jm_raw = product.metafields.judgeme.review_widget_data -%}
+{%- if jm_raw != blank -%}
+  {%- assign jm_num = jm_raw.number_of_reviews -%}
+  {%- if jm_num != blank -%}{%- assign jm_count = jm_num | plus: 0 -%}{%- endif -%}
+  {%- assign jm_ar = jm_raw.average_rating -%}
+  {%- if jm_ar != blank -%}{%- assign jm_avg = jm_ar | times: 1.0 -%}{%- endif -%}
+  {%- if jm_count == 0 -%}
+    {%- assign jm_str = jm_raw | json -%}
+    {%- if jm_str contains 'number_of_reviews' -%}
+      {%- assign jm_p1 = jm_str | split: '"number_of_reviews":' -%}
+      {%- if jm_p1.size > 1 -%}
+        {%- assign jm_p2 = jm_p1[1] | split: ',' | first | split: '}' | first | strip -%}
+        {%- assign jm_count = jm_p2 | plus: 0 -%}
+      {%- endif -%}
+    {%- endif -%}
+    {%- if jm_str contains 'average_rating' -%}
+      {%- assign jm_p3 = jm_str | split: '"average_rating":"' -%}
+      {%- if jm_p3.size > 1 -%}
+        {%- assign jm_p4 = jm_p3[1] | split: '"' | first -%}
+        {%- assign jm_avg = jm_p4 | times: 1.0 -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
+{%- assign jm_show = false -%}
+{%- if jm_count > 0 and jm_avg >= 4.0 -%}{%- assign jm_show = true -%}{%- endif -%}
+{%- assign jm_full = jm_avg | floor -%}
+{%- assign jm_frac = jm_avg | minus: jm_full -%}
+{%- assign jm_has_half = false -%}
+{%- if jm_frac >= 0.25 and jm_frac < 0.75 -%}{%- assign jm_has_half = true -%}{%- endif -%}
+{%- if jm_frac >= 0.75 -%}{%- assign jm_full = jm_full | plus: 1 -%}{%- endif -%}
+{%- assign jm_half_idx = jm_full | plus: 1 -%}
+
+<style>
+.bfc4d *,.bfc4d *::before,.bfc4d *::after{box-sizing:border-box;margin:0;padding:0}
+.bfc4d{
+  --or:#E36E15;--go:#F4A027;--ce:#ABCC99;--cv:#F8F6EE;
+  --bk:#202009;--ch:#4E4741;--gr:#E3DDDA;
+  --sr:'Cormorant Garamond',Georgia,serif;
+  --sn:'Poppins',sans-serif;--t:0.2s ease;
+  font-family:var(--sn);color:var(--bk);background:var(--cv);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+
+/* ── BREADCRUMBS ───────────────────────────── */
+.bfc4d-crumbs{padding:14px 40px;font-size:10px;color:rgba(32,32,9,0.5);letter-spacing:0.06em;text-transform:uppercase;font-weight:500;border-bottom:1px solid rgba(32,32,9,0.06)}
+.bfc4d-crumbs a{color:inherit;text-decoration:none;transition:color var(--t)}
+.bfc4d-crumbs a:hover{color:var(--or)}
+.bfc4d-crumbs span{margin:0 8px;opacity:0.4}
+.bfc4d-crumbs strong{color:var(--bk);font-weight:500}
+
+/* ── SPLIT ─────────────────────────────────── */
+.bfc4d-split{display:grid;grid-template-columns:1fr 1fr;align-items:start}
+
+/* ── LEFT: SLIDER ──────────────────────────── */
+.bfc4d-left{
+  position:sticky;top:0;
+  width:50vw;height:50vw;max-height:100vh;
+  overflow:hidden;background:var(--gr);
+}
+.bfc4d-slides{
+  display:flex;height:100%;
+  transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);will-change:transform;
+}
+.bfc4d-slide{width:50vw;flex-shrink:0;height:100%;position:relative}
+.bfc4d-slide img{
+  width:100%;height:100%;
+  object-fit:contain;object-position:center;display:block;
+}
+.bfc4d-arrow{
+  position:absolute;top:50%;transform:translateY(-50%);z-index:10;
+  background:rgba(32,32,9,0.3);border:none;
+  width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background var(--t);backdrop-filter:blur(4px);
+}
+.bfc4d-arrow:hover{background:rgba(32,32,9,0.6)}
+.bfc4d-arrow.is-prev{left:16px}
+.bfc4d-arrow.is-next{right:16px}
+.bfc4d-dots{
+  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+  display:flex;gap:6px;z-index:10;
+}
+.bfc4d-dot{
+  width:6px;height:6px;background:rgba(255,255,255,0.4);
+  border:none;cursor:pointer;padding:0;transition:background var(--t),transform var(--t);
+}
+.bfc4d-dot.is-active{background:#fff;transform:scale(1.3)}
+.bfc4d-noimg{display:flex;align-items:center;justify-content:center;height:100%;color:rgba(32,32,9,0.2);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600}
+
+/* ── RIGHT ─────────────────────────────────── */
+.bfc4d-right{
+  background:var(--cv);padding:36px 40px 56px;
+  display:flex;flex-direction:column;gap:16px;
+}
+.bfc4d-eyebrow{
+  font-size:9px;font-weight:700;letter-spacing:0.22em;
+  text-transform:uppercase;color:var(--or);margin-bottom:0;display:block;
+}
+.bfc4d-title{
+  font-family:var(--sn);font-size:28px;font-weight:600;
+  line-height:1.1;letter-spacing:-0.3px;margin-bottom:2px;
+}
+.bfc4d-rating{display:flex;align-items:center;gap:8px;font-family:var(--sn);font-size:11px;color:var(--ch);font-weight:500}
+.bfc4d-stars{display:inline-flex;gap:2px}
+.bfc4d-star{width:12px;height:12px;display:inline-block;color:rgba(32,32,9,0.15)}
+.bfc4d-star.is-full{color:var(--or)}
+.bfc4d-star.is-half{background:linear-gradient(90deg,var(--or) 50%,rgba(32,32,9,0.15) 50%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bfc4d-rating-count{color:rgba(32,32,9,0.55);font-size:10.5px}
+.bfc4d-price-row{display:flex;align-items:baseline;gap:12px;margin-bottom:2px}
+.bfc4d-price{font-family:var(--sr);font-size:40px;font-weight:300;color:var(--bk);line-height:1}
+.bfc4d-price-compare{font-family:var(--sr);font-size:24px;font-weight:300;color:rgba(32,32,9,0.25);text-decoration:line-through}
+.bfc4d-save{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--or);background:rgba(227,110,21,0.08);padding:4px 8px;align-self:center}
+
+/* ── VARIANTS ──────────────────────────────── */
+.bfc4d-var-label{font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ch);margin-bottom:8px;display:block}
+.bfc4d-var-row{display:flex;gap:6px;flex-wrap:wrap}
+.bfc4d-var-btn{
+  flex:1;min-width:64px;padding:10px 8px;border:1px solid rgba(32,32,9,0.15);
+  background:#fff;cursor:pointer;font-family:var(--sn);
+  font-size:11px;font-weight:600;color:var(--bk);transition:all var(--t);text-align:center;
+}
+.bfc4d-var-btn:hover{border-color:var(--or)}
+.bfc4d-var-btn.is-active{border:2px solid var(--or);color:var(--or);background:rgba(227,110,21,0.05)}
+.bfc4d-var-btn[disabled]{opacity:0.5;cursor:not-allowed;border-color:rgba(32,32,9,0.08);color:rgba(32,32,9,0.3);background:rgba(32,32,9,0.03)}
+.bfc4d-var-btn[disabled]:hover{border-color:rgba(32,32,9,0.08)}
+.bfc4d-var-oos{display:block;font-size:8px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(32,32,9,0.3);margin-top:2px}
+
+/* ── BUY ───────────────────────────────────── */
+.bfc4d-qty-row{display:flex;gap:6px;margin-bottom:8px;align-items:stretch}
+.bfc4d-qty{display:flex;border:1px solid rgba(32,32,9,0.15);background:#fff;align-items:center}
+.bfc4d-qty button{width:36px;height:100%;background:none;border:none;font-size:16px;cursor:pointer;color:var(--bk);font-family:var(--sn);transition:background var(--t)}
+.bfc4d-qty button:hover{background:rgba(32,32,9,0.04)}
+.bfc4d-qty-val{width:40px;text-align:center;font-size:12px;font-weight:600;border:none;border-left:1px solid rgba(32,32,9,0.1);border-right:1px solid rgba(32,32,9,0.1);background:none;font-family:var(--sn);color:var(--bk);-moz-appearance:textfield}
+.bfc4d-qty-val::-webkit-inner-spin-button,.bfc4d-qty-val::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.bfc4d-atc{
+  flex:1;padding:14px;background:var(--or);color:#fff;border:none;
+  cursor:pointer;font-family:var(--sn);font-size:11px;font-weight:700;
+  letter-spacing:0.14em;text-transform:uppercase;transition:background var(--t);display:block;text-align:center;
+}
+.bfc4d-atc:hover:not([disabled]){background:#c9600f}
+.bfc4d-atc[disabled]{opacity:0.5;cursor:not-allowed}
+
+/* ── STOCK ─────────────────────────────────── */
+.bfc4d-stock{font-size:10px;font-weight:600;letter-spacing:0.08em;color:var(--ch);display:flex;align-items:center;gap:6px}
+.bfc4d-stock-dot{width:6px;height:6px;background:var(--ce);display:inline-block}
+.bfc4d-stock.is-low .bfc4d-stock-dot{background:var(--or)}
+.bfc4d-stock.is-low{color:var(--or)}
+
+/* ── DESCRIPTION ───────────────────────────── */
+.bfc4d-desc{border-top:1px solid rgba(32,32,9,0.08);padding-top:16px}
+.bfc4d-desc-label{font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ch);margin-bottom:8px;display:block}
+.bfc4d-desc-text{font-size:12px;color:var(--ch);line-height:1.6}
+.bfc4d-desc-text p{margin:0 0 8px}.bfc4d-desc-text p:last-child{margin:0}
+.bfc4d-desc-text ul,.bfc4d-desc-text ol{padding-left:20px;margin:0 0 8px}
+.bfc4d-desc-text li{margin-bottom:2px}
+.bfc4d-desc-text a{color:var(--or);text-decoration:none;border-bottom:1px solid rgba(227,110,21,0.3)}
+.bfc4d-desc-text a:hover{border-color:var(--or)}
+.bfc4d-desc-text img{max-width:100%;height:auto;display:block;margin:8px 0}
+
+/* ── META ──────────────────────────────────── */
+.bfc4d-meta{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid rgba(32,32,9,0.08);padding-top:12px}
+.bfc4d-meta-item{padding:6px 0;display:flex;flex-direction:column;gap:2px}
+.bfc4d-meta-item:nth-child(odd){padding-right:16px}
+.bfc4d-meta-item:nth-child(even){padding-left:16px;border-left:1px solid rgba(32,32,9,0.06)}
+.bfc4d-meta-key{font-size:8px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(32,32,9,0.3)}
+.bfc4d-meta-val{font-size:11.5px;font-weight:500}
+
+/* ── TRUST ─────────────────────────────────── */
+.bfc4d-trust{display:flex;align-items:stretch;border:1px solid rgba(32,32,9,0.08);background:#fff}
+.bfc4d-trust-item{flex:1;padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.bfc4d-trust-item+.bfc4d-trust-item{border-left:1px solid rgba(32,32,9,0.08)}
+.bfc4d-trust-icon{width:24px;height:24px;background:rgba(227,110,21,0.08);display:flex;align-items:center;justify-content:center;color:var(--or)}
+.bfc4d-trust-label{font-size:8px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--bk);line-height:1.3}
+
+/* ── POLICIES ──────────────────────────────── */
+.bfc4d-policies{border-top:1px solid rgba(32,32,9,0.08)}
+.bfc4d-policy{border-bottom:1px solid rgba(32,32,9,0.06)}
+.bfc4d-policy summary{display:flex;align-items:center;justify-content:space-between;padding:12px 0;font-size:10.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--bk);cursor:pointer;list-style:none;user-select:none}
+.bfc4d-policy summary::-webkit-details-marker{display:none}
+.bfc4d-policy summary::after{content:'+';font-size:14px;font-weight:400;opacity:.3}
+.bfc4d-policy[open] summary::after{content:'\2212'}
+.bfc4d-policy-body{padding:0 0 12px;font-size:11px;line-height:1.5;color:var(--ch)}
+
+/* ── APP BLOCKS ────────────────────────────── */
+.bfc4d-app-block{margin:0}
+
+/* ── LIGHTBOX ──────────────────────────────── */
+.bfc4d-lightbox{display:none;position:fixed;inset:0;background:rgba(32,32,9,0.92);z-index:200;align-items:center;justify-content:center;cursor:zoom-out}
+.bfc4d-lightbox.is-open{display:flex}
+.bfc4d-lightbox img{max-width:90vw;max-height:90vh;object-fit:contain}
+.bfc4d-lightbox-close{position:absolute;top:16px;right:20px;background:none;border:none;color:rgba(255,255,255,0.6);font-size:28px;cursor:pointer;line-height:1}
+.bfc4d-lightbox-close:hover{color:#fff}
+
+/* ── MOBILE STICKY ─────────────────────────── */
+.bfc4d-sticky{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--cv);border-top:1px solid rgba(32,32,9,0.15);padding:10px 16px;z-index:100;align-items:center;gap:12px}
+.bfc4d-sticky-info{flex:1;min-width:0}
+.bfc4d-sticky-title{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bfc4d-sticky-price{font-size:11px;color:var(--ch)}
+.bfc4d-sticky-btn{background:var(--or);color:#fff;border:none;padding:12px 24px;font-size:10px;font-weight:700;font-family:var(--sn);text-transform:uppercase;letter-spacing:0.14em;cursor:pointer;white-space:nowrap}
+
+/* ── BELOW FOLD ────────────────────────────── */
+.bfc4d-below{background:var(--cv)}
+
+/* ── RECOMMENDATIONS ───────────────────────── */
+.bfc4d-recs{border-top:1px solid rgba(32,32,9,0.1);padding:48px}
+.bfc4d-recs-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px}
+.bfc4d-recs-title{font-family:var(--sr);font-size:40px;font-weight:300}
+.bfc4d-recs-all{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(32,32,9,0.4);text-decoration:none;transition:color var(--t)}
+.bfc4d-recs-all:hover{color:var(--or)}
+.bfc4d-recs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.bfc4d-rec-card{
+  text-decoration:none;color:var(--bk);background:#fff;
+  border:1px solid rgba(32,32,9,0.08);overflow:hidden;
+  display:flex;flex-direction:column;transition:border-color var(--t);
+}
+.bfc4d-rec-card:hover{border-color:rgba(227,110,21,0.3)}
+.bfc4d-rec-img-wrap{aspect-ratio:1/1;overflow:hidden;background:var(--gr)}
+.bfc4d-rec-img{width:100%;height:100%;object-fit:contain;display:block;transition:transform 0.4s ease}
+.bfc4d-rec-card:hover .bfc4d-rec-img{transform:scale(1.04)}
+.bfc4d-rec-body{padding:10px 10px 12px}
+.bfc4d-rec-name{font-size:11px;font-weight:600;line-height:1.3;margin-bottom:4px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.bfc4d-rec-price{font-size:11px;font-weight:700;color:var(--or)}
+/* When best-sellers follows the "you might also like" recs, give it slightly more
+   breathing room — the existing border-top already provides visual separation. */
+.bfc4d-best-sellers{padding-top:56px}
+
+/* ── MOBILE ────────────────────────────────── */
+@media(max-width:900px){
+  .bfc4d-crumbs{padding:12px 20px;font-size:9px}
+  .bfc4d-split{grid-template-columns:1fr}
+  .bfc4d-left{position:relative;width:100%;height:100vw;max-height:520px}
+  .bfc4d-slide{width:100%}
+  .bfc4d-arrow{width:32px;height:32px}
+  .bfc4d-right{padding:24px 20px 40px;gap:14px}
+  .bfc4d-title{font-size:22px}
+  .bfc4d-price{font-size:32px}
+  .bfc4d-trust{flex-direction:column}
+  .bfc4d-trust-item{flex-direction:row;gap:8px;text-align:left;padding:10px 12px}
+  .bfc4d-trust-item+.bfc4d-trust-item{border-left:none;border-top:1px solid rgba(32,32,9,0.08)}
+  .bfc4d-recs{padding:32px 20px}
+  .bfc4d-recs-title{font-size:28px}
+  .bfc4d-recs-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .bfc4d-sticky.is-visible{display:flex}
+  .bfc4d{padding-bottom:64px}
+}
+</style>
+
+<div class="bfc4d" data-section-id="{{ section.id }}">
+
+  {%- comment -%} ── Breadcrumbs ── {%- endcomment -%}
+  <div class="bfc4d-crumbs" aria-label="Breadcrumb">
+    <a href="/">Home</a>
+    <span>/</span>
+    {%- if first_collection -%}
+      <a href="{{ first_collection.url }}">{{ first_collection.title }}</a>
+      <span>/</span>
+    {%- endif -%}
+    <strong>{{ product.title | truncate: 60 }}</strong>
+  </div>
+
+  <!-- ═══ SPLIT ═══ -->
+  <div class="bfc4d-split">
+
+    <!-- LEFT: Slider -->
+    <div class="bfc4d-left" id="bfc4d-slider">
+      {%- if product.images.size > 0 -%}
+        <div class="bfc4d-slides" id="bfc4d-slides">
+          {%- for image in product.images -%}
+            <div class="bfc4d-slide">
+              <img
+                src="{{ image | image_url: width: 1200 }}"
+                alt="{{ image.alt | default: product.title }}"
+                {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}
+                onclick="bfc4dLightbox('{{ image | image_url: width: 2400 }}')"
+                style="cursor:zoom-in"
+              >
+            </div>
+          {%- endfor -%}
+        </div>
+        {%- if product.images.size > 1 -%}
+          <button class="bfc4d-arrow is-prev" id="bfc4d-prev" aria-label="Previous" style="visibility:hidden">
+            <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="2"><path d="M10 2L4 8l6 6"/></svg>
+          </button>
+          <button class="bfc4d-arrow is-next" id="bfc4d-next" aria-label="Next">
+            <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="2"><path d="M6 2l6 6-6 6"/></svg>
+          </button>
+          <div class="bfc4d-dots" id="bfc4d-dots">
+            {%- for image in product.images -%}
+              <button class="bfc4d-dot{% if forloop.first %} is-active{% endif %}" data-idx="{{ forloop.index0 }}" aria-label="Go to image {{ forloop.index }}"></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        <div class="bfc4d-noimg">No Image Available</div>
+      {%- endif -%}
+    </div>
+
+    <!-- RIGHT: Info -->
+    <div class="bfc4d-right">
+
+      {%- assign brand_name = product.metafields.custom.brand | default: product.vendor -%}
+      {%- if brand_name != blank -%}
+        <div><span class="bfc4d-eyebrow">{{ brand_name }}</span></div>
+      {%- endif -%}
+
+      <div>
+        <h1 class="bfc4d-title">{{ product.title }}</h1>
+        {%- if jm_show -%}
+          <div class="bfc4d-rating" aria-label="Rated {{ jm_avg }} out of 5 based on {{ jm_count }} reviews">
+            <span class="bfc4d-stars" aria-hidden="true">
+              {%- for i in (1..5) -%}
+                {%- if i <= jm_full -%}
+                  <span class="bfc4d-star is-full"><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 .5l1.7 3.4 3.8.5-2.7 2.6.6 3.8L6 9l-3.4 1.8.6-3.8L.5 4.4l3.8-.5z"/></svg></span>
+                {%- elsif jm_has_half and i == jm_half_idx -%}
+                  <span class="bfc4d-star is-half"><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 .5l1.7 3.4 3.8.5-2.7 2.6.6 3.8L6 9l-3.4 1.8.6-3.8L.5 4.4l3.8-.5z"/></svg></span>
+                {%- else -%}
+                  <span class="bfc4d-star"><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 .5l1.7 3.4 3.8.5-2.7 2.6.6 3.8L6 9l-3.4 1.8.6-3.8L.5 4.4l3.8-.5z"/></svg></span>
+                {%- endif -%}
+              {%- endfor -%}
+            </span>
+            <span class="bfc4d-rating-count">{{ jm_count }} review{% if jm_count != 1 %}s{% endif %}</span>
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div>
+        <div class="bfc4d-price-row">
+          <span class="bfc4d-price" id="bfc4d-price">{{ current_variant.price | money_without_trailing_zeros }}</span>
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            <span class="bfc4d-price-compare" id="bfc4d-compare">{{ current_variant.compare_at_price | money_without_trailing_zeros }}</span>
+            {%- assign save_pct = current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round -%}
+            <span class="bfc4d-save" id="bfc4d-save">Save {{ save_pct }}%</span>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- if product.variants.size > 1 -%}
+        <div>
+          <span class="bfc4d-var-label">
+            {%- if product.options.size == 1 -%}{{ product.options.first }}{%- else -%}Options{%- endif -%}
+          </span>
+          <div class="bfc4d-var-row" role="radiogroup" aria-label="Product options">
+            {%- for variant in product.variants -%}
+              <button type="button"
+                class="bfc4d-var-btn{% if variant == current_variant %} is-active{% endif %}"
+                data-vid="{{ variant.id }}"
+                data-price="{{ variant.price | money_without_trailing_zeros }}"
+                data-compare-price="{{ variant.compare_at_price | money_without_trailing_zeros }}"
+                data-has-compare="{% if variant.compare_at_price > variant.price %}1{% else %}0{% endif %}"
+                data-available="{{ variant.available }}"
+                data-url="{{ product.url }}?variant={{ variant.id }}"
+                data-inventory="{{ variant.inventory_quantity }}"
+                role="radio"
+                aria-checked="{% if variant == current_variant %}true{% else %}false{% endif %}"
+                {% unless variant.available %}disabled{% endunless %}
+              >
+                {{ variant.title }}
+                {%- unless variant.available -%}<span class="bfc4d-var-oos">Sold Out</span>{%- endunless -%}
+              </button>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      <div class="bfc4d-buy">
+        <input type="hidden" id="bfc4d-vid" value="{{ current_variant.id }}">
+        <div class="bfc4d-qty-row">
+          <div class="bfc4d-qty">
+            <button type="button" onclick="bfc4dQty(-1)" aria-label="Decrease">&minus;</button>
+            <input class="bfc4d-qty-val" type="number" value="1" min="1" max="99" id="bfc4d-qty" aria-label="Quantity">
+            <button type="button" onclick="bfc4dQty(1)" aria-label="Increase">+</button>
+          </div>
+          <button type="button" class="bfc4d-atc" id="bfc4d-atc" onclick="bfc4dAddToCart()" {% unless current_variant.available %}disabled{% endunless %}>
+            <span id="bfc4d-atc-text">{%- if current_variant.available -%}Add to Cart{%- else -%}Sold Out{%- endif -%}</span>
+          </button>
+        </div>
+
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              <div class="bfc4d-app-block" {{ block.shopify_attributes }}>{% render block %}</div>
+          {%- endcase -%}
+        {%- endfor -%}
+
+        {%- if current_variant.available and current_variant.inventory_management == 'shopify' -%}
+          <div class="bfc4d-stock{% if current_variant.inventory_quantity <= 5 %} is-low{% endif %}" id="bfc4d-stock" style="margin-top:6px">
+            <span class="bfc4d-stock-dot"></span>
+            {%- if current_variant.inventory_quantity <= 5 -%}
+              Only {{ current_variant.inventory_quantity }} left
+            {%- else -%}
+              In stock
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} ── Optional meta grid (SKU intentionally hidden — internal-only data) ── {%- endcomment -%}
+      {%- assign show_meta = false -%}
+      {%- if product.type != blank -%}{%- assign show_meta = true -%}{%- endif -%}
+      {%- if show_meta -%}
+        <div class="bfc4d-meta" id="bfc4d-meta">
+          {%- if product.type != blank -%}
+            <div class="bfc4d-meta-item">
+              <span class="bfc4d-meta-key">Type</span>
+              <span class="bfc4d-meta-val">{{ product.type }}</span>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if product.description != blank -%}
+        <div class="bfc4d-desc">
+          <span class="bfc4d-desc-label">Details</span>
+          <div class="bfc4d-desc-text">{{ product.description }}</div>
+        </div>
+      {%- endif -%}
+
+      <div class="bfc4d-trust">
+        <div class="bfc4d-trust-item">
+          <div class="bfc4d-trust-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16"/><path d="M2 10h20"/></svg></div>
+          <div class="bfc4d-trust-label">Ships Fast</div>
+        </div>
+        <div class="bfc4d-trust-item">
+          <div class="bfc4d-trust-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+          <div class="bfc4d-trust-label">Free BK Pickup</div>
+        </div>
+        <div class="bfc4d-trust-item">
+          <div class="bfc4d-trust-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2l2.39 7.36H22l-6.18 4.49L18.21 21 12 16.51 5.79 21l2.39-7.15L2 9.36h7.61z" stroke-linejoin="round"/></svg></div>
+          <div class="bfc4d-trust-label">NY Curated</div>
+        </div>
+      </div>
+
+      <div class="bfc4d-policies">
+        <details class="bfc4d-policy">
+          <summary>Shipping</summary>
+          <div class="bfc4d-policy-body">Most orders ship same day from our Brooklyn shop. Domestic delivery via USPS or UPS typically arrives in 2-4 business days. Free shipping on US orders over $399. In-store pickup at 855 Grand Street is always free.</div>
+        </details>
+        <details class="bfc4d-policy">
+          <summary>Returns</summary>
+          <div class="bfc4d-policy-body">Unopened accessories and gear can be returned within 14 days of delivery. Items must be in original condition. Contact <a href="mailto:hello@brooklynfilmcamera.com" style="color:var(--or)">hello@brooklynfilmcamera.com</a> to start a return.</div>
+        </details>
+        <details class="bfc4d-policy">
+          <summary>Questions?</summary>
+          <div class="bfc4d-policy-body">Email <a href="mailto:hello@brooklynfilmcamera.com" style="color:var(--or)">hello@brooklynfilmcamera.com</a> or stop by the shop — we're open every day. You can also browse our <a href="https://brooklynfilmcamera.com/pages/faq" style="color:var(--or)">FAQ</a>. We're happy to help you find the right thing.</div>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ BELOW FOLD ═══ -->
+  <div class="bfc4d-below">
+    {%- if first_collection and section.settings.show_recs -%}
+      {%- assign rec_count = 0 -%}
+      {%- for rec in first_collection.products -%}
+        {%- if rec.id != product.id and rec_count < rec_limit -%}
+          {%- assign rec_count = rec_count | plus: 1 -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if rec_count > 0 -%}
+        <div class="bfc4d-recs">
+          <div class="bfc4d-recs-head">
+            <div class="bfc4d-recs-title">You might also like</div>
+            <a href="{{ first_collection.url }}" class="bfc4d-recs-all">View all</a>
+          </div>
+          <div class="bfc4d-recs-grid">
+            {%- assign rec_shown = 0 -%}
+            {%- for rec in first_collection.products -%}
+              {%- if rec.id != product.id and rec_shown < rec_limit -%}
+                {%- assign rec_shown = rec_shown | plus: 1 -%}
+                <a href="{{ rec.url }}" class="bfc4d-rec-card">
+                  <div class="bfc4d-rec-img-wrap">
+                    {%- if rec.featured_image -%}
+                      <img class="bfc4d-rec-img" src="{{ rec.featured_image | image_url: width: 400 }}" alt="{{ rec.featured_image.alt | default: rec.title }}" loading="lazy" width="400" height="400">
+                    {%- endif -%}
+                  </div>
+                  <div class="bfc4d-rec-body">
+                    <div class="bfc4d-rec-name">{{ rec.title }}</div>
+                    <div class="bfc4d-rec-price">
+                      {%- if rec.price_varies -%}from {% endif -%}
+                      {{ rec.price_min | money_without_trailing_zeros }}
+                    </div>
+                  </div>
+                </a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- comment -%}
+      ── BEST SELLERS ──
+      Pulls from an admin-selected collection (settings.best_sellers_collection).
+      If none set, falls back to a collection with handle 'best-sellers'.
+      Excludes the current product so users don't see what they're already viewing.
+      Section is silent (renders nothing) if the collection has no other products.
+    {%- endcomment -%}
+    {%- if section.settings.show_best_sellers -%}
+      {%- assign bs_col = section.settings.best_sellers_collection | default: collections['best-sellers'] -%}
+      {%- if bs_col != blank -%}
+        {%- assign bs_count = 0 -%}
+        {%- assign bs_max = section.settings.best_sellers_count | default: 8 -%}
+        {%- for bs in bs_col.products -%}
+          {%- if bs.id != product.id and bs_count < bs_max -%}
+            {%- assign bs_count = bs_count | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if bs_count > 0 -%}
+          <div class="bfc4d-recs bfc4d-best-sellers">
+            <div class="bfc4d-recs-head">
+              <div class="bfc4d-recs-title">Shop our best sellers</div>
+              <a href="{{ bs_col.url }}" class="bfc4d-recs-all">View all</a>
+            </div>
+            <div class="bfc4d-recs-grid">
+              {%- assign bs_shown = 0 -%}
+              {%- for bs in bs_col.products -%}
+                {%- if bs.id != product.id and bs_shown < bs_max -%}
+                  {%- assign bs_shown = bs_shown | plus: 1 -%}
+                  <a href="{{ bs.url }}" class="bfc4d-rec-card">
+                    <div class="bfc4d-rec-img-wrap">
+                      {%- if bs.featured_image -%}
+                        <img class="bfc4d-rec-img" src="{{ bs.featured_image | image_url: width: 400 }}" alt="{{ bs.featured_image.alt | default: bs.title }}" loading="lazy" width="400" height="400">
+                      {%- endif -%}
+                    </div>
+                    <div class="bfc4d-rec-body">
+                      <div class="bfc4d-rec-name">{{ bs.title }}</div>
+                      <div class="bfc4d-rec-price">
+                        {%- if bs.price_varies -%}from {% endif -%}
+                        {{ bs.price_min | money_without_trailing_zeros }}
+                      </div>
+                    </div>
+                  </a>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+
+  <!-- Lightbox -->
+  <div class="bfc4d-lightbox" id="bfc4d-lightbox" onclick="bfc4dCloseLightbox()">
+    <button class="bfc4d-lightbox-close" onclick="bfc4dCloseLightbox()" aria-label="Close">&times;</button>
+    <img id="bfc4d-lightbox-img" alt="">
+  </div>
+
+  <!-- Mobile sticky ATC -->
+  <div class="bfc4d-sticky" id="bfc4d-sticky">
+    <div class="bfc4d-sticky-info">
+      <div class="bfc4d-sticky-title">{{ product.title | truncate: 40 }}</div>
+      <div class="bfc4d-sticky-price" id="bfc4d-sticky-price">{{ current_variant.price | money_without_trailing_zeros }}</div>
+    </div>
+    <button class="bfc4d-sticky-btn" id="bfc4d-sticky-btn" onclick="bfc4dAddToCart()"><span id="bfc4d-sticky-btn-text">Add to Cart</span></button>
+  </div>
+
+  {%- comment -%} Hidden Shopify product form — primary path for ATC. The visible
+    bfc4d-atc button syncs vid + qty into this form's inputs and clicks the
+    submit, which lets the theme's <product-form> custom element handle the
+    cart drawer open + bubble update natively. {%- endcomment -%}
+  {%- assign bfc4d_form_id = 'bfc4d-form-' | append: section.id -%}
+  <div style="display:none">
+    <product-form class="product-form" data-hide-errors="false" data-section-id="{{ section.id }}">
+      {%- form 'product', product, id: bfc4d_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}" class="product-variant-id" id="bfc4d-hidden-vid"/>
+        <input type="hidden" name="quantity" value="1" id="bfc4d-hidden-qty"/>
+        <div class="product-form__buttons" data-display-quantity="false" data-display-layout="seperate" data-display-dynamics="false">
+          <button id="ProductSubmitButton-{{ section.id }}" type="submit" name="add" class="product-form__submit button button--filled">
+            <span>Add to Cart</span>
+            <div class="loading__spinner hidden">
+              <svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66"><circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle></svg>
+            </div>
+          </button>
+        </div>
+        <div class="product-form__error-message-wrapper" role="alert" hidden>
+          <span class="product-form__error-message"></span>
+        </div>
+      {%- endform -%}
+    </product-form>
+  </div>
+
+</div>
+
+{%- comment -%} Reviews {%- endcomment -%}
+{% render 'bfc-pdp-reviews', pdp_handle: product.handle, pdp_title: product.title %}
+
+<script>
+(function(){
+  /* ── XHR helper (bypasses Judge.me fetch patching) — used by the fallback
+     ATC path below in case the hidden <product-form> isn't available. */
+  function bfc4dXhr(url,opts){
+    opts=opts||{};
+    return new Promise(function(resolve,reject){
+      var xhr=new XMLHttpRequest();
+      xhr.open(opts.method||'GET',url,true);
+      xhr.withCredentials=true;
+      if(opts.headers)Object.keys(opts.headers).forEach(function(k){xhr.setRequestHeader(k,opts.headers[k]);});
+      xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
+      xhr.onload=function(){
+        resolve({ok:xhr.status>=200&&xhr.status<300,status:xhr.status,
+          json:function(){try{return Promise.resolve(JSON.parse(xhr.responseText));}catch(e){return Promise.resolve({});}},
+          text:function(){return Promise.resolve(xhr.responseText);}
+        });
+      };
+      xhr.onerror=function(){reject(new Error('Network error'));};
+      xhr.send(opts.body||null);
+    });
+  }
+
+  /* ── Slider ── */
+  var idx=0,slides=document.getElementById('bfc4d-slides'),
+      dots=document.querySelectorAll('.bfc4d-dot'),total=dots.length,
+      prev=document.getElementById('bfc4d-prev'),next=document.getElementById('bfc4d-next');
+  function goTo(i){if(i<0)i=0;if(i>=total)i=total-1;idx=i;
+    if(slides)slides.style.transform='translateX(-'+(idx*100)+'%)';
+    dots.forEach(function(d,j){d.classList.toggle('is-active',j===idx);});
+    if(prev)prev.style.visibility=idx===0?'hidden':'visible';
+    if(next)next.style.visibility=idx>=total-1?'hidden':'visible';
+  }
+  if(prev)prev.onclick=function(){goTo(idx-1);};
+  if(next)next.onclick=function(){goTo(idx+1);};
+  dots.forEach(function(d){d.onclick=function(){goTo(+this.dataset.idx);};});
+  if(total<=1&&next)next.style.visibility='hidden';
+
+  var sx=0,sl=document.getElementById('bfc4d-slider');
+  if(sl){
+    sl.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;},{passive:true});
+    sl.addEventListener('touchend',function(e){var d=sx-e.changedTouches[0].clientX;if(Math.abs(d)>40){d>0?goTo(idx+1):goTo(idx-1);}},{passive:true});
+  }
+
+  /* ── Variants ── */
+  document.querySelectorAll('.bfc4d-var-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      if(this.disabled)return;
+      document.querySelectorAll('.bfc4d-var-btn').forEach(function(b){b.classList.remove('is-active');b.setAttribute('aria-checked','false');});
+      this.classList.add('is-active');this.setAttribute('aria-checked','true');
+
+      var vid=this.dataset.vid,price=this.dataset.price,avail=this.dataset.available==='true',
+          inv=parseInt(this.dataset.inventory,10),
+          cmp=this.dataset.comparePrice,hasC=this.dataset.hasCompare==='1';
+
+      document.getElementById('bfc4d-vid').value=vid;
+      var hidVid=document.getElementById('bfc4d-hidden-vid');if(hidVid)hidVid.value=vid;
+
+      document.getElementById('bfc4d-price').textContent=price;
+      var sp=document.getElementById('bfc4d-sticky-price');if(sp)sp.textContent=price;
+
+      var cmpEl=document.getElementById('bfc4d-compare'),saveEl=document.getElementById('bfc4d-save');
+      if(hasC&&cmpEl){cmpEl.textContent=cmp;cmpEl.style.display='';if(saveEl)saveEl.style.display='';}
+      else{if(cmpEl)cmpEl.style.display='none';if(saveEl)saveEl.style.display='none';}
+
+      var stockEl=document.getElementById('bfc4d-stock');
+      if(stockEl){
+        if(avail&&!isNaN(inv)&&inv>0){
+          stockEl.style.display='';
+          if(inv<=5){stockEl.classList.add('is-low');stockEl.innerHTML='<span class="bfc4d-stock-dot"></span>Only '+inv+' left';}
+          else{stockEl.classList.remove('is-low');stockEl.innerHTML='<span class="bfc4d-stock-dot"></span>In stock';}
+        } else {
+          stockEl.style.display='none';
+        }
+      }
+
+      var atcBtn=document.getElementById('bfc4d-atc'),atcTxt=document.getElementById('bfc4d-atc-text');
+      if(atcBtn){atcBtn.disabled=!avail;}
+      if(atcTxt){atcTxt.textContent=avail?'Add to Cart':'Sold Out';}
+
+      /* Update URL without reload */
+      var u=new URL(this.dataset.url,window.location.origin);
+      window.history.replaceState({},'',u.pathname+u.search);
+    });
+  });
+
+  /* ── Qty stepper ── */
+  window.bfc4dQty=function(d){
+    var q=document.getElementById('bfc4d-qty');if(!q)return;
+    var v=(parseInt(q.value,10)||1)+d;
+    if(v<1)v=1;if(v>99)v=99;q.value=v;
+  };
+
+  /* ── Lightbox ── */
+  window.bfc4dLightbox=function(src){
+    var lb=document.getElementById('bfc4d-lightbox'),im=document.getElementById('bfc4d-lightbox-img');
+    if(!lb||!im)return;im.src=src;lb.classList.add('is-open');document.body.style.overflow='hidden';
+  };
+  window.bfc4dCloseLightbox=function(){
+    var lb=document.getElementById('bfc4d-lightbox');if(!lb)return;
+    lb.classList.remove('is-open');document.body.style.overflow='';
+  };
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')bfc4dCloseLightbox();});
+
+  /* ── Mobile sticky ── */
+  var sticky=document.getElementById('bfc4d-sticky'),atcB=document.getElementById('bfc4d-atc');
+  if(sticky&&atcB&&window.innerWidth<=900){
+    new IntersectionObserver(function(e){e.forEach(function(x){sticky.classList.toggle('is-visible',!x.isIntersecting);});},{threshold:0}).observe(atcB);
+  }
+
+  /* ── Visible button state helpers ── */
+  function bfc4dSetButtonsAdding(){
+    var btn=document.getElementById('bfc4d-atc'),
+        textEl=document.getElementById('bfc4d-atc-text'),
+        stickyBtn=document.getElementById('bfc4d-sticky-btn'),
+        stickyText=document.getElementById('bfc4d-sticky-btn-text');
+    if(btn)btn.disabled=true;
+    if(stickyBtn)stickyBtn.disabled=true;
+    if(textEl)textEl.textContent='Adding\u2026';
+    if(stickyText)stickyText.textContent='Adding\u2026';
+  }
+  function bfc4dSetButtonsAdded(){
+    var btn=document.getElementById('bfc4d-atc'),
+        textEl=document.getElementById('bfc4d-atc-text'),
+        stickyBtn=document.getElementById('bfc4d-sticky-btn'),
+        stickyText=document.getElementById('bfc4d-sticky-btn-text');
+    if(textEl)textEl.textContent='Added!';
+    if(stickyText)stickyText.textContent='Added!';
+    if(btn)btn.style.background='#2a4820';
+    setTimeout(function(){
+      if(textEl)textEl.textContent='Add to Cart';
+      if(stickyText)stickyText.textContent='Add to Cart';
+      if(btn){btn.disabled=false;btn.style.background='';}
+      if(stickyBtn)stickyBtn.disabled=false;
+    },1500);
+  }
+  function bfc4dSetButtonsError(msg){
+    var btn=document.getElementById('bfc4d-atc'),
+        textEl=document.getElementById('bfc4d-atc-text'),
+        stickyBtn=document.getElementById('bfc4d-sticky-btn'),
+        stickyText=document.getElementById('bfc4d-sticky-btn-text');
+    if(textEl)textEl.textContent=String(msg||'Error').slice(0,30);
+    if(stickyText)stickyText.textContent='Add to Cart';
+    if(btn)btn.style.background='#a33';
+    setTimeout(function(){
+      if(textEl)textEl.textContent='Add to Cart';
+      if(btn){btn.disabled=false;btn.style.background='';}
+      if(stickyBtn)stickyBtn.disabled=false;
+    },3000);
+  }
+
+  /* ── ATC ──
+     Primary path: sync vid + qty into the hidden <product-form>, then click its
+     submit button. The theme's product-form web component handles /cart/add.js
+     AND opens the cart drawer / updates the cart bubble natively — no manual
+     section swapping required.
+
+     Previous bug: a second XHR fetched ?sections=cart-drawer and replaced
+     #cart-drawer's innerHTML directly. That doesn't re-init the <cart-drawer>
+     custom element's internal state, so newly added items only appeared after
+     a full page reload.
+
+     Fallback path (no <product-form> on page): direct XHR to /cart/add.js with
+     `sections` in the body, then call cart-drawer.renderContents(state) which
+     is Dawn's standard method for "render the response sections AND open the
+     drawer". Falls back to drawer.open() if renderContents isn't available. */
+  window.bfc4dAddToCart=function(){
+    var btn=document.getElementById('bfc4d-atc'),
+        vid=parseInt(document.getElementById('bfc4d-vid').value,10),
+        qty=parseInt(document.getElementById('bfc4d-qty').value,10)||1,
+        hiddenVid=document.getElementById('bfc4d-hidden-vid'),
+        hiddenQty=document.getElementById('bfc4d-hidden-qty'),
+        hiddenSubmit=document.querySelector('product-form .product-form__submit');
+
+    if(!vid||(btn&&btn.disabled))return;
+    bfc4dSetButtonsAdding();
+
+    /* Sync values into the hidden form so the theme submits the right thing */
+    if(hiddenVid)hiddenVid.value=vid;
+    if(hiddenQty)hiddenQty.value=qty;
+
+    /* Primary path: theme handles everything via <product-form> */
+    if(hiddenSubmit){
+      try{
+        hiddenSubmit.click();
+      }catch(e){
+        console.error('[BFC4D] Hidden submit click failed:',e);
+        bfc4dSetButtonsError('Error');
+        return;
+      }
+      /* Theme drives the drawer; we just give the user button feedback.
+         Listen briefly for an error message rendered by product-form so we
+         can surface it on our visible button if needed. */
+      setTimeout(function(){
+        var errEl=document.querySelector('product-form .product-form__error-message');
+        var errMsg=errEl&&!errEl.hidden&&errEl.textContent.trim();
+        if(errMsg){
+          bfc4dSetButtonsError(errMsg);
+        }else{
+          bfc4dSetButtonsAdded();
+        }
+      },800);
+      return;
+    }
+
+    /* Fallback path: no product-form available, use raw XHR + renderContents */
+    bfc4dXhr('/cart/add.js',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        items:[{id:vid,quantity:qty}],
+        sections:'cart-drawer,cart-icon-bubble',
+        sections_url:window.location.pathname
+      })
+    }).then(function(r){
+      return r.json().then(function(d){
+        if(!r.ok)throw new Error(d.description||d.message||('HTTP '+r.status));
+        return d;
+      });
+    }).then(function(state){
+      var drawer=document.querySelector('cart-drawer, cart-notification');
+      if(drawer&&typeof drawer.renderContents==='function'){
+        drawer.renderContents(state);
+      }else if(drawer&&typeof drawer.open==='function'){
+        drawer.open();
+      }
+      if(state.sections&&state.sections['cart-icon-bubble']){
+        document.querySelectorAll('#cart-icon-bubble').forEach(function(b){
+          var t=document.createElement('div');t.innerHTML=state.sections['cart-icon-bubble'];
+          var n=t.querySelector('#cart-icon-bubble');if(n)b.innerHTML=n.innerHTML;
+        });
+      }
+      bfc4dSetButtonsAdded();
+    }).catch(function(e){
+      console.error('[BFC4D] ATC error:',e);
+      bfc4dSetButtonsError(e.message);
+    });
+  };
+})();
+</script>
+
+{%- comment -%} ── JSON-LD for SEO ── {%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "image": [{% for image in product.images limit: 5 %}{{ image | image_url: width: 1200 | prepend: 'https:' | json }}{% unless forloop.last %},{% endunless %}{% endfor %}],
+  "description": {{ product.description | strip_html | json }},
+  {% if product.vendor != blank %}"brand": { "@type": "Brand", "name": {{ product.vendor | json }} },{% endif %}
+  {% if current_variant.sku != blank %}"sku": {{ current_variant.sku | json }},{% endif %}
+  "offers": {
+    "@type": "Offer",
+    "url": {{ shop.url | append: product.url | json }},
+    "priceCurrency": {{ cart.currency.iso_code | json }},
+    "price": {{ current_variant.price | divided_by: 100.00 | json }},
+    "availability": "{% if current_variant.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}"
+    {% if jm_show %},
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "{{ jm_avg }}",
+      "reviewCount": "{{ jm_count }}"
+    }
+    {% endif %}
+  }
+}
+</script>
+
+{% schema %}
+{
+  "name": "BFC Default PDP",
+  "tag": "section",
+  "class": "bfc-default-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Recommendations"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_recs",
+      "label": "Show 'You might also like' grid",
+      "default": true,
+      "info": "Shows up to N products from this product's first collection."
+    },
+    {
+      "type": "range",
+      "id": "rec_count",
+      "label": "Number of recommendations",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "Best Sellers"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_best_sellers",
+      "label": "Show 'Shop our best sellers' grid",
+      "default": true,
+      "info": "Renders below 'You might also like'. Falls back to the 'best-sellers' collection handle if none picked."
+    },
+    {
+      "type": "collection",
+      "id": "best_sellers_collection",
+      "label": "Best sellers collection",
+      "info": "Pick which collection to show. Leave blank to auto-use a collection with handle 'best-sellers'."
+    },
+    {
+      "type": "range",
+      "id": "best_sellers_count",
+      "label": "Number of best sellers",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Default PDP"
+    }
+  ],
+  "templates": ["product"]
+}
+{% endschema %}

@@ -1,0 +1,1555 @@
+{{- 'section-product.css' | asset_url | stylesheet_tag -}}
+<script src="{{ 'product-variants.js' | asset_url }}" defer="defer"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/></noscript>
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+
+  assign g1 = product.metafields.custom.gallery_1.value
+  assign g2 = product.metafields.custom.gallery_2.value
+  assign g3 = product.metafields.custom.gallery_3.value
+  assign g4 = product.metafields.custom.gallery_4.value
+  assign g5 = product.metafields.custom.gallery_5.value
+  assign g6 = product.metafields.custom.gallery_6.value
+
+  assign spec_shutter = product.metafields.custom.spec_shutterspeeds.value
+  assign spec_battery = product.metafields.custom.spec_battery.value
+  assign spec_flash   = product.metafields.custom.spec_flash.value
+  assign spec_focus   = product.metafields.custom.spec_focus.value
+  assign spec_meter   = product.metafields.custom.spec_meter.value
+  assign spec_lens    = product.metafields.custom.spec_lens.value
+-%}
+
+{% style %}
+/* ================================================================
+   BFC SX-70 PDP — bfcsx namespace
+   ================================================================ */
+.bfcsx *,
+.bfcsx *::before,
+.bfcsx *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.bfcsx {
+  --or:  #E36E15;
+  --go:  #F4A027;
+  --ce:  #ABCC99;
+  --cv:  #F8F6EE;
+  --bk:  #202009;
+  --ol:  #525741;
+  --br:  #5A3E2D;
+  --ch:  #4E4741;
+  --gr:  #E3DDDA;
+  --sr:  'Cormorant Garamond', Georgia, serif;
+  --sn:  'Poppins', sans-serif;
+  --t:   0.2s ease;
+  font-family: var(--sn);
+  color: var(--bk);
+  background: var(--cv);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── PDP TOP (two-column: photos left, info right) ── */
+.bfcsx .sx-pdp-top {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 48px 48px;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 40px;
+  align-items: start;
+}
+.bfcsx .sx-photos {
+  position: sticky; top: 24px;
+}
+.bfcsx .sx-hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #eae6db;
+}
+.bfcsx .sx-slider {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.bfcsx .sx-slider::-webkit-scrollbar { display: none; }
+.bfcsx .sx-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  position: relative;
+}
+.bfcsx .sx-slide img {
+  width: 100%; height: 100%;
+  object-fit: contain; object-position: center;
+  display: block;
+}
+.bfcsx .sx-dots {
+  position: absolute; bottom: 16px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 8px; z-index: 2;
+}
+.bfcsx .sx-dot {
+  width: 8px; height: 8px;
+  background: rgba(32,32,9,0.2);
+  cursor: pointer;
+  transition: background var(--t);
+  border: none;
+}
+.bfcsx .sx-dot.is-active { background: var(--or); }
+.bfcsx .sx-thumbs {
+  display: flex; gap: 8px; margin-top: 8px;
+}
+.bfcsx .sx-thumb {
+  width: 64px; height: 64px;
+  background: #eae6db;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity var(--t);
+  border: none; padding: 0;
+}
+.bfcsx .sx-thumb.is-active { opacity: 1; }
+.bfcsx .sx-thumb img {
+  width: 100%; height: 100%;
+  object-fit: contain; display: block;
+}
+
+/* ── PRODUCT INFO (right column) ──────────────── */
+.bfcsx .sx-info {
+  display: flex;
+  flex-direction: column;
+}
+.bfcsx .sx-eyebrow {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 12px; display: block;
+}
+.bfcsx .sx-title {
+  font-family: var(--sr);
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 300; line-height: 1.05;
+  color: var(--bk);
+  margin-bottom: 20px;
+}
+.bfcsx .sx-mini-specs {
+  display: flex; flex-wrap: wrap; gap: 0;
+  margin-bottom: 24px;
+}
+.bfcsx .sx-mini-spec {
+  display: flex; flex-direction: column;
+  padding: 12px 20px 12px 0;
+  border-right: 1px solid rgba(82,87,65,0.12);
+  margin-right: 20px;
+}
+.bfcsx .sx-mini-spec:last-child { border-right: none; margin-right: 0; padding-right: 0; }
+.bfcsx .sx-spec-key {
+  font-size: 8px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(82,87,65,0.5); margin-bottom: 3px;
+}
+.bfcsx .sx-spec-val {
+  font-size: 13px; font-weight: 500; color: var(--bk);
+}
+.bfcsx .sx-desc {
+  font-size: 14px; line-height: 1.7;
+  color: var(--ol); margin-bottom: 0;
+}
+.bfcsx .sx-desc p { margin-bottom: 12px; }
+.bfcsx .sx-desc p:last-child { margin-bottom: 0; }
+.bfcsx .sx-desc form, .bfcsx .sx-desc button, .bfcsx .sx-desc input[type="submit"], .bfcsx .sx-desc iframe, .bfcsx .sx-desc .shopify-buy-frame, .bfcsx .sx-desc [data-product-form], .bfcsx .sx-desc h1, .bfcsx .sx-desc h2 { display: none !important; }
+
+/* ── ATC (inline in right column) ─────────────── */
+.bfcsx .sx-atc-panel {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(82,87,65,0.1);
+}
+.bfcsx .sx-atc-price {
+  font-family: var(--sr);
+  font-size: 36px; font-weight: 300;
+  color: var(--bk); margin-bottom: 4px;
+}
+.bfcsx .sx-atc-compare {
+  font-size: 11px; color: rgba(82,87,65,0.45);
+  text-decoration: line-through;
+  margin-bottom: 16px; display: block;
+}
+.bfcsx .sx-atc-variant-label {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ol); margin-bottom: 8px; display: block;
+}
+.bfcsx .sx-atc-variants {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 20px;
+}
+.bfcsx .sx-variant-btn {
+  font-family: var(--sn);
+  font-size: 12px; font-weight: 500;
+  padding: 8px 16px;
+  background: var(--cv); border: 1px solid rgba(82,87,65,0.12);
+  color: var(--bk); cursor: pointer;
+  transition: all var(--t);
+}
+.bfcsx .sx-variant-btn:hover { border-color: var(--or); }
+.bfcsx .sx-variant-btn.is-selected {
+  background: var(--bk); color: #fff; border-color: var(--bk);
+}
+.bfcsx .sx-variant-btn.is-sold-out {
+  opacity: 0.35; cursor: not-allowed;
+  text-decoration: line-through;
+}
+.bfcsx .sx-add-btn {
+  width: 100%;
+  font-family: var(--sn);
+  font-size: 13px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 16px;
+  background: var(--or); color: #fff;
+  border: none; cursor: pointer;
+  transition: background var(--t);
+  margin-bottom: 12px;
+}
+.bfcsx .sx-add-btn:hover { background: #c75e10; }
+.bfcsx .sx-add-btn:disabled {
+  background: var(--gr); color: rgba(82,87,65,0.4); cursor: not-allowed;
+}
+.bfcsx .sx-atc-badges {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.bfcsx .sx-badge {
+  font-size: 10.5px; color: var(--ol);
+  display: flex; align-items: center; gap: 8px;
+}
+.bfcsx .sx-badge-icon {
+  width: 16px; height: 16px; flex-shrink: 0;
+  fill: var(--or);
+}
+.bfcsx .sx-itype-note {
+  font-size: 10px; line-height: 1.5;
+  color: rgba(82,87,65,0.45);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(82,87,65,0.08);
+}
+
+/* ── OPENSX70 INTRO ───────────────────────────── */
+.bfcsx .sx-osx-intro {
+  background: var(--bk); color: #fff;
+  padding: 80px 48px;
+  margin-top: 0;
+}
+.bfcsx .sx-osx-intro-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+.bfcsx .sx-osx-ey {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--go); margin-bottom: 16px; display: block;
+}
+.bfcsx .sx-osx-title {
+  font-family: var(--sr);
+  font-size: clamp(32px, 4vw, 46px);
+  font-weight: 300; line-height: 1.1;
+  color: #fff; margin-bottom: 20px;
+}
+.bfcsx .sx-osx-title em {
+  font-style: italic; color: rgba(255,255,255,0.3);
+}
+.bfcsx .sx-osx-body {
+  font-size: 14px; line-height: 1.75;
+  color: rgba(255,255,255,0.6);
+}
+.bfcsx .sx-osx-body p { margin-bottom: 16px; }
+.bfcsx .sx-osx-body p:last-child { margin-bottom: 0; }
+.bfcsx .sx-osx-img-slot {
+  aspect-ratio: 4 / 3;
+  background: rgba(255,255,255,0.03);
+  overflow: hidden;
+}
+.bfcsx .sx-osx-img-slot img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+
+/* ── CORE FEATURES ────────────────────────────── */
+.bfcsx .sx-features {
+  background: var(--bk);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 0 48px 80px;
+}
+.bfcsx .sx-features-inner {
+  max-width: 1200px; margin: 0 auto;
+}
+.bfcsx .sx-feat-head {
+  padding: 48px 0 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 0;
+}
+.bfcsx .sx-feat-label {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+.bfcsx .sx-feat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+.bfcsx .sx-feat-card {
+  padding: 40px 32px;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.bfcsx .sx-feat-card:nth-child(3n) { border-right: none; }
+.bfcsx .sx-feat-card:nth-last-child(-n+3) { border-bottom: none; }
+.bfcsx .sx-feat-num {
+  font-family: var(--sr);
+  font-size: 48px; font-weight: 300;
+  color: rgba(255,255,255,0.06);
+  line-height: 1; margin-bottom: 16px; display: block;
+}
+.bfcsx .sx-feat-name {
+  font-size: 13px; font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 8px;
+}
+.bfcsx .sx-feat-desc {
+  font-size: 12px; line-height: 1.65;
+  color: rgba(255,255,255,0.4);
+}
+.bfcsx .sx-feat-tag {
+  display: inline-block;
+  font-size: 8px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 4px 8px; margin-top: 12px;
+  background: rgba(227,110,21,0.15);
+  color: var(--go);
+}
+
+/* ── COMPARISON TABLE ─────────────────────────── */
+.bfcsx .sx-compare {
+  background: var(--cv);
+  padding: 80px 48px;
+}
+.bfcsx .sx-compare-inner {
+  max-width: 1000px; margin: 0 auto;
+}
+.bfcsx .sx-compare-ey {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--or); margin-bottom: 12px; display: block;
+  text-align: center;
+}
+.bfcsx .sx-compare-title {
+  font-family: var(--sr);
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 300; line-height: 1.1;
+  color: var(--bk); text-align: center;
+  margin-bottom: 48px;
+}
+.bfcsx .sx-compare-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.bfcsx .sx-compare-table thead th {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 16px 20px;
+  text-align: left;
+  border-bottom: 2px solid var(--bk);
+}
+.bfcsx .sx-compare-table thead th:first-child {
+  color: var(--ol); width: 24%;
+}
+.bfcsx .sx-compare-table thead th:nth-child(2) {
+  color: rgba(82,87,65,0.4); width: 38%;
+}
+.bfcsx .sx-compare-table thead th:nth-child(3) {
+  color: var(--or); width: 38%;
+  background: rgba(227,110,21,0.04);
+}
+.bfcsx .sx-compare-table tbody td {
+  font-size: 13px; line-height: 1.55;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(82,87,65,0.08);
+  vertical-align: top;
+}
+.bfcsx .sx-compare-table tbody td:first-child {
+  font-size: 11px; font-weight: 600;
+  color: var(--bk);
+}
+.bfcsx .sx-compare-table tbody td:nth-child(2) {
+  color: rgba(82,87,65,0.5);
+}
+.bfcsx .sx-compare-table tbody td:nth-child(3) {
+  color: var(--bk);
+  background: rgba(227,110,21,0.04);
+}
+.bfcsx .sx-compare-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── DONGLE SECTION ───────────────────────────── */
+.bfcsx .sx-dongle {
+  background: #fff;
+  padding: 80px 48px;
+  border-top: 1px solid rgba(82,87,65,0.08);
+}
+.bfcsx .sx-dongle-inner {
+  max-width: 1200px; margin: 0 auto;
+}
+.bfcsx .sx-dongle-head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  margin-bottom: 56px;
+}
+.bfcsx .sx-dongle-ey {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--or); margin-bottom: 16px; display: block;
+}
+.bfcsx .sx-dongle-title {
+  font-family: var(--sr);
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 300; line-height: 1.1;
+  color: var(--bk); margin-bottom: 16px;
+}
+.bfcsx .sx-dongle-sub {
+  font-size: 14px; line-height: 1.7;
+  color: var(--ol);
+}
+.bfcsx .sx-dongle-img {
+  aspect-ratio: 4 / 3;
+  background: var(--cv);
+  overflow: hidden;
+}
+.bfcsx .sx-dongle-img img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.bfcsx .sx-dongle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+.bfcsx .sx-dgrid-card {
+  padding: 32px;
+  border-right: 1px solid rgba(82,87,65,0.08);
+  border-bottom: 1px solid rgba(82,87,65,0.08);
+}
+.bfcsx .sx-dgrid-card:nth-child(3n) { border-right: none; }
+.bfcsx .sx-dgrid-card:nth-last-child(-n+3) { border-bottom: none; }
+.bfcsx .sx-dgrid-name {
+  font-size: 13px; font-weight: 600;
+  color: var(--bk); margin-bottom: 8px;
+}
+.bfcsx .sx-dgrid-desc {
+  font-size: 12px; line-height: 1.65;
+  color: var(--ol);
+}
+
+/* ── LED QUICK REFERENCE ──────────────────────── */
+.bfcsx .sx-led-ref {
+  background: var(--bk);
+  padding: 40px 48px;
+}
+.bfcsx .sx-led-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center;
+  gap: 40px; flex-wrap: wrap;
+}
+.bfcsx .sx-led-label {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  flex-shrink: 0;
+}
+.bfcsx .sx-led-items {
+  display: flex; gap: 32px; flex-wrap: wrap;
+}
+.bfcsx .sx-led-item {
+  display: flex; align-items: center; gap: 10px;
+}
+.bfcsx .sx-led-dot {
+  width: 10px; height: 10px;
+  flex-shrink: 0;
+}
+.bfcsx .sx-led-dot--blue { background: #4A90D9; }
+.bfcsx .sx-led-dot--red { background: #D94A4A; }
+.bfcsx .sx-led-dot--red-solid { background: #D94A4A; box-shadow: 0 0 6px rgba(217,74,74,0.5); }
+.bfcsx .sx-led-text {
+  font-size: 11px; color: rgba(255,255,255,0.5);
+}
+
+/* ── KIT BUILDER ──────────────────────────────── */
+.bfcsx .sx-kit {
+  background: var(--cv);
+  padding: 64px 48px 48px;
+  border-top: 1px solid rgba(82,87,65,0.08);
+}
+.bfcsx .sx-kit-inner {
+  max-width: 1200px; margin: 0 auto;
+}
+.bfcsx .sx-kit-ey {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--or); margin-bottom: 12px; display: block;
+}
+.bfcsx .sx-kit-title {
+  font-family: var(--sr);
+  font-size: 32px; font-weight: 300;
+  color: var(--bk); margin-bottom: 8px;
+}
+.bfcsx .sx-kit-sub {
+  font-size: 13px; color: var(--ol); margin-bottom: 40px;
+}
+.bfcsx .sx-kit-cols {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.bfcsx .sx-kit-col {
+  border-right: 1px solid rgba(82,87,65,0.08);
+}
+.bfcsx .sx-kit-col:last-child { border-right: none; }
+.bfcsx .sx-kit-col-head {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ol);
+  padding: 16px 20px;
+  border-bottom: 2px solid var(--bk);
+}
+.bfcsx .sx-kit-tile {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(82,87,65,0.06);
+  cursor: pointer;
+  transition: background var(--t);
+}
+.bfcsx .sx-kit-tile:hover { background: rgba(227,110,21,0.04); }
+.bfcsx .sx-kit-tile.is-selected { background: rgba(227,110,21,0.08); }
+.bfcsx .sx-kit-tile-img {
+  width: 48px; height: 48px;
+  object-fit: contain; flex-shrink: 0;
+  background: #fff;
+}
+.bfcsx .sx-kit-tile-info { flex: 1; min-width: 0; }
+.bfcsx .sx-kit-tile-name {
+  font-size: 12px; font-weight: 500;
+  color: var(--bk);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.bfcsx .sx-kit-tile-price {
+  font-size: 11px; color: var(--ol);
+}
+.bfcsx .sx-kit-tile-check {
+  width: 18px; height: 18px;
+  border: 1.5px solid rgba(82,87,65,0.2);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--t);
+}
+.bfcsx .sx-kit-tile.is-selected .sx-kit-tile-check {
+  background: var(--or); border-color: var(--or);
+}
+.bfcsx .sx-kit-tile.is-selected .sx-kit-tile-check::after {
+  content: '';
+  width: 6px; height: 10px;
+  border: solid #fff; border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
+/* ── RESTORATION ──────────────────────────────── */
+.bfcsx .sx-restore {
+  background: var(--bk);
+  padding: 0 48px;
+}
+.bfcsx .sx-restore-inner {
+  max-width: 1200px; margin: 0 auto;
+}
+.bfcsx .sx-restore-head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.bfcsx .sx-restore-headline {
+  padding: 64px 48px 64px 0;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.bfcsx .sx-restore-ey {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--go); margin-bottom: 16px; display: block;
+}
+.bfcsx .sx-restore-title {
+  font-family: var(--sr);
+  font-size: 42px; font-weight: 300;
+  color: #fff; line-height: 1.05;
+}
+.bfcsx .sx-restore-title em {
+  font-style: italic; color: rgba(255,255,255,0.3);
+}
+.bfcsx .sx-restore-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+}
+.bfcsx .sx-r-stat {
+  padding: 0 24px;
+  border-left: 1px solid rgba(255,255,255,0.07);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.bfcsx .sx-r-stat:first-child { border-left: none; padding-left: 0; }
+.bfcsx .sx-r-stat-num {
+  font-family: var(--sr);
+  font-size: 52px; font-weight: 300;
+  color: #fff; line-height: 1; margin-bottom: 8px;
+}
+.bfcsx .sx-r-stat-num span { color: var(--go); font-size: 0.6em; }
+.bfcsx .sx-r-stat-label {
+  font-size: 10.5px; color: rgba(255,255,255,0.3);
+  line-height: 1.5; max-width: 100px;
+}
+.bfcsx .sx-restore-steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.bfcsx .sx-r-step {
+  padding: 28px 24px;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+.bfcsx .sx-r-step:last-child { border-right: none; }
+.bfcsx .sx-r-num {
+  font-family: var(--sr);
+  font-size: 36px; font-weight: 300;
+  color: rgba(255,255,255,0.08);
+  line-height: 1; margin-bottom: 12px; display: block;
+}
+.bfcsx .sx-r-title {
+  font-size: 12px; font-weight: 600;
+  color: rgba(255,255,255,0.85); margin-bottom: 4px;
+}
+.bfcsx .sx-r-desc {
+  font-size: 10.5px; color: rgba(255,255,255,0.4);
+  line-height: 1.5;
+}
+
+/* ── FULL SPECS ───────────────────────────────── */
+.bfcsx .sx-specs {
+  background: var(--bk);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: grid;
+  grid-template-columns: 280px 1fr;
+}
+.bfcsx .sx-specs-head {
+  padding: 48px 40px 48px 48px;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  display: flex; flex-direction: column; justify-content: flex-start;
+}
+.bfcsx .sx-specs-title {
+  font-family: var(--sr);
+  font-size: 36px; font-weight: 300;
+  color: #fff; line-height: 1; margin-bottom: 10px;
+}
+.bfcsx .sx-specs-note {
+  font-size: 10px; color: rgba(255,255,255,0.55); line-height: 1.5;
+}
+.bfcsx .sx-specs-body { padding: 48px 48px 48px 40px; }
+.bfcsx .sx-specs-table {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+}
+.bfcsx .sx-spec {
+  display: flex; align-items: baseline; gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.bfcsx .sx-spec:nth-child(odd) { padding-right: 32px; }
+.bfcsx .sx-spec:nth-child(even) { padding-left: 32px; border-left: 1px solid rgba(255,255,255,0.05); }
+.bfcsx .sx-spec:nth-last-child(-n+2) { border-bottom: none; }
+.bfcsx .sx-spec-k {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  flex-shrink: 0; min-width: 100px;
+}
+.bfcsx .sx-spec-v {
+  font-size: 12px; font-weight: 500;
+  color: rgba(255,255,255,0.7);
+}
+
+/* ── WARRANTY STRIP ───────────────────────────── */
+.bfcsx .sx-warranty {
+  background: var(--cv);
+  padding: 48px;
+  border-top: 1px solid rgba(82,87,65,0.08);
+}
+.bfcsx .sx-warranty-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+}
+.bfcsx .sx-w-item {
+  padding: 0 32px;
+  border-right: 1px solid rgba(82,87,65,0.1);
+}
+.bfcsx .sx-w-item:first-child { padding-left: 0; }
+.bfcsx .sx-w-item:last-child { border-right: none; padding-right: 0; }
+.bfcsx .sx-w-label {
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--or); margin-bottom: 6px;
+}
+.bfcsx .sx-w-text {
+  font-size: 13px; line-height: 1.55;
+  color: var(--ol);
+}
+
+/* ── MOBILE ───────────────────────────────────── */
+@media (max-width: 768px) {
+  .bfcsx .sx-pdp-top {
+    grid-template-columns: 1fr;
+    padding: 16px 20px 32px;
+    gap: 24px;
+  }
+  .bfcsx .sx-photos { position: static; }
+  .bfcsx .sx-hero { aspect-ratio: 1 / 1; }
+  .bfcsx .sx-thumbs { display: none; }
+  .bfcsx .sx-mini-specs { gap: 0; }
+  .bfcsx .sx-osx-intro { padding: 48px 20px; }
+  .bfcsx .sx-osx-intro-inner {
+    grid-template-columns: 1fr; gap: 32px;
+  }
+  .bfcsx .sx-features { padding: 0 20px 48px; }
+  .bfcsx .sx-feat-grid {
+    grid-template-columns: 1fr;
+  }
+  .bfcsx .sx-feat-card {
+    border-right: none;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 28px 0;
+  }
+  .bfcsx .sx-feat-card:last-child { border-bottom: none; }
+  .bfcsx .sx-compare { padding: 48px 20px; }
+  .bfcsx .sx-compare-table { display: block; overflow-x: auto; }
+  .bfcsx .sx-dongle { padding: 48px 20px; }
+  .bfcsx .sx-dongle-head {
+    grid-template-columns: 1fr; gap: 32px;
+  }
+  .bfcsx .sx-dongle-grid {
+    grid-template-columns: 1fr;
+  }
+  .bfcsx .sx-dgrid-card {
+    border-right: none;
+    border-bottom: 1px solid rgba(82,87,65,0.08);
+    padding: 24px 0;
+  }
+  .bfcsx .sx-dgrid-card:last-child { border-bottom: none; }
+  .bfcsx .sx-led-ref { padding: 28px 20px; }
+  .bfcsx .sx-led-inner { flex-direction: column; gap: 16px; align-items: flex-start; }
+  .bfcsx .sx-led-items { flex-direction: column; gap: 12px; }
+  .bfcsx .sx-kit { padding: 40px 20px; }
+  .bfcsx .sx-kit-cols {
+    grid-template-columns: 1fr;
+  }
+  .bfcsx .sx-kit-col { border-right: none; border-bottom: 1px solid rgba(82,87,65,0.08); }
+  .bfcsx .sx-kit-col:last-child { border-bottom: none; }
+  .bfcsx .sx-restore { padding: 0 20px; }
+  .bfcsx .sx-restore-head { grid-template-columns: 1fr; }
+  .bfcsx .sx-restore-headline { padding: 40px 0; }
+  .bfcsx .sx-restore-stats { grid-template-columns: repeat(3, 1fr); padding-bottom: 32px; }
+  .bfcsx .sx-restore-steps {
+    grid-template-columns: 1fr;
+  }
+  .bfcsx .sx-r-step { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .bfcsx .sx-r-step:last-child { border-bottom: none; }
+  .bfcsx .sx-specs { grid-template-columns: 1fr; }
+  .bfcsx .sx-specs-head { padding: 32px 20px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .bfcsx .sx-specs-body { padding: 20px; }
+  .bfcsx .sx-specs-table { grid-template-columns: 1fr; }
+  .bfcsx .sx-spec:nth-child(even) { padding-left: 0; border-left: none; }
+  .bfcsx .sx-spec:nth-child(odd) { padding-right: 0; }
+  .bfcsx .sx-warranty { padding: 32px 20px; }
+  .bfcsx .sx-warranty-inner { grid-template-columns: 1fr; gap: 24px; }
+  .bfcsx .sx-w-item { padding: 0; border-right: none; border-bottom: 1px solid rgba(82,87,65,0.08); padding-bottom: 20px; }
+  .bfcsx .sx-w-item:last-child { border-bottom: none; padding-bottom: 0; }
+}
+
+/* ── Extended Warranty ── */
+.bfcsx .sx-ext-warranty { border-top: 1px solid rgba(32,32,9,0.08); padding-top: 16px; margin-top: 16px; }
+.bfcsx .sx-ext-w-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.bfcsx .sx-ext-w-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--or); }
+.bfcsx .sx-ext-w-baseline { font-size: 10px; color: var(--ch); margin-bottom: 10px; display: flex; align-items: flex-start; gap: 5px; line-height: 1.5; }
+.bfcsx .sx-ext-w-baseline svg { flex-shrink: 0; color: #2a4820; margin-top: 2px; }
+.bfcsx .sx-ext-w-baseline strong { color: var(--bk); }
+.bfcsx .sx-ext-w-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.bfcsx .sx-ext-w-btn { border: 1px solid rgba(32,32,9,0.1); background: #fff; padding: 10px 8px; cursor: pointer; font-family: var(--sn); text-align: center; transition: border-color 0.2s ease, box-shadow 0.2s ease; display: flex; flex-direction: column; gap: 3px; position: relative; }
+.bfcsx .sx-ext-w-btn:hover { border-color: var(--or); }
+.bfcsx .sx-ext-w-btn.is-sel { border: 2px solid var(--or); box-shadow: 0 0 0 1px rgba(227,110,21,0.15); }
+.bfcsx .sx-ext-w-btn.is-sel::after { content: '✓'; position: absolute; top: 4px; right: 5px; font-size: 8px; font-weight: 700; color: var(--or); }
+.bfcsx .sx-ext-w-extend { font-size: 11px; font-weight: 700; color: var(--or); line-height: 1; }
+.bfcsx .sx-ext-w-months { font-size: 9px; color: var(--ch); letter-spacing: 0.04em; line-height: 1; }
+.bfcsx .sx-ext-w-price { font-size: 11px; font-weight: 700; color: var(--bk); margin-top: 2px; }
+.bfcsx .sx-ext-w-acc { font-size: 7.5px; color: #2a4820; font-weight: 600; letter-spacing: 0.04em; margin-top: 1px; }
+.bfcsx .sx-ext-w-none { font-size: 8.5px; color: rgba(32,32,9,0.4); margin-top: 8px; text-align: left; cursor: pointer; background: none; border: none; font-family: var(--sn); transition: color 0.2s ease; padding: 0; display: none; }
+.bfcsx .sx-ext-w-none.is-vis { display: block; }
+.bfcsx .sx-ext-w-none:hover { color: var(--bk); }
+
+/* ── Warranty & Returns Policy ── */
+.bfcsx .sx-policy { display: grid; grid-template-columns: 1fr 1fr; background: var(--cv); border-top: 1px solid rgba(32,32,9,0.06); }
+.bfcsx .sx-policy-col { padding: 48px; }
+.bfcsx .sx-policy-col:first-child { border-right: 1px solid rgba(32,32,9,0.06); }
+.bfcsx .sx-policy-ey { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--go); display: block; margin-bottom: 12px; }
+.bfcsx .sx-policy-title { font-family: var(--sr); font-size: 28px; font-weight: 300; color: var(--bk); line-height: 1.1; margin: 0 0 16px; }
+.bfcsx .sx-policy-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: rgba(171,204,153,0.2); color: var(--or); font-size: 10px; font-weight: 600; letter-spacing: 0.06em; margin-bottom: 20px; }
+.bfcsx .sx-policy-body { font-size: 13px; line-height: 1.6; color: var(--ch); }
+.bfcsx .sx-policy-body p { margin: 0; }
+.bfcsx .sx-policy-body strong { color: var(--bk); }
+@media (max-width: 767px) {
+  .bfcsx .sx-policy { grid-template-columns: 1fr; }
+  .bfcsx .sx-policy-col { padding: 32px 20px; }
+  .bfcsx .sx-policy-col:first-child { border-right: none; border-bottom: 1px solid rgba(32,32,9,0.06); }
+  .bfcsx .sx-policy-title { font-size: 22px; }
+}
+
+/* ── Sticky Mobile ATC Bar ────────────────── */
+.bfcsx .sx-sticky-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--cv); border-top: 1px solid rgba(32,32,9,0.15); padding: 10px 16px; z-index: 100; align-items: center; gap: 12px; box-shadow: 0 -2px 12px rgba(0,0,0,0.08); }
+.bfcsx .sx-sticky-info { flex: 1; min-width: 0; }
+.bfcsx .sx-sticky-name { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--bk); }
+.bfcsx .sx-sticky-meta { display: flex; align-items: center; gap: 6px; margin-top: 1px; }
+.bfcsx .sx-sticky-grade { font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ch); }
+.bfcsx .sx-sticky-price { font-size: 13px; font-weight: 700; color: var(--or); }
+.bfcsx .sx-sticky-btn { background: var(--or); color: #fff; border: none; padding: 12px 24px; font-size: 10px; font-weight: 700; font-family: var(--sn); text-transform: uppercase; letter-spacing: 0.14em; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+.bfcsx .sx-sticky-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+@media (max-width: 767px) {
+  .bfcsx .sx-sticky-bar.is-visible { display: flex; }
+}
+{% endstyle %}
+
+{%- comment -%}
+  ================================================================
+  HTML
+  ================================================================
+{%- endcomment -%}
+
+<div class="bfcsx" data-section-id="{{ section.id }}">
+
+  {%- comment -%} ── PDP TOP: Photos Left | Info + ATC Right ── {%- endcomment -%}
+  <div class="sx-pdp-top">
+    <div class="sx-photos">
+      <div class="sx-hero">
+        <div class="sx-slider" id="sxSlider-{{ section.id }}">
+          {%- assign slide_imgs = '' -%}
+          {%- for i in (1..5) -%}
+            {%- assign slide_key = 'slide_' | append: i -%}
+            {%- assign slide_img = section.settings[slide_key] -%}
+            {%- if slide_img != blank -%}
+              <div class="sx-slide">
+                <img src="{{ slide_img | image_url: width: 900 }}" alt="{{ product.title }} - image {{ i }}" loading="{% if i == 1 %}eager{% else %}lazy{% endif %}" width="900" height="900">
+              </div>
+              {%- assign slide_imgs = slide_imgs | append: '1,' -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- comment -%} Fallback to product images {%- endcomment -%}
+          {%- assign slide_count = slide_imgs | split: ',' | size -%}
+          {%- if slide_count == 0 -%}
+            {%- for img in product.images limit: 5 -%}
+              <div class="sx-slide">
+                <img src="{{ img | image_url: width: 900 }}" alt="{{ img.alt | default: product.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" width="{{ img.width }}" height="{{ img.height }}">
+              </div>
+            {%- endfor -%}
+            {%- assign slide_count = product.images.size | at_most: 5 -%}
+          {%- endif -%}
+        </div>
+        {%- if slide_count > 1 -%}
+          <div class="sx-dots" id="sxDots-{{ section.id }}">
+            {%- for i in (1..slide_count) -%}
+              <button class="sx-dot{% if forloop.first %} is-active{% endif %}" data-idx="{{ forloop.index0 }}" aria-label="Slide {{ i }}"></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+      {%- comment -%} Thumbnail strip {%- endcomment -%}
+      {%- if slide_count > 1 -%}
+        <div class="sx-thumbs" id="sxThumbs-{{ section.id }}">
+          {%- assign thumb_idx = 0 -%}
+          {%- for i in (1..5) -%}
+            {%- assign slide_key = 'slide_' | append: i -%}
+            {%- assign slide_img = section.settings[slide_key] -%}
+            {%- if slide_img != blank -%}
+              <button class="sx-thumb{% if thumb_idx == 0 %} is-active{% endif %}" data-idx="{{ thumb_idx }}">
+                <img src="{{ slide_img | image_url: width: 128 }}" alt="Thumbnail {{ i }}" loading="lazy">
+              </button>
+              {%- assign thumb_idx = thumb_idx | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if slide_count == 0 -%}
+            {%- for img in product.images limit: 5 -%}
+              <button class="sx-thumb{% if forloop.first %} is-active{% endif %}" data-idx="{{ forloop.index0 }}">
+                <img src="{{ img | image_url: width: 128 }}" alt="{{ img.alt | default: 'Thumbnail' }}" loading="lazy">
+              </button>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="sx-info">
+      <span class="sx-eyebrow">{{ product.type | default: 'Instant Film SLR' }} — Professionally Restored &middot; 6-Month Warranty</span>
+      <h1 class="sx-title">{{ product.title }}</h1>
+
+      {%- comment -%} Mini specs {%- endcomment -%}
+      <div class="sx-mini-specs">
+        <div class="sx-mini-spec">
+          <span class="sx-spec-key">Film</span>
+          <span class="sx-spec-val">SX-70 &amp; 600</span>
+        </div>
+        {%- if spec_focus != blank -%}
+          <div class="sx-mini-spec">
+            <span class="sx-spec-key">Focus</span>
+            <span class="sx-spec-val">{{ spec_focus }}</span>
+          </div>
+        {%- endif -%}
+        {%- if spec_lens != blank -%}
+          <div class="sx-mini-spec">
+            <span class="sx-spec-key">Lens</span>
+            <span class="sx-spec-val">{{ spec_lens }}</span>
+          </div>
+        {%- endif -%}
+        <div class="sx-mini-spec">
+          <span class="sx-spec-key">Condition</span>
+          <span class="sx-spec-val">Professionally Restored</span>
+        </div>
+      </div>
+
+      <div class="sx-desc">
+        {%- comment -%} Strip spec tables, spec grids, and spec-like paragraphs — shown in dedicated specs table below {%- endcomment -%}
+        {%- assign desc_clean = product.description -%}
+        {%- comment -%} Remove <table>...</table> blocks (spec grids) {%- endcomment -%}
+        {%- assign table_parts = desc_clean | split: '<table' -%}
+        {%- if table_parts.size > 1 -%}
+          {%- assign desc_clean = table_parts[0] -%}
+          {%- for part in table_parts -%}
+            {%- if forloop.first -%}{%- continue -%}{%- endif -%}
+            {%- assign after_table = part | split: '</table>' -%}
+            {%- if after_table.size > 1 -%}
+              {%- assign desc_clean = desc_clean | append: after_table[1] -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+        {%- comment -%} Remove <ul>...</ul> blocks that contain spec content {%- endcomment -%}
+        {%- assign ul_parts = desc_clean | split: '<ul' -%}
+        {%- if ul_parts.size > 1 -%}
+          {%- assign desc_rebuilt = ul_parts[0] -%}
+          {%- for part in ul_parts -%}
+            {%- if forloop.first -%}{%- continue -%}{%- endif -%}
+            {%- assign ul_text = part | strip_html | strip -%}
+            {%- assign ul_is_spec = false -%}
+            {%- if ul_text contains 'Lens:' or ul_text contains 'Shutter:' or ul_text contains 'Battery:' or ul_text contains 'Film:' or ul_text contains 'Focus:' or ul_text contains 'Metering:' or ul_text contains 'Flash:' or ul_text contains 'ISO:' or ul_text contains 'Viewfinder:' or ul_text contains 'Aperture:' -%}
+              {%- assign ul_is_spec = true -%}
+            {%- endif -%}
+            {%- if ul_is_spec -%}
+              {%- assign after_ul = part | split: '</ul>' -%}
+              {%- if after_ul.size > 1 -%}
+                {%- assign desc_rebuilt = desc_rebuilt | append: after_ul[1] -%}
+              {%- endif -%}
+            {%- else -%}
+              {%- assign desc_rebuilt = desc_rebuilt | append: '<ul' | append: part -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- assign desc_clean = desc_rebuilt -%}
+        {%- endif -%}
+        {%- comment -%} Remove <div>...</div> blocks that look like spec grids {%- endcomment -%}
+        {%- assign div_parts = desc_clean | split: '<div' -%}
+        {%- if div_parts.size > 1 -%}
+          {%- assign desc_rebuilt = div_parts[0] -%}
+          {%- for part in div_parts -%}
+            {%- if forloop.first -%}{%- continue -%}{%- endif -%}
+            {%- assign div_text = part | strip_html | strip -%}
+            {%- assign div_is_spec = false -%}
+            {%- if div_text contains 'Lens:' or div_text contains 'Shutter:' or div_text contains 'Battery:' or div_text contains 'Film Type:' or div_text contains 'Focus:' or div_text contains 'Metering:' or div_text contains 'Flash:' or div_text contains 'ISO:' or div_text contains 'Viewfinder:' -%}
+              {%- assign div_is_spec = true -%}
+            {%- endif -%}
+            {%- if part contains 'spec' or part contains 'metafield' -%}
+              {%- assign div_is_spec = true -%}
+            {%- endif -%}
+            {%- if div_is_spec -%}
+              {%- assign after_div = part | split: '</div>' -%}
+              {%- if after_div.size > 1 -%}
+                {%- comment -%} Skip the first segment (inside the spec div), keep everything after {%- endcomment -%}
+                {%- for seg in after_div -%}
+                  {%- if forloop.first -%}{%- continue -%}{%- endif -%}
+                  {%- if forloop.last == false -%}
+                    {%- assign desc_rebuilt = desc_rebuilt | append: seg | append: '</div>' -%}
+                  {%- else -%}
+                    {%- assign desc_rebuilt = desc_rebuilt | append: seg -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              {%- endif -%}
+            {%- else -%}
+              {%- assign desc_rebuilt = desc_rebuilt | append: '<div' | append: part -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- assign desc_clean = desc_rebuilt -%}
+        {%- endif -%}
+        {%- comment -%} Filter remaining <p> tags for spec-like lines {%- endcomment -%}
+        {%- assign desc_paras = desc_clean | split: '<p>' -%}
+        {%- assign spec_words = 'Lens:,Shutter:,Battery:,Film:,Focus:,Metering:,Flash:,Viewfinder:,Exposure:,Self Timer:,Self-Timer:,Weight:,Dimensions:,ISO:,Aperture:,Mount:,Format:,Type:,Speed:,Range:,Condition:,Board:' | split: ',' -%}
+        {%- for para in desc_paras -%}
+          {%- assign is_spec = false -%}
+          {%- assign para_stripped = para | strip_html | strip -%}
+          {%- if para_stripped == '' -%}{%- continue -%}{%- endif -%}
+          {%- for sw in spec_words -%}
+            {%- if para_stripped contains sw -%}
+              {%- assign is_spec = true -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- unless is_spec -%}
+            <p>{{ para | strip | remove: '</p>' }}</p>
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+
+      {%- comment -%} ── ATC ── {%- endcomment -%}
+      <div class="sx-atc-panel">
+        <div class="sx-atc-price" id="sxPrice-{{ section.id }}">
+          {{ current_variant.price | money }}
+        </div>
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <span class="sx-atc-compare" id="sxCompare-{{ section.id }}">
+            {{ current_variant.compare_at_price | money }}
+          </span>
+        {%- endif -%}
+
+        {%- if product.variants.size > 1 -%}
+          <span class="sx-atc-variant-label">Select Model</span>
+          <div class="sx-atc-variants" id="sxVariants-{{ section.id }}">
+            {%- for v in product.variants -%}
+              <button class="sx-variant-btn{% if v == current_variant %} is-selected{% endif %}{% unless v.available %} is-sold-out{% endunless %}"
+                data-variant-id="{{ v.id }}"
+                data-price="{{ v.price | money }}"
+                data-price-cents="{{ v.price }}"
+                data-compare="{{ v.compare_at_price | money }}"
+                data-available="{{ v.available }}"
+                {% unless v.available %}disabled{% endunless %}>
+                {{ v.title }}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <form method="post" action="/cart/add" id="sxATC-{{ section.id }}">
+          <input type="hidden" name="id" value="{{ current_variant.id }}" id="sxVariantInput-{{ section.id }}">
+          <button type="submit" class="sx-add-btn"{% unless current_variant.available %} disabled{% endunless %}>
+            {%- if current_variant.available -%}Add to Cart{%- else -%}Sold Out{%- endif -%}
+          </button>
+        </form>
+
+        <div class="sx-atc-badges">
+          <div class="sx-badge">
+            <svg class="sx-badge-icon" viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm3.1 5.37-3.5 3.5a.5.5 0 0 1-.7 0l-1.5-1.5a.5.5 0 1 1 .7-.7L7.25 8.8l3.15-3.13a.5.5 0 1 1 .7.7Z"/></svg>
+            Cleaned, serviced &amp; tested
+          </div>
+          <div class="sx-badge">
+            <svg class="sx-badge-icon" viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm3.1 5.37-3.5 3.5a.5.5 0 0 1-.7 0l-1.5-1.5a.5.5 0 1 1 .7-.7L7.25 8.8l3.15-3.13a.5.5 0 1 1 .7.7Z"/></svg>
+            Full mechanical &amp; optical restoration
+          </div>
+          <div class="sx-badge">
+            <svg class="sx-badge-icon" viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm3.1 5.37-3.5 3.5a.5.5 0 0 1-.7 0l-1.5-1.5a.5.5 0 1 1 .7-.7L7.25 8.8l3.15-3.13a.5.5 0 1 1 .7.7Z"/></svg>
+            Shoots SX-70 &amp; 600 film
+          </div>
+          <div class="sx-badge">
+            <svg class="sx-badge-icon" viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm3.1 5.37-3.5 3.5a.5.5 0 0 1-.7 0l-1.5-1.5a.5.5 0 1 1 .7-.7L7.25 8.8l3.15-3.13a.5.5 0 1 1 .7.7Z"/></svg>
+            6-month warranty
+          </div>
+        </div>
+
+        {%- comment -%} Extended Warranty
+            Tier pricing/variant IDs from snippets/bfc-warranty-tiers.liquid.
+            SX-70 PDPs use Polaroid pricing. {%- endcomment -%}
+        {%- assign cam_price = current_variant.price -%}
+        {% include 'bfc-warranty-tiers', category: 'polaroid', cam_price: cam_price %}
+        {%- liquid
+          assign w9_vid = w_w9_vid
+          assign w9_price = w_w9_price
+          assign w12_vid = w_w12_vid
+          assign w12_price = w_w12_price
+        -%}
+        <div class="sx-ext-warranty">
+          <div class="sx-ext-w-head">
+            <span class="sx-ext-w-eyebrow">Extended Warranty</span>
+          </div>
+          <div class="sx-ext-w-baseline">
+            <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M2 7L5.5 10.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Your camera includes a <strong>6-month warranty</strong> &mdash; extend your total coverage below:</span>
+          </div>
+          <div class="sx-ext-w-options">
+            <button class="sx-ext-w-btn" data-months="3" data-total="9" data-price="{{ w9_price }}" data-variant-id="{{ w9_vid }}" onclick="sxSelectWarranty(this)">
+              <span class="sx-ext-w-extend">+3 months</span>
+              <span class="sx-ext-w-months">9 mo total</span>
+              <span class="sx-ext-w-price">+{{ w9_price | money_without_trailing_zeros }}</span>
+              <span class="sx-ext-w-acc">+ Accidental</span>
+            </button>
+            <button class="sx-ext-w-btn" data-months="6" data-total="12" data-price="{{ w12_price }}" data-variant-id="{{ w12_vid }}" onclick="sxSelectWarranty(this)">
+              <span class="sx-ext-w-extend">+6 months</span>
+              <span class="sx-ext-w-months">1 year total</span>
+              <span class="sx-ext-w-price">+{{ w12_price | money_without_trailing_zeros }}</span>
+              <span class="sx-ext-w-acc">+ Accidental</span>
+            </button>
+          </div>
+          <button class="sx-ext-w-none" id="sx-ext-w-clear" onclick="sxClearWarranty()">&times; Remove Extended Warranty</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ── KIT BUILDER ── {%- endcomment -%}
+  <div class="sx-kit">
+    <div class="sx-kit-inner">
+      <span class="sx-kit-ey">Build Your Kit</span>
+      <div class="sx-kit-title">Add What You Need</div>
+      <div class="sx-kit-sub">Grab your film, flash, or any accessories — everything ships together.</div>
+
+      {%- comment -%} Build column names from blocks {%- endcomment -%}
+      {%- assign col_names = '' -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'kit_item' and block.settings.product != blank -%}
+          {%- assign block_col = block.settings.column | default: block.settings.label -%}
+          {%- unless col_names contains block_col -%}
+            {%- if col_names != '' -%}{%- assign col_names = col_names | append: '||' -%}{%- endif -%}
+            {%- assign col_names = col_names | append: block_col -%}
+          {%- endunless -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- assign columns = col_names | split: '||' -%}
+
+      {%- if columns.size > 0 -%}
+        <div class="sx-kit-cols" style="grid-template-columns: repeat({{ columns.size | at_most: 4 }}, 1fr);">
+          {%- for col_name in columns -%}
+            <div class="sx-kit-col">
+              <div class="sx-kit-col-head">{{ col_name }}</div>
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'kit_item' and block.settings.product != blank -%}
+                  {%- if block.settings.only_show_for == blank or block.settings.only_show_for.handle == product.handle -%}
+                    {%- assign block_col = block.settings.column | default: block.settings.label -%}
+                    {%- if block_col == col_name -%}
+                      {%- assign kit_prod = block.settings.product -%}
+                      {%- assign kit_var = kit_prod.selected_or_first_available_variant -%}
+                      <div class="sx-kit-tile" data-variant-id="{{ kit_var.id }}" data-price="{{ kit_var.price }}" {{ block.shopify_attributes }}>
+                        {%- if kit_prod.featured_image != blank -%}
+                          <img class="sx-kit-tile-img" src="{{ kit_prod.featured_image | image_url: width: 96 }}" alt="{{ kit_prod.title }}" loading="lazy">
+                        {%- endif -%}
+                        <div class="sx-kit-tile-info">
+                          <div class="sx-kit-tile-name">{{ kit_prod.title }}</div>
+                          <div class="sx-kit-tile-price">{{ kit_var.price | money }}</div>
+                        </div>
+                        <div class="sx-kit-tile-check"></div>
+                      </div>
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%} ── RESTORATION SECTION ── {%- endcomment -%}
+  <div class="sx-restore">
+    <div class="sx-restore-inner">
+      <div class="sx-restore-head">
+        <div class="sx-restore-headline">
+          <span class="sx-restore-ey">Our Restoration Process</span>
+          <div class="sx-restore-title">Every Camera.<br><em>A Full Restoration.</em></div>
+        </div>
+        <div class="sx-restore-stats">
+          <div class="sx-r-stat">
+            <div class="sx-r-stat-num">5<span>+</span></div>
+            <div class="sx-r-stat-label">Point restoration process</div>
+          </div>
+          <div class="sx-r-stat">
+            <div class="sx-r-stat-num">QC</div>
+            <div class="sx-r-stat-label">Professional equipment testing</div>
+          </div>
+          <div class="sx-r-stat">
+            <div class="sx-r-stat-num">6<span>mo</span></div>
+            <div class="sx-r-stat-label">Warranty coverage</div>
+          </div>
+        </div>
+      </div>
+      <div class="sx-restore-steps">
+        <div class="sx-r-step">
+          <span class="sx-r-num">01</span>
+          <div class="sx-r-title">Full Disassembly</div>
+          <div class="sx-r-desc">Camera stripped down completely. Every component inspected for wear, corrosion, and mechanical issues.</div>
+        </div>
+        <div class="sx-r-step">
+          <span class="sx-r-num">02</span>
+          <div class="sx-r-title">Electronics Testing</div>
+          <div class="sx-r-desc">Original circuit board tested, cleaned, and recalibrated. All electrical connections verified for proper metering and shutter control.</div>
+        </div>
+        <div class="sx-r-step">
+          <span class="sx-r-num">03</span>
+          <div class="sx-r-title">Optics &amp; Bellows</div>
+          <div class="sx-r-desc">Mirror and lens cleaned. Bellows inspected for light leaks and replaced if needed. Focus mechanism serviced.</div>
+        </div>
+        <div class="sx-r-step">
+          <span class="sx-r-num">04</span>
+          <div class="sx-r-title">Mechanical Service</div>
+          <div class="sx-r-desc">Shutter, gears, and hinge mechanism cleaned and lubricated. Film door, rollers, and ejection path tested.</div>
+        </div>
+        <div class="sx-r-step">
+          <span class="sx-r-num">05</span>
+          <div class="sx-r-title">Final QC &amp; Testing</div>
+          <div class="sx-r-desc">Fully reassembled, then metering accuracy, shutter timing, and ISO detection verified with precision instruments across all modes.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ── FULL SPECS ── {%- endcomment -%}
+  <div class="sx-specs">
+    <div class="sx-specs-head">
+      <div class="sx-specs-title">Specs</div>
+      <div class="sx-specs-note">Specifications may vary slightly by model variant.</div>
+    </div>
+    <div class="sx-specs-body">
+      <div class="sx-specs-table">
+        <div class="sx-spec"><span class="sx-spec-k">Film Type</span><span class="sx-spec-v">SX-70 &amp; 600 (with ND filter)</span></div>
+        {%- if spec_lens != blank -%}
+          <div class="sx-spec"><span class="sx-spec-k">Lens</span><span class="sx-spec-v">{{ spec_lens }}</span></div>
+        {%- else -%}
+          <div class="sx-spec"><span class="sx-spec-k">Lens</span><span class="sx-spec-v">4-element 116mm f/8</span></div>
+        {%- endif -%}
+        {%- if spec_focus != blank -%}
+          <div class="sx-spec"><span class="sx-spec-k">Focus</span><span class="sx-spec-v">{{ spec_focus }}</span></div>
+        {%- else -%}
+          <div class="sx-spec"><span class="sx-spec-k">Focus</span><span class="sx-spec-v">Manual SLR (10.4&Prime; to &infin;)</span></div>
+        {%- endif -%}
+        {%- if spec_shutter != blank -%}
+          <div class="sx-spec"><span class="sx-spec-k">Shutter</span><span class="sx-spec-v">{{ spec_shutter }}</span></div>
+        {%- else -%}
+          <div class="sx-spec"><span class="sx-spec-k">Shutter</span><span class="sx-spec-v">Auto: ~1/175 &ndash; 14s</span></div>
+        {%- endif -%}
+        {%- if spec_meter != blank -%}
+          <div class="sx-spec"><span class="sx-spec-k">Metering</span><span class="sx-spec-v">{{ spec_meter }}</span></div>
+        {%- else -%}
+          <div class="sx-spec"><span class="sx-spec-k">Metering</span><span class="sx-spec-v">Real-time analog photodiode integration</span></div>
+        {%- endif -%}
+        <div class="sx-spec"><span class="sx-spec-k">Flash</span><span class="sx-spec-v">{%- if spec_flash != blank -%}{{ spec_flash }}{%- else -%}Flashbar compatible{%- endif -%}</span></div>
+        <div class="sx-spec"><span class="sx-spec-k">Battery</span><span class="sx-spec-v">{%- if spec_battery != blank -%}{{ spec_battery }}{%- else -%}In-pack (film cartridge){%- endif -%}</span></div>
+        <div class="sx-spec"><span class="sx-spec-k">Viewfinder</span><span class="sx-spec-v">SLR reflex (through-the-lens)</span></div>
+        <div class="sx-spec"><span class="sx-spec-k">Exposure Comp</span><span class="sx-spec-v">Lighten/Darken wheel</span></div>
+        <div class="sx-spec"><span class="sx-spec-k">Self Timer</span><span class="sx-spec-v">None (original board)</span></div>
+        <div class="sx-spec"><span class="sx-spec-k">Multiple Exp</span><span class="sx-spec-v">None (original board)</span></div>
+        <div class="sx-spec"><span class="sx-spec-k">Warranty</span><span class="sx-spec-v">6-month warranty</span></div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ── WARRANTY STRIP ── {%- endcomment -%}
+  <div class="sx-warranty">
+    <div class="sx-warranty-inner">
+      <div class="sx-w-item">
+        <div class="sx-w-label">Warranty</div>
+        <div class="sx-w-text">6-month warranty on all restored SX-70 cameras.</div>
+      </div>
+      <div class="sx-w-item">
+        <div class="sx-w-label">Repairs</div>
+        <div class="sx-w-text">If anything goes wrong within 6 months, we'll fix or replace it at no cost.</div>
+      </div>
+      <div class="sx-w-item">
+        <div class="sx-w-label">Free Shipping</div>
+        <div class="sx-w-text">{{ section.settings.shipping_text | default: 'Free shipping on all orders over $399.' }}</div>
+      </div>
+      <div class="sx-w-item">
+        <div class="sx-w-label">Support</div>
+        <div class="sx-w-text">Questions? We're here — sx70@brooklynfilmcamera.com</div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ── WARRANTY & RETURNS POLICY ── {%- endcomment -%}
+  <div class="sx-policy">
+    <div class="sx-policy-col">
+      <span class="sx-policy-ey">Warranty</span>
+      <h2 class="sx-policy-title">We stand behind every camera.</h2>
+      <div class="sx-policy-pill">
+        <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><path d="M2 7L5.5 10.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        6-Month Warranty Included
+      </div>
+      <div class="sx-policy-body">
+        <p>Every SX-70 we sell includes a <strong>6-month warranty</strong> covering mechanical and electrical defects. If something goes wrong, we'll repair it or replace it with the exact same camera you purchased.</p>
+        <p style="margin-top:10px">To open a claim, visit the Shipping Label tab in your <a href="https://account.brooklynfilmcamera.com" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">BFC account</a>, or come into the store anytime.</p>
+        <p style="margin-top:12px"><a href="https://brooklynfilmcamera.com/pages/warranty" style="font-size:11px;color:var(--or);font-weight:600;letter-spacing:0.06em;text-decoration:underline;text-underline-offset:2px;">View full warranty policy &rsaquo;</a></p>
+      </div>
+    </div>
+    <div class="sx-policy-col">
+      <span class="sx-policy-ey">Returns</span>
+      <h2 class="sx-policy-title">14-day return window.</h2>
+      <div class="sx-policy-pill" style="background:rgba(32,32,9,0.05);color:var(--ch);">
+        <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><line x1="7" y1="6.5" x2="7" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="4" r="0.7" fill="currentColor"/></svg>
+        Conditions Apply
+      </div>
+      <div class="sx-policy-body">
+        <p>If you change your mind, you have <strong>14 days from delivery</strong> to return your camera. The camera must be returned in the same condition it was received. A restocking fee may apply.</p>
+        <p style="margin-top:10px">We recommend taking advantage of the warranty rather than returning &mdash; if the camera has a functional issue within 6 months, we'll fix or replace it at no cost.</p>
+        <p style="margin-top:10px;color:rgba(78,71,65,0.6);font-size:11px">To initiate a return, contact us at <a href="mailto:sx70@brooklynfilmcamera.com" style="color:inherit">sx70@brooklynfilmcamera.com</a> with your order number.</p>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} Sticky Mobile ATC Bar {%- endcomment -%}
+  <div class="sx-sticky-bar" id="sx-sticky-bar">
+    <div class="sx-sticky-info">
+      <div class="sx-sticky-name">{{ product.title }}</div>
+      <div class="sx-sticky-meta">
+        {%- unless current_variant.title == 'Default Title' -%}
+          <span class="sx-sticky-grade" id="sx-sticky-grade">{{ current_variant.title }}</span>
+        {%- endunless -%}
+        <span class="sx-sticky-price" id="sx-sticky-price">{{ current_variant.price | money }}</span>
+      </div>
+    </div>
+    <button class="sx-sticky-btn" id="sx-sticky-btn" onclick="document.getElementById('sxATC-{{ section.id }}').requestSubmit()"{% unless current_variant.available %} disabled{% endunless %}>Add to Cart</button>
+  </div>
+
+</div>
+
+{%- comment -%}
+  ================================================================
+  JAVASCRIPT
+  ================================================================
+{%- endcomment -%}
+<script>
+(function(){
+// ── XHR helper (bypasses Judge.me monkey-patching of window.fetch) ─────
+function sxXhr(url, opts) {
+  opts = opts || {};
+  return new Promise(function(resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.open(opts.method || 'GET', url, true);
+    xhr.withCredentials = true;
+    if (opts.headers) Object.keys(opts.headers).forEach(function(k){xhr.setRequestHeader(k, opts.headers[k]);});
+    xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
+    xhr.onload = function() {
+      resolve({
+        ok: xhr.status>=200 && xhr.status<300,
+        status: xhr.status,
+        json: function(){ try{return Promise.resolve(JSON.parse(xhr.responseText));}catch(e){return Promise.resolve({});} },
+        text: function(){ return Promise.resolve(xhr.responseText); }
+      });
+    };
+    xhr.onerror = function(){ reject(new Error('Network error')); };
+    xhr.send(opts.body || null);
+  });
+}
+  const sid = '{{ section.id }}';
+
+  /* ── Slider + Thumbs ── */
+  const slider = document.getElementById('sxSlider-' + sid);
+  const dots   = document.querySelectorAll('#sxDots-' + sid + ' .sx-dot');
+  const thumbs = document.querySelectorAll('#sxThumbs-' + sid + ' .sx-thumb');
+  if (slider) {
+    const updateActive = () => {
+      const idx = Math.round(slider.scrollLeft / slider.offsetWidth);
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+      thumbs.forEach((t, i) => t.classList.toggle('is-active', i === idx));
+    };
+    slider.addEventListener('scroll', updateActive, { passive: true });
+    const goTo = (idx) => slider.scrollTo({ left: idx * slider.offsetWidth, behavior: 'smooth' });
+    dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.idx)));
+    thumbs.forEach(t => t.addEventListener('click', () => goTo(+t.dataset.idx)));
+  }
+
+  /* ── Variant picker ── */
+  const variantBtns = document.querySelectorAll('#sxVariants-' + sid + ' .sx-variant-btn');
+  const priceEl     = document.getElementById('sxPrice-' + sid);
+  const compareEl   = document.getElementById('sxCompare-' + sid);
+  const varInput    = document.getElementById('sxVariantInput-' + sid);
+  const addBtn      = document.querySelector('#sxATC-' + sid + ' .sx-add-btn');
+
+  variantBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('is-sold-out')) return;
+      variantBtns.forEach(b => b.classList.remove('is-selected'));
+      btn.classList.add('is-selected');
+      varInput.value = btn.dataset.variantId;
+      if (priceEl) priceEl.textContent = btn.dataset.price;
+      if (compareEl) {
+        compareEl.textContent = btn.dataset.compare || '';
+        compareEl.style.display = btn.dataset.compare ? '' : 'none';
+      }
+      const avail = btn.dataset.available === 'true';
+      addBtn.disabled = !avail;
+      addBtn.textContent = avail ? 'Add to Cart' : 'Sold Out';
+
+      /* Update URL */
+      const url = new URL(window.location);
+      url.searchParams.set('variant', btn.dataset.variantId);
+      window.history.replaceState({}, '', url);
+
+      /* Update warranty tier */
+      if (btn.dataset.priceCents) sxUpdateWarrantyTier(parseInt(btn.dataset.priceCents, 10));
+
+      /* Update sticky bar */
+      const stickyGrade = document.getElementById('sx-sticky-grade');
+      const stickyPrice = document.getElementById('sx-sticky-price');
+      const stickyBtn   = document.getElementById('sx-sticky-btn');
+      if (stickyGrade) stickyGrade.textContent = btn.textContent.trim();
+      if (stickyPrice) stickyPrice.textContent = btn.dataset.price;
+      if (stickyBtn)   stickyBtn.disabled = !avail;
+    });
+  });
+
+  /* ── Kit builder ── */
+  const kitTiles = document.querySelectorAll('.bfcsx .sx-kit-tile');
+  const kitCart  = [];
+  kitTiles.forEach(tile => {
+    tile.addEventListener('click', () => {
+      tile.classList.toggle('is-selected');
+      const vid = tile.dataset.variantId;
+      const idx = kitCart.indexOf(vid);
+      if (idx > -1) kitCart.splice(idx, 1);
+      else kitCart.push(vid);
+    });
+  });
+
+  /* ── Extended Warranty ── */
+  let sxWarranty = null;
+  // Warranty tier table — sourced from snippets/bfc-warranty-tiers-js.liquid
+  // (Polaroid pricing, 9 brackets). Snippet emits BFC_WARRANTY_TIERS;
+  // SX_WARRANTY_TIERS aliased here so existing sxGetWarrantyTier code is unchanged.
+  {% render 'bfc-warranty-tiers-js', category: 'polaroid' %}
+  const SX_WARRANTY_TIERS = BFC_WARRANTY_TIERS;
+  function sxGetWarrantyTier(price) {
+    for (let i = 0; i < SX_WARRANTY_TIERS.length; i++) {
+      if (price <= SX_WARRANTY_TIERS[i].max) return SX_WARRANTY_TIERS[i];
+    }
+    return SX_WARRANTY_TIERS[SX_WARRANTY_TIERS.length - 1];
+  }
+  function sxUpdateWarrantyTier(variantPrice) {
+    const tier = sxGetWarrantyTier(variantPrice);
+    const td = [{ vid: tier.v9, price: tier.p9 }, { vid: tier.v12, price: tier.p12 }];
+    document.querySelectorAll('.sx-ext-w-btn').forEach((btn, i) => {
+      if (!td[i]) return;
+      btn.dataset.variantId = td[i].vid;
+      btn.dataset.price = td[i].price;
+      const el = btn.querySelector('.sx-ext-w-price');
+      if (el) el.textContent = '+$' + (td[i].price / 100).toFixed(0);
+      if (btn.classList.contains('is-sel') && sxWarranty) {
+        sxWarranty.variantId = td[i].vid;
+        sxWarranty.price = td[i].price;
+      }
+    });
+  }
+  window.sxSelectWarranty = function(btn) {
+    const wasSelected = btn.classList.contains('is-sel');
+    document.querySelectorAll('.sx-ext-w-btn').forEach(b => b.classList.remove('is-sel'));
+    const clearBtn = document.getElementById('sx-ext-w-clear');
+    if (wasSelected) {
+      sxWarranty = null;
+      if (clearBtn) clearBtn.classList.remove('is-vis');
+    } else {
+      btn.classList.add('is-sel');
+      sxWarranty = {
+        months: parseInt(btn.dataset.months, 10),
+        total:  parseInt(btn.dataset.total, 10),
+        price:  parseInt(btn.dataset.price, 10),
+        variantId: btn.dataset.variantId || null
+      };
+      if (clearBtn) clearBtn.classList.add('is-vis');
+    }
+  };
+  window.sxClearWarranty = function() {
+    document.querySelectorAll('.sx-ext-w-btn').forEach(b => b.classList.remove('is-sel'));
+    sxWarranty = null;
+    const clearBtn = document.getElementById('sx-ext-w-clear');
+    if (clearBtn) clearBtn.classList.remove('is-vis');
+  };
+  sxUpdateWarrantyTier({{ current_variant.price }});
+
+  /* ── Intercept ATC to include kit + warranty items ── */
+  const form = document.getElementById('sxATC-' + sid);
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      if (kitCart.length === 0 && !sxWarranty) return; /* default single-item submit */
+      e.preventDefault();
+      const items = [{ id: parseInt(varInput.value), quantity: 1 }];
+      kitCart.forEach(vid => items.push({ id: parseInt(vid), quantity: 1 }));
+      if (sxWarranty && sxWarranty.variantId) {
+        items.push({ id: parseInt(sxWarranty.variantId), quantity: 1, properties: { _extended_warranty: 'true' } });
+      }
+      sxXhr('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: items })
+      }).then(r => {
+        if (r.ok) window.location.href = '/cart';
+        else r.json().then(d => alert(d.description || 'Could not add to cart'));
+      }).catch(() => alert('Something went wrong — please try again.'));
+    });
+  }
+
+  /* ── Sticky Mobile ATC Bar ── */
+  const stickyBar = document.getElementById('sx-sticky-bar');
+  const mainBtn   = document.querySelector('#sxATC-' + sid + ' .sx-add-btn');
+  if (stickyBar && mainBtn && window.innerWidth <= 767) {
+    new IntersectionObserver(entries => {
+      entries.forEach(e => stickyBar.classList.toggle('is-visible', !e.isIntersecting));
+    }, { threshold: 0 }).observe(mainBtn);
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "BFC SX-70 Standard",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "slide_1", "label": "Hero slide 1" },
+    { "type": "image_picker", "id": "slide_2", "label": "Hero slide 2" },
+    { "type": "image_picker", "id": "slide_3", "label": "Hero slide 3" },
+    { "type": "image_picker", "id": "slide_4", "label": "Hero slide 4" },
+    { "type": "image_picker", "id": "slide_5", "label": "Hero slide 5" },
+    { "type": "header", "content": "OpenSX70 Section" },
+    { "type": "image_picker", "id": "board_image", "label": "Board install photo", "info": "Close-up of OpenSX70 board in camera body" },
+    { "type": "header", "content": "Dongle Section" },
+    { "type": "image_picker", "id": "dongle_image", "label": "Dongle product photo" },
+    { "type": "header", "content": "Warranty Strip" },
+    { "type": "text", "id": "shipping_text", "label": "Shipping text", "default": "Free shipping on all orders over $399." }
+  ],
+  "blocks": [
+    {
+      "type": "kit_item",
+      "name": "Kit Item",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" },
+        { "type": "text", "id": "column", "label": "Column name", "info": "Items with the same column name group together. E.g. Film, Flash, Dongle, Accessories." },
+        { "type": "text", "id": "label", "label": "Display label (optional)", "info": "Override the product title in the kit tile." },
+        { "type": "product", "id": "only_show_for", "label": "Only show for product", "info": "Leave blank to show on every product using this template." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC SX-70 Standard"
+    }
+  ]
+}
+{% endschema %}

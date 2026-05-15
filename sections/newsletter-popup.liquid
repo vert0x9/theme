@@ -1,0 +1,194 @@
+{{- 'section-newsletter-popup.css' | asset_url | stylesheet_tag -}}
+<script src="{{- 'newsletter-popup.js' | asset_url -}}" defer="defer"></script>
+
+<newsletter-popup
+  id="NewsletterModal-{{- section.id -}}"
+  class="newsletter-popup"
+  data-delay="{{- section.settings.delay -}}"
+  {% if request.design_mode and section.settings.show_popup_on_customizer %} data-open-in-design-mode="true"{% endif %}
+>
+  <div class="newsletter-popup__wrapper color-{{ section.settings.color_scheme }}" aria-modal="true" role="dialog" aria-labelledby="Newsletter Modal" tabindex="-1">
+    {%- if section.settings.image != blank -%}
+      <div class="media media--small newsletter-popup__media">
+        {%- render 'image', image: section.settings.image, image_url_width: 550, alt: section.settings.image.alt | escape, section_index: section.index -%}
+      </div>
+    {%- endif -%}
+
+    <div class="newsletter-popup__content">
+      {%- if section.settings.heading != blank -%}
+        <h4 class="section__heading {{ section.settings.heading_size }}">
+          {{- section.settings.heading -}}
+        </h4>
+      {%- endif -%}
+
+      {%- if section.settings.text != blank -%}
+        <div class="newsletter-popup__entry rte">
+          {{- section.settings.text -}}
+        </div>
+      {%- endif -%}
+
+      <div class="newsletter-popup__form">
+        {%- assign submit_button_text = 'theme.newsletter.button_label' | t -%}
+        {%- render 'newsletter-form', namespace: section.id, js_class: 'js-form', submit_button_text: submit_button_text -%}
+      </div>
+
+      <!-- Sign me up link (added back in, before close button) -->
+      <a href="https://brooklynfilmcamera.com/pages/expired-film-club"
+         class="bfc-signup-link js-button-close js-newsletter-dismiss">Sign me up</a>
+
+      <button id="ModalClose-{{- section.id -}}" type="button" class="link js-button-close">
+        {{- section.settings.button_close_text -}}
+      </button>
+    </div>
+  </div>
+</newsletter-popup>
+
+{% schema %}
+{
+  "name": "t:sections.newsletter-popup.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "delay",
+      "label": "t:sections.newsletter-popup.settings.delay.label",
+      "unit": "s",
+      "min": 4,
+      "max": 30,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "t:sections.global.header.content.content"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.global.element.image.label"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "t:sections.global.element.heading.label",
+      "default": "Newsletter heading here"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "t:sections.global.element.heading_size.label",
+      "options": [
+        { "value": "h6", "label": "XS" },
+        { "value": "h5", "label": "S" },
+        { "value": "h4", "label": "M" },
+        { "value": "h3", "label": "L" },
+        { "value": "h2", "label": "XL" }
+      ],
+      "default": "h3"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:sections.global.element.text.label",
+      "default": "<p>An example subheading for new subscribers.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_close_text",
+      "label": "t:sections.newsletter-popup.settings.button_close_text.label",
+      "default": "No thanks"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_popup_on_customizer",
+      "label": "t:sections.newsletter-popup.settings.show_popup_on_customizer.label",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.global.header.settings.content",
+      "info": "t:sections.global.header.settings.info"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.global.color_scheme.label",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  /* Hide the email form entirely */
+  #NewsletterModal-{{ section.id }} .newsletter-popup__form {
+    display: none !important;
+  }
+
+  /* Center both CTA and close link */
+  #NewsletterModal-{{ section.id }} .newsletter-popup__cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  /* "Sign me up": italic, slightly larger, no underline */
+  #NewsletterModal-{{ section.id }} .bfc-signup-link {
+    display: inline-block;
+    font-style: italic;
+    font-size: 1.05em;
+    text-decoration: none !important;
+    font-weight: normal;
+  }
+
+  /* "No thanks": even smaller */
+  #NewsletterModal-{{ section.id }} .bfc-no-thanks {
+    font-size: 0.7em;
+    font-style: normal;
+    text-decoration: none !important;
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+(function() {
+  var KEY = 'bfc_newsletter_seen';
+  var modal = document.getElementById('NewsletterModal-{{ section.id }}');
+  if (!modal) return;
+
+  // If already dismissed this session, remove the modal immediately
+  try {
+    if (sessionStorage.getItem(KEY) === '1') {
+      if (modal.parentNode) modal.parentNode.removeChild(modal);
+      return;
+    }
+  } catch (e) {}
+
+  var closeBtn = modal.querySelector('#ModalClose-{{ section.id }}');
+  if (!closeBtn) return;
+
+  // Wrap CTA + Close in container if not already
+  var wrapper = closeBtn.parentNode;
+  wrapper.classList.add('newsletter-popup__cta');
+
+  // Restyle No thanks
+  closeBtn.classList.add('bfc-no-thanks', 'js-newsletter-dismiss');
+
+  // On dismiss, set flag and remove modal
+  modal.addEventListener('click', function(e) {
+    var t = e.target.closest('.js-newsletter-dismiss');
+    if (!t) return;
+    try { sessionStorage.setItem(KEY, '1'); } catch (e) {}
+    if (modal && modal.parentNode) modal.parentNode.removeChild(modal);
+    document.documentElement.classList.remove('no-scroll','modal-open','is-locked');
+    document.body.classList.remove('no-scroll','modal-open','is-locked','overflow-hidden');
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+  }, { capture: true });
+})();
+</script>
