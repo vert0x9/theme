@@ -185,7 +185,9 @@ html.no-js .hero__swiper-slide {
 }
 
 
-.hero__heading p {
+.hero__heading p,
+.hero__heading h1,
+.hero__heading h2 {
   color: rgb(var(--color-heading-text));
   font-family: var(--font-heading-family);
   font-size: calc(var(--font-heading-scale) * var(--h1-multiplier));
@@ -198,7 +200,9 @@ html.no-js .hero__swiper-slide {
   letter-spacing: var(--font-heading-letter-spacing);
 }
 
-.hero__heading p em {
+.hero__heading p em,
+.hero__heading h1 em,
+.hero__heading h2 em {
   font-family: var(--font-italic-family);
   font-size: calc(var(--font-italic-scale) * var(--h1-multiplier));
   font-style: var(--font-italic-style);
@@ -222,7 +226,9 @@ html.no-js .hero__swiper-slide {
   padding-block: 0;
 }
 
-.hero__heading p {
+.hero__heading p,
+.hero__heading h1,
+.hero__heading h2 {
   margin-block: 0;
 }
 
@@ -501,10 +507,14 @@ html.no-js .hero__swiper-slide {
     grid-template-columns: 50% 50%;
     grid-template-areas: "content_element media_element";
   }
-  .hero-banner .hero__heading p {
+  .hero-banner .hero__heading p,
+  .hero-banner .hero__heading h1,
+  .hero-banner .hero__heading h2 {
     font-size: calc(var(--font-heading-scale) * var(--h3-multiplier))
   }
-  .hero-banner .hero__heading p em {
+  .hero-banner .hero__heading p em,
+  .hero-banner .hero__heading h1 em,
+  .hero-banner .hero__heading h2 em {
     font-size: calc(var(--font-italic-scale) * var(--h3-multiplier))
   }
 
@@ -589,10 +599,14 @@ html.no-js .hero__swiper-slide {
     grid-template-areas: "content_element media_element";
   }
 
-  .hero-banner .hero__heading p {
+  .hero-banner .hero__heading p,
+  .hero-banner .hero__heading h1,
+  .hero-banner .hero__heading h2 {
     font-size: calc(var(--font-heading-scale) * var(--h2-multiplier))
   }
-  .hero-banner .hero__heading p em {
+  .hero-banner .hero__heading p em,
+  .hero-banner .hero__heading h1 em,
+  .hero-banner .hero__heading h2 em {
     font-size: calc(var(--font-italic-scale) * var(--h2-multiplier))
   }
 
@@ -621,10 +635,14 @@ html.no-js .hero__swiper-slide {
     grid-template-areas: "content_element media_element";
   }
 
-  .hero-banner .hero__heading p {
+  .hero-banner .hero__heading p,
+  .hero-banner .hero__heading h1,
+  .hero-banner .hero__heading h2 {
     font-size: calc(var(--font-heading-scale) * var(--h1-multiplier))
   }
-  .hero-banner .hero__heading p em {
+  .hero-banner .hero__heading p em,
+  .hero-banner .hero__heading h1 em,
+  .hero-banner .hero__heading h2 em {
     font-size: calc(var(--font-italic-scale) * var(--h1-multiplier))
   }
 
