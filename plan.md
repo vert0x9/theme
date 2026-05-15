@@ -43,7 +43,7 @@
 
 ---
 
-### [ ] 5. Theme Color Meta
+### [x] 5. Theme Color Meta
 **File:** `layout/theme.liquid` line 150  
 **Problem:** `<meta name="theme-color" content="">` is empty — does nothing.  
 **Change:** Set to brand olive `#525741` (trust bar background) or orange `#e36e15` (accent).  
@@ -51,7 +51,7 @@
 
 ---
 
-### [ ] 6. Hreflang Tags
+### [x] 6. Hreflang Tags
 **File:** `snippets/meta-tags.liquid`  
 **Problem:** 10 languages supported, zero hreflang links — translated pages may cannibalize each other in SERPs.  
 **Change:** Loop `shop.published_locales` and output `<link rel="alternate" hreflang="..." href="...">` for each, plus `x-default`.  

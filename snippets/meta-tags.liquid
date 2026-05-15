@@ -15,6 +15,13 @@
   endif
 %}
 
+{%- for locale in shop.published_locales -%}
+  <link rel="alternate" hreflang="{{ locale.iso_code }}" href="{{ request.origin }}{{ locale.root_url }}{{ request.path | remove_first: '/' }}">
+  {%- if locale.primary -%}
+    <link rel="alternate" hreflang="x-default" href="{{ request.origin }}{{ locale.root_url }}{{ request.path | remove_first: '/' }}">
+  {%- endif -%}
+{%- endfor -%}
+
 <title>
   {{ meta_title }}
   {%- if current_tags %}
