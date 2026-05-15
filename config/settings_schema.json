@@ -1326,6 +1326,16 @@
       },
       {
         "type": "header",
+        "content": "Social sharing image"
+      },
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "Default OG / social share image",
+        "info": "Used when a page has no featured image. Recommended: 1200×630px."
+      },
+      {
+        "type": "header",
         "content": "t:sections.global.header.sharing_options.content"
       },
       {

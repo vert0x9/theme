@@ -27,7 +27,7 @@
 
 ---
 
-### [ ] 3. OG Image Fallback
+### [x] 3. OG Image Fallback
 **File:** `snippets/meta-tags.liquid`  
 **Problem:** `og:image` only outputs when `page_image` is set. Homepage has no `page_image` — social shares render imageless.  
 **Change:** Add fallback to `settings.share_image` (Shopify theme setting), then hardcode a CDN URL for the hero image if both are blank.  
@@ -35,7 +35,7 @@
 
 ---
 
-### [ ] 4. Twitter Image Tag
+### [x] 4. Twitter Image Tag
 **File:** `snippets/meta-tags.liquid`  
 **Problem:** `twitter:card` is `summary_large_image` but no `twitter:image` tag — card renders blank.  
 **Change:** Add `twitter:image` using same fallback chain as OG image (task 3). Do task 3 first.  
