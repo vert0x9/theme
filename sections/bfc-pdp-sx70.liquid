@@ -3898,8 +3898,50 @@ window.bfcsxToggleCompare = function() {
       const idx = kitCart.indexOf(vid);
       if (idx > -1) kitCart.splice(idx, 1);
       else kitCart.push(vid);
+      sxUpdateAtcLabels();
     });
   });
+
+  /* ── ATC label sync ──
+     Three buttons reflect the current kit+warranty selection state:
+       1. Main "Add to Cart" inside the buy box
+       2. Bottom sticky mobile bar
+       3. Top sticky TOC button
+     All three say the same thing at any moment. Function is exposed on
+     window so the warranty handler (defined below) can call it too. */
+  window.sxUpdateAtcLabels = function() {
+    var addonCount = kitCart.length;
+    var hasWarranty = (typeof sxWarranty !== 'undefined' && sxWarranty && sxWarranty.variantId) ? 1 : 0;
+    var totalExtras = addonCount + hasWarranty;
+
+    var mainLabel, stickyLabel, tocLabel;
+    if (totalExtras === 0) {
+      mainLabel = stickyLabel = tocLabel = 'Add to Cart';
+    } else if (totalExtras === 1) {
+      mainLabel  = 'Add Camera + 1 Add-On to Cart';
+      stickyLabel = 'Add Camera + 1 Add-On';
+      tocLabel   = 'Add Camera + 1 Add-On';
+    } else {
+      mainLabel  = 'Add Camera + ' + totalExtras + ' Add-Ons to Cart';
+      stickyLabel = 'Add Camera + ' + totalExtras + ' Add-Ons';
+      tocLabel   = 'Add Camera + ' + totalExtras + ' Add-Ons';
+    }
+
+    var mainBtn = document.querySelector('#sxATC-' + sid + ' .sx-add-btn');
+    if (mainBtn && !mainBtn.disabled && mainBtn.textContent.trim().indexOf('Adding') === -1 && mainBtn.textContent.trim().indexOf('Added') === -1 && mainBtn.textContent.trim() !== 'Sold Out') {
+      mainBtn.textContent = mainLabel;
+    }
+
+    var stickyBtn = document.getElementById('sx-sticky-btn');
+    if (stickyBtn && !stickyBtn.disabled && stickyBtn.textContent.trim().indexOf('Adding') === -1) {
+      stickyBtn.textContent = stickyLabel;
+    }
+
+    var tocText = document.getElementById('sx-toc-atc-text');
+    if (tocText) {
+      tocText.textContent = tocLabel;
+    }
+  };
 
   /* ── Kit tile info popup ──
      The small "i" on each tile opens a modal showing the product's
@@ -4000,12 +4042,14 @@ window.bfcsxToggleCompare = function() {
       };
       if (clearBtn) clearBtn.classList.add('is-vis');
     }
+    if (typeof window.sxUpdateAtcLabels === 'function') window.sxUpdateAtcLabels();
   };
   window.sxClearWarranty = function() {
     document.querySelectorAll('.sx-ext-w-btn').forEach(b => b.classList.remove('is-sel'));
     sxWarranty = null;
     const clearBtn = document.getElementById('sx-ext-w-clear');
     if (clearBtn) clearBtn.classList.remove('is-vis');
+    if (typeof window.sxUpdateAtcLabels === 'function') window.sxUpdateAtcLabels();
   };
   sxUpdateWarrantyTier({{ current_variant.price }});
 
