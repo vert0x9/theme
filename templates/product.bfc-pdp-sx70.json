@@ -1,1 +1,182 @@
-{"sections":{"main":{"type":"bfc-pdp-sx70","blocks":{"schematic_hotspot_gYgpYc":{"type":"schematic_hotspot","settings":{"number":1,"name":"Microcontroller","tech":"","body":"This is a microcontroller","x_pct":67,"y_pct":50,"desc_x_pct":88,"desc_y_pct":8,"path_style":"l_v_first","open_by_default":false}},"schematic_hotspot_Nexrwi":{"type":"schematic_hotspot","settings":{"number":2,"name":"Microcontroller","tech":"","body":"Photodiode","x_pct":26,"y_pct":48,"desc_x_pct":14,"desc_y_pct":32,"path_style":"l_v_first","open_by_default":false}},"schematic_hotspot_NdGUyF":{"type":"schematic_hotspot","settings":{"number":3,"name":"Adapter","tech":"","body":"Adapter","x_pct":59,"y_pct":40,"desc_x_pct":43,"desc_y_pct":7,"path_style":"l_v_first","open_by_default":false}},"kit_item_9RPNzN":{"type":"kit_item","settings":{"product":"polaroid-600-round-frame-edition","product_alt_1":"","product_alt_2":"","column":"","label":"","only_show_for":""}},"kit_item_YrXrJE":{"type":"kit_item","settings":{"product":"polaroid-600-color-film","product_alt_1":"","product_alt_2":"","column":"","label":"","only_show_for":""}},"kit_item_iFyUbH":{"type":"kit_item","settings":{"product":"polaroid-600-bw-film","product_alt_1":"","product_alt_2":"","column":"","label":"","only_show_for":""}}},"block_order":["schematic_hotspot_gYgpYc","schematic_hotspot_Nexrwi","schematic_hotspot_NdGUyF","kit_item_9RPNzN","kit_item_YrXrJE","kit_item_iFyUbH"],"settings":{"show_board_pill":true,"board_pill_text":"OpenSX70 V2 Board","intro_text":"Every SX-70 we restore is a complete rebuild — full mechanical and optical service, and our exclusive OpenSX70 board. Incredible low-light metering, hold-to-eject, and a 6-month warranty come standard.","board_image":"shopify:\/\/shop_images\/Open_SX-70_Board_Red-1264T.png","schematic_image":"shopify:\/\/shop_images\/Open_SX-70_Board_Red-1307.png","schematic_lead":"","schematic_auto_preview":true,"schematic_panels_boxed":false,"pillar_1_title":"Open source","pillar_1_body":"","pillar_2_title":"Built to last","pillar_2_body":"","pillar_3_title":"Why it matters","pillar_3_body":"","shipping_text":"Free shipping on all orders over $399."}},"apps_QBggJq":{"type":"apps","blocks":{"judge_me_reviews_review_widget_VPGHVk":{"type":"shopify:\/\/apps\/judge-me-reviews\/blocks\/review_widget\/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8","settings":{"review_data":"sample_data","max_width":1200,"show_shop_reviews":false,"empty_state":"empty_widget"}}},"block_order":["judge_me_reviews_review_widget_VPGHVk"],"settings":{"section_layout":"normal","spacing_inner":"2","section_width":"max-w-page","color_scheme":"","spacing_top":"2","spacing_bottom":"2"}}},"order":["main","apps_QBggJq"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "bfc-pdp-sx70",
+      "blocks": {
+        "schematic_hotspot_gYgpYc": {
+          "type": "schematic_hotspot",
+          "settings": {
+            "number": 4,
+            "name": "Board Communication",
+            "tech": "",
+            "body": "Tells the the rest of the camera what to do.",
+            "x_pct": 78,
+            "y_pct": 50,
+            "desc_x_pct": 84,
+            "desc_y_pct": 40,
+            "path_style": "l_v_first",
+            "open_by_default": false
+          }
+        },
+        "schematic_hotspot_DDAeBW": {
+          "type": "schematic_hotspot",
+          "settings": {
+            "number": 5,
+            "name": "Lettering & Labels",
+            "tech": "",
+            "body": "Unlike original boards the entire openSX70 board is clearly labelled",
+            "x_pct": 53,
+            "y_pct": 40,
+            "desc_x_pct": 84,
+            "desc_y_pct": 40,
+            "path_style": "l_v_first",
+            "open_by_default": false
+          }
+        },
+        "schematic_hotspot_Nexrwi": {
+          "type": "schematic_hotspot",
+          "settings": {
+            "number": 2,
+            "name": "Microcontroller",
+            "tech": "",
+            "body": "The brain of the board.",
+            "x_pct": 26,
+            "y_pct": 48,
+            "desc_x_pct": 14,
+            "desc_y_pct": 32,
+            "path_style": "l_v_first",
+            "open_by_default": false
+          }
+        },
+        "schematic_hotspot_rEcz6N": {
+          "type": "schematic_hotspot",
+          "settings": {
+            "number": 1,
+            "name": "Analog Metering Circuit",
+            "tech": "",
+            "body": "Uses real time analog photodiode to meter for perfect exposures. Brand new electric eye.",
+            "x_pct": 30,
+            "y_pct": 43,
+            "desc_x_pct": 14,
+            "desc_y_pct": 32,
+            "path_style": "l_v_first",
+            "open_by_default": false
+          }
+        },
+        "schematic_hotspot_NdGUyF": {
+          "type": "schematic_hotspot",
+          "settings": {
+            "number": 3,
+            "name": "Status LED",
+            "tech": "",
+            "body": "LED lights to tell you the type of film you have , and a low light warning.",
+            "x_pct": 34,
+            "y_pct": 37,
+            "desc_x_pct": 43,
+            "desc_y_pct": 21,
+            "path_style": "l_v_first",
+            "open_by_default": false
+          }
+        },
+        "kit_item_9RPNzN": {
+          "type": "kit_item",
+          "settings": {
+            "product": "polaroid-600-round-frame-edition",
+            "product_alt_1": "",
+            "product_alt_2": "",
+            "column": "",
+            "label": "",
+            "only_show_for": ""
+          }
+        },
+        "kit_item_YrXrJE": {
+          "type": "kit_item",
+          "settings": {
+            "product": "polaroid-600-color-film",
+            "product_alt_1": "",
+            "product_alt_2": "",
+            "column": "",
+            "label": "",
+            "only_show_for": ""
+          }
+        },
+        "kit_item_iFyUbH": {
+          "type": "kit_item",
+          "settings": {
+            "product": "polaroid-600-bw-film",
+            "product_alt_1": "",
+            "product_alt_2": "",
+            "column": "",
+            "label": "",
+            "only_show_for": ""
+          }
+        }
+      },
+      "block_order": [
+        "schematic_hotspot_gYgpYc",
+        "schematic_hotspot_DDAeBW",
+        "schematic_hotspot_Nexrwi",
+        "schematic_hotspot_rEcz6N",
+        "schematic_hotspot_NdGUyF",
+        "kit_item_9RPNzN",
+        "kit_item_YrXrJE",
+        "kit_item_iFyUbH"
+      ],
+      "settings": {
+        "show_board_pill": true,
+        "board_pill_text": "OpenSX70 V2 Board",
+        "intro_text": "Every SX-70 we restore is a complete rebuild — full mechanical and optical service, and our exclusive OpenSX70 board. Incredible low-light metering, hold-to-eject, and a 6-month warranty come standard.",
+        "board_image": "shopify://shop_images/Open_SX-70_Board_Red-1264T.png",
+        "schematic_image": "shopify://shop_images/Open_SX-70_Blue_Board_Glass-1370.png",
+        "schematic_lead": "",
+        "schematic_auto_preview": true,
+        "schematic_panels_boxed": false,
+        "pillar_1_title": "Open source",
+        "pillar_1_body": "",
+        "pillar_2_title": "Built to last",
+        "pillar_2_body": "",
+        "pillar_3_title": "Why it matters",
+        "pillar_3_body": "",
+        "shipping_text": "Free shipping on all orders over $399."
+      }
+    },
+    "apps_QBggJq": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_VPGHVk": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_VPGHVk"
+      ],
+      "settings": {
+        "section_layout": "normal",
+        "spacing_inner": "2",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "apps_QBggJq"
+  ]
+}
