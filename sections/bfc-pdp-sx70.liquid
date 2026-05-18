@@ -1614,10 +1614,25 @@
   color: var(--ol);
   padding: 16px 20px;
   border-bottom: 2px solid var(--bk);
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px;
 }
+.bfcsx .sx-kit-col-see {
+  background: none; border: none;
+  font-family: var(--sn);
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--or);
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex; align-items: center; gap: 4px;
+  transition: opacity var(--t);
+}
+.bfcsx .sx-kit-col-see:hover { opacity: 0.7; }
+.bfcsx .sx-kit-col-see svg { display: block; }
 .bfcsx .sx-kit-tile {
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px 16px;
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px;
   border-bottom: 1px solid rgba(82,87,65,0.06);
   cursor: pointer;
   transition: background var(--t);
@@ -1627,10 +1642,10 @@
 .bfcsx .sx-kit-tile-img-wrap {
   position: relative;
   flex-shrink: 0;
-  width: 44px; height: 44px;
+  width: 56px; height: 56px;
 }
 .bfcsx .sx-kit-tile-img {
-  width: 44px; height: 44px;
+  width: 56px; height: 56px;
   object-fit: contain;
   background: #fff;
   display: block;
@@ -1760,6 +1775,205 @@
 .bfcsx .sx-popup-desc p:last-child { margin-bottom: 0; }
 @media (max-width: 600px) {
   .bfcsx .sx-popup-imgs { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── OPTICS GUIDE MODAL ──
+   "See what these can do" link in the Lenses & Optics column header opens
+   this modal. Pulls from kit_item blocks tagged Lenses & Optics — title,
+   featured image, and full description. Add buttons fire the same selection
+   logic as the small kit tiles below. */
+.bfcsx .sx-og-overlay {
+  position: fixed; inset: 0;
+  background: rgba(32,32,9,0.78);
+  z-index: 100000;
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 24px;
+}
+.bfcsx .sx-og-overlay.is-open { display: flex; }
+.bfcsx .sx-og {
+  background: #fff;
+  max-width: 720px;
+  width: 95%;
+  max-height: 88vh;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.bfcsx .sx-og-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px 18px;
+  border-bottom: 1px solid rgba(32,32,9,0.1);
+  background: #fff;
+  flex-shrink: 0;
+}
+.bfcsx .sx-og-head-text {
+  min-width: 0;
+  line-height: 1.25;
+}
+.bfcsx .sx-og-head-ey {
+  font-family: var(--sn);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--or);
+  margin: 0 0 4px;
+}
+.bfcsx .sx-og-head-title {
+  font-family: var(--sr);
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--bk);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.bfcsx .sx-og-head-title em { font-style: italic; color: var(--or); }
+.bfcsx .sx-og-close {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  background: rgba(32,32,9,0.04);
+  border: none;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ch);
+  transition: background var(--t), color var(--t);
+}
+.bfcsx .sx-og-close:hover {
+  background: rgba(227,110,21,0.1);
+  color: var(--or);
+}
+.bfcsx .sx-og-body {
+  overflow-y: auto;
+  background: var(--cv);
+  flex: 1;
+}
+.bfcsx .sx-og-intro {
+  padding: 18px 24px;
+  background: #fff;
+  border-bottom: 1px solid rgba(32,32,9,0.08);
+  font-family: var(--sn);
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--ch);
+}
+.bfcsx .sx-og-intro p { margin: 0; }
+.bfcsx .sx-og-card {
+  background: #fff;
+  padding: 22px 24px;
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  gap: 20px;
+  align-items: center;
+  border-bottom: 1px solid rgba(32,32,9,0.06);
+}
+.bfcsx .sx-og-card:last-child { border-bottom: none; }
+.bfcsx .sx-og-card-img {
+  width: 140px;
+  aspect-ratio: 1/1;
+  background: var(--gr);
+  overflow: hidden;
+  position: relative;
+}
+.bfcsx .sx-og-card-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.bfcsx .sx-og-card-info {
+  min-width: 0;
+  align-self: center;
+}
+.bfcsx .sx-og-card-pill {
+  display: inline-block;
+  font-family: var(--sn);
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--or);
+  margin: 0 0 6px;
+}
+.bfcsx .sx-og-card-name {
+  font-family: var(--sr);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--bk);
+  margin: 0 0 6px;
+  letter-spacing: -0.005em;
+}
+.bfcsx .sx-og-card-desc {
+  font-family: var(--sn);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ch);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.bfcsx .sx-og-card-side {
+  text-align: right;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.bfcsx .sx-og-card-price {
+  font-family: var(--sr);
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--bk);
+  display: block;
+  margin: 0 0 8px;
+  letter-spacing: -0.005em;
+}
+.bfcsx .sx-og-card-cta {
+  font-family: var(--sn);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  background: var(--or);
+  color: #fff;
+  border: none;
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: background var(--t);
+  min-width: 78px;
+}
+.bfcsx .sx-og-card-cta:hover { background: #c75e10; }
+.bfcsx .sx-og-card-cta.is-added {
+  background: #2a4820;
+}
+.bfcsx .sx-og-card-cta.is-added::before { content: '✓ '; }
+.bfcsx .sx-og-card.is-oos {
+  opacity: 0.55;
+}
+.bfcsx .sx-og-card.is-oos .sx-og-card-cta {
+  background: rgba(32,32,9,0.25);
+  cursor: not-allowed;
+}
+.bfcsx .sx-og-card.is-oos .sx-og-card-img { filter: grayscale(0.5); }
+.bfcsx .sx-og-empty {
+  padding: 40px 24px;
+  text-align: center;
+  font-family: var(--sn);
+  font-size: 12px;
+  color: rgba(32,32,9,0.5);
+  font-style: italic;
+  background: #fff;
+}
+@media (max-width: 640px) {
+  .bfcsx .sx-og-card {
+    grid-template-columns: 100px 1fr;
+    grid-template-rows: auto auto;
+    padding: 18px;
+    gap: 14px;
+  }
+  .bfcsx .sx-og-card-img { width: 100px; }
+  .bfcsx .sx-og-card-side {
+    grid-column: 1 / -1;
+    text-align: left;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+  }
+  .bfcsx .sx-og-card-price { margin: 0; }
 }
 
 
@@ -3181,7 +3395,17 @@
         <div class="sx-kit-cols" style="grid-template-columns: repeat({{ columns.size | at_most: 4 }}, 1fr);">
           {%- for col_name in columns -%}
             <div class="sx-kit-col">
-              <div class="sx-kit-col-head">{{ col_name }}</div>
+              <div class="sx-kit-col-head">
+                <span>{{ col_name }}</span>
+                {%- if col_name == 'Lenses & Optics' or col_name == 'Lenses &amp; Optics' -%}
+                  <button type="button" class="sx-kit-col-see" onclick="sxOpenOpticsGuide()" aria-label="See what these optics can do">
+                    See what these can do
+                    <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                      <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                {%- endif -%}
+              </div>
               {%- for block in section.blocks -%}
                 {%- if block.type == 'kit_item' and block.settings.product != blank -%}
                   {%- if block.settings.only_show_for == blank or block.settings.only_show_for.handle == product.handle -%}
@@ -3221,7 +3445,7 @@
                            {{ block.shopify_attributes }}>
                         {%- if kit_prod.featured_image != blank -%}
                           <div class="sx-kit-tile-img-wrap">
-                            <img class="sx-kit-tile-img" src="{{ kit_prod.featured_image | image_url: width: 88 }}" alt="{{ kit_prod.title }}" loading="lazy">
+                            <img class="sx-kit-tile-img" src="{{ kit_prod.featured_image | image_url: width: 112 }}" alt="{{ kit_prod.title }}" loading="lazy">
                             <button type="button"
                                     class="sx-kit-tile-info-btn"
                                     onclick="event.stopPropagation(); sxOpenPopup('{{ kit_tile_id }}')"
@@ -3288,6 +3512,95 @@
       <div class="sx-popup-body">
         <div class="sx-popup-imgs" id="sx-popup-imgs"></div>
         <div class="sx-popup-desc" id="sx-popup-desc"></div>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ── OPTICS GUIDE MODAL ──
+       Built server-side from all kit_item blocks tagged with the
+       "Lenses & Optics" column. Each card shows the product's featured
+       image, full description, price, and an Add button. Add buttons
+       reuse the same selection logic as the small tiles below — click
+       once to add, click again to remove. The empty-state shows when
+       there are no Lenses & Optics kit items configured. {%- endcomment -%}
+  {%- assign optics_items_count = 0 -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'kit_item' and block.settings.product != blank -%}
+      {%- if block.settings.only_show_for == blank or block.settings.only_show_for.handle == product.handle -%}
+        {%- assign og_col = block.settings.column_custom | default: block.settings.column | default: block.settings.label | default: 'Add-Ons' -%}
+        {%- if og_col == 'Lenses & Optics' -%}
+          {%- assign optics_items_count = optics_items_count | plus: 1 -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+  <div class="sx-og-overlay" id="sx-og-overlay" onclick="sxCloseOpticsGuide()" role="dialog" aria-modal="true" aria-labelledby="sx-og-title">
+    <div class="sx-og" onclick="event.stopPropagation()">
+      <div class="sx-og-head">
+        <div class="sx-og-head-text">
+          <p class="sx-og-head-ey">Instant Optics</p>
+          <h3 class="sx-og-head-title" id="sx-og-title">Make your polaroid <em>magical</em></h3>
+        </div>
+        <button type="button" class="sx-og-close" onclick="sxCloseOpticsGuide()" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+          </svg>
+        </button>
+      </div>
+      <div class="sx-og-body">
+        <div class="sx-og-intro">
+          <p>A growing system of filters and lenses for the SX-70. Each one threads onto our SX-37 adapter &mdash; pick the adapter once, build the kit over time.</p>
+        </div>
+        {%- if optics_items_count > 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'kit_item' and block.settings.product != blank -%}
+              {%- if block.settings.only_show_for == blank or block.settings.only_show_for.handle == product.handle -%}
+                {%- assign og_col = block.settings.column_custom | default: block.settings.column | default: block.settings.label | default: 'Add-Ons' -%}
+                {%- if og_col == 'Lenses & Optics' -%}
+                  {%- assign og_prod = block.settings.product -%}
+                  {%- unless og_prod.available -%}
+                    {%- if block.settings.product_alt_1 != blank and block.settings.product_alt_1.available -%}
+                      {%- assign og_prod = block.settings.product_alt_1 -%}
+                    {%- elsif block.settings.product_alt_2 != blank and block.settings.product_alt_2.available -%}
+                      {%- assign og_prod = block.settings.product_alt_2 -%}
+                    {%- endif -%}
+                  {%- endunless -%}
+                  {%- assign og_var = og_prod.selected_or_first_available_variant | default: og_prod.variants.first -%}
+                  {%- assign og_oos = false -%}
+                  {%- unless og_prod.available -%}{%- assign og_oos = true -%}{%- endunless -%}
+                  {%- comment -%} Pill text: if the product's title contains "Lens" we call it Lens, otherwise Filter. {%- endcomment -%}
+                  {%- assign og_pill = 'Filter' -%}
+                  {%- assign og_title_lower = og_prod.title | downcase -%}
+                  {%- if og_title_lower contains 'lens' -%}{%- assign og_pill = 'Lens' -%}{%- endif -%}
+                  <div class="sx-og-card{% if og_oos %} is-oos{% endif %}" data-variant-id="{{ og_var.id }}" {% if og_oos %}data-oos="true"{% endif %}>
+                    <div class="sx-og-card-img">
+                      {%- if og_prod.featured_image != blank -%}
+                        <img src="{{ og_prod.featured_image | image_url: width: 400 }}" alt="{{ og_prod.title | escape }}" loading="lazy"/>
+                      {%- endif -%}
+                    </div>
+                    <div class="sx-og-card-info">
+                      <span class="sx-og-card-pill">{{ og_pill }}</span>
+                      <h4 class="sx-og-card-name">{{ block.settings.label | default: og_prod.title }}</h4>
+                      <p class="sx-og-card-desc">{{ og_prod.description | strip_html | truncate: 200 }}</p>
+                    </div>
+                    <div class="sx-og-card-side">
+                      <span class="sx-og-card-price">{%- if og_oos -%}Sold Out{%- else -%}{{ og_var.price | money }}{%- endif -%}</span>
+                      <button type="button"
+                              class="sx-og-card-cta"
+                              data-variant-id="{{ og_var.id }}"
+                              {% if og_oos %}disabled{% endif %}
+                              onclick="sxOpticsGuideAdd(this, '{{ og_var.id }}')">
+                        {%- if og_oos -%}Sold Out{%- else -%}Add{%- endif -%}
+                      </button>
+                    </div>
+                  </div>
+                {%- endif -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          <div class="sx-og-empty">No filters or lenses are configured for this product yet.</div>
+        {%- endif -%}
       </div>
     </div>
   </div>
@@ -3603,6 +3916,17 @@ window.bfcsxToggleCompare = function() {
       const idx = kitCart.indexOf(vid);
       if (idx > -1) kitCart.splice(idx, 1);
       else kitCart.push(vid);
+      // Mirror state into the optics guide modal if a matching CTA exists.
+      var modalBtn = document.querySelector('.sx-og-card-cta[data-variant-id="' + vid + '"]');
+      if (modalBtn) {
+        if (kitCart.indexOf(vid) > -1) {
+          modalBtn.classList.add('is-added');
+          modalBtn.textContent = 'Added';
+        } else {
+          modalBtn.classList.remove('is-added');
+          modalBtn.textContent = 'Add';
+        }
+      }
     });
   });
 
@@ -3639,6 +3963,59 @@ window.bfcsxToggleCompare = function() {
   };
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') sxClosePopup();
+  });
+
+  /* ── Optics Guide modal ──
+     The "See what these can do" link in the Lenses & Optics column header
+     opens this modal. It mirrors the kit tile selection state — clicking
+     Add in the modal toggles the same kitCart entry as the small tile
+     would, and visually keeps both surfaces in sync (modal CTA flips to
+     "✓ Added" green, the small tile gets is-selected). */
+  window.sxOpenOpticsGuide = function() {
+    var overlay = document.getElementById('sx-og-overlay');
+    if (!overlay) return;
+    overlay.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    // Sync any Add buttons that are already-selected (in case user opens
+    // after toggling tiles on the page).
+    document.querySelectorAll('.sx-og-card-cta').forEach(function(btn) {
+      var vid = btn.dataset.variantId;
+      if (kitCart.indexOf(vid) > -1) {
+        btn.classList.add('is-added');
+        btn.textContent = 'Added';
+      } else {
+        btn.classList.remove('is-added');
+        if (!btn.disabled) btn.textContent = 'Add';
+      }
+    });
+  };
+  window.sxCloseOpticsGuide = function() {
+    var overlay = document.getElementById('sx-og-overlay');
+    if (overlay) overlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+  };
+  window.sxOpticsGuideAdd = function(btn, vid) {
+    if (!vid) return;
+    var idx = kitCart.indexOf(vid);
+    if (idx > -1) {
+      kitCart.splice(idx, 1);
+      btn.classList.remove('is-added');
+      btn.textContent = 'Add';
+    } else {
+      kitCart.push(vid);
+      btn.classList.add('is-added');
+      btn.textContent = 'Added';
+    }
+    // Sync the matching small kit tile below
+    document.querySelectorAll('.bfcsx .sx-kit-tile').forEach(function(tile) {
+      if (tile.dataset.variantId === vid) {
+        if (kitCart.indexOf(vid) > -1) tile.classList.add('is-selected');
+        else tile.classList.remove('is-selected');
+      }
+    });
+  };
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') sxCloseOpticsGuide();
   });
 
   /* ── Extended Warranty ── */
