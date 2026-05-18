@@ -1716,41 +1716,14 @@
   max-width: 48ch;
 }
 
-/* Polaroid card — a white-bordered photo card. The actual photo is wrapped
-   in a 1:1 frame with a thick white border to mimic an instant film print. */
-.bfcsx .sx-restore-polaroid-wrap {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 8px 16px;
-}
-.bfcsx .sx-restore-polaroid {
-  background: #fff;
-  padding: 14px 14px 56px;
-  box-shadow: 0 14px 36px rgba(32,32,9,0.18), 0 2px 6px rgba(32,32,9,0.08);
-  transition: transform 0.4s ease;
+/* Restoration photo — plain image, no wrapper styling. The uploaded scan
+   already has its own framing. */
+.bfcsx .sx-restore-photo {
+  display: block;
   max-width: 340px;
   width: 100%;
-  position: relative;
-}
-.bfcsx .sx-restore-polaroid:hover { transform: scale(1.02); }
-.bfcsx .sx-restore-polaroid-frame {
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  background: rgba(32,32,9,0.04);
-}
-.bfcsx .sx-restore-polaroid-frame img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.bfcsx .sx-restore-polaroid-frame-placeholder {
-  width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--sm);
-  font-size: 9px; font-weight: 700;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: rgba(32,32,9,0.35);
+  height: auto;
+  margin: 0 auto;
 }
 .bfcsx .sx-restore-headline {
   padding: 64px 48px 64px 0;
@@ -1997,8 +1970,7 @@
     padding: 40px 0 28px;
   }
   .bfcsx .sx-restore-head--simple { padding: 32px 0 20px; }
-  .bfcsx .sx-restore-polaroid-wrap { padding: 0; }
-  .bfcsx .sx-restore-polaroid { max-width: 280px; }
+  .bfcsx .sx-restore-photo { max-width: 280px; }
   .bfcsx .sx-restore-steps {
     grid-template-columns: 1fr;
   }
@@ -2557,7 +2529,7 @@
           <span class="sx-spec-val">Restored, Calibrated &amp; Upgraded</span>
         </div>
       </div>
-      <p class="sx-summary-line">{{ section.settings.intro_text | default: "Every SX-70 we restore is fitted with our exclusive OpenSX70 board: It brings accurate metering, low-light capability, and hold-to-eject control to a camera that's already a beloved masterpiece." }}</p>
+      <p class="sx-summary-line">{{ section.settings.intro_text | default: "Every SX-70 we restore is a complete rebuild &mdash; full mechanical and optical service, and our exclusive OpenSX70 board. Incredible low-light metering, hold-to-eject, and a 6-month warranty come standard." }}</p>
     </div>
   </div>
 
@@ -2569,7 +2541,7 @@
     <div class="sx-chapter-header">
       <span class="sx-chapter-eyebrow">BFC Exclusive · Inside Every Camera</span>
       <h2 class="sx-chapter-title">The OpenSX70 <em>Modification</em></h2>
-      <p class="sx-chapter-sub">Every SX-70 we restore is fitted with our exclusive OpenSX70 board: It brings accurate metering, low-light capability, and hold-to-eject control to a camera that's already a beloved masterpiece.</p>
+      <p class="sx-chapter-sub">Every SX-70 we restore is fitted with our exclusive OpenSX70 board: It brings accurate metering, low-light capability, and hold-to-eject control to a camera that was engineered before the microprocessor existed.</p>
       <button type="button" class="sx-chapter-toggle" id="sx-chapter-toggle" aria-expanded="false" aria-controls="sx-chapter-body" onclick="sxToggleChapter()">
         <span class="sx-chapter-toggle-text">Learn how it works</span>
         <svg class="sx-chapter-toggle-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -3191,17 +3163,9 @@
           <h2 class="sx-restore-h2">Hand-rebuilt in <em>Brooklyn</em></h2>
           <p class="sx-restore-lead">Each SX-70 goes through a thorough multi-stage refurbishment in our shop. A ground-up restoration on every camera.</p>
         </div>
-        <div class="sx-restore-polaroid-wrap" aria-hidden="true">
-          <div class="sx-restore-polaroid">
-            <div class="sx-restore-polaroid-frame">
-              {%- if section.settings.restoration_photo != blank -%}
-                <img src="{{ section.settings.restoration_photo | image_url: width: 800 }}" alt="Restoring an SX-70 at Brooklyn Film Camera" loading="lazy"/>
-              {%- else -%}
-                <div class="sx-restore-polaroid-frame-placeholder">Add photo in theme editor</div>
-              {%- endif -%}
-            </div>
-          </div>
-        </div>
+        {%- if section.settings.restoration_photo != blank -%}
+          <img class="sx-restore-photo" src="{{ section.settings.restoration_photo | image_url: width: 800 }}" alt="Restoring an SX-70 at Brooklyn Film Camera" loading="lazy"/>
+        {%- endif -%}
       </div>
       <div class="sx-restore-steps">
         <div class="sx-r-step">
