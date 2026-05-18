@@ -12,6 +12,90 @@
     "main": {
       "type": "bfc-pdp-sx70",
       "blocks": {
+        "kit_item_nCgwmz": {
+          "type": "kit_item",
+          "settings": {
+            "product": "polaroid-600-reclaimed-purple",
+            "product_alt_1": "",
+            "product_alt_2": "",
+            "column": "Film",
+            "column_custom": "",
+            "label": "",
+            "only_show_for": ""
+          }
+        },
+        "kit_item_TiABmk": {
+          "type": "kit_item",
+          "settings": {
+            "product": "polaroid-600-round-frame-edition",
+            "product_alt_1": "",
+            "product_alt_2": "",
+            "column": "Film",
+            "column_custom": "",
+            "label": "",
+            "only_show_for": ""
+          }
+        },
+        "kit_item_BGQDCd": {
+          "type": "kit_item",
+          "settings": {
+            "product": "polaroid-600-color-film",
+            "product_alt_1": "",
+            "product_alt_2": "",
+            "column": "Film",
+            "column_custom": "",
+            "label": "",
+            "only_show_for": ""
+          }
+        },
+        "kit_item_yp4JzA": {
+          "type": "kit_item",
+          "settings": {
+            "product": "polaroid-600-bw-film",
+            "product_alt_1": "",
+            "product_alt_2": "",
+            "column": "Film",
+            "column_custom": "",
+            "label": "",
+            "only_show_for": ""
+          }
+        },
+        "kit_item_iAUU7r": {
+          "type": "kit_item",
+          "settings": {
+            "product": "polaroid-photo-album-small",
+            "product_alt_1": "",
+            "product_alt_2": "",
+            "column": "Other",
+            "column_custom": "",
+            "label": "",
+            "only_show_for": ""
+          }
+        },
+        "kit_item_tae7Wg": {
+          "type": "kit_item",
+          "settings": {
+            "product": "polaroid-photo-album-pocket-large",
+            "product_alt_1": "",
+            "product_alt_2": "",
+            "column": "Other",
+            "column_custom": "",
+            "label": "",
+            "only_show_for": ""
+          }
+        },
+        "kit_item_Dap8L7": {
+          "type": "kit_item",
+          "settings": {
+            "product": "",
+            "product_alt_1": "",
+            "product_alt_2": "",
+            "column": "Film",
+            "column_custom": "",
+            "label": "",
+            "only_show_for": ""
+          }
+        },
         "kit_item_Ex44RT": {
           "type": "kit_item",
           "settings": {
@@ -98,54 +182,22 @@
             "path_style": "l_v_first",
             "open_by_default": false
           }
-        },
-        "kit_item_9RPNzN": {
-          "type": "kit_item",
-          "settings": {
-            "product": "polaroid-600-round-frame-edition",
-            "product_alt_1": "",
-            "product_alt_2": "",
-            "column": "",
-            "column_custom": "",
-            "label": "",
-            "only_show_for": ""
-          }
-        },
-        "kit_item_YrXrJE": {
-          "type": "kit_item",
-          "settings": {
-            "product": "polaroid-600-color-film",
-            "product_alt_1": "",
-            "product_alt_2": "",
-            "column": "",
-            "column_custom": "",
-            "label": "",
-            "only_show_for": ""
-          }
-        },
-        "kit_item_iFyUbH": {
-          "type": "kit_item",
-          "settings": {
-            "product": "polaroid-600-bw-film",
-            "product_alt_1": "",
-            "product_alt_2": "",
-            "column": "",
-            "column_custom": "",
-            "label": "",
-            "only_show_for": ""
-          }
         }
       },
       "block_order": [
+        "kit_item_nCgwmz",
+        "kit_item_TiABmk",
+        "kit_item_BGQDCd",
+        "kit_item_yp4JzA",
+        "kit_item_iAUU7r",
+        "kit_item_tae7Wg",
+        "kit_item_Dap8L7",
         "kit_item_Ex44RT",
         "schematic_hotspot_gYgpYc",
         "schematic_hotspot_DDAeBW",
         "schematic_hotspot_Nexrwi",
         "schematic_hotspot_rEcz6N",
-        "schematic_hotspot_NdGUyF",
-        "kit_item_9RPNzN",
-        "kit_item_YrXrJE",
-        "kit_item_iFyUbH"
+        "schematic_hotspot_NdGUyF"
       ],
       "settings": {
         "show_board_pill": true,
