@@ -12,6 +12,18 @@
     "main": {
       "type": "bfc-pdp-sx70",
       "blocks": {
+        "kit_item_Ex44RT": {
+          "type": "kit_item",
+          "settings": {
+            "product": "diamond-prism",
+            "product_alt_1": "",
+            "product_alt_2": "",
+            "column": "Lenses & Optics",
+            "column_custom": "",
+            "label": "",
+            "only_show_for": ""
+          }
+        },
         "schematic_hotspot_gYgpYc": {
           "type": "schematic_hotspot",
           "settings": {
@@ -94,6 +106,7 @@
             "product_alt_1": "",
             "product_alt_2": "",
             "column": "",
+            "column_custom": "",
             "label": "",
             "only_show_for": ""
           }
@@ -105,6 +118,7 @@
             "product_alt_1": "",
             "product_alt_2": "",
             "column": "",
+            "column_custom": "",
             "label": "",
             "only_show_for": ""
           }
@@ -116,12 +130,14 @@
             "product_alt_1": "",
             "product_alt_2": "",
             "column": "",
+            "column_custom": "",
             "label": "",
             "only_show_for": ""
           }
         }
       },
       "block_order": [
+        "kit_item_Ex44RT",
         "schematic_hotspot_gYgpYc",
         "schematic_hotspot_DDAeBW",
         "schematic_hotspot_Nexrwi",
