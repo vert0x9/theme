@@ -2,7 +2,8 @@
   {{ group.user_agent }}
 
   {% for rule in group.rules %}
-    {% unless rule.directive contains '/policies/' %}
+    {% assign rule_str = rule | downcase %}
+    {% unless rule_str contains 'policies' %}
       {{ rule }}
     {% endunless %}
   {% endfor %}
