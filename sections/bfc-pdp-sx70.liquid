@@ -1616,18 +1616,41 @@
   border-bottom: 2px solid var(--bk);
 }
 .bfcsx .sx-kit-tile {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 16px;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px;
   border-bottom: 1px solid rgba(82,87,65,0.06);
   cursor: pointer;
   transition: background var(--t);
 }
 .bfcsx .sx-kit-tile:hover { background: rgba(227,110,21,0.04); }
 .bfcsx .sx-kit-tile.is-selected { background: rgba(227,110,21,0.08); }
+.bfcsx .sx-kit-tile-img-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px; height: 44px;
+}
 .bfcsx .sx-kit-tile-img {
-  width: 36px; height: 36px;
-  object-fit: contain; flex-shrink: 0;
+  width: 44px; height: 44px;
+  object-fit: contain;
   background: #fff;
+  display: block;
+}
+.bfcsx .sx-kit-tile-info-btn {
+  position: absolute;
+  bottom: -2px; right: -2px;
+  width: 16px; height: 16px;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid rgba(82,87,65,0.15);
+  cursor: pointer;
+  padding: 0;
+  color: rgba(32,32,9,0.5);
+  display: flex; align-items: center; justify-content: center;
+  transition: color var(--t), border-color var(--t);
+  z-index: 2;
+}
+.bfcsx .sx-kit-tile-info-btn:hover {
+  color: var(--or);
+  border-color: var(--or);
 }
 .bfcsx .sx-kit-tile-info { flex: 1; min-width: 0; }
 .bfcsx .sx-kit-tile-name {
@@ -1670,6 +1693,74 @@
   font-weight: 500;
 }
 .bfcsx .sx-kit-tile.is-oos .sx-kit-tile-check { display: none; }
+
+/* ── KIT INFO POPUP ──
+   Click the small "i" on a kit tile to open a modal with the product's
+   images + description. Pattern mirrors V4's baOpenPopup but namespaced
+   `sx-popup` to avoid global collisions if both PDPs ever co-exist. */
+.bfcsx .sx-popup-overlay {
+  position: fixed; inset: 0;
+  background: rgba(32,32,9,0.7);
+  z-index: 99999;
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 24px;
+}
+.bfcsx .sx-popup-overlay.is-open { display: flex; }
+.bfcsx .sx-popup {
+  background: #fff;
+  max-width: 680px; width: 90%;
+  max-height: 85vh;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.bfcsx .sx-popup-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(32,32,9,0.1);
+  flex-shrink: 0;
+}
+.bfcsx .sx-popup-title {
+  font-family: var(--sn);
+  font-size: 14px; font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--bk);
+}
+.bfcsx .sx-popup-close {
+  background: none; border: none;
+  cursor: pointer; padding: 4px;
+  color: var(--ch);
+  display: flex; align-items: center;
+}
+.bfcsx .sx-popup-close:hover { color: var(--or); }
+.bfcsx .sx-popup-body {
+  overflow-y: auto;
+  flex: 1;
+}
+.bfcsx .sx-popup-imgs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.bfcsx .sx-popup-imgs img {
+  width: 100%; aspect-ratio: 1/1;
+  object-fit: cover;
+  display: block;
+  border-right: 1px solid rgba(32,32,9,0.07);
+  border-bottom: 1px solid rgba(32,32,9,0.07);
+}
+.bfcsx .sx-popup-desc {
+  padding: 20px;
+  font-family: var(--sn);
+  font-size: 12.5px;
+  color: var(--ch);
+  line-height: 1.7;
+  border-top: 1px solid rgba(32,32,9,0.08);
+}
+.bfcsx .sx-popup-desc p { margin-bottom: 10px; }
+.bfcsx .sx-popup-desc p:last-child { margin-bottom: 0; }
+@media (max-width: 600px) {
+  .bfcsx .sx-popup-imgs { grid-template-columns: repeat(2, 1fr); }
+}
 
 
 /* ── RESTORATION ──────────────────────────────── */
@@ -3112,13 +3203,36 @@
                       {%- assign kit_var = kit_prod.selected_or_first_available_variant | default: kit_prod.variants.first -%}
                       {%- assign tile_oos = false -%}
                       {%- unless kit_prod.available -%}{%- assign tile_oos = true -%}{%- endunless -%}
+                      {%- comment -%} Build the popup data: title, plain-text description, and up to 6 product images
+                          joined with '||' for the JS popup helper to split & render. {%- endcomment -%}
+                      {%- assign kit_tile_id = 'sx-kit-' | append: section.id | append: '-' | append: block.id -%}
+                      {%- assign kit_popup_imgs = '' -%}
+                      {%- for media in kit_prod.media limit: 6 -%}
+                        {%- if media.media_type == 'image' -%}
+                          {%- assign kit_img_url = media | image_url: width: 600 -%}
+                          {%- if kit_popup_imgs == '' -%}{%- assign kit_popup_imgs = kit_img_url -%}
+                          {%- else -%}{%- assign kit_popup_imgs = kit_popup_imgs | append: '||' | append: kit_img_url -%}{%- endif -%}
+                        {%- endif -%}
+                      {%- endfor -%}
                       <div class="sx-kit-tile{% if tile_oos %} is-oos{% endif %}"
                            data-variant-id="{{ kit_var.id }}"
                            data-price="{{ kit_var.price }}"
                            {% if tile_oos %}data-oos="true" aria-disabled="true"{% endif %}
                            {{ block.shopify_attributes }}>
                         {%- if kit_prod.featured_image != blank -%}
-                          <img class="sx-kit-tile-img" src="{{ kit_prod.featured_image | image_url: width: 72 }}" alt="{{ kit_prod.title }}" loading="lazy">
+                          <div class="sx-kit-tile-img-wrap">
+                            <img class="sx-kit-tile-img" src="{{ kit_prod.featured_image | image_url: width: 88 }}" alt="{{ kit_prod.title }}" loading="lazy">
+                            <button type="button"
+                                    class="sx-kit-tile-info-btn"
+                                    onclick="event.stopPropagation(); sxOpenPopup('{{ kit_tile_id }}')"
+                                    aria-label="View {{ kit_prod.title | escape }} details">
+                              <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
+                                <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/>
+                                <line x1="7" y1="6.5" x2="7" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+                                <circle cx="7" cy="4" r="0.7" fill="currentColor"/>
+                              </svg>
+                            </button>
+                          </div>
                         {%- endif -%}
                         <div class="sx-kit-tile-info">
                           <div class="sx-kit-tile-name">{{ block.settings.label | default: kit_prod.title }}</div>
@@ -3132,6 +3246,10 @@
                         </div>
                         <div class="sx-kit-tile-check"></div>
                       </div>
+                      <div id="sx-popup-data-{{ kit_tile_id }}" style="display:none"
+                           data-title="{{ kit_prod.title | escape }}"
+                           data-desc="{{ kit_prod.description | strip_html | escape }}"
+                           data-imgs="{{ kit_popup_imgs | escape }}"></div>
                     {%- endif -%}
                   {%- endif -%}
                 {%- endif -%}
@@ -3151,6 +3269,26 @@
           </div>
         {%- endif -%}
       {%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%} ── KIT INFO POPUP OVERLAY ──
+       Single overlay reused for all kit-tile info clicks. Populated on
+       click by sxOpenPopup() reading the matching hidden data div. {%- endcomment -%}
+  <div class="sx-popup-overlay" id="sx-popup-overlay" onclick="sxClosePopup()">
+    <div class="sx-popup" onclick="event.stopPropagation()">
+      <div class="sx-popup-head">
+        <span class="sx-popup-title" id="sx-popup-title"></span>
+        <button class="sx-popup-close" onclick="sxClosePopup()" aria-label="Close">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+          </svg>
+        </button>
+      </div>
+      <div class="sx-popup-body">
+        <div class="sx-popup-imgs" id="sx-popup-imgs"></div>
+        <div class="sx-popup-desc" id="sx-popup-desc"></div>
+      </div>
     </div>
   </div>
 
@@ -3466,6 +3604,41 @@ window.bfcsxToggleCompare = function() {
       if (idx > -1) kitCart.splice(idx, 1);
       else kitCart.push(vid);
     });
+  });
+
+  /* ── Kit tile info popup ──
+     The small "i" on each tile opens a modal showing the product's
+     images + description. Reuses one overlay; payload comes from
+     hidden #sx-popup-data-{tileId} divs rendered alongside each tile. */
+  window.sxOpenPopup = function(tileId) {
+    var data = document.getElementById('sx-popup-data-' + tileId);
+    if (!data) return;
+    var titleEl = document.getElementById('sx-popup-title');
+    var descEl  = document.getElementById('sx-popup-desc');
+    var imgsEl  = document.getElementById('sx-popup-imgs');
+    var overlay = document.getElementById('sx-popup-overlay');
+    if (!overlay) return;
+    if (titleEl) titleEl.textContent = data.dataset.title || '';
+    if (descEl) {
+      var desc = data.dataset.desc || '';
+      descEl.innerHTML = desc ? '<p>' + desc.replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br/>') + '</p>' : '';
+    }
+    if (imgsEl) {
+      var imgs = data.dataset.imgs ? data.dataset.imgs.split('||').filter(Boolean) : [];
+      imgsEl.innerHTML = imgs.map(function(src) {
+        return '<img src="' + src + '" loading="lazy" alt=""/>';
+      }).join('');
+    }
+    overlay.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  };
+  window.sxClosePopup = function() {
+    var overlay = document.getElementById('sx-popup-overlay');
+    if (overlay) overlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+  };
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') sxClosePopup();
   });
 
   /* ── Extended Warranty ── */
