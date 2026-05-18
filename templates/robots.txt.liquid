@@ -2,7 +2,9 @@
   {{ group.user_agent }}
 
   {% for rule in group.rules %}
-    {{ rule }}
+    {% unless rule.directive contains '/policies/' %}
+      {{ rule }}
+    {% endunless %}
   {% endfor %}
 
   {% if group.user_agent.value == '*' %}
