@@ -12,6 +12,42 @@
     "main": {
       "type": "bfc-pdp-sx70",
       "blocks": {
+        "optic_showcase_BryVcc": {
+          "type": "optic_showcase",
+          "settings": {
+            "image": "shopify://shop_images/polaroid_example_4.png",
+            "kicker": "Filter",
+            "title": "Vortex Filter",
+            "description": ""
+          }
+        },
+        "optic_showcase_qgxmwK": {
+          "type": "optic_showcase",
+          "settings": {
+            "image": "shopify://shop_images/examplepolaroidlens2.png",
+            "kicker": "Filter",
+            "title": "Macro Lens Set",
+            "description": ""
+          }
+        },
+        "optic_showcase_y3mBRq": {
+          "type": "optic_showcase",
+          "settings": {
+            "image": "shopify://shop_images/Polaroid_Filter_Kit_Example_2.jpg",
+            "kicker": "Filter",
+            "title": "Linear Prism",
+            "description": ""
+          }
+        },
+        "optic_showcase_DUFjxw": {
+          "type": "optic_showcase",
+          "settings": {
+            "image": "shopify://shop_images/polaroidexamplens1.png",
+            "kicker": "Lens",
+            "title": "Fish Eye",
+            "description": ""
+          }
+        },
         "kit_item_nCgwmz": {
           "type": "kit_item",
           "settings": {
@@ -197,6 +233,10 @@
         }
       },
       "block_order": [
+        "optic_showcase_BryVcc",
+        "optic_showcase_qgxmwK",
+        "optic_showcase_y3mBRq",
+        "optic_showcase_DUFjxw",
         "kit_item_nCgwmz",
         "kit_item_TiABmk",
         "kit_item_BGQDCd",
