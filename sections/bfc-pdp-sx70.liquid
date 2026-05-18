@@ -1101,6 +1101,18 @@
 .bfcsx .sx-sch-dot.is-active { transform: scale(1.12); }
 .bfcsx .sx-sch-dot:focus-visible { outline: 2px solid var(--bk); outline-offset: 4px; }
 
+/* Mobile: shrink the hotspot dots so they don't dominate the small
+   schematic image. ~60% of desktop size keeps the number legible
+   while letting the underlying board show through. */
+@media (max-width: 768px) {
+  .bfcsx .sx-sch-dot {
+    width: 18px; height: 18px;
+    margin-left: -9px; margin-top: -9px;
+    font-size: 9px;
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.95), 0 0 0 3px var(--or);
+  }
+}
+
 /* Pulse — single soft ring expanding from each dot when section first
    enters viewport. Triggered by JS toggling .is-pulsing on the parent.
    Each dot's animation delay is staggered via nth-of-type(n). */
@@ -2098,7 +2110,7 @@
 .bfcsx .sx-specs-body { padding: 0; }
 .bfcsx .sx-specs-table {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 0;
   border-top: 1px solid rgba(32,32,9,0.15);
   border-left: 1px solid rgba(32,32,9,0.15);
@@ -2126,6 +2138,9 @@
   font-size: 14px; font-weight: 400;
   color: var(--bk);
   line-height: 1.45;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .bfcsx .sx-spec-asterisk {
   color: var(--or);
@@ -2232,10 +2247,15 @@
   .bfcsx .sx-led-items { flex-direction: column; gap: 12px; }
   .bfcsx .sx-kit { padding: 40px 20px; }
   .bfcsx .sx-kit-cols {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
   }
   .bfcsx .sx-kit-col { border-right: none; border-bottom: 1px solid rgba(82,87,65,0.08); }
   .bfcsx .sx-kit-col:last-child { border-bottom: none; }
+  .bfcsx .sx-kit-col-head {
+    min-height: 0;
+    padding: 14px 16px;
+  }
+  .bfcsx .sx-kit-tile { padding: 12px 16px; gap: 12px; }
   .bfcsx .sx-restore { padding: 0 20px; }
   .bfcsx .sx-restore-head {
     grid-template-columns: 1fr;
@@ -2254,10 +2274,14 @@
   .bfcsx .sx-specs-title { font-size: 32px; }
   .bfcsx .sx-specs-body { padding: 0; }
   .bfcsx .sx-specs-table { grid-template-columns: 1fr; }
-  .bfcsx .sx-spec { grid-template-columns: 110px 1fr; padding: 14px 18px; }
+  .bfcsx .sx-spec {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 14px 16px;
+  }
   .bfcsx .sx-spec-v { font-size: 14px; }
-  .bfcsx .sx-spec:nth-child(even) { padding-left: 0; border-left: none; }
-  .bfcsx .sx-spec:nth-child(odd) { padding-right: 0; }
+  .bfcsx .sx-spec:nth-child(even) { padding-left: 16px; border-left: none; }
+  .bfcsx .sx-spec:nth-child(odd) { padding-right: 16px; }
   .bfcsx .sx-warranty { padding: 32px 20px; }
   .bfcsx .sx-warranty-inner { grid-template-columns: 1fr; gap: 24px; }
   .bfcsx .sx-w-item { padding: 0; border-right: none; border-bottom: 1px solid rgba(82,87,65,0.08); padding-bottom: 20px; }
