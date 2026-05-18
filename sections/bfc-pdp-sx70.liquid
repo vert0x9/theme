@@ -1691,25 +1691,72 @@
 .bfcsx .sx-kit-tile-price {
   font-size: 11px; color: var(--ol);
 }
-.bfcsx .sx-kit-tile-check {
-  width: 18px; height: 18px;
-  border: 1.5px solid rgba(82,87,65,0.2);
+/* ── Kit tile controls ──
+   Each tile has both: a small + button (visible when not yet added) and
+   a -/+ qty stepper (visible once at least 1 is in the kit). They occupy
+   the same slot on the right side of the tile. Tapping the tile body
+   anywhere increments quantity, but the buttons themselves stop click
+   propagation so they decrement cleanly. */
+.bfcsx .sx-kit-tile-controls {
   flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 32px;
+}
+.bfcsx .sx-kit-add {
+  width: 28px; height: 28px;
+  border: 1.5px solid rgba(82,87,65,0.25);
+  background: #fff;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ch);
   transition: all var(--t);
 }
-.bfcsx .sx-kit-tile.is-selected .sx-kit-tile-check {
-  background: var(--or); border-color: var(--or);
+.bfcsx .sx-kit-add:hover {
+  border-color: var(--or);
+  color: var(--or);
 }
-.bfcsx .sx-kit-tile.is-selected .sx-kit-tile-check::after {
-  content: '';
-  width: 6px; height: 10px;
-  border: solid #fff; border-width: 0 2px 2px 0;
-  transform: rotate(45deg) translate(-1px, -1px);
+.bfcsx .sx-kit-add.is-hidden { display: none; }
+
+.bfcsx .sx-kit-qty {
+  display: none;
+  align-items: center;
+  gap: 2px;
+  background: var(--or);
+  border: 1px solid var(--or);
+  color: #fff;
 }
-/* Kit tile — sold out state. Shown when the picked product (and all its
-   alternates) are OOS. Tile is still visible so customers see what was
-   intended, but it can't be selected. */
+.bfcsx .sx-kit-qty.is-active { display: inline-flex; }
+.bfcsx .sx-kit-qty-minus,
+.bfcsx .sx-kit-qty-plus {
+  background: transparent;
+  border: none;
+  color: #fff;
+  width: 24px; height: 26px;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--t);
+}
+.bfcsx .sx-kit-qty-minus:hover,
+.bfcsx .sx-kit-qty-plus:hover { background: rgba(0,0,0,0.12); }
+.bfcsx .sx-kit-qty-count {
+  font-family: var(--sn);
+  font-size: 12px;
+  font-weight: 600;
+  min-width: 18px;
+  text-align: center;
+  padding: 0 2px;
+  user-select: none;
+}
+
+/* Kit tile sold-out — control area is omitted in HTML for OOS tiles */
 .bfcsx .sx-kit-tile.is-oos {
   opacity: 0.55;
   cursor: not-allowed;
@@ -1722,7 +1769,6 @@
   font-style: italic;
   font-weight: 500;
 }
-.bfcsx .sx-kit-tile.is-oos .sx-kit-tile-check { display: none; }
 
 /* ── KIT INFO POPUP ──
    Click the small "i" on a kit tile to open a modal with the product's
@@ -3470,7 +3516,28 @@
                             {%- endif -%}
                           </div>
                         </div>
-                        <div class="sx-kit-tile-check"></div>
+                        {%- unless tile_oos -%}
+                          <div class="sx-kit-tile-controls">
+                            <button type="button" class="sx-kit-add" aria-label="Add to kit">
+                              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                <path d="M7 1.5v11M1.5 7h11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                              </svg>
+                            </button>
+                            <div class="sx-kit-qty" role="group" aria-label="Quantity">
+                              <button type="button" class="sx-kit-qty-minus" aria-label="Decrease">
+                                <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
+                                  <path d="M1.5 7h11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                </svg>
+                              </button>
+                              <span class="sx-kit-qty-count" aria-live="polite">0</span>
+                              <button type="button" class="sx-kit-qty-plus" aria-label="Increase">
+                                <svg width="10" height="10" viewBox="0 0 14 14" fill="none">
+                                  <path d="M7 1.5v11M1.5 7h11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                        {%- endunless -%}
                       </div>
                       <div id="sx-popup-data-{{ kit_tile_id }}" style="display:none"
                            data-title="{{ kit_prod.title | escape }}"
@@ -3886,20 +3953,76 @@ window.bfcsxToggleCompare = function() {
     });
   });
 
-  /* ── Kit builder ── */
-  const kitTiles = document.querySelectorAll('.bfcsx .sx-kit-tile');
-  const kitCart  = [];
-  kitTiles.forEach(tile => {
-    tile.addEventListener('click', () => {
-      // Skip OOS tiles — they're rendered for visual continuity but can't be added.
-      if (tile.dataset.oos === 'true') return;
-      tile.classList.toggle('is-selected');
-      const vid = tile.dataset.variantId;
-      const idx = kitCart.indexOf(vid);
-      if (idx > -1) kitCart.splice(idx, 1);
-      else kitCart.push(vid);
-      sxUpdateAtcLabels();
+  /* ── Kit builder ──
+     kitCart is a {variantId: qty} map so films can be ordered in multiples.
+     Each tile has its own stepper (-/+) controls that mutate this map.
+     The whole tile is also clickable as a "tap to add 1" shortcut for
+     people who just want to grab the default quantity quickly. */
+  const kitCart = {};
+  const kitTilesEls = document.querySelectorAll('.bfcsx .sx-kit-tile');
+
+  function kitTotalItems() {
+    var total = 0;
+    Object.keys(kitCart).forEach(function(k) { total += kitCart[k]; });
+    return total;
+  }
+  function kitDistinctCount() {
+    return Object.keys(kitCart).filter(function(k) { return kitCart[k] > 0; }).length;
+  }
+  function refreshTileUI(tile) {
+    var vid = tile.dataset.variantId;
+    var qty = kitCart[vid] || 0;
+    tile.classList.toggle('is-selected', qty > 0);
+    var qtyEl = tile.querySelector('.sx-kit-qty-count');
+    var stepper = tile.querySelector('.sx-kit-qty');
+    var addBtn = tile.querySelector('.sx-kit-add');
+    if (qtyEl) qtyEl.textContent = qty;
+    if (stepper) stepper.classList.toggle('is-active', qty > 0);
+    if (addBtn) addBtn.classList.toggle('is-hidden', qty > 0);
+  }
+  function setQty(vid, qty) {
+    qty = Math.max(0, qty);
+    if (qty === 0) delete kitCart[vid];
+    else kitCart[vid] = qty;
+    var tile = document.querySelector('.bfcsx .sx-kit-tile[data-variant-id="' + vid + '"]');
+    if (tile) refreshTileUI(tile);
+    sxUpdateAtcLabels();
+  }
+
+  kitTilesEls.forEach(function(tile) {
+    if (tile.dataset.oos === 'true') return;
+    var vid = tile.dataset.variantId;
+
+    // Tap anywhere on the tile (other than the controls/info button) → +1
+    tile.addEventListener('click', function(e) {
+      if (e.target.closest('.sx-kit-tile-info-btn')) return;
+      if (e.target.closest('.sx-kit-qty')) return;
+      if (e.target.closest('.sx-kit-add')) return;
+      setQty(vid, (kitCart[vid] || 0) + 1);
     });
+
+    // Plus button (also acts as the "Add" affordance when at 0)
+    var addBtn = tile.querySelector('.sx-kit-add');
+    if (addBtn) {
+      addBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        setQty(vid, (kitCart[vid] || 0) + 1);
+      });
+    }
+    var minus = tile.querySelector('.sx-kit-qty-minus');
+    if (minus) {
+      minus.addEventListener('click', function(e) {
+        e.stopPropagation();
+        setQty(vid, (kitCart[vid] || 0) - 1);
+      });
+    }
+    var plus = tile.querySelector('.sx-kit-qty-plus');
+    if (plus) {
+      plus.addEventListener('click', function(e) {
+        e.stopPropagation();
+        setQty(vid, (kitCart[vid] || 0) + 1);
+      });
+    }
   });
 
   /* ── ATC label sync ──
@@ -3907,12 +4030,12 @@ window.bfcsxToggleCompare = function() {
        1. Main "Add to Cart" inside the buy box
        2. Bottom sticky mobile bar
        3. Top sticky TOC button
-     All three say the same thing at any moment. Function is exposed on
-     window so the warranty handler (defined below) can call it too. */
+     All three say the same thing at any moment. Counts TOTAL items
+     (so 3 rolls of film + a strap = 4), not distinct SKUs. */
   window.sxUpdateAtcLabels = function() {
-    var addonCount = kitCart.length;
+    var addonQty = kitTotalItems();
     var hasWarranty = (typeof sxWarranty !== 'undefined' && sxWarranty && sxWarranty.variantId) ? 1 : 0;
-    var totalExtras = addonCount + hasWarranty;
+    var totalExtras = addonQty + hasWarranty;
 
     var mainLabel, stickyLabel, tocLabel;
     if (totalExtras === 0) {
@@ -4057,10 +4180,13 @@ window.bfcsxToggleCompare = function() {
   const form = document.getElementById('sxATC-' + sid);
   if (form) {
     form.addEventListener('submit', function(e) {
-      if (kitCart.length === 0 && !sxWarranty) return; /* default single-item submit */
+      if (kitDistinctCount() === 0 && !sxWarranty) return; /* default single-item submit */
       e.preventDefault();
       const items = [{ id: parseInt(varInput.value), quantity: 1 }];
-      kitCart.forEach(vid => items.push({ id: parseInt(vid), quantity: 1 }));
+      Object.keys(kitCart).forEach(function(vid) {
+        var qty = kitCart[vid];
+        if (qty > 0) items.push({ id: parseInt(vid), quantity: qty });
+      });
       if (sxWarranty && sxWarranty.variantId) {
         items.push({ id: parseInt(sxWarranty.variantId), quantity: 1, properties: { _extended_warranty: 'true' } });
       }
