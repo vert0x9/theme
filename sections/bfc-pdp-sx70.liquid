@@ -3068,12 +3068,14 @@
       {%- comment -%} Build column names from blocks. A block contributes a column
           if it has a product picked AND passes the only_show_for filter for this
           PDP. We only want columns that will actually have visible items —
-          otherwise we render an empty column with just a header. {%- endcomment -%}
+          otherwise we render an empty column with just a header.
+          Resolution order: column_custom (free-text override) → column (preset
+          dropdown) → label fallback → 'Add-Ons'. {%- endcomment -%}
       {%- assign col_names = '' -%}
       {%- for block in section.blocks -%}
         {%- if block.type == 'kit_item' and block.settings.product != blank -%}
           {%- if block.settings.only_show_for == blank or block.settings.only_show_for.handle == product.handle -%}
-            {%- assign block_col = block.settings.column | default: block.settings.label | default: 'Add-Ons' -%}
+            {%- assign block_col = block.settings.column_custom | default: block.settings.column | default: block.settings.label | default: 'Add-Ons' -%}
             {%- unless col_names contains block_col -%}
               {%- if col_names != '' -%}{%- assign col_names = col_names | append: '||' -%}{%- endif -%}
               {%- assign col_names = col_names | append: block_col -%}
@@ -3091,7 +3093,7 @@
               {%- for block in section.blocks -%}
                 {%- if block.type == 'kit_item' and block.settings.product != blank -%}
                   {%- if block.settings.only_show_for == blank or block.settings.only_show_for.handle == product.handle -%}
-                    {%- assign block_col = block.settings.column | default: block.settings.label | default: 'Add-Ons' -%}
+                    {%- assign block_col = block.settings.column_custom | default: block.settings.column | default: block.settings.label | default: 'Add-Ons' -%}
                     {%- if block_col == col_name -%}
                       {%- comment -%} Pick the best available product: primary, then alt 1, then alt 2.
                           Previously, if all three were OOS the block was silently skipped — confusing
@@ -4046,7 +4048,19 @@ window.sxTocAddToCart = function() {
         { "type": "product", "id": "product", "label": "Product" },
         { "type": "product", "id": "product_alt_1", "label": "Backup product 1 (if primary OOS)" },
         { "type": "product", "id": "product_alt_2", "label": "Backup product 2 (if both OOS)" },
-        { "type": "text", "id": "column", "label": "Column name", "info": "Items with the same column name group together. E.g. Film, Flash, Dongle, Accessories." },
+        {
+          "type": "select",
+          "id": "column",
+          "label": "Column",
+          "default": "Film",
+          "info": "Which column this item lives in. Use the custom field below to add a column that isn't in this list.",
+          "options": [
+            { "value": "Film",            "label": "Film" },
+            { "value": "Lenses & Optics", "label": "Lenses & Optics" },
+            { "value": "Other",           "label": "Other" }
+          ]
+        },
+        { "type": "text", "id": "column_custom", "label": "Custom column name (optional)", "info": "Overrides the column dropdown above. Use this if you need a column that isn't in the preset list." },
         { "type": "text", "id": "label", "label": "Display label (optional)", "info": "Override the product title in the kit tile." },
         { "type": "product", "id": "only_show_for", "label": "Only show for product", "info": "Leave blank to show on every product using this template." }
       ]
