@@ -3163,9 +3163,11 @@
           <h2 class="sx-restore-h2">Hand-rebuilt in <em>Brooklyn</em></h2>
           <p class="sx-restore-lead">Each SX-70 goes through a thorough multi-stage refurbishment in our shop. A ground-up restoration on every camera.</p>
         </div>
-        {%- if section.settings.restoration_photo != blank -%}
-          <img class="sx-restore-photo" src="{{ section.settings.restoration_photo | image_url: width: 800 }}" alt="Restoring an SX-70 at Brooklyn Film Camera" loading="lazy"/>
-        {%- endif -%}
+        {%- comment -%} Hardcoded restoration photo. The image_picker setting
+            kept failing to sync between customizer and live JSON, so this
+            references the CDN URL directly. To swap the image: upload a new
+            one to Admin → Content → Files, then replace the URL below. {%- endcomment -%}
+        <img class="sx-restore-photo" src="https://cdn.shopify.com/s/files/1/0575/8638/5068/files/img20260518_12044995.jpg?v=1779120538" alt="Restoring an SX-70 at Brooklyn Film Camera" loading="lazy"/>
       </div>
       <div class="sx-restore-steps">
         <div class="sx-r-step">
@@ -3986,7 +3988,7 @@ window.sxTocAddToCart = function() {
     { "type": "image_picker", "id": "sample_photo_2", "label": "Sample frame 02" },
     { "type": "image_picker", "id": "sample_photo_3", "label": "Sample frame 03" },
     { "type": "header", "content": "Restoration Process" },
-    { "type": "image_picker", "id": "restoration_photo", "label": "Restoration photo", "info": "A square photo of a camera being restored on the bench. Renders as a white-bordered photo card next to the process steps." },
+    { "type": "image_picker", "id": "restoration_photo", "label": "Restoration photo", "info": "A photo of a camera being restored on the bench. Renders next to the process steps with no added framing." },
     { "type": "header", "content": "OpenSX70 Section" },
     { "type": "image_picker", "id": "board_image", "label": "Board install photo (legacy)", "info": "Legacy field — used as fallback if Schematic image is blank. Prefer the Schematic image setting below." },
     { "type": "header", "content": "OpenSX70 Schematic" },
