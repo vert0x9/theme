@@ -1,0 +1,1021 @@
+{% comment %}
+  ============================================================
+  BFC Refurbishment Process Section  (v1)
+  ------------------------------------------------------------
+  Drop-in section for any 35mm / 120 camera PDP — explains
+  why buying from BFC is different from eBay, what we do
+  beyond other camera shops, type-specific refurb steps, and
+  the risk-removal guarantee.
+
+  Schema "camera_type" dropdown swaps the type-specific copy
+  (hero headline + intro + 5 process steps). The pillars and
+  the vs-table stay the same across all types.
+
+  Defaults are wired for every type so adding the section to
+  a PDP requires zero configuration. Every text field is
+  overridable in the customizer if a specific camera needs
+  different wording.
+
+  Designed to mirror the collapsible pattern used in the SX-70
+  Family Guide section so it feels native to the BFC theme.
+  ============================================================
+{% endcomment %}
+
+{%- assign t = section.settings.camera_type -%}
+
+{%- comment -%} Resolve the type-specific copy based on the dropdown.
+    Each `tX_*` setting overrides the default for that type. {%- endcomment -%}
+{%- if t == 'rangefinder' -%}
+  {%- assign bar_title_default     = 'How we refurbish every rangefinder' -%}
+  {%- assign hero_h_default        = 'A working rangefinder, <em>aligned.</em>' -%}
+  {%- assign hero_p_default        = 'A rangefinder is only as good as its patch alignment. Every rangefinder we sell has been opened, cleaned, and re-calibrated so the patch is sharp, the lines up, and the meter reads true.' -%}
+  {%- assign proc_h_default        = 'The rangefinder refurb process' -%}
+  {%- assign proc_intro_default    = 'Rangefinders need different care than SLRs. Here is the short version.' -%}
+  {%- assign step1_h_default       = 'Open and inspect' -%}
+  {%- assign step1_p_default       = 'Log shutter, patch, and meter issues.' -%}
+  {%- assign step2_h_default       = 'Service the shutter' -%}
+  {%- assign step2_p_default       = 'Cleaned and re-lubed at every speed.' -%}
+  {%- assign step3_h_default       = 'Realign the RF patch' -%}
+  {%- assign step3_p_default       = 'Vertical, horizontal, and infinity dialed in.' -%}
+  {%- assign step4_h_default       = 'Clean the optics' -%}
+  {%- assign step4_p_default       = 'Viewfinder, RF window, and beamsplitter.' -%}
+  {%- assign step5_h_default       = 'QC and warranty' -%}
+  {%- assign step5_p_default       = 'Final check, second tech, on the shelf.' -%}
+{%- elsif t == 'mf-slr' -%}
+  {%- assign bar_title_default     = 'How we refurbish every medium format SLR' -%}
+  {%- assign hero_h_default        = 'Medium format, <em>medium-format ready.</em>' -%}
+  {%- assign hero_p_default        = 'Bronicas, Mamiyas, Hasselblads — every medium format SLR we sell has been disassembled, serviced, and tested with the back, lens, and body all working together.' -%}
+  {%- assign proc_h_default        = 'The medium format SLR refurb process' -%}
+  {%- assign proc_intro_default    = 'Medium format SLRs have more moving parts. We service the system, not just the body.' -%}
+  {%- assign step1_h_default       = 'Body inspection' -%}
+  {%- assign step1_p_default       = 'Mirror, screen, shutter, electronics.' -%}
+  {%- assign step2_h_default       = 'Back inspection' -%}
+  {%- assign step2_p_default       = 'Dark slide, foams, frame counter.' -%}
+  {%- assign step3_h_default       = 'Lens service' -%}
+  {%- assign step3_p_default       = 'Aperture, helicoid, leaf shutter.' -%}
+  {%- assign step4_h_default       = 'System calibration' -%}
+  {%- assign step4_p_default       = 'Body + back + lens, tested together.' -%}
+  {%- assign step5_h_default       = 'QC and warranty' -%}
+  {%- assign step5_p_default       = 'Second tech, photos, warranty card.' -%}
+{%- elsif t == 'tlr' -%}
+  {%- assign bar_title_default     = 'How we refurbish every TLR' -%}
+  {%- assign hero_h_default        = 'Twin lenses, <em>matched.</em>' -%}
+  {%- assign hero_p_default        = 'A TLR only works when the taking lens and viewing lens see the same thing. Every TLR we sell is collimated, focus-checked, and tested for light leaks before it leaves.' -%}
+  {%- assign proc_h_default        = 'The TLR refurb process' -%}
+  {%- assign proc_intro_default    = 'TLRs are mostly mechanical. Simple, but unforgiving when something is off.' -%}
+  {%- assign step1_h_default       = 'Open and inspect' -%}
+  {%- assign step1_p_default       = 'Front shutter, aperture, self-timer.' -%}
+  {%- assign step2_h_default       = 'Service the shutter' -%}
+  {%- assign step2_p_default       = 'Leaf shutter cleaned at all speeds.' -%}
+  {%- assign step3_h_default       = 'Collimate the lenses' -%}
+  {%- assign step3_p_default       = 'Taking and viewing lenses matched.' -%}
+  {%- assign step4_h_default       = 'Body and back' -%}
+  {%- assign step4_p_default       = 'Light seals, frame counter, advance.' -%}
+  {%- assign step5_h_default       = 'QC and warranty' -%}
+  {%- assign step5_p_default       = 'Second tech, photos, warranty card.' -%}
+{%- elsif t == 'ps' -%}
+  {%- assign bar_title_default     = 'How we refurbish every point & shoot' -%}
+  {%- assign hero_h_default        = 'Plastic fantastic, <em>actually working.</em>' -%}
+  {%- assign hero_p_default        = 'Point & shoots are mostly electronic, which means most camera shops will not touch them. Ours will.' -%}
+  {%- assign proc_h_default        = 'The point & shoot refurb process' -%}
+  {%- assign proc_intro_default    = 'Compact cameras are full of electronics other shops will not service. We do.' -%}
+  {%- assign step1_h_default       = 'Electronics check' -%}
+  {%- assign step1_p_default       = 'Battery, capacitor, LCD, modes.' -%}
+  {%- assign step2_h_default       = 'Optics and AF' -%}
+  {%- assign step2_p_default       = 'Lens cleaned, AF tested at all ranges.' -%}
+  {%- assign step3_h_default       = 'Flash and meter' -%}
+  {%- assign step3_p_default       = 'Flash at all power levels, meter checked.' -%}
+  {%- assign step4_h_default       = 'Seal and shoot' -%}
+  {%- assign step4_p_default       = 'Battery door foam and light seals replaced.' -%}
+  {%- assign step5_h_default       = 'QC and warranty' -%}
+  {%- assign step5_p_default       = 'Second tech reviews everything.' -%}
+{%- elsif t == 'generic' -%}
+  {%- assign bar_title_default     = 'How we refurbish every camera' -%}
+  {%- assign hero_h_default        = 'Every camera, <em>checked.</em>' -%}
+  {%- assign hero_p_default        = 'Every camera in our shop — SLR, rangefinder, medium format, TLR, point & shoot — goes through our bench before it goes on the shelf.' -%}
+  {%- assign proc_h_default        = 'Our refurb process' -%}
+  {%- assign proc_intro_default    = 'The specifics vary by camera type, but the principle is the same: nothing ships until it is ready to shoot.' -%}
+  {%- assign step1_h_default       = 'Open and inspect' -%}
+  {%- assign step1_p_default       = 'Logged against our reference checklist.' -%}
+  {%- assign step2_h_default       = 'Service mechanism' -%}
+  {%- assign step2_p_default       = 'Clean, lube, re-tension as needed.' -%}
+  {%- assign step3_h_default       = 'Calibrate' -%}
+  {%- assign step3_p_default       = 'Pro test gear, not eyeball-and-hope.' -%}
+  {%- assign step4_h_default       = 'Replace what is worn' -%}
+  {%- assign step4_p_default       = 'Foams, seals, contacts. Standard, not upsell.' -%}
+  {%- assign step5_h_default       = 'QC and warranty' -%}
+  {%- assign step5_p_default       = 'Second tech, photos, warranty card.' -%}
+{%- else -%}
+  {%- comment -%} Default = SLR {%- endcomment -%}
+  {%- assign bar_title_default     = 'How we refurbish every SLR' -%}
+  {%- assign hero_h_default        = 'A working camera, <em>guaranteed.</em>' -%}
+  {%- assign hero_p_default        = 'Every SLR in our shop has been through our bench, tested with professional equipment, and given a six-month warranty.' -%}
+  {%- assign proc_h_default        = 'The SLR refurb process' -%}
+  {%- assign proc_intro_default    = 'Every SLR that comes through our bench gets the same treatment, regardless of brand or value. No shortcuts.' -%}
+  {%- assign step1_h_default       = 'Open and inspect' -%}
+  {%- assign step1_p_default       = 'Shutter, meter, foam, mirror logged.' -%}
+  {%- assign step2_h_default       = 'Clean and lubricate' -%}
+  {%- assign step2_p_default       = 'Re-lubed with the right viscosity for the body.' -%}
+  {%- assign step3_h_default       = 'Calibrate shutter and meter' -%}
+  {%- assign step3_p_default       = 'Verified on professional test equipment.' -%}
+  {%- assign step4_h_default       = 'Optics service' -%}
+  {%- assign step4_p_default       = 'Lens, viewfinder, mirror as needed.' -%}
+  {%- assign step5_h_default       = 'QC and warranty' -%}
+  {%- assign step5_p_default       = 'Second tech, photos, warranty card.' -%}
+{%- endif -%}
+
+{%- comment -%} Resolve final values: customizer override falls back to type default. {%- endcomment -%}
+{%- assign bar_title  = section.settings.bar_title   | default: bar_title_default -%}
+{%- assign hero_h     = section.settings.hero_h      | default: hero_h_default -%}
+{%- assign hero_p     = section.settings.hero_p      | default: hero_p_default -%}
+{%- assign proc_h     = section.settings.proc_h      | default: proc_h_default -%}
+{%- assign proc_intro = section.settings.proc_intro  | default: proc_intro_default -%}
+{%- assign s1_h = section.settings.step1_h | default: step1_h_default -%}
+{%- assign s1_p = section.settings.step1_p | default: step1_p_default -%}
+{%- assign s2_h = section.settings.step2_h | default: step2_h_default -%}
+{%- assign s2_p = section.settings.step2_p | default: step2_p_default -%}
+{%- assign s3_h = section.settings.step3_h | default: step3_h_default -%}
+{%- assign s3_p = section.settings.step3_p | default: step3_p_default -%}
+{%- assign s4_h = section.settings.step4_h | default: step4_h_default -%}
+{%- assign s4_p = section.settings.step4_p | default: step4_p_default -%}
+{%- assign s5_h = section.settings.step5_h | default: step5_h_default -%}
+{%- assign s5_p = section.settings.step5_p | default: step5_p_default -%}
+
+<section class="bfc-rp" data-section-id="{{ section.id }}" data-section-type="bfc-refurb-process">
+  <details class="bfc-rp-details"{% if section.settings.open_by_default %} open{% endif %}>
+
+    {%- comment -%} ── Collapsed bar (default state) ── {%- endcomment -%}
+    <summary class="bfc-rp-summary">
+      <div class="bfc-rp-summary-text">
+        <span class="bfc-rp-summary-ey">{{ section.settings.eyebrow }}</span>
+        <span class="bfc-rp-summary-title">{{ bar_title }}</span>
+      </div>
+      <div class="bfc-rp-summary-toggle">
+        <span class="bfc-rp-summary-cta-open">{{ section.settings.open_label }}</span>
+        <span class="bfc-rp-summary-cta-close">{{ section.settings.close_label }}</span>
+        <span class="bfc-rp-summary-icon" aria-hidden="true"></span>
+      </div>
+    </summary>
+
+    {%- comment -%} ── Expanded body ── {%- endcomment -%}
+    <div class="bfc-rp-body">
+      <div class="bfc-rp-inner">
+
+        {%- comment -%} Dark hero — type-specific headline plus the "why us not eBay" thesis. {%- endcomment -%}
+        <div class="bfc-rp-hero">
+          <p class="bfc-rp-hero-ey">{{ section.settings.hero_eyebrow }}</p>
+          <h2 class="bfc-rp-hero-h">{{ hero_h }}</h2>
+          <p class="bfc-rp-hero-p">{{ hero_p }}</p>
+        </div>
+
+        {%- comment -%} Pillars — the universal "why BFC" story, same across every type. {%- endcomment -%}
+        <div class="bfc-rp-pillars">
+          <div class="bfc-rp-pillar">
+            <p class="bfc-rp-pillar-num">01</p>
+            <h3 class="bfc-rp-pillar-h">{{ section.settings.pillar1_h }}</h3>
+            <p class="bfc-rp-pillar-p">{{ section.settings.pillar1_p }}</p>
+          </div>
+          <div class="bfc-rp-pillar">
+            <p class="bfc-rp-pillar-num">02</p>
+            <h3 class="bfc-rp-pillar-h">{{ section.settings.pillar2_h }}</h3>
+            <p class="bfc-rp-pillar-p">{{ section.settings.pillar2_p }}</p>
+          </div>
+          <div class="bfc-rp-pillar">
+            <p class="bfc-rp-pillar-num">03</p>
+            <h3 class="bfc-rp-pillar-h">{{ section.settings.pillar3_h }}</h3>
+            <p class="bfc-rp-pillar-p">{{ section.settings.pillar3_p }}</p>
+          </div>
+          <div class="bfc-rp-pillar">
+            <p class="bfc-rp-pillar-num">04</p>
+            <h3 class="bfc-rp-pillar-h">{{ section.settings.pillar4_h }}</h3>
+            <p class="bfc-rp-pillar-p">{{ section.settings.pillar4_p }}</p>
+          </div>
+        </div>
+
+        {%- comment -%} BFC vs stranger online — head-to-head. {%- endcomment -%}
+        <div class="bfc-rp-vs">
+          <div class="bfc-rp-vs-head">
+            <div>{{ section.settings.vs_left_label }}</div>
+            <div>{{ section.settings.vs_right_label }}</div>
+          </div>
+          <div class="bfc-rp-vs-row">
+            <div>{{ section.settings.vs_row1_left }}</div>
+            <div>{{ section.settings.vs_row1_right }}</div>
+          </div>
+          <div class="bfc-rp-vs-row">
+            <div>{{ section.settings.vs_row2_left }}</div>
+            <div>{{ section.settings.vs_row2_right }}</div>
+          </div>
+          <div class="bfc-rp-vs-row">
+            <div>{{ section.settings.vs_row3_left }}</div>
+            <div>{{ section.settings.vs_row3_right }}</div>
+          </div>
+          <div class="bfc-rp-vs-row">
+            <div>{{ section.settings.vs_row4_left }}</div>
+            <div>{{ section.settings.vs_row4_right }}</div>
+          </div>
+        </div>
+
+        {%- comment -%} Type-specific 5 steps — headline format, not paragraphs. {%- endcomment -%}
+        <div class="bfc-rp-process">
+          <div class="bfc-rp-process-head">
+            <h3 class="bfc-rp-process-h">{{ proc_h }}</h3>
+            <span class="bfc-rp-process-tag">5 steps</span>
+          </div>
+          {%- if proc_intro != blank -%}
+            <p class="bfc-rp-process-intro">{{ proc_intro }}</p>
+          {%- endif -%}
+          <div class="bfc-rp-steps">
+            <div class="bfc-rp-step">
+              <p class="bfc-rp-step-num">Step 01</p>
+              <h4 class="bfc-rp-step-h">{{ s1_h }}</h4>
+              <p class="bfc-rp-step-p">{{ s1_p }}</p>
+            </div>
+            <div class="bfc-rp-step">
+              <p class="bfc-rp-step-num">Step 02</p>
+              <h4 class="bfc-rp-step-h">{{ s2_h }}</h4>
+              <p class="bfc-rp-step-p">{{ s2_p }}</p>
+            </div>
+            <div class="bfc-rp-step">
+              <p class="bfc-rp-step-num">Step 03</p>
+              <h4 class="bfc-rp-step-h">{{ s3_h }}</h4>
+              <p class="bfc-rp-step-p">{{ s3_p }}</p>
+            </div>
+            <div class="bfc-rp-step">
+              <p class="bfc-rp-step-num">Step 04</p>
+              <h4 class="bfc-rp-step-h">{{ s4_h }}</h4>
+              <p class="bfc-rp-step-p">{{ s4_p }}</p>
+            </div>
+            <div class="bfc-rp-step">
+              <p class="bfc-rp-step-num">Step 05</p>
+              <h4 class="bfc-rp-step-h">{{ s5_h }}</h4>
+              <p class="bfc-rp-step-p">{{ s5_p }}</p>
+            </div>
+          </div>
+        </div>
+
+        {%- comment -%} "Risk, removed" — warranty wraps everything in the same dark band the hero uses. {%- endcomment -%}
+        <div class="bfc-rp-guarantee">
+          <div class="bfc-rp-guarantee-text">
+            <p class="bfc-rp-guarantee-ey">{{ section.settings.guarantee_ey }}</p>
+            <h3 class="bfc-rp-guarantee-h">{{ section.settings.guarantee_h }}</h3>
+            <p class="bfc-rp-guarantee-p">{{ section.settings.guarantee_p }}</p>
+          </div>
+          <ul class="bfc-rp-guarantee-list">
+            <li>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              {{ section.settings.guarantee_pt1 }}
+            </li>
+            <li>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              {{ section.settings.guarantee_pt2 }}
+            </li>
+            <li>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              {{ section.settings.guarantee_pt3 }}
+            </li>
+            <li>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              {{ section.settings.guarantee_pt4 }}
+            </li>
+          </ul>
+        </div>
+
+        {%- comment -%} Optional CTA below everything. {%- endcomment -%}
+        {%- if section.settings.cta_label != blank and section.settings.cta_url != blank -%}
+          <div class="bfc-rp-footer">
+            <a href="{{ section.settings.cta_url }}" class="bfc-rp-cta">
+              {{ section.settings.cta_label }}
+              <span aria-hidden="true">&nbsp;&rarr;</span>
+            </a>
+          </div>
+        {%- endif -%}
+
+      </div>
+    </div>
+
+  </details>
+</section>
+
+<style>
+  .bfc-rp {
+    --rp-or: #E36E15;
+    --rp-go: #F4A027;
+    --rp-ce: #ABCC99;
+    --rp-cv: #F8F6EE;
+    --rp-bk: #202009;
+    --rp-ch: #4E4741;
+    --rp-gr: #E3DDDA;
+    font-family: 'Poppins', sans-serif;
+    color: var(--rp-bk);
+    background: var(--rp-cv);
+  }
+  .bfc-rp, .bfc-rp * {
+    word-break: normal;
+    overflow-wrap: break-word;
+    hyphens: none;
+    box-sizing: border-box;
+  }
+
+  .bfc-rp-details {
+    border-top: 1px solid var(--rp-bk);
+    border-bottom: 1px solid var(--rp-bk);
+  }
+
+  /* ── Collapsed bar ── */
+  .bfc-rp-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 22px 32px;
+    cursor: pointer;
+    list-style: none;
+    transition: background 0.2s ease;
+    user-select: none;
+  }
+  .bfc-rp-summary::-webkit-details-marker { display: none; }
+  .bfc-rp-summary:hover { background: rgba(227, 110, 21, 0.04); }
+  .bfc-rp-summary-text {
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+  .bfc-rp-summary-ey {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--rp-or);
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+  .bfc-rp-summary-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--rp-bk);
+    min-width: 0;
+  }
+  .bfc-rp-summary-toggle {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 0 0 auto;
+  }
+  .bfc-rp-summary-cta-open,
+  .bfc-rp-summary-cta-close {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rp-ch);
+    white-space: nowrap;
+  }
+  .bfc-rp-summary-cta-close { display: none; }
+  .bfc-rp-details[open] .bfc-rp-summary-cta-open { display: none; }
+  .bfc-rp-details[open] .bfc-rp-summary-cta-close { display: inline; }
+  .bfc-rp-summary-icon {
+    position: relative;
+    display: inline-block;
+    width: 14px; height: 14px;
+    color: var(--rp-bk);
+  }
+  .bfc-rp-summary-icon::before,
+  .bfc-rp-summary-icon::after {
+    content: '';
+    position: absolute;
+    background: currentColor;
+    transition: transform 0.3s ease;
+  }
+  .bfc-rp-summary-icon::before {
+    top: 50%; left: 0; right: 0; height: 1px;
+    transform: translateY(-50%);
+  }
+  .bfc-rp-summary-icon::after {
+    top: 0; bottom: 0; left: 50%; width: 1px;
+    transform: translateX(-50%);
+  }
+  .bfc-rp-details[open] .bfc-rp-summary-icon::after {
+    transform: translateX(-50%) scaleY(0);
+  }
+
+  /* ── Body ── */
+  .bfc-rp-body {
+    border-top: 1px solid var(--rp-gr);
+    animation: bfcRpReveal 0.35s ease-out;
+  }
+  @keyframes bfcRpReveal {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .bfc-rp-inner {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 56px 32px 64px;
+  }
+
+  /* ── Hero ── */
+  .bfc-rp-hero {
+    padding: 40px 40px;
+    background: var(--rp-bk);
+    color: var(--rp-cv);
+    margin-bottom: 40px;
+  }
+  .bfc-rp-hero-ey {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--rp-or);
+    margin: 0 0 12px;
+  }
+  .bfc-rp-hero-h {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 34px;
+    font-weight: 300;
+    line-height: 1.15;
+    margin: 0 0 16px;
+    color: var(--rp-cv);
+    letter-spacing: -0.005em;
+  }
+  .bfc-rp-hero-h em {
+    font-style: italic;
+    color: var(--rp-go);
+  }
+  .bfc-rp-hero-p {
+    font-size: 15px;
+    line-height: 1.65;
+    color: rgba(248, 246, 238, 0.85);
+    margin: 0;
+    max-width: 640px;
+  }
+
+  /* ── Pillars ── */
+  .bfc-rp-pillars {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--rp-gr);
+    border: 1px solid var(--rp-gr);
+    margin-bottom: 48px;
+  }
+  .bfc-rp-pillar {
+    background: var(--rp-cv);
+    padding: 24px 22px 26px;
+    min-width: 0;
+  }
+  .bfc-rp-pillar-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--rp-or);
+    line-height: 1;
+    margin: 0 0 14px;
+  }
+  .bfc-rp-pillar-h {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0 0 10px;
+    color: var(--rp-bk);
+  }
+  .bfc-rp-pillar-p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--rp-ch);
+    margin: 0;
+  }
+
+  /* ── BFC vs stranger online ── */
+  .bfc-rp-vs {
+    background: #fff;
+    border: 1px solid var(--rp-gr);
+    margin-bottom: 48px;
+  }
+  .bfc-rp-vs-head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .bfc-rp-vs-head > div { padding: 14px 18px; }
+  .bfc-rp-vs-head > div:first-child {
+    background: var(--rp-bk);
+    color: var(--rp-go);
+  }
+  .bfc-rp-vs-head > div:last-child {
+    background: var(--rp-gr);
+    color: var(--rp-ch);
+  }
+  .bfc-rp-vs-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    border-top: 1px solid var(--rp-gr);
+  }
+  .bfc-rp-vs-row > div {
+    padding: 16px 18px;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .bfc-rp-vs-row > div:first-child {
+    border-right: 1px solid var(--rp-gr);
+    color: var(--rp-bk);
+    font-weight: 500;
+  }
+  .bfc-rp-vs-row > div:last-child {
+    color: var(--rp-ch);
+    background: rgba(82, 87, 65, 0.025);
+  }
+
+  /* ── Process steps ── */
+  .bfc-rp-process { margin-bottom: 48px; }
+  .bfc-rp-process-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rp-gr);
+  }
+  .bfc-rp-process-h {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0;
+    color: var(--rp-bk);
+  }
+  .bfc-rp-process-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rp-or);
+  }
+  .bfc-rp-process-intro {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--rp-ch);
+    margin: 0 0 22px;
+    max-width: 640px;
+  }
+  .bfc-rp-steps {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--rp-gr);
+    border: 1px solid var(--rp-gr);
+  }
+  .bfc-rp-step {
+    background: var(--rp-cv);
+    padding: 20px 18px 22px;
+    min-width: 0;
+  }
+  .bfc-rp-step-num {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--rp-or);
+    margin: 0 0 12px;
+    text-transform: uppercase;
+  }
+  .bfc-rp-step-h {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0 0 6px;
+    color: var(--rp-bk);
+  }
+  .bfc-rp-step-p {
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--rp-ch);
+    margin: 0;
+  }
+
+  /* ── Guarantee band ── */
+  .bfc-rp-guarantee {
+    background: var(--rp-bk);
+    color: var(--rp-cv);
+    padding: 36px 40px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: 40px;
+    align-items: center;
+  }
+  .bfc-rp-guarantee-ey {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--rp-ce);
+    margin: 0 0 10px;
+  }
+  .bfc-rp-guarantee-h {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    line-height: 1.2;
+    color: var(--rp-cv);
+    margin: 0 0 12px;
+    letter-spacing: -0.005em;
+  }
+  .bfc-rp-guarantee-p {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: rgba(248, 246, 238, 0.85);
+    margin: 0;
+  }
+  .bfc-rp-guarantee-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .bfc-rp-guarantee-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 13px;
+    color: rgba(248, 246, 238, 0.92);
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(248, 246, 238, 0.12);
+  }
+  .bfc-rp-guarantee-list li:last-child { border-bottom: none; }
+  .bfc-rp-guarantee-list li svg {
+    flex-shrink: 0;
+    color: var(--rp-ce);
+    margin-top: 2px;
+  }
+
+  /* ── Optional CTA ── */
+  .bfc-rp-footer {
+    text-align: center;
+    margin-top: 40px;
+  }
+  .bfc-rp-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--rp-bk);
+    text-decoration: none;
+    padding: 14px 28px;
+    border: 1px solid var(--rp-bk);
+    background: transparent;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .bfc-rp-cta:hover {
+    background: var(--rp-bk);
+    color: var(--rp-cv);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1100px) {
+    .bfc-rp-pillars { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .bfc-rp-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 768px) {
+    .bfc-rp-summary { padding: 18px 20px; }
+    .bfc-rp-summary-text { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .bfc-rp-summary-title { font-size: 18px; }
+    .bfc-rp-summary-cta-open,
+    .bfc-rp-summary-cta-close { display: none !important; }
+    .bfc-rp-inner { padding: 40px 20px 48px; }
+    .bfc-rp-hero { padding: 28px 24px; margin-bottom: 32px; }
+    .bfc-rp-hero-h { font-size: 26px; }
+    .bfc-rp-pillars {
+      grid-template-columns: minmax(0, 1fr);
+      margin-bottom: 36px;
+    }
+    .bfc-rp-pillar { padding: 22px 20px; }
+    .bfc-rp-vs-head > div,
+    .bfc-rp-vs-row > div { padding: 12px 14px; font-size: 12px; }
+    .bfc-rp-process { margin-bottom: 36px; }
+    .bfc-rp-process-h { font-size: 20px; }
+    .bfc-rp-steps { grid-template-columns: minmax(0, 1fr); }
+    .bfc-rp-step { padding: 18px 18px 20px; }
+    .bfc-rp-guarantee {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 28px 24px;
+      gap: 24px;
+    }
+    .bfc-rp-guarantee-h { font-size: 22px; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "BFC Refurb Process",
+  "tag": "section",
+  "class": "bfc-refurb-process-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Camera Type"
+    },
+    {
+      "type": "paragraph",
+      "content": "Pick the camera category for this PDP. All default copy and the 5 process steps swap based on this. You can override anything below per-placement."
+    },
+    {
+      "type": "select",
+      "id": "camera_type",
+      "label": "Camera type",
+      "default": "slr",
+      "options": [
+        { "value": "slr",          "label": "SLR (35mm)" },
+        { "value": "rangefinder",  "label": "Rangefinder" },
+        { "value": "mf-slr",       "label": "Medium Format SLR" },
+        { "value": "tlr",          "label": "TLR" },
+        { "value": "ps",           "label": "Point & Shoot" },
+        { "value": "generic",      "label": "Generic / Mixed" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "open_by_default",
+      "label": "Expanded by default",
+      "default": false,
+      "info": "Default is collapsed bar. Tick to render expanded on page load."
+    },
+    {
+      "type": "header",
+      "content": "Collapsed bar"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Why BFC"
+    },
+    {
+      "type": "text",
+      "id": "bar_title",
+      "label": "Bar title (override)",
+      "info": "Leave blank to use the type-specific default."
+    },
+    {
+      "type": "text",
+      "id": "open_label",
+      "label": "Expand label",
+      "default": "Learn how"
+    },
+    {
+      "type": "text",
+      "id": "close_label",
+      "label": "Collapse label",
+      "default": "Close"
+    },
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "hero_eyebrow",
+      "label": "Hero eyebrow",
+      "default": "Why buy from us, not eBay"
+    },
+    {
+      "type": "text",
+      "id": "hero_h",
+      "label": "Hero headline (override)",
+      "info": "Wrap a word in <em>...</em> for italic orange emphasis. Leave blank to use the type-specific default."
+    },
+    {
+      "type": "textarea",
+      "id": "hero_p",
+      "label": "Hero paragraph (override)",
+      "info": "Leave blank to use the type-specific default."
+    },
+    {
+      "type": "header",
+      "content": "Pillars (universal — same across every type)"
+    },
+    {
+      "type": "text",
+      "id": "pillar1_h",
+      "label": "Pillar 1 title",
+      "default": "More than a wipe-down"
+    },
+    {
+      "type": "textarea",
+      "id": "pillar1_p",
+      "label": "Pillar 1 body",
+      "default": "Most shops just clean the outside and test if the shutter fires. We open every camera, service the mechanics, replace what is worn, and recalibrate to factory spec."
+    },
+    {
+      "type": "text",
+      "id": "pillar2_h",
+      "label": "Pillar 2 title",
+      "default": "We work on everything"
+    },
+    {
+      "type": "textarea",
+      "id": "pillar2_p",
+      "label": "Pillar 2 body",
+      "default": "Most camera shops outsource repairs or will not touch certain models. Our in-house techs handle SLRs, rangefinders, TLRs, medium format, and electronic point and shoots — start to finish."
+    },
+    {
+      "type": "text",
+      "id": "pillar3_h",
+      "label": "Pillar 3 title",
+      "default": "Tested with pro gear"
+    },
+    {
+      "type": "textarea",
+      "id": "pillar3_p",
+      "label": "Pillar 3 body",
+      "default": "Shutters checked on a real shutter tester. Meters verified against a calibrated light source. Light leaks confirmed with a dark room, not just a guess."
+    },
+    {
+      "type": "text",
+      "id": "pillar4_h",
+      "label": "Pillar 4 title",
+      "default": "Fast easy warranties"
+    },
+    {
+      "type": "textarea",
+      "id": "pillar4_p",
+      "label": "Pillar 4 body",
+      "default": "Six-month warranty as standard on every camera. Something off? Bring it back. We service what we sell — no return labels to print, no overseas repair centers."
+    },
+    {
+      "type": "header",
+      "content": "BFC vs stranger online"
+    },
+    {
+      "type": "text",
+      "id": "vs_left_label",
+      "label": "Left column header",
+      "default": "Buying from BFC"
+    },
+    {
+      "type": "text",
+      "id": "vs_right_label",
+      "label": "Right column header",
+      "default": "Buying from a stranger online"
+    },
+    {
+      "type": "text",
+      "id": "vs_row1_left",
+      "label": "Row 1 — BFC",
+      "default": "Bench-tested, calibrated, warrantied"
+    },
+    {
+      "type": "text",
+      "id": "vs_row1_right",
+      "label": "Row 1 — Other",
+      "default": "\"Worked last time I used it\""
+    },
+    {
+      "type": "text",
+      "id": "vs_row2_left",
+      "label": "Row 2 — BFC",
+      "default": "Repair dept on staff"
+    },
+    {
+      "type": "text",
+      "id": "vs_row2_right",
+      "label": "Row 2 — Other",
+      "default": "You are on your own"
+    },
+    {
+      "type": "text",
+      "id": "vs_row3_left",
+      "label": "Row 3 — BFC",
+      "default": "Honest condition notes from techs"
+    },
+    {
+      "type": "text",
+      "id": "vs_row3_right",
+      "label": "Row 3 — Other",
+      "default": "Phone photos and hope"
+    },
+    {
+      "type": "text",
+      "id": "vs_row4_left",
+      "label": "Row 4 — BFC",
+      "default": "Fast easy warranties"
+    },
+    {
+      "type": "text",
+      "id": "vs_row4_right",
+      "label": "Row 4 — Other",
+      "default": "Open a case, wait three weeks"
+    },
+    {
+      "type": "header",
+      "content": "Process intro (overrides)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Title and intro for the 5-step process. Leave blank to use the type-specific default."
+    },
+    {
+      "type": "text",
+      "id": "proc_h",
+      "label": "Process title"
+    },
+    {
+      "type": "textarea",
+      "id": "proc_intro",
+      "label": "Process intro paragraph"
+    },
+    {
+      "type": "header",
+      "content": "Steps (overrides)"
+    },
+    {
+      "type": "paragraph",
+      "content": "Headline-style copy. Keep each title to 2–4 words, each body to one short sentence. Leave blank to use the type-specific defaults."
+    },
+    { "type": "text",     "id": "step1_h", "label": "Step 1 title" },
+    { "type": "text",     "id": "step1_p", "label": "Step 1 body"  },
+    { "type": "text",     "id": "step2_h", "label": "Step 2 title" },
+    { "type": "text",     "id": "step2_p", "label": "Step 2 body"  },
+    { "type": "text",     "id": "step3_h", "label": "Step 3 title" },
+    { "type": "text",     "id": "step3_p", "label": "Step 3 body"  },
+    { "type": "text",     "id": "step4_h", "label": "Step 4 title" },
+    { "type": "text",     "id": "step4_p", "label": "Step 4 body"  },
+    { "type": "text",     "id": "step5_h", "label": "Step 5 title" },
+    { "type": "text",     "id": "step5_p", "label": "Step 5 body"  },
+    {
+      "type": "header",
+      "content": "Guarantee band"
+    },
+    {
+      "type": "text",
+      "id": "guarantee_ey",
+      "label": "Eyebrow",
+      "default": "Risk, removed"
+    },
+    {
+      "type": "text",
+      "id": "guarantee_h",
+      "label": "Title",
+      "default": "If something is wrong, we fix it."
+    },
+    {
+      "type": "textarea",
+      "id": "guarantee_p",
+      "label": "Body",
+      "default": "Every camera ships with a real warranty, not a fine print return window. If it stops working we will fix or replace it. We offer affordable extended warranties as well."
+    },
+    {
+      "type": "text",
+      "id": "guarantee_pt1",
+      "label": "Checklist 1",
+      "default": "Six-month warranty, every body"
+    },
+    {
+      "type": "text",
+      "id": "guarantee_pt2",
+      "label": "Checklist 2",
+      "default": "In-house techs, no overseas centers"
+    },
+    {
+      "type": "text",
+      "id": "guarantee_pt3",
+      "label": "Checklist 3",
+      "default": "Affordable extended warranty available"
+    },
+    {
+      "type": "text",
+      "id": "guarantee_pt4",
+      "label": "Checklist 4",
+      "default": "Stop in. Email us. Call us. We answer."
+    },
+    {
+      "type": "header",
+      "content": "Optional CTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "CTA label"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Refurb Process"
+    }
+  ]
+}
+{% endschema %}
