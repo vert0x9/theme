@@ -157,6 +157,13 @@
   display: flex; align-items: center; gap: 10px;
   margin-bottom: 8px;
 }
+/* Mobile-only leather row sits right under the image so customers can
+   see the photo swap when they tap. Hidden on desktop by default. */
+.bfc4-leather-mobile {
+  display: none;
+  padding: 14px 20px 4px;
+  background: var(--cv);
+}
 .bfc4-leather-label {
   font-size: 9px; font-weight: 700; letter-spacing: 0.14em;
   text-transform: uppercase; color: var(--ch); white-space: nowrap;
@@ -1322,6 +1329,10 @@
   .bfc4-left { position: relative; width: 100%; height: 100vw; max-height: 520px; }
   .bfc4-arrow { display: none; }
   .bfc4-right { padding: 28px 20px 48px; gap: 24px; overflow-y: visible; }
+  /* Swap leather row placement on mobile: hide the one inside the buy box,
+     show the one rendered directly under the image slider. */
+  .bfc4-right .bfc4-leather-compact:not(.bfc4-leather-mobile) { display: none; }
+  .bfc4-leather-mobile { display: flex; }
   .bfc4-title { font-size: 36px; }
   .bfc4-tiles { grid-template-columns: repeat(4, 1fr); gap: 6px; }
   .bfc4-tile-img-wrap { aspect-ratio: 1/1; }
@@ -1339,8 +1350,8 @@
   .bfc4 .ba-col-body { display: none !important; grid-template-columns: 1fr !important; padding: 0; border-top: 1px solid rgba(32,32,9,0.08); }
   .bfc4 .ba-col.is-open .ba-col-body { display: block !important; }
   .bfc4 .ba-mini-card { display: grid !important; grid-template-columns: 52px 1fr; flex-direction: unset; border: none; border-bottom: 1px solid rgba(32,32,9,0.07) !important; }
-  .bfc4 .ba-col-body .ba-mini-img-wrap { width: 52px !important; aspect-ratio: unset !important; height: 52px !important; min-height: 52px !important; border-right: 1px solid rgba(32,32,9,0.06) !important; border-bottom: none !important; flex-shrink: 0 !important; }
-  .bfc4 .ba-col-body .ba-mini-img { width: 52px !important; height: 52px !important; min-height: 52px !important; }
+  .bfc4 .ba-col-body .ba-mini-img-wrap { width: 52px !important; aspect-ratio: unset !important; height: 52px !important; min-height: 52px !important; border-right: 1px solid rgba(32,32,9,0.06) !important; border-bottom: none !important; flex-shrink: 0 !important; background: #fff !important; }
+  .bfc4 .ba-col-body .ba-mini-img { width: 52px !important; height: 52px !important; min-height: 52px !important; object-fit: contain !important; padding: 4px !important; }
   .bfc4 .ba-col-body .ba-mini-card { display: grid !important; flex-direction: unset !important; grid-template-columns: 52px 1fr !important; }
   .bfc4 .ba-col-body .ba-mini-body { flex-direction: row !important; align-items: center !important; padding: 10px 12px !important; }
   .bfc4 .ba-col-body .ba-mini-right { text-align: right !important; }
@@ -1350,6 +1361,15 @@
   .bfc4-promos { padding: 0 20px; }
   .bfc4-below-checkout { padding: 24px 20px 40px; overflow: hidden; }
   .bfc4-selected-row { flex-direction: column; gap: 16px; }
+  .bfc4-selected-items {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    overflow-x: visible;
+    flex-wrap: unset;
+  }
+  .bfc4-sel-item { width: 100%; }
+  .bfc4-sel-item-img { width: 100%; height: auto; aspect-ratio: 4/3; }
   .bfc4-below-atc { width: 100%; max-width: 100%; }
   .bfc4-below-atc .bfc4-price { font-size: 32px; }
   .bfc4 .ba-shot-head { padding: 36px 20px 16px; flex-direction: column; gap: 4px; }
@@ -1601,6 +1621,25 @@
   endfor
 -%}
 
+{%- comment -%} ── Detect a "Leather Cover" / "Leather" / "Cover" option ──
+     Hoisted to file scope so it's available to the mobile placement (above
+     the buy box), the desktop placement (inside the buy box), and the
+     secondary below-ATC placement. Reading inside one block doesn't make
+     it available to the others — Liquid scope is top-down. {%- endcomment -%}
+{%- assign leather_opt_idx = null -%}
+{%- assign leather_opt_name = '' -%}
+{%- assign current_leather = '' -%}
+{%- for opt in product.options_with_values -%}
+  {%- assign opt_name_lower = opt.name | downcase -%}
+  {%- if opt_name_lower contains 'leather' or opt_name_lower == 'cover' -%}
+    {%- assign leather_opt_idx = forloop.index0 -%}
+    {%- assign leather_opt_name = opt.name -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- if leather_opt_idx != null -%}
+  {%- assign current_leather = current_variant.options[leather_opt_idx] -%}
+{%- endif -%}
+
 {%- comment -%} ── SPLIT: left image + right content ── {%- endcomment -%}
 <div class="bfc4-split">
 
@@ -1650,13 +1689,15 @@
       </div>
 
     {%- else -%}
-      {%- comment -%} Fallback: use product.media images {%- endcomment -%}
+      {%- comment -%} Fallback: use product.media images. Each slide gets
+           tagged with data-media-id so the variant→image swap logic can
+           find and jump to the right slide when a variant is selected. {%- endcomment -%}
       {%- assign media_images = product.media | where: 'media_type', 'image' -%}
       {%- assign total_slides = media_images | size -%}
 
       <div class="bfc4-slides" id="bfc4-slides">
         {%- for media in media_images limit: 8 -%}
-          <div class="bfc4-slide">
+          <div class="bfc4-slide" data-media-id="{{ media.id }}">
             <img
               src="{{ media | image_url: width: 900 }}"
               srcset="{{ media | image_url: width: 600 }} 600w, {{ media | image_url: width: 900 }} 900w, {{ media | image_url: width: 1200 }} 1200w"
@@ -1685,6 +1726,39 @@
       </div>
     {%- endif -%}
   </div>
+
+  {%- comment -%} ── Mobile-only leather swatches ──
+       Lives BETWEEN the image column and the right panel so on mobile,
+       where the image stacks above the buy box, the swatches appear
+       directly under the photo. Hidden on desktop where the buy-box
+       version is shown instead. {%- endcomment -%}
+  {%- if leather_opt_idx != null -%}
+    {%- assign leather_opt_m = product.options_with_values[leather_opt_idx] -%}
+    <div class="bfc4-leather-compact bfc4-leather-mobile">
+      <span class="bfc4-leather-label">{{ leather_opt_name }}</span>
+      <div class="bfc4-leather-row">
+        {%- for v_value in leather_opt_m.values -%}
+          {%- assign v_available = false -%}
+          {%- for var in product.variants -%}
+            {%- assign var_v_value = var.options[leather_opt_idx] -%}
+            {%- if var_v_value == v_value and var.available -%}{%- assign v_available = true -%}{%- endif -%}
+          {%- endfor -%}
+          {%- assign v_color = v_value | downcase | split: ' ' | first | split: '/' | first -%}
+          <button
+            type="button"
+            class="bfc4-leather-swatch{% if v_value == current_leather %} is-active{% endif %}"
+            data-leather="{{ v_color }}"
+            data-leather-value="{{ v_value | escape }}"
+            data-opt-index="{{ leather_opt_idx }}"
+            onclick="bfc4SelectLeather(this)"
+            title="{{ v_value | escape }}{% unless v_available %} (sold out){% endunless %}"
+            aria-label="{{ leather_opt_name }}: {{ v_value | escape }}"
+            {%- unless v_available -%}disabled{%- endunless -%}
+          >{{ v_value }}</button>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
 
   {%- comment -%} RIGHT: product content {%- endcomment -%}
   <div class="bfc4-right">
@@ -1804,23 +1878,8 @@
 
     {%- comment -%} 4. Grade selector (compact) + price + ATC {%- endcomment -%}
     <div class="bfc4-buy">
-      {%- comment -%} ── Detect a "Leather Cover" / "Leather" / "Cover" option ──
-           If the product has an option matching any of those names, render
-           it as a row of color swatches. Pairs with bfc4SelectLeather() in
-           JS below. Color is derived from the value's text (downcased + first
-           token), with a CSS lookup table for known colors. {%- endcomment -%}
-      {%- assign leather_opt_idx = null -%}
-      {%- assign leather_opt_name = '' -%}
-      {%- for opt in product.options_with_values -%}
-        {%- assign opt_name_lower = opt.name | downcase -%}
-        {%- if opt_name_lower contains 'leather' or opt_name_lower == 'cover' -%}
-          {%- assign leather_opt_idx = forloop.index0 -%}
-          {%- assign leather_opt_name = opt.name -%}
-        {%- endif -%}
-      {%- endfor -%}
       {%- if leather_opt_idx != null -%}
         {%- assign leather_opt = product.options_with_values[leather_opt_idx] -%}
-        {%- assign current_leather = current_variant.options[leather_opt_idx] -%}
         <div class="bfc4-leather-compact">
           <span class="bfc4-leather-label">{{ leather_opt_name }}</span>
           <div class="bfc4-leather-row">
@@ -2569,11 +2628,58 @@
   // Variant lookup table for the Leather Cover swatch handler.
   // Needed when a product has multiple options (Grade + Leather) so we
   // can find the correct variant given the cross-product of selections.
+  // featured_media_id lets us jump the image slider to the variant's
+  // assigned image when the customer changes leather/variant.
   window.__bfc4Variants = [
     {%- for v in product.variants -%}
-    { id: {{ v.id }}, price: {{ v.price }}, price_fmt: {{ v.price | money | json }}, available: {{ v.available }}, options: [{% for o in v.options %}{{ o | json }}{% unless forloop.last %},{% endunless %}{% endfor %}] }{% unless forloop.last %},{% endunless %}
+    { id: {{ v.id }}, price: {{ v.price }}, price_fmt: {{ v.price | money | json }}, available: {{ v.available }}, options: [{% for o in v.options %}{{ o | json }}{% unless forloop.last %},{% endunless %}{% endfor %}], featured_media_id: {% if v.featured_media %}{{ v.featured_media.id }}{% else %}null{% endif %} }{% unless forloop.last %},{% endunless %}
     {%- endfor -%}
   ];
+
+  // Jump the image slider to a variant's assigned image, if there is one.
+  // Strategy:
+  //   1. Look up the variant in __bfc4Variants
+  //   2. If variant has featured_media_id, find the slide with matching
+  //      data-media-id and jump to it (only works on product.media fallback,
+  //      not when section image pickers are in use)
+  //   3. As a fallback, try to find a slide whose alt text contains the
+  //      variant's option title (e.g. "Brown" or "Burgundy"). This works
+  //      even with section-image PDPs where images aren't formally linked
+  //      to variants in Shopify Admin — they're matched by alt text instead.
+  // If neither works, this is a no-op and the slider stays put. Safer than
+  // guessing.
+  window.bfc4JumpToVariantImage = function(variantId) {
+    var v = window.__bfc4Variants && window.__bfc4Variants.find(function(x) { return x.id === variantId; });
+    if (!v) return;
+    var slides = document.querySelectorAll('.bfc4-slide');
+
+    // Strategy 1: featured_media_id match (best when present)
+    if (v.featured_media_id) {
+      for (var i = 0; i < slides.length; i++) {
+        if (String(slides[i].dataset.mediaId) === String(v.featured_media_id)) {
+          if (typeof window.bfc4GoTo === 'function') window.bfc4GoTo(i);
+          return;
+        }
+      }
+    }
+
+    // Strategy 2: alt-text match — try each option value (in case variant
+    // is named "Brown / Grade A", we want to match on "Brown"). Use the
+    // FIRST option value that produces a hit. Case-insensitive substring.
+    if (v.options && v.options.length) {
+      for (var oi = 0; oi < v.options.length; oi++) {
+        var optVal = (v.options[oi] || '').toLowerCase().trim();
+        if (!optVal || optVal === 'default title') continue;
+        for (var si = 0; si < slides.length; si++) {
+          var img = slides[si].querySelector('img');
+          if (img && img.alt && img.alt.toLowerCase().indexOf(optVal) > -1) {
+            if (typeof window.bfc4GoTo === 'function') window.bfc4GoTo(si);
+            return;
+          }
+        }
+      }
+    }
+  };
 
   // ── Clear stale kit attributes on page load ─────
   // Defense in depth: when a customer lands on this PDP, wipe any kit-bundle
@@ -2687,6 +2793,7 @@
     var stickyGrade = document.getElementById('bfc4-sticky-grade');
     if (stickyGrade) stickyGrade.textContent = btn.textContent.trim();
     bfc4UpdateWarrantyTier(STATE.variantPrice);
+    bfc4JumpToVariantImage(STATE.variantId);
   };
 
   // ── Leather Cover swatch handler ──
@@ -2733,6 +2840,7 @@
       b.classList.toggle('is-active', parseInt(b.dataset.variantId, 10) === match.id);
     });
     bfc4UpdateWarrantyTier(STATE.variantPrice);
+    bfc4JumpToVariantImage(match.id);
   };
 
   // ── Also keep existing baSelectVariant alias ────
