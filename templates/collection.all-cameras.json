@@ -360,6 +360,7 @@
       "block_order": [
         "new_arrivals_enhRQM"
       ],
+      "disabled": true,
       "name": "BFC New Arrivals",
       "settings": {
         "background_color": "#F8F6EE",
