@@ -2861,8 +2861,8 @@
 
 
   // Warranty tier table — sourced from snippets/bfc-warranty-tiers-js.liquid
-  // so the variant IDs match the central registry. SLR/Rangefinder uses
-  // 9 brackets now (was 3); same shape as before { max, v9, p9, v12, p12 }.
+  // so the variant IDs match the central registry. SLR/Rangefinder cameras
+  // only offer the +6 month extension (single button, v12/p12).
   {% render 'bfc-warranty-tiers-js', category: 'slr' %}
   function bfc4GetWarrantyTier(price) {
     for (var i = 0; i < BFC_WARRANTY_TIERS.length; i++) {
@@ -2872,7 +2872,8 @@
   }
   function bfc4UpdateWarrantyTier(variantPrice) {
     var tier = bfc4GetWarrantyTier(variantPrice);
-    var td = [{ vid: tier.v9, price: tier.p9 }, { vid: tier.v12, price: tier.p12 }];
+    // SLR/Rangefinder: single button (+6 mo). Only v12/p12 exists.
+    var td = [{ vid: tier.v12, price: tier.p12 }];
     document.querySelectorAll('.bfc4-ext-w-btn').forEach(function(btn, i) {
       if (!td[i]) return;
       btn.dataset.variantId = td[i].vid;
