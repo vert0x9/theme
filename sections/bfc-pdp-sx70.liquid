@@ -4170,11 +4170,21 @@ window.bfcsxToggleCompare = function() {
   };
   sxUpdateWarrantyTier({{ current_variant.price }});
 
-  /* ── Intercept ATC to include kit + warranty items ── */
+  /* ── Intercept ATC to include kit + warranty items ──
+     Vanilla `<form action="/cart/add">` instead of the Release theme's
+     `<product-form>` web component, so we can't rely on the theme to
+     open the cart drawer for us. We:
+       1) Use XHR (Judge.me monkey-patches window.fetch globally; XHR is
+          BFC's convention for cart calls to bypass that interference)
+       2) Request the updated cart-drawer + cart-icon-bubble sections in
+          the same /cart/add.js call (saves a round trip)
+       3) Pass the returned section HTML to drawer.renderContents() so
+          the drawer reflects the just-added items, then open it
+       4) Fall back to /cart navigation only if the drawer isn't available
+          or renderContents throws (older theme versions). */
   const form = document.getElementById('sxATC-' + sid);
   if (form) {
     form.addEventListener('submit', function(e) {
-      if (kitDistinctCount() === 0 && !sxWarranty) return; /* default single-item submit */
       e.preventDefault();
       const items = [{ id: parseInt(varInput.value), quantity: 1 }];
       Object.keys(kitCart).forEach(function(vid) {
@@ -4184,32 +4194,64 @@ window.bfcsxToggleCompare = function() {
       if (sxWarranty && sxWarranty.variantId) {
         items.push({ id: parseInt(sxWarranty.variantId), quantity: 1, properties: { _extended_warranty: 'true' } });
       }
-      fetch('/cart/add.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: items })
-      }).then(r => {
-        if (r.ok) {
-          if (window.bfcTrackActivity) bfcTrackActivity('atc');
-          if (window._bfcStickySuppress) window._bfcStickySuppress();
-      var sBar = document.getElementById('sx-sticky-bar');
-          if (sBar) sBar.classList.remove('is-visible');
-          window.location.href = '/cart';
-        }
-        else r.json().then(d => alert(d.description || 'Could not add to cart'));
-      }).catch(() => alert('Something went wrong — please try again.'));
-    });
-  }
 
-  /* ── Hide sticky bar on native form submit ── */
-  if (form) {
-    form.addEventListener('submit', function() {
-      if (window._bfcStickySuppress) window._bfcStickySuppress();
-      var sBar = document.getElementById('sx-sticky-bar');
-      var sBtn = document.getElementById('sx-sticky-btn');
-      if (sBtn) { sBtn.textContent = 'Added!'; sBtn.style.background = '#2a4820'; }
-      if (sBar) setTimeout(function() { sBar.classList.remove('is-visible'); }, 1500);
-    }); /* sx-sticky-hide-on-submit */
+      var payload = {
+        items: items,
+        sections: 'cart-drawer,cart-icon-bubble',
+        sections_url: window.location.pathname
+      };
+
+      var x = new XMLHttpRequest();
+      x.open('POST', '/cart/add.js', true);
+      x.setRequestHeader('Content-Type', 'application/json');
+      x.setRequestHeader('Accept', 'application/json');
+      x.onload = function() {
+        if (x.status < 200 || x.status >= 300) {
+          var msg = 'Could not add to cart';
+          try { var ed = JSON.parse(x.responseText); if (ed && ed.description) msg = ed.description; } catch (e) {}
+          alert(msg);
+          return;
+        }
+        if (window.bfcTrackActivity) bfcTrackActivity('atc');
+        if (window._bfcStickySuppress) window._bfcStickySuppress();
+        var sBar = document.getElementById('sx-sticky-bar');
+        var sBtn = document.getElementById('sx-sticky-btn');
+        if (sBtn) { sBtn.textContent = 'Added!'; sBtn.style.background = '#2a4820'; }
+        if (sBar) setTimeout(function() { sBar.classList.remove('is-visible'); }, 1500);
+
+        var data = null;
+        try { data = JSON.parse(x.responseText); } catch (e) {}
+
+        // Try Release theme's cart-drawer first
+        try {
+          var drawer = document.querySelector('cart-drawer');
+          if (drawer && data && data.sections) {
+            if (typeof drawer.renderContents === 'function') {
+              drawer.renderContents(data);
+            }
+            var bubbleHtml = data.sections['cart-icon-bubble'];
+            if (bubbleHtml) {
+              var existing = document.getElementById('cart-icon-bubble');
+              if (existing) {
+                var temp = document.createElement('div');
+                temp.innerHTML = bubbleHtml;
+                var fresh = temp.querySelector('#cart-icon-bubble');
+                if (fresh) existing.innerHTML = fresh.innerHTML;
+              }
+            }
+            if (typeof drawer.open === 'function') {
+              drawer.open();
+              return;
+            }
+          }
+        } catch (err) { /* fall through to /cart redirect below */ }
+
+        // Drawer unavailable or render failed — navigate to cart page
+        window.location.href = '/cart';
+      };
+      x.onerror = function() { alert('Something went wrong — please try again.'); };
+      x.send(JSON.stringify(payload));
+    });
   }
 
   /* ── Sticky Mobile ATC Bar ── */
