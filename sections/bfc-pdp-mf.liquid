@@ -2391,6 +2391,25 @@
     extWarranty: null
   };
 
+  // ── Clear stale kit attributes on page load ─────
+  // Defense in depth: when a customer lands on this PDP, wipe any kit-bundle
+  // cart attributes left over from a previous session. Without this, a
+  // customer who had `_free_developing_credit: true` set from an earlier kit
+  // purchase (e.g. on V4 or PS PDP) would carry that flag into a fresh order
+  // unless they go through the kit ATC flow which overwrites it. The kit ATC
+  // already awaits its own attribute set; this clears the slate up front so
+  // any other path (default form submit, abandoned checkout return, etc.)
+  // starts clean.
+  (function() {
+    try {
+      bfc4Xhr('/cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        body: JSON.stringify({ attributes: { '_kit_bundle': '', '_kit_camera': '', '_free_developing_credit': '' } })
+      });
+    } catch (e) { /* non-critical */ }
+  })();
+
   // Starter kit STATE seeded from tile data-attributes on load (see bottom of script)
 
   // ── Tile toggle (top tiles = add-ons) ──────────
@@ -2601,9 +2620,13 @@
     }
 
     try {
-      // Fire-and-forget cart attrs (don't await — non-critical)
+      // Cart attributes — AWAIT this. Previously fire-and-forget which created
+      // a race condition: if the page navigated before cart/update completed,
+      // stale attributes from prior sessions (e.g. _free_developing_credit: true
+      // from an earlier kit with film) would survive and corrupt the current
+      // order. Awaiting guarantees the attrs reflect THIS order's state.
       var cartAttrs = { attributes: { '_kit_bundle': 'true', '_kit_camera': '{{ product.title | escape }}', '_free_developing_credit': filmCount >= 2 ? 'true' : 'false' } };
-      bfc4Xhr('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: JSON.stringify(cartAttrs) });
+      await bfc4Xhr('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: JSON.stringify(cartAttrs) });
       if (items.length > 0) {
         var res = await bfc4Xhr('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: JSON.stringify({ items: items }) });
         if (!res.ok) {
