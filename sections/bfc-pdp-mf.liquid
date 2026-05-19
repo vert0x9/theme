@@ -146,6 +146,79 @@
 .bfc4-grade-compact .bfc4-grade-row { flex: 1; }
 .bfc4-grade-compact .bfc4-var-btn { padding: 7px 8px; font-size: 10px; }
 
+/* ── LEATHER COVER SWATCHES ──
+   Color-circle picker for products with a "Leather Cover" option.
+   Mirrors the SX-70 button-color swatch pattern: 22px circle filled
+   with the leather's tone, a dark ring when selected, slashed when
+   sold out. Color→hex lookup is below; anything not in the table
+   falls back to a neutral border with the variant name showing on
+   hover (via title attr). */
+.bfc4-leather-compact {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 8px;
+}
+.bfc4-leather-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ch); white-space: nowrap;
+}
+.bfc4-leather-row {
+  flex: 1;
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap;
+}
+.bfc4-leather-swatch {
+  position: relative;
+  width: 22px; height: 22px;
+  padding: 0;
+  border: 1px solid rgba(82,87,65,0.25);
+  border-radius: 50%;
+  background: var(--gr);
+  cursor: pointer;
+  font-size: 0;
+  color: transparent;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  flex-shrink: 0;
+}
+.bfc4-leather-swatch:hover { transform: scale(1.12); }
+.bfc4-leather-swatch.is-active {
+  box-shadow: 0 0 0 2px var(--cv), 0 0 0 3px var(--bk);
+}
+.bfc4-leather-swatch[disabled] {
+  opacity: 0.35; cursor: not-allowed;
+}
+.bfc4-leather-swatch[disabled]::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-top: 1px solid var(--ch);
+  transform: rotate(45deg);
+  top: 50%;
+}
+/* Color → hex lookup. Add more as you stock more leathers. */
+.bfc4-leather-swatch[data-leather="black"]    { background: #1a1a1a; border-color: rgba(0,0,0,0.25); }
+.bfc4-leather-swatch[data-leather="brown"]    { background: #5e3a1f; border-color: rgba(0,0,0,0.2); }
+.bfc4-leather-swatch[data-leather="tan"]      { background: #b48a5d; border-color: rgba(0,0,0,0.15); }
+.bfc4-leather-swatch[data-leather="burgundy"] { background: #7a1f1f; border-color: rgba(0,0,0,0.2); }
+.bfc4-leather-swatch[data-leather="red"]      { background: #c8362b; border-color: rgba(0,0,0,0.15); }
+.bfc4-leather-swatch[data-leather="green"]    { background: #3a5c3a; border-color: rgba(0,0,0,0.2); }
+.bfc4-leather-swatch[data-leather="blue"]     { background: #2b4566; border-color: rgba(0,0,0,0.2); }
+.bfc4-leather-swatch[data-leather="navy"]     { background: #1f2d4a; border-color: rgba(0,0,0,0.25); }
+.bfc4-leather-swatch[data-leather="gray"]     { background: #666660; border-color: rgba(0,0,0,0.15); }
+.bfc4-leather-swatch[data-leather="grey"]     { background: #666660; border-color: rgba(0,0,0,0.15); }
+.bfc4-leather-swatch[data-leather="cream"]    { background: #e8e2d4; border-color: rgba(0,0,0,0.15); }
+.bfc4-leather-swatch[data-leather="white"]    { background: #f0eee6; border-color: rgba(0,0,0,0.15); }
+.bfc4-leather-swatch[data-leather="ivory"]    { background: #ece4cf; border-color: rgba(0,0,0,0.15); }
+.bfc4-leather-swatch[data-leather="orange"]   { background: #d46818; border-color: rgba(0,0,0,0.15); }
+.bfc4-leather-swatch[data-leather="yellow"]   { background: #c8a72b; border-color: rgba(0,0,0,0.15); }
+.bfc4-leather-swatch[data-leather="purple"]   { background: #503966; border-color: rgba(0,0,0,0.2); }
+.bfc4-leather-swatch[data-leather="pink"]     { background: #c97a8c; border-color: rgba(0,0,0,0.15); }
+.bfc4-leather-name {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--ch);
+  margin-left: 2px;
+}
+
 /* ── TILE SELECTION ──────────────────────── */
 .bfc4-tile { cursor: pointer; transition: border-color var(--t), box-shadow var(--t); }
 .bfc4-tile.is-sel { border: 2px solid var(--or); box-shadow: 0 0 0 1px rgba(227,110,21,0.15); }
@@ -1724,7 +1797,73 @@
 
     {%- comment -%} 4. Grade selector (compact) + price + ATC {%- endcomment -%}
     <div class="bfc4-buy">
+      {%- comment -%} ── Detect a "Leather Cover" / "Leather" / "Cover" option ──
+           If the product has an option matching any of those names, render
+           it as a row of color swatches. Pairs with bfc4SelectLeather() in
+           JS below. Color is derived from the value's text (downcased + first
+           token), with a CSS lookup table for known colors. {%- endcomment -%}
+      {%- assign leather_opt_idx = null -%}
+      {%- assign leather_opt_name = '' -%}
+      {%- for opt in product.options_with_values -%}
+        {%- assign opt_name_lower = opt.name | downcase -%}
+        {%- if opt_name_lower contains 'leather' or opt_name_lower == 'cover' -%}
+          {%- assign leather_opt_idx = forloop.index0 -%}
+          {%- assign leather_opt_name = opt.name -%}
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if leather_opt_idx != null -%}
+        {%- assign leather_opt = product.options_with_values[leather_opt_idx] -%}
+        {%- assign current_leather = current_variant.options[leather_opt_idx] -%}
+        <div class="bfc4-leather-compact">
+          <span class="bfc4-leather-label">{{ leather_opt_name }}</span>
+          <div class="bfc4-leather-row">
+            {%- for v_value in leather_opt.values -%}
+              {%- comment -%} Determine if this value has any available variant. {%- endcomment -%}
+              {%- assign v_available = false -%}
+              {%- assign v_match_variant = null -%}
+              {%- for var in product.variants -%}
+                {%- assign var_v_value = var.options[leather_opt_idx] -%}
+                {%- if var_v_value == v_value -%}
+                  {%- if var.available -%}{%- assign v_available = true -%}{%- endif -%}
+                  {%- if v_match_variant == null -%}{%- assign v_match_variant = var -%}{%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {%- assign v_color = v_value | downcase | split: ' ' | first | split: '/' | first -%}
+              <button
+                type="button"
+                class="bfc4-leather-swatch{% if v_value == current_leather %} is-active{% endif %}"
+                data-leather="{{ v_color }}"
+                data-leather-value="{{ v_value | escape }}"
+                data-opt-index="{{ leather_opt_idx }}"
+                onclick="bfc4SelectLeather(this)"
+                title="{{ v_value | escape }}{% unless v_available %} (sold out){% endunless %}"
+                aria-label="{{ leather_opt_name }}: {{ v_value | escape }}{% unless v_available %} (sold out){% endunless %}"
+                {%- unless v_available -%}disabled{%- endunless -%}
+              >{{ v_value }}</button>
+            {%- endfor -%}
+            <span class="bfc4-leather-name" id="bfc4-leather-name">{{ current_leather }}</span>
+          </div>
+        </div>
+      {%- endif -%}
+
       {%- if product.variants.size > 1 -%}
+        {%- comment -%} ── Grade row ── shown only if there's a Grade option
+             (or if leather is the only option, we skip this since it'd
+             duplicate the leather swatches). {%- endcomment -%}
+        {%- assign show_grade_row = false -%}
+        {%- for opt in product.options_with_values -%}
+          {%- assign opt_name_lower = opt.name | downcase -%}
+          {%- if opt_name_lower contains 'grade' or opt_name_lower contains 'condition' -%}
+            {%- assign show_grade_row = true -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- comment -%} If there's no leather option AND no explicit grade option,
+             still render the legacy variant row (back-compat for products that
+             use the default "Title" option). {%- endcomment -%}
+        {%- if leather_opt_idx == null and show_grade_row == false -%}
+          {%- assign show_grade_row = true -%}
+        {%- endif -%}
+        {%- if show_grade_row -%}
         <div class="bfc4-grade-compact">
           <span class="bfc4-grade-label">Grade</span>
           <div class="bfc4-grade-row">
@@ -1741,6 +1880,7 @@
             {%- endfor -%}
           </div>
         </div>
+        {%- endif -%}
       {%- endif -%}
       <div class="bfc4-price-row">
         <span class="bfc4-price-label">Total</span>
@@ -2204,7 +2344,35 @@
           {%- comment -%} Populated by JS {%- endcomment -%}
         </div>
         <div class="bfc4-below-atc">
-          {%- if product.variants.size > 1 -%}
+          {%- comment -%} ── Leather Cover swatches (mirror of primary buy box) ── {%- endcomment -%}
+          {%- if leather_opt_idx != null -%}
+            {%- assign leather_opt2 = product.options_with_values[leather_opt_idx] -%}
+            <div class="bfc4-leather-compact">
+              <span class="bfc4-leather-label">{{ leather_opt_name }}</span>
+              <div class="bfc4-leather-row">
+                {%- for v_value in leather_opt2.values -%}
+                  {%- assign v_available = false -%}
+                  {%- for var in product.variants -%}
+                    {%- assign var_v_value = var.options[leather_opt_idx] -%}
+                    {%- if var_v_value == v_value and var.available -%}{%- assign v_available = true -%}{%- endif -%}
+                  {%- endfor -%}
+                  {%- assign v_color = v_value | downcase | split: ' ' | first | split: '/' | first -%}
+                  <button
+                    type="button"
+                    class="bfc4-leather-swatch{% if v_value == current_leather %} is-active{% endif %}"
+                    data-leather="{{ v_color }}"
+                    data-leather-value="{{ v_value | escape }}"
+                    data-opt-index="{{ leather_opt_idx }}"
+                    onclick="bfc4SelectLeather(this)"
+                    title="{{ v_value | escape }}{% unless v_available %} (sold out){% endunless %}"
+                    aria-label="{{ leather_opt_name }}: {{ v_value | escape }}"
+                    {%- unless v_available -%}disabled{%- endunless -%}
+                  >{{ v_value }}</button>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+          {%- if product.variants.size > 1 and show_grade_row -%}
             <div class="bfc4-grade-compact">
               <span class="bfc4-grade-label">Grade</span>
               <div class="bfc4-grade-row">
@@ -2391,6 +2559,15 @@
     extWarranty: null
   };
 
+  // Variant lookup table for the Leather Cover swatch handler.
+  // Needed when a product has multiple options (Grade + Leather) so we
+  // can find the correct variant given the cross-product of selections.
+  window.__bfc4Variants = [
+    {%- for v in product.variants -%}
+    { id: {{ v.id }}, price: {{ v.price }}, price_fmt: {{ v.price | money | json }}, available: {{ v.available }}, options: [{% for o in v.options %}{{ o | json }}{% unless forloop.last %},{% endunless %}{% endfor %}] }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ];
+
   // ── Clear stale kit attributes on page load ─────
   // Defense in depth: when a customer lands on this PDP, wipe any kit-bundle
   // cart attributes left over from a previous session. Without this, a
@@ -2502,6 +2679,52 @@
     if (ksCamEl)    ksCamEl.textContent    = btn.dataset.variantPriceFmt;
     var stickyGrade = document.getElementById('bfc4-sticky-grade');
     if (stickyGrade) stickyGrade.textContent = btn.textContent.trim();
+    bfc4UpdateWarrantyTier(STATE.variantPrice);
+  };
+
+  // ── Leather Cover swatch handler ──
+  // When a leather swatch is clicked, we need to find the variant whose
+  // chosen options match the currently-selected Grade (if present) AND
+  // the new leather value. The variants list is rendered as a JS object
+  // below (`window.__bfc4Variants`) so we can look up by option pair.
+  window.bfc4SelectLeather = function(btn) {
+    if (btn.disabled) return;
+    var newLeather = btn.dataset.leatherValue;
+    var optIdx = parseInt(btn.dataset.optIndex, 10);
+    document.querySelectorAll('.bfc4-leather-swatch').forEach(function(b) { b.classList.remove('is-active'); });
+    btn.classList.add('is-active');
+
+    var nameEl = document.getElementById('bfc4-leather-name');
+    if (nameEl) nameEl.textContent = newLeather;
+
+    // Build the target options array: keep all other option values from the
+    // currently selected variant, swap in the new leather at its index.
+    if (!window.__bfc4Variants) return;
+    var currentVariant = window.__bfc4Variants.find(function(v) { return v.id === STATE.variantId; });
+    if (!currentVariant) return;
+    var newOpts = currentVariant.options.slice();
+    newOpts[optIdx] = newLeather;
+    var match = window.__bfc4Variants.find(function(v) {
+      for (var i = 0; i < newOpts.length; i++) {
+        if (v.options[i] !== newOpts[i]) return false;
+      }
+      return true;
+    });
+    if (!match || !match.available) return;
+
+    STATE.variantId    = match.id;
+    STATE.variantPrice = match.price;
+    var inp = document.getElementById('bfc4-variant-input');
+    if (inp) inp.value = STATE.variantId;
+    var camPriceEl = document.getElementById('bfc4-cam-price');
+    var ksCamEl    = document.getElementById('bfc4-ks-cam-price');
+    var priceFmt = match.price_fmt;
+    if (camPriceEl) camPriceEl.textContent = priceFmt;
+    if (ksCamEl)    ksCamEl.textContent    = priceFmt;
+    // If a Grade row exists, sync its is-active to the matching variant
+    document.querySelectorAll('.bfc4-var-btn').forEach(function(b) {
+      b.classList.toggle('is-active', parseInt(b.dataset.variantId, 10) === match.id);
+    });
     bfc4UpdateWarrantyTier(STATE.variantPrice);
   };
 
