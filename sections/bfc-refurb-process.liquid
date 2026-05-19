@@ -26,26 +26,26 @@
 {%- comment -%} Resolve the type-specific copy based on the dropdown.
     Each `tX_*` setting overrides the default for that type. {%- endcomment -%}
 {%- if t == 'rangefinder' -%}
-  {%- assign bar_title_default     = 'How we refurbish every rangefinder' -%}
+  {%- assign bar_title_default     = 'How we service every rangefinder' -%}
   {%- assign hero_h_default        = 'A working rangefinder, <em>aligned.</em>' -%}
   {%- assign hero_p_default        = 'A rangefinder is only as good as its patch alignment. Every rangefinder we sell has been opened, cleaned, and re-calibrated so the patch is sharp, the lines up, and the meter reads true.' -%}
-  {%- assign proc_h_default        = 'The rangefinder refurb process' -%}
+  {%- assign proc_h_default        = 'The rangefinder service process' -%}
   {%- assign proc_intro_default    = 'Rangefinders need different care than SLRs. Here is the short version.' -%}
-  {%- assign step1_h_default       = 'Open and inspect' -%}
-  {%- assign step1_p_default       = 'Log shutter, patch, and meter issues.' -%}
+  {%- assign step1_h_default       = 'Full intake' -%}
+  {%- assign step1_p_default       = 'Body opened, mechanics checked, condition logged before any work starts.' -%}
   {%- assign step2_h_default       = 'Service the shutter' -%}
   {%- assign step2_p_default       = 'Cleaned and re-lubed at every speed.' -%}
   {%- assign step3_h_default       = 'Realign the RF patch' -%}
   {%- assign step3_p_default       = 'Vertical, horizontal, and infinity dialed in.' -%}
   {%- assign step4_h_default       = 'Clean the optics' -%}
   {%- assign step4_p_default       = 'Viewfinder, RF window, and beamsplitter.' -%}
-  {%- assign step5_h_default       = 'QC and warranty' -%}
-  {%- assign step5_p_default       = 'Final check, second tech, on the shelf.' -%}
+  {%- assign step5_h_default       = 'Two techs, photo record, warranty card' -%}
+  {%- assign step5_p_default       = 'Second tech signs off, photos taken, warranty card issued.' -%}
 {%- elsif t == 'mf-slr' -%}
-  {%- assign bar_title_default     = 'How we refurbish every medium format SLR' -%}
+  {%- assign bar_title_default     = 'How we service every medium format SLR' -%}
   {%- assign hero_h_default        = 'Medium format, <em>medium-format ready.</em>' -%}
   {%- assign hero_p_default        = 'Bronicas, Mamiyas, Hasselblads — every medium format SLR we sell has been disassembled, serviced, and tested with the back, lens, and body all working together.' -%}
-  {%- assign proc_h_default        = 'The medium format SLR refurb process' -%}
+  {%- assign proc_h_default        = 'The medium format SLR service process' -%}
   {%- assign proc_intro_default    = 'Medium format SLRs have more moving parts. We service the system, not just the body.' -%}
   {%- assign step1_h_default       = 'Body inspection' -%}
   {%- assign step1_p_default       = 'Mirror, screen, shutter, electronics.' -%}
@@ -55,15 +55,15 @@
   {%- assign step3_p_default       = 'Aperture, helicoid, leaf shutter.' -%}
   {%- assign step4_h_default       = 'System calibration' -%}
   {%- assign step4_p_default       = 'Body + back + lens, tested together.' -%}
-  {%- assign step5_h_default       = 'QC and warranty' -%}
-  {%- assign step5_p_default       = 'Second tech, photos, warranty card.' -%}
+  {%- assign step5_h_default       = 'Two techs, photo record, warranty card' -%}
+  {%- assign step5_p_default       = 'Second tech signs off, photos taken, warranty card issued.' -%}
 {%- elsif t == 'tlr' -%}
-  {%- assign bar_title_default     = 'How we refurbish every TLR' -%}
+  {%- assign bar_title_default     = 'How we service every TLR' -%}
   {%- assign hero_h_default        = 'Twin lenses, <em>matched.</em>' -%}
   {%- assign hero_p_default        = 'A TLR only works when the taking lens and viewing lens see the same thing. Every TLR we sell is collimated, focus-checked, and tested for light leaks before it leaves.' -%}
-  {%- assign proc_h_default        = 'The TLR refurb process' -%}
+  {%- assign proc_h_default        = 'The TLR service process' -%}
   {%- assign proc_intro_default    = 'TLRs are mostly mechanical. Simple, but unforgiving when something is off.' -%}
-  {%- assign step1_h_default       = 'Open and inspect' -%}
+  {%- assign step1_h_default       = 'Full intake' -%}
   {%- assign step1_p_default       = 'Front shutter, aperture, self-timer.' -%}
   {%- assign step2_h_default       = 'Service the shutter' -%}
   {%- assign step2_p_default       = 'Leaf shutter cleaned at all speeds.' -%}
@@ -71,13 +71,13 @@
   {%- assign step3_p_default       = 'Taking and viewing lenses matched.' -%}
   {%- assign step4_h_default       = 'Body and back' -%}
   {%- assign step4_p_default       = 'Light seals, frame counter, advance.' -%}
-  {%- assign step5_h_default       = 'QC and warranty' -%}
-  {%- assign step5_p_default       = 'Second tech, photos, warranty card.' -%}
+  {%- assign step5_h_default       = 'Two techs, photo record, warranty card' -%}
+  {%- assign step5_p_default       = 'Second tech signs off, photos taken, warranty card issued.' -%}
 {%- elsif t == 'ps' -%}
-  {%- assign bar_title_default     = 'How we refurbish every point & shoot' -%}
+  {%- assign bar_title_default     = 'How we service every point & shoot' -%}
   {%- assign hero_h_default        = 'Plastic fantastic, <em>actually working.</em>' -%}
   {%- assign hero_p_default        = 'Point & shoots are mostly electronic, which means most camera shops will not touch them. Ours will.' -%}
-  {%- assign proc_h_default        = 'The point & shoot refurb process' -%}
+  {%- assign proc_h_default        = 'The point & shoot service process' -%}
   {%- assign proc_intro_default    = 'Compact cameras are full of electronics other shops will not service. We do.' -%}
   {%- assign step1_h_default       = 'Electronics check' -%}
   {%- assign step1_p_default       = 'Battery, capacitor, LCD, modes.' -%}
@@ -87,41 +87,41 @@
   {%- assign step3_p_default       = 'Flash at all power levels, meter checked.' -%}
   {%- assign step4_h_default       = 'Seal and shoot' -%}
   {%- assign step4_p_default       = 'Battery door foam and light seals replaced.' -%}
-  {%- assign step5_h_default       = 'QC and warranty' -%}
-  {%- assign step5_p_default       = 'Second tech reviews everything.' -%}
+  {%- assign step5_h_default       = 'Two techs, photo record, warranty card' -%}
+  {%- assign step5_p_default       = 'Second tech signs off, photos taken, warranty card issued.' -%}
 {%- elsif t == 'generic' -%}
-  {%- assign bar_title_default     = 'How we refurbish every camera' -%}
-  {%- assign hero_h_default        = 'Every camera, <em>checked.</em>' -%}
+  {%- assign bar_title_default     = 'How we service every camera' -%}
+  {%- assign hero_h_default        = 'How we service <em>every camera.</em>' -%}
   {%- assign hero_p_default        = 'Every camera in our shop — SLR, rangefinder, medium format, TLR, point & shoot — goes through our bench before it goes on the shelf.' -%}
-  {%- assign proc_h_default        = 'Our refurb process' -%}
+  {%- assign proc_h_default        = 'Our service process' -%}
   {%- assign proc_intro_default    = 'The specifics vary by camera type, but the principle is the same: nothing ships until it is ready to shoot.' -%}
-  {%- assign step1_h_default       = 'Open and inspect' -%}
-  {%- assign step1_p_default       = 'Logged against our reference checklist.' -%}
-  {%- assign step2_h_default       = 'Service mechanism' -%}
-  {%- assign step2_p_default       = 'Clean, lube, re-tension as needed.' -%}
-  {%- assign step3_h_default       = 'Calibrate' -%}
-  {%- assign step3_p_default       = 'Pro test gear, not eyeball-and-hope.' -%}
-  {%- assign step4_h_default       = 'Replace what is worn' -%}
-  {%- assign step4_p_default       = 'Foams, seals, contacts. Standard, not upsell.' -%}
-  {%- assign step5_h_default       = 'QC and warranty' -%}
-  {%- assign step5_p_default       = 'Second tech, photos, warranty card.' -%}
+  {%- assign step1_h_default       = 'Full intake' -%}
+  {%- assign step1_p_default       = 'Body opened, mechanics checked, condition logged before any work starts.' -%}
+  {%- assign step2_h_default       = 'Service the system' -%}
+  {%- assign step2_p_default       = 'Each camera gets what it needs, mechanical or electronic, to run the way it was built to.' -%}
+  {%- assign step3_h_default       = 'Dial it in' -%}
+  {%- assign step3_p_default       = 'Shutter speeds, meter accuracy, and focus all checked on professional gear.' -%}
+  {%- assign step4_h_default       = 'Swap the wear parts' -%}
+  {%- assign step4_p_default       = 'Light seals, foams, contacts. Always replaced when needed.' -%}
+  {%- assign step5_h_default       = 'Two techs, photo record, warranty card' -%}
+  {%- assign step5_p_default       = 'Second tech signs off, photos taken, warranty card issued.' -%}
 {%- else -%}
   {%- comment -%} Default = SLR {%- endcomment -%}
-  {%- assign bar_title_default     = 'How we refurbish every SLR' -%}
+  {%- assign bar_title_default     = 'How we service every SLR' -%}
   {%- assign hero_h_default        = 'A working camera, <em>guaranteed.</em>' -%}
   {%- assign hero_p_default        = 'Every SLR in our shop has been through our bench, tested with professional equipment, and given a six-month warranty.' -%}
-  {%- assign proc_h_default        = 'The SLR refurb process' -%}
+  {%- assign proc_h_default        = 'The SLR service process' -%}
   {%- assign proc_intro_default    = 'Every SLR that comes through our bench gets the same treatment, regardless of brand or value. No shortcuts.' -%}
-  {%- assign step1_h_default       = 'Open and inspect' -%}
-  {%- assign step1_p_default       = 'Shutter, meter, foam, mirror logged.' -%}
-  {%- assign step2_h_default       = 'Clean and lubricate' -%}
-  {%- assign step2_p_default       = 'Re-lubed with the right viscosity for the body.' -%}
-  {%- assign step3_h_default       = 'Calibrate shutter and meter' -%}
-  {%- assign step3_p_default       = 'Verified on professional test equipment.' -%}
-  {%- assign step4_h_default       = 'Optics service' -%}
-  {%- assign step4_p_default       = 'Lens, viewfinder, mirror as needed.' -%}
-  {%- assign step5_h_default       = 'QC and warranty' -%}
-  {%- assign step5_p_default       = 'Second tech, photos, warranty card.' -%}
+  {%- assign step1_h_default       = 'Full intake' -%}
+  {%- assign step1_p_default       = 'Body opened, mechanics checked, condition logged before any work starts.' -%}
+  {%- assign step2_h_default       = 'Service the system' -%}
+  {%- assign step2_p_default       = 'Each camera gets what it needs, mechanical or electronic, to run the way it was built to.' -%}
+  {%- assign step3_h_default       = 'Dial it in' -%}
+  {%- assign step3_p_default       = 'Shutter speeds, meter accuracy, and focus all checked on professional gear.' -%}
+  {%- assign step4_h_default       = 'Swap the wear parts' -%}
+  {%- assign step4_p_default       = 'Light seals, foams, contacts. Always replaced when needed.' -%}
+  {%- assign step5_h_default       = 'Two techs, photo record, warranty card' -%}
+  {%- assign step5_p_default       = 'Second tech signs off, photos taken, warranty card issued.' -%}
 {%- endif -%}
 
 {%- comment -%} Resolve final values: customizer override falls back to type default. {%- endcomment -%}
@@ -807,49 +807,49 @@
       "type": "text",
       "id": "pillar1_h",
       "label": "Pillar 1 title",
-      "default": "More than a wipe-down"
+      "default": "Past the surface"
     },
     {
       "type": "textarea",
       "id": "pillar1_p",
       "label": "Pillar 1 body",
-      "default": "Most shops just clean the outside and test if the shutter fires. We open every camera, service the mechanics, replace what is worn, and recalibrate to factory spec."
+      "default": "Most resellers clean the outside and call it done. Our techs go further: full internal service, part replacement where needed, and recalibration to factory tolerances."
     },
     {
       "type": "text",
       "id": "pillar2_h",
       "label": "Pillar 2 title",
-      "default": "We work on everything"
+      "default": "A real repair department"
     },
     {
       "type": "textarea",
       "id": "pillar2_p",
       "label": "Pillar 2 body",
-      "default": "Most camera shops outsource repairs or will not touch certain models. Our in-house techs handle SLRs, rangefinders, TLRs, medium format, and electronic point and shoots — start to finish."
+      "default": "Cameras come in broken and leave shooting. That's the entire job, and it's what our techs do every day."
     },
     {
       "type": "text",
       "id": "pillar3_h",
       "label": "Pillar 3 title",
-      "default": "Tested with pro gear"
+      "default": "Verified, not assumed"
     },
     {
       "type": "textarea",
       "id": "pillar3_p",
       "label": "Pillar 3 body",
-      "default": "Shutters checked on a real shutter tester. Meters verified against a calibrated light source. Light leaks confirmed with a dark room, not just a guess."
+      "default": "Shutter speeds, meter accuracy, and focus calibration all get checked against pro bench equipment and factory specs."
     },
     {
       "type": "text",
       "id": "pillar4_h",
       "label": "Pillar 4 title",
-      "default": "Fast easy warranties"
+      "default": "Warranties on every camera, extended options available"
     },
     {
       "type": "textarea",
       "id": "pillar4_p",
       "label": "Pillar 4 body",
-      "default": "Six-month warranty as standard on every camera. Something off? Bring it back. We service what we sell — no return labels to print, no overseas repair centers."
+      "default": "Standard coverage runs three to six months depending on the category. Want longer? We offer extended warranties at checkout. Something goes wrong, bring it back."
     },
     {
       "type": "header",
@@ -907,7 +907,7 @@
       "type": "text",
       "id": "vs_row4_left",
       "label": "Row 4 — BFC",
-      "default": "Fast easy warranties"
+      "default": "Warranties standard, extended available"
     },
     {
       "type": "text",
@@ -977,13 +977,13 @@
       "type": "text",
       "id": "guarantee_pt1",
       "label": "Checklist 1",
-      "default": "Six-month warranty, every body"
+      "default": "Warranty standard on every camera"
     },
     {
       "type": "text",
       "id": "guarantee_pt2",
       "label": "Checklist 2",
-      "default": "In-house techs, no overseas centers"
+      "default": "In-house techs handle every repair"
     },
     {
       "type": "text",
