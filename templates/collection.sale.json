@@ -1,1 +1,978 @@
-{"sections":{"dual_tiles_qE6ERR":{"type":"dual-tiles","blocks":{"tile_dL8TtP":{"type":"tile","settings":{"show_on":"both","color_scheme":"scheme-5","custom_background_color":"","heading":"","heading_size":"h3","text":"","button_label":"","button_link":"","button_style":"button--filled","product":"","product_width":24,"show_other_elements_with_product":true,"aspect_ratio":"16\/9","vertical_position":"stretch","content_position":"justify-center","content_alignment":"text-center align-center","product_position":"0","image":"shopify:\/\/shop_images\/Xmas_2025_Kodak_Film.png","video_external":"","show_controls_on_video":false,"aspect_ratio_mobile":"auto","content_alignment_mobile":"text-center--mobile align-center--mobile","content_position_mobile":"justify-center--mobile","product_position_mobile":"0","video_external_mobile":"","show_controls_on_video_mobile":false,"spacing_inner":"3"}},"tile_pmmD6M":{"type":"tile","settings":{"show_on":"both","color_scheme":"scheme-5","custom_background_color":"","heading":"Bundles, Stocking Stuffers, & more.","heading_size":"h3","text":"<p>The perfect gift awaits, shop our collections or shop all below<\/p>","button_label":"All Gifts","button_link":"#my-custom-section","button_style":"button--filled","product":"","product_width":24,"show_other_elements_with_product":true,"aspect_ratio":"auto","vertical_position":"stretch","content_position":"justify-center","content_alignment":"text-center align-center","product_position":"0","video_external":"","show_controls_on_video":false,"aspect_ratio_mobile":"16\/9","content_alignment_mobile":"text-center--mobile align-center--mobile","content_position_mobile":"justify-center--mobile","product_position_mobile":"0","video_external_mobile":"","show_controls_on_video_mobile":false,"spacing_inner":"2"}}},"block_order":["tile_dL8TtP","tile_pmmD6M"],"name":"t:sections.dual-tiles.name","settings":{"section_layout":"seperated","block_size":"large","block_order_mobile":false,"heading":"","heading_size":"h5","heading_alignment":"start","color_scheme":"","section_width":"max-w-full","spacing_top":"0","spacing_bottom":"2"}},"hero_banner_Q6HnaT":{"type":"hero-banner","blocks":{"slide_6rLtrR":{"type":"slide","settings":{"banner_layout":"hero-banner--full","color_scheme":"scheme-1","header_menu_text_color":"#ffffff","heading":"","subheading":"","subheading_link":"","text":"","button_link_1":"\/","button_link_1_type":"button","button_label_1":"View more","button_style_1":"button--filled","button_link_2":"\/","button_label_2":"View more","button_style_2":"button--outlined","content_position":"start","content_alignment":"center","image":"shopify:\/\/shop_images\/Xmas_P_S_Group.png","video_external":"","show_controls_on_video":false,"enable_media_overlay_desktop":true,"content_position_mobile":"center","content_alignment_mobile":"center","video_external_mobile":"","show_controls_on_video_mobile":false,"enable_media_overlay_mobile":true,"mobile_text_offset_y":0}}},"block_order":["slide_6rLtrR"],"disabled":true,"name":"t:sections.hero-banner.name","settings":{"enable_transparent_header":true,"slider_height_desktop":50,"slider_height_mobile":80,"slideshow_autoplay_interval":6,"show_slideshow_navigation":true,"slideshow_navigation_position":"hero__swiper-buttons--start","color_scheme_arrows":"","show_slideshow_pagination":true,"slideshow_pagination_style":"style-1","floating_bar":false}},"announcement_bar_fWFRMb":{"type":"announcement-bar","blocks":{"text_slide_kHFejk":{"type":"text-slide","settings":{"content":"<p>Fast Delivery Before Christmas!<\/p>","icon":"theme-box"}}},"block_order":["text_slide_kHFejk"],"name":"t:sections.announcement-bar.name","settings":{"text_block_behaviour":"slider","slider_autoplay_interval":3,"font_weight":"700","section_width":"max-w-fluid","color_scheme":"scheme-7"}},"bfc_collection_editorial_KdqNyx":{"type":"bfc-collection-editorial","blocks":{"category_cover_3rRWR4":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Cool_Cam_Red_Kit.png","title":"Cool Cam Filter Kit","subtitle":"","url":"shopify:\/\/products\/cool-cam-red-bundle","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_c4Bcwi":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Cool_Cam_Pink_Kit_931d5749-bfa1-4e8f-8875-6f4ee72bbf1a.png","title":"Cool Cam Pink Bundle","subtitle":"","url":"","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_TC3ht6":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Polaroid_Kit.png","title":"Polaroid Accessory","subtitle":"","url":"","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_nWqxWB":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/WP-1_Canon_Kit.png","title":"WP-1 Camera Kit","subtitle":"","url":"","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_4JFfbL":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Pentax_k1000_Kit_1.png","title":"K1000 Camera Kit","subtitle":"","url":"","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_MnEFEK":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/35mm_Film_Kits.png","title":"35mm Expired Film","subtitle":"","url":"","badge":"","bg_tint":0,"text_align":"left"}}},"block_order":["category_cover_3rRWR4","category_cover_c4Bcwi","category_cover_TC3ht6","category_cover_nWqxWB","category_cover_4JFfbL","category_cover_MnEFEK"],"name":"Category covers strip (styled)","settings":{"header_enable":true,"header_eyebrow":"","header_title":"Film Photography Gift Bundles","header_subtitle":"","header_divider":false,"header_align":"left","header_max_width":820,"heading_font":"serif","header_title_font_size_mobile":1.8,"header_title_font_size_desktop":2.2,"header_font_weight":"400","columns_mobile":3,"columns_tablet":3,"columns_desktop":6,"mobile_show_count":6,"gap_px":12,"padding_top":0,"padding_bottom":0,"background_color":"#ffffff","text_color":"#111111","media_aspect":"portrait","media_aspect_desktop":"inherit","media_radius":0,"enable_media_overlay":false,"overlay_color":"#000000","overlay_opacity":25,"badge_text":"","badge_font":"sans","badge_transform":"upper","badge_position":"above_title","badge_style":"solid","badge_background":"#1c1c1c","badge_text_color":"#ffffff","badge_padding":12,"badge_radius":28,"scroll_hint_enable":true,"scroll_hint_label":"Shop more gifts"}},"bfc_collection_editorial_gnwEqV":{"type":"bfc-collection-editorial","blocks":{"category_cover_ihRUei":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Xmas_35mm_Kit_d22b7320-b2ac-4e1c-ba1e-3670843ce6d0.png","title":"Stocking Stuffers","subtitle":"","url":"#stocking-stuffers","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_988cBE":{"type":"category_cover","disabled":true,"settings":{"title":"","subtitle":"","url":"","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_Hcqm3N":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Xmas_XA_2_Espio.png","title":"Under $150","subtitle":"","url":"#under-150","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_hDpXTq":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Xmas_2025_Espio.png","title":"Under $300","subtitle":"","url":"#under-300","badge":"","bg_tint":0,"text_align":"left"}}},"block_order":["category_cover_ihRUei","category_cover_988cBE","category_cover_Hcqm3N","category_cover_hDpXTq"],"name":"Category covers strip (styled)","settings":{"header_enable":true,"header_eyebrow":"","header_title":"Gifts","header_subtitle":"","header_divider":false,"header_align":"left","header_max_width":820,"heading_font":"serif","header_title_font_size_mobile":1.8,"header_title_font_size_desktop":2.2,"header_font_weight":"400","columns_mobile":3,"columns_tablet":3,"columns_desktop":3,"mobile_show_count":6,"gap_px":12,"padding_top":0,"padding_bottom":0,"background_color":"#ffffff","text_color":"#1c1c1c","media_aspect":"portrait","media_aspect_desktop":"short","media_radius":0,"enable_media_overlay":false,"overlay_color":"#000000","overlay_opacity":25,"badge_text":"","badge_font":"sans","badge_transform":"upper","badge_position":"above_title","badge_style":"solid","badge_background":"#1c1c1c","badge_text_color":"#ffffff","badge_padding":12,"badge_radius":28,"scroll_hint_enable":true,"scroll_hint_label":""}},"new_items_MjzTw9":{"type":"new-items","name":"New Arrivals Grid","settings":{"anchor_id":"stocking-stuffers","heading":"Stocking Stuffers","header_align":"left","header_max_width":820,"header_title_font_size_mobile":1.8,"header_title_font_size_desktop":2.2,"header_font_weight":"400","header_letter_spacing":0,"header_uppercase":false,"manual_products":["pin-canon-wp-2","35mm-slr-pin","pin-mamiya","pin-sx-70-one-step","pin-fuji-disposable","nikon-f3-pin","120-film-box-by-larkhill-prints","35mm-film-box-by-larkhill-prints","637-adapter","larkhill-prints-polaroid-box","canon-50mm-1-1-8-lens-clad","do-not-x-ray-film-pouch","film-case-loaded-with-expired-film","eastman-kodak-gold-200-color","cinestill-400d-color","cinestill-50d-120mm","cinestill-800t-120mm","canon-fd-50mm-f-1-4","analog-photography-reference-manual-for-shooting-film","bfc-gift-card","sx70-remote-shutter-button-v2","flic-film-elektra-100-color","fujicolor-400-color","fujicolor-200-color-35mm","fujifilm-fp-100c","glitter-disposable","harman-phoenix-color-ii","hippie-strap","ilford-pan-50-b-w-expired-2007","ilford-hp5-400-35mm","ilford-color-35mm","kodak-500t-color-super-8mm-film","kodak-super-8-film","kodak-color-plus-color","kodak-ektar-35mm","kodak-ektachrome-100-35mm","kodak-patch","kodak-portra-160-35mm","portra-400-4x5","kodak-portra-400-35mm","kodak-portra-800-35mm","sx-70-sonar-leather-shoulder-case-limited-edition-1","leica-mini"],"collection":"","items_to_show":48,"initial_items":12,"show_more_label":"Display more","collapse_label":"Collapse","show_back_to_top":true,"back_to_top_label":"Back to top","info_display":"hover","background_color":"#ffffff","text_color":"#1c1c1c","padding_top":40,"padding_bottom":40,"product_radius":0,"button_text":"SEE ALL","button_link":""}},"new_items_4m39Xd":{"type":"new-items","name":"New Arrivals Grid","settings":{"anchor_id":"new-arrivals","heading":"Under $50","header_align":"left","header_max_width":820,"header_title_font_size_mobile":1.8,"header_title_font_size_desktop":2.2,"header_font_weight":"400","header_letter_spacing":0,"header_uppercase":false,"manual_products":[],"collection":"under-50","items_to_show":48,"initial_items":12,"show_more_label":"Display more","collapse_label":"Collapse","show_back_to_top":true,"back_to_top_label":"Back to top","info_display":"hover","background_color":"#ffffff","text_color":"#1c1c1c","padding_top":40,"padding_bottom":40,"product_radius":0,"button_text":"SEE ALL","button_link":""}},"new_items_AjUrrm":{"type":"new-items","name":"New Arrivals Grid","settings":{"anchor_id":"under-150","heading":"Under $150","header_align":"left","header_max_width":820,"header_title_font_size_mobile":1.8,"header_title_font_size_desktop":2.2,"header_font_weight":"400","header_letter_spacing":0,"header_uppercase":false,"manual_products":[],"collection":"under-150","items_to_show":48,"initial_items":12,"show_more_label":"Display more","collapse_label":"Collapse","show_back_to_top":true,"back_to_top_label":"Back to top","info_display":"hover","background_color":"#ffffff","text_color":"#1c1c1c","padding_top":40,"padding_bottom":40,"product_radius":8,"button_text":"SEE ALL","button_link":""}},"new_items_wxRMQi":{"type":"new-items","name":"New Arrivals Grid","settings":{"anchor_id":"under-300","heading":"Under $300","header_align":"left","header_max_width":820,"header_title_font_size_mobile":1.8,"header_title_font_size_desktop":2.2,"header_font_weight":"400","header_letter_spacing":0,"header_uppercase":false,"manual_products":[],"collection":"under-300","items_to_show":48,"initial_items":12,"show_more_label":"Display more","collapse_label":"Collapse","show_back_to_top":true,"back_to_top_label":"Back to top","info_display":"hover","background_color":"#ffffff","text_color":"#1c1c1c","padding_top":40,"padding_bottom":40,"product_radius":8,"button_text":"SEE ALL","button_link":""}},"new_items_48yENp":{"type":"new-items","name":"New Arrivals Grid","settings":{"anchor_id":"under-300","heading":"For the photographer who has everything","header_align":"left","header_max_width":820,"header_title_font_size_mobile":1.8,"header_title_font_size_desktop":2.2,"header_font_weight":"400","header_letter_spacing":0,"header_uppercase":false,"manual_products":["hasselblad-500c-80mm-f2-8-fully-refurbished","contax-tvs","yashica-t3","hasselblad-500cm-250mm-t-f5-6-fully-refurbished","fujifilm-fp-100c","leica-mini-zoom","nikon-f3","leitz-leica-summicron-90mm-f-2-m-mount-clad","nikon-28mm-f3-5-tilt-shift","t2","kodak-ektachrome-100-35mm","ilford-delta-3200-bw-35mm"],"collection":"under-300","items_to_show":48,"initial_items":12,"show_more_label":"Display more","collapse_label":"Collapse","show_back_to_top":true,"back_to_top_label":"Back to top","info_display":"hover","background_color":"#ffffff","text_color":"#1c1c1c","padding_top":40,"padding_bottom":40,"product_radius":8,"button_text":"SEE ALL","button_link":""}},"bfc_collection_editorial_VGri8X":{"type":"bfc-collection-editorial","blocks":{"category_cover_4DyFht":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Xmas_35mm_Film_mobile.png","title":"Film","subtitle":"","url":"shopify:\/\/collections\/film","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_cmyHGb":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Xmas_Cool_Cam_Red_mobile.png","title":"Polaroid 600","subtitle":"","url":"shopify:\/\/collections\/cameras-polaroid-600","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_tihYKU":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Xmas_2025_Hasselblad_Group_Full_mobile.png","title":"All Cameras","subtitle":"","url":"shopify:\/\/collections\/cameras","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_8EdHW9":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Xmas_2025_Espio.png","title":"Point & Shoots","subtitle":"","url":"shopify:\/\/collections\/point-shoots","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_gtA6ab":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Xmas_Hasselblad_2_1.png","title":"Medium Format","subtitle":"","url":"shopify:\/\/collections\/medium-format-cameras","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_rnXea8":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Xmas_SX-70_mobile.png","title":"SX-70","subtitle":"","url":"shopify:\/\/collections\/cameras-polaroid-sx-70","badge":"","bg_tint":0,"text_align":"left"}}},"block_order":["category_cover_4DyFht","category_cover_cmyHGb","category_cover_tihYKU","category_cover_8EdHW9","category_cover_gtA6ab","category_cover_rnXea8"],"name":"Category covers strip (styled)","settings":{"header_enable":true,"header_eyebrow":"","header_title":"Shop by category","header_subtitle":"","header_divider":false,"header_align":"left","header_max_width":820,"heading_font":"serif","header_title_font_size_mobile":1.8,"header_title_font_size_desktop":2.2,"header_font_weight":"400","columns_mobile":2,"columns_tablet":3,"columns_desktop":6,"mobile_show_count":6,"gap_px":12,"padding_top":0,"padding_bottom":0,"background_color":"#ffffff","text_color":"#1c1c1c","media_aspect":"portrait","media_aspect_desktop":"inherit","media_radius":0,"enable_media_overlay":false,"overlay_color":"#000000","overlay_opacity":25,"badge_text":"","badge_font":"sans","badge_transform":"upper","badge_position":"above_title","badge_style":"solid","badge_background":"#1c1c1c","badge_text_color":"#ffffff","badge_padding":12,"badge_radius":0,"scroll_hint_enable":true,"scroll_hint_label":""}},"custom_liquid_cQnEpr":{"type":"custom-liquid","name":"t:sections.custom-liquid.name","settings":{"custom_liquid":"<div id=\"my-custom-section\">\n<H> Shop All <\/h>\n\n<\/div>\n\n<script>\ndocument.addEventListener('DOMContentLoaded', function () {\n  \/\/ Smooth scroll for any link that starts with \"#\"\n  document.querySelectorAll('a[href^=\"#\"]').forEach(function(anchor) {\n    anchor.addEventListener('click', function (e) {\n      const targetID = this.getAttribute('href').slice(1);\n      const target = document.getElementById(targetID);\n\n      if (target) {\n        e.preventDefault();\n        target.scrollIntoView({\n          behavior: 'smooth',\n          block: 'start'\n        });\n      }\n    });\n  });\n});\n<\/script>","section_width":"max-w-page","color_scheme":"","spacing_top":"2","spacing_bottom":"2"}},"main":{"type":"main-collection","settings":{"show_top_border_for_utilities_bar":false,"enable_products_count":false,"enable_sorting":true,"enable_opened_accordions":true,"filters":"drawer","products_per_row":"4","products_per_row_mobile":"2","products_per_page":19,"pagination_style":"default","enable_infinity_scroll":false,"section_width":"max-w-fluid","color_scheme":"scheme-1","spacing_top":"2","spacing_bottom":"6"}},"new_items_CMFbPj":{"type":"new-items","name":"New Arrivals Grid","settings":{"anchor_id":"bundles","heading":"All Bundles","header_align":"center","header_max_width":820,"header_title_font_size_mobile":1.8,"header_title_font_size_desktop":2.2,"header_font_weight":"400","header_letter_spacing":0,"header_uppercase":false,"manual_products":[],"collection":"kits","items_to_show":12,"initial_items":12,"show_more_label":"Display more","collapse_label":"Collapse","show_back_to_top":true,"back_to_top_label":"Back to top","info_display":"hover","background_color":"#ffffff","text_color":"#1c1c1c","padding_top":40,"padding_bottom":40,"product_radius":8,"button_text":"SEE ALL","button_link":""}},"f8303da3-c3cb-4a90-a63a-7a628615aa6f":{"type":"seo-content","disabled":true,"settings":{"section_layout":"normal","heading":"Heading for SEO Content","heading_size":"h4","text":"<p>Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand.<\/p>","content_alignment":"center","section_width":"max-w-fluid","color_scheme":"scheme-5","spacing_inner":"2","spacing_top":"4","spacing_bottom":"4"}},"product_recommendations_QrVpBw":{"type":"product-recommendations","disabled":true,"name":"t:sections.product-recommendations.name","settings":{"layout":"layout-1","enable_slideshow_overflow":false,"heading":"You may also like","heading_size":"h3","subheading":"","button_label":"View all","button_link":"shopify:\/\/collections\/all","button_style":"button--filled","show_navigation_arrows":true,"slider_autoplay":3,"tabs_button_style":"tab-btn-filled","max_products":8,"show_unavailable_products":false,"section_width":"max-w-page","color_scheme":"","spacing_top":"2","spacing_bottom":"2"}},"custom_gallery_th6zBd":{"type":"custom-gallery","blocks":{"image_card_JYLaDw":{"type":"image_card","settings":{"alt":"","ratio_override":"auto","span":1,"frameless":false,"badge":"","overlay_subhead":"","overlay_title":"","overlay_body":"","overlay_style":"gradient","overlay_button_text":"","overlay_button_url":"","overlay_button_style":"primary","enable_lightbox":true,"lightbox_label":"View larger","enable_link":false,"link_url":"","subhead":"","title":"Photo story","body":"","tag_one":"","tag_two":"","caption":"","text_align":"left","button_text":"","button_url":"","button_style":"primary","secondary_text":"","secondary_url":"","secondary_style":"outline","button_align":"left"}},"image_card_VUVmD3":{"type":"image_card","settings":{"alt":"","ratio_override":"auto","span":1,"frameless":false,"badge":"","overlay_subhead":"","overlay_title":"","overlay_body":"","overlay_style":"gradient","overlay_button_text":"","overlay_button_url":"","overlay_button_style":"primary","enable_lightbox":true,"lightbox_label":"View larger","enable_link":false,"link_url":"","subhead":"","title":"Photo story","body":"","tag_one":"","tag_two":"","caption":"","text_align":"left","button_text":"","button_url":"","button_style":"primary","secondary_text":"","secondary_url":"","secondary_style":"outline","button_align":"left"}},"text_block_tQWwbP":{"type":"text_block","settings":{"span":2,"background":"#f8fafc","kicker":"","headline":"Curated sets","body":"","button_text":"","button_url":"","button_style":"primary","link_text":"","link_url":""}}},"block_order":["image_card_JYLaDw","image_card_VUVmD3","text_block_tQWwbP"],"disabled":true,"name":"Creative photo gallery","settings":{"eyebrow":"","title":"<p>Creative gallery<\/p>","dek":"","text_align":"center","show_controls":true,"primary_text":"View collection","primary_url":"","secondary_text":"Learn more","secondary_url":"","max_width":1160,"section_padding":52,"gap":16,"object_fit":"cover","columns_desktop":4,"columns_tablet":2,"columns_mobile":3,"radius":0,"sans_font":"Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial","display_font":"\"Playfair Display\", Georgia, Times New Roman, Times, serif","bg":"#f8fafc","card_bg":"#ffffff","text_color":"#0f172a","muted_color":"#6b7280","accent":"#eab308"}}},"order":["dual_tiles_qE6ERR","hero_banner_Q6HnaT","announcement_bar_fWFRMb","bfc_collection_editorial_KdqNyx","bfc_collection_editorial_gnwEqV","new_items_MjzTw9","new_items_4m39Xd","new_items_AjUrrm","new_items_wxRMQi","new_items_48yENp","bfc_collection_editorial_VGri8X","custom_liquid_cQnEpr","main","new_items_CMFbPj","f8303da3-c3cb-4a90-a63a-7a628615aa6f","product_recommendations_QrVpBw","custom_gallery_th6zBd"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "dual_tiles_qE6ERR": {
+      "type": "dual-tiles",
+      "blocks": {
+        "tile_dL8TtP": {
+          "type": "tile",
+          "settings": {
+            "show_on": "both",
+            "color_scheme": "scheme-5",
+            "custom_background_color": "",
+            "heading": "",
+            "heading_size": "h3",
+            "text": "",
+            "button_label": "",
+            "button_link": "",
+            "button_style": "button--filled",
+            "product": "",
+            "product_width": 24,
+            "show_other_elements_with_product": true,
+            "aspect_ratio": "16/9",
+            "vertical_position": "stretch",
+            "content_position": "justify-center",
+            "content_alignment": "text-center align-center",
+            "product_position": "0",
+            "image": "shopify://shop_images/Xmas_2025_Kodak_Film.png",
+            "video_external": "",
+            "show_controls_on_video": false,
+            "aspect_ratio_mobile": "auto",
+            "content_alignment_mobile": "text-center--mobile align-center--mobile",
+            "content_position_mobile": "justify-center--mobile",
+            "product_position_mobile": "0",
+            "video_external_mobile": "",
+            "show_controls_on_video_mobile": false,
+            "spacing_inner": "3"
+          }
+        },
+        "tile_pmmD6M": {
+          "type": "tile",
+          "settings": {
+            "show_on": "both",
+            "color_scheme": "scheme-5",
+            "custom_background_color": "",
+            "heading": "Bundles, Stocking Stuffers, & more.",
+            "heading_size": "h3",
+            "text": "<p>The perfect gift awaits, shop our collections or shop all below</p>",
+            "button_label": "All Gifts",
+            "button_link": "#my-custom-section",
+            "button_style": "button--filled",
+            "product": "",
+            "product_width": 24,
+            "show_other_elements_with_product": true,
+            "aspect_ratio": "auto",
+            "vertical_position": "stretch",
+            "content_position": "justify-center",
+            "content_alignment": "text-center align-center",
+            "product_position": "0",
+            "video_external": "",
+            "show_controls_on_video": false,
+            "aspect_ratio_mobile": "16/9",
+            "content_alignment_mobile": "text-center--mobile align-center--mobile",
+            "content_position_mobile": "justify-center--mobile",
+            "product_position_mobile": "0",
+            "video_external_mobile": "",
+            "show_controls_on_video_mobile": false,
+            "spacing_inner": "2"
+          }
+        }
+      },
+      "block_order": [
+        "tile_dL8TtP",
+        "tile_pmmD6M"
+      ],
+      "name": "t:sections.dual-tiles.name",
+      "settings": {
+        "section_layout": "seperated",
+        "block_size": "large",
+        "block_order_mobile": false,
+        "heading": "",
+        "heading_size": "h5",
+        "heading_alignment": "start",
+        "color_scheme": "",
+        "section_width": "max-w-full",
+        "spacing_top": "0",
+        "spacing_bottom": "2"
+      }
+    },
+    "hero_banner_Q6HnaT": {
+      "type": "hero-banner",
+      "blocks": {
+        "slide_6rLtrR": {
+          "type": "slide",
+          "settings": {
+            "banner_layout": "hero-banner--full",
+            "color_scheme": "scheme-1",
+            "header_menu_text_color": "#ffffff",
+            "heading": "",
+            "subheading": "",
+            "subheading_link": "",
+            "text": "",
+            "button_link_1": "/",
+            "button_link_1_type": "button",
+            "button_label_1": "View more",
+            "button_style_1": "button--filled",
+            "button_link_2": "/",
+            "button_label_2": "View more",
+            "button_style_2": "button--outlined",
+            "content_position": "start",
+            "content_alignment": "center",
+            "image": "shopify://shop_images/Xmas_P_S_Group.png",
+            "video_external": "",
+            "show_controls_on_video": false,
+            "enable_media_overlay_desktop": true,
+            "content_position_mobile": "center",
+            "content_alignment_mobile": "center",
+            "video_external_mobile": "",
+            "show_controls_on_video_mobile": false,
+            "enable_media_overlay_mobile": true,
+            "mobile_text_offset_y": 0
+          }
+        }
+      },
+      "block_order": [
+        "slide_6rLtrR"
+      ],
+      "disabled": true,
+      "name": "t:sections.hero-banner.name",
+      "settings": {
+        "enable_transparent_header": true,
+        "slider_height_desktop": 50,
+        "slider_height_mobile": 80,
+        "slideshow_autoplay_interval": 6,
+        "show_slideshow_navigation": true,
+        "slideshow_navigation_position": "hero__swiper-buttons--start",
+        "color_scheme_arrows": "",
+        "show_slideshow_pagination": true,
+        "slideshow_pagination_style": "style-1",
+        "floating_bar": false
+      }
+    },
+    "announcement_bar_fWFRMb": {
+      "type": "announcement-bar",
+      "blocks": {
+        "text_slide_kHFejk": {
+          "type": "text-slide",
+          "settings": {
+            "content": "<p>Fast Delivery Before Christmas!</p>",
+            "icon": "theme-box"
+          }
+        }
+      },
+      "block_order": [
+        "text_slide_kHFejk"
+      ],
+      "name": "t:sections.announcement-bar.name",
+      "settings": {
+        "text_block_behaviour": "slider",
+        "slider_autoplay_interval": 3,
+        "font_weight": "700",
+        "section_width": "max-w-fluid",
+        "color_scheme": "scheme-7"
+      }
+    },
+    "bfc_collection_editorial_KdqNyx": {
+      "type": "bfc-collection-editorial",
+      "blocks": {
+        "category_cover_3rRWR4": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Cool_Cam_Red_Kit.png",
+            "title": "Cool Cam Filter Kit",
+            "subtitle": "",
+            "url": "shopify://products/cool-cam-red-bundle",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_c4Bcwi": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Cool_Cam_Pink_Kit_931d5749-bfa1-4e8f-8875-6f4ee72bbf1a.png",
+            "title": "Cool Cam Pink Bundle",
+            "subtitle": "",
+            "url": "",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_TC3ht6": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Polaroid_Kit.png",
+            "title": "Polaroid Accessory",
+            "subtitle": "",
+            "url": "",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_nWqxWB": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/WP-1_Canon_Kit.png",
+            "title": "WP-1 Camera Kit",
+            "subtitle": "",
+            "url": "",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_4JFfbL": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Pentax_k1000_Kit_1.png",
+            "title": "K1000 Camera Kit",
+            "subtitle": "",
+            "url": "",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_MnEFEK": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/35mm_Film_Kits.png",
+            "title": "35mm Expired Film",
+            "subtitle": "",
+            "url": "",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        }
+      },
+      "block_order": [
+        "category_cover_3rRWR4",
+        "category_cover_c4Bcwi",
+        "category_cover_TC3ht6",
+        "category_cover_nWqxWB",
+        "category_cover_4JFfbL",
+        "category_cover_MnEFEK"
+      ],
+      "name": "Category covers strip (styled)",
+      "settings": {
+        "header_enable": true,
+        "header_eyebrow": "",
+        "header_title": "Film Photography Gift Bundles",
+        "header_subtitle": "",
+        "header_divider": false,
+        "header_align": "left",
+        "header_max_width": 820,
+        "heading_font": "serif",
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "400",
+        "columns_mobile": 3,
+        "columns_tablet": 3,
+        "columns_desktop": 6,
+        "mobile_show_count": 6,
+        "gap_px": 12,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "background_color": "#ffffff",
+        "text_color": "#111111",
+        "media_aspect": "portrait",
+        "media_aspect_desktop": "inherit",
+        "media_radius": 0,
+        "enable_media_overlay": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 25,
+        "badge_text": "",
+        "badge_font": "sans",
+        "badge_transform": "upper",
+        "badge_position": "above_title",
+        "badge_style": "solid",
+        "badge_background": "#1c1c1c",
+        "badge_text_color": "#ffffff",
+        "badge_padding": 12,
+        "badge_radius": 28,
+        "scroll_hint_enable": true,
+        "scroll_hint_label": "Shop more gifts"
+      }
+    },
+    "bfc_collection_editorial_gnwEqV": {
+      "type": "bfc-collection-editorial",
+      "blocks": {
+        "category_cover_ihRUei": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Xmas_35mm_Kit_d22b7320-b2ac-4e1c-ba1e-3670843ce6d0.png",
+            "title": "Stocking Stuffers",
+            "subtitle": "",
+            "url": "#stocking-stuffers",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_988cBE": {
+          "type": "category_cover",
+          "disabled": true,
+          "settings": {
+            "title": "",
+            "subtitle": "",
+            "url": "",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_Hcqm3N": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Xmas_XA_2_Espio.png",
+            "title": "Under $150",
+            "subtitle": "",
+            "url": "#under-150",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_hDpXTq": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Xmas_2025_Espio.png",
+            "title": "Under $300",
+            "subtitle": "",
+            "url": "#under-300",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        }
+      },
+      "block_order": [
+        "category_cover_ihRUei",
+        "category_cover_988cBE",
+        "category_cover_Hcqm3N",
+        "category_cover_hDpXTq"
+      ],
+      "name": "Category covers strip (styled)",
+      "settings": {
+        "header_enable": true,
+        "header_eyebrow": "",
+        "header_title": "Gifts",
+        "header_subtitle": "",
+        "header_divider": false,
+        "header_align": "left",
+        "header_max_width": 820,
+        "heading_font": "serif",
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "400",
+        "columns_mobile": 3,
+        "columns_tablet": 3,
+        "columns_desktop": 3,
+        "mobile_show_count": 6,
+        "gap_px": 12,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "background_color": "#ffffff",
+        "text_color": "#1c1c1c",
+        "media_aspect": "portrait",
+        "media_aspect_desktop": "short",
+        "media_radius": 0,
+        "enable_media_overlay": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 25,
+        "badge_text": "",
+        "badge_font": "sans",
+        "badge_transform": "upper",
+        "badge_position": "above_title",
+        "badge_style": "solid",
+        "badge_background": "#1c1c1c",
+        "badge_text_color": "#ffffff",
+        "badge_padding": 12,
+        "badge_radius": 28,
+        "scroll_hint_enable": true,
+        "scroll_hint_label": ""
+      }
+    },
+    "new_items_MjzTw9": {
+      "type": "new-items",
+      "name": "New Arrivals Grid",
+      "settings": {
+        "anchor_id": "stocking-stuffers",
+        "heading": "Stocking Stuffers",
+        "header_align": "left",
+        "header_max_width": 820,
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "400",
+        "header_letter_spacing": 0,
+        "header_uppercase": false,
+        "manual_products": [
+          "pin-canon-wp-2",
+          "35mm-slr-pin",
+          "pin-mamiya",
+          "pin-sx-70-one-step",
+          "pin-fuji-disposable",
+          "nikon-f3-pin",
+          "120-film-box-by-larkhill-prints",
+          "35mm-film-box-by-larkhill-prints",
+          "637-adapter",
+          "larkhill-prints-polaroid-box",
+          "canon-50mm-1-1-8-lens-clad",
+          "do-not-x-ray-film-pouch",
+          "film-case-loaded-with-expired-film",
+          "eastman-kodak-gold-200-color",
+          "cinestill-400d-color",
+          "cinestill-50d-120mm",
+          "cinestill-800t-120mm",
+          "canon-fd-50mm-f-1-4",
+          "analog-photography-reference-manual-for-shooting-film",
+          "bfc-gift-card",
+          "sx70-remote-shutter-button-v2",
+          "flic-film-elektra-100-color",
+          "fujicolor-400-color",
+          "fujicolor-200-color-35mm",
+          "fujifilm-fp-100c",
+          "glitter-disposable",
+          "harman-phoenix-color-ii",
+          "hippie-strap",
+          "ilford-pan-50-b-w-expired-2007",
+          "ilford-hp5-400-35mm",
+          "ilford-color-35mm",
+          "kodak-500t-color-super-8mm-film",
+          "kodak-super-8-film",
+          "kodak-color-plus-color",
+          "kodak-ektar-35mm",
+          "kodak-ektachrome-100-35mm",
+          "kodak-patch",
+          "kodak-portra-160-35mm",
+          "portra-400-4x5",
+          "kodak-portra-400-35mm",
+          "kodak-portra-800-35mm",
+          "sx-70-sonar-leather-shoulder-case-limited-edition-1",
+          "leica-mini"
+        ],
+        "collection": "",
+        "items_to_show": 48,
+        "initial_items": 12,
+        "show_more_label": "Display more",
+        "collapse_label": "Collapse",
+        "show_back_to_top": true,
+        "back_to_top_label": "Back to top",
+        "info_display": "hover",
+        "background_color": "#ffffff",
+        "text_color": "#1c1c1c",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "product_radius": 0,
+        "button_text": "SEE ALL",
+        "button_link": ""
+      }
+    },
+    "new_items_4m39Xd": {
+      "type": "new-items",
+      "name": "New Arrivals Grid",
+      "settings": {
+        "anchor_id": "new-arrivals",
+        "heading": "Under $50",
+        "header_align": "left",
+        "header_max_width": 820,
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "400",
+        "header_letter_spacing": 0,
+        "header_uppercase": false,
+        "manual_products": [],
+        "collection": "under-50",
+        "items_to_show": 48,
+        "initial_items": 12,
+        "show_more_label": "Display more",
+        "collapse_label": "Collapse",
+        "show_back_to_top": true,
+        "back_to_top_label": "Back to top",
+        "info_display": "hover",
+        "background_color": "#ffffff",
+        "text_color": "#1c1c1c",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "product_radius": 0,
+        "button_text": "SEE ALL",
+        "button_link": ""
+      }
+    },
+    "new_items_AjUrrm": {
+      "type": "new-items",
+      "name": "New Arrivals Grid",
+      "settings": {
+        "anchor_id": "under-150",
+        "heading": "Under $150",
+        "header_align": "left",
+        "header_max_width": 820,
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "400",
+        "header_letter_spacing": 0,
+        "header_uppercase": false,
+        "manual_products": [],
+        "collection": "under-150",
+        "items_to_show": 48,
+        "initial_items": 12,
+        "show_more_label": "Display more",
+        "collapse_label": "Collapse",
+        "show_back_to_top": true,
+        "back_to_top_label": "Back to top",
+        "info_display": "hover",
+        "background_color": "#ffffff",
+        "text_color": "#1c1c1c",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "product_radius": 8,
+        "button_text": "SEE ALL",
+        "button_link": ""
+      }
+    },
+    "new_items_wxRMQi": {
+      "type": "new-items",
+      "name": "New Arrivals Grid",
+      "settings": {
+        "anchor_id": "under-300",
+        "heading": "Under $300",
+        "header_align": "left",
+        "header_max_width": 820,
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "400",
+        "header_letter_spacing": 0,
+        "header_uppercase": false,
+        "manual_products": [],
+        "collection": "under-300",
+        "items_to_show": 48,
+        "initial_items": 12,
+        "show_more_label": "Display more",
+        "collapse_label": "Collapse",
+        "show_back_to_top": true,
+        "back_to_top_label": "Back to top",
+        "info_display": "hover",
+        "background_color": "#ffffff",
+        "text_color": "#1c1c1c",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "product_radius": 8,
+        "button_text": "SEE ALL",
+        "button_link": ""
+      }
+    },
+    "new_items_48yENp": {
+      "type": "new-items",
+      "name": "New Arrivals Grid",
+      "settings": {
+        "anchor_id": "under-300",
+        "heading": "For the photographer who has everything",
+        "header_align": "left",
+        "header_max_width": 820,
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "400",
+        "header_letter_spacing": 0,
+        "header_uppercase": false,
+        "manual_products": [
+          "hasselblad-500c-80mm-f2-8-fully-refurbished",
+          "contax-tvs",
+          "yashica-t3",
+          "hasselblad-500cm-250mm-t-f5-6-fully-refurbished",
+          "fujifilm-fp-100c",
+          "leica-mini-zoom",
+          "nikon-f3",
+          "leitz-leica-summicron-90mm-f-2-m-mount-clad",
+          "nikon-28mm-f3-5-tilt-shift",
+          "t2",
+          "kodak-ektachrome-100-35mm",
+          "ilford-delta-3200-bw-35mm"
+        ],
+        "collection": "under-300",
+        "items_to_show": 48,
+        "initial_items": 12,
+        "show_more_label": "Display more",
+        "collapse_label": "Collapse",
+        "show_back_to_top": true,
+        "back_to_top_label": "Back to top",
+        "info_display": "hover",
+        "background_color": "#ffffff",
+        "text_color": "#1c1c1c",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "product_radius": 8,
+        "button_text": "SEE ALL",
+        "button_link": ""
+      }
+    },
+    "bfc_collection_editorial_VGri8X": {
+      "type": "bfc-collection-editorial",
+      "blocks": {
+        "category_cover_4DyFht": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Xmas_35mm_Film_mobile.png",
+            "title": "Film",
+            "subtitle": "",
+            "url": "shopify://collections/film",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_cmyHGb": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Xmas_Cool_Cam_Red_mobile.png",
+            "title": "Polaroid 600",
+            "subtitle": "",
+            "url": "shopify://collections/cameras-polaroid-600",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_tihYKU": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Xmas_2025_Hasselblad_Group_Full_mobile.png",
+            "title": "All Cameras",
+            "subtitle": "",
+            "url": "shopify://collections/cameras",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_8EdHW9": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Xmas_2025_Espio.png",
+            "title": "Point & Shoots",
+            "subtitle": "",
+            "url": "shopify://collections/point-shoots",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_gtA6ab": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Xmas_Hasselblad_2_1.png",
+            "title": "Medium Format",
+            "subtitle": "",
+            "url": "shopify://collections/medium-format-cameras",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_rnXea8": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Xmas_SX-70_mobile.png",
+            "title": "SX-70",
+            "subtitle": "",
+            "url": "shopify://collections/cameras-polaroid-sx-70",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        }
+      },
+      "block_order": [
+        "category_cover_4DyFht",
+        "category_cover_cmyHGb",
+        "category_cover_tihYKU",
+        "category_cover_8EdHW9",
+        "category_cover_gtA6ab",
+        "category_cover_rnXea8"
+      ],
+      "name": "Category covers strip (styled)",
+      "settings": {
+        "header_enable": true,
+        "header_eyebrow": "",
+        "header_title": "Shop by category",
+        "header_subtitle": "",
+        "header_divider": false,
+        "header_align": "left",
+        "header_max_width": 820,
+        "heading_font": "serif",
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "400",
+        "columns_mobile": 2,
+        "columns_tablet": 3,
+        "columns_desktop": 6,
+        "mobile_show_count": 6,
+        "gap_px": 12,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "background_color": "#ffffff",
+        "text_color": "#1c1c1c",
+        "media_aspect": "portrait",
+        "media_aspect_desktop": "inherit",
+        "media_radius": 0,
+        "enable_media_overlay": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 25,
+        "badge_text": "",
+        "badge_font": "sans",
+        "badge_transform": "upper",
+        "badge_position": "above_title",
+        "badge_style": "solid",
+        "badge_background": "#1c1c1c",
+        "badge_text_color": "#ffffff",
+        "badge_padding": 12,
+        "badge_radius": 0,
+        "scroll_hint_enable": true,
+        "scroll_hint_label": ""
+      }
+    },
+    "custom_liquid_cQnEpr": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.name",
+      "settings": {
+        "custom_liquid": "<div id=\"my-custom-section\">\n<H> Shop All </h>\n\n</div>\n\n<script>\ndocument.addEventListener('DOMContentLoaded', function () {\n  // Smooth scroll for any link that starts with \"#\"\n  document.querySelectorAll('a[href^=\"#\"]').forEach(function(anchor) {\n    anchor.addEventListener('click', function (e) {\n      const targetID = this.getAttribute('href').slice(1);\n      const target = document.getElementById(targetID);\n\n      if (target) {\n        e.preventDefault();\n        target.scrollIntoView({\n          behavior: 'smooth',\n          block: 'start'\n        });\n      }\n    });\n  });\n});\n</script>",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "show_top_border_for_utilities_bar": false,
+        "enable_products_count": false,
+        "enable_sorting": true,
+        "enable_opened_accordions": true,
+        "filters": "drawer",
+        "products_per_row": "4",
+        "products_per_row_mobile": "2",
+        "products_per_page": 19,
+        "pagination_style": "default",
+        "enable_infinity_scroll": false,
+        "section_width": "max-w-fluid",
+        "color_scheme": "scheme-1",
+        "spacing_top": "2",
+        "spacing_bottom": "6"
+      }
+    },
+    "new_items_CMFbPj": {
+      "type": "new-items",
+      "name": "New Arrivals Grid",
+      "settings": {
+        "anchor_id": "bundles",
+        "heading": "All Bundles",
+        "header_align": "center",
+        "header_max_width": 820,
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "400",
+        "header_letter_spacing": 0,
+        "header_uppercase": false,
+        "manual_products": [],
+        "collection": "kits",
+        "items_to_show": 12,
+        "initial_items": 12,
+        "show_more_label": "Display more",
+        "collapse_label": "Collapse",
+        "show_back_to_top": true,
+        "back_to_top_label": "Back to top",
+        "info_display": "hover",
+        "background_color": "#ffffff",
+        "text_color": "#1c1c1c",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "product_radius": 8,
+        "button_text": "SEE ALL",
+        "button_link": ""
+      }
+    },
+    "f8303da3-c3cb-4a90-a63a-7a628615aa6f": {
+      "type": "seo-content",
+      "disabled": true,
+      "settings": {
+        "section_layout": "normal",
+        "heading": "Heading for SEO Content",
+        "heading_size": "h4",
+        "text": "<p>Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand.</p>",
+        "content_alignment": "center",
+        "section_width": "max-w-fluid",
+        "color_scheme": "scheme-5",
+        "spacing_inner": "2",
+        "spacing_top": "4",
+        "spacing_bottom": "4"
+      }
+    },
+    "product_recommendations_QrVpBw": {
+      "type": "product-recommendations",
+      "disabled": true,
+      "name": "t:sections.product-recommendations.name",
+      "settings": {
+        "layout": "layout-1",
+        "enable_slideshow_overflow": false,
+        "heading": "You may also like",
+        "heading_size": "h3",
+        "subheading": "",
+        "button_label": "View all",
+        "button_link": "shopify://collections/all",
+        "button_style": "button--filled",
+        "show_navigation_arrows": true,
+        "slider_autoplay": 3,
+        "tabs_button_style": "tab-btn-filled",
+        "max_products": 8,
+        "show_unavailable_products": false,
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    },
+    "custom_gallery_th6zBd": {
+      "type": "custom-gallery",
+      "blocks": {
+        "image_card_JYLaDw": {
+          "type": "image_card",
+          "settings": {
+            "alt": "",
+            "ratio_override": "auto",
+            "span": 1,
+            "frameless": false,
+            "badge": "",
+            "overlay_subhead": "",
+            "overlay_title": "",
+            "overlay_body": "",
+            "overlay_style": "gradient",
+            "overlay_button_text": "",
+            "overlay_button_url": "",
+            "overlay_button_style": "primary",
+            "enable_lightbox": true,
+            "lightbox_label": "View larger",
+            "enable_link": false,
+            "link_url": "",
+            "subhead": "",
+            "title": "Photo story",
+            "body": "",
+            "tag_one": "",
+            "tag_two": "",
+            "caption": "",
+            "text_align": "left",
+            "button_text": "",
+            "button_url": "",
+            "button_style": "primary",
+            "secondary_text": "",
+            "secondary_url": "",
+            "secondary_style": "outline",
+            "button_align": "left"
+          }
+        },
+        "image_card_VUVmD3": {
+          "type": "image_card",
+          "settings": {
+            "alt": "",
+            "ratio_override": "auto",
+            "span": 1,
+            "frameless": false,
+            "badge": "",
+            "overlay_subhead": "",
+            "overlay_title": "",
+            "overlay_body": "",
+            "overlay_style": "gradient",
+            "overlay_button_text": "",
+            "overlay_button_url": "",
+            "overlay_button_style": "primary",
+            "enable_lightbox": true,
+            "lightbox_label": "View larger",
+            "enable_link": false,
+            "link_url": "",
+            "subhead": "",
+            "title": "Photo story",
+            "body": "",
+            "tag_one": "",
+            "tag_two": "",
+            "caption": "",
+            "text_align": "left",
+            "button_text": "",
+            "button_url": "",
+            "button_style": "primary",
+            "secondary_text": "",
+            "secondary_url": "",
+            "secondary_style": "outline",
+            "button_align": "left"
+          }
+        },
+        "text_block_tQWwbP": {
+          "type": "text_block",
+          "settings": {
+            "span": 2,
+            "background": "#f8fafc",
+            "kicker": "",
+            "headline": "Curated sets",
+            "body": "",
+            "button_text": "",
+            "button_url": "",
+            "button_style": "primary",
+            "link_text": "",
+            "link_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_card_JYLaDw",
+        "image_card_VUVmD3",
+        "text_block_tQWwbP"
+      ],
+      "disabled": true,
+      "name": "Creative photo gallery",
+      "settings": {
+        "eyebrow": "",
+        "title": "<p>Creative gallery</p>",
+        "dek": "",
+        "text_align": "center",
+        "show_controls": true,
+        "primary_text": "View collection",
+        "primary_url": "",
+        "secondary_text": "Learn more",
+        "secondary_url": "",
+        "max_width": 1160,
+        "section_padding": 52,
+        "gap": 16,
+        "object_fit": "cover",
+        "columns_desktop": 4,
+        "columns_tablet": 2,
+        "columns_mobile": 3,
+        "radius": 0,
+        "sans_font": "Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial",
+        "display_font": "\"Playfair Display\", Georgia, Times New Roman, Times, serif",
+        "bg": "#f8fafc",
+        "card_bg": "#ffffff",
+        "text_color": "#0f172a",
+        "muted_color": "#6b7280",
+        "accent": "#eab308"
+      }
+    }
+  },
+  "order": [
+    "dual_tiles_qE6ERR",
+    "hero_banner_Q6HnaT",
+    "announcement_bar_fWFRMb",
+    "bfc_collection_editorial_KdqNyx",
+    "bfc_collection_editorial_gnwEqV",
+    "new_items_MjzTw9",
+    "new_items_4m39Xd",
+    "new_items_AjUrrm",
+    "new_items_wxRMQi",
+    "new_items_48yENp",
+    "bfc_collection_editorial_VGri8X",
+    "custom_liquid_cQnEpr",
+    "main",
+    "new_items_CMFbPj",
+    "f8303da3-c3cb-4a90-a63a-7a628615aa6f",
+    "product_recommendations_QrVpBw",
+    "custom_gallery_th6zBd"
+  ]
+}

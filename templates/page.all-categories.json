@@ -1,1 +1,558 @@
-{"sections":{"bfc_collection_editorial_8mgVHK":{"type":"bfc-collection-editorial","blocks":{"category_cover_aehhNw":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/120_Group_Hasselbland_Yashica_124-G_2.png","title":"Everything","subtitle":"","url":"","badge":"","bg_tint":0,"text_align":"left"}}},"block_order":["category_cover_aehhNw"],"disabled":true,"name":"Category covers strip (styled)","settings":{"header_enable":true,"header_eyebrow":"","header_title":"Shop by category","header_subtitle":"","header_divider":false,"header_align":"left","header_max_width":820,"heading_font":"serif","header_title_font_size_mobile":1.8,"header_title_font_size_desktop":2.2,"header_font_weight":"600","columns_mobile":2,"columns_tablet":3,"columns_desktop":6,"mobile_show_count":6,"gap_px":12,"padding_top":40,"padding_bottom":40,"background_color":"#FFFFFF","text_color":"#1C1C1C","media_aspect":"portrait","media_aspect_desktop":"inherit","media_radius":16,"enable_media_overlay":false,"overlay_color":"#000000","overlay_opacity":25,"badge_text":"","badge_font":"sans","badge_transform":"upper","badge_position":"above_title","badge_style":"solid","badge_background":"#1C1C1C","badge_text_color":"#FFFFFF","badge_padding":12,"badge_radius":28,"scroll_hint_enable":true,"scroll_hint_label":"Shop all"}},"main":{"type":"main-page","disabled":true,"settings":{"breadcrumbs":true,"show_page_title":true,"page_title_alignment":"text-center","info_title":"","info_content":"","section_width":"max-w-narrower","color_scheme":"","spacing_top":"2","spacing_bottom":"2"}},"bfc_collection_editorial_mYm7bd":{"type":"bfc-collection-editorial","blocks":{"category_cover_GGXfMJ":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/120_Group_Hasselbland_Yashica_124-G_2.png","title":"All Products","subtitle":"","url":"shopify:\/\/collections\/all","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_P6FF8x":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Hello_Kitty.png","title":"Polaroids","subtitle":"","url":"shopify:\/\/collections\/all-polaroid-cameras","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_q6DUfP":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Pentax_K1000_35mm_1.png","title":"35mm","subtitle":"","url":"shopify:\/\/collections\/35mm-cameras","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_aRXpr8":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Hasselblad_500CM_6.png","title":"Medium Format","subtitle":"","url":"shopify:\/\/collections\/medium-format-cameras","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_T7NmBf":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/larkhill_prints_35mm_1.png","title":"Accessories","subtitle":"","url":"shopify:\/\/collections\/accessories","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_3Tj7HR":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Kodak_Kodacolor_100_35mm.png","title":"Film","subtitle":"","url":"shopify:\/\/collections\/film","badge":"","bg_tint":0,"text_align":"left"}}},"block_order":["category_cover_GGXfMJ","category_cover_P6FF8x","category_cover_q6DUfP","category_cover_aRXpr8","category_cover_T7NmBf","category_cover_3Tj7HR"],"name":"Category covers strip (styled)","settings":{"header_enable":true,"header_eyebrow":"","header_title":"Customer Favorites","header_subtitle":"","header_divider":false,"header_align":"left","header_max_width":820,"heading_font":"serif","header_title_font_size_mobile":1.8,"header_title_font_size_desktop":2.2,"header_font_weight":"600","columns_mobile":3,"columns_tablet":3,"columns_desktop":6,"mobile_show_count":6,"gap_px":12,"padding_top":0,"padding_bottom":0,"background_color":"#ffffff","text_color":"#1c1c1c","media_aspect":"portrait","media_aspect_desktop":"inherit","media_radius":16,"enable_media_overlay":false,"overlay_color":"#000000","overlay_opacity":25,"badge_text":"","badge_font":"sans","badge_transform":"upper","badge_position":"above_title","badge_style":"solid","badge_background":"#1c1c1c","badge_text_color":"#ffffff","badge_padding":12,"badge_radius":28,"scroll_hint_enable":false,"scroll_hint_label":""}},"bfc_collection_editorial_eL7MNM":{"type":"bfc-collection-editorial","blocks":{"category_cover_bNyiUi":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Polaroid_Cool_Cam_Red.png","title":"600 Cameras","subtitle":"","url":"shopify:\/\/collections\/cameras-polaroid-600","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_H6ntww":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Hello_Kitty.png","title":"SX-70","subtitle":"","url":"shopify:\/\/collections\/cameras-polaroid-sx-70","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_yGBBqG":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Screenshot_2025-10-28_at_2.57.01_PM.png","title":"Film","subtitle":"","url":"shopify:\/\/collections\/film-instant","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_9jJrEz":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/637_Adapter_2.png","title":"Instant Optics","subtitle":"","url":"shopify:\/\/collections\/instant-optics","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_dWGaYe":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Vintage_Polaroid_Cases_SX-70_3.jpg","title":"SX-70 Accessories","subtitle":"","url":"shopify:\/\/collections\/polaroid-sx-70-accessories","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_7NWnme":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Polaroid_NOW_Gen3_White_Front.jpg","title":"Modern Polaroid","subtitle":"","url":"shopify:\/\/collections\/new-polaroid-cameras","badge":"","bg_tint":0,"text_align":"left"}}},"block_order":["category_cover_bNyiUi","category_cover_H6ntww","category_cover_yGBBqG","category_cover_9jJrEz","category_cover_dWGaYe","category_cover_7NWnme"],"name":"Category covers strip (styled)","settings":{"header_enable":true,"header_eyebrow":"","header_title":"Polaroid","header_subtitle":"","header_divider":false,"header_align":"left","header_max_width":820,"heading_font":"serif","header_title_font_size_mobile":1.8,"header_title_font_size_desktop":2.2,"header_font_weight":"600","columns_mobile":3,"columns_tablet":3,"columns_desktop":6,"mobile_show_count":6,"gap_px":12,"padding_top":0,"padding_bottom":0,"background_color":"#ffffff","text_color":"#1c1c1c","media_aspect":"portrait","media_aspect_desktop":"inherit","media_radius":16,"enable_media_overlay":false,"overlay_color":"#000000","overlay_opacity":25,"badge_text":"","badge_font":"sans","badge_transform":"upper","badge_position":"above_title","badge_style":"solid","badge_background":"#1c1c1c","badge_text_color":"#ffffff","badge_padding":12,"badge_radius":28,"scroll_hint_enable":false,"scroll_hint_label":"Shop all"}},"bfc_collection_editorial_wgM6rP":{"type":"bfc-collection-editorial","blocks":{"category_cover_FPAWyt":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Canon_AE-1_Program.png","title":"SLR's","subtitle":"","url":"https:\/\/brooklynfilmcamera.com\/collections\/35mm-cameras?sort_by=manual&filter.p.m.custom.camera_type=SLR&filter.p.m.custom.camera_type=SLR","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_dNJJKb":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Yashica_T3_35mm_1.jpg","title":"Point & Shoots","subtitle":"","url":"https:\/\/brooklynfilmcamera.com\/collections\/35mm-cameras?filter.p.m.custom.camera_type=Point+%26+Shoot&filter.p.m.custom.camera_type=Point+%26+Shoot&sort_by=manual","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_bYkMLE":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Contax_G2_Kit.png","title":"Staff Favorites","subtitle":"","url":"shopify:\/\/collections\/staff-favorites","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_z6E4Mf":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Olympus_XA2_Flash.png","title":"All Cameras","subtitle":"","url":"shopify:\/\/collections\/35mm-cameras","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_AgLwqG":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Kodak_Kodacolor_100_35mm.png","title":"35mm Film","subtitle":"","url":"shopify:\/\/collections\/35mm-film","badge":"","bg_tint":0,"text_align":"left"}}},"block_order":["category_cover_FPAWyt","category_cover_dNJJKb","category_cover_bYkMLE","category_cover_z6E4Mf","category_cover_AgLwqG"],"name":"Category covers strip (styled)","settings":{"header_enable":true,"header_eyebrow":"","header_title":"35mm","header_subtitle":"","header_divider":false,"header_align":"left","header_max_width":820,"heading_font":"serif","header_title_font_size_mobile":1.8,"header_title_font_size_desktop":2.2,"header_font_weight":"600","columns_mobile":2,"columns_tablet":3,"columns_desktop":6,"mobile_show_count":6,"gap_px":12,"padding_top":0,"padding_bottom":0,"background_color":"#ffffff","text_color":"#1c1c1c","media_aspect":"portrait","media_aspect_desktop":"inherit","media_radius":16,"enable_media_overlay":false,"overlay_color":"#000000","overlay_opacity":25,"badge_text":"","badge_font":"sans","badge_transform":"upper","badge_position":"above_title","badge_style":"solid","badge_background":"#1c1c1c","badge_text_color":"#ffffff","badge_padding":12,"badge_radius":28,"scroll_hint_enable":false,"scroll_hint_label":"Shop all"}},"bfc_collection_editorial_KTgJ9V":{"type":"bfc-collection-editorial","blocks":{"category_cover_xq84DQ":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Yashica_A.png","title":"TLR's","subtitle":"","url":"https:\/\/brooklynfilmcamera.com\/collections\/120-cameras?sort_by=best-selling&filter.p.m.custom.camera_type=TLR","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_YGzU8K":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Hasselblad_500CM_Prisim.png","title":"All Cameras","subtitle":"","url":"shopify:\/\/collections\/medium-format-cameras","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_WWMmK9":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/larkhill_prints_120.png","title":"120 FIlm","subtitle":"","url":"shopify:\/\/collections\/120-film","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_yceC4f":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Nikon_Lens_5.jpg","title":"Medium Format Lenses","subtitle":"","url":"shopify:\/\/collections\/medium-format-lens","badge":"","bg_tint":0,"text_align":"left"}}},"block_order":["category_cover_xq84DQ","category_cover_YGzU8K","category_cover_WWMmK9","category_cover_yceC4f"],"name":"Category covers strip (styled)","settings":{"header_enable":true,"header_eyebrow":"","header_title":"Medium Format","header_subtitle":"","header_divider":false,"header_align":"left","header_max_width":820,"heading_font":"serif","header_title_font_size_mobile":1.8,"header_title_font_size_desktop":2.2,"header_font_weight":"600","columns_mobile":2,"columns_tablet":3,"columns_desktop":6,"mobile_show_count":6,"gap_px":12,"padding_top":0,"padding_bottom":0,"background_color":"#ffffff","text_color":"#1c1c1c","media_aspect":"portrait","media_aspect_desktop":"inherit","media_radius":16,"enable_media_overlay":false,"overlay_color":"#000000","overlay_opacity":25,"badge_text":"","badge_font":"sans","badge_transform":"upper","badge_position":"above_title","badge_style":"solid","badge_background":"#1c1c1c","badge_text_color":"#ffffff","badge_padding":12,"badge_radius":28,"scroll_hint_enable":false,"scroll_hint_label":"Shop all"}}},"order":["bfc_collection_editorial_8mgVHK","main","bfc_collection_editorial_mYm7bd","bfc_collection_editorial_eL7MNM","bfc_collection_editorial_wgM6rP","bfc_collection_editorial_KTgJ9V"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "bfc_collection_editorial_8mgVHK": {
+      "type": "bfc-collection-editorial",
+      "blocks": {
+        "category_cover_aehhNw": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/120_Group_Hasselbland_Yashica_124-G_2.png",
+            "title": "Everything",
+            "subtitle": "",
+            "url": "",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        }
+      },
+      "block_order": [
+        "category_cover_aehhNw"
+      ],
+      "disabled": true,
+      "name": "Category covers strip (styled)",
+      "settings": {
+        "header_enable": true,
+        "header_eyebrow": "",
+        "header_title": "Shop by category",
+        "header_subtitle": "",
+        "header_divider": false,
+        "header_align": "left",
+        "header_max_width": 820,
+        "heading_font": "serif",
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "600",
+        "columns_mobile": 2,
+        "columns_tablet": 3,
+        "columns_desktop": 6,
+        "mobile_show_count": 6,
+        "gap_px": 12,
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "background_color": "#FFFFFF",
+        "text_color": "#1C1C1C",
+        "media_aspect": "portrait",
+        "media_aspect_desktop": "inherit",
+        "media_radius": 16,
+        "enable_media_overlay": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 25,
+        "badge_text": "",
+        "badge_font": "sans",
+        "badge_transform": "upper",
+        "badge_position": "above_title",
+        "badge_style": "solid",
+        "badge_background": "#1C1C1C",
+        "badge_text_color": "#FFFFFF",
+        "badge_padding": 12,
+        "badge_radius": 28,
+        "scroll_hint_enable": true,
+        "scroll_hint_label": "Shop all"
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "breadcrumbs": true,
+        "show_page_title": true,
+        "page_title_alignment": "text-center",
+        "info_title": "",
+        "info_content": "",
+        "section_width": "max-w-narrower",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    },
+    "bfc_collection_editorial_mYm7bd": {
+      "type": "bfc-collection-editorial",
+      "blocks": {
+        "category_cover_GGXfMJ": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/120_Group_Hasselbland_Yashica_124-G_2.png",
+            "title": "All Products",
+            "subtitle": "",
+            "url": "shopify://collections/all",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_P6FF8x": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Hello_Kitty.png",
+            "title": "Polaroids",
+            "subtitle": "",
+            "url": "shopify://collections/all-polaroid-cameras",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_q6DUfP": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Pentax_K1000_35mm_1.png",
+            "title": "35mm",
+            "subtitle": "",
+            "url": "shopify://collections/35mm-cameras",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_aRXpr8": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Hasselblad_500CM_6.png",
+            "title": "Medium Format",
+            "subtitle": "",
+            "url": "shopify://collections/medium-format-cameras",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_T7NmBf": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/larkhill_prints_35mm_1.png",
+            "title": "Accessories",
+            "subtitle": "",
+            "url": "shopify://collections/accessories",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_3Tj7HR": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Kodak_Kodacolor_100_35mm.png",
+            "title": "Film",
+            "subtitle": "",
+            "url": "shopify://collections/film",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        }
+      },
+      "block_order": [
+        "category_cover_GGXfMJ",
+        "category_cover_P6FF8x",
+        "category_cover_q6DUfP",
+        "category_cover_aRXpr8",
+        "category_cover_T7NmBf",
+        "category_cover_3Tj7HR"
+      ],
+      "name": "Category covers strip (styled)",
+      "settings": {
+        "header_enable": true,
+        "header_eyebrow": "",
+        "header_title": "Customer Favorites",
+        "header_subtitle": "",
+        "header_divider": false,
+        "header_align": "left",
+        "header_max_width": 820,
+        "heading_font": "serif",
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "600",
+        "columns_mobile": 3,
+        "columns_tablet": 3,
+        "columns_desktop": 6,
+        "mobile_show_count": 6,
+        "gap_px": 12,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "background_color": "#ffffff",
+        "text_color": "#1c1c1c",
+        "media_aspect": "portrait",
+        "media_aspect_desktop": "inherit",
+        "media_radius": 16,
+        "enable_media_overlay": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 25,
+        "badge_text": "",
+        "badge_font": "sans",
+        "badge_transform": "upper",
+        "badge_position": "above_title",
+        "badge_style": "solid",
+        "badge_background": "#1c1c1c",
+        "badge_text_color": "#ffffff",
+        "badge_padding": 12,
+        "badge_radius": 28,
+        "scroll_hint_enable": false,
+        "scroll_hint_label": ""
+      }
+    },
+    "bfc_collection_editorial_eL7MNM": {
+      "type": "bfc-collection-editorial",
+      "blocks": {
+        "category_cover_bNyiUi": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Polaroid_Cool_Cam_Red.png",
+            "title": "600 Cameras",
+            "subtitle": "",
+            "url": "shopify://collections/cameras-polaroid-600",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_H6ntww": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Hello_Kitty.png",
+            "title": "SX-70",
+            "subtitle": "",
+            "url": "shopify://collections/cameras-polaroid-sx-70",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_yGBBqG": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Screenshot_2025-10-28_at_2.57.01_PM.png",
+            "title": "Film",
+            "subtitle": "",
+            "url": "shopify://collections/film-instant",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_9jJrEz": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/637_Adapter_2.png",
+            "title": "Instant Optics",
+            "subtitle": "",
+            "url": "shopify://collections/instant-optics",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_dWGaYe": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Vintage_Polaroid_Cases_SX-70_3.jpg",
+            "title": "SX-70 Accessories",
+            "subtitle": "",
+            "url": "shopify://collections/polaroid-sx-70-accessories",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_7NWnme": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Polaroid_NOW_Gen3_White_Front.jpg",
+            "title": "Modern Polaroid",
+            "subtitle": "",
+            "url": "shopify://collections/new-polaroid-cameras",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        }
+      },
+      "block_order": [
+        "category_cover_bNyiUi",
+        "category_cover_H6ntww",
+        "category_cover_yGBBqG",
+        "category_cover_9jJrEz",
+        "category_cover_dWGaYe",
+        "category_cover_7NWnme"
+      ],
+      "name": "Category covers strip (styled)",
+      "settings": {
+        "header_enable": true,
+        "header_eyebrow": "",
+        "header_title": "Polaroid",
+        "header_subtitle": "",
+        "header_divider": false,
+        "header_align": "left",
+        "header_max_width": 820,
+        "heading_font": "serif",
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "600",
+        "columns_mobile": 3,
+        "columns_tablet": 3,
+        "columns_desktop": 6,
+        "mobile_show_count": 6,
+        "gap_px": 12,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "background_color": "#ffffff",
+        "text_color": "#1c1c1c",
+        "media_aspect": "portrait",
+        "media_aspect_desktop": "inherit",
+        "media_radius": 16,
+        "enable_media_overlay": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 25,
+        "badge_text": "",
+        "badge_font": "sans",
+        "badge_transform": "upper",
+        "badge_position": "above_title",
+        "badge_style": "solid",
+        "badge_background": "#1c1c1c",
+        "badge_text_color": "#ffffff",
+        "badge_padding": 12,
+        "badge_radius": 28,
+        "scroll_hint_enable": false,
+        "scroll_hint_label": "Shop all"
+      }
+    },
+    "bfc_collection_editorial_wgM6rP": {
+      "type": "bfc-collection-editorial",
+      "blocks": {
+        "category_cover_FPAWyt": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Canon_AE-1_Program.png",
+            "title": "SLR's",
+            "subtitle": "",
+            "url": "https://brooklynfilmcamera.com/collections/35mm-cameras?sort_by=manual&filter.p.m.custom.camera_type=SLR&filter.p.m.custom.camera_type=SLR",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_dNJJKb": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Yashica_T3_35mm_1.jpg",
+            "title": "Point & Shoots",
+            "subtitle": "",
+            "url": "https://brooklynfilmcamera.com/collections/35mm-cameras?filter.p.m.custom.camera_type=Point+%26+Shoot&filter.p.m.custom.camera_type=Point+%26+Shoot&sort_by=manual",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_bYkMLE": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Contax_G2_Kit.png",
+            "title": "Staff Favorites",
+            "subtitle": "",
+            "url": "shopify://collections/staff-favorites",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_z6E4Mf": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Olympus_XA2_Flash.png",
+            "title": "All Cameras",
+            "subtitle": "",
+            "url": "shopify://collections/35mm-cameras",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_AgLwqG": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Kodak_Kodacolor_100_35mm.png",
+            "title": "35mm Film",
+            "subtitle": "",
+            "url": "shopify://collections/35mm-film",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        }
+      },
+      "block_order": [
+        "category_cover_FPAWyt",
+        "category_cover_dNJJKb",
+        "category_cover_bYkMLE",
+        "category_cover_z6E4Mf",
+        "category_cover_AgLwqG"
+      ],
+      "name": "Category covers strip (styled)",
+      "settings": {
+        "header_enable": true,
+        "header_eyebrow": "",
+        "header_title": "35mm",
+        "header_subtitle": "",
+        "header_divider": false,
+        "header_align": "left",
+        "header_max_width": 820,
+        "heading_font": "serif",
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "600",
+        "columns_mobile": 2,
+        "columns_tablet": 3,
+        "columns_desktop": 6,
+        "mobile_show_count": 6,
+        "gap_px": 12,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "background_color": "#ffffff",
+        "text_color": "#1c1c1c",
+        "media_aspect": "portrait",
+        "media_aspect_desktop": "inherit",
+        "media_radius": 16,
+        "enable_media_overlay": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 25,
+        "badge_text": "",
+        "badge_font": "sans",
+        "badge_transform": "upper",
+        "badge_position": "above_title",
+        "badge_style": "solid",
+        "badge_background": "#1c1c1c",
+        "badge_text_color": "#ffffff",
+        "badge_padding": 12,
+        "badge_radius": 28,
+        "scroll_hint_enable": false,
+        "scroll_hint_label": "Shop all"
+      }
+    },
+    "bfc_collection_editorial_KTgJ9V": {
+      "type": "bfc-collection-editorial",
+      "blocks": {
+        "category_cover_xq84DQ": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Yashica_A.png",
+            "title": "TLR's",
+            "subtitle": "",
+            "url": "https://brooklynfilmcamera.com/collections/120-cameras?sort_by=best-selling&filter.p.m.custom.camera_type=TLR",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_YGzU8K": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Hasselblad_500CM_Prisim.png",
+            "title": "All Cameras",
+            "subtitle": "",
+            "url": "shopify://collections/medium-format-cameras",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_WWMmK9": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/larkhill_prints_120.png",
+            "title": "120 FIlm",
+            "subtitle": "",
+            "url": "shopify://collections/120-film",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_yceC4f": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Nikon_Lens_5.jpg",
+            "title": "Medium Format Lenses",
+            "subtitle": "",
+            "url": "shopify://collections/medium-format-lens",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        }
+      },
+      "block_order": [
+        "category_cover_xq84DQ",
+        "category_cover_YGzU8K",
+        "category_cover_WWMmK9",
+        "category_cover_yceC4f"
+      ],
+      "name": "Category covers strip (styled)",
+      "settings": {
+        "header_enable": true,
+        "header_eyebrow": "",
+        "header_title": "Medium Format",
+        "header_subtitle": "",
+        "header_divider": false,
+        "header_align": "left",
+        "header_max_width": 820,
+        "heading_font": "serif",
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "600",
+        "columns_mobile": 2,
+        "columns_tablet": 3,
+        "columns_desktop": 6,
+        "mobile_show_count": 6,
+        "gap_px": 12,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "background_color": "#ffffff",
+        "text_color": "#1c1c1c",
+        "media_aspect": "portrait",
+        "media_aspect_desktop": "inherit",
+        "media_radius": 16,
+        "enable_media_overlay": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 25,
+        "badge_text": "",
+        "badge_font": "sans",
+        "badge_transform": "upper",
+        "badge_position": "above_title",
+        "badge_style": "solid",
+        "badge_background": "#1c1c1c",
+        "badge_text_color": "#ffffff",
+        "badge_padding": 12,
+        "badge_radius": 28,
+        "scroll_hint_enable": false,
+        "scroll_hint_label": "Shop all"
+      }
+    }
+  },
+  "order": [
+    "bfc_collection_editorial_8mgVHK",
+    "main",
+    "bfc_collection_editorial_mYm7bd",
+    "bfc_collection_editorial_eL7MNM",
+    "bfc_collection_editorial_wgM6rP",
+    "bfc_collection_editorial_KTgJ9V"
+  ]
+}
