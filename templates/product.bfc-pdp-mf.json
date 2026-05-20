@@ -1,1 +1,192 @@
-{"sections":{"main":{"type":"bfc-pdp-mf","blocks":{"kit_item_FYaCxi":{"type":"kit_item","settings":{"label":"Film","custom_label":"","column":"More","product":"film-case-loaded-with-expired-film","product_alt_1":"","product_alt_2":"","variant_id":"45053858250924","discount_percent":10,"is_developing":false,"is_starter_kit":false}},"kit_item_Gkqdtw":{"type":"kit_item","settings":{"label":"Film","custom_label":"","column":"More","product":"do-not-x-ray-film-pouch","product_alt_1":"","product_alt_2":"","variant_id":"45053858250924","discount_percent":0,"is_developing":false,"is_starter_kit":false}},"kit_item_bbpw3b":{"type":"kit_item","settings":{"label":"Film","custom_label":"","column":"More","product":"analog-photography-notebooks","product_alt_1":"","product_alt_2":"","variant_id":"45053858250924","discount_percent":0,"is_developing":false,"is_starter_kit":false}},"kit_item_zkfd3p":{"type":"kit_item","settings":{"label":"Film","custom_label":"","column":"More","product":"120-film-box-by-larkhill-prints","product_alt_1":"","product_alt_2":"","variant_id":"","discount_percent":10,"is_developing":false,"is_starter_kit":false}},"kit_item_Qw4r4A":{"type":"kit_item","settings":{"label":"Film","custom_label":"Portra 400","column":"","product":"kodak-portra-400-35mm","product_alt_1":"","product_alt_2":"","variant_id":"40027148714156","discount_percent":0,"is_developing":false,"is_starter_kit":true}},"kit_item_wFB8xM":{"type":"kit_item","settings":{"label":"Film","custom_label":"Cinestill 800T","column":"","product":"cinestill-800t-120mm","product_alt_1":"","product_alt_2":"","variant_id":"40026778108076","discount_percent":0,"is_developing":false,"is_starter_kit":false}},"kit_item_QUKfxa":{"type":"kit_item","settings":{"label":"Film","custom_label":"Gold 200","column":"","product":"eastman-kodak-gold-200-color","product_alt_1":"","product_alt_2":"","variant_id":"41524157513900","discount_percent":0,"is_developing":false,"is_starter_kit":true}},"kit_item_xG4qaw":{"type":"kit_item","settings":{"label":"Film","custom_label":"Portra 800","column":"","product":"kodak-portra-800-35mm","product_alt_1":"","product_alt_2":"","variant_id":"40027156644012","discount_percent":0,"is_developing":false,"is_starter_kit":false}},"kit_item_LjNVdk":{"type":"kit_item","settings":{"label":"Film","custom_label":"Ilford HP5","column":"","product":"ilford-hp5-400-35mm","product_alt_1":"","product_alt_2":"","variant_id":"40027148714156","discount_percent":0,"is_developing":false,"is_starter_kit":true}},"kit_item_MzwNmV":{"type":"kit_item","settings":{"label":"Film","custom_label":"Kodak TRI-X","column":"","product":"eastman-kodak-tri-x-400-b-w","product_alt_1":"","product_alt_2":"","variant_id":"40027167522988","discount_percent":0,"is_developing":false,"is_starter_kit":false}}},"block_order":["kit_item_FYaCxi","kit_item_Gkqdtw","kit_item_bbpw3b","kit_item_zkfd3p","kit_item_Qw4r4A","kit_item_wFB8xM","kit_item_QUKfxa","kit_item_xG4qaw","kit_item_LjNVdk","kit_item_MzwNmV"],"settings":{}},"177680223040eef4fa":{"type":"apps","blocks":{"judge_me_reviews_review_widget_nDwgFc":{"type":"shopify:\/\/apps\/judge-me-reviews\/blocks\/review_widget\/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8","settings":{"review_data":"sample_data","max_width":1200,"show_shop_reviews":false,"empty_state":"empty_widget"}}},"block_order":["judge_me_reviews_review_widget_nDwgFc"],"settings":{"section_layout":"normal","spacing_inner":"2","section_width":"max-w-page","color_scheme":"","spacing_top":"2","spacing_bottom":"2"}}},"order":["main","177680223040eef4fa"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "bfc-pdp-mf",
+      "blocks": {
+        "kit_item_FYaCxi": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "",
+            "column": "More",
+            "product": "film-case-loaded-with-expired-film",
+            "variant_id": "45053858250924",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_item_Gkqdtw": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "",
+            "column": "More",
+            "product": "do-not-x-ray-film-pouch",
+            "variant_id": "45053858250924",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_item_bbpw3b": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "",
+            "column": "More",
+            "product": "analog-photography-notebooks",
+            "variant_id": "45053858250924",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_item_zkfd3p": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "",
+            "column": "More",
+            "product": "120-film-box-by-larkhill-prints",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_item_Qw4r4A": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Portra 400",
+            "column": "",
+            "product": "kodak-portra-400-35mm",
+            "variant_id": "40027148714156",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": true
+          }
+        },
+        "kit_item_wFB8xM": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Cinestill 800T",
+            "column": "",
+            "product": "cinestill-800t-120mm",
+            "variant_id": "40026778108076",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_item_QUKfxa": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Gold 200",
+            "column": "",
+            "product": "eastman-kodak-gold-200-color",
+            "variant_id": "41524157513900",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": true
+          }
+        },
+        "kit_item_xG4qaw": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Portra 800",
+            "column": "",
+            "product": "kodak-portra-800-35mm",
+            "variant_id": "40027156644012",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_item_LjNVdk": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Ilford HP5",
+            "column": "",
+            "product": "ilford-hp5-400-35mm",
+            "variant_id": "40027148714156",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": true
+          }
+        },
+        "kit_item_MzwNmV": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Kodak TRI-X",
+            "column": "",
+            "product": "eastman-kodak-tri-x-400-b-w",
+            "variant_id": "40027167522988",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        }
+      },
+      "block_order": [
+        "kit_item_FYaCxi",
+        "kit_item_Gkqdtw",
+        "kit_item_bbpw3b",
+        "kit_item_zkfd3p",
+        "kit_item_Qw4r4A",
+        "kit_item_wFB8xM",
+        "kit_item_QUKfxa",
+        "kit_item_xG4qaw",
+        "kit_item_LjNVdk",
+        "kit_item_MzwNmV"
+      ],
+      "settings": {
+        "restoration_prose": ""
+      }
+    },
+    "177680223040eef4fa": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_nDwgFc": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_nDwgFc"
+      ],
+      "settings": {
+        "section_layout": "normal",
+        "spacing_inner": "2",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "177680223040eef4fa"
+  ]
+}
