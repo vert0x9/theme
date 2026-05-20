@@ -14,12 +14,11 @@
       "blocks": {
         "slide_aBrUfY": {
           "type": "slide",
-          "disabled": true,
           "settings": {
             "banner_layout": "hero-banner--full",
             "color_scheme": "scheme-2",
             "header_menu_text_color": "#ffffff",
-            "heading": "<p><em><strong>The Open SX70</strong></em></p>",
+            "heading": "<p><em><strong>The OpenSX70</strong></em></p>",
             "subheading": "",
             "subheading_link": "",
             "text": "<p>You can buy a vintage SX-70 anywhere. </p><p>We rebuild ours to work better than the day they left the factory more than 50 years ago.</p>",
