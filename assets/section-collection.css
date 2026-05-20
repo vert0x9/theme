@@ -8,7 +8,16 @@
 
 .collection__heading {
   margin: 0 0 var(--spacing-5);
-  padding-inline-start: 2.4rem;
+  padding-inline-start: 1.6rem;
+}
+
+@media screen and (min-width: 750px) {
+  .collection__heading {
+    padding-inline-start: 0;
+  }
+  .collection.filters--sidebar .collection__heading {
+    grid-column: 2;
+  }
 }
 
 .collection__title {
