@@ -139,7 +139,6 @@
         "category_cover_P3Am6m",
         "category_cover_HrdQcJ"
       ],
-      "disabled": true,
       "name": "Category covers strip (styled)",
       "settings": {
         "header_enable": false,
@@ -364,10 +363,10 @@
       "disabled": true,
       "name": "BFC New Arrivals",
       "settings": {
-        "background_color": "#f8f6ee",
+        "background_color": "#F8F6EE",
         "text_color": "#202009",
-        "accent_color": "#e36e15",
-        "secondary_text_color": "#4e4741",
+        "accent_color": "#E36E15",
+        "secondary_text_color": "#4E4741",
         "horizontal_padding": 32,
         "section_padding_top": 56,
         "section_padding_bottom": 56

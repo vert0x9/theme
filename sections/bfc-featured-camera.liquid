@@ -1,0 +1,370 @@
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/></noscript>
+
+<style>
+#bfc-feat-{{ section.id }} *, #bfc-feat-{{ section.id }} *::before, #bfc-feat-{{ section.id }} *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+#bfc-feat-{{ section.id }} {
+  --or: #E36E15;
+  --go: #F4A027;
+  --ce: #ABCC99;
+  --cv: #F8F6EE;
+  --bk: #202009;
+  --ch: #4E4741;
+  --gr: #E3DDDA;
+  --sr: 'Cormorant Garamond', Georgia, serif;
+  --sn: 'Poppins', sans-serif;
+  --t: 0.2s ease;
+  font-family: var(--sn);
+  color: var(--bk);
+  background: var(--cv);
+  -webkit-font-smoothing: antialiased;
+}
+#bfc-feat-{{ section.id }}.is-dark { background: var(--bk); color: #fff; }
+
+{%- comment -%} Each camera block hidden until JS reveals one. noscript shows the first. {%- endcomment -%}
+#bfc-feat-{{ section.id }} .feat-block { display: none; }
+#bfc-feat-{{ section.id }} .feat-block.is-active { display: block; }
+
+#bfc-feat-{{ section.id }} .feat-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.1fr 0.95fr;
+  min-height: 30vh;
+  align-items: stretch;
+}
+
+{%- comment -%} ── CAMERA IMAGE (left) ── {%- endcomment -%}
+#bfc-feat-{{ section.id }} .feat-cam {
+  position: relative;
+  background: var(--gr);
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 30vh;
+}
+#bfc-feat-{{ section.id }}.is-dark .feat-cam { background: #18180a; }
+#bfc-feat-{{ section.id }} .feat-cam img {
+  width: 100%; height: 100%; object-fit: contain; display: block;
+  transition: transform 0.5s ease;
+}
+#bfc-feat-{{ section.id }} .feat-cam:hover img { transform: scale(1.03); }
+#bfc-feat-{{ section.id }} .feat-cam-grade {
+  position: absolute; top: 16px; left: 16px;
+  font-size: 8px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: #fff; background: var(--or); padding: 3px 9px;
+}
+
+{%- comment -%} ── TEXT (center) ── {%- endcomment -%}
+#bfc-feat-{{ section.id }} .feat-text {
+  padding: 40px 44px;
+  display: flex; flex-direction: column; justify-content: center;
+  border-left: 1px solid rgba(32,32,9,0.1);
+  border-right: 1px solid rgba(32,32,9,0.1);
+}
+#bfc-feat-{{ section.id }}.is-dark .feat-text {
+  border-left-color: rgba(255,255,255,0.1);
+  border-right-color: rgba(255,255,255,0.1);
+}
+#bfc-feat-{{ section.id }} .feat-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--or); margin-bottom: 14px;
+}
+#bfc-feat-{{ section.id }} .feat-eyebrow::before {
+  content: ''; width: 18px; height: 1px; background: var(--or); display: block;
+}
+#bfc-feat-{{ section.id }} .feat-title {
+  font-family: var(--sr); font-size: 32px; font-weight: 300;
+  line-height: 1.08; letter-spacing: -0.01em; margin-bottom: 12px;
+}
+#bfc-feat-{{ section.id }}.is-dark .feat-title { color: #fff; }
+#bfc-feat-{{ section.id }} .feat-desc {
+  font-size: 12.5px; line-height: 1.65; color: var(--ch);
+  margin-bottom: 20px; max-width: 42ch;
+}
+#bfc-feat-{{ section.id }}.is-dark .feat-desc { color: rgba(255,255,255,0.7); }
+#bfc-feat-{{ section.id }} .feat-buy { display: flex; align-items: center; gap: 18px; }
+#bfc-feat-{{ section.id }} .feat-price {
+  font-family: var(--sr); font-size: 26px; font-weight: 300; line-height: 1;
+}
+#bfc-feat-{{ section.id }}.is-dark .feat-price { color: #fff; }
+#bfc-feat-{{ section.id }} .feat-price small {
+  display: block; font-family: var(--sn); font-size: 8px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--ch); margin-bottom: 4px;
+}
+#bfc-feat-{{ section.id }}.is-dark .feat-price small { color: rgba(255,255,255,0.5); }
+#bfc-feat-{{ section.id }} .feat-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 22px; background: var(--or); color: #fff;
+  font-family: var(--sn); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  text-decoration: none; transition: background var(--t);
+}
+#bfc-feat-{{ section.id }} .feat-cta:hover { background: #c9600f; }
+#bfc-feat-{{ section.id }} .feat-cta svg { transition: transform var(--t); }
+#bfc-feat-{{ section.id }} .feat-cta:hover svg { transform: translateX(3px); }
+
+{%- comment -%} Shuffle control (optional) {%- endcomment -%}
+#bfc-feat-{{ section.id }} .feat-shuffle {
+  position: absolute; top: 14px; right: 16px; z-index: 4;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 11px; background: rgba(248,246,238,0.85);
+  border: 1px solid rgba(32,32,9,0.12);
+  font-family: var(--sn); font-size: 8.5px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--ch);
+  cursor: pointer; transition: all var(--t);
+}
+#bfc-feat-{{ section.id }} .feat-shuffle:hover { color: var(--or); border-color: var(--or); }
+#bfc-feat-{{ section.id }}.is-dark .feat-shuffle {
+  background: rgba(32,32,9,0.6); border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.75);
+}
+#bfc-feat-{{ section.id }}.is-dark .feat-shuffle:hover { color: var(--go); border-color: var(--go); }
+#bfc-feat-{{ section.id }} .feat-shuffle svg { transition: transform 0.4s ease; }
+#bfc-feat-{{ section.id }} .feat-shuffle:hover svg { transform: rotate(180deg); }
+
+{%- comment -%} ── EXAMPLE PHOTOS (right) ── {%- endcomment -%}
+#bfc-feat-{{ section.id }} .feat-photos {
+  position: relative;
+  display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+  min-height: 30vh;
+}
+#bfc-feat-{{ section.id }} .feat-photo {
+  position: relative; overflow: hidden; background: var(--gr);
+  border-left: 1px solid rgba(32,32,9,0.08);
+  border-top: 1px solid rgba(32,32,9,0.08);
+  display: block; line-height: 0;
+}
+#bfc-feat-{{ section.id }}.is-dark .feat-photo {
+  background: #18180a;
+  border-left-color: rgba(255,255,255,0.08);
+  border-top-color: rgba(255,255,255,0.08);
+}
+#bfc-feat-{{ section.id }} .feat-photo:nth-child(odd) { border-left: none; }
+#bfc-feat-{{ section.id }} .feat-photo:nth-child(-n+2) { border-top: none; }
+#bfc-feat-{{ section.id }} .feat-photo img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.5s ease;
+}
+#bfc-feat-{{ section.id }} .feat-photo:hover img { transform: scale(1.05); }
+#bfc-feat-{{ section.id }} .feat-photos-cap {
+  position: absolute; bottom: 0; left: 0; right: 0; padding: 6px 10px;
+  font-size: 8px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  color: #fff; background: rgba(32,32,9,0.55); text-align: center; z-index: 2; pointer-events: none;
+}
+
+{%- comment -%} ── MOBILE ── {%- endcomment -%}
+@media (max-width: 749px) {
+  #bfc-feat-{{ section.id }} .feat-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    min-height: 80vh;
+  }
+  #bfc-feat-{{ section.id }} .feat-cam { min-height: 30vh; }
+  #bfc-feat-{{ section.id }} .feat-text {
+    padding: 28px 22px;
+    border-left: none; border-right: none;
+    border-top: 1px solid rgba(32,32,9,0.1);
+    border-bottom: 1px solid rgba(32,32,9,0.1);
+  }
+  #bfc-feat-{{ section.id }}.is-dark .feat-text {
+    border-top-color: rgba(255,255,255,0.1);
+    border-bottom-color: rgba(255,255,255,0.1);
+  }
+  #bfc-feat-{{ section.id }} .feat-title { font-size: 30px; }
+  #bfc-feat-{{ section.id }} .feat-desc { max-width: none; }
+  #bfc-feat-{{ section.id }} .feat-photos { min-height: 30vh; }
+}
+</style>
+
+{%- comment -%} noscript: with JS off, reveal the first camera block {%- endcomment -%}
+<noscript><style>#bfc-feat-{{ section.id }} .feat-block:first-child { display: block !important; }</style></noscript>
+
+<div id="bfc-feat-{{ section.id }}" class="{% if section.settings.theme == 'dark' %}is-dark{% endif %}" data-shuffle="{{ section.settings.randomize }}">
+  {%- if section.blocks.size > 0 -%}
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign p = block.settings.product
+        if p == blank
+          continue
+        endif
+
+        assign ex1 = block.settings.photo_1
+        assign ex2 = block.settings.photo_2
+        assign ex3 = block.settings.photo_3
+        assign ex4 = block.settings.photo_4
+        if ex1 == blank and ex2 == blank and ex3 == blank and ex4 == blank
+          assign ex1 = p.metafields.custom.gallery_1.value
+          assign ex2 = p.metafields.custom.gallery_2.value
+          assign ex3 = p.metafields.custom.gallery_3.value
+          assign ex4 = p.metafields.custom.gallery_4.value
+        endif
+
+        assign feat_heading = block.settings.heading_override | default: p.title
+        assign feat_desc = block.settings.description_override
+        if feat_desc == blank
+          assign feat_desc = p.description | strip_html | strip | truncatewords: 32
+        endif
+      -%}
+      <div class="feat-block" {{ block.shopify_attributes }}>
+        <div class="feat-grid">
+
+          <a class="feat-cam" href="{{ p.url }}" aria-label="{{ p.title | escape }}">
+            {%- if p.featured_image -%}
+              <img
+                src="{{ p.featured_image | image_url: width: 800 }}"
+                srcset="{{ p.featured_image | image_url: width: 500 }} 500w, {{ p.featured_image | image_url: width: 800 }} 800w, {{ p.featured_image | image_url: width: 1100 }} 1100w"
+                sizes="(max-width: 749px) 100vw, 33vw"
+                alt="{{ p.title | escape }}" loading="lazy" width="800" height="800"/>
+            {%- endif -%}
+            {%- if block.settings.show_grade_badge -%}
+              <span class="feat-cam-grade">{{ block.settings.grade_badge_text | default: 'Restored' }}</span>
+            {%- endif -%}
+          </a>
+
+          <div class="feat-text">
+            <span class="feat-eyebrow">{{ block.settings.eyebrow | default: 'Featured Camera' }}</span>
+            <h2 class="feat-title">{{ feat_heading }}</h2>
+            {%- if feat_desc != blank -%}<p class="feat-desc">{{ feat_desc }}</p>{%- endif -%}
+            <div class="feat-buy">
+              {%- if p.available -%}
+                <div class="feat-price">
+                  <small>{% if p.price_varies %}From{% else %}Price{% endif %}</small>
+                  {{ p.price | money }}
+                </div>
+              {%- else -%}
+                <div class="feat-price"><small>Status</small>Sold Out</div>
+              {%- endif -%}
+              <a class="feat-cta" href="{{ p.url }}">
+                {{ block.settings.cta_label | default: 'Shop this camera' }}
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="feat-photos">
+            {%- if section.settings.show_shuffle and section.blocks.size > 1 -%}
+              <button type="button" class="feat-shuffle" data-feat-shuffle aria-label="Show another camera">
+                <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 4h3l5 6h2M2 10h3l5-6h2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 2.5L12 4l-1.5 1.5M10.5 8.5L12 10l-1.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Shuffle
+              </button>
+            {%- endif -%}
+            {%- if ex1 -%}<a class="feat-photo" href="{{ p.url }}"><img src="{{ ex1 | image_url: width: 500 }}" alt="" loading="lazy"/></a>{%- endif -%}
+            {%- if ex2 -%}<a class="feat-photo" href="{{ p.url }}"><img src="{{ ex2 | image_url: width: 500 }}" alt="" loading="lazy"/></a>{%- endif -%}
+            {%- if ex3 -%}<a class="feat-photo" href="{{ p.url }}"><img src="{{ ex3 | image_url: width: 500 }}" alt="" loading="lazy"/></a>{%- endif -%}
+            {%- if ex4 -%}<a class="feat-photo" href="{{ p.url }}"><img src="{{ ex4 | image_url: width: 500 }}" alt="" loading="lazy"/></a>{%- endif -%}
+            {%- if block.settings.photos_caption != blank -%}
+              <span class="feat-photos-cap">{{ block.settings.photos_caption }}</span>
+            {%- endif -%}
+          </div>
+
+        </div>
+      </div>
+    {%- endfor -%}
+  {%- else -%}
+    <div style="padding: 48px; text-align: center; font-family: 'Poppins', sans-serif; font-size: 13px; color: #4E4741;">
+      Add one or more Camera blocks in the theme editor.
+    </div>
+  {%- endif -%}
+</div>
+
+<script>
+(function() {
+  var root = document.getElementById('bfc-feat-{{ section.id }}');
+  if (!root) return;
+  var blocks = root.querySelectorAll('.feat-block');
+  if (!blocks.length) return;
+  var n = blocks.length;
+  var key = 'bfcFeatLast_{{ section.id }}';
+  var inEditor = !!(window.Shopify && window.Shopify.designMode);
+
+  function show(idx) {
+    for (var i = 0; i < n; i++) blocks[i].classList.toggle('is-active', i === idx);
+  }
+
+  function pick(avoid) {
+    if (n === 1) return 0;
+    var idx;
+    do { idx = Math.floor(Math.random() * n); } while (idx === avoid);
+    return idx;
+  }
+
+  var randomize = root.getAttribute('data-shuffle') !== 'false';
+  var start = 0;
+
+  if (inEditor) {
+    // Keep it stable while editing.
+    start = 0;
+  } else if (randomize && n > 1) {
+    var last = -1;
+    try { last = parseInt(sessionStorage.getItem(key), 10); } catch (e) {}
+    if (isNaN(last)) last = -1;
+    start = pick(last);
+    try { sessionStorage.setItem(key, start); } catch (e) {}
+  }
+  show(start);
+
+  // Optional shuffle button — advances to a different random camera.
+  root.querySelectorAll('[data-feat-shuffle]').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var current = -1;
+      for (var i = 0; i < n; i++) { if (blocks[i].classList.contains('is-active')) { current = i; break; } }
+      var next = pick(current);
+      try { sessionStorage.setItem(key, next); } catch (e2) {}
+      show(next);
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "BFC Featured Camera",
+  "tag": "section",
+  "class": "bfc-featured-camera-section",
+  "max_blocks": 25,
+  "settings": [
+    {
+      "type": "select", "id": "theme", "label": "Theme", "default": "light",
+      "options": [
+        { "value": "light", "label": "Light (cream)" },
+        { "value": "dark", "label": "Dark" }
+      ]
+    },
+    { "type": "checkbox", "id": "randomize", "label": "Pick a random camera on each page load", "default": true, "info": "When on, a different camera shows each reload. When off, always shows the first block." },
+    { "type": "checkbox", "id": "show_shuffle", "label": "Show a Shuffle button", "default": false, "info": "Lets visitors switch to another camera without reloading. Only appears with 2+ blocks." }
+  ],
+  "blocks": [
+    {
+      "type": "camera",
+      "name": "Camera",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Camera" },
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Featured Camera" },
+        { "type": "text", "id": "heading_override", "label": "Heading override", "info": "Leave blank to use the product title." },
+        { "type": "richtext", "id": "description_override", "label": "Description override", "info": "Leave blank to pull from the product description." },
+        { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop this camera" },
+        { "type": "header", "content": "Grade badge" },
+        { "type": "checkbox", "id": "show_grade_badge", "label": "Show badge on camera image", "default": true },
+        { "type": "text", "id": "grade_badge_text", "label": "Badge text", "default": "Restored" },
+        { "type": "header", "content": "Example photos" },
+        { "type": "text", "id": "photos_caption", "label": "Photos caption", "info": "Optional label overlaid on the photo grid, e.g. 'Frames shot on this camera'." },
+        { "type": "paragraph", "content": "Leave all four blank to auto-pull from the product's gallery metafields (gallery_1 through gallery_4)." },
+        { "type": "image_picker", "id": "photo_1", "label": "Example photo 1" },
+        { "type": "image_picker", "id": "photo_2", "label": "Example photo 2" },
+        { "type": "image_picker", "id": "photo_3", "label": "Example photo 3" },
+        { "type": "image_picker", "id": "photo_4", "label": "Example photo 4" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Featured Camera",
+      "blocks": [
+        { "type": "camera" }
+      ]
+    }
+  ]
+}
+{% endschema %}
