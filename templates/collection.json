@@ -173,7 +173,7 @@
       "type": "bfc-refurb-process",
       "name": "BFC Refurb Process",
       "settings": {
-        "camera_type": "slr",
+        "camera_type": "generic",
         "open_by_default": false,
         "eyebrow": "Why BFC",
         "bar_title": "",
@@ -196,7 +196,7 @@
         "vs_row1_right": "\"Worked last time I used it\"",
         "vs_row2_left": "Repair dept on staff",
         "vs_row2_right": "You are on your own",
-        "vs_row3_left": "Honest condition notes from techs",
+        "vs_row3_left": "We only see the best quality",
         "vs_row3_right": "Phone photos and hope",
         "vs_row4_left": "Warranties standard, extended available",
         "vs_row4_right": "Open a case, wait three weeks",
