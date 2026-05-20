@@ -31,7 +31,7 @@
 #bfc-feat-{{ section.id }} .feat-grid {
   display: grid;
   grid-template-columns: 0.95fr 1.1fr 0.95fr;
-  min-height: 30vh;
+  height: clamp(300px, 32vh, 420px);
   align-items: stretch;
 }
 
@@ -41,7 +41,7 @@
   background: var(--gr);
   overflow: hidden;
   display: flex; align-items: center; justify-content: center;
-  min-height: 30vh;
+  height: 100%; min-height: 0;
 }
 #bfc-feat-{{ section.id }}.is-dark .feat-cam { background: #18180a; }
 #bfc-feat-{{ section.id }} .feat-cam img {
@@ -57,8 +57,9 @@
 
 {%- comment -%} ── TEXT (center) ── {%- endcomment -%}
 #bfc-feat-{{ section.id }} .feat-text {
-  padding: 40px 44px;
+  padding: 28px 40px;
   display: flex; flex-direction: column; justify-content: center;
+  overflow: hidden;
   border-left: 1px solid rgba(32,32,9,0.1);
   border-right: 1px solid rgba(32,32,9,0.1);
 }
@@ -75,13 +76,15 @@
   content: ''; width: 18px; height: 1px; background: var(--or); display: block;
 }
 #bfc-feat-{{ section.id }} .feat-title {
-  font-family: var(--sr); font-size: 32px; font-weight: 300;
-  line-height: 1.08; letter-spacing: -0.01em; margin-bottom: 12px;
+  font-family: var(--sr); font-size: 25px; font-weight: 300;
+  line-height: 1.12; letter-spacing: -0.01em; margin-bottom: 10px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 #bfc-feat-{{ section.id }}.is-dark .feat-title { color: #fff; }
 #bfc-feat-{{ section.id }} .feat-desc {
-  font-size: 12.5px; line-height: 1.65; color: var(--ch);
-  margin-bottom: 20px; max-width: 42ch;
+  font-size: 12px; line-height: 1.55; color: var(--ch);
+  margin-bottom: 18px; max-width: 42ch;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
 }
 #bfc-feat-{{ section.id }}.is-dark .feat-desc { color: rgba(255,255,255,0.7); }
 #bfc-feat-{{ section.id }} .feat-buy { display: flex; align-items: center; gap: 18px; }
@@ -127,7 +130,7 @@
 #bfc-feat-{{ section.id }} .feat-photos {
   position: relative;
   display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
-  min-height: 30vh;
+  height: 100%; min-height: 0;
 }
 #bfc-feat-{{ section.id }} .feat-photo {
   position: relative; overflow: hidden; background: var(--gr);
@@ -158,9 +161,10 @@
   #bfc-feat-{{ section.id }} .feat-grid {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
+    height: auto;
     min-height: 80vh;
   }
-  #bfc-feat-{{ section.id }} .feat-cam { min-height: 30vh; }
+  #bfc-feat-{{ section.id }} .feat-cam { height: 30vh; min-height: 0; }
   #bfc-feat-{{ section.id }} .feat-text {
     padding: 28px 22px;
     border-left: none; border-right: none;
@@ -173,7 +177,7 @@
   }
   #bfc-feat-{{ section.id }} .feat-title { font-size: 30px; }
   #bfc-feat-{{ section.id }} .feat-desc { max-width: none; }
-  #bfc-feat-{{ section.id }} .feat-photos { min-height: 30vh; }
+  #bfc-feat-{{ section.id }} .feat-photos { height: 30vh; min-height: 0; }
 }
 </style>
 
@@ -203,7 +207,7 @@
         assign feat_heading = block.settings.heading_override | default: p.title
         assign feat_desc = block.settings.description_override
         if feat_desc == blank
-          assign feat_desc = p.description | strip_html | strip | truncatewords: 32
+          assign feat_desc = p.description | strip_html | strip | truncatewords: 20
         endif
       -%}
       <div class="feat-block" {{ block.shopify_attributes }}>

@@ -139,7 +139,6 @@
         "category_cover_P3Am6m",
         "category_cover_HrdQcJ"
       ],
-      "disabled": true,
       "name": "Category covers strip (styled)",
       "settings": {
         "header_enable": false,
@@ -179,34 +178,6 @@
         "badge_radius": 24,
         "scroll_hint_enable": true,
         "scroll_hint_label": "Scroll down to shop all"
-      }
-    },
-    "bfc_featured_camera_Hf8JrN": {
-      "type": "bfc-featured-camera",
-      "blocks": {
-        "camera_j3Am7p": {
-          "type": "camera",
-          "settings": {
-            "product": "black-canon-ae-1-program-chrome-nose-1-8-50m-lens",
-            "eyebrow": "Featured Camera",
-            "heading_override": "",
-            "description_override": "",
-            "cta_label": "Shop this camera",
-            "show_grade_badge": true,
-            "grade_badge_text": "Restored",
-            "photos_caption": ""
-          }
-        }
-      },
-      "block_order": [
-        "camera_j3Am7p"
-      ],
-      "disabled": true,
-      "name": "BFC Featured Camera",
-      "settings": {
-        "theme": "light",
-        "randomize": true,
-        "show_shuffle": false
       }
     },
     "main": {
@@ -392,10 +363,10 @@
       "disabled": true,
       "name": "BFC New Arrivals",
       "settings": {
-        "background_color": "#f8f6ee",
+        "background_color": "#F8F6EE",
         "text_color": "#202009",
-        "accent_color": "#e36e15",
-        "secondary_text_color": "#4e4741",
+        "accent_color": "#E36E15",
+        "secondary_text_color": "#4E4741",
         "horizontal_padding": 32,
         "section_padding_top": 56,
         "section_padding_bottom": 56
@@ -406,7 +377,6 @@
     "nyt_editorial_wncxri",
     "page_banner_WYggxL",
     "bfc_collection_editorial_RkX6Xn",
-    "bfc_featured_camera_Hf8JrN",
     "main",
     "f8303da3-c3cb-4a90-a63a-7a628615aa6f",
     "custom_liquid_YAHeC6",
