@@ -337,40 +337,252 @@
 .bfc4 .ba-shot-grid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; transition: transform 0.4s ease; }
 .bfc4 .ba-shot-grid a:hover img { transform: scale(1.04); }
 
-/* Restoration */
-.bfc4 .ba-restore { background: var(--bk); }
-.bfc4 .ba-restore-top { display: grid; grid-template-columns: 1fr 1fr; padding: 56px 48px 40px; gap: 48px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-.bfc4 .ba-restore-headline { display: flex; flex-direction: column; justify-content: flex-end; }
-.bfc4 .ba-restore-ey { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--go); margin-bottom: 16px; display: block; }
-.bfc4 .ba-restore-title { font-family: var(--sr); font-size: 42px; font-weight: 300; color: #fff; line-height: 1.05; }
-.bfc4 .ba-restore-title em { font-style: italic; color: rgba(255,255,255,0.3); }
-.bfc4 .ba-restore-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
-.bfc4 .ba-r-stat { padding: 0 24px; border-left: 1px solid rgba(255,255,255,0.07); display: flex; flex-direction: column; justify-content: center; }
-.bfc4 .ba-r-stat:first-child { border-left: none; padding-left: 0; }
-.bfc4 .ba-r-stat-num { font-family: var(--sr); font-size: 52px; font-weight: 300; color: #fff; line-height: 1; margin-bottom: 8px; }
-.bfc4 .ba-r-stat-num span { color: var(--go); font-size: 0.6em; }
-.bfc4 .ba-r-stat-label { font-size: 10.5px; color: rgba(255,255,255,0.3); line-height: 1.5; max-width: 100px; }
-.bfc4 .ba-restore-body {
-  padding: 0 48px 56px;
+/* ── CHAPTER — Restoration process + specs (combined, dark) — 3-col ── */
+.bfc4 .bfc4-chapter {
+  background: var(--bk);
+  color: #fff;
+  position: relative;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
 }
-.bfc4 .ba-restore-list {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+.bfc4 .bfc4-chapter-header {
+  padding: 64px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
-.bfc4 .ba-restore-item {
-  padding: 20px 32px 20px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+.bfc4 .bfc4-chapter-title {
+  font-family: var(--sr);
+  font-size: 30px;
+  font-weight: 300;
+  color: #fff;
+  margin: 0 0 18px;
+  line-height: 1.15;
+  letter-spacing: -0.005em;
 }
-.bfc4 .ba-restore-item:nth-child(even) {
-  padding-left: 32px; padding-right: 0;
-  border-left: 1px solid rgba(255,255,255,0.06);
+.bfc4 .bfc4-chapter-title em { font-style: normal; color: rgba(255,255,255,0.6); font-weight: 300; }
+.bfc4 .bfc4-chapter-sub {
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.6;
+  margin: 0 0 28px;
 }
-.bfc4 .ba-restore-item-title {
-  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.75);
-  margin-bottom: 4px;
+.bfc4 .bfc4-chapter-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  background: transparent;
+  border: 1px solid rgba(227,110,21,0.6);
+  color: var(--or);
+  font-family: var(--sn);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: flex-start;
 }
-.bfc4 .ba-restore-item-title.is-highlight { color: var(--go); }
-.bfc4 .ba-restore-item-desc {
-  font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.6;
+.bfc4 .bfc4-chapter-toggle:hover { background: rgba(227,110,21,0.1); border-color: var(--or); }
+.bfc4 .bfc4-chapter-toggle-icon { transition: transform 0.3s ease; }
+.bfc4 .bfc4-chapter-toggle[aria-expanded="true"] .bfc4-chapter-toggle-icon { transform: rotate(180deg); }
+
+/* Per-column toggle (mobile only) */
+.bfc4 .bfc4-chapter-col-toggle {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin-top: 22px;
+  padding: 11px 16px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.22);
+  color: rgba(255,255,255,0.85);
+  font-family: var(--sn);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.bfc4 .bfc4-chapter-col-toggle:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.4); color: #fff; }
+.bfc4 .bfc4-chapter-col-toggle-icon { transition: transform 0.3s ease; flex-shrink: 0; }
+.bfc4 .bfc4-chapter-col-toggle[aria-expanded="true"] .bfc4-chapter-col-toggle-icon { transform: rotate(180deg); }
+.bfc4 .bfc4-chapter-extra.is-open { max-height: 6000px; opacity: 1; margin-top: 28px; }
+
+/* THREE-column grid: header | process | specs */
+.bfc4 .bfc4-chapter-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0;
+}
+.bfc4 .bfc4-chapter-col {
+  padding: 64px 48px;
+  min-width: 0;
+  border-left: 1px solid rgba(255,255,255,0.08);
+}
+.bfc4 .bfc4-chapter-col:first-child { border-left: none; }
+.bfc4 .bfc4-chapter-col-head {
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.bfc4 .bfc4-chapter-col-ey {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 12px;
+}
+.bfc4 .bfc4-chapter-col-title {
+  font-family: var(--sr);
+  font-size: 26px;
+  font-weight: 300;
+  color: #fff;
+  line-height: 1.15;
+  letter-spacing: -0.005em;
+  margin: 0;
+}
+.bfc4 .bfc4-chapter-col-title em { font-style: normal; color: rgba(255,255,255,0.55); font-weight: 300; }
+.bfc4 .bfc4-chapter-col-sub {
+  font-family: var(--sn);
+  font-size: 12.5px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.55;
+  margin: 12px 0 0;
+}
+
+/* Process: short list always visible */
+.bfc4 .bfc4-chapter-process-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.bfc4 .bfc4-chapter-process-list li {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 16px;
+  align-items: baseline;
+  font-family: var(--sn);
+  font-size: 14px;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.4;
+}
+.bfc4 .bfc4-chapter-process-list .num {
+  font-family: var(--sr);
+  font-size: 20px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.4);
+  line-height: 1;
+}
+
+/* Specs: quick 2x2, always visible */
+.bfc4 .bfc4-chapter-specs-quick {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  border-left: 1px solid rgba(255,255,255,0.1);
+}
+.bfc4 .bfc4-chapter-specs-quick > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.bfc4 .bfc4-chapter-specs-quick .key { font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+.bfc4 .bfc4-chapter-specs-quick .val { font-family: var(--sr); font-size: 16px; font-weight: 400; color: #fff; line-height: 1.3; }
+
+/* Extras hidden until toggle expands */
+.bfc4 .bfc4-chapter-extra {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.6s ease, opacity 0.4s ease, margin-top 0.4s ease;
+  margin-top: 0;
+}
+.bfc4 .bfc4-chapter-body.is-open .bfc4-chapter-extra { max-height: 6000px; opacity: 1; margin-top: 36px; }
+
+/* Header extra: photo + prose */
+.bfc4 .bfc4-chapter-header-extra .ba-restore-photo {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: rgba(255,255,255,0.04);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.bfc4 .bfc4-chapter-header-extra .ba-restore-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.bfc4 .bfc4-chapter-header-extra .ba-restore-prose {
+  font-family: var(--sn);
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.7;
+  text-align: left;
+  margin: 0;
+}
+.bfc4 .bfc4-chapter-header-extra .ba-restore-prose p { margin-bottom: 12px; }
+.bfc4 .bfc4-chapter-header-extra .ba-restore-prose p:last-child { margin-bottom: 0; }
+
+/* Process extra: detail steps */
+.bfc4 .bfc4-chapter-process-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.bfc4 .bfc4-chapter-process-detail-step {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 16px;
+  align-items: baseline;
+}
+.bfc4 .bfc4-chapter-process-detail-step .num { font-family: var(--sr); font-size: 20px; font-weight: 300; color: rgba(255,255,255,0.4); line-height: 1; }
+.bfc4 .bfc4-chapter-process-detail-step .body strong { display: block; font-size: 13px; font-weight: 600; color: #fff; margin-bottom: 4px; font-family: var(--sn); }
+.bfc4 .bfc4-chapter-process-detail-step .body p { font-size: 12px; color: rgba(255,255,255,0.6); line-height: 1.55; margin: 0; }
+
+/* Specs extra: full table */
+.bfc4 .bfc4-chapter-specs-extra .bfc4-chapter-specs-full {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  border-left: 1px solid rgba(255,255,255,0.1);
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+.bfc4 .bfc4-chapter-specs-extra .bfc4-chapter-specs-full > div {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  align-items: baseline;
+}
+.bfc4 .bfc4-chapter-specs-extra .key { font-size: 8.5px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
+.bfc4 .bfc4-chapter-specs-extra .val { font-family: var(--sr); font-size: 14px; color: #fff; line-height: 1.3; }
+
+@media (max-width: 900px) {
+  .bfc4 .bfc4-chapter-grid { grid-template-columns: 1fr; }
+  .bfc4 .bfc4-chapter-col { padding: 36px 24px; border-left: none; }
+  .bfc4 .bfc4-chapter-col + .bfc4-chapter-col { border-top: 1px solid rgba(255,255,255,0.08); }
+  .bfc4 .bfc4-chapter-header { padding: 44px 24px 32px; }
+  .bfc4 .bfc4-chapter-title { font-size: 28px; }
+  .bfc4 .bfc4-chapter-col-title { font-size: 24px; }
+  .bfc4 .bfc4-chapter-specs-quick { grid-template-columns: 1fr; }
+  .bfc4 .bfc4-chapter-specs-extra .bfc4-chapter-specs-full { grid-template-columns: 1fr; }
+  /* Swap global -> per-column toggles on mobile */
+  .bfc4 .bfc4-chapter-toggle { display: none; }
+  .bfc4 .bfc4-chapter-col-toggle { display: inline-flex; }
 }
 
 /* Extended Warranty */
@@ -381,6 +593,7 @@
 .bfc4 .ba-ext-w-baseline svg { flex-shrink: 0; color: #2a4820; margin-top: 2px; }
 .bfc4 .ba-ext-w-baseline strong { color: var(--bk); }
 .bfc4 .ba-ext-w-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.bfc4 .ba-ext-w-options.ba-ext-w-options--single { grid-template-columns: 1fr; }
 .bfc4 .ba-ext-w-btn { border: 1px solid rgba(32,32,9,0.1); background: #fff; padding: 10px 8px; cursor: pointer; font-family: var(--sn); text-align: center; transition: border-color var(--t), box-shadow var(--t); display: flex; flex-direction: column; gap: 3px; position: relative; }
 .bfc4 .ba-ext-w-btn:hover { border-color: var(--or); }
 .bfc4 .ba-ext-w-btn.is-sel { border: 2px solid var(--or); box-shadow: 0 0 0 1px rgba(227,110,21,0.15); }
@@ -393,30 +606,15 @@
 .bfc4 .ba-ext-w-none.is-vis { display: block; }
 .bfc4 .ba-ext-w-none:hover { color: var(--bk); }
 
-/* Warranty & Returns Policy */
-.bfc4 .ba-policy { display: grid; grid-template-columns: 1fr 1fr; background: var(--cv); border-top: 1px solid rgba(32,32,9,0.06); }
+/* Warranty Policy (single column) */
+.bfc4 .ba-policy { display: grid; grid-template-columns: 1fr; background: var(--cv); border-top: 1px solid rgba(32,32,9,0.06); }
 .bfc4 .ba-policy-col { padding: 48px; }
-.bfc4 .ba-policy-col:first-child { border-right: 1px solid rgba(32,32,9,0.06); }
 .bfc4 .ba-policy-ey { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--go); display: block; margin-bottom: 12px; }
 .bfc4 .ba-policy-title { font-family: var(--sr); font-size: 28px; font-weight: 300; color: var(--bk); line-height: 1.1; margin: 0 0 16px; }
 .bfc4 .ba-policy-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: rgba(171,204,153,0.2); color: var(--or); font-size: 10px; font-weight: 600; letter-spacing: 0.06em; margin-bottom: 20px; }
 .bfc4 .ba-policy-body { font-size: 13px; line-height: 1.6; color: var(--ch); }
 .bfc4 .ba-policy-body p { margin: 0; }
 .bfc4 .ba-policy-body strong { color: var(--bk); }
-
-/* Full specs */
-.bfc4 .ba-specs { background: var(--bk); border-top: 1px solid rgba(255,255,255,0.06); display: grid; grid-template-columns: 280px 1fr; }
-.bfc4 .ba-specs-head { padding: 48px 40px 48px 48px; border-right: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; justify-content: flex-start; }
-.bfc4 .ba-specs-title { font-family: var(--sr); font-size: 36px; font-weight: 300; color: #fff; line-height: 1; margin-bottom: 10px; }
-.bfc4 .ba-specs-note { font-size: 10px; color: rgba(255,255,255,0.2); line-height: 1.5; }
-.bfc4 .ba-specs-body { padding: 48px 48px 48px 40px; }
-.bfc4 .ba-specs-table { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-.bfc4 .ba-spec { display: flex; align-items: baseline; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-.bfc4 .ba-spec:nth-child(odd) { padding-right: 32px; }
-.bfc4 .ba-spec:nth-child(even) { padding-left: 32px; border-left: 1px solid rgba(255,255,255,0.05); }
-.bfc4 .ba-spec:nth-last-child(-n+2) { border-bottom: none; }
-.bfc4 .ba-spec-key { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.2); flex-shrink: 0; min-width: 100px; }
-.bfc4 .ba-spec-val { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.7); }
 
 /* Popup */
 .bfc4 .ba-popup-overlay {
@@ -453,26 +651,9 @@
   .bfc4 .ba-shot-head { padding: 36px 20px 16px; flex-direction: column; gap: 4px; }
   .bfc4 .ba-shot-title { font-size: 28px; }
   .bfc4 .ba-shot-grid { grid-template-columns: repeat(3, 1fr); }
-  .bfc4 .ba-restore-top { grid-template-columns: 1fr; gap: 24px; padding: 32px 20px 24px; }
-  .bfc4 .ba-restore-stats { grid-template-columns: repeat(3, 1fr); }
-  .bfc4 .ba-restore-body { padding: 0 20px 40px; }
-  .bfc4 .ba-restore-list { grid-template-columns: 1fr; }
-  .bfc4 .ba-restore-item:nth-child(even) { padding-left: 0; border-left: none; }
   .bfc4 .ba-policy { grid-template-columns: 1fr; }
   .bfc4 .ba-policy-col { padding: 32px 20px; }
-  .bfc4 .ba-policy-col:first-child { border-right: none; border-bottom: 1px solid rgba(32,32,9,0.06); }
   .bfc4 .ba-policy-title { font-size: 22px; }
-  .bfc4 .ba-specs { grid-template-columns: 1fr; }
-  .bfc4 .ba-specs-head { padding: 24px 20px 16px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
-  .bfc4 .ba-specs-body { padding: 16px 20px 24px; }
-  .bfc4 .ba-specs-table { grid-template-columns: 1fr; }
-  .bfc4 .ba-spec:nth-child(odd) { padding-right: 0; }
-  .bfc4 .ba-spec:nth-child(even) { padding-left: 0; border-left: none; }
-  .bfc4 .ba-spec:nth-last-child(-n+2) { border-bottom: 1px solid rgba(255,255,255,0.05); }
-  .bfc4 .ba-spec:last-child { border-bottom: none; }
-  .bfc4 .ba-ext-w-options { grid-template-columns: repeat(2, 1fr); }
-  .bfc4 .ba-policy { grid-template-columns: 1fr; }
-  .bfc4 .ba-policy-col { padding: 32px 20px; }
 }
 
 /* ── Sticky Mobile ATC Bar ────────────────── */
@@ -876,13 +1057,11 @@
 
     {%- comment -%} Extended Warranty
         Tier pricing/variant IDs from snippets/bfc-warranty-tiers.liquid.
-        Super 8 PDPs use SLR/Rangefinder pricing — same modal shape (2-button,
-        6mo base, +3 / +6 extensions) and similar mechanical risk profile. {%- endcomment -%}
+        Super 8 borrows SLR/Rangefinder pricing — base warranty is already
+        6 months, so cameras now offer a single +6 month extension (1 year total). {%- endcomment -%}
     {%- assign cam_price = current_variant.price -%}
     {% include 'bfc-warranty-tiers', category: 'slr', cam_price: cam_price %}
     {%- liquid
-      assign w9_vid = w_w9_vid
-      assign w9_price = w_w9_price
       assign w12_vid = w_w12_vid
       assign w12_price = w_w12_price
     -%}
@@ -895,15 +1074,9 @@
       </div>
       <div class="ba-ext-w-baseline">
         <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M2 7L5.5 10.5L12 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span>Your camera includes a <strong>6-month warranty</strong> &mdash; extend your total coverage below:</span>
+        <span>Your camera includes a <strong>6-month warranty</strong> &mdash; extend to a full year below:</span>
       </div>
-      <div class="ba-ext-w-options">
-        <button class="ba-ext-w-btn" data-months="3" data-total="9" data-price="{{ w9_price }}" data-variant-id="{{ w9_vid }}" onclick="bfc4SelectWarranty(this)">
-          <span class="ba-ext-w-extend">+3 months</span>
-          <span class="ba-ext-w-months">9 mo total</span>
-          <span class="ba-ext-w-price">+{{ w9_price | money_without_trailing_zeros }}</span>
-          <span class="ba-ext-w-acc">+ Accidental</span>
-        </button>
+      <div class="ba-ext-w-options ba-ext-w-options--single">
         <button class="ba-ext-w-btn" data-months="6" data-total="12" data-price="{{ w12_price }}" data-variant-id="{{ w12_vid }}" onclick="bfc4SelectWarranty(this)">
           <span class="ba-ext-w-extend">+6 months</span>
           <span class="ba-ext-w-months">1 year total</span>
@@ -915,7 +1088,7 @@
     </div>
     <div id="ba-popup-data-ba-ext-w-popup" style="display:none"
       data-title="Extended Warranty"
-      data-desc="Your camera includes a 6-month warranty. Extended warranty adds months on top — select +3 months for 9 months total, or +6 months for a full year, all from your purchase date. Extended warranty covers any issues including accidental damage, which the standard warranty does not cover. Approved claims are repaired at no cost. If the camera cannot be repaired, you will receive a BFC gift card at the value you paid, redeemable on any camera in our shop. Warranties are non-transferable and apply to the original purchaser only. Must be purchased within 30 days of your camera purchase."
+      data-desc="Your camera includes a 6-month warranty. Extended warranty adds 6 months on top, for a full year of coverage from your purchase date. Extended warranty covers any issues including accidental damage, which the standard warranty does not cover. Approved claims are repaired at no cost. If the camera cannot be repaired, you will receive a BFC gift card at the value you paid, redeemable on any camera in our shop. Warranties are non-transferable and apply to the original purchaser only. Must be purchased within 30 days of your camera purchase."
       data-imgs=""
     ></div>
 
@@ -942,77 +1115,172 @@
   </div>
   {%- endif -%}
 
-  {%- comment -%} Restoration — Super 8 narrative {%- endcomment -%}
-  <div class="ba-restore" id="ba-restore">
-    <div class="ba-restore-top">
-      <div class="ba-restore-headline">
-        <span class="ba-restore-ey">Our Process</span>
-        <h2 class="ba-restore-title">Fully refurbished<br/><em>&amp; ready to shoot</em></h2>
-      </div>
-      <div class="ba-restore-stats">
-        <div class="ba-r-stat"><div class="ba-r-stat-num">6<span>mo</span></div><div class="ba-r-stat-label">Warranty on every camera sold</div></div>
-        <div class="ba-r-stat"><div class="ba-r-stat-num">5K<span>+</span></div><div class="ba-r-stat-label">Cameras restored since 2018</div></div>
-        <div class="ba-r-stat"><div class="ba-r-stat-num">24<span>fps</span></div><div class="ba-r-stat-label">Cinema-standard frame rate on every Super 8</div></div>
-      </div>
-    </div>
-    <div class="ba-restore-body">
-      <div class="ba-restore-list">
-        <div class="ba-restore-item">
-          <div class="ba-restore-item-title">Complete Disassembly &amp; Cleaning</div>
-          <div class="ba-restore-item-desc">Every camera is fully taken apart, cleaned inside and out, and carefully reassembled. No spot-checks, no shortcuts.</div>
-        </div>
-        <div class="ba-restore-item">
-          <div class="ba-restore-item-title is-highlight">True 24fps Modification</div>
-          <div class="ba-restore-item-desc">Most vintage Super 8 cameras were never built to shoot at cinema-standard 24fps. We modify and calibrate every camera so yours does.</div>
-        </div>
-        <div class="ba-restore-item">
-          <div class="ba-restore-item-title">Full Mechanical &amp; Electrical Inspection</div>
-          <div class="ba-restore-item-desc">Every component is tested and verified &mdash; motor, metering, optics, film path. If it's not working properly, we fix it before it ships.</div>
-        </div>
-        <div class="ba-restore-item">
-          <div class="ba-restore-item-title">Ready to Shoot</div>
-          <div class="ba-restore-item-desc">Load a cartridge and go. Every camera leaves our shop ready to film from the moment it arrives at your door.</div>
-        </div>
-        <div class="ba-restore-item">
-          <div class="ba-restore-item-title">6-Month Warranty</div>
-          <div class="ba-restore-item-desc">We stand behind our work. Every Super 8 camera we sell is backed by a full 6-month warranty covering mechanical and electrical defects.</div>
-        </div>
-        <div class="ba-restore-item">
-          <div class="ba-restore-item-title">Tested with Professional Equipment</div>
-          <div class="ba-restore-item-desc">Frame rate, exposure, and film path are all verified using professional testing equipment before we pack and ship.</div>
-        </div>
-      </div>
-    </div>
-  </div>
+  {%- comment -%} ════════════════════════════════════════════════
+       CHAPTER — Restoration process + Camera specs (combined, dark).
+       Matches the v4 below-fold design.
+       ════════════════════════════════════════════════ {%- endcomment -%}
+  <div class="bfc4-chapter" id="bfc4-chapter">
+    <div class="bfc4-chapter-body" id="bfc4-chapter-body">
+      <div class="bfc4-chapter-grid">
 
-  {%- comment -%} Full specs {%- endcomment -%}
-  <div class="ba-specs">
-    <div class="ba-specs-head">
-      <h2 class="ba-specs-title">Specs</h2>
-      <div class="ba-specs-note">{{ product.title }}<br/>Super 8 Camera</div>
-    </div>
-    <div class="ba-specs-body">
-      <div class="ba-specs-table">
-        {%- if spec_lens    != blank -%}<div class="ba-spec"><span class="ba-spec-key">Lens</span><span class="ba-spec-val">{{ spec_lens }}</span></div>{%- endif -%}
-        {%- if spec_zoom    != blank -%}<div class="ba-spec"><span class="ba-spec-key">Zoom</span><span class="ba-spec-val">{{ spec_zoom }}</span></div>{%- endif -%}
-        {%- if spec_fps     != blank -%}<div class="ba-spec"><span class="ba-spec-key">Frame Rate</span><span class="ba-spec-val">{{ spec_fps }}</span></div>{%- endif -%}
-        {%- if spec_film    != blank -%}<div class="ba-spec"><span class="ba-spec-key">Film Format</span><span class="ba-spec-val">{{ spec_film }}</span></div>{%- endif -%}
-        {%- if spec_cart    != blank -%}<div class="ba-spec"><span class="ba-spec-key">Cartridge</span><span class="ba-spec-val">{{ spec_cart }}</span></div>{%- endif -%}
-        {%- if spec_sound   != blank -%}<div class="ba-spec"><span class="ba-spec-key">Sound</span><span class="ba-spec-val">{{ spec_sound }}</span></div>{%- endif -%}
-        {%- if spec_speeds  != blank -%}<div class="ba-spec"><span class="ba-spec-key">Shutter</span><span class="ba-spec-val">{{ spec_speeds }}</span></div>{%- endif -%}
-        {%- if spec_meter   != blank -%}<div class="ba-spec"><span class="ba-spec-key">Metering</span><span class="ba-spec-val">{{ spec_meter }}</span></div>{%- endif -%}
-        {%- if spec_focus   != blank -%}<div class="ba-spec"><span class="ba-spec-key">Focus</span><span class="ba-spec-val">{{ spec_focus }}</span></div>{%- endif -%}
-        {%- if spec_aperture != blank -%}<div class="ba-spec"><span class="ba-spec-key">Aperture</span><span class="ba-spec-val">{{ spec_aperture }}</span></div>{%- endif -%}
-        {%- if spec_filter  != blank -%}<div class="ba-spec"><span class="ba-spec-key">Filter Size</span><span class="ba-spec-val">{{ spec_filter }}</span></div>{%- endif -%}
-        {%- if spec_battery != blank -%}<div class="ba-spec"><span class="ba-spec-key">Battery</span><span class="ba-spec-val">{{ spec_battery }}</span></div>{%- endif -%}
-        {%- if spec_weight  != blank -%}<div class="ba-spec"><span class="ba-spec-key">Weight</span><span class="ba-spec-val">{{ spec_weight }}</span></div>{%- endif -%}
-        <div class="ba-spec"><span class="ba-spec-key">Condition</span><span class="ba-spec-val">Professionally Refurbished &mdash; 24fps Calibrated</span></div>
-      </div>
-    </div>
-  </div>
+        {%- comment -%} ── LEFT: HEADER ── {%- endcomment -%}
+        <div class="bfc4-chapter-col bfc4-chapter-header">
+          <h2 class="bfc4-chapter-title">{{ product.title | escape }}</h2>
+          <p class="bfc4-chapter-sub">We started Brooklyn Film Camera to take the guesswork out of buying a Super 8 camera. Most decades-old movie cameras were never built to run at cinema-standard 24fps, and a wipe-down is never enough to make one shoot like it did the day it left the factory. So we do the real work.</p>
+          <button type="button" class="bfc4-chapter-toggle" id="bfc4-chapter-toggle" aria-expanded="false" aria-controls="bfc4-chapter-body" onclick="bfc4ToggleChapter()">
+            <span class="bfc4-chapter-toggle-text">View full process &amp; all specs</span>
+            <svg class="bfc4-chapter-toggle-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M3.5 5.5L7 9L10.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
 
-  {%- comment -%} Warranty & Returns Policy {%- endcomment -%}
-  <div class="ba-policy">
+          {%- comment -%} Per-column toggle (mobile only) {%- endcomment -%}
+          <button type="button" class="bfc4-chapter-col-toggle" aria-expanded="false" data-open-label="Hide story" data-closed-label="View full story" onclick="bfc4ToggleChapterCol(this)">
+            <span class="bfc4-chapter-col-toggle-label">View full story</span>
+            <svg class="bfc4-chapter-col-toggle-icon" width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M3.5 5.5L7 9L10.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <div class="bfc4-chapter-extra bfc4-chapter-header-extra">
+            {%- if section.settings.restoration_photo != blank -%}
+              <div class="ba-restore-photo">
+                <img src="{{ section.settings.restoration_photo | image_url: width: 1200 }}" alt="Restoration in progress at Brooklyn Film Camera" loading="lazy"/>
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.restoration_prose != blank -%}
+              <div class="ba-restore-prose">{{ section.settings.restoration_prose }}</div>
+            {%- else -%}
+              <div class="ba-restore-prose">
+                <p>Every Super 8 camera we sell passes through our in-house technicians. We modify and calibrate the mechanism to true 24fps, service the motor and metering, replace seals and aged components, and bench-test every function before anything ships.</p>
+                <p>You're not gambling on whether the camera works. You're getting a tool brought back to pristine condition by people who've spent careers learning how.</p>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+
+        {%- comment -%} ── MIDDLE: PROCESS ── {%- endcomment -%}
+        <div class="bfc4-chapter-col bfc4-chapter-process" id="ba-restore">
+          <div class="bfc4-chapter-col-head">
+            <span class="bfc4-chapter-col-ey">Our Process</span>
+            <h3 class="bfc4-chapter-col-title">Restored &amp; 24fps calibrated</h3>
+            <p class="bfc4-chapter-col-sub">Each camera goes through four checkpoints before it ships.</p>
+          </div>
+
+          <ul class="bfc4-chapter-process-list">
+            <li><span class="num">01</span><span>Complete disassembly &amp; cleaning</span></li>
+            <li><span class="num">02</span><span>True 24fps modification</span></li>
+            <li><span class="num">03</span><span>Full mechanical &amp; electrical inspection</span></li>
+            <li><span class="num">04</span><span>Tested on professional bench equipment</span></li>
+          </ul>
+
+          {%- comment -%} Per-column toggle (mobile only) {%- endcomment -%}
+          <button type="button" class="bfc4-chapter-col-toggle" aria-expanded="false" data-open-label="Hide steps" data-closed-label="View all steps" onclick="bfc4ToggleChapterCol(this)">
+            <span class="bfc4-chapter-col-toggle-label">View all steps</span>
+            <svg class="bfc4-chapter-col-toggle-icon" width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M3.5 5.5L7 9L10.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <div class="bfc4-chapter-extra bfc4-chapter-process-extra">
+            <div class="bfc4-chapter-process-detail">
+              <div class="bfc4-chapter-process-detail-step">
+                <span class="num">01</span>
+                <div class="body"><strong>Complete Disassembly &amp; Cleaning</strong><p>Every camera is fully taken apart, cleaned inside and out, and carefully reassembled. No spot-checks, no shortcuts.</p></div>
+              </div>
+              <div class="bfc4-chapter-process-detail-step">
+                <span class="num">02</span>
+                <div class="body"><strong>True 24fps Modification</strong><p>Most vintage Super 8 cameras were never built to shoot at cinema-standard 24fps. We modify and calibrate every camera so yours does.</p></div>
+              </div>
+              <div class="bfc4-chapter-process-detail-step">
+                <span class="num">03</span>
+                <div class="body"><strong>Full Mechanical &amp; Electrical Inspection</strong><p>Motor, metering, optics, film path. Every component is tested and verified, and fixed before it ships.</p></div>
+              </div>
+              <div class="bfc4-chapter-process-detail-step">
+                <span class="num">04</span>
+                <div class="body"><strong>Final QC</strong><p>Frame rate, exposure, and film path are all verified on professional bench equipment before we pack and ship.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {%- comment -%} ── RIGHT: SPECS ── {%- endcomment -%}
+        <div class="bfc4-chapter-col bfc4-chapter-specs">
+          <div class="bfc4-chapter-col-head">
+            <h3 class="bfc4-chapter-col-title">Specifications</h3>
+            <p class="bfc4-chapter-col-sub">The exact technical details of this camera.</p>
+          </div>
+
+          <div class="bfc4-chapter-specs-quick">
+            {%- assign qs_count = 0 -%}
+            {%- if spec_lens != blank and qs_count < 4 -%}
+              <div><span class="key">Lens</span><span class="val">{{ spec_lens }}</span></div>
+              {%- assign qs_count = qs_count | plus: 1 -%}
+            {%- endif -%}
+            {%- if spec_fps != blank and qs_count < 4 -%}
+              <div><span class="key">Frame Rate</span><span class="val">{{ spec_fps }}</span></div>
+              {%- assign qs_count = qs_count | plus: 1 -%}
+            {%- endif -%}
+            {%- if spec_film != blank and qs_count < 4 -%}
+              <div><span class="key">Film Format</span><span class="val">{{ spec_film }}</span></div>
+              {%- assign qs_count = qs_count | plus: 1 -%}
+            {%- endif -%}
+            {%- if qs_count < 4 -%}
+              <div><span class="key">Condition</span><span class="val">24fps Calibrated</span></div>
+              {%- assign qs_count = qs_count | plus: 1 -%}
+            {%- endif -%}
+            {%- if spec_zoom != blank and qs_count < 4 -%}
+              <div><span class="key">Zoom</span><span class="val">{{ spec_zoom }}</span></div>
+              {%- assign qs_count = qs_count | plus: 1 -%}
+            {%- endif -%}
+            {%- if spec_cart != blank and qs_count < 4 -%}
+              <div><span class="key">Cartridge</span><span class="val">{{ spec_cart }}</span></div>
+              {%- assign qs_count = qs_count | plus: 1 -%}
+            {%- endif -%}
+            {%- if spec_sound != blank and qs_count < 4 -%}
+              <div><span class="key">Sound</span><span class="val">{{ spec_sound }}</span></div>
+              {%- assign qs_count = qs_count | plus: 1 -%}
+            {%- endif -%}
+            {%- if spec_meter != blank and qs_count < 4 -%}
+              <div><span class="key">Metering</span><span class="val">{{ spec_meter }}</span></div>
+              {%- assign qs_count = qs_count | plus: 1 -%}
+            {%- endif -%}
+          </div>
+
+          {%- comment -%} Per-column toggle (mobile only) {%- endcomment -%}
+          <button type="button" class="bfc4-chapter-col-toggle" aria-expanded="false" data-open-label="Hide specs" data-closed-label="View all specs" onclick="bfc4ToggleChapterCol(this)">
+            <span class="bfc4-chapter-col-toggle-label">View all specs</span>
+            <svg class="bfc4-chapter-col-toggle-icon" width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M3.5 5.5L7 9L10.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+          <div class="bfc4-chapter-extra bfc4-chapter-specs-extra">
+            <div class="bfc4-chapter-specs-full">
+              {%- if spec_lens    != blank -%}<div><span class="key">Lens</span><span class="val">{{ spec_lens }}</span></div>{%- endif -%}
+              {%- if spec_zoom    != blank -%}<div><span class="key">Zoom</span><span class="val">{{ spec_zoom }}</span></div>{%- endif -%}
+              {%- if spec_fps     != blank -%}<div><span class="key">Frame Rate</span><span class="val">{{ spec_fps }}</span></div>{%- endif -%}
+              {%- if spec_film    != blank -%}<div><span class="key">Film Format</span><span class="val">{{ spec_film }}</span></div>{%- endif -%}
+              {%- if spec_cart    != blank -%}<div><span class="key">Cartridge</span><span class="val">{{ spec_cart }}</span></div>{%- endif -%}
+              {%- if spec_sound   != blank -%}<div><span class="key">Sound</span><span class="val">{{ spec_sound }}</span></div>{%- endif -%}
+              {%- if spec_speeds  != blank -%}<div><span class="key">Shutter</span><span class="val">{{ spec_speeds }}</span></div>{%- endif -%}
+              {%- if spec_meter   != blank -%}<div><span class="key">Metering</span><span class="val">{{ spec_meter }}</span></div>{%- endif -%}
+              {%- if spec_focus   != blank -%}<div><span class="key">Focus</span><span class="val">{{ spec_focus }}</span></div>{%- endif -%}
+              {%- if spec_filter  != blank -%}<div><span class="key">Filter Size</span><span class="val">{{ spec_filter }}</span></div>{%- endif -%}
+              {%- if spec_battery != blank -%}<div><span class="key">Battery</span><span class="val">{{ spec_battery }}</span></div>{%- endif -%}
+              {%- if spec_weight  != blank -%}<div><span class="key">Weight</span><span class="val">{{ spec_weight }}</span></div>{%- endif -%}
+              <div><span class="key">Condition</span><span class="val">Professionally Refurbished, 24fps Calibrated</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>{%- comment -%} /bfc4-chapter-body {%- endcomment -%}
+  </div>{%- comment -%} /bfc4-chapter {%- endcomment -%}
+
+  {%- comment -%} Warranty policy (single column, matches v4) {%- endcomment -%}
+  <div class="ba-policy" id="bfc4-policy-section">
     <div class="ba-policy-col">
       <span class="ba-policy-ey">Warranty</span>
       <h2 class="ba-policy-title">We stand behind every camera.</h2>
@@ -1021,22 +1289,10 @@
         6-Month Warranty Included
       </div>
       <div class="ba-policy-body">
-        <p>Every Super 8 camera we sell includes a <strong>6-month warranty</strong> covering mechanical and electrical defects. If something goes wrong, we'll repair or replace it at no cost.</p>
-        <p style="margin-top:10px;color:rgba(78,71,65,0.6);font-size:11px">Warranty does not cover cosmetic wear or accidental damage.</p>
+        <p>Every Super 8 camera we sell includes a <strong>6-month warranty</strong> covering mechanical and electrical defects. If something goes wrong, we'll repair it or replace it at no cost.</p>
+        <p style="margin-top:10px">To open a claim, visit the Shipping Label tab in your <a href="https://account.brooklynfilmcamera.com" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">BFC account</a>, or come into the store anytime.</p>
+        <p style="margin-top:10px;color:rgba(78,71,65,0.6);font-size:11px">Return shipping is covered by BFC within the first 30 days. After 30 days, the buyer is responsible for return shipping on warranty claims.</p>
         <p style="margin-top:12px"><a href="https://brooklynfilmcamera.com/pages/warranty" style="font-size:11px;color:var(--or);font-weight:600;letter-spacing:0.06em;text-decoration:underline;text-underline-offset:2px;">View full warranty policy &rsaquo;</a></p>
-      </div>
-    </div>
-    <div class="ba-policy-col">
-      <span class="ba-policy-ey">Returns</span>
-      <h2 class="ba-policy-title">14-day return window.</h2>
-      <div class="ba-policy-pill" style="background:rgba(32,32,9,0.05);color:var(--ch);">
-        <svg width="10" height="10" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><line x1="7" y1="6.5" x2="7" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="4" r="0.7" fill="currentColor"/></svg>
-        Conditions Apply
-      </div>
-      <div class="ba-policy-body">
-        <p>If you change your mind, you have <strong>14 days from delivery</strong> to return your camera. The camera must be returned in the same condition it was received. A restocking fee may apply.</p>
-        <p style="margin-top:10px">We recommend taking advantage of the warranty rather than returning &mdash; if the camera has a functional issue within 6 months, we'll fix or replace it at no cost.</p>
-        <p style="margin-top:10px;color:rgba(78,71,65,0.6);font-size:11px">To initiate a return or warranty claim, contact us at <a href="mailto:hello@brooklynfilmcamera.com" style="color:inherit">hello@brooklynfilmcamera.com</a> with your order number.</p>
       </div>
     </div>
   </div>
@@ -1174,7 +1430,7 @@
       total += sel.sale;
       filmCount++;
     });
-    if (STATE.extWarranty) total += STATE.extWarranty.price;
+    if (STATE.extWarranty && !isNaN(STATE.extWarranty.price)) total += STATE.extWarranty.price;
     var totalEl = document.getElementById('bfc4-total');
     if (totalEl) totalEl.textContent = fmt(total);
     var stickyPrice = document.getElementById('bfc4-sticky-price');
@@ -1320,16 +1576,20 @@
   }
   function bfc4UpdateWarrantyTier(variantPrice) {
     var tier = bfc4GetWarrantyTier(variantPrice);
-    var td = [{ vid: tier.v9, price: tier.p9 }, { vid: tier.v12, price: tier.p12 }];
+    // Super 8 borrows SLR pricing: single +6 month button. Only v12/p12 exists.
+    var td = [{ vid: tier.v12, price: tier.p12 }];
     document.querySelectorAll('.ba-ext-w-btn').forEach(function(btn, i) {
       if (!td[i]) return;
-      btn.dataset.variantId = td[i].vid;
-      btn.dataset.price = td[i].price;
-      var el = btn.querySelector('.ba-ext-w-price');
-      if (el) el.textContent = '+$' + (td[i].price / 100).toFixed(0);
+      var price = parseInt(td[i].price, 10);
+      if (td[i].vid != null && td[i].vid !== '') btn.dataset.variantId = td[i].vid;
+      if (!isNaN(price)) {
+        btn.dataset.price = price;
+        var el = btn.querySelector('.ba-ext-w-price');
+        if (el) el.textContent = '+$' + (price / 100).toFixed(0);
+      }
       if (btn.classList.contains('is-sel') && STATE.extWarranty) {
-        STATE.extWarranty.variantId = td[i].vid;
-        STATE.extWarranty.price = td[i].price;
+        STATE.extWarranty.variantId = btn.dataset.variantId;
+        STATE.extWarranty.price = parseInt(btn.dataset.price, 10);
       }
     });
     bfc4Render();
@@ -1360,6 +1620,35 @@
     if (clearBtn) clearBtn.classList.remove('is-vis');
     bfc4Render();
   };
+
+  // ── Chapter toggle (process + specs) ──────────────
+  window.bfc4ToggleChapter = function() {
+    var btn = document.getElementById('bfc4-chapter-toggle');
+    var body = document.getElementById('bfc4-chapter-body');
+    var txt = btn ? btn.querySelector('.bfc4-chapter-toggle-text') : null;
+    if (!btn || !body) return;
+    var isOpen = body.classList.toggle('is-open');
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    if (txt) txt.textContent = isOpen ? 'Hide details' : 'View full process & all specs';
+  };
+
+  // ── Per-column chapter toggle (mobile only) ──
+  window.bfc4ToggleChapterCol = function(btn) {
+    if (!btn) return;
+    var col = btn.closest('.bfc4-chapter-col');
+    if (!col) return;
+    var extra = col.querySelector('.bfc4-chapter-extra');
+    if (!extra) return;
+    var isOpen = extra.classList.toggle('is-open');
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    var label = btn.querySelector('.bfc4-chapter-col-toggle-label');
+    if (label) {
+      var openLabel   = btn.dataset.openLabel   || 'Hide';
+      var closedLabel = btn.dataset.closedLabel || 'Show more';
+      label.textContent = isOpen ? openLabel : closedLabel;
+    }
+  };
+
   bfc4UpdateWarrantyTier(STATE.variantPrice);
 
   bfc4Render();
@@ -1392,7 +1681,10 @@
     { "type": "image_picker", "id": "slide_2_mobile", "label": "Mobile slide 2" },
     { "type": "image_picker", "id": "slide_3_mobile", "label": "Mobile slide 3" },
     { "type": "image_picker", "id": "slide_4_mobile", "label": "Mobile slide 4" },
-    { "type": "image_picker", "id": "slide_5_mobile", "label": "Mobile slide 5" }
+    { "type": "image_picker", "id": "slide_5_mobile", "label": "Mobile slide 5" },
+    { "type": "header", "content": "Restoration chapter (optional)" },
+    { "type": "image_picker", "id": "restoration_photo", "label": "Restoration photo (16:9 landscape works best)" },
+    { "type": "richtext",     "id": "restoration_prose", "label": "Restoration narrative (optional override)" }
   ],
   "blocks": [
     {
