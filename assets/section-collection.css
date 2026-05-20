@@ -8,6 +8,7 @@
 
 .collection__heading {
   margin: 0 0 var(--spacing-5);
+  padding-inline-start: var(--page-gutter);
 }
 
 .collection__title {
