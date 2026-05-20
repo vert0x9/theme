@@ -31,7 +31,7 @@
 #bfc-feat-{{ section.id }} .feat-grid {
   display: grid;
   grid-template-columns: 0.95fr 1.1fr 0.95fr;
-  height: clamp(210px, 24vh, 320px);
+  height: clamp(240px, 27vh, 360px);
   align-items: stretch;
 }
 
@@ -68,7 +68,8 @@
 
 {%- comment -%} ── TEXT (center) ── {%- endcomment -%}
 #bfc-feat-{{ section.id }} .feat-text {
-  padding: 28px 40px;
+  position: relative;
+  padding: 30px 40px;
   display: flex; flex-direction: column; justify-content: center;
   overflow: hidden;
   border-left: 1px solid rgba(32,32,9,0.1);
@@ -79,28 +80,29 @@
   border-right-color: rgba(255,255,255,0.1);
 }
 #bfc-feat-{{ section.id }} .feat-eyebrow {
+  position: absolute; top: 22px; right: 30px; z-index: 2;
   display: inline-flex; align-items: center; gap: 8px;
   font-size: 9.5px; font-weight: 700; letter-spacing: 0.22em;
-  text-transform: uppercase; color: var(--or); margin-bottom: 14px;
+  text-transform: uppercase; color: var(--or);
 }
 #bfc-feat-{{ section.id }} .feat-eyebrow::before {
   content: ''; width: 18px; height: 1px; background: var(--or); display: block;
 }
 #bfc-feat-{{ section.id }} .feat-title {
-  font-family: var(--sr); font-size: 25px; font-weight: 300;
-  line-height: 1.12; letter-spacing: -0.01em; margin-bottom: 10px;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  font-family: var(--sr); font-size: 24px; font-weight: 300;
+  line-height: 1.3; letter-spacing: -0.01em; margin-bottom: 10px;
+  max-width: 90%;
 }
 #bfc-feat-{{ section.id }}.is-dark .feat-title { color: #fff; }
 #bfc-feat-{{ section.id }} .feat-desc {
-  font-size: 12px; line-height: 1.55; color: var(--ch);
-  margin-bottom: 18px; max-width: 42ch;
-  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  font-size: 12.5px; line-height: 1.6; color: var(--ch);
+  margin-bottom: 18px; max-width: 52ch;
+  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
 }
 #bfc-feat-{{ section.id }}.is-dark .feat-desc { color: rgba(255,255,255,0.7); }
-#bfc-feat-{{ section.id }} .feat-buy { display: flex; align-items: center; gap: 18px; }
+#bfc-feat-{{ section.id }} .feat-buy { display: flex; align-items: center; gap: 16px; }
 #bfc-feat-{{ section.id }} .feat-price {
-  font-family: var(--sr); font-size: 26px; font-weight: 300; line-height: 1;
+  font-family: var(--sr); font-size: 22px; font-weight: 300; line-height: 1;
 }
 #bfc-feat-{{ section.id }}.is-dark .feat-price { color: #fff; }
 #bfc-feat-{{ section.id }} .feat-price small {
@@ -109,10 +111,10 @@
 }
 #bfc-feat-{{ section.id }}.is-dark .feat-price small { color: rgba(255,255,255,0.5); }
 #bfc-feat-{{ section.id }} .feat-cta {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 12px 22px; background: var(--or); color: #fff;
-  font-family: var(--sn); font-size: 10px; font-weight: 700;
-  letter-spacing: 0.14em; text-transform: uppercase;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 18px; background: var(--or); color: #fff;
+  font-family: var(--sn); font-size: 9.5px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
   text-decoration: none; transition: background var(--t);
 }
 #bfc-feat-{{ section.id }} .feat-cta:hover { background: #c9600f; }
@@ -179,9 +181,9 @@
     padding: 14px 16px;
     border-right: none;
   }
-  #bfc-feat-{{ section.id }} .feat-eyebrow { margin-bottom: 8px; font-size: 8.5px; letter-spacing: 0.16em; }
+  #bfc-feat-{{ section.id }} .feat-eyebrow { position: static; margin-bottom: 8px; font-size: 8.5px; letter-spacing: 0.16em; }
   #bfc-feat-{{ section.id }} .feat-eyebrow::before { width: 12px; }
-  #bfc-feat-{{ section.id }} .feat-title { font-size: 18px; margin-bottom: 6px; -webkit-line-clamp: 2; }
+  #bfc-feat-{{ section.id }} .feat-title { font-size: 18px; margin-bottom: 6px; }
   #bfc-feat-{{ section.id }} .feat-desc { display: none; }
   #bfc-feat-{{ section.id }} .feat-buy { gap: 12px; }
   #bfc-feat-{{ section.id }} .feat-price { font-size: 19px; }
@@ -253,7 +255,7 @@
         assign feat_desc = block.settings.card_text
         assign desc_is_custom = true
         if feat_desc == blank
-          assign feat_desc = p.description | strip_html | strip | truncatewords: 20
+          assign feat_desc = p.description | strip_html | strip | truncatewords: 42
           assign desc_is_custom = false
         endif
       -%}
