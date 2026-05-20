@@ -31,26 +31,37 @@
 #bfc-feat-{{ section.id }} .feat-grid {
   display: grid;
   grid-template-columns: 0.95fr 1.1fr 0.95fr;
-  height: clamp(300px, 32vh, 420px);
+  height: clamp(210px, 24vh, 320px);
   align-items: stretch;
 }
 
 {%- comment -%} ── CAMERA IMAGE (left) ── {%- endcomment -%}
 #bfc-feat-{{ section.id }} .feat-cam {
   position: relative;
-  background: var(--gr);
+  background: var(--cv);
   overflow: hidden;
   display: flex; align-items: center; justify-content: center;
   height: 100%; min-height: 0;
 }
 #bfc-feat-{{ section.id }}.is-dark .feat-cam { background: #18180a; }
+#bfc-feat-{{ section.id }} .feat-cam-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  filter: blur(26px) saturate(1.05);
+  transform: scale(1.2);
+  opacity: 0.55;
+  z-index: 0;
+}
+#bfc-feat-{{ section.id }} .feat-cam:not(.is-fit) .feat-cam-bg { display: none; }
 #bfc-feat-{{ section.id }} .feat-cam img {
-  width: 100%; height: 100%; object-fit: contain; display: block;
+  position: relative; z-index: 1;
+  width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;
   transition: transform 0.5s ease;
 }
+#bfc-feat-{{ section.id }} .feat-cam.is-fit img { object-fit: contain; }
 #bfc-feat-{{ section.id }} .feat-cam:hover img { transform: scale(1.03); }
 #bfc-feat-{{ section.id }} .feat-cam-grade {
-  position: absolute; top: 16px; left: 16px;
+  position: absolute; top: 16px; left: 16px; z-index: 2;
   font-size: 8px; font-weight: 700; letter-spacing: 0.14em;
   text-transform: uppercase; color: #fff; background: var(--or); padding: 3px 9px;
 }
@@ -126,25 +137,25 @@
 #bfc-feat-{{ section.id }} .feat-shuffle svg { transition: transform 0.4s ease; }
 #bfc-feat-{{ section.id }} .feat-shuffle:hover svg { transform: rotate(180deg); }
 
-{%- comment -%} ── EXAMPLE PHOTOS (right) ── {%- endcomment -%}
+{%- comment -%} ── EXAMPLE PHOTOS (right) — layout adapts to photo count ── {%- endcomment -%}
 #bfc-feat-{{ section.id }} .feat-photos {
   position: relative;
-  display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+  display: grid;
+  gap: 1px;
+  background: rgba(32,32,9,0.1);
   height: 100%; min-height: 0;
 }
+#bfc-feat-{{ section.id }}.is-dark .feat-photos { background: rgba(255,255,255,0.1); }
+#bfc-feat-{{ section.id }} .feat-photos.is-1 { grid-template-columns: 1fr; grid-template-rows: 1fr; }
+#bfc-feat-{{ section.id }} .feat-photos.is-2 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; }
+#bfc-feat-{{ section.id }} .feat-photos.is-3 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+#bfc-feat-{{ section.id }} .feat-photos.is-3 .feat-photo:first-child { grid-row: 1 / span 2; }
+#bfc-feat-{{ section.id }} .feat-photos.is-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
 #bfc-feat-{{ section.id }} .feat-photo {
   position: relative; overflow: hidden; background: var(--gr);
-  border-left: 1px solid rgba(32,32,9,0.08);
-  border-top: 1px solid rgba(32,32,9,0.08);
   display: block; line-height: 0;
 }
-#bfc-feat-{{ section.id }}.is-dark .feat-photo {
-  background: #18180a;
-  border-left-color: rgba(255,255,255,0.08);
-  border-top-color: rgba(255,255,255,0.08);
-}
-#bfc-feat-{{ section.id }} .feat-photo:nth-child(odd) { border-left: none; }
-#bfc-feat-{{ section.id }} .feat-photo:nth-child(-n+2) { border-top: none; }
+#bfc-feat-{{ section.id }}.is-dark .feat-photo { background: #18180a; }
 #bfc-feat-{{ section.id }} .feat-photo img {
   width: 100%; height: 100%; object-fit: cover; display: block;
   transition: transform 0.5s ease;
@@ -156,28 +167,32 @@
   color: #fff; background: rgba(32,32,9,0.55); text-align: center; z-index: 2; pointer-events: none;
 }
 
-{%- comment -%} ── MOBILE ── {%- endcomment -%}
+{%- comment -%} ── MOBILE: stay a compact horizontal strip, don't restack tall ── {%- endcomment -%}
 @media (max-width: 749px) {
   #bfc-feat-{{ section.id }} .feat-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-    height: auto;
-    min-height: 80vh;
+    grid-template-columns: 0.85fr 1.15fr;
+    grid-template-rows: 1fr;
+    height: clamp(150px, 22vh, 200px);
   }
-  #bfc-feat-{{ section.id }} .feat-cam { height: 30vh; min-height: 0; }
+  #bfc-feat-{{ section.id }} .feat-photos { display: none; }
   #bfc-feat-{{ section.id }} .feat-text {
-    padding: 28px 22px;
-    border-left: none; border-right: none;
-    border-top: 1px solid rgba(32,32,9,0.1);
-    border-bottom: 1px solid rgba(32,32,9,0.1);
+    padding: 14px 16px;
+    border-right: none;
   }
-  #bfc-feat-{{ section.id }}.is-dark .feat-text {
-    border-top-color: rgba(255,255,255,0.1);
-    border-bottom-color: rgba(255,255,255,0.1);
-  }
-  #bfc-feat-{{ section.id }} .feat-title { font-size: 30px; }
-  #bfc-feat-{{ section.id }} .feat-desc { max-width: none; }
-  #bfc-feat-{{ section.id }} .feat-photos { height: 30vh; min-height: 0; }
+  #bfc-feat-{{ section.id }} .feat-eyebrow { margin-bottom: 8px; font-size: 8.5px; letter-spacing: 0.16em; }
+  #bfc-feat-{{ section.id }} .feat-eyebrow::before { width: 12px; }
+  #bfc-feat-{{ section.id }} .feat-title { font-size: 18px; margin-bottom: 6px; -webkit-line-clamp: 2; }
+  #bfc-feat-{{ section.id }} .feat-desc { display: none; }
+  #bfc-feat-{{ section.id }} .feat-buy { gap: 12px; }
+  #bfc-feat-{{ section.id }} .feat-price { font-size: 19px; }
+  #bfc-feat-{{ section.id }} .feat-price small { font-size: 7px; margin-bottom: 2px; }
+  #bfc-feat-{{ section.id }} .feat-cta { padding: 9px 14px; font-size: 9px; letter-spacing: 0.1em; }
+  #bfc-feat-{{ section.id }} .feat-cam-grade { top: 10px; left: 10px; }
+}
+@media (max-width: 480px) {
+  #bfc-feat-{{ section.id }} .feat-grid { grid-template-columns: 0.8fr 1.2fr; height: clamp(135px, 20vh, 175px); }
+  #bfc-feat-{{ section.id }} .feat-title { font-size: 16px; }
+  #bfc-feat-{{ section.id }} .feat-buy { flex-direction: column; align-items: flex-start; gap: 8px; }
 }
 </style>
 
@@ -204,17 +219,50 @@
           assign ex4 = p.metafields.custom.gallery_4.value
         endif
 
+        comment # Collapse present photos into a gap-free, ordered URL list #
+        endcomment
+        assign photo_urls = ''
+        if ex1 != blank
+          capture u1
+            echo ex1 | image_url: width: 700
+          endcapture
+          assign photo_urls = photo_urls | append: u1 | append: '||'
+        endif
+        if ex2 != blank
+          capture u2
+            echo ex2 | image_url: width: 700
+          endcapture
+          assign photo_urls = photo_urls | append: u2 | append: '||'
+        endif
+        if ex3 != blank
+          capture u3
+            echo ex3 | image_url: width: 700
+          endcapture
+          assign photo_urls = photo_urls | append: u3 | append: '||'
+        endif
+        if ex4 != blank
+          capture u4
+            echo ex4 | image_url: width: 700
+          endcapture
+          assign photo_urls = photo_urls | append: u4 | append: '||'
+        endif
+        assign photo_list = photo_urls | split: '||'
+        assign photo_count = photo_list | size
+
         assign feat_heading = block.settings.heading_override | default: p.title
-        assign feat_desc = block.settings.description_override
+        assign feat_desc = block.settings.card_text
+        assign desc_is_custom = true
         if feat_desc == blank
           assign feat_desc = p.description | strip_html | strip | truncatewords: 20
+          assign desc_is_custom = false
         endif
       -%}
       <div class="feat-block" {{ block.shopify_attributes }}>
         <div class="feat-grid">
 
-          <a class="feat-cam" href="{{ p.url }}" aria-label="{{ p.title | escape }}">
+          <a class="feat-cam{% if block.settings.image_fit == 'fit' %} is-fit{% endif %}" href="{{ p.url }}" aria-label="{{ p.title | escape }}">
             {%- if p.featured_image -%}
+              <div class="feat-cam-bg" style="background-image:url('{{ p.featured_image | image_url: width: 800 }}')"></div>
               <img
                 src="{{ p.featured_image | image_url: width: 800 }}"
                 srcset="{{ p.featured_image | image_url: width: 500 }} 500w, {{ p.featured_image | image_url: width: 800 }} 800w, {{ p.featured_image | image_url: width: 1100 }} 1100w"
@@ -229,7 +277,7 @@
           <div class="feat-text">
             <span class="feat-eyebrow">{{ block.settings.eyebrow | default: 'Featured Camera' }}</span>
             <h2 class="feat-title">{{ feat_heading }}</h2>
-            {%- if feat_desc != blank -%}<p class="feat-desc">{{ feat_desc }}</p>{%- endif -%}
+            {%- if feat_desc != blank -%}<p class="feat-desc">{% if desc_is_custom %}{{ feat_desc | escape | newline_to_br }}{% else %}{{ feat_desc }}{% endif %}</p>{%- endif -%}
             <div class="feat-buy">
               {%- if p.available -%}
                 <div class="feat-price">
@@ -246,19 +294,18 @@
             </div>
           </div>
 
-          <div class="feat-photos">
+          <div class="feat-photos is-{{ photo_count }}">
+            {%- for purl in photo_list -%}
+              <a class="feat-photo" href="{{ p.url }}"><img src="{{ purl }}" alt="" loading="lazy"/></a>
+            {%- endfor -%}
+            {%- if block.settings.photos_caption != blank -%}
+              <span class="feat-photos-cap">{{ block.settings.photos_caption }}</span>
+            {%- endif -%}
             {%- if section.settings.show_shuffle and section.blocks.size > 1 -%}
               <button type="button" class="feat-shuffle" data-feat-shuffle aria-label="Show another camera">
                 <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 4h3l5 6h2M2 10h3l5-6h2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 2.5L12 4l-1.5 1.5M10.5 8.5L12 10l-1.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 Shuffle
               </button>
-            {%- endif -%}
-            {%- if ex1 -%}<a class="feat-photo" href="{{ p.url }}"><img src="{{ ex1 | image_url: width: 500 }}" alt="" loading="lazy"/></a>{%- endif -%}
-            {%- if ex2 -%}<a class="feat-photo" href="{{ p.url }}"><img src="{{ ex2 | image_url: width: 500 }}" alt="" loading="lazy"/></a>{%- endif -%}
-            {%- if ex3 -%}<a class="feat-photo" href="{{ p.url }}"><img src="{{ ex3 | image_url: width: 500 }}" alt="" loading="lazy"/></a>{%- endif -%}
-            {%- if ex4 -%}<a class="feat-photo" href="{{ p.url }}"><img src="{{ ex4 | image_url: width: 500 }}" alt="" loading="lazy"/></a>{%- endif -%}
-            {%- if block.settings.photos_caption != blank -%}
-              <span class="feat-photos-cap">{{ block.settings.photos_caption }}</span>
             {%- endif -%}
           </div>
 
@@ -347,8 +394,15 @@
         { "type": "product", "id": "product", "label": "Camera" },
         { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Featured Camera" },
         { "type": "text", "id": "heading_override", "label": "Heading override", "info": "Leave blank to use the product title." },
-        { "type": "richtext", "id": "description_override", "label": "Description override", "info": "Leave blank to pull from the product description." },
+        { "type": "textarea", "id": "card_text", "label": "Custom card text", "info": "Write something interesting about this camera. Leave blank to fall back to the product description." },
         { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop this camera" },
+        {
+          "type": "select", "id": "image_fit", "label": "Camera image", "default": "zoom",
+          "options": [
+            { "value": "zoom", "label": "Zoom to fill (crops empty margins)" },
+            { "value": "fit", "label": "Fit whole image (blurred backdrop)" }
+          ]
+        },
         { "type": "header", "content": "Grade badge" },
         { "type": "checkbox", "id": "show_grade_badge", "label": "Show badge on camera image", "default": true },
         { "type": "text", "id": "grade_badge_text", "label": "Badge text", "default": "Restored" },
