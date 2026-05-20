@@ -81,103 +81,45 @@
         "spacing_bottom": "0"
       }
     },
-    "bfc_collection_editorial_RkX6Xn": {
-      "type": "bfc-collection-editorial",
+    "bfc_featured_camera_pg4ALh": {
+      "type": "bfc-featured-camera",
       "blocks": {
-        "category_cover_NeWp43": {
-          "type": "category_cover",
+        "camera_Gx9CHp": {
+          "type": "camera",
           "settings": {
-            "image": "shopify://shop_images/WEB72_BFC-0094.jpg",
-            "title": "Polaroids",
-            "subtitle": "",
-            "url": "shopify://collections/all-polaroid-cameras",
-            "badge": "Best Sellers",
-            "bg_tint": 0,
-            "text_align": "center"
+            "product": "olympus-stylus-mjui",
+            "eyebrow": "Featured Camera",
+            "heading_override": "",
+            "description_override": "",
+            "cta_label": "Shop this camera",
+            "show_grade_badge": true,
+            "grade_badge_text": "Restored",
+            "photos_caption": ""
           }
         },
-        "category_cover_MzJzkc": {
-          "type": "category_cover",
+        "camera_X8WyUg": {
+          "type": "camera",
           "settings": {
-            "image": "shopify://shop_images/HB_Group-1656.png",
-            "title": "CLA'd Hasselblads",
-            "subtitle": "",
-            "url": "https://brooklynfilmcamera.com/collections/120-cameras?sort_by=manual&filter.p.m.custom.brand=Hasselblad",
-            "badge": "6 month warranty",
-            "bg_tint": 0,
-            "text_align": "center"
-          }
-        },
-        "category_cover_P3Am6m": {
-          "type": "category_cover",
-          "settings": {
-            "image": "shopify://shop_images/WP-1_Canon_Kit_d303fab8-fadf-472e-82de-2f47170d3130.png",
-            "title": "Ready to Shoot Kits",
-            "subtitle": "",
-            "url": "shopify://collections/kits",
-            "badge": "SAVE",
-            "bg_tint": 0,
-            "text_align": "center"
-          }
-        },
-        "category_cover_HrdQcJ": {
-          "type": "category_cover",
-          "settings": {
-            "image": "shopify://shop_images/EX_50__P_S_Group_35mm_579_1.jpg",
-            "title": "New High End Cameras",
-            "subtitle": "",
-            "url": "shopify://pages/high-end-point-shoots",
-            "badge": "TVS!",
-            "bg_tint": 0,
-            "text_align": "center"
+            "product": "",
+            "eyebrow": "Featured Camera",
+            "heading_override": "",
+            "description_override": "",
+            "cta_label": "Shop this camera",
+            "show_grade_badge": true,
+            "grade_badge_text": "Restored",
+            "photos_caption": ""
           }
         }
       },
       "block_order": [
-        "category_cover_NeWp43",
-        "category_cover_MzJzkc",
-        "category_cover_P3Am6m",
-        "category_cover_HrdQcJ"
+        "camera_Gx9CHp",
+        "camera_X8WyUg"
       ],
-      "name": "Category covers strip (styled)",
+      "name": "BFC Featured Camera",
       "settings": {
-        "header_enable": false,
-        "header_eyebrow": "",
-        "header_title": "Shop By Category",
-        "header_subtitle": "",
-        "header_divider": false,
-        "header_align": "left",
-        "header_max_width": 700,
-        "heading_font": "serif",
-        "header_title_font_size_mobile": 1.8,
-        "header_title_font_size_desktop": 2.2,
-        "header_font_weight": "600",
-        "columns_mobile": 2,
-        "columns_tablet": 3,
-        "columns_desktop": 4,
-        "mobile_show_count": 2,
-        "gap_px": 12,
-        "padding_top": 0,
-        "padding_bottom": 0,
-        "background_color": "#ffffff",
-        "text_color": "#1c1c1c",
-        "media_aspect": "square",
-        "media_aspect_desktop": "short",
-        "media_radius": 0,
-        "enable_media_overlay": false,
-        "overlay_color": "#000000",
-        "overlay_opacity": 25,
-        "badge_text": "",
-        "badge_font": "sans",
-        "badge_transform": "upper",
-        "badge_position": "over_media",
-        "badge_style": "solid",
-        "badge_background": "#1c1c1c",
-        "badge_text_color": "#ffffff",
-        "badge_padding": 12,
-        "badge_radius": 24,
-        "scroll_hint_enable": true,
-        "scroll_hint_label": "Scroll down to shop all"
+        "theme": "light",
+        "randomize": true,
+        "show_shuffle": false
       }
     },
     "main": {
@@ -363,10 +305,10 @@
       "disabled": true,
       "name": "BFC New Arrivals",
       "settings": {
-        "background_color": "#F8F6EE",
+        "background_color": "#f8f6ee",
         "text_color": "#202009",
-        "accent_color": "#E36E15",
-        "secondary_text_color": "#4E4741",
+        "accent_color": "#e36e15",
+        "secondary_text_color": "#4e4741",
         "horizontal_padding": 32,
         "section_padding_top": 56,
         "section_padding_bottom": 56
@@ -376,7 +318,7 @@
   "order": [
     "nyt_editorial_wncxri",
     "page_banner_WYggxL",
-    "bfc_collection_editorial_RkX6Xn",
+    "bfc_featured_camera_pg4ALh",
     "main",
     "f8303da3-c3cb-4a90-a63a-7a628615aa6f",
     "custom_liquid_YAHeC6",
