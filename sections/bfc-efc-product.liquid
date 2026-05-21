@@ -423,13 +423,17 @@
 
   function buildSubscribeUrl(){
     if (!state.variantId) return;
-    // Clear cart then add the chosen variant + selling plan, then go to checkout.
-    // Mirrors the pattern used on the EFC landing page.
-    var addPath = '/cart/add?items[][id]=' + state.variantId
-      + '&items[][quantity]=1'
-      + (state.plan ? '&items[][selling_plan]=' + state.plan : '')
-      + '&return_to=/checkout';
-    var url = '/cart/clear?return_to=' + encodeURIComponent(addPath);
+    // Build the cart URL using the EXACT format proven on the EFC landing page:
+    //   /cart/clear?return_to=/cart/add?items[][id]=X%26items[][quantity]=1%26items[][selling_plan]=Y%26return_to=/checkout
+    // Only the inner ampersands (separating the items[] params) are encoded as %26.
+    // The rest of the path stays literal. Do NOT run encodeURIComponent over the
+    // whole thing — that over-encodes /, ?, =, [ ] and breaks Shopify's parsing,
+    // which sends the customer to the wrong checkout.
+    var inner = '/cart/add?items[][id]=' + state.variantId
+      + '%26items[][quantity]=1'
+      + (state.plan ? '%26items[][selling_plan]=' + state.plan : '')
+      + '%26return_to=/checkout';
+    var url = '/cart/clear?return_to=' + inner;
     subscribeEl.setAttribute('href', url);
   }
 
