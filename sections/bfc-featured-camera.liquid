@@ -54,21 +54,12 @@
   height: 100%;
 }
 #bfc-feat-{{ section.id }}.is-dark .feat-cam { background: #18180a; }
-#bfc-feat-{{ section.id }} .feat-cam-bg {
-  position: absolute; inset: 0;
-  background-size: cover; background-position: center;
-  filter: blur(28px) saturate(1.05);
-  transform: scale(1.25);
-  opacity: 0.45;
-  z-index: 0;
-}
 #bfc-feat-{{ section.id }} .feat-cam img {
   position: relative; z-index: 1;
-  width: 100%; height: 100%; object-fit: contain; display: block;
-  padding: 18px;
+  width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;
   transition: transform 0.5s ease;
 }
-#bfc-feat-{{ section.id }} .feat-cam:hover img { transform: scale(1.03); }
+#bfc-feat-{{ section.id }} .feat-cam:hover img { transform: scale(1.04); }
 #bfc-feat-{{ section.id }} .feat-cam-grade {
   position: absolute; top: 14px; left: 14px; z-index: 2;
   font-size: 8px; font-weight: 700; letter-spacing: 0.14em;
@@ -145,7 +136,7 @@
 {%- comment -%} ── MOBILE: compact single strip ── {%- endcomment -%}
 @media (max-width: 749px) {
   #bfc-feat-{{ section.id }} .feat-card { grid-template-columns: 0.82fr 1fr; height: clamp(150px, 22vh, 200px); }
-  #bfc-feat-{{ section.id }} .feat-cam img { padding: 12px; }
+  #bfc-feat-{{ section.id }} .feat-cam:hover img { transform: none; }
   #bfc-feat-{{ section.id }} .feat-text { padding: 14px 16px; }
   #bfc-feat-{{ section.id }} .feat-eyebrow { position: static; margin-bottom: 8px; font-size: 8.5px; }
   #bfc-feat-{{ section.id }} .feat-title { font-size: 18px; margin-bottom: 6px; }
@@ -215,11 +206,12 @@
         <div class="feat-card" {{ block.shopify_attributes }}>
           <a class="feat-cam" href="{{ p.url }}" aria-label="{{ p.title | escape }}">
             {%- if p.featured_image -%}
-              <div class="feat-cam-bg" style="background-image:url('{{ p.featured_image | image_url: width: 800 }}')"></div>
+              {%- assign fp = p.featured_image.presentation.focal_point | default: '50% 50%' -%}
               <img
                 src="{{ p.featured_image | image_url: width: 800 }}"
                 srcset="{{ p.featured_image | image_url: width: 500 }} 500w, {{ p.featured_image | image_url: width: 800 }} 800w"
                 sizes="(max-width: 749px) 40vw, 22vw"
+                style="object-position: {{ fp }};"
                 alt="{{ p.title | escape }}" loading="lazy" width="800" height="800"/>
             {%- endif -%}
             {%- if block.settings.show_grade_badge -%}
