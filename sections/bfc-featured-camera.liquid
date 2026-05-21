@@ -22,28 +22,44 @@
   background: var(--cv);
   -webkit-font-smoothing: antialiased;
   position: relative;
+  overflow: hidden;
 }
 #bfc-feat-{{ section.id }}.is-dark { background: var(--bk); color: #fff; }
 
-{%- comment -%} ── TRACK: holds the visible camera cards side by side ── {%- endcomment -%}
+{%- comment -%} ── TRACK: layout depends on mode set by JS ──
+   .mode-duo  → two cameras side by side, no photos
+   .mode-solo → one camera, wider, with its example photos {%- endcomment -%}
 #bfc-feat-{{ section.id }} .feat-track {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
+#bfc-feat-{{ section.id }} .feat-track.mode-solo { grid-template-columns: 1fr; }
 #bfc-feat-{{ section.id }} .feat-track.is-showing-1 { grid-template-columns: 1fr; }
 
-{%- comment -%} Each card hidden until JS reveals it; noscript reveals the first {%- endcomment -%}
+{%- comment -%} Cards stay hidden until JS picks a layout mode and reveals one.
+   The .mode-* class on the track is the signal that JS has run. {%- endcomment -%}
 #bfc-feat-{{ section.id }} .feat-card { display: none; }
-#bfc-feat-{{ section.id }} .feat-card.is-on { display: grid; }
+#bfc-feat-{{ section.id }} .feat-track.mode-solo .feat-card.is-on,
+#bfc-feat-{{ section.id }} .feat-track.mode-duo .feat-card.is-on { display: grid; }
 
 #bfc-feat-{{ section.id }} .feat-card {
   grid-template-columns: 0.82fr 1fr;
   height: clamp(240px, 27vh, 330px);
   align-items: stretch;
+  overflow: hidden;
   border-left: 1px solid rgba(32,32,9,0.1);
 }
+#bfc-feat-{{ section.id }} .feat-card > * { min-width: 0; min-height: 0; }
 #bfc-feat-{{ section.id }} .feat-card:first-child { border-left: none; }
 #bfc-feat-{{ section.id }}.is-dark .feat-card { border-left-color: rgba(255,255,255,0.1); }
+
+{%- comment -%} Solo + has photos → three columns: camera | text | photos {%- endcomment -%}
+#bfc-feat-{{ section.id }} .mode-solo .feat-card.has-photos {
+  grid-template-columns: 0.82fr 1fr 0.95fr;
+}
+{%- comment -%} Photos hidden everywhere except solo+has-photos {%- endcomment -%}
+#bfc-feat-{{ section.id }} .feat-photos { display: none; }
+#bfc-feat-{{ section.id }} .mode-solo .feat-card.has-photos .feat-photos { display: grid; }
 
 {%- comment -%} ── CAMERA IMAGE (left of card) — always fit, never cropped ── {%- endcomment -%}
 #bfc-feat-{{ section.id }} .feat-cam {
@@ -113,6 +129,39 @@
 #bfc-feat-{{ section.id }} .feat-cta svg { transition: transform var(--t); }
 #bfc-feat-{{ section.id }} .feat-cta:hover svg { transform: translateX(3px); }
 
+{%- comment -%} ── EXAMPLE PHOTOS (solo mode only) — layout adapts to count ── {%- endcomment -%}
+#bfc-feat-{{ section.id }} .feat-photos {
+  position: relative;
+  gap: 1px;
+  background: rgba(32,32,9,0.1);
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  border-left: 1px solid rgba(32,32,9,0.1);
+}
+#bfc-feat-{{ section.id }} .feat-photos > * { min-width: 0; min-height: 0; }
+#bfc-feat-{{ section.id }}.is-dark .feat-photos { background: rgba(255,255,255,0.1); border-left-color: rgba(255,255,255,0.1); }
+#bfc-feat-{{ section.id }} .feat-photos.is-1 { grid-template-columns: 1fr; grid-template-rows: 1fr; }
+#bfc-feat-{{ section.id }} .feat-photos.is-2 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; }
+#bfc-feat-{{ section.id }} .feat-photos.is-3 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+#bfc-feat-{{ section.id }} .feat-photos.is-3 .feat-photo:first-child { grid-row: 1 / span 2; }
+#bfc-feat-{{ section.id }} .feat-photos.is-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
+#bfc-feat-{{ section.id }} .feat-photo {
+  position: relative; overflow: hidden; background: var(--gr);
+  display: block; line-height: 0;
+}
+#bfc-feat-{{ section.id }}.is-dark .feat-photo { background: #18180a; }
+#bfc-feat-{{ section.id }} .feat-photo img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform 0.5s ease;
+}
+#bfc-feat-{{ section.id }} .feat-photo:hover img { transform: scale(1.05); }
+#bfc-feat-{{ section.id }} .feat-photos-cap {
+  position: absolute; bottom: 0; left: 0; right: 0; padding: 6px 10px;
+  font-size: 8px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  color: #fff; background: rgba(32,32,9,0.55); text-align: center; z-index: 2; pointer-events: none;
+}
+
 {%- comment -%} ── SHUFFLE (optional) ── {%- endcomment -%}
 #bfc-feat-{{ section.id }} .feat-shuffle {
   position: absolute; top: 12px; right: 16px; z-index: 6;
@@ -133,9 +182,12 @@
   #bfc-feat-{{ section.id }} .feat-track { grid-template-columns: 1fr; }
 }
 
-{%- comment -%} ── MOBILE: compact single strip ── {%- endcomment -%}
+{%- comment -%} ── MOBILE: compact single strip, never show photos ── {%- endcomment -%}
 @media (max-width: 749px) {
-  #bfc-feat-{{ section.id }} .feat-card { grid-template-columns: 0.82fr 1fr; height: clamp(150px, 22vh, 200px); }
+  #bfc-feat-{{ section.id }} .feat-card,
+  #bfc-feat-{{ section.id }} .mode-solo .feat-card.has-photos { grid-template-columns: 0.82fr 1fr; height: clamp(150px, 22vh, 200px); }
+  #bfc-feat-{{ section.id }} .feat-photos,
+  #bfc-feat-{{ section.id }} .mode-solo .feat-card.has-photos .feat-photos { display: none !important; }
   #bfc-feat-{{ section.id }} .feat-cam:hover img { transform: none; }
   #bfc-feat-{{ section.id }} .feat-text { padding: 14px 16px; }
   #bfc-feat-{{ section.id }} .feat-eyebrow { position: static; margin-bottom: 8px; font-size: 8.5px; }
@@ -152,95 +204,305 @@
 }
 </style>
 
-{%- comment -%} noscript: reveal the first card(s) when JS is off {%- endcomment -%}
+{%- comment -%} noscript: with JS off, show the first two cameras as a plain duo {%- endcomment -%}
 <noscript><style>
   #bfc-feat-{{ section.id }} .feat-card:nth-child(-n+2) { display: grid !important; }
+  #bfc-feat-{{ section.id }} .feat-card .feat-photos { display: none !important; }
   @media (max-width: 990px) { #bfc-feat-{{ section.id }} .feat-card:nth-child(n+2) { display: none !important; } }
 </style></noscript>
 
 <div id="bfc-feat-{{ section.id }}" class="{% if section.settings.theme == 'dark' %}is-dark{% endif %}"
-     data-count="{{ section.settings.cameras_desktop }}"
+     data-layout="{{ section.settings.layout_mode }}"
      data-shuffle="{{ section.settings.randomize }}">
 
-  {%- assign cams_shown = section.settings.cameras_desktop | plus: 0 -%}
-  {%- if section.settings.show_shuffle and section.blocks.size > cams_shown -%}
-    <button type="button" class="feat-shuffle" data-feat-shuffle aria-label="Show different cameras">
+  {%- if section.settings.show_shuffle -%}
+    <button type="button" class="feat-shuffle" data-feat-shuffle aria-label="Show different cameras" style="display:none">
       <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 4h3l5 6h2M2 10h3l5-6h2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 2.5L12 4l-1.5 1.5M10.5 8.5L12 10l-1.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Shuffle
     </button>
   {%- endif -%}
 
-  {%- comment -%} Count cameras we can actually feature (in stock, product set). In the editor,
-       treat all set products as showable so the section never looks empty while editing. {%- endcomment -%}
+  {%- comment -%} ── Decide the source of featured cameras ──
+       'auto'   → pull in-stock products from the collection being viewed (or a chosen one)
+       'manual' → use the Camera blocks added in the editor
+       On non-collection pages, auto falls back to the chosen collection, then to manual. {%- endcomment -%}
+  {%- liquid
+    assign feat_source = section.settings.source
+    assign auto_collection = section.settings.auto_collection
+
+    comment # In auto mode, prefer the collection currently being viewed #
+    endcomment
+    if feat_source == 'auto'
+      if collection != blank and auto_collection == blank
+        assign source_collection = collection
+      else
+        assign source_collection = auto_collection
+      endif
+    endif
+
+    comment # Auto pool size; needs at least 2 so duo mode always has a pair #
+    endcomment
+    assign auto_limit = section.settings.auto_pool | plus: 0
+    if auto_limit < 2
+      assign auto_limit = 2
+    endif
+  -%}
+
+  {%- comment -%} Count cameras we can actually feature (in stock). Editor shows sold-out too. {%- endcomment -%}
   {%- assign available_cams = 0 -%}
-  {%- for block in section.blocks -%}
-    {%- if block.settings.product != blank -%}
-      {%- if block.settings.product.available or request.design_mode -%}
-        {%- assign available_cams = available_cams | plus: 1 -%}
+  {%- if feat_source == 'auto' and source_collection != blank -%}
+    {%- for cp in source_collection.products limit: auto_limit -%}
+      {%- if cp.available or request.design_mode -%}{%- assign available_cams = available_cams | plus: 1 -%}{%- endif -%}
+    {%- endfor -%}
+  {%- else -%}
+    {%- for block in section.blocks -%}
+      {%- if block.settings.product != blank -%}
+        {%- if block.settings.product.available or request.design_mode -%}{%- assign available_cams = available_cams | plus: 1 -%}{%- endif -%}
       {%- endif -%}
-    {%- endif -%}
-  {%- endfor -%}
+    {%- endfor -%}
+  {%- endif -%}
 
   {%- if available_cams > 0 -%}
     <div class="feat-track">
-      {%- for block in section.blocks -%}
-        {%- liquid
-          assign p = block.settings.product
-          if p == blank
-            continue
-          endif
-          comment # Only feature in-stock cameras. In the theme editor we still render
-            sold-out ones so they don't silently vanish while you're setting up. #
-          endcomment
-          unless p.available or request.design_mode
-            continue
-          endunless
-          assign feat_heading = block.settings.heading_override | default: p.title
-          assign feat_desc = block.settings.card_text
-          assign desc_is_custom = true
-          if feat_desc == blank
-            assign feat_desc = p.description | strip_html | strip | truncatewords: 26
-            assign desc_is_custom = false
-          endif
-        -%}
-        <div class="feat-card" {{ block.shopify_attributes }}>
-          <a class="feat-cam" href="{{ p.url }}" aria-label="{{ p.title | escape }}">
-            {%- if p.featured_image -%}
-              {%- assign fp = p.featured_image.presentation.focal_point | default: '50% 50%' -%}
-              <img
-                src="{{ p.featured_image | image_url: width: 800 }}"
-                srcset="{{ p.featured_image | image_url: width: 500 }} 500w, {{ p.featured_image | image_url: width: 800 }} 800w"
-                sizes="(max-width: 749px) 40vw, 22vw"
-                style="object-position: {{ fp }};"
-                alt="{{ p.title | escape }}" loading="lazy" width="800" height="800"/>
-            {%- endif -%}
-            {%- if block.settings.show_grade_badge -%}
-              <span class="feat-cam-grade">{{ block.settings.grade_badge_text | default: 'Restored' }}</span>
-            {%- endif -%}
-          </a>
-          <div class="feat-text">
-            <span class="feat-eyebrow">{{ block.settings.eyebrow | default: 'Featured Camera' }}</span>
-            <h2 class="feat-title">{{ feat_heading }}</h2>
-            {%- if feat_desc != blank -%}<p class="feat-desc">{% if desc_is_custom %}{{ feat_desc | escape | newline_to_br }}{% else %}{{ feat_desc }}{% endif %}</p>{%- endif -%}
-            <div class="feat-buy">
-              {%- if p.available -%}
-                <div class="feat-price"><small>{% if p.price_varies %}From{% else %}Price{% endif %}</small>{{ p.price | money }}</div>
-              {%- else -%}
-                <div class="feat-price"><small>Status</small>Sold Out</div>
+
+      {%- if feat_source == 'auto' and source_collection != blank -%}
+        {%- comment -%} ── AUTO: cameras from the current/chosen collection ── {%- endcomment -%}
+        {%- for p in source_collection.products limit: auto_limit -%}
+          {%- liquid
+            unless p.available or request.design_mode
+              continue
+            endunless
+
+            comment # Look for an override block whose product matches this camera #
+            endcomment
+            assign ov = blank
+            for b in section.blocks
+              if b.settings.product != blank and b.settings.product.id == p.id
+                assign ov = b
+                break
+              endif
+            endfor
+
+            comment # Heading: override block's heading, else product title #
+            endcomment
+            if ov != blank and ov.settings.heading_override != blank
+              assign feat_heading = ov.settings.heading_override
+            else
+              assign feat_heading = p.title
+            endif
+
+            comment # Card text: override block's custom text, else product description #
+            endcomment
+            if ov != blank and ov.settings.card_text != blank
+              assign feat_desc = ov.settings.card_text
+              assign desc_is_custom = true
+            else
+              assign feat_desc = p.description | strip_html | strip | truncatewords: 26
+              assign desc_is_custom = false
+            endif
+
+            comment # Eyebrow + CTA: override block first, else section defaults #
+            endcomment
+            if ov != blank and ov.settings.eyebrow != blank
+              assign card_eyebrow = ov.settings.eyebrow
+            else
+              assign card_eyebrow = section.settings.auto_eyebrow | default: 'Featured Camera'
+            endif
+            if ov != blank and ov.settings.cta_label != blank
+              assign card_cta = ov.settings.cta_label
+            else
+              assign card_cta = section.settings.cta_label | default: 'Shop this camera'
+            endif
+
+            comment # Example photos: override block pickers first, else product gallery metafields #
+            endcomment
+            assign e1 = blank
+            assign e2 = blank
+            assign e3 = blank
+            assign e4 = blank
+            if ov != blank
+              assign e1 = ov.settings.photo_1
+              assign e2 = ov.settings.photo_2
+              assign e3 = ov.settings.photo_3
+              assign e4 = ov.settings.photo_4
+            endif
+            if e1 == blank and e2 == blank and e3 == blank and e4 == blank
+              assign e1 = p.metafields.custom.gallery_1.value
+              assign e2 = p.metafields.custom.gallery_2.value
+              assign e3 = p.metafields.custom.gallery_3.value
+              assign e4 = p.metafields.custom.gallery_4.value
+            endif
+            assign ph_list = ''
+            if e1 != blank
+              capture c1
+                echo e1 | image_url: width: 700
+              endcapture
+              assign ph_list = ph_list | append: c1 | append: '||'
+            endif
+            if e2 != blank
+              capture c2
+                echo e2 | image_url: width: 700
+              endcapture
+              assign ph_list = ph_list | append: c2 | append: '||'
+            endif
+            if e3 != blank
+              capture c3
+                echo e3 | image_url: width: 700
+              endcapture
+              assign ph_list = ph_list | append: c3 | append: '||'
+            endif
+            if e4 != blank
+              capture c4
+                echo e4 | image_url: width: 700
+              endcapture
+              assign ph_list = ph_list | append: c4 | append: '||'
+            endif
+            assign ph_arr = ph_list | split: '||'
+            assign ph_count = ph_arr | size
+          -%}
+          <div class="feat-card{% if ph_count > 0 %} has-photos{% endif %}" data-has-photos="{% if ph_count > 0 %}1{% else %}0{% endif %}">
+            <a class="feat-cam" href="{{ p.url }}" aria-label="{{ p.title | escape }}">
+              {%- if p.featured_image -%}
+                {%- assign fp = p.featured_image.presentation.focal_point | default: '50% 50%' -%}
+                <img
+                  src="{{ p.featured_image | image_url: width: 800 }}"
+                  srcset="{{ p.featured_image | image_url: width: 500 }} 500w, {{ p.featured_image | image_url: width: 800 }} 800w"
+                  sizes="(max-width: 749px) 40vw, 22vw"
+                  style="object-position: {{ fp }};"
+                  alt="{{ p.title | escape }}" loading="lazy" width="800" height="800"/>
               {%- endif -%}
-              <a class="feat-cta" href="{{ p.url }}">
-                {{ block.settings.cta_label | default: 'Shop this camera' }}
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
-              </a>
+              {%- if section.settings.show_grade_badge -%}
+                <span class="feat-cam-grade">{{ section.settings.grade_badge_text | default: 'Restored' }}</span>
+              {%- endif -%}
+            </a>
+            <div class="feat-text">
+              <span class="feat-eyebrow">{{ card_eyebrow }}</span>
+              <h2 class="feat-title">{{ feat_heading }}</h2>
+              {%- if feat_desc != blank -%}<p class="feat-desc">{% if desc_is_custom %}{{ feat_desc | escape | newline_to_br }}{% else %}{{ feat_desc }}{% endif %}</p>{%- endif -%}
+              <div class="feat-buy">
+                {%- if p.available -%}
+                  <div class="feat-price"><small>{% if p.price_varies %}From{% else %}Price{% endif %}</small>{{ p.price | money }}</div>
+                {%- else -%}
+                  <div class="feat-price"><small>Status</small>Sold Out</div>
+                {%- endif -%}
+                <a class="feat-cta" href="{{ p.url }}">
+                  {{ card_cta }}
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
+                </a>
+              </div>
             </div>
+            {%- if ph_count > 0 -%}
+              <div class="feat-photos is-{{ ph_count }}">
+                {%- for purl in ph_arr -%}<a class="feat-photo" href="{{ p.url }}"><img src="{{ purl }}" alt="" loading="lazy"/></a>{%- endfor -%}
+              </div>
+            {%- endif -%}
           </div>
-        </div>
-      {%- endfor -%}
+        {%- endfor -%}
+
+      {%- else -%}
+        {%- comment -%} ── MANUAL: hand-picked Camera blocks ── {%- endcomment -%}
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign p = block.settings.product
+            if p == blank
+              continue
+            endif
+            unless p.available or request.design_mode
+              continue
+            endunless
+            assign feat_heading = block.settings.heading_override | default: p.title
+            assign feat_desc = block.settings.card_text
+            assign desc_is_custom = true
+            if feat_desc == blank
+              assign feat_desc = p.description | strip_html | strip | truncatewords: 26
+              assign desc_is_custom = false
+            endif
+
+            comment # Example photos: block pickers first, then product gallery metafields #
+            endcomment
+            assign e1 = block.settings.photo_1
+            assign e2 = block.settings.photo_2
+            assign e3 = block.settings.photo_3
+            assign e4 = block.settings.photo_4
+            if e1 == blank and e2 == blank and e3 == blank and e4 == blank
+              assign e1 = p.metafields.custom.gallery_1.value
+              assign e2 = p.metafields.custom.gallery_2.value
+              assign e3 = p.metafields.custom.gallery_3.value
+              assign e4 = p.metafields.custom.gallery_4.value
+            endif
+            assign ph_list = ''
+            if e1 != blank
+              capture c1
+                echo e1 | image_url: width: 700
+              endcapture
+              assign ph_list = ph_list | append: c1 | append: '||'
+            endif
+            if e2 != blank
+              capture c2
+                echo e2 | image_url: width: 700
+              endcapture
+              assign ph_list = ph_list | append: c2 | append: '||'
+            endif
+            if e3 != blank
+              capture c3
+                echo e3 | image_url: width: 700
+              endcapture
+              assign ph_list = ph_list | append: c3 | append: '||'
+            endif
+            if e4 != blank
+              capture c4
+                echo e4 | image_url: width: 700
+              endcapture
+              assign ph_list = ph_list | append: c4 | append: '||'
+            endif
+            assign ph_arr = ph_list | split: '||'
+            assign ph_count = ph_arr | size
+          -%}
+          <div class="feat-card{% if ph_count > 0 %} has-photos{% endif %}" data-has-photos="{% if ph_count > 0 %}1{% else %}0{% endif %}" {{ block.shopify_attributes }}>
+            <a class="feat-cam" href="{{ p.url }}" aria-label="{{ p.title | escape }}">
+              {%- if p.featured_image -%}
+                {%- assign fp = p.featured_image.presentation.focal_point | default: '50% 50%' -%}
+                <img
+                  src="{{ p.featured_image | image_url: width: 800 }}"
+                  srcset="{{ p.featured_image | image_url: width: 500 }} 500w, {{ p.featured_image | image_url: width: 800 }} 800w"
+                  sizes="(max-width: 749px) 40vw, 22vw"
+                  style="object-position: {{ fp }};"
+                  alt="{{ p.title | escape }}" loading="lazy" width="800" height="800"/>
+              {%- endif -%}
+              {%- if block.settings.show_grade_badge -%}
+                <span class="feat-cam-grade">{{ block.settings.grade_badge_text | default: 'Restored' }}</span>
+              {%- endif -%}
+            </a>
+            <div class="feat-text">
+              <span class="feat-eyebrow">{{ block.settings.eyebrow | default: 'Featured Camera' }}</span>
+              <h2 class="feat-title">{{ feat_heading }}</h2>
+              {%- if feat_desc != blank -%}<p class="feat-desc">{% if desc_is_custom %}{{ feat_desc | escape | newline_to_br }}{% else %}{{ feat_desc }}{% endif %}</p>{%- endif -%}
+              <div class="feat-buy">
+                {%- if p.available -%}
+                  <div class="feat-price"><small>{% if p.price_varies %}From{% else %}Price{% endif %}</small>{{ p.price | money }}</div>
+                {%- else -%}
+                  <div class="feat-price"><small>Status</small>Sold Out</div>
+                {%- endif -%}
+                <a class="feat-cta" href="{{ p.url }}">
+                  {{ block.settings.cta_label | default: 'Shop this camera' }}
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
+                </a>
+              </div>
+            </div>
+            {%- if ph_count > 0 -%}
+              <div class="feat-photos is-{{ ph_count }}">
+                {%- for purl in ph_arr -%}<a class="feat-photo" href="{{ p.url }}"><img src="{{ purl }}" alt="" loading="lazy"/></a>{%- endfor -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+
     </div>
-  {%- elsif section.blocks.size == 0 and request.design_mode -%}
-    <div style="padding: 40px; text-align: center; font-size: 13px; color: #4E4741;">Add one or more Camera blocks in the theme editor.</div>
   {%- elsif request.design_mode -%}
-    <div style="padding: 40px; text-align: center; font-size: 13px; color: #4E4741;">No cameras are in stock right now, so this section is hidden on the live store.</div>
+    <div style="padding: 40px; text-align: center; font-size: 13px; color: #4E4741;">
+      {%- if feat_source == 'auto' -%}No in-stock cameras found for this collection, so this section is hidden on the live store.{%- else -%}Add one or more Camera blocks, or switch the source to a collection in this section's settings.{%- endif -%}
+    </div>
   {%- endif -%}
 
 </div>
@@ -254,70 +516,112 @@
   var n = cards.length;
   if (!track || !n) return;
 
-  var key = 'bfcFeat2_{{ section.id }}';
+  var key = 'bfcFeat3_{{ section.id }}';
   var inEditor = !!(window.Shopify && window.Shopify.designMode);
-  var desktopCount = Math.max(1, parseInt(root.getAttribute('data-count'), 10) || 2);
+  var layout = root.getAttribute('data-layout') || 'vary';   // 'vary' | 'duo' | 'solo'
   var randomize = root.getAttribute('data-shuffle') !== 'false';
   var mqMobile = window.matchMedia('(max-width: 990px)');
 
+  // Which cards have example photos (eligible for solo-with-photos)
+  var withPhotos = [];
+  for (var i = 0; i < n; i++) if (cards[i].getAttribute('data-has-photos') === '1') withPhotos.push(i);
+
   function allIdx() { var a = []; for (var i = 0; i < n; i++) a.push(i); return a; }
   function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
-  function targetCount() { return mqMobile.matches ? 1 : Math.min(desktopCount, n); }
 
-  function show(idxs) {
-    for (var i = 0; i < n; i++) cards[i].classList.toggle('is-on', idxs.indexOf(i) >= 0);
-    track.classList.toggle('is-showing-1', idxs.length <= 1);
+  // Decide the layout mode for this load.
+  // duo needs 2+ cameras; solo-with-photos needs at least one camera that has photos.
+  function chooseMode() {
+    if (mqMobile.matches) return 'duo1';          // mobile = single strip, no photos
+    var canDuo  = n >= 2;
+    var canSolo = withPhotos.length >= 1;
+    if (layout === 'duo')  return canDuo ? 'duo' : 'solo';
+    if (layout === 'solo') return canSolo ? 'solo' : 'duo';
+    // vary: coin-flip between the modes that are actually possible
+    if (canDuo && canSolo) return Math.random() < 0.5 ? 'solo' : 'duo';
+    if (canSolo) return 'solo';
+    return 'duo';
   }
 
-  function pick(count, avoid) {
-    if (n <= count) return allIdx();
+  function applyMode(mode) {
+    track.classList.toggle('mode-solo', mode === 'solo');
+    track.classList.toggle('mode-duo', mode !== 'solo');
+  }
+
+  function show(idxs, mode) {
+    for (var i = 0; i < n; i++) cards[i].classList.toggle('is-on', idxs.indexOf(i) >= 0);
+    track.classList.toggle('is-showing-1', idxs.length <= 1);
+    applyMode(mode);
+  }
+
+  // Pick the camera indices for a given mode.
+  function pickFor(mode, avoid) {
+    if (mode === 'solo') {
+      // one camera that has photos, fresh vs last when possible
+      var pool = withPhotos.slice();
+      shuffle(pool);
+      var choice = pool[0];
+      if (avoid != null && pool.length > 1 && String(choice) === avoid) choice = pool[1];
+      return [choice];
+    }
+    if (mode === 'duo1') {
+      // mobile single, any camera
+      var one = shuffle(allIdx()).slice(0, 1);
+      if (avoid && one.join(',') === avoid && n > 1) { one = shuffle(allIdx()).slice(0, 1); }
+      return one;
+    }
+    // duo: two distinct cameras
+    if (n <= 2) return allIdx().slice(0, 2);
     var idxs, tries = 0;
-    do { idxs = shuffle(allIdx()).slice(0, count).sort(function(a,b){return a-b;}); tries++; }
+    do { idxs = shuffle(allIdx()).slice(0, 2).sort(function(a,b){return a-b;}); tries++; }
     while (avoid && idxs.join(',') === avoid && tries < 8);
     return idxs;
   }
 
-  function rollFresh() {
+  function roll(forceMode) {
+    var mode = forceMode || chooseMode();
     var avoid = null;
     try { avoid = sessionStorage.getItem(key); } catch (e) {}
-    var idxs = pick(targetCount(), avoid);
+    var idxs = pickFor(mode, avoid);
     try { sessionStorage.setItem(key, idxs.join(',')); } catch (e) {}
-    show(idxs);
+    show(idxs, mode);
+    return mode;
   }
 
+  var currentMode;
   if (inEditor) {
-    show(allIdx().slice(0, targetCount()));
+    // Stable while editing: prefer solo if the layout asks, else duo.
+    currentMode = (layout === 'solo' && withPhotos.length) ? 'solo' : (n >= 2 ? 'duo' : 'solo');
+    var startIdx = currentMode === 'solo'
+      ? [ withPhotos.length ? withPhotos[0] : 0 ]
+      : allIdx().slice(0, mqMobile.matches ? 1 : 2);
+    show(startIdx, mqMobile.matches ? 'duo1' : currentMode);
   } else if (randomize) {
-    rollFresh();
+    currentMode = roll();
   } else {
-    show(allIdx().slice(0, targetCount()));
+    // No randomize: deterministic — solo shows first photo-camera, duo shows first two.
+    currentMode = chooseMode();
+    var det = currentMode === 'solo' ? [ withPhotos[0] ] : allIdx().slice(0, mqMobile.matches ? 1 : 2);
+    show(det, mqMobile.matches ? 'duo1' : currentMode);
   }
 
-  // Adjust visible count when crossing the desktop/mobile breakpoint, keep current picks where possible.
+  // Re-pick when crossing the mobile/desktop boundary (mode availability changes).
   function reflow() {
-    var count = targetCount();
-    var visible = [];
-    for (var i = 0; i < n; i++) if (cards[i].classList.contains('is-on')) visible.push(i);
-    if (visible.length === count) return;
-    if (visible.length > count) { show(visible.slice(0, count)); }
-    else {
-      var pool = allIdx().filter(function(i){ return visible.indexOf(i) < 0; });
-      shuffle(pool);
-      show(visible.concat(pool.slice(0, count - visible.length)).sort(function(a,b){return a-b;}));
-    }
+    if (randomize && !inEditor) { roll(); return; }
+    var mode = mqMobile.matches ? 'duo1' : (track.classList.contains('mode-solo') ? 'solo' : 'duo');
+    var idxs = mode === 'solo' ? [ withPhotos.length ? withPhotos[0] : 0 ] : allIdx().slice(0, mqMobile.matches ? 1 : 2);
+    show(idxs, mode);
   }
   if (mqMobile.addEventListener) mqMobile.addEventListener('change', reflow);
   else if (mqMobile.addListener) mqMobile.addListener(reflow);
 
-  // Shuffle button — reroll to a different set without reloading.
+  // Shuffle button — reroll (new mode + new cameras) without reloading.
   root.querySelectorAll('[data-feat-shuffle]').forEach(function(btn) {
+    // Only useful if there's more than one camera, or a solo/duo choice to make.
+    if (n > 1 || (withPhotos.length && n >= 1)) btn.style.display = '';
     btn.addEventListener('click', function(e) {
       e.preventDefault();
-      var cur = [];
-      for (var i = 0; i < n; i++) if (cards[i].classList.contains('is-on')) cur.push(i);
-      var idxs = pick(targetCount(), cur.join(','));
-      try { sessionStorage.setItem(key, idxs.join(',')); } catch (e2) {}
-      show(idxs);
+      roll();
     });
   });
 })();
@@ -331,28 +635,47 @@
   "max_blocks": 30,
   "settings": [
     {
-      "type": "select", "id": "cameras_desktop", "label": "Cameras shown (desktop)", "default": "2",
-      "info": "Tablet and mobile always show one.",
+      "type": "select", "id": "source", "label": "Which cameras to feature", "default": "auto",
+      "info": "Auto = pull from the collection being viewed. You can still add Camera blocks below to set custom text/photos for specific cameras (any block whose product is in the collection overrides that camera's text). Manual = only show the hand-picked blocks.",
       "options": [
-        { "value": "1", "label": "One" },
-        { "value": "2", "label": "Two" }
+        { "value": "auto", "label": "Auto — from the current collection" },
+        { "value": "manual", "label": "Manual — hand-picked blocks" }
       ]
     },
-    { "type": "checkbox", "id": "randomize", "label": "Pick random cameras on each page load", "default": true, "info": "When on, a fresh set shows each reload. When off, shows the first block(s)." },
-    { "type": "checkbox", "id": "show_shuffle", "label": "Show a Shuffle button", "default": false, "info": "Lets visitors swap to other cameras without reloading. Appears when there are more cameras than shown." },
+    { "type": "collection", "id": "auto_collection", "label": "Collection override (Auto)", "info": "Leave blank to use whatever collection the visitor is viewing. Set one to always pull from a specific collection (and for non-collection pages like the homepage)." },
+    { "type": "range", "id": "auto_pool", "label": "Auto: how many to draw from", "min": 2, "max": 24, "step": 1, "default": 8, "info": "The first N in-stock products from the collection become the pool the featured cameras are picked from." },
+    { "type": "text", "id": "auto_eyebrow", "label": "Auto: eyebrow label", "default": "Featured Camera" },
+    { "type": "paragraph", "content": "In the 1-camera layout, example photos are pulled from each product's gallery metafields (gallery_1 through gallery_4). Cameras without gallery photos simply show in the 2-camera layout." },
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "select", "id": "layout_mode", "label": "Layout", "default": "vary",
+      "info": "Vary = randomly alternate each load between one camera with photos and two cameras without. Tablet and mobile always show a single camera.",
+      "options": [
+        { "value": "vary", "label": "Vary — sometimes 1 with photos, sometimes 2" },
+        { "value": "duo",  "label": "Always two (no photos)" },
+        { "value": "solo", "label": "Always one (with photos)" }
+      ]
+    },
+    { "type": "checkbox", "id": "randomize", "label": "Pick random cameras on each page load", "default": true, "info": "When on, a fresh set shows each reload. When off, shows the first cameras in the pool." },
+    { "type": "checkbox", "id": "show_shuffle", "label": "Show a Shuffle button", "default": false, "info": "Lets visitors swap to other cameras without reloading. Appears only when there are more cameras than shown." },
     {
       "type": "select", "id": "theme", "label": "Theme", "default": "light",
       "options": [
         { "value": "light", "label": "Light (cream)" },
         { "value": "dark", "label": "Dark" }
       ]
-    }
+    },
+    { "type": "header", "content": "Auto mode: shared card style" },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop this camera" },
+    { "type": "checkbox", "id": "show_grade_badge", "label": "Show badge on camera image", "default": true },
+    { "type": "text", "id": "grade_badge_text", "label": "Badge text", "default": "Restored" }
   ],
   "blocks": [
     {
       "type": "camera",
-      "name": "Camera",
+      "name": "Camera / override",
       "settings": [
+        { "type": "paragraph", "content": "In Manual source, these are the cameras shown. In Auto source, a block customizes the matching collection product's text and photos (and is otherwise ignored)." },
         { "type": "product", "id": "product", "label": "Camera" },
         { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Featured Camera" },
         { "type": "text", "id": "heading_override", "label": "Heading override", "info": "Leave blank to use the product title." },
@@ -360,17 +683,19 @@
         { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop this camera" },
         { "type": "header", "content": "Grade badge" },
         { "type": "checkbox", "id": "show_grade_badge", "label": "Show badge on camera image", "default": true },
-        { "type": "text", "id": "grade_badge_text", "label": "Badge text", "default": "Restored" }
+        { "type": "text", "id": "grade_badge_text", "label": "Badge text", "default": "Restored" },
+        { "type": "header", "content": "Example photos (shown in the 1-camera layout)" },
+        { "type": "paragraph", "content": "Leave all four blank to auto-pull from the product's gallery metafields (gallery_1 through gallery_4)." },
+        { "type": "image_picker", "id": "photo_1", "label": "Example photo 1" },
+        { "type": "image_picker", "id": "photo_2", "label": "Example photo 2" },
+        { "type": "image_picker", "id": "photo_3", "label": "Example photo 3" },
+        { "type": "image_picker", "id": "photo_4", "label": "Example photo 4" }
       ]
     }
   ],
   "presets": [
     {
-      "name": "BFC Featured Camera",
-      "blocks": [
-        { "type": "camera" },
-        { "type": "camera" }
-      ]
+      "name": "BFC Featured Camera"
     }
   ]
 }
