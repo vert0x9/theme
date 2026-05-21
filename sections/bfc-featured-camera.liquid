@@ -179,7 +179,18 @@
     </button>
   {%- endif -%}
 
-  {%- if section.blocks.size > 0 -%}
+  {%- comment -%} Count cameras we can actually feature (in stock, product set). In the editor,
+       treat all set products as showable so the section never looks empty while editing. {%- endcomment -%}
+  {%- assign available_cams = 0 -%}
+  {%- for block in section.blocks -%}
+    {%- if block.settings.product != blank -%}
+      {%- if block.settings.product.available or request.design_mode -%}
+        {%- assign available_cams = available_cams | plus: 1 -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if available_cams > 0 -%}
     <div class="feat-track">
       {%- for block in section.blocks -%}
         {%- liquid
@@ -187,6 +198,12 @@
           if p == blank
             continue
           endif
+          comment # Only feature in-stock cameras. In the theme editor we still render
+            sold-out ones so they don't silently vanish while you're setting up. #
+          endcomment
+          unless p.available or request.design_mode
+            continue
+          endunless
           assign feat_heading = block.settings.heading_override | default: p.title
           assign feat_desc = block.settings.card_text
           assign desc_is_custom = true
@@ -228,8 +245,10 @@
         </div>
       {%- endfor -%}
     </div>
-  {%- else -%}
+  {%- elsif section.blocks.size == 0 and request.design_mode -%}
     <div style="padding: 40px; text-align: center; font-size: 13px; color: #4E4741;">Add one or more Camera blocks in the theme editor.</div>
+  {%- elsif request.design_mode -%}
+    <div style="padding: 40px; text-align: center; font-size: 13px; color: #4E4741;">No cameras are in stock right now, so this section is hidden on the live store.</div>
   {%- endif -%}
 
 </div>
