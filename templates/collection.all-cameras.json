@@ -86,7 +86,6 @@
       "blocks": {
         "camera_Gx9CHp": {
           "type": "camera",
-          "disabled": true,
           "settings": {
             "product": "olympus-stylus-mjui",
             "eyebrow": "Featured Camera",
