@@ -86,7 +86,6 @@
       "blocks": {
         "camera_Gx9CHp": {
           "type": "camera",
-          "disabled": true,
           "settings": {
             "product": "olympus-stylus-mjui",
             "eyebrow": "Featured Camera",
@@ -116,6 +115,7 @@
       ],
       "name": "BFC Featured Camera",
       "settings": {
+        "cameras_desktop": "2",
         "randomize": true,
         "show_shuffle": false,
         "theme": "light"
