@@ -86,16 +86,15 @@
       "blocks": {
         "camera_Gx9CHp": {
           "type": "camera",
+          "disabled": true,
           "settings": {
             "product": "olympus-stylus-mjui",
             "eyebrow": "Featured Camera",
             "heading_override": "",
             "card_text": "",
             "cta_label": "Shop this camera",
-            "image_fit": "zoom",
             "show_grade_badge": true,
-            "grade_badge_text": "Restored",
-            "photos_caption": ""
+            "grade_badge_text": "Restored"
           }
         },
         "camera_X8WyUg": {
@@ -106,10 +105,8 @@
             "heading_override": "",
             "card_text": "Bronicas Hasselblad Competitor. Beautiful images with a TTL light meter.",
             "cta_label": "Shop this camera",
-            "image_fit": "zoom",
             "show_grade_badge": true,
-            "grade_badge_text": "Restored",
-            "photos_caption": ""
+            "grade_badge_text": "Restored"
           }
         }
       },
@@ -119,9 +116,9 @@
       ],
       "name": "BFC Featured Camera",
       "settings": {
-        "theme": "light",
         "randomize": true,
-        "show_shuffle": false
+        "show_shuffle": false,
+        "theme": "light"
       }
     },
     "main": {

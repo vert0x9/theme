@@ -121,6 +121,21 @@ a.bfc-rv-cta-btn:hover, a.bfc-rv-cta-btn:focus, a.bfc-rv-cta-btn:active { backgr
 .bfc-rv-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); margin-top: auto; }
 .bfc-rv-card-name { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.85); }
 .bfc-rv-card-verified { font-size: 9px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ce, #ABCC99); }
+/* ── Review photo thumbnails + lightbox ── */
+.bfc-rv-card-photos { display: flex; gap: 8px; flex-wrap: wrap; margin: -2px 0 2px; }
+.bfc-rv-card-photo { width: 80px; height: 80px; object-fit: cover; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); transition: border-color 0.15s, transform 0.15s; display: block; image-rendering: auto; }
+.bfc-rv-card-photo:hover { border-color: var(--or, #E36E15); transform: scale(1.05); }
+.bfc-rv-card-photo-more { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: border-color 0.15s; }
+.bfc-rv-card-photo-more:hover { border-color: var(--or, #E36E15); color: #fff; }
+.bfc-rv-lightbox { position: fixed; inset: 0; z-index: 100000; background: rgba(10,10,4,0.92); display: none; align-items: center; justify-content: center; padding: 32px; }
+.bfc-rv-lightbox.is-open { display: flex; }
+.bfc-rv-lightbox img { max-width: 90vw; max-height: 86vh; object-fit: contain; display: block; }
+.bfc-rv-lightbox-close { position: absolute; top: 20px; right: 24px; width: 40px; height: 40px; background: rgba(255,255,255,0.08); border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.bfc-rv-lightbox-close:hover { background: rgba(255,255,255,0.18); }
+.bfc-rv-lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; background: rgba(255,255,255,0.08); border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.bfc-rv-lightbox-nav:hover { background: rgba(255,255,255,0.18); }
+.bfc-rv-lightbox-nav.is-prev { left: 20px; }
+.bfc-rv-lightbox-nav.is-next { right: 20px; }
 .bfc-rv-nav { display: flex; gap: 8px; flex-shrink: 0; }
 .bfc-rv-arrow { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,0.15); background: transparent; color: rgba(255,255,255,0.6); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: background 0.15s, color 0.15s; padding: 0; }
 .bfc-rv-arrow:hover { background: rgba(255,255,255,0.08); color: #fff; }
@@ -231,6 +246,53 @@ a.bfc-rv-cta-btn:hover, a.bfc-rv-cta-btn:focus, a.bfc-rv-cta-btn:active { backgr
                 {%- endfor -%}
               </div>
               <p class="bfc-rv-card-body">{{ review.body | escape }}</p>
+              {%- comment -%} ── Review photos ──
+                   The Base44 sync may store pictures in a few shapes:
+                     • review.pictures = ["url1","url2"]            (array of strings)
+                     • review.pictures = [{url:"…"}, …]             (array of objects w/ .url)
+                     • review.pictures = [{urls:{compact:"…",…}}]   (Judge.me native shape)
+                   We normalize all three. Show up to 4 thumbnails; if more,
+                   the 4th becomes a "+N" tile that opens the lightbox at index 3.
+                   Each thumbnail carries data-full (the largest URL we can find)
+                   so the lightbox shows the high-res version. {%- endcomment -%}
+              {%- assign rv_pics = review.picture_urls -%}
+              {%- if rv_pics == blank -%}{%- assign rv_pics = review.pictures -%}{%- endif -%}
+              {%- if rv_pics == blank -%}{%- assign rv_pics = review.images -%}{%- endif -%}
+              {%- if rv_pics == blank -%}{%- assign rv_pics = review.photos -%}{%- endif -%}
+              {%- if rv_pics != blank and rv_pics.size > 0 -%}
+                <div class="bfc-rv-card-photos">
+                  {%- for pic in rv_pics limit: 4 -%}
+                    {%- comment -%} Resolve thumb + full URL across the shapes. {%- endcomment -%}
+                    {%- assign pic_thumb = '' -%}
+                    {%- assign pic_full = '' -%}
+                    {%- if pic.urls != blank -%}
+                      {%- assign pic_thumb = pic.urls.compact | default: pic.urls.small | default: pic.urls.original -%}
+                      {%- assign pic_full = pic.urls.huge | default: pic.urls.original | default: pic.urls.compact -%}
+                    {%- elsif pic.url != blank -%}
+                      {%- assign pic_thumb = pic.url -%}
+                      {%- assign pic_full = pic.url -%}
+                    {%- else -%}
+                      {%- assign pic_thumb = pic -%}
+                      {%- assign pic_full = pic -%}
+                    {%- endif -%}
+                    {%- comment -%} Judge.me serves imgix URLs ending in "?auto=format&w=1024".
+                         imgix honours w= for resizing, so we rewrite the width to get a
+                         small crisp thumbnail (160px, sharp on retina at 56px display) and
+                         a large lightbox version (1600px). If the URL doesn't contain
+                         "w=1024" the replace is a no-op and the original URL is used. {%- endcomment -%}
+                    {%- assign pic_thumb = pic_thumb | replace: 'w=1024', 'w=240' -%}
+                    {%- assign pic_full = pic_full | replace: 'w=1024', 'w=1600' -%}
+                    {%- if pic_thumb != blank -%}
+                      {%- if forloop.last and rv_pics.size > 4 -%}
+                        {%- assign extra_count = rv_pics.size | minus: 4 -%}
+                        <div class="bfc-rv-card-photo-more" data-rv-photo data-full="{{ pic_full | escape }}" role="button" tabindex="0" aria-label="View {{ extra_count | plus: 1 }} more photos">+{{ extra_count | plus: 1 }}</div>
+                      {%- else -%}
+                        <img class="bfc-rv-card-photo" src="{{ pic_thumb }}" data-rv-photo data-full="{{ pic_full | escape }}" loading="lazy" alt="Customer photo" />
+                      {%- endif -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
               <div class="bfc-rv-card-footer">
                 <span class="bfc-rv-card-name">{{ review.author | escape }}</span>
                 {%- if review.verified -%}
@@ -406,6 +468,7 @@ a.bfc-rv-cta-btn:hover, a.bfc-rv-cta-btn:focus, a.bfc-rv-cta-btn:active { backgr
   if (nextBtn) nextBtn.addEventListener('click', function() { slide(1); });
 
   /* ── Touch/drag on both tracks ── */
+  var rvDragMoved = false; /* shared flag so the photo click handler can ignore drag-clicks */
   var tracks = sec.querySelectorAll('[data-bfc-rv-track]');
   tracks.forEach(function(track) {
     var startX = 0, startTx = 0, dragging = false;
@@ -415,10 +478,10 @@ a.bfc-rv-cta-btn:hover, a.bfc-rv-cta-btn:focus, a.bfc-rv-cta-btn:active { backgr
       var m = st.match(/matrix\((.+)\)/);
       return m ? parseFloat(m[1].split(',')[4]) : 0;
     }
-    track.addEventListener('mousedown', function(e) { dragging = true; startX = e.clientX; startTx = getTx(); track.classList.add('is-dragging'); });
-    track.addEventListener('touchstart', function(e) { dragging = true; startX = e.touches[0].clientX; startTx = getTx(); track.classList.add('is-dragging'); }, { passive: true });
-    window.addEventListener('mousemove', function(e) { if (!dragging) return; track.style.transform = 'translateX(' + (startTx + e.clientX - startX) + 'px)'; });
-    window.addEventListener('touchmove', function(e) { if (!dragging) return; track.style.transform = 'translateX(' + (startTx + e.touches[0].clientX - startX) + 'px)'; }, { passive: true });
+    track.addEventListener('mousedown', function(e) { dragging = true; rvDragMoved = false; startX = e.clientX; startTx = getTx(); track.classList.add('is-dragging'); });
+    track.addEventListener('touchstart', function(e) { dragging = true; rvDragMoved = false; startX = e.touches[0].clientX; startTx = getTx(); track.classList.add('is-dragging'); }, { passive: true });
+    window.addEventListener('mousemove', function(e) { if (!dragging) return; if (Math.abs(e.clientX - startX) > 6) rvDragMoved = true; track.style.transform = 'translateX(' + (startTx + e.clientX - startX) + 'px)'; });
+    window.addEventListener('touchmove', function(e) { if (!dragging) return; if (Math.abs(e.touches[0].clientX - startX) > 6) rvDragMoved = true; track.style.transform = 'translateX(' + (startTx + e.touches[0].clientX - startX) + 'px)'; }, { passive: true });
     function end(e) {
       if (!dragging) return;
       dragging = false;
@@ -432,6 +495,112 @@ a.bfc-rv-cta-btn:hover, a.bfc-rv-cta-btn:focus, a.bfc-rv-cta-btn:active { backgr
   });
 })();
 </script>
+
+<script>
+/* ── Review photo lightbox ── (separate <script> so an error in the carousel
+   JS above can never prevent photo clicks from binding. Deferred to DOMready
+   because the lightbox overlay div is rendered after this script tag.) */
+(function(){
+  function rvInitLightbox(){
+  var sec = document.getElementById('bfc-rv-section');
+  if (!sec) return;
+  var rvLightbox = document.getElementById('bfc-rv-lightbox');
+  if (rvLightbox) {
+    var rvLbImg = rvLightbox.querySelector('img');
+    var rvPhotoEls = [];
+    var rvCurrentIdx = 0;
+
+    function rvRefreshPhotoList() {
+      rvPhotoEls = Array.prototype.slice.call(sec.querySelectorAll('[data-rv-photo]'));
+    }
+    function rvOpenLightbox(idx) {
+      rvRefreshPhotoList();
+      if (!rvPhotoEls.length) return;
+      rvCurrentIdx = Math.max(0, Math.min(idx, rvPhotoEls.length - 1));
+      rvLbImg.src = rvPhotoEls[rvCurrentIdx].getAttribute('data-full');
+      rvLightbox.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function rvCloseLightbox() {
+      rvLightbox.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+    function rvStep(dir) {
+      if (!rvPhotoEls.length) return;
+      rvCurrentIdx = (rvCurrentIdx + dir + rvPhotoEls.length) % rvPhotoEls.length;
+      rvLbImg.src = rvPhotoEls[rvCurrentIdx].getAttribute('data-full');
+    }
+
+    /* Bind each photo directly with pointer tracking. We measure how far the
+       pointer moved between down and up; only a near-stationary release counts
+       as a click. This is fully independent of the carousel drag handler, so
+       it works whether or not the photo lives inside a draggable track. Bound
+       per-element (not delegated) and re-bound whenever the list refreshes. */
+    function rvBindPhotoClicks() {
+      rvRefreshPhotoList();
+      rvPhotoEls.forEach(function(el, i) {
+        if (el.__rvBound) return;
+        el.__rvBound = true;
+        var downX = 0, downY = 0;
+        el.addEventListener('pointerdown', function(e) { downX = e.clientX; downY = e.clientY; });
+        el.addEventListener('pointerup', function(e) {
+          var moved = Math.abs(e.clientX - downX) + Math.abs(e.clientY - downY);
+          if (moved > 10) return; /* was a drag/swipe, not a tap */
+          e.preventDefault();
+          e.stopPropagation();
+          rvRefreshPhotoList();
+          var idx = rvPhotoEls.indexOf(el);
+          rvOpenLightbox(idx > -1 ? idx : 0);
+        });
+        el.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            rvRefreshPhotoList();
+            var idx = rvPhotoEls.indexOf(el);
+            rvOpenLightbox(idx > -1 ? idx : 0);
+          }
+        });
+      });
+    }
+    rvBindPhotoClicks();
+    /* Re-bind after tab switches (shop reviews tab cards mount/unmount). */
+    sec.querySelectorAll('[data-bfc-rv-tab]').forEach(function(tab) {
+      tab.addEventListener('click', function() { setTimeout(rvBindPhotoClicks, 50); });
+    });
+
+    var rvLbClose = rvLightbox.querySelector('[data-rv-lb-close]');
+    var rvLbPrev = rvLightbox.querySelector('[data-rv-lb-prev]');
+    var rvLbNext = rvLightbox.querySelector('[data-rv-lb-next]');
+    if (rvLbClose) rvLbClose.addEventListener('click', rvCloseLightbox);
+    rvLightbox.addEventListener('click', function(e) { if (e.target === rvLightbox) rvCloseLightbox(); });
+    if (rvLbPrev) rvLbPrev.addEventListener('click', function(e) { e.stopPropagation(); rvStep(-1); });
+    if (rvLbNext) rvLbNext.addEventListener('click', function(e) { e.stopPropagation(); rvStep(1); });
+    document.addEventListener('keydown', function(e) {
+      if (!rvLightbox.classList.contains('is-open')) return;
+      if (e.key === 'Escape') rvCloseLightbox();
+      else if (e.key === 'ArrowLeft') rvStep(-1);
+      else if (e.key === 'ArrowRight') rvStep(1);
+    });
+  }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', rvInitLightbox);
+  } else {
+    rvInitLightbox();
+  }
+})();
+</script>
+
+{%- comment -%} Review photo lightbox overlay — outside the section so the
+    fixed overlay isn't clipped by any ancestor overflow. {%- endcomment -%}
+<div class="bfc-rv-lightbox" id="bfc-rv-lightbox" role="dialog" aria-modal="true" aria-label="Review photo">
+  <button class="bfc-rv-lightbox-close" data-rv-lb-close aria-label="Close">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg>
+  </button>
+  <button class="bfc-rv-lightbox-nav is-prev" data-rv-lb-prev aria-label="Previous photo">&#8249;</button>
+  <img src="" alt="Customer review photo" />
+  <button class="bfc-rv-lightbox-nav is-next" data-rv-lb-next aria-label="Next photo">&#8250;</button>
+</div>
 
 {%- endif -%}
 
