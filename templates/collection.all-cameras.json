@@ -84,6 +84,18 @@
     "bfc_featured_camera_pg4ALh": {
       "type": "bfc-featured-camera",
       "blocks": {
+        "camera_c8hx9T": {
+          "type": "camera",
+          "settings": {
+            "product": "black-canon-ae-1-program-chrome-nose-1-8-50m-lens",
+            "eyebrow": "Featured Camera",
+            "heading_override": "",
+            "card_text": "",
+            "cta_label": "Shop this camera",
+            "show_grade_badge": true,
+            "grade_badge_text": "Restored"
+          }
+        },
         "camera_Gx9CHp": {
           "type": "camera",
           "settings": {
@@ -110,6 +122,7 @@
         }
       },
       "block_order": [
+        "camera_c8hx9T",
         "camera_Gx9CHp",
         "camera_X8WyUg"
       ],
