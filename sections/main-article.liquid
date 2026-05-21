@@ -321,26 +321,31 @@
   {
     "@context": "https://schema.org",
     "@type": "Article",
+    "@id": {{ shop.url | append: article.url | append: '/#article' | json }},
     "articleBody": {{ article.content | strip_html | json }},
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": {{ shop.url | append: page.url | json }}
+      "@id": {{ shop.url | append: article.url | json }}
     },
     "headline": {{ article.title | json }},
     {% if article.excerpt != blank %}
       "description": {{ article.excerpt | strip_html | json }},
     {% endif %}
     {% if article.image %}
-      {% assign image_size = article.image.width | append: 'x' %}
       "image": [
-        {{ article | image_url: image_size | prepend: "https:" | json }}
+        {{ article.image | image_url: width: 1200 | prepend: "https:" | json }}
       ],
     {% endif %}
     "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
     "dateCreated": {{ article.created_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
+    "dateModified": {{ article.updated_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
+    "wordCount": {{ article.content | strip_html | split: ' ' | size }},
     "author": {
       "@type": "Person",
       "name": {{ article.author | json }}
+    },
+    "publisher": {
+      "@id": "{{ shop.url }}/#organization"
     }
   }
 </script>

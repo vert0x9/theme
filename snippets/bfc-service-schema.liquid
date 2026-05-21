@@ -1,0 +1,18 @@
+{%- comment -%}
+  Render with: {% render 'bfc-service-schema', service_name: 'Camera Repair', service_type: 'Camera Repair Service', service_description: '...' %}
+{%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": {{ service_name | json }},
+  "serviceType": {{ service_type | default: service_name | json }},
+  "description": {{ service_description | json }},
+  "provider": { "@id": "{{ shop.url }}/#organization" },
+  "areaServed": {
+    "@type": "Country",
+    "name": "US"
+  },
+  "url": {{ canonical_url | json }}
+}
+</script>

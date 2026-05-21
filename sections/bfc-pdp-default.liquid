@@ -841,32 +841,7 @@
 })();
 </script>
 
-{%- comment -%} ── JSON-LD for SEO ── {%- endcomment -%}
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org/",
-  "@type": "Product",
-  "name": {{ product.title | json }},
-  "image": [{% for image in product.images limit: 5 %}{{ image | image_url: width: 1200 | prepend: 'https:' | json }}{% unless forloop.last %},{% endunless %}{% endfor %}],
-  "description": {{ product.description | strip_html | json }},
-  {% if product.vendor != blank %}"brand": { "@type": "Brand", "name": {{ product.vendor | json }} },{% endif %}
-  {% if current_variant.sku != blank %}"sku": {{ current_variant.sku | json }},{% endif %}
-  "offers": {
-    "@type": "Offer",
-    "url": {{ shop.url | append: product.url | json }},
-    "priceCurrency": {{ cart.currency.iso_code | json }},
-    "price": {{ current_variant.price | divided_by: 100.00 | json }},
-    "availability": "{% if current_variant.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}"
-    {% if jm_show %},
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "{{ jm_avg }}",
-      "reviewCount": "{{ jm_count }}"
-    }
-    {% endif %}
-  }
-}
-</script>
+{%- render 'bfc-product-schema' -%}
 
 {% schema %}
 {

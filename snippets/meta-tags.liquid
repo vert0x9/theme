@@ -72,11 +72,49 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "Organization",
+      "@id": "{{ shop.url }}/#organization",
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | json }},
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https:{{ 'logo.png' | asset_url }}"
+      },
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "telephone": "+1-718-218-4023",
+          "email": "hello@brooklynfilmcamera.com",
+          "availableLanguage": "English"
+        },
+        {
+          "@type": "ContactPoint",
+          "contactType": "technical support",
+          "email": "repairs@brooklynfilmcamera.com",
+          "availableLanguage": "English"
+        }
+      ],
+      "sameAs": [
+        {%- if settings.social_instagram_link != blank -%}{{ settings.social_instagram_link | json }},{%- endif -%}
+        {%- if settings.social_twitter_link != blank -%}{{ settings.social_twitter_link | json }},{%- endif -%}
+        {%- if settings.social_facebook_link != blank -%}{{ settings.social_facebook_link | json }},{%- endif -%}
+        {%- if settings.social_tiktok_link != blank -%}{{ settings.social_tiktok_link | json }},{%- endif -%}
+        {%- if settings.social_youtube_link != blank -%}{{ settings.social_youtube_link | json }},{%- endif -%}
+        "https://brooklynfilmcamera.com"
+      ]
+    },
+    {
       "@type": "LocalBusiness",
       "@id": "{{ shop.url }}/#localbusiness",
       "name": {{ shop.name | json }},
       "url": {{ shop.url | json }},
       "description": "Brooklyn's film camera shop. Refurbished 35mm and medium format cameras, film developing, camera repairs, and film supplies.",
+      "parentOrganization": { "@id": "{{ shop.url }}/#organization" },
+      "telephone": "+1-718-218-4023",
+      "email": "hello@brooklynfilmcamera.com",
+      "priceRange": "$$",
+      "image": "https:{{ 'logo.png' | asset_url }}",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "855 Grand St",
@@ -85,26 +123,27 @@
         "postalCode": "11211",
         "addressCountry": "US"
       },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 40.7128,
+        "longitude": -73.9387
+      },
       "openingHoursSpecification": [
         {
           "@type": "OpeningHoursSpecification",
-          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+          "opens": "11:00",
+          "closes": "19:00"
         }
       ],
-      "hasMap": "https://maps.google.com/?q=855+Grand+St+Brooklyn+NY+11211",
-      "sameAs": [
-        {%- if settings.social_instagram_link != blank -%}{{ settings.social_instagram_link | json }},{%- endif -%}
-        {%- if settings.social_twitter_link != blank -%}{{ settings.social_twitter_link | json }},{%- endif -%}
-        {%- if settings.social_facebook_link != blank -%}{{ settings.social_facebook_link | json }},{%- endif -%}
-        {%- if settings.social_tiktok_link != blank -%}{{ settings.social_tiktok_link | json }},{%- endif -%}
-        "https://brooklynfilmcamera.com"
-      ]
+      "hasMap": "https://maps.google.com/?q=855+Grand+St+Brooklyn+NY+11211"
     },
     {
       "@type": "WebSite",
       "@id": "{{ shop.url }}/#website",
       "url": {{ shop.url | json }},
       "name": {{ shop.name | json }},
+      "publisher": { "@id": "{{ shop.url }}/#organization" },
       "potentialAction": {
         "@type": "SearchAction",
         "target": {
