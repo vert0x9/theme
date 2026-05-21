@@ -1,0 +1,637 @@
+{%- comment -%}
+  Expired Film Club — PRODUCT PAGE template
+  Brooklyn Film Camera — Shopify Custom Liquid Section
+
+  Assign to the Expired Film Club product (handle: expired-film-club).
+  Reuses the EFC landing-page design system but in a PDP layout:
+  product image + buy box up top, editorial sections below.
+
+  Reads variants / prices / images dynamically from `product`.
+  Billing (monthly vs every-3-months) is handled by Subi selling plans;
+  because Subi-managed plans don't always surface in product.selling_plan_groups,
+  the two plan IDs are SCHEMA SETTINGS (pre-filled, editable in the customizer).
+  If Subi ever regenerates the plans, update them in the theme editor — no code change.
+
+  Fonts: Cormorant Garamond (display) + Poppins (body/UI)
+  Style: Sharp/modern — no border-radius
+{%- endcomment -%}
+
+{%- liquid
+  assign monthly_plan = section.settings.monthly_plan_id
+  assign quarterly_plan = section.settings.quarterly_plan_id
+  assign monthly_discount = section.settings.monthly_discount_pct | default: 10
+  assign first_variant = product.selected_or_first_available_variant
+  assign img_count = product.images | size
+-%}
+
+<div class="efc efc-pdp" id="efc-pdp-{{ section.id }}"
+  data-monthly-plan="{{ monthly_plan }}"
+  data-quarterly-plan="{{ quarterly_plan }}"
+  data-monthly-discount="{{ monthly_discount }}">
+
+  <!-- ANNOUNCEMENT STRIP -->
+  <div class="efc-announce" role="banner">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    {{ section.settings.announce_text | default: 'Free shipping on all subscriptions — cancel or pause anytime' }}
+  </div>
+
+  <!-- ═══ PRODUCT TOP: image + buy box ═══ -->
+  <section class="efc-pdp-top" aria-labelledby="efc-pdp-title">
+    <div class="efc-wrap efc-pdp-top__inner">
+
+      <!-- LEFT: gallery -->
+      <div class="efc-pdp-gallery">
+        <div class="efc-pdp-gallery__main">
+          {%- if img_count > 0 -%}
+            {%- for image in product.images -%}
+              <button
+                type="button"
+                class="efc-pdp-slide{% if forloop.first %} is-active{% endif %}"
+                data-slide-index="{{ forloop.index0 }}"
+                data-full="{{ image | image_url: width: 1600 }}"
+                aria-label="View {{ product.title | escape }} image {{ forloop.index }} full size"
+                {% unless forloop.first %}hidden{% endunless %}>
+                <img
+                  src="{{ image | image_url: width: 900 }}"
+                  srcset="{{ image | image_url: width: 600 }} 600w, {{ image | image_url: width: 900 }} 900w, {{ image | image_url: width: 1200 }} 1200w"
+                  sizes="(max-width: 900px) 100vw, 50vw"
+                  alt="{{ image.alt | default: product.title | escape }}"
+                  width="900" height="600"
+                  {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+              </button>
+            {%- endfor -%}
+          {%- else -%}
+            <div class="efc-pdp-slide is-active"><div class="efc-pdp-noimg">No image</div></div>
+          {%- endif -%}
+        </div>
+
+        {%- if img_count > 1 -%}
+          <div class="efc-pdp-thumbs" role="tablist" aria-label="Product image thumbnails">
+            {%- for image in product.images -%}
+              <button
+                type="button"
+                class="efc-pdp-thumb{% if forloop.first %} is-active{% endif %}"
+                data-thumb-index="{{ forloop.index0 }}"
+                role="tab"
+                aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                aria-label="Show image {{ forloop.index }}">
+                <img src="{{ image | image_url: width: 200 }}" alt="" width="80" height="80" loading="lazy">
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- RIGHT: buy box -->
+      <div class="efc-pdp-buy">
+        <span class="efc-badge">{{ section.settings.badge_text | default: 'Limited stock · Ships from NYC' }}</span>
+
+        <h1 id="efc-pdp-title" class="efc-pdp-title">{{ product.title }}</h1>
+
+        <div class="efc-pdp-price-row">
+          <span class="efc-pdp-price" id="efc-pdp-price">{{ first_variant.price | money }}</span>
+          <span class="efc-pdp-price-per" id="efc-pdp-price-per">/mo</span>
+          <span class="efc-tag" id="efc-pdp-discount-tag">{{ monthly_discount }}% off</span>
+        </div>
+        <p class="efc-pdp-price-note" id="efc-pdp-price-note"></p>
+
+        {%- if product.description != blank -%}
+          <div class="efc-pdp-desc">{{ product.description }}</div>
+        {%- endif -%}
+
+        <!-- FORMAT selector (variants) -->
+        <div class="efc-pdp-opt">
+          <span class="efc-pdp-opt__label">{{ product.options.first | default: 'Type of Film' }}</span>
+          <div class="efc-pdp-opt__btns" role="group" aria-label="Choose format">
+            {%- for variant in product.variants -%}
+              <button
+                type="button"
+                class="efc-pdp-fmt{% if variant.id == first_variant.id %} is-active{% endif %}"
+                data-variant-id="{{ variant.id }}"
+                data-variant-price="{{ variant.price }}"
+                data-variant-price-fmt="{{ variant.price | money }}"
+                data-variant-index="{{ forloop.index0 }}"
+                data-variant-available="{{ variant.available }}"
+                {% unless variant.available %}disabled{% endunless %}>
+                {{ variant.title }}
+              </button>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <!-- BILLING selector (selling plans) -->
+        <div class="efc-pdp-opt">
+          <span class="efc-pdp-opt__label">Billing</span>
+          <div class="efc-pdp-opt__btns efc-pdp-opt__btns--2" role="group" aria-label="Choose billing frequency">
+            <button type="button" class="efc-pdp-bill is-active" data-bill="monthly" data-plan="{{ monthly_plan }}">
+              Monthly
+              <span class="efc-pdp-bill__sub">{{ monthly_discount }}% off</span>
+            </button>
+            <button type="button" class="efc-pdp-bill" data-bill="quarterly" data-plan="{{ quarterly_plan }}">
+              Every 3 months
+              <span class="efc-pdp-bill__sub">Billed quarterly</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Subscribe -->
+        <a class="efc-btn efc-btn--primary efc-btn--full efc-pdp-sub" id="efc-pdp-subscribe"
+           href="#" data-base="{{ shop.url }}">
+          <span id="efc-pdp-sub-label">Subscribe — </span><span id="efc-pdp-sub-price">{{ first_variant.price | money }}</span><span id="efc-pdp-sub-per">/mo</span>
+        </a>
+
+        <p class="efc-pdp-trust">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Free shipping · Cancel or pause anytime
+        </p>
+
+        <a class="efc-pdp-account" href="/account">Manage an existing membership →</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ WHAT'S IN THE BOX ═══ -->
+  <section class="efc-inbox" aria-labelledby="efc-inbox-title">
+    <div class="efc-wrap efc-inbox__inner">
+      <div class="efc-inbox__media">
+        <figure class="efc-inbox__frame">
+          <img
+            src="{{ section.settings.inbox_image | default: 'https://cdn.shopify.com/s/files/1/0575/8638/5068/files/EX_50__Expired_P160_403_SQ_1.jpg?v=1756574725' }}"
+            alt="Contents of an Expired Film Club box"
+            loading="lazy" width="560" height="560">
+        </figure>
+      </div>
+      <div class="efc-inbox__copy">
+        <span class="efc-eyebrow">{{ section.settings.inbox_eyebrow | default: "What's in every box" }}</span>
+        <h2 id="efc-inbox-title" class="efc-inbox__title">{{ section.settings.inbox_title | default: 'Curated with <em>intention</em>' }}</h2>
+        <p class="efc-inbox__body">{{ section.settings.inbox_body | default: 'Every shipment is hand-picked from trusted sources. We focus on rolls with reliable results and genuine character — plus the occasional rare stock you will not find anywhere else.' }}</p>
+        <ul class="efc-inbox__list" role="list">
+          <li><span class="efc-list-icon" aria-hidden="true">◆</span>3 curated rolls per box</li>
+          <li><span class="efc-list-icon" aria-hidden="true">◆</span>Rare &amp; hard-to-find stocks</li>
+          <li><span class="efc-list-icon" aria-hidden="true">◆</span>Both 35mm and 120 available</li>
+          <li><span class="efc-list-icon" aria-hidden="true">◆</span>Free shipping — ships from Brooklyn, NYC</li>
+        </ul>
+        <a class="efc-btn efc-btn--primary" href="#efc-pdp-{{ section.id }}">Choose your box</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ BOTTOM CTA ═══ -->
+  <section class="efc-cta" aria-labelledby="efc-cta-title">
+    <div class="efc-wrap">
+      <div class="efc-cta__card">
+        <div class="efc-cta__copy">
+          <h2 id="efc-cta-title" class="efc-cta__title">{{ section.settings.cta_title | default: 'Looking for a specific stock?' }}</h2>
+          <p class="efc-cta__sub">{{ section.settings.cta_sub | default: 'Browse our full selection of expired films — sold individually.' }}</p>
+        </div>
+        <a class="efc-btn efc-btn--dark" href="{{ section.settings.cta_link | default: '/collections/expired-film' }}">{{ section.settings.cta_button | default: 'Shop All Expired Film' }}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- IMAGE LIGHTBOX -->
+  <div class="efc-lightbox" id="efc-lightbox-{{ section.id }}" role="dialog" aria-modal="true" aria-label="Product image">
+    <button class="efc-lightbox__close" data-lb-close type="button" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg>
+    </button>
+    <button class="efc-lightbox__nav is-prev" data-lb-prev type="button" aria-label="Previous">&#8249;</button>
+    <img src="" alt="{{ product.title | escape }}">
+    <button class="efc-lightbox__nav is-next" data-lb-next type="button" aria-label="Next">&#8250;</button>
+  </div>
+
+</div><!-- /efc-pdp -->
+
+{% style %}
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Poppins:wght@400;500;600&display=swap');
+
+#efc-pdp-{{ section.id }}.efc {
+  --efc-canvas:#F8F6EE; --efc-orange:#E36E15; --efc-gold:#F4A027; --efc-brown:#5A3E2D;
+  --efc-black:#202009; --efc-charcoal:#4E4741; --efc-gray:#E3DDDA; --efc-manila:#FFEACC; --efc-muted:#7A6F68;
+  --efc-font-display:'Cormorant Garamond', Georgia, serif;
+  --efc-font-body:'Poppins', system-ui, sans-serif;
+  --efc-gap: clamp(56px, 8vw, 88px);
+  font-family: var(--efc-font-body);
+  color: var(--efc-black);
+  background: var(--efc-canvas);
+  -webkit-font-smoothing: antialiased;
+}
+#efc-pdp-{{ section.id }} *, #efc-pdp-{{ section.id }} *::before, #efc-pdp-{{ section.id }} *::after { box-sizing: border-box; }
+
+#efc-pdp-{{ section.id }} .efc-announce {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  background:var(--efc-black); color:var(--efc-canvas);
+  font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; padding:10px 16px;
+}
+#efc-pdp-{{ section.id }} .efc-announce svg { flex-shrink:0; opacity:.6; }
+
+#efc-pdp-{{ section.id }} .efc-wrap { max-width:1140px; margin-inline:auto; padding-inline:clamp(16px,4vw,40px); }
+
+#efc-pdp-{{ section.id }} .efc-eyebrow { display:block; font-size:10.5px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--efc-orange); margin-bottom:14px; }
+
+/* Buttons */
+#efc-pdp-{{ section.id }} .efc-btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:.5ch;
+  padding:11px 22px; border-radius:0; border:1.5px solid transparent;
+  font-family:var(--efc-font-body); font-size:11.5px; font-weight:600; letter-spacing:.08em;
+  text-transform:uppercase; text-decoration:none; cursor:pointer;
+  transition:background .15s,color .15s,border-color .15s; white-space:nowrap;
+}
+#efc-pdp-{{ section.id }} .efc-btn--primary { background:var(--efc-orange); color:#fff; border-color:var(--efc-orange); }
+#efc-pdp-{{ section.id }} .efc-btn--primary:hover { background:#c95e0f; border-color:#c95e0f; }
+#efc-pdp-{{ section.id }} .efc-btn--dark { background:var(--efc-black); color:var(--efc-canvas); border-color:var(--efc-black); }
+#efc-pdp-{{ section.id }} .efc-btn--dark:hover { background:#3a3a1a; }
+#efc-pdp-{{ section.id }} .efc-btn--full { width:100%; }
+
+#efc-pdp-{{ section.id }} .efc-badge {
+  display:inline-flex; align-items:center; padding:4px 12px; background:var(--efc-manila);
+  color:var(--efc-brown); font-size:10.5px; font-weight:600; letter-spacing:.07em; text-transform:uppercase;
+}
+#efc-pdp-{{ section.id }} .efc-tag {
+  display:inline-block; padding:2px 8px; background:#E6F4E0; color:#2D6A1F;
+  font-size:9.5px; font-weight:600; letter-spacing:.04em; vertical-align:middle;
+}
+
+/* ── PDP TOP ── */
+#efc-pdp-{{ section.id }} .efc-pdp-top {
+  background:var(--efc-canvas);
+  border-bottom:1px solid var(--efc-gray);
+  padding-block: clamp(40px,6vw,64px);
+}
+#efc-pdp-{{ section.id }} .efc-pdp-top__inner {
+  display:grid; grid-template-columns:1fr; gap:40px; align-items:start;
+}
+@media (min-width:900px){
+  #efc-pdp-{{ section.id }} .efc-pdp-top__inner { grid-template-columns:1fr 1fr; gap:56px; }
+}
+
+/* Gallery */
+#efc-pdp-{{ section.id }} .efc-pdp-gallery { position:sticky; top:20px; }
+@media (max-width:899px){ #efc-pdp-{{ section.id }} .efc-pdp-gallery { position:static; } }
+#efc-pdp-{{ section.id }} .efc-pdp-gallery__main {
+  position:relative; aspect-ratio:3/2; background:var(--efc-gray); overflow:hidden;
+}
+#efc-pdp-{{ section.id }} .efc-pdp-slide {
+  position:absolute; inset:0; padding:0; border:none; background:none; cursor:zoom-in; display:block; width:100%; height:100%;
+}
+#efc-pdp-{{ section.id }} .efc-pdp-slide[hidden] { display:none; }
+#efc-pdp-{{ section.id }} .efc-pdp-slide img { width:100%; height:100%; object-fit:cover; display:block; }
+#efc-pdp-{{ section.id }} .efc-pdp-noimg { display:flex; align-items:center; justify-content:center; height:100%; color:var(--efc-muted); font-size:12px; text-transform:uppercase; letter-spacing:.1em; }
+#efc-pdp-{{ section.id }} .efc-pdp-thumbs { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+#efc-pdp-{{ section.id }} .efc-pdp-thumb {
+  width:64px; height:64px; padding:0; border:1px solid var(--efc-gray); background:#fff; cursor:pointer; overflow:hidden; transition:border-color .15s;
+}
+#efc-pdp-{{ section.id }} .efc-pdp-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+#efc-pdp-{{ section.id }} .efc-pdp-thumb.is-active { border-color:var(--efc-orange); border-width:2px; }
+
+/* Buy box */
+#efc-pdp-{{ section.id }} .efc-pdp-buy { display:flex; flex-direction:column; }
+#efc-pdp-{{ section.id }} .efc-pdp-buy .efc-badge { align-self:flex-start; margin-bottom:14px; }
+#efc-pdp-{{ section.id }} .efc-pdp-title {
+  font-family:var(--efc-font-display); font-size:clamp(34px,5vw,52px); font-weight:600; line-height:1.02; margin:0 0 14px; color:var(--efc-black);
+}
+#efc-pdp-{{ section.id }} .efc-pdp-price-row { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; margin-bottom:2px; }
+#efc-pdp-{{ section.id }} .efc-pdp-price { font-family:var(--efc-font-display); font-size:40px; font-weight:600; line-height:1; color:var(--efc-black); }
+#efc-pdp-{{ section.id }} .efc-pdp-price-per { font-size:13px; color:var(--efc-muted); }
+#efc-pdp-{{ section.id }} .efc-pdp-price-note { font-size:11.5px; color:var(--efc-muted); margin:6px 0 0; min-height:1em; }
+#efc-pdp-{{ section.id }} .efc-pdp-desc { font-size:13.5px; line-height:1.65; color:var(--efc-charcoal); margin:18px 0 4px; }
+#efc-pdp-{{ section.id }} .efc-pdp-desc p { margin:0 0 10px; }
+#efc-pdp-{{ section.id }} .efc-pdp-desc p:last-child { margin:0; }
+
+#efc-pdp-{{ section.id }} .efc-pdp-opt { margin-top:22px; }
+#efc-pdp-{{ section.id }} .efc-pdp-opt__label {
+  display:block; font-size:9.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--efc-charcoal); margin-bottom:8px;
+}
+#efc-pdp-{{ section.id }} .efc-pdp-opt__btns { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+#efc-pdp-{{ section.id }} .efc-pdp-opt__btns--2 { grid-template-columns:1fr 1fr; }
+#efc-pdp-{{ section.id }} .efc-pdp-fmt, #efc-pdp-{{ section.id }} .efc-pdp-bill {
+  padding:12px 10px; border:1.5px solid var(--efc-gray); background:#fff; cursor:pointer;
+  font-family:var(--efc-font-body); font-size:12px; font-weight:600; color:var(--efc-black);
+  transition:all .15s; text-align:center; line-height:1.2;
+}
+#efc-pdp-{{ section.id }} .efc-pdp-fmt:hover, #efc-pdp-{{ section.id }} .efc-pdp-bill:hover { border-color:var(--efc-orange); }
+#efc-pdp-{{ section.id }} .efc-pdp-fmt.is-active, #efc-pdp-{{ section.id }} .efc-pdp-bill.is-active {
+  border-color:var(--efc-orange); color:var(--efc-orange); background:rgba(227,110,21,.05); border-width:2px;
+}
+#efc-pdp-{{ section.id }} .efc-pdp-fmt[disabled] { opacity:.4; cursor:not-allowed; }
+#efc-pdp-{{ section.id }} .efc-pdp-fmt[disabled]:hover { border-color:var(--efc-gray); }
+#efc-pdp-{{ section.id }} .efc-pdp-bill { display:flex; flex-direction:column; gap:3px; }
+#efc-pdp-{{ section.id }} .efc-pdp-bill__sub { font-size:9px; font-weight:500; letter-spacing:.04em; text-transform:uppercase; color:var(--efc-muted); }
+#efc-pdp-{{ section.id }} .efc-pdp-bill.is-active .efc-pdp-bill__sub { color:var(--efc-orange); }
+
+#efc-pdp-{{ section.id }} .efc-pdp-sub { margin-top:24px; padding:15px 22px; font-size:12.5px; }
+#efc-pdp-{{ section.id }} .efc-pdp-trust { display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--efc-muted); margin:14px 0 0; }
+#efc-pdp-{{ section.id }} .efc-pdp-trust svg { color:#2D6A1F; flex-shrink:0; }
+#efc-pdp-{{ section.id }} .efc-pdp-account { margin-top:16px; font-size:11.5px; color:var(--efc-charcoal); text-decoration:none; border-bottom:1px solid var(--efc-gray); align-self:flex-start; padding-bottom:1px; transition:color .15s,border-color .15s; }
+#efc-pdp-{{ section.id }} .efc-pdp-account:hover { color:var(--efc-orange); border-color:var(--efc-orange); }
+
+/* ── INBOX ── */
+#efc-pdp-{{ section.id }} .efc-inbox { background:var(--efc-black); color:var(--efc-canvas); padding-block:var(--efc-gap); }
+#efc-pdp-{{ section.id }} .efc-inbox__inner { display:grid; grid-template-columns:1fr; gap:48px; align-items:center; }
+@media (min-width:900px){ #efc-pdp-{{ section.id }} .efc-inbox__inner { grid-template-columns:1fr 1fr; gap:72px; } }
+#efc-pdp-{{ section.id }} .efc-inbox__frame { overflow:hidden; aspect-ratio:1; background:var(--efc-charcoal); margin:0; }
+#efc-pdp-{{ section.id }} .efc-inbox__frame img { width:100%; height:100%; object-fit:cover; display:block; }
+#efc-pdp-{{ section.id }} .efc-inbox .efc-eyebrow { color:var(--efc-gold); }
+#efc-pdp-{{ section.id }} .efc-inbox__title { font-family:var(--efc-font-display); font-size:clamp(36px,5.5vw,58px); font-weight:600; line-height:1.04; margin:0 0 18px; color:var(--efc-canvas); }
+#efc-pdp-{{ section.id }} .efc-inbox__title em { font-style:italic; color:var(--efc-gold); }
+#efc-pdp-{{ section.id }} .efc-inbox__body { font-size:14.5px; line-height:1.72; color:rgba(248,246,238,.65); margin:0 0 22px; max-width:48ch; }
+#efc-pdp-{{ section.id }} .efc-inbox__list { list-style:none; padding:0; margin:0 0 32px; border-top:1px solid rgba(248,246,238,.1); }
+#efc-pdp-{{ section.id }} .efc-inbox__list li { display:flex; align-items:center; gap:12px; font-size:13.5px; color:rgba(248,246,238,.8); padding:11px 0; border-bottom:1px solid rgba(248,246,238,.1); }
+#efc-pdp-{{ section.id }} .efc-list-icon { color:var(--efc-gold); font-size:6px; flex-shrink:0; }
+
+/* ── CTA ── */
+#efc-pdp-{{ section.id }} .efc-cta { background:var(--efc-canvas); border-top:1px solid var(--efc-gray); padding-block:40px 64px; }
+#efc-pdp-{{ section.id }} .efc-cta__card { display:grid; grid-template-columns:1fr; gap:16px; align-items:center; background:#fff; border:1px solid var(--efc-gray); padding:24px 28px; max-width:960px; margin-inline:auto; }
+@media (min-width:680px){ #efc-pdp-{{ section.id }} .efc-cta__card { grid-template-columns:1fr auto; } }
+#efc-pdp-{{ section.id }} .efc-cta__title { font-family:var(--efc-font-display); font-size:24px; font-weight:600; margin:0 0 4px; color:var(--efc-black); }
+#efc-pdp-{{ section.id }} .efc-cta__sub { font-size:12.5px; color:var(--efc-muted); margin:0; }
+
+/* ── LIGHTBOX ── */
+#efc-pdp-{{ section.id }} .efc-lightbox { position:fixed; inset:0; z-index:100000; background:rgba(10,10,4,.94); display:none; align-items:center; justify-content:center; padding:32px; }
+#efc-pdp-{{ section.id }} .efc-lightbox.is-open { display:flex; }
+#efc-pdp-{{ section.id }} .efc-lightbox img { max-width:92vw; max-height:88vh; object-fit:contain; display:block; }
+#efc-pdp-{{ section.id }} .efc-lightbox__close { position:absolute; top:20px; right:24px; width:44px; height:44px; background:rgba(255,255,255,.08); border:none; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s; }
+#efc-pdp-{{ section.id }} .efc-lightbox__close:hover { background:rgba(255,255,255,.18); }
+#efc-pdp-{{ section.id }} .efc-lightbox__nav { position:absolute; top:50%; transform:translateY(-50%); width:48px; height:48px; background:rgba(255,255,255,.08); border:none; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:26px; line-height:1; transition:background .15s; }
+#efc-pdp-{{ section.id }} .efc-lightbox__nav:hover { background:rgba(255,255,255,.18); }
+#efc-pdp-{{ section.id }} .efc-lightbox__nav.is-prev { left:20px; }
+#efc-pdp-{{ section.id }} .efc-lightbox__nav.is-next { right:20px; }
+@media (max-width:600px){
+  #efc-pdp-{{ section.id }} .efc-lightbox { padding:12px; }
+  #efc-pdp-{{ section.id }} .efc-lightbox__nav { width:40px; height:40px; font-size:22px; }
+  #efc-pdp-{{ section.id }} .efc-lightbox__nav.is-prev { left:8px; }
+  #efc-pdp-{{ section.id }} .efc-lightbox__nav.is-next { right:8px; }
+}
+{% endstyle %}
+
+<script>
+(function(){
+  var root = document.getElementById('efc-pdp-{{ section.id }}');
+  if (!root) return;
+
+  var monthlyPlan = root.dataset.monthlyPlan || '';
+  var quarterlyPlan = root.dataset.quarterlyPlan || '';
+  var monthlyDiscount = parseFloat(root.dataset.monthlyDiscount) || 0;
+  var shopBase = (document.getElementById('efc-pdp-subscribe') || {}).getAttribute
+    ? document.getElementById('efc-pdp-subscribe').getAttribute('data-base') : '';
+
+  var state = {
+    variantId: null,
+    variantPrice: 0,      // cents
+    variantPriceFmt: '',
+    bill: 'monthly',
+    plan: monthlyPlan
+  };
+
+  var priceEl     = document.getElementById('efc-pdp-price');
+  var perEl       = document.getElementById('efc-pdp-price-per');
+  var noteEl      = document.getElementById('efc-pdp-price-note');
+  var tagEl       = document.getElementById('efc-pdp-discount-tag');
+  var subPriceEl  = document.getElementById('efc-pdp-sub-price');
+  var subPerEl    = document.getElementById('efc-pdp-sub-per');
+  var subscribeEl = document.getElementById('efc-pdp-subscribe');
+
+  function money(cents){
+    var dollars = (cents / 100);
+    return '$' + dollars.toFixed(2);
+  }
+
+  // Compute displayed monthly price. Subi applies the discount at checkout via
+  // the selling plan, but we reflect it here so the price shown matches what the
+  // customer will pay. Monthly = list price minus monthlyDiscount%. Quarterly =
+  // list price (billed every 3 months, no per-box discount shown).
+  function recompute(){
+    var base = state.variantPrice; // cents, the variant list price
+    if (state.bill === 'monthly') {
+      var discounted = Math.round(base * (1 - monthlyDiscount/100));
+      priceEl.textContent = money(discounted);
+      perEl.textContent = '/mo';
+      if (tagEl) { tagEl.textContent = monthlyDiscount + '% off'; tagEl.style.display = ''; }
+      noteEl.textContent = 'Billed monthly · ' + money(base) + ' value';
+      subPriceEl.textContent = money(discounted);
+      subPerEl.textContent = '/mo';
+    } else {
+      priceEl.textContent = money(base);
+      perEl.textContent = '/mo';
+      if (tagEl) { tagEl.style.display = 'none'; }
+      noteEl.textContent = 'Billed every 3 months';
+      subPriceEl.textContent = money(base);
+      subPerEl.textContent = '/mo';
+    }
+    buildSubscribeUrl();
+  }
+
+  function buildSubscribeUrl(){
+    if (!state.variantId) return;
+    // Clear cart then add the chosen variant + selling plan, then go to checkout.
+    // Mirrors the pattern used on the EFC landing page.
+    var addPath = '/cart/add?items[][id]=' + state.variantId
+      + '&items[][quantity]=1'
+      + (state.plan ? '&items[][selling_plan]=' + state.plan : '')
+      + '&return_to=/checkout';
+    var url = '/cart/clear?return_to=' + encodeURIComponent(addPath);
+    subscribeEl.setAttribute('href', url);
+  }
+
+  // ── Format (variant) selection ──
+  var fmtBtns = root.querySelectorAll('.efc-pdp-fmt');
+  fmtBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      if (btn.disabled) return;
+      fmtBtns.forEach(function(b){ b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      state.variantId = btn.dataset.variantId;
+      state.variantPrice = parseInt(btn.dataset.variantPrice, 10);
+      state.variantPriceFmt = btn.dataset.variantPriceFmt;
+      showSlide(parseInt(btn.dataset.variantIndex, 10));
+      recompute();
+    });
+  });
+
+  // ── Billing (selling plan) selection ──
+  var billBtns = root.querySelectorAll('.efc-pdp-bill');
+  billBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      billBtns.forEach(function(b){ b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      state.bill = btn.dataset.bill;
+      state.plan = btn.dataset.plan || '';
+      recompute();
+    });
+  });
+
+  // ── Gallery: slide swap + thumbnails ──
+  var slides = root.querySelectorAll('.efc-pdp-slide');
+  var thumbs = root.querySelectorAll('.efc-pdp-thumb');
+  function showSlide(i){
+    if (!slides.length) return;
+    if (i < 0 || i >= slides.length) return;
+    slides.forEach(function(s, idx){
+      if (idx === i) { s.removeAttribute('hidden'); s.classList.add('is-active'); }
+      else { s.setAttribute('hidden', ''); s.classList.remove('is-active'); }
+    });
+    thumbs.forEach(function(t, idx){
+      var on = idx === i;
+      t.classList.toggle('is-active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+  }
+  thumbs.forEach(function(t){
+    t.addEventListener('click', function(){ showSlide(parseInt(t.dataset.thumbIndex, 10)); });
+  });
+
+  // ── Lightbox ──
+  var lb = document.getElementById('efc-lightbox-{{ section.id }}');
+  if (lb) {
+    var lbImg = lb.querySelector('img');
+    var lbIdx = 0;
+    function lbOpen(i){
+      lbIdx = (i + slides.length) % slides.length;
+      lbImg.src = slides[lbIdx].getAttribute('data-full');
+      lb.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function lbClose(){ lb.classList.remove('is-open'); document.body.style.overflow=''; lbImg.src=''; }
+    function lbStep(d){ lbOpen(lbIdx + d); }
+    slides.forEach(function(s, i){
+      s.addEventListener('click', function(){ lbOpen(i); });
+    });
+    var c = lb.querySelector('[data-lb-close]'), p = lb.querySelector('[data-lb-prev]'), n = lb.querySelector('[data-lb-next]');
+    if (c) c.addEventListener('click', lbClose);
+    if (p) p.addEventListener('click', function(e){ e.stopPropagation(); lbStep(-1); });
+    if (n) n.addEventListener('click', function(e){ e.stopPropagation(); lbStep(1); });
+    lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+    document.addEventListener('keydown', function(e){
+      if (!lb.classList.contains('is-open')) return;
+      if (e.key === 'Escape') lbClose();
+      else if (e.key === 'ArrowLeft') lbStep(-1);
+      else if (e.key === 'ArrowRight') lbStep(1);
+    });
+  }
+
+  // ── Init from the first/active format button ──
+  var initBtn = root.querySelector('.efc-pdp-fmt.is-active') || root.querySelector('.efc-pdp-fmt:not([disabled])');
+  if (initBtn) {
+    initBtn.classList.add('is-active');
+    state.variantId = initBtn.dataset.variantId;
+    state.variantPrice = parseInt(initBtn.dataset.variantPrice, 10);
+    state.variantPriceFmt = initBtn.dataset.variantPriceFmt;
+    recompute();
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "BFC Expired Film Club PDP",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Subscription plans (Subi)"
+    },
+    {
+      "type": "paragraph",
+      "content": "These are the Subi selling plan IDs. They are pre-filled with the current values. If Subi regenerates the plans, update them here."
+    },
+    {
+      "type": "text",
+      "id": "monthly_plan_id",
+      "label": "Monthly selling plan ID",
+      "default": "2987491500"
+    },
+    {
+      "type": "text",
+      "id": "quarterly_plan_id",
+      "label": "Every-3-months selling plan ID",
+      "default": "2987458732"
+    },
+    {
+      "type": "range",
+      "id": "monthly_discount_pct",
+      "label": "Monthly discount shown",
+      "info": "Percentage off shown on the monthly option. Should match the Subi plan discount.",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Top strip + badge"
+    },
+    {
+      "type": "text",
+      "id": "announce_text",
+      "label": "Announcement strip",
+      "default": "Free shipping on all subscriptions — cancel or pause anytime"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Buy box badge",
+      "default": "Limited stock · Ships from NYC"
+    },
+    {
+      "type": "header",
+      "content": "What's in the box section"
+    },
+    {
+      "type": "image_picker",
+      "id": "inbox_image",
+      "label": "Box contents image"
+    },
+    {
+      "type": "text",
+      "id": "inbox_eyebrow",
+      "label": "Eyebrow",
+      "default": "What's in every box"
+    },
+    {
+      "type": "text",
+      "id": "inbox_title",
+      "label": "Title (use <em> for italic gold)",
+      "default": "Curated with <em>intention</em>"
+    },
+    {
+      "type": "textarea",
+      "id": "inbox_body",
+      "label": "Body",
+      "default": "Every shipment is hand-picked from trusted sources. We focus on rolls with reliable results and genuine character — plus the occasional rare stock you will not find anywhere else."
+    },
+    {
+      "type": "header",
+      "content": "Bottom CTA"
+    },
+    {
+      "type": "text",
+      "id": "cta_title",
+      "label": "CTA title",
+      "default": "Looking for a specific stock?"
+    },
+    {
+      "type": "text",
+      "id": "cta_sub",
+      "label": "CTA subtitle",
+      "default": "Browse our full selection of expired films — sold individually."
+    },
+    {
+      "type": "text",
+      "id": "cta_button",
+      "label": "CTA button text",
+      "default": "Shop All Expired Film"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "CTA button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Expired Film Club PDP"
+    }
+  ]
+}
+{% endschema %}
