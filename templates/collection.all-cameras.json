@@ -90,8 +90,9 @@
             "product": "olympus-stylus-mjui",
             "eyebrow": "Featured Camera",
             "heading_override": "",
-            "description_override": "",
+            "card_text": "",
             "cta_label": "Shop this camera",
+            "image_fit": "zoom",
             "show_grade_badge": true,
             "grade_badge_text": "Restored",
             "photos_caption": ""
@@ -100,11 +101,12 @@
         "camera_X8WyUg": {
           "type": "camera",
           "settings": {
-            "product": "",
+            "product": "zenza-bronica-ec-tl",
             "eyebrow": "Featured Camera",
             "heading_override": "",
-            "description_override": "",
+            "card_text": "Bronicas Hasselblad Competitor. Beautiful images with a TTL light meter.",
             "cta_label": "Shop this camera",
+            "image_fit": "zoom",
             "show_grade_badge": true,
             "grade_badge_text": "Restored",
             "photos_caption": ""
