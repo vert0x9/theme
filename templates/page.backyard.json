@@ -85,6 +85,7 @@
       ],
       "name": "Backyard Rental",
       "settings": {
+        "form_url": "",
         "hero_height": "60vh",
         "hero_overlay_opacity": 55,
         "slide_speed": 3,
@@ -98,7 +99,7 @@
         "detail_setting": "Outdoor / Covered",
         "detail_capacity": "Up to ~50 guests",
         "detail_availability": "By inquiry",
-        "rate": "425",
+        "rate": "550",
         "rate_note": "Sliding scale options available depending on the type of event and amount of space used. We're happy to work with you — reach out and let's figure out a rate that fits.",
         "rate_includes": "Access to the full backyard space, basic setup and breakdown coordination, and proximity to BFC's storefront for your guests to browse. Additional add-ons such as lighting, A/V, and furniture are available upon request.",
         "rev_tag": "For Revenue-Generating Events",
