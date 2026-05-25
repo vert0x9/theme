@@ -128,7 +128,6 @@
       ],
       "name": "BFC Featured Camera",
       "settings": {
-        "cameras_desktop": "2",
         "randomize": true,
         "show_shuffle": false,
         "theme": "light"

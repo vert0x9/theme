@@ -230,6 +230,44 @@
   font-size: 12px; color: var(--ch); line-height: 1.6; margin-top: 4px;
 }
 
+/* Rich HTML description + read-more */
+.bfc4 .bfc4-desc-rich { position: relative; }
+.bfc4 .bfc4-desc-rich-body { font-size: 13px; line-height: 1.65; color: var(--ch); }
+.bfc4 .bfc4-desc-rich-body > *:first-child { margin-top: 0; }
+.bfc4 .bfc4-desc-rich-body > *:last-child { margin-bottom: 0; }
+.bfc4 .bfc4-desc-rich-body p { margin: 0 0 10px; }
+.bfc4 .bfc4-desc-rich-body h2,
+.bfc4 .bfc4-desc-rich-body h3,
+.bfc4 .bfc4-desc-rich-body h4 {
+  font-family: var(--sr); font-weight: 400; color: var(--bk); line-height: 1.2; margin: 16px 0 7px;
+}
+.bfc4 .bfc4-desc-rich-body h2 { font-size: 20px; }
+.bfc4 .bfc4-desc-rich-body h3 { font-size: 17px; }
+.bfc4 .bfc4-desc-rich-body h4 { font-size: 14px; }
+.bfc4 .bfc4-desc-rich-body ul,
+.bfc4 .bfc4-desc-rich-body ol { margin: 0 0 10px; padding-left: 20px; }
+.bfc4 .bfc4-desc-rich-body li { margin: 0 0 5px; padding-left: 3px; }
+.bfc4 .bfc4-desc-rich-body li::marker { color: var(--or); }
+.bfc4 .bfc4-desc-rich-body a { color: var(--or); text-decoration: underline; text-underline-offset: 2px; }
+.bfc4 .bfc4-desc-rich-body strong { font-weight: 600; color: var(--bk); }
+.bfc4 .bfc4-desc-rich-body em { font-style: italic; }
+.bfc4 .bfc4-desc-rich-body img { max-width: 100%; height: auto; display: block; margin: 10px 0; }
+.bfc4 .bfc4-desc-rich[data-collapsed="true"] .bfc4-desc-rich-body {
+  max-height: 7.8em; overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+}
+.bfc4 .bfc4-desc-readmore {
+  display: inline-flex; align-items: center; gap: 5px; margin-top: 8px; padding: 0;
+  background: none; border: none; cursor: pointer;
+  font-family: var(--sn); font-size: 12px; font-weight: 600; color: var(--or); letter-spacing: .02em;
+}
+.bfc4 .bfc4-desc-readmore::after {
+  content: ""; width: 8px; height: 8px; border-right: 1.5px solid var(--or);
+  border-bottom: 1.5px solid var(--or); transform: rotate(45deg); margin-top: -3px; transition: transform .15s;
+}
+.bfc4 .bfc4-desc-readmore[aria-expanded="true"]::after { transform: rotate(-135deg); margin-top: 2px; }
+
 
 /* ── STARTER TILES ────────────────────────── */
 .bfc4-tiles {
@@ -1742,19 +1780,38 @@
       <span class="bfc4-eyebrow">{{ product.type | default: '35mm SLR' }} — Professionally Restored &middot; 6-Month Warranty</span>
       <h1 class="bfc4-title">{{ product.title }}</h1>
       <span id="bfc4-star-placeholder"></span>
-      {%- comment -%} Extract prose only from __desc, skipping spec grid {%- endcomment -%}
-      {%- assign desc_text = '' -%}
-      {%- if product.description contains 'bfc-desc-specs__desc' -%}
-        {%- assign desc_inner = product.description | split: 'bfc-desc-specs__desc">' | last | split: '</div>' | first -%}
-        {%- assign desc_text = desc_inner | strip_html | strip -%}
+      {%- comment -%}
+        Product description rendered as HTML (paragraphs, lists, headings honored).
+        - Modern products: plain HTML description, output as-is.
+        - Legacy products: description is wrapped in a bfc-desc-specs block with a
+          spec grid. We extract ONLY the inner prose of bfc-desc-specs__desc, which is
+          self-contained and balanced, and drop the grid + wrapper + inline style.
+      {%- endcomment -%}
+      {%- assign desc_html = product.description -%}
+      {%- if desc_html contains 'bfc-desc-specs__desc' -%}
+        {%- comment -%} take everything after the __desc opening div, then everything
+            before the NEXT closing div — that's the balanced prose block {%- endcomment -%}
+        {%- assign _after = desc_html | split: 'bfc-desc-specs__desc">' | last -%}
+        {%- assign desc_html = _after | split: '</div>' | first -%}
+      {%- elsif desc_html contains 'bfc-desc-specs__grid' -%}
+        {%- comment -%} grid but no __desc wrapper: keep everything before the grid's div {%- endcomment -%}
+        {%- assign _before = desc_html | split: '<!-- Spec Grid' | first -%}
+        {%- assign _segs = _before | split: '<div' -%}
+        {%- assign _keep = _segs | size | minus: 1 -%}
+        {%- assign desc_html = '' -%}
+        {%- for _seg in _segs -%}
+          {%- if forloop.index0 >= _keep -%}{%- break -%}{%- endif -%}
+          {%- if forloop.first -%}{%- assign desc_html = _seg -%}{%- else -%}{%- assign desc_html = desc_html | append: '<div' | append: _seg -%}{%- endif -%}
+        {%- endfor -%}
+        {%- assign desc_html = desc_html | split: '<style' | first -%}
       {%- endif -%}
-      {%- if desc_text == blank -%}
-        {%- assign desc_text = product.description | split: 'bfc-desc-specs__grid' | first | strip_html | strip -%}
+      {%- assign desc_plain = desc_html | strip_html | strip -%}
+      {%- if desc_plain != blank -%}
+        <div class="bfc4-kit-desc bfc4-desc-rich" data-readmore>
+          <div class="bfc4-desc-rich-body">{{ desc_html }}</div>
+          <button type="button" class="bfc4-desc-readmore" data-readmore-btn aria-expanded="false" hidden>Read more</button>
+        </div>
       {%- endif -%}
-      {%- if desc_text == blank -%}
-        {%- assign desc_text = product.description | strip_html | strip -%}
-      {%- endif -%}
-      <p class="bfc4-kit-desc">{{ desc_text }}</p>
       <span class="bfc4-free-dev-mini">
         <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="0.5" stroke="#ABCC99" stroke-width="1.2"/><circle cx="7" cy="7" r="2.5" stroke="#ABCC99" stroke-width="1.2"/><line x1="1" y1="4" x2="13" y2="4" stroke="#ABCC99" stroke-width="0.8"/><line x1="1" y1="10" x2="13" y2="10" stroke="#ABCC99" stroke-width="0.8"/></svg>
         Add 2 rolls of film &mdash; get a free developing credit with your order
@@ -3612,6 +3669,36 @@ window.bfc4TocAddToCart = function() {
       bfc4OpenHeroLightbox(i);
     });
   });
+})();
+
+/* ─── Description read-more ─── */
+(function() {
+  function initReadMore() {
+    var wraps = document.querySelectorAll('[data-readmore]');
+    for (var w = 0; w < wraps.length; w++) {
+      (function(wrap) {
+        var body = wrap.querySelector('.bfc4-desc-rich-body');
+        var btn  = wrap.querySelector('[data-readmore-btn]');
+        if (!body || !btn) return;
+        var lineH = parseFloat(getComputedStyle(body).lineHeight) || 21;
+        if (body.scrollHeight > (lineH * 6) + 8) {
+          wrap.setAttribute('data-collapsed', 'true');
+          btn.hidden = false;
+          btn.addEventListener('click', function() {
+            var collapsed = wrap.getAttribute('data-collapsed') === 'true';
+            wrap.setAttribute('data-collapsed', collapsed ? 'false' : 'true');
+            btn.setAttribute('aria-expanded', collapsed ? 'true' : 'false');
+            btn.textContent = collapsed ? 'Read less' : 'Read more';
+          });
+        }
+      })(wraps[w]);
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initReadMore);
+  } else {
+    initReadMore();
+  }
 })();
 </script>
 
