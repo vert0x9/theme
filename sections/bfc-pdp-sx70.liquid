@@ -67,6 +67,8 @@
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;
+  max-height: 90svh;
+  margin-inline: auto;
   overflow: hidden;
   background: var(--bk);
 }
@@ -1600,6 +1602,29 @@
 .bfcsx .sx-kit-sub {
   font-size: 13px; color: var(--ol); margin-bottom: 40px;
 }
+
+/* Build Your Kit — mobile collapse toggle (hidden on desktop) */
+.bfcsx .sx-kit-toggle {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin: -16px 0 0;
+  padding: 13px 16px;
+  background: #fff;
+  border: 1px solid rgba(82,87,65,0.18);
+  cursor: pointer;
+  font-family: var(--sn);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--bk);
+}
+.bfcsx .sx-kit-toggle-icon { transition: transform .2s ease; flex-shrink: 0; }
+.bfcsx .sx-kit-toggle[aria-expanded="true"] .sx-kit-toggle-icon { transform: rotate(180deg); }
+
 .bfcsx .sx-kit-cols {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -2233,6 +2258,18 @@
     padding: 0;
     gap: 0;
   }
+
+  /* Build Your Kit — collapsed by default on mobile, tap toggle to expand */
+  .bfcsx .sx-kit-sub { margin-bottom: 16px; }
+  .bfcsx .sx-kit-toggle { display: flex; }
+  .bfcsx .sx-kit-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .25s ease;
+    overflow: hidden;
+  }
+  .bfcsx .sx-kit-body > * { min-height: 0; }
+  .bfcsx .sx-kit.is-kit-open .sx-kit-body { grid-template-rows: 1fr; margin-top: 16px; }
   .bfcsx .sx-photos { position: static; height: auto; max-height: none; }
   .bfcsx .sx-hero { aspect-ratio: 1 / 1; height: auto; }
   .bfcsx .sx-info-pane { padding: 24px 20px 32px; max-width: 100%; }
@@ -2532,12 +2569,15 @@
         <div class="sx-slider" id="sxSlider-{{ section.id }}">
           {%- assign warranty_base = product.metafields.bfc.warranty_months | default: 6 -%}
 {%- assign slide_imgs = '' -%}
-          {%- for i in (1..5) -%}
+          {%- for i in (1..20) -%}
             {%- assign slide_key = 'slide_' | append: i -%}
             {%- assign slide_img = section.settings[slide_key] -%}
             {%- if slide_img != blank -%}
               <div class="sx-slide">
-                <img src="{{ slide_img | image_url: width: 900 }}" alt="{{ product.title }} - image {{ i }}" loading="{% if i == 1 %}eager{% else %}lazy{% endif %}" width="900" height="900">
+                <img src="{{ slide_img | image_url: width: 1600 }}"
+                     srcset="{{ slide_img | image_url: width: 800 }} 800w, {{ slide_img | image_url: width: 1200 }} 1200w, {{ slide_img | image_url: width: 1600 }} 1600w, {{ slide_img | image_url: width: 2000 }} 2000w"
+                     sizes="(max-width: 768px) 100vw, 50vw"
+                     alt="{{ product.title }} - image {{ i }}" loading="{% if i == 1 %}eager{% else %}lazy{% endif %}"{% if i == 1 %} fetchpriority="high"{% endif %} width="900" height="900">
               </div>
               {%- assign slide_imgs = slide_imgs | append: '1,' -%}
             {%- endif -%}
@@ -2545,12 +2585,15 @@
           {%- comment -%} Fallback to product images {%- endcomment -%}
           {%- assign slide_count = slide_imgs | split: ',' | size -%}
           {%- if slide_count == 0 -%}
-            {%- for img in product.images limit: 5 -%}
+            {%- for img in product.images limit: 20 -%}
               <div class="sx-slide">
-                <img src="{{ img | image_url: width: 900 }}" alt="{{ img.alt | default: product.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" width="{{ img.width }}" height="{{ img.height }}">
+                <img src="{{ img | image_url: width: 1600 }}"
+                     srcset="{{ img | image_url: width: 800 }} 800w, {{ img | image_url: width: 1200 }} 1200w, {{ img | image_url: width: 1600 }} 1600w, {{ img | image_url: width: 2000 }} 2000w"
+                     sizes="(max-width: 768px) 100vw, 50vw"
+                     alt="{{ img.alt | default: product.title }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"{% if forloop.first %} fetchpriority="high"{% endif %} width="{{ img.width }}" height="{{ img.height }}">
               </div>
             {%- endfor -%}
-            {%- assign slide_count = product.images.size | at_most: 5 -%}
+            {%- assign slide_count = product.images.size | at_most: 20 -%}
           {%- endif -%}
         </div>
         {%- if slide_count > 1 -%}
@@ -2571,7 +2614,7 @@
       {%- if slide_count > 1 -%}
         <div class="sx-thumbs" id="sxThumbs-{{ section.id }}">
           {%- assign thumb_idx = 0 -%}
-          {%- for i in (1..5) -%}
+          {%- for i in (1..20) -%}
             {%- assign slide_key = 'slide_' | append: i -%}
             {%- assign slide_img = section.settings[slide_key] -%}
             {%- if slide_img != blank -%}
@@ -2582,7 +2625,7 @@
             {%- endif -%}
           {%- endfor -%}
           {%- if slide_count == 0 -%}
-            {%- for img in product.images limit: 5 -%}
+            {%- for img in product.images limit: 20 -%}
               <button class="sx-thumb{% if forloop.first %} is-active{% endif %}" data-idx="{{ forloop.index0 }}">
                 <img src="{{ img | image_url: width: 128 }}" alt="{{ img.alt | default: 'Thumbnail' }}" loading="lazy">
               </button>
@@ -2865,21 +2908,6 @@
         </div>
       </div>
 
-      <div class="sx-summary-specs">
-        <div class="sx-summary-spec">
-          <span class="sx-spec-key">Film</span>
-          <span class="sx-spec-val">SX-70 &amp; 600</span>
-        </div>
-        <div class="sx-summary-spec">
-          <span class="sx-spec-key">Board</span>
-          <span class="sx-spec-val">OpenSX70</span>
-        </div>
-        <div class="sx-summary-spec">
-          <span class="sx-spec-key">Condition</span>
-          <span class="sx-spec-val">Restored, Calibrated &amp; Upgraded</span>
-        </div>
-      </div>
-      <p class="sx-summary-line">{{ section.settings.intro_text | default: "Every SX-70 we restore is a complete rebuild &mdash; full mechanical and optical service, and our exclusive OpenSX70 board. Incredible low-light metering, hold-to-eject, and a 6-month warranty come standard." }}</p>
     </div>
   </div>
 
@@ -3414,6 +3442,10 @@
       <span class="sx-kit-ey">Build Your Kit</span>
       <div class="sx-kit-title">Add What You Need</div>
       <div class="sx-kit-sub">Grab your film, flash, dongle, or any accessories — everything ships together.</div>
+      <button type="button" class="sx-kit-toggle" id="sx-kit-toggle-{{ section.id }}" aria-expanded="false" aria-controls="sx-kit-body-{{ section.id }}">
+        <span class="sx-kit-toggle-label">Show options</span>
+        <svg class="sx-kit-toggle-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3.5 5.5L7 9L10.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
 
       {%- comment -%} Build column names from blocks. A block contributes a column
           if it has a product picked AND passes the only_show_for filter for this
@@ -3435,6 +3467,7 @@
       {%- endfor -%}
       {%- assign columns = col_names | split: '||' -%}
 
+      <div class="sx-kit-body" id="sx-kit-body-{{ section.id }}">
       {%- if columns.size > 0 -%}
         <div class="sx-kit-cols">
           {%- for col_name in columns -%}
@@ -3558,6 +3591,7 @@
           </div>
         {%- endif -%}
       {%- endif -%}
+      </div>{%- comment -%} /sx-kit-body {%- endcomment -%}
     </div>
   </div>
 
@@ -4664,6 +4698,30 @@ window.sxTocAddToCart = function() {
     form.requestSubmit();
   }
 };
+
+/* Build Your Kit — mobile collapse toggle */
+(function() {
+  function initKitToggle() {
+    var toggles = document.querySelectorAll('.sx-kit-toggle');
+    for (var i = 0; i < toggles.length; i++) {
+      (function(btn) {
+        var kit = btn.closest('.sx-kit');
+        if (!kit) return;
+        var label = btn.querySelector('.sx-kit-toggle-label');
+        btn.addEventListener('click', function() {
+          var open = kit.classList.toggle('is-kit-open');
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          if (label) label.textContent = open ? 'Hide options' : 'Show options';
+        });
+      })(toggles[i]);
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initKitToggle);
+  } else {
+    initKitToggle();
+  }
+})();
 </script>
 
 {%- render 'bfc-product-schema' -%}
@@ -4678,6 +4736,21 @@ window.sxTocAddToCart = function() {
     { "type": "image_picker", "id": "slide_3", "label": "Hero slide 3" },
     { "type": "image_picker", "id": "slide_4", "label": "Hero slide 4" },
     { "type": "image_picker", "id": "slide_5", "label": "Hero slide 5" },
+    { "type": "image_picker", "id": "slide_6", "label": "Hero slide 6" },
+    { "type": "image_picker", "id": "slide_7", "label": "Hero slide 7" },
+    { "type": "image_picker", "id": "slide_8", "label": "Hero slide 8" },
+    { "type": "image_picker", "id": "slide_9", "label": "Hero slide 9" },
+    { "type": "image_picker", "id": "slide_10", "label": "Hero slide 10" },
+    { "type": "image_picker", "id": "slide_11", "label": "Hero slide 11" },
+    { "type": "image_picker", "id": "slide_12", "label": "Hero slide 12" },
+    { "type": "image_picker", "id": "slide_13", "label": "Hero slide 13" },
+    { "type": "image_picker", "id": "slide_14", "label": "Hero slide 14" },
+    { "type": "image_picker", "id": "slide_15", "label": "Hero slide 15" },
+    { "type": "image_picker", "id": "slide_16", "label": "Hero slide 16" },
+    { "type": "image_picker", "id": "slide_17", "label": "Hero slide 17" },
+    { "type": "image_picker", "id": "slide_18", "label": "Hero slide 18" },
+    { "type": "image_picker", "id": "slide_19", "label": "Hero slide 19" },
+    { "type": "image_picker", "id": "slide_20", "label": "Hero slide 20" },
     { "type": "header", "content": "Board Launch Pill" },
     { "type": "checkbox", "id": "show_board_pill", "label": "Show 'New Board' pill above title", "default": true },
     { "type": "text", "id": "board_pill_text", "label": "Pill text", "default": "OpenSX70 V2 Board" },
