@@ -111,10 +111,55 @@
     "bfc_about_8an9qC": {
       "type": "bfc-about",
       "blocks": {
+        "team_member_jBXJB6": {
+          "type": "team_member",
+          "settings": {
+            "photo": "shopify://shop_images/000089110015.jpg",
+            "name": "Spike",
+            "pronouns": "",
+            "role": "Head Cat",
+            "bio": "Spike is often hanging around the shop saying hi to people. You may often see spike with grease marks on his nose and paws from all of his nighttime camera work. He loves to be pet & lounge on our orange office couch.",
+            "email": "",
+            "website": "",
+            "instagram": "",
+            "extra_link_url": "",
+            "extra_link_label": "More"
+          }
+        },
+        "team_member_VcCyWD": {
+          "type": "team_member",
+          "settings": {
+            "photo": "shopify://shop_images/000089110027.jpg",
+            "name": "Poppy",
+            "pronouns": "",
+            "role": "Cat",
+            "bio": "Poppy enjoys knocking things over, sleeping in our kitchen cabinets, and occasionally roaming the neighbors yards. If you're lucky you'll get a pet, but probably just a meow from afar.",
+            "email": "",
+            "website": "",
+            "instagram": "",
+            "extra_link_url": "",
+            "extra_link_label": "More"
+          }
+        },
+        "team_member_6N6pC4": {
+          "type": "team_member",
+          "settings": {
+            "photo": "shopify://shop_images/000086980029.jpg",
+            "name": "Ben",
+            "pronouns": "",
+            "role": "Owner & Operator",
+            "bio": "Ben is busy running the business so has yet to supply me with an about or photo.",
+            "email": "",
+            "website": "",
+            "instagram": "",
+            "extra_link_url": "",
+            "extra_link_label": "More"
+          }
+        },
         "team_member_bDkpeN": {
           "type": "team_member",
           "settings": {
-            "photo": "shopify://shop_images/BFC_Taylor.jpg",
+            "photo": "shopify://shop_images/000089110009.jpg",
             "name": "Taylor",
             "pronouns": "",
             "role": "Camera Tech Manager",
@@ -129,7 +174,7 @@
         "team_member_KXBPG7": {
           "type": "team_member",
           "settings": {
-            "photo": "shopify://shop_images/BFC_Griffin.jpg",
+            "photo": "shopify://shop_images/000086980025.jpg",
             "name": "Griffin",
             "pronouns": "She/They",
             "role": "Operations Manager",
@@ -137,6 +182,111 @@
             "email": "griffin@brooklynfilmcamera.com",
             "website": "",
             "instagram": "",
+            "extra_link_url": "",
+            "extra_link_label": "More"
+          }
+        },
+        "team_member_PFXV6c": {
+          "type": "team_member",
+          "settings": {
+            "photo": "shopify://shop_images/000089110031.jpg",
+            "name": "James",
+            "pronouns": "",
+            "role": "Lead Camera Tech",
+            "bio": "James was formally trained in film camera repair by some of the last factory trained film camera technicians in the world during his tenure at Nippon Photo Clinic Inc. At this point, he tends to fix more cameras than he breaks - which he thinks is pretty cool. When he's not busy with that, you can find him exploring on his bike with his camera, behind the camera on film sets, or playing his guitar, probably with his camera nearby",
+            "email": "james@brooklynfilmcamera.com",
+            "website": "",
+            "instagram": "https://www.instagram.com/the_whitest_latino/",
+            "extra_link_url": "",
+            "extra_link_label": "More"
+          }
+        },
+        "team_member_GmxEyB": {
+          "type": "team_member",
+          "settings": {
+            "photo": "shopify://shop_images/000086980011.jpg",
+            "name": "Coco",
+            "pronouns": "",
+            "role": "Clerk",
+            "bio": "Coco is a multimedia artist and musician who lives in Brooklyn.",
+            "email": "coco@brooklynfilmcamera.com",
+            "website": "https://cocosimone.cargo.site/",
+            "instagram": "https://www.instagram.com/coco.simone/",
+            "extra_link_url": "",
+            "extra_link_label": "More"
+          }
+        },
+        "team_member_GPfxWG": {
+          "type": "team_member",
+          "settings": {
+            "photo": "shopify://shop_images/000089110035.jpg",
+            "name": "Hannah",
+            "pronouns": "",
+            "role": "Marketing + Events Planner",
+            "bio": "Hannah manages social media, design, and events planning.\n\nShe enjoys tactile forms of creation just as much as she loves pushing pixels. In her free time, she enjoys experimenting with textiles, developing film, baking bread, jumping in lakes, and being with friends.",
+            "email": "hannah@brooklynfilmcamera.com",
+            "website": "https://Hannahleahy.xyz",
+            "instagram": "https://www.instagram.com/hannahleahy__",
+            "extra_link_url": "",
+            "extra_link_label": ""
+          }
+        },
+        "team_member_CHhBx9": {
+          "type": "team_member",
+          "settings": {
+            "photo": "shopify://shop_images/BFC_Dan.jpg",
+            "name": "Dan",
+            "pronouns": "",
+            "role": "Clerk / Events / DJ",
+            "bio": "Dan Hureira is a photographer and music enthusiast. He throws parties and produces music as part of his record label Bouquet. Dan is one of the many faces you'll see behind the counter providing excellent service.",
+            "email": "dan@brooklynfilmcamera.com",
+            "website": "https://ifeellikedan.com/",
+            "instagram": "https://www.instagram.com/ifeellikedan",
+            "extra_link_url": "",
+            "extra_link_label": "More"
+          }
+        },
+        "team_member_xeCmkU": {
+          "type": "team_member",
+          "settings": {
+            "photo": "shopify://shop_images/000086980021.jpg",
+            "name": "Addie",
+            "pronouns": "he/they",
+            "role": "Office Manager",
+            "bio": "If you've ever seen someone on a neon green bike on the hunt for vanity plates, it was probably Addie. The Office & Fulfillment Coordinator at BFC, Addie can otherwise be found behind the camera or off somewhere reading a book. If you catch him without a Mets hat on, ask if everything's okay.",
+            "email": "addie@brooklynfilmcamera.com",
+            "website": "",
+            "instagram": "",
+            "extra_link_url": "",
+            "extra_link_label": "More"
+          }
+        },
+        "team_member_jiXdDt": {
+          "type": "team_member",
+          "settings": {
+            "photo": "shopify://shop_images/000089110013.jpg",
+            "name": "Sydney",
+            "pronouns": "",
+            "role": "Camera Technician",
+            "bio": "Sydney Task (also known as Syd) is a photographer, filmmaker, animator, and serial hobbyist. When she's not clerking at BFC, she might be rock climbing, drawing silly characters, learning the banjo, or roaming the streets with a camera in hand.",
+            "email": "Sydney@brooklynfilmcamera.com",
+            "website": "https://www.sydneytask.com/",
+            "instagram": "https://www.instagram.com/sydneytask/",
+            "extra_link_url": "",
+            "extra_link_label": "More"
+          }
+        },
+        "team_member_XxBLMD": {
+          "type": "team_member",
+          "settings": {
+            "photo": "shopify://shop_images/000089110005.jpg",
+            "name": "Malaya",
+            "pronouns": "She/Her",
+            "role": "Camera Technician",
+            "bio": "Malaya is a Brooklyn-based collage artist, collector and maximalist. She uses primarily found imagery and words in her work but occasionally incorporates her own photography. She collects just about everything, including but not limited to tiny trinkets, snoopy toys, ceramic rabbits, magazines, etc. When she is not repairing cameras at BFC she is usually rewatching her favorite movies and tv shows, decorating her home, making art or scrolling on pinterest.",
+            "email": "malaya@brooklynfilmcamera.com",
+            "website": "",
+            "instagram": "https://www.instagram.com/uhmlaya/",
             "extra_link_url": "",
             "extra_link_label": "More"
           }
@@ -171,21 +321,6 @@
             "extra_link_label": "More"
           }
         },
-        "team_member_GmxEyB": {
-          "type": "team_member",
-          "settings": {
-            "photo": "shopify://shop_images/BFC_Coco.jpg",
-            "name": "Coco",
-            "pronouns": "",
-            "role": "Clerk",
-            "bio": "Coco is a multimedia artist and musician who lives in Brooklyn.",
-            "email": "coco@brooklynfilmcamera.com",
-            "website": "https://cocosimone.cargo.site/",
-            "instagram": "https://www.instagram.com/coco.simone/",
-            "extra_link_url": "",
-            "extra_link_label": "More"
-          }
-        },
         "team_member_PYiDz4": {
           "type": "team_member",
           "settings": {
@@ -197,36 +332,6 @@
             "email": "mitch@brooklynfilmcamera.com",
             "website": "",
             "instagram": "",
-            "extra_link_url": "",
-            "extra_link_label": "More"
-          }
-        },
-        "team_member_CHhBx9": {
-          "type": "team_member",
-          "settings": {
-            "photo": "shopify://shop_images/BFC_Dan.jpg",
-            "name": "Dan",
-            "pronouns": "",
-            "role": "Clerk / Events / DJ",
-            "bio": "Dan Hureira is a photographer and music enthusiast. He throws parties and produces music as part of his record label Bouquet. Dan is one of the many faces you'll see behind the counter providing excellent service.",
-            "email": "dan@brooklynfilmcamera.com",
-            "website": "https://ifeellikedan.com/",
-            "instagram": "https://www.instagram.com/ifeellikedan",
-            "extra_link_url": "",
-            "extra_link_label": "More"
-          }
-        },
-        "team_member_jiXdDt": {
-          "type": "team_member",
-          "settings": {
-            "photo": "shopify://shop_images/BFC_Syndey.jpg",
-            "name": "Sydney",
-            "pronouns": "",
-            "role": "35mm & 120 Tech",
-            "bio": "Sydney Task (also known as Syd) is a photographer, filmmaker, animator, and serial hobbyist. When she's not clerking at BFC, she might be rock climbing, drawing silly characters, learning the banjo, or roaming the streets with a camera in hand.",
-            "email": "Sydney@brooklynfilmcamera.com",
-            "website": "https://www.sydneytask.com/",
-            "instagram": "https://www.instagram.com/sydneytask/",
             "extra_link_url": "",
             "extra_link_label": "More"
           }
@@ -245,93 +350,25 @@
             "extra_link_url": "",
             "extra_link_label": "More"
           }
-        },
-        "team_member_6N6pC4": {
-          "type": "team_member",
-          "settings": {
-            "name": "Ben",
-            "pronouns": "",
-            "role": "Owner & Operator",
-            "bio": "Ben is busy running the business so has yet to supply me with an about or photo.",
-            "email": "",
-            "website": "",
-            "instagram": "",
-            "extra_link_url": "",
-            "extra_link_label": "More"
-          }
-        },
-        "team_member_xeCmkU": {
-          "type": "team_member",
-          "settings": {
-            "name": "Addie",
-            "pronouns": "he/they",
-            "role": "Office Manager",
-            "bio": "If you've ever seen someone on a neon green bike on the hunt for vanity plates, it was probably Addie. The Office & Fulfillment Coordinator at BFC, Addie can otherwise be found behind the camera or off somewhere reading a book. If you catch him without a Mets hat on, ask if everything's okay.",
-            "email": "addie@brooklynfilmcamera.com",
-            "website": "",
-            "instagram": "",
-            "extra_link_url": "",
-            "extra_link_label": "More"
-          }
-        },
-        "team_member_GPfxWG": {
-          "type": "team_member",
-          "settings": {
-            "name": "Hannah",
-            "pronouns": "",
-            "role": "Social Media & Events",
-            "bio": "",
-            "email": "addie@brooklynfilmcamera.com",
-            "website": "",
-            "instagram": "https://www.instagram.com/ingridiviruel",
-            "extra_link_url": "",
-            "extra_link_label": ""
-          }
-        },
-        "team_member_XxBLMD": {
-          "type": "team_member",
-          "settings": {
-            "name": "Malaya",
-            "pronouns": "",
-            "role": "Camera Technician",
-            "bio": "",
-            "email": "malaya@brooklynfilmcamera.com",
-            "website": "",
-            "instagram": "",
-            "extra_link_url": "",
-            "extra_link_label": "More"
-          }
-        },
-        "team_member_PFXV6c": {
-          "type": "team_member",
-          "settings": {
-            "name": "James",
-            "pronouns": "",
-            "role": "Lead Camera Tech",
-            "bio": "",
-            "email": "james@brooklynfilmcamera.com",
-            "website": "",
-            "instagram": "",
-            "extra_link_url": "",
-            "extra_link_label": "More"
-          }
         }
       },
       "block_order": [
+        "team_member_jBXJB6",
+        "team_member_VcCyWD",
+        "team_member_6N6pC4",
         "team_member_bDkpeN",
         "team_member_KXBPG7",
+        "team_member_PFXV6c",
+        "team_member_GmxEyB",
+        "team_member_GPfxWG",
+        "team_member_CHhBx9",
+        "team_member_xeCmkU",
+        "team_member_jiXdDt",
+        "team_member_XxBLMD",
         "team_member_tK4whD",
         "team_member_UcQahP",
-        "team_member_GmxEyB",
         "team_member_PYiDz4",
-        "team_member_CHhBx9",
-        "team_member_jiXdDt",
-        "team_member_Dhxtz9",
-        "team_member_6N6pC4",
-        "team_member_xeCmkU",
-        "team_member_GPfxWG",
-        "team_member_XxBLMD",
-        "team_member_PFXV6c"
+        "team_member_Dhxtz9"
       ],
       "name": "About Us",
       "settings": {
