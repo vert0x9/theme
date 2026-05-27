@@ -1874,19 +1874,15 @@
     {%- comment -%} 1. Product header + description {%- endcomment -%}
     <div class="bfc4-header">
       {%- comment -%}
-        Breadcrumbs: Home / [collection if user arrived from one, else product.type] / Product title.
-        Shopify's `collection` global is present when navigated from a collection URL.
+        Breadcrumbs hardcoded for the medium format PDP: Home > Cameras > Medium Format Cameras > Product.
+        Doesn't use Shopify's `collection` global since this file is specifically the MF template.
       {%- endcomment -%}
       <nav class="bfc4-crumbs" aria-label="Breadcrumb">
         <a href="/" class="bfc4-crumb">Home</a>
         <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
-        {%- if collection -%}
-          <a href="{{ collection.url }}" class="bfc4-crumb">{{ collection.title }}</a>
-        {%- elsif product.type != blank -%}
-          <a href="/collections/all?filter.p.product_type={{ product.type | url_encode }}" class="bfc4-crumb">{{ product.type }}</a>
-        {%- else -%}
-          <a href="/collections/all" class="bfc4-crumb">Shop</a>
-        {%- endif -%}
+        <a href="/collections/cameras" class="bfc4-crumb">Cameras</a>
+        <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
+        <a href="/collections/medium-format-cameras" class="bfc4-crumb">Medium Format Cameras</a>
         <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
         <span class="bfc4-crumb bfc4-crumb-current" aria-current="page">{{ product.title }}</span>
       </nav>
@@ -3442,6 +3438,51 @@
     if (label) label.textContent = expanded ? 'Read less' : 'Read more';
     if (btn) btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
   };
+  // Verification pass: the Liquid character-count heuristic is coarse (some 280-380
+  // char descriptions actually fit in 4 lines if the words are short). Measure the
+  // real heights after layout settles. If text fits, drop the clamp and hide the
+  // button. This is HIDE-ONLY — JS never reveals the button, only removes it when
+  // the measurement confirms no overflow. Safer than the show-based approach which
+  // had timing issues with -webkit-box.
+  (function() {
+    function verifyDescOverflow() {
+      var desc = document.getElementById('bfc4-desc');
+      var toggle = document.getElementById('bfc4-desc-toggle');
+      var wrap = document.getElementById('bfc4-desc-wrap');
+      if (!desc || !toggle || !wrap) return;
+      if (wrap.classList.contains('is-expanded')) return;
+      if (!desc.classList.contains('bfc4-desc-clamp')) return;
+      // Measure clamped height first
+      var clampedH = desc.clientHeight;
+      // Temporarily remove the clamp to measure full unclamped height. Without
+      // -webkit-box, the element is a normal block, so clientHeight === full height.
+      desc.classList.remove('bfc4-desc-clamp');
+      // Force a layout recalc so the next measurement is accurate
+      void desc.offsetHeight;
+      var fullH = desc.clientHeight;
+      // If the unclamped height is essentially the same as the clamped height,
+      // the text fit in 4 lines anyway. Leave the clamp off and remove the button.
+      if (fullH <= clampedH + 2) {
+        toggle.remove();
+        // .bfc4-desc-clamp stays off intentionally so the text shows in full
+      } else {
+        // Text really does overflow. Put the clamp back.
+        desc.classList.add('bfc4-desc-clamp');
+      }
+    }
+    function schedule() {
+      requestAnimationFrame(verifyDescOverflow);
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(verifyDescOverflow);
+      }
+      setTimeout(verifyDescOverflow, 400);
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', schedule);
+    } else {
+      schedule();
+    }
+  })();
 })();
 
 /* ─── PHOTO LIGHTBOX — used by hero slider + Shot On gallery ─── */
