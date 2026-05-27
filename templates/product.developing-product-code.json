@@ -1,1 +1,247 @@
-{"sections":{"main":{"type":"main-product","blocks":{"badge_Hkd38r":{"type":"badge","settings":{"spacing_bottom":"1","show_badges":true,"show_badges_discount":true,"show_badges_sold":true}},"1e0c79e9-7de0-4eee-b9c5-f27132635fb8":{"type":"title","settings":{"heading_size":"h6","spacing_bottom":"1"}},"8effeb43-55b7-4ec4-ab9b-68bcd89b865b":{"type":"price","settings":{"spacing_bottom":"1","show_price_tax_info":true,"show_price_shipping_info":false,"show_price_custom_info":""}},"description_qA3HqH":{"type":"description","settings":{"spacing_bottom":"4","behaviour":"plain","heading":"","text_truncate":0,"icon":"theme-box","metafield_for_product_variant":"","show_block_content":true}},"1e939cd6-0958-4135-a9e5-c50faef01437":{"type":"variant_picker","settings":{"spacing_bottom":"4","title":"Variant picker","enable_back_in_stock":true,"picker_type":"dropdown","variant_options_with_thumbnails":"Color","size_guide_page":"size-guide","sizes_option":"Size"}},"1e939cd6-0955-4135-a9e5-c50faef01437":{"type":"purchase_options","settings":{"spacing_bottom":"1","show_subscription_title":true,"show_subscription_custom_info":"","show_subscription_policy":true}},"easify_options_easify_product_options_YPHzNG":{"type":"shopify:\/\/apps\/easify-options\/blocks\/easify-product-options\/d2288b18-c1ba-42f5-b3b3-26c75c8820bf","disabled":true,"settings":{}},"globo_product_options_variant_app_block_Vqkqzg":{"type":"shopify:\/\/apps\/globo-product-options-variant\/blocks\/app-block\/fdc9fad5-1a0f-4bd4-9c8a-1af6a6eef6b8","settings":{}},"8604a6ff-ad0b-44dd-8068-1de4e062f8e8":{"type":"buy_buttons","settings":{"spacing_bottom":"4","show_quantity":true,"layout":"inline","show_dynamic_checkout":true,"show_gift_card_recipient":false}},"content_grid_W3Mqy6":{"type":"content_grid","settings":{"heading":"2-3 Day Turnaround","icon":"theme-box"}},"content_grid_iCJFCN":{"type":"content_grid","settings":{"heading":"Notristu Scanning","icon":"theme-box"}},"content_grid_HTRRPP":{"type":"content_grid","settings":{"heading":"High Quality Scans","icon":"theme-box"}},"content_grid_AAkHkC":{"type":"content_grid","settings":{"heading":"Affordable Rates","icon":"theme-box"}},"complementary_products_tKerNK":{"type":"complementary_products","settings":{"spacing_bottom":"1","heading":"You may also like","icon":"theme-box","limit":4}}},"block_order":["badge_Hkd38r","1e0c79e9-7de0-4eee-b9c5-f27132635fb8","8effeb43-55b7-4ec4-ab9b-68bcd89b865b","description_qA3HqH","1e939cd6-0958-4135-a9e5-c50faef01437","1e939cd6-0955-4135-a9e5-c50faef01437","easify_options_easify_product_options_YPHzNG","globo_product_options_variant_app_block_Vqkqzg","8604a6ff-ad0b-44dd-8068-1de4e062f8e8","content_grid_W3Mqy6","content_grid_iCJFCN","content_grid_HTRRPP","content_grid_AAkHkC","complementary_products_tKerNK"],"settings":{"product_media_layout":"product__media-layout--grid","product_media_layout_mobile":"product__media-layout--partial--sm","product_media_aspect_ratio":"fit","product_media_object_fit":"cover","product_slider_auto_height":false,"media_transparent_background":true,"display_media_zoom":"click","product_media_with_thumbs":"only_mobile","product_media_thumbs_ratio":"square","product_media_thumbs_object_fit":"cover","gallery_arrows_show_on":"desktop","display_media_gallery_pagination":"none","media_gallery_info":"","metafield_as_seen_on":"theme.as_seen_on","color_scheme_gallery":"","enable_sticky_info":true,"enable_actions_bar":true,"media_grid_size":"large","media_grid_position":"start","grid_gap":"2","spacing_grid":1.6,"grid_content_alignment":"start","section_width":"max-w-fluid","color_scheme":"scheme-1","spacing_top":"2","spacing_bottom":"0"}},"1754512899714fc58c":{"type":"apps","settings":{"section_layout":"normal","spacing_inner":"2","section_width":"max-w-page","color_scheme":"","spacing_top":"2","spacing_bottom":"2"}},"977cac03-4044-4567-8907-fa55103a47eb":{"type":"complete-the-set","blocks":{"collapsible_9xjNk9":{"type":"collapsible","settings":{"block_type":"collapsible","heading":"What type of scans do we do?","link":"","content":"<p><em>We scan on a Nortitsu 1800 scanner and offer multiple quality of scans. <br\/><br\/>We offer basic JPG or TIFF for an additional charge. We can scan half frame as well. We can not scan with any film borders.<\/em><\/p>","page":""}},"collapsible_pR4zmY":{"type":"collapsible","settings":{"block_type":"collapsible","heading":"What's our turnaround time?","link":"","content":"<p>Our turnaround time is 2-3 days and 4-5 for black and white! <br\/><br\/>Your scans may be delivered faster than your negatives. Please wait 36 hours before coming to get your negatives after you get your scans.<\/p>","page":""}},"collapsible_DYfCGt":{"type":"collapsible","settings":{"block_type":"collapsible","heading":"Where can I find my photos?","link":"","content":"<p>We will email you your negatives when they are available. We send them via We-Transfer.<\/p>","page":""}},"collapsible_QcDnKh":{"type":"collapsible","settings":{"block_type":"link","heading":"Contact Us","link":"","content":"","page":""}}},"block_order":["collapsible_9xjNk9","collapsible_pR4zmY","collapsible_DYfCGt","collapsible_QcDnKh"],"disabled":true,"settings":{"heading":"More info","content_heading":"Similar items","heading_size":"h5","content_type":"products","featured_image_aspect_ratio":"4\/3","open_first_collapsible":true,"flip_desktop":true,"flip_mobile":true,"section_width":"max-w-fluid","color_scheme":"","spacing_top":"6","spacing_bottom":"2"}}},"order":["main","1754512899714fc58c","977cac03-4044-4567-8907-fa55103a47eb"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "badge_Hkd38r": {
+          "type": "badge",
+          "settings": {
+            "spacing_bottom": "1",
+            "show_badges": true,
+            "show_badges_discount": true,
+            "show_badges_sold": true
+          }
+        },
+        "1e0c79e9-7de0-4eee-b9c5-f27132635fb8": {
+          "type": "title",
+          "settings": {
+            "heading_size": "h6",
+            "spacing_bottom": "1"
+          }
+        },
+        "8effeb43-55b7-4ec4-ab9b-68bcd89b865b": {
+          "type": "price",
+          "settings": {
+            "spacing_bottom": "1",
+            "show_price_tax_info": true,
+            "show_price_shipping_info": false,
+            "show_price_custom_info": ""
+          }
+        },
+        "description_qA3HqH": {
+          "type": "description",
+          "settings": {
+            "spacing_bottom": "4",
+            "behaviour": "plain",
+            "heading": "",
+            "text_truncate": 0,
+            "icon": "theme-box",
+            "metafield_for_product_variant": "",
+            "show_block_content": true
+          }
+        },
+        "1e939cd6-0958-4135-a9e5-c50faef01437": {
+          "type": "variant_picker",
+          "settings": {
+            "spacing_bottom": "4",
+            "title": "Variant picker",
+            "enable_back_in_stock": true,
+            "picker_type": "dropdown",
+            "variant_options_with_thumbnails": "Color",
+            "size_guide_page": "size-guide",
+            "sizes_option": "Size"
+          }
+        },
+        "1e939cd6-0955-4135-a9e5-c50faef01437": {
+          "type": "purchase_options",
+          "settings": {
+            "spacing_bottom": "1",
+            "show_subscription_title": true,
+            "show_subscription_custom_info": "",
+            "show_subscription_policy": true
+          }
+        },
+        "8604a6ff-ad0b-44dd-8068-1de4e062f8e8": {
+          "type": "buy_buttons",
+          "settings": {
+            "spacing_bottom": "4",
+            "show_quantity": true,
+            "layout": "inline",
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": false
+          }
+        },
+        "content_grid_W3Mqy6": {
+          "type": "content_grid",
+          "settings": {
+            "heading": "2-3 Day Turnaround",
+            "icon": "theme-box"
+          }
+        },
+        "content_grid_iCJFCN": {
+          "type": "content_grid",
+          "settings": {
+            "heading": "Notristu Scanning",
+            "icon": "theme-box"
+          }
+        },
+        "content_grid_HTRRPP": {
+          "type": "content_grid",
+          "settings": {
+            "heading": "High Quality Scans",
+            "icon": "theme-box"
+          }
+        },
+        "content_grid_AAkHkC": {
+          "type": "content_grid",
+          "settings": {
+            "heading": "Affordable Rates",
+            "icon": "theme-box"
+          }
+        },
+        "complementary_products_tKerNK": {
+          "type": "complementary_products",
+          "settings": {
+            "spacing_bottom": "1",
+            "heading": "You may also like",
+            "icon": "theme-box",
+            "limit": 4
+          }
+        }
+      },
+      "block_order": [
+        "badge_Hkd38r",
+        "1e0c79e9-7de0-4eee-b9c5-f27132635fb8",
+        "8effeb43-55b7-4ec4-ab9b-68bcd89b865b",
+        "description_qA3HqH",
+        "1e939cd6-0958-4135-a9e5-c50faef01437",
+        "1e939cd6-0955-4135-a9e5-c50faef01437",
+        "8604a6ff-ad0b-44dd-8068-1de4e062f8e8",
+        "content_grid_W3Mqy6",
+        "content_grid_iCJFCN",
+        "content_grid_HTRRPP",
+        "content_grid_AAkHkC",
+        "complementary_products_tKerNK"
+      ],
+      "settings": {
+        "product_media_layout": "product__media-layout--grid",
+        "product_media_layout_mobile": "product__media-layout--partial--sm",
+        "product_media_aspect_ratio": "fit",
+        "product_media_object_fit": "cover",
+        "product_slider_auto_height": false,
+        "media_transparent_background": true,
+        "display_media_zoom": "click",
+        "product_media_with_thumbs": "only_mobile",
+        "product_media_thumbs_ratio": "square",
+        "product_media_thumbs_object_fit": "cover",
+        "gallery_arrows_show_on": "desktop",
+        "display_media_gallery_pagination": "none",
+        "media_gallery_info": "",
+        "metafield_as_seen_on": "theme.as_seen_on",
+        "color_scheme_gallery": "",
+        "enable_sticky_info": true,
+        "enable_actions_bar": true,
+        "media_grid_size": "large",
+        "media_grid_position": "start",
+        "grid_gap": "2",
+        "spacing_grid": 1.6,
+        "grid_content_alignment": "start",
+        "section_width": "max-w-fluid",
+        "color_scheme": "scheme-1",
+        "spacing_top": "2",
+        "spacing_bottom": "0"
+      }
+    },
+    "1754512899714fc58c": {
+      "type": "apps",
+      "settings": {
+        "section_layout": "normal",
+        "spacing_inner": "2",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    },
+    "977cac03-4044-4567-8907-fa55103a47eb": {
+      "type": "complete-the-set",
+      "blocks": {
+        "collapsible_9xjNk9": {
+          "type": "collapsible",
+          "settings": {
+            "block_type": "collapsible",
+            "heading": "What type of scans do we do?",
+            "link": "",
+            "content": "<p><em>We scan on a Nortitsu 1800 scanner and offer multiple quality of scans. <br/><br/>We offer basic JPG or TIFF for an additional charge. We can scan half frame as well. We can not scan with any film borders.</em></p>",
+            "page": ""
+          }
+        },
+        "collapsible_pR4zmY": {
+          "type": "collapsible",
+          "settings": {
+            "block_type": "collapsible",
+            "heading": "What's our turnaround time?",
+            "link": "",
+            "content": "<p>Our turnaround time is 2-3 days and 4-5 for black and white! <br/><br/>Your scans may be delivered faster than your negatives. Please wait 36 hours before coming to get your negatives after you get your scans.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_DYfCGt": {
+          "type": "collapsible",
+          "settings": {
+            "block_type": "collapsible",
+            "heading": "Where can I find my photos?",
+            "link": "",
+            "content": "<p>We will email you your negatives when they are available. We send them via We-Transfer.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_QcDnKh": {
+          "type": "collapsible",
+          "settings": {
+            "block_type": "link",
+            "heading": "Contact Us",
+            "link": "",
+            "content": "",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_9xjNk9",
+        "collapsible_pR4zmY",
+        "collapsible_DYfCGt",
+        "collapsible_QcDnKh"
+      ],
+      "disabled": true,
+      "settings": {
+        "heading": "More info",
+        "content_heading": "Similar items",
+        "heading_size": "h5",
+        "content_type": "products",
+        "featured_image_aspect_ratio": "4/3",
+        "open_first_collapsible": true,
+        "flip_desktop": true,
+        "flip_mobile": true,
+        "section_width": "max-w-fluid",
+        "color_scheme": "",
+        "spacing_top": "6",
+        "spacing_bottom": "2"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1754512899714fc58c",
+    "977cac03-4044-4567-8907-fa55103a47eb"
+  ]
+}

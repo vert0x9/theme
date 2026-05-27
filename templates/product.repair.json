@@ -1,1 +1,402 @@
-{"sections":{"main":{"type":"main-product","blocks":{"badge_Hkd38r":{"type":"badge","settings":{"spacing_bottom":"1","show_badges":true,"show_badges_discount":true,"show_badges_sold":true}},"1e0c79e9-7de0-4eee-b9c5-f27132635fb8":{"type":"title","settings":{"heading_size":"h5","spacing_bottom":"2"}},"8effeb43-55b7-4ec4-ab9b-68bcd89b865b":{"type":"price","settings":{"spacing_bottom":"0","show_price_tax_info":true,"show_price_shipping_info":false,"show_price_custom_info":""}},"description_qA3HqH":{"type":"description","settings":{"spacing_bottom":"0","behaviour":"plain","heading":"","text_truncate":0,"icon":"theme-box","metafield_for_product_variant":"","show_block_content":true}},"1e939cd6-0958-4135-a9e5-c50faef01437":{"type":"variant_picker","settings":{"spacing_bottom":"4","title":"Variant picker","enable_back_in_stock":true,"picker_type":"dropdown","variant_options_with_thumbnails":"Color","size_guide_page":"size-guide","sizes_option":"Size"}},"1e939cd6-0955-4135-a9e5-c50faef01437":{"type":"purchase_options","settings":{"spacing_bottom":"1","show_subscription_title":true,"show_subscription_custom_info":"","show_subscription_policy":true}},"globo_product_options_variant_app_block_t37XQc":{"type":"shopify:\/\/apps\/globo-product-options\/blocks\/app-block\/fdc9fad5-1a0f-4bd4-9c8a-1af6a6eef6b8","settings":{}},"8604a6ff-ad0b-44dd-8068-1de4e062f8e8":{"type":"buy_buttons","settings":{"spacing_bottom":"4","show_quantity":true,"layout":"inline","show_dynamic_checkout":true,"show_gift_card_recipient":false}}},"block_order":["badge_Hkd38r","1e0c79e9-7de0-4eee-b9c5-f27132635fb8","8effeb43-55b7-4ec4-ab9b-68bcd89b865b","description_qA3HqH","1e939cd6-0958-4135-a9e5-c50faef01437","1e939cd6-0955-4135-a9e5-c50faef01437","globo_product_options_variant_app_block_t37XQc","8604a6ff-ad0b-44dd-8068-1de4e062f8e8"],"settings":{"product_media_layout":"product__media-layout--grid","product_media_layout_mobile":"product__media-layout--partial--sm","product_media_aspect_ratio":"fit","product_media_object_fit":"cover","product_slider_auto_height":false,"media_transparent_background":true,"display_media_zoom":"click","product_media_with_thumbs":"only_mobile","product_media_thumbs_ratio":"square","product_media_thumbs_object_fit":"cover","gallery_arrows_show_on":"desktop","display_media_gallery_pagination":"none","media_gallery_info":"","metafield_as_seen_on":"theme.as_seen_on","color_scheme_gallery":"scheme-c7f71c1d-cd34-4dd1-b023-9b05b17a2420","enable_sticky_info":true,"enable_actions_bar":true,"media_grid_size":"large","media_grid_position":"start","grid_gap":"2","spacing_grid":1.6,"grid_content_alignment":"start","section_width":"max-w-fluid","color_scheme":"scheme-1","spacing_top":"2","spacing_bottom":"0"}},"1754512899714fc58c":{"type":"apps","settings":{"section_layout":"normal","spacing_inner":"2","section_width":"max-w-page","color_scheme":"","spacing_top":"2","spacing_bottom":"2"}},"instant_section_JVtWqX":{"type":"instant-section","disabled":true,"name":"Repair Below Section","settings":{"text_b1ethHm88r6HXMAG-1":"<h4><strong>Step 1: Purchase Repair Quote<\/strong><\/h4>","text_zK5b4fQevS7bQERJ-1":"<p>Complete our online form with your camera details above, <\/p><p>describe the issues you&apos;re experiencing, and upload photos if available. <\/p>","text_0si98RFp5joWJ1B8-1":"<h4><strong>Step 2: Ship Your Camera to Brooklyn<\/strong><\/h4>","text_3lXcPM5OEDXNzDbL-1":"<p>Pack your camera securely and ship it to our workshop. Labels are easily purchased via our service portal. Ensure you pack your camera well!<\/p>","text_uoM6sBLNDaHyMRgg-1":"<h4><strong>Step 3 : Assessment<\/strong><\/h4>","text_RPTUdA1bfP1WKHbf-1":"<p>Our technician performs a comprehensive diagnostic assessment of your camera. This $50 inspection fee is applied toward your final repair cost.<\/p>","text_HrsD7nsiZ51a7coM-1":"<h4><strong>Step 5: Expert Repair Work<\/strong><\/h4>","text_T4nRNJtWXNje3fMK-1":"<p>Once approved, our skilled technicians perform the necessary repairs using quality parts and time-tested techniques honed over years of film camera expertise.<\/p>","text_bWF9lADjf58RmD6y-1":"<h4><strong>Step 4: Receive Your Repair Quote<\/strong><\/h4>","text_IdTYOB7FDYASZcxP-1":"<p>We&apos;ll contact you with a detailed breakdown of what needs to be repaired and the associated costs. No work proceeds until you approve the estimate.<\/p>","text_kxIcPYlQOEUWoLHz-1":"<h4><strong>Step 6: Quality Testing &amp; Return<\/strong><\/h4>","text_dAmEcKiEXHxfrQ9v-1":"<p>Your camera undergoes thorough testing to ensure everything functions perfectly. We then carefully pack and ship it back to you, ready for your next roll of film.<\/p>","url_44r2z7TSjcGHkDEt-1":"","text_OGVmSdENOpRpSm1q-1":"<p>Start Repair<\/p>","text_N7qzcLWFQqCVBAbv-1":"<h3>What We Repair<\/h3>","text_nsHGXN0PI3XSWcih-1":"<p>We are actively expanding our menu. If you don&apos;t see your camera listed in the menu above you can book it through Unlisted to still get a quote. If you want to check if we can service it first, you can message our tehcnicians<\/p>","text_6JvkZISk15Bqlgxg-1":"<p>Full CLA &amp; Complex Repairs<\/p>","text_SLsE9eGYVTapAVsT-1":"<p>Select Models<\/p>","text_Xnf3rDE7I6jdSF6e-1":"<p>Most Models<\/p>","text_p16dy95MBPo29XDR-1":"<p>All Models<\/p>","text_2Ia3UGzMFDRiRyHP-1":"<p>Unjams \/ Minor Mechanical Failures<\/p>","text_TC2mKpvMFOVA9liS-1":"<p>Select Models<\/p>","text_AwqfbBv5ZiLI12LQ-1":"<p>Most Models<\/p>","text_pT4WojU8cNf8fHHz-1":"<p>All Models<\/p>","text_HaY04RxLvTzJest3-1":"<p>Cleaning &amp; Light Seals<\/p>","text_vKzf5j31Fq2Du83Z-1":"<p>Select Models<\/p>","text_Il75qUf7bnn4qvRa-1":"<p>Most Models<\/p>","text_czuh60iuC9PY90RE-1":"<p>All Models<\/p>","text_MbFTa8lVxtxk1MyV-1":"<h3>Full CLA Service<\/h3>","text_e3IgUtmnx0JCNiDZ-1":"<h3>Canon AE-1 Program<\/h3>","text_nSvnmtcQ01027Xj7-1":"<p>One of our most popular services we can perform everything on a Canon AE-1 Program.<\/p>","text_0GXley78XRccVff6-1":"<h3>K1000<\/h3>","text_4V3mnOu74Winkojf-1":"<p>Another popular service, we are setup to handle every issue with the K1000<\/p>","text_P6UogtMNA3NTe4iU-1":"<h3>Hasselblad 500 Series<\/h3>","text_xj27KEgUVzPLcNGZ-1":"<p>Our dedicated Hasselblad tech can perform full CLA on any 500 series body.<\/p>","text_huNJv1FaXJPXBXne-1":"<h3>Contax T<\/h3>","text_fpHh06dolmevW9rt-1":"<p>Specializing in Contax for years, our technicians can do throuoguh repairs on Contaxt T<\/p>","text_pXhOtTQSfrgaTNZM-1":"<h3>Contax G2<\/h3>","text_wTI1WAcR4j4D1JgN-1":"<p>Calibration, full CLAs, repairs, and more—if it’s acting up, just bring it in!<\/p>","text_zj5YYBoqEAS4JhTb-1":"<h3>Other Cameras<\/h3>","text_AnBPyLkv0Y3ci8Wo-1":"<p>We also CLA - Contax T, TVS, T2&apos;s, Canonet&apos;s, canon P&apos;s. Don&apos;t see your camera? Email us, we do more!<\/p>","text_AmElW6xnkWf22Fkd-1":"<h3>Other Repairs - Most Models<\/h3>","text_f4piqP05EzMfEZYr-1":"<h3>Light Seals<\/h3>","text_OanafuXt1OjroSZu-1":"<p>Light seals can be done on all models<\/p>","text_OXdu84QbSBevWBqf-1":"<h3>Unjam &amp; Stuck Shutters<\/h3>","text_ZjVPrYjV4ny7YV5h-1":"<p>Most mechanical cameras we can perform unjam and stuck shutter repairs. <\/p>","text_3ubSAIis1Z8OAXms-1":"<h3>Door Replacement<\/h3>","text_rgCiunvUGsyflbjz-1":"<p>Model &amp; Part dependent but many mechanical models point &amp; shoots can have the doors replaced<\/p>","text_GbMFJFCngCgXVmer-1":"<h3>Lens CLA<\/h3>","text_IO0SzTfLrMc9Hmjy-1":"<p>We can CLA almost every lens out there. As well as all lens specific repairs. <\/p>","text_Rz7yyO07IB3auE3t-1":"<h3>Parts Replacement<\/h3>","text_GFGnDjbsSg1sSZmu-1":"<p>Deopending on the model and part we can perform many exterior parts replacements<\/p>","text_UGmDsnOqjIyIyy3i-1":"<h3>Other Cameras<\/h3>","text_K5rgZXTlX3nGlRJF-1":"<p>There is a vast array of other issues we can solve. Select other camera, or contact us!<\/p>","text_cQqIVEgqDtrrxC69-1":"<p>Transparent Pricing<\/p>","text_qP8N4jH6z2NMGl9a-1":"<h1>Sample Repair Price Ranges<\/h1>","url_vXX8izTIbPsVDqLd-1":"","text_ZSSb2jGJ33AH7IaV-1":"<p>See More<\/p>","text_tX5jvewh0rqW2AIv-1":"<p>Every camera is unique, so all repairs are quote-based after our bench inspection. Below are example price ranges to help you plan. Your actual quote may vary based on your camera&apos;s specific condition and required parts.<\/p>","text_pjrwESGDUEHrdTL5-1":"<h3>$85–150<\/h3>","text_faarjtbb0IW5JBxo-1":"<h4>Light Seals <\/h4>","text_A7hnSbkawoWazFh9-1":"<h3>$80–200<\/h3>","text_6HLaDCdaTccEYJs6-1":"<h4>Shutter Calibration<\/h4>","text_jPpNrAJEvHro8fGY-1":"<h3>$~325<\/h3>","text_4tRf1aJI5bUz2mCE-1":"<h4>CLA<\/h4>","text_vdrhx0h7YdsU1RYN-1":"<h3>$90<\/h3>","text_5SQU26miURpbtVBd-1":"<h4>Unjam<\/h4>","text_7aESZrg5i4gIDe2I-1":"<h3>Frequently Asked Questions<\/h3>","text_9eTXhF2Jl59s8a6I-1":"<p>Everything you need to know about our camera repair service. Can&apos;t find your answer? Reach out to our team directly.<\/p>","url_hkfu6CK8SSCaCMoo-1":"","text_suzeb1nmUompX5cX-1":"<p>Contact Us<\/p>","text_yPOfQDQyudoffbEH-1":"<h4>What is the $50 bench fee and is it refundable?<\/h4>","text_DyX1AepcieaXngSX-1":"<p>The $50 bench fee is a non-refundable inspection charge that covers our technician&apos;s time to thoroughly assess your camera. This fee is applied toward your final repair cost if you proceed with the repair. If repairs aren&apos;t possible due to any reason, the bench fee still cannot be refunded.<\/p>","text_2uvk73piGaJVfSA1-1":"<h4>How long will my repair take?<\/h4>","text_ENPmwIUdsO9w8ai3-1":"<p>Standard repair turnaround is 2–4 weeks from when we receive your camera. Complex repairs or situations requiring special parts may take longer. We do not guarantee any timeframe as multiple factors go into repair times. <\/p>","text_m9G2IMZMMGgH3J3w-1":"<h4>What cameras do you repair?<\/h4>","text_1YqXpD4kvhmSlv9K-1":"<p>We specialize in 35mm and medium format film cameras including Canon, Nikon, Pentax, Olympus, Minolta, Contax, Leica, Hasselblad, Mamiya, Bronica, Rolleiflex, Yashica, and so many more! If you&apos;re unsure whether we service your camera model, contact us before submitting a repair request.<\/p>","text_JUKnHXd2MfaYQ4lL-1":"<h4>Do you repair Polaroid cameras?<\/h4>","text_nKyOLcNCxQ9BU6Lx-1":"<p>Polaroid cameras require specialized service. Please visit our dedicated Polaroid Repairs page for information on instant camera repair options and pricing.<\/p>","text_9SpfQZ8nomRE73wp-1":"<h4>How should I pack my camera for shipping?<\/h4>","text_Ek5DbpeAU9rLi2mh-1":"<p>Wrap your camera in bubble wrap or foam padding and place it in a sturdy box with additional packing material to prevent movement. Remove batteries and any detachable lenses (pack separately if sending). <\/p>","text_ReexIItutqMaLTuP-1":"<h4>Will I receive a quote before any work is done?<\/h4>","text_U5chG9FSxzdJdnk9-1":"<p>Absolutely. After the bench inspection, we&apos;ll contact you with a detailed quote outlining all recommended repairs and costs. No repair work proceeds until you approve the estimate. You can decline the repair, though the bench fee is non-refundable.<\/p>","text_YIEerFC852DhgYeL-1":"<h4>What payment methods do you accept?<\/h4>","text_Xqgk9OZXuw21n0iY-1":"<p>We accept all major credit cards, PayPal, and Shop Pay. The bench fee is collected when you submit your repair request. The remaining balance is due upon recieving the quote.<\/p>","text_QNSMFgbyON2JQ9sv-1":"<h4>Can I drop off my camera in person?<\/h4>","text_FAZaZxa8kpRb1gbS-1":"<p>Yes! Local customers can drop off and pick up cameras at our Brooklyn location: 855 Grand St, Brooklyn. Please submit your repair request online first, then drop off your camera any day we are open.<\/p>","text_B6eNUe5cX9LOchif-1":"<h3>Secure Shipping &amp; Handling<\/h3>","text_9RZitkmjBUPjFcoq-1":"<p><\/p><p>Getting your camera to us has never been easier. No more complicated forms, notes, or fears of loosing it - simply buy a label on our portal and get a label instantly.<\/p><p><\/p><p>Your camera is handled with the utmost care throughout the repair process. We photograph every camera upon arrival to document its condition. Return shipping options include USPS Priority, UPS Ground, or expedited services. Local Brooklyn customers can arrange pickup at our Grand Street location. All shipments are fully insured for your peace of mind.<\/p>","padding_top":0,"padding_bottom":0}},"hero_banner_6XmHf4":{"type":"hero-banner","blocks":{"slide_q6ALKe":{"type":"slide","settings":{"banner_layout":"hero-banner--full","color_scheme":"scheme-cff46e11-510f-466f-8591-6bd732f3a314","header_menu_text_color":"#ffffff","heading":"<h2><em><strong>Get Your Camera<\/strong><\/em><\/h2><h2><em><strong> Repaired Now<\/strong><\/em><\/h2>","subheading":"","subheading_link":"","text":"","button_link_1":"shopify:\/\/products\/35mm-and-medium-format-repair","button_link_1_type":"button","button_label_1":"","button_style_1":"button--filled","button_link_2":"\/","button_label_2":"","button_style_2":"button--outlined","content_position":"end","content_alignment":"start","image":"shopify:\/\/shop_images\/REPAIRS_DESKTOP.jpg","video_external":"","show_controls_on_video":false,"enable_media_overlay_desktop":false,"content_position_mobile":"end","content_alignment_mobile":"center","image_mobile":"shopify:\/\/shop_images\/REPAIRS_MOBILE.jpg","video_external_mobile":"","show_controls_on_video_mobile":false,"enable_media_overlay_mobile":true,"mobile_text_offset_y":0}}},"block_order":["slide_q6ALKe"],"name":"t:sections.hero-banner.name","settings":{"enable_transparent_header":true,"slider_height_desktop":50,"slider_height_mobile":65,"slideshow_autoplay_interval":6,"show_slideshow_navigation":true,"slideshow_navigation_position":"hero__swiper-buttons--start","color_scheme_arrows":"scheme-cff46e11-510f-466f-8591-6bd732f3a314","show_slideshow_pagination":true,"slideshow_pagination_style":"style-1","floating_bar":false}},"custom_liquid_TJL9aP":{"type":"custom-liquid","name":"t:sections.custom-liquid.name","settings":{"custom_liquid":"","section_width":"max-w-page","color_scheme":"","spacing_top":"2","spacing_bottom":"2"}},"instant_section_73Nqpf":{"type":"instant-section","disabled":true,"name":"Repair Below Section","settings":{"text_b1ethHm88r6HXMAG-1":"<h4><strong>Step 1: Purchase Repair Quote<\/strong><\/h4>","text_zK5b4fQevS7bQERJ-1":"<p>Complete our online form with your camera details above, <\/p><p>describe the issues you're experiencing, and upload photos if available. <\/p>","text_0si98RFp5joWJ1B8-1":"<h4><strong>Step 2: Ship Your Camera to Brooklyn<\/strong><\/h4>","text_3lXcPM5OEDXNzDbL-1":"<p>Pack your camera securely and ship it to our workshop. Labels are easily purchased via our service portal. Ensure you pack your camera well!<\/p>","text_uoM6sBLNDaHyMRgg-1":"<h4><strong>Step 3 : Assessment<\/strong><\/h4>","text_RPTUdA1bfP1WKHbf-1":"<p>Our technician performs a comprehensive diagnostic assessment of your camera. This $50 inspection fee is applied toward your final repair cost.<\/p>","text_HrsD7nsiZ51a7coM-1":"<h4><strong>Step 5: Expert Repair Work<\/strong><\/h4>","text_T4nRNJtWXNje3fMK-1":"<p>Once approved, our skilled technicians perform the necessary repairs using quality parts and time-tested techniques honed over years of film camera expertise.<\/p>","text_bWF9lADjf58RmD6y-1":"<h4><strong>Step 4: Receive Your Repair Quote<\/strong><\/h4>","text_IdTYOB7FDYASZcxP-1":"<p>We'll contact you with a detailed breakdown of what needs to be repaired and the associated costs. No work proceeds until you approve the estimate.<\/p>","text_kxIcPYlQOEUWoLHz-1":"<h4><strong>Step 6: Quality Testing & Return<\/strong><\/h4>","text_dAmEcKiEXHxfrQ9v-1":"<p>Your camera undergoes thorough testing to ensure everything functions perfectly. We then carefully pack and ship it back to you, ready for your next roll of film.<\/p>","url_44r2z7TSjcGHkDEt-1":"shopify:\/\/products\/35mm-and-medium-format-repair","text_OGVmSdENOpRpSm1q-1":"<p>Start Repair<\/p>","text_N7qzcLWFQqCVBAbv-1":"<h3>What We Repair<\/h3>","text_nsHGXN0PI3XSWcih-1":"<p>We are actively expanding our menu. If you don't see your camera listed in the menu above you can book it through Unlisted to still get a quote. If you want to check if we can service it first, you can message our tehcnicians<\/p>","text_6JvkZISk15Bqlgxg-1":"<p>Full CLA & Complex Repairs<\/p>","text_SLsE9eGYVTapAVsT-1":"<p>Select Models<\/p>","text_Xnf3rDE7I6jdSF6e-1":"<p>Most Models<\/p>","text_p16dy95MBPo29XDR-1":"<p>All Models<\/p>","text_2Ia3UGzMFDRiRyHP-1":"<p>Unjams \/ Minor Mechanical Failures<\/p>","text_TC2mKpvMFOVA9liS-1":"<p>Select Models<\/p>","text_AwqfbBv5ZiLI12LQ-1":"<p>Most Models<\/p>","text_pT4WojU8cNf8fHHz-1":"<p>All Models<\/p>","text_HaY04RxLvTzJest3-1":"<p>Cleaning & Light Seals<\/p>","text_vKzf5j31Fq2Du83Z-1":"<p>Select Models<\/p>","text_Il75qUf7bnn4qvRa-1":"<p>Most Models<\/p>","text_czuh60iuC9PY90RE-1":"<p>All Models<\/p>","text_MbFTa8lVxtxk1MyV-1":"<h3>Full CLA Service<\/h3>","text_e3IgUtmnx0JCNiDZ-1":"<h3>Canon AE-1 Program<\/h3>","text_nSvnmtcQ01027Xj7-1":"<p>One of our most popular services we can perform everything on a Canon AE-1 Program.<\/p>","text_0GXley78XRccVff6-1":"<h3>K1000<\/h3>","text_4V3mnOu74Winkojf-1":"<p>Another popular service, we are setup to handle every issue with the K1000<\/p>","text_P6UogtMNA3NTe4iU-1":"<h3>Hasselblad 500 Series<\/h3>","text_xj27KEgUVzPLcNGZ-1":"<p>Our dedicated Hasselblad tech can perform full CLA on any 500 series body.<\/p>","text_huNJv1FaXJPXBXne-1":"<h3>Contax T<\/h3>","text_fpHh06dolmevW9rt-1":"<p>Specializing in Contax for years, our technicians can do throuoguh repairs on Contaxt T<\/p>","text_pXhOtTQSfrgaTNZM-1":"<h3>Contax G2<\/h3>","text_wTI1WAcR4j4D1JgN-1":"<p>Calibration, full CLAs, repairs, and more—if it’s acting up, just bring it in!<\/p>","text_zj5YYBoqEAS4JhTb-1":"<h3>Other Cameras<\/h3>","text_AnBPyLkv0Y3ci8Wo-1":"<p>We also CLA - Contax T, TVS, T2's, Canonet's, canon P's. Don't see your camera? Email us, we do more!<\/p>","text_AmElW6xnkWf22Fkd-1":"<h3>Other Repairs - Most Models<\/h3>","text_f4piqP05EzMfEZYr-1":"<h3>Light Seals<\/h3>","text_OanafuXt1OjroSZu-1":"<p>Light seals can be done on all models<\/p>","text_OXdu84QbSBevWBqf-1":"<h3>Unjam & Stuck Shutters<\/h3>","text_ZjVPrYjV4ny7YV5h-1":"<p>Most mechanical cameras we can perform unjam and stuck shutter repairs. <\/p>","text_3ubSAIis1Z8OAXms-1":"<h3>Door Replacement<\/h3>","text_rgCiunvUGsyflbjz-1":"<p>Model & Part dependent but many mechanical models point & shoots can have the doors replaced<\/p>","text_GbMFJFCngCgXVmer-1":"<h3>Lens CLA<\/h3>","text_IO0SzTfLrMc9Hmjy-1":"<p>We can CLA almost every lens out there. As well as all lens specific repairs. <\/p>","text_Rz7yyO07IB3auE3t-1":"<h3>Parts Replacement<\/h3>","text_GFGnDjbsSg1sSZmu-1":"<p>Deopending on the model and part we can perform many exterior parts replacements<\/p>","text_UGmDsnOqjIyIyy3i-1":"<h3>Other Cameras<\/h3>","text_K5rgZXTlX3nGlRJF-1":"<p>There is a vast array of other issues we can solve. Select other camera, or contact us!<\/p>","text_cQqIVEgqDtrrxC69-1":"<p>Transparent Pricing<\/p>","text_qP8N4jH6z2NMGl9a-1":"<h1>Sample Repair Price Ranges<\/h1>","url_vXX8izTIbPsVDqLd-1":"shopify:\/\/products\/35mm-and-medium-format-repair","text_ZSSb2jGJ33AH7IaV-1":"<p>See More<\/p>","text_tX5jvewh0rqW2AIv-1":"<p>Every camera is unique, so all repairs are quote-based after our bench inspection. Below are example price ranges to help you plan. Your actual quote may vary based on your camera's specific condition and required parts.<\/p>","text_pjrwESGDUEHrdTL5-1":"<h3>$85–150<\/h3>","text_faarjtbb0IW5JBxo-1":"<h4>Light Seals <\/h4>","text_A7hnSbkawoWazFh9-1":"<h3>$80–200<\/h3>","text_6HLaDCdaTccEYJs6-1":"<h4>Shutter Calibration<\/h4>","text_jPpNrAJEvHro8fGY-1":"<h3>$~325<\/h3>","text_4tRf1aJI5bUz2mCE-1":"<h4>CLA<\/h4>","text_vdrhx0h7YdsU1RYN-1":"<h3>$90<\/h3>","text_5SQU26miURpbtVBd-1":"<h4>Unjam<\/h4>","text_7aESZrg5i4gIDe2I-1":"<h3>Frequently Asked Questions<\/h3>","text_9eTXhF2Jl59s8a6I-1":"<p>Everything you need to know about our camera repair service. Can't find your answer? Reach out to our team directly.<\/p>","url_hkfu6CK8SSCaCMoo-1":"shopify:\/\/pages\/visit","text_suzeb1nmUompX5cX-1":"<p>Contact Us<\/p>","text_yPOfQDQyudoffbEH-1":"<h4>What is the $50 bench fee and is it refundable?<\/h4>","text_DyX1AepcieaXngSX-1":"<p>The $50 bench fee is a non-refundable inspection charge that covers our technician's time to thoroughly assess your camera. This fee is applied toward your final repair cost if you proceed with the repair. If repairs aren't possible due to any reason, the bench fee still cannot be refunded.<\/p>","text_2uvk73piGaJVfSA1-1":"<h4>How long will my repair take?<\/h4>","text_ENPmwIUdsO9w8ai3-1":"<p>Standard repair turnaround is 2–4 weeks from when we receive your camera. Complex repairs or situations requiring special parts may take longer. We do not guarantee any timeframe as multiple factors go into repair times. <\/p>","text_m9G2IMZMMGgH3J3w-1":"<h4>What cameras do you repair?<\/h4>","text_1YqXpD4kvhmSlv9K-1":"<p>We specialize in 35mm and medium format film cameras including Canon, Nikon, Pentax, Olympus, Minolta, Contax, Leica, Hasselblad, Mamiya, Bronica, Rolleiflex, Yashica, and so many more! If you're unsure whether we service your camera model, contact us before submitting a repair request.<\/p>","text_JUKnHXd2MfaYQ4lL-1":"<h4>Do you repair Polaroid cameras?<\/h4>","text_nKyOLcNCxQ9BU6Lx-1":"<p>Polaroid cameras require specialized service. Please visit our dedicated Polaroid Repairs page for information on instant camera repair options and pricing.<\/p>","text_9SpfQZ8nomRE73wp-1":"<h4>How should I pack my camera for shipping?<\/h4>","text_Ek5DbpeAU9rLi2mh-1":"<p>Wrap your camera in bubble wrap or foam padding and place it in a sturdy box with additional packing material to prevent movement. Remove batteries and any detachable lenses (pack separately if sending). <\/p>","text_ReexIItutqMaLTuP-1":"<h4>Will I receive a quote before any work is done?<\/h4>","text_U5chG9FSxzdJdnk9-1":"<p>Absolutely. After the bench inspection, we'll contact you with a detailed quote outlining all recommended repairs and costs. No repair work proceeds until you approve the estimate. You can decline the repair, though the bench fee is non-refundable.<\/p>","text_YIEerFC852DhgYeL-1":"<h4>What payment methods do you accept?<\/h4>","text_Xqgk9OZXuw21n0iY-1":"<p>We accept all major credit cards, PayPal, and Shop Pay. The bench fee is collected when you submit your repair request. The remaining balance is due upon recieving the quote.<\/p>","text_QNSMFgbyON2JQ9sv-1":"<h4>Can I drop off my camera in person?<\/h4>","text_FAZaZxa8kpRb1gbS-1":"<p>Yes! Local customers can drop off and pick up cameras at our Brooklyn location: 855 Grand St, Brooklyn. Please submit your repair request online first, then drop off your camera any day we are open.<\/p>","text_B6eNUe5cX9LOchif-1":"<h3>Secure Shipping & Handling<\/h3>","text_9RZitkmjBUPjFcoq-1":"<p><\/p><p>Getting your camera to us has never been easier. No more complicated forms, notes, or fears of loosing it - simply buy a label on our portal and get a label instantly.<\/p><p><\/p><p>Your camera is handled with the utmost care throughout the repair process. We photograph every camera upon arrival to document its condition. Return shipping options include USPS Priority, UPS Ground, or expedited services. Local Brooklyn customers can arrange pickup at our Grand Street location. All shipments are fully insured for your peace of mind.<\/p>","padding_top":0,"padding_bottom":0}}},"order":["main","1754512899714fc58c","instant_section_JVtWqX","hero_banner_6XmHf4","custom_liquid_TJL9aP","instant_section_73Nqpf"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "badge_Hkd38r": {
+          "type": "badge",
+          "settings": {
+            "spacing_bottom": "1",
+            "show_badges": true,
+            "show_badges_discount": true,
+            "show_badges_sold": true
+          }
+        },
+        "1e0c79e9-7de0-4eee-b9c5-f27132635fb8": {
+          "type": "title",
+          "settings": {
+            "heading_size": "h5",
+            "spacing_bottom": "2"
+          }
+        },
+        "8effeb43-55b7-4ec4-ab9b-68bcd89b865b": {
+          "type": "price",
+          "settings": {
+            "spacing_bottom": "0",
+            "show_price_tax_info": true,
+            "show_price_shipping_info": false,
+            "show_price_custom_info": ""
+          }
+        },
+        "description_qA3HqH": {
+          "type": "description",
+          "settings": {
+            "spacing_bottom": "0",
+            "behaviour": "plain",
+            "heading": "",
+            "text_truncate": 0,
+            "icon": "theme-box",
+            "metafield_for_product_variant": "",
+            "show_block_content": true
+          }
+        },
+        "1e939cd6-0958-4135-a9e5-c50faef01437": {
+          "type": "variant_picker",
+          "settings": {
+            "spacing_bottom": "4",
+            "title": "Variant picker",
+            "enable_back_in_stock": true,
+            "picker_type": "dropdown",
+            "variant_options_with_thumbnails": "Color",
+            "size_guide_page": "size-guide",
+            "sizes_option": "Size"
+          }
+        },
+        "1e939cd6-0955-4135-a9e5-c50faef01437": {
+          "type": "purchase_options",
+          "settings": {
+            "spacing_bottom": "1",
+            "show_subscription_title": true,
+            "show_subscription_custom_info": "",
+            "show_subscription_policy": true
+          }
+        },
+        "8604a6ff-ad0b-44dd-8068-1de4e062f8e8": {
+          "type": "buy_buttons",
+          "settings": {
+            "spacing_bottom": "4",
+            "show_quantity": true,
+            "layout": "inline",
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": false
+          }
+        }
+      },
+      "block_order": [
+        "badge_Hkd38r",
+        "1e0c79e9-7de0-4eee-b9c5-f27132635fb8",
+        "8effeb43-55b7-4ec4-ab9b-68bcd89b865b",
+        "description_qA3HqH",
+        "1e939cd6-0958-4135-a9e5-c50faef01437",
+        "1e939cd6-0955-4135-a9e5-c50faef01437",
+        "8604a6ff-ad0b-44dd-8068-1de4e062f8e8"
+      ],
+      "settings": {
+        "product_media_layout": "product__media-layout--grid",
+        "product_media_layout_mobile": "product__media-layout--partial--sm",
+        "product_media_aspect_ratio": "fit",
+        "product_media_object_fit": "cover",
+        "product_slider_auto_height": false,
+        "media_transparent_background": true,
+        "display_media_zoom": "click",
+        "product_media_with_thumbs": "only_mobile",
+        "product_media_thumbs_ratio": "square",
+        "product_media_thumbs_object_fit": "cover",
+        "gallery_arrows_show_on": "desktop",
+        "display_media_gallery_pagination": "none",
+        "media_gallery_info": "",
+        "metafield_as_seen_on": "theme.as_seen_on",
+        "color_scheme_gallery": "scheme-c7f71c1d-cd34-4dd1-b023-9b05b17a2420",
+        "enable_sticky_info": true,
+        "enable_actions_bar": true,
+        "media_grid_size": "large",
+        "media_grid_position": "start",
+        "grid_gap": "2",
+        "spacing_grid": 1.6,
+        "grid_content_alignment": "start",
+        "section_width": "max-w-fluid",
+        "color_scheme": "scheme-1",
+        "spacing_top": "2",
+        "spacing_bottom": "0"
+      }
+    },
+    "1754512899714fc58c": {
+      "type": "apps",
+      "settings": {
+        "section_layout": "normal",
+        "spacing_inner": "2",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    },
+    "instant_section_JVtWqX": {
+      "type": "instant-section",
+      "disabled": true,
+      "name": "Repair Below Section",
+      "settings": {
+        "text_b1ethHm88r6HXMAG-1": "<h4><strong>Step 1: Purchase Repair Quote</strong></h4>",
+        "text_zK5b4fQevS7bQERJ-1": "<p>Complete our online form with your camera details above, </p><p>describe the issues you&apos;re experiencing, and upload photos if available. </p>",
+        "text_0si98RFp5joWJ1B8-1": "<h4><strong>Step 2: Ship Your Camera to Brooklyn</strong></h4>",
+        "text_3lXcPM5OEDXNzDbL-1": "<p>Pack your camera securely and ship it to our workshop. Labels are easily purchased via our service portal. Ensure you pack your camera well!</p>",
+        "text_uoM6sBLNDaHyMRgg-1": "<h4><strong>Step 3 : Assessment</strong></h4>",
+        "text_RPTUdA1bfP1WKHbf-1": "<p>Our technician performs a comprehensive diagnostic assessment of your camera. This $50 inspection fee is applied toward your final repair cost.</p>",
+        "text_HrsD7nsiZ51a7coM-1": "<h4><strong>Step 5: Expert Repair Work</strong></h4>",
+        "text_T4nRNJtWXNje3fMK-1": "<p>Once approved, our skilled technicians perform the necessary repairs using quality parts and time-tested techniques honed over years of film camera expertise.</p>",
+        "text_bWF9lADjf58RmD6y-1": "<h4><strong>Step 4: Receive Your Repair Quote</strong></h4>",
+        "text_IdTYOB7FDYASZcxP-1": "<p>We&apos;ll contact you with a detailed breakdown of what needs to be repaired and the associated costs. No work proceeds until you approve the estimate.</p>",
+        "text_kxIcPYlQOEUWoLHz-1": "<h4><strong>Step 6: Quality Testing &amp; Return</strong></h4>",
+        "text_dAmEcKiEXHxfrQ9v-1": "<p>Your camera undergoes thorough testing to ensure everything functions perfectly. We then carefully pack and ship it back to you, ready for your next roll of film.</p>",
+        "url_44r2z7TSjcGHkDEt-1": "",
+        "text_OGVmSdENOpRpSm1q-1": "<p>Start Repair</p>",
+        "text_N7qzcLWFQqCVBAbv-1": "<h3>What We Repair</h3>",
+        "text_nsHGXN0PI3XSWcih-1": "<p>We are actively expanding our menu. If you don&apos;t see your camera listed in the menu above you can book it through Unlisted to still get a quote. If you want to check if we can service it first, you can message our tehcnicians</p>",
+        "text_6JvkZISk15Bqlgxg-1": "<p>Full CLA &amp; Complex Repairs</p>",
+        "text_SLsE9eGYVTapAVsT-1": "<p>Select Models</p>",
+        "text_Xnf3rDE7I6jdSF6e-1": "<p>Most Models</p>",
+        "text_p16dy95MBPo29XDR-1": "<p>All Models</p>",
+        "text_2Ia3UGzMFDRiRyHP-1": "<p>Unjams / Minor Mechanical Failures</p>",
+        "text_TC2mKpvMFOVA9liS-1": "<p>Select Models</p>",
+        "text_AwqfbBv5ZiLI12LQ-1": "<p>Most Models</p>",
+        "text_pT4WojU8cNf8fHHz-1": "<p>All Models</p>",
+        "text_HaY04RxLvTzJest3-1": "<p>Cleaning &amp; Light Seals</p>",
+        "text_vKzf5j31Fq2Du83Z-1": "<p>Select Models</p>",
+        "text_Il75qUf7bnn4qvRa-1": "<p>Most Models</p>",
+        "text_czuh60iuC9PY90RE-1": "<p>All Models</p>",
+        "text_MbFTa8lVxtxk1MyV-1": "<h3>Full CLA Service</h3>",
+        "text_e3IgUtmnx0JCNiDZ-1": "<h3>Canon AE-1 Program</h3>",
+        "text_nSvnmtcQ01027Xj7-1": "<p>One of our most popular services we can perform everything on a Canon AE-1 Program.</p>",
+        "text_0GXley78XRccVff6-1": "<h3>K1000</h3>",
+        "text_4V3mnOu74Winkojf-1": "<p>Another popular service, we are setup to handle every issue with the K1000</p>",
+        "text_P6UogtMNA3NTe4iU-1": "<h3>Hasselblad 500 Series</h3>",
+        "text_xj27KEgUVzPLcNGZ-1": "<p>Our dedicated Hasselblad tech can perform full CLA on any 500 series body.</p>",
+        "text_huNJv1FaXJPXBXne-1": "<h3>Contax T</h3>",
+        "text_fpHh06dolmevW9rt-1": "<p>Specializing in Contax for years, our technicians can do throuoguh repairs on Contaxt T</p>",
+        "text_pXhOtTQSfrgaTNZM-1": "<h3>Contax G2</h3>",
+        "text_wTI1WAcR4j4D1JgN-1": "<p>Calibration, full CLAs, repairs, and more—if it’s acting up, just bring it in!</p>",
+        "text_zj5YYBoqEAS4JhTb-1": "<h3>Other Cameras</h3>",
+        "text_AnBPyLkv0Y3ci8Wo-1": "<p>We also CLA - Contax T, TVS, T2&apos;s, Canonet&apos;s, canon P&apos;s. Don&apos;t see your camera? Email us, we do more!</p>",
+        "text_AmElW6xnkWf22Fkd-1": "<h3>Other Repairs - Most Models</h3>",
+        "text_f4piqP05EzMfEZYr-1": "<h3>Light Seals</h3>",
+        "text_OanafuXt1OjroSZu-1": "<p>Light seals can be done on all models</p>",
+        "text_OXdu84QbSBevWBqf-1": "<h3>Unjam &amp; Stuck Shutters</h3>",
+        "text_ZjVPrYjV4ny7YV5h-1": "<p>Most mechanical cameras we can perform unjam and stuck shutter repairs. </p>",
+        "text_3ubSAIis1Z8OAXms-1": "<h3>Door Replacement</h3>",
+        "text_rgCiunvUGsyflbjz-1": "<p>Model &amp; Part dependent but many mechanical models point &amp; shoots can have the doors replaced</p>",
+        "text_GbMFJFCngCgXVmer-1": "<h3>Lens CLA</h3>",
+        "text_IO0SzTfLrMc9Hmjy-1": "<p>We can CLA almost every lens out there. As well as all lens specific repairs. </p>",
+        "text_Rz7yyO07IB3auE3t-1": "<h3>Parts Replacement</h3>",
+        "text_GFGnDjbsSg1sSZmu-1": "<p>Deopending on the model and part we can perform many exterior parts replacements</p>",
+        "text_UGmDsnOqjIyIyy3i-1": "<h3>Other Cameras</h3>",
+        "text_K5rgZXTlX3nGlRJF-1": "<p>There is a vast array of other issues we can solve. Select other camera, or contact us!</p>",
+        "text_cQqIVEgqDtrrxC69-1": "<p>Transparent Pricing</p>",
+        "text_qP8N4jH6z2NMGl9a-1": "<h1>Sample Repair Price Ranges</h1>",
+        "url_vXX8izTIbPsVDqLd-1": "",
+        "text_ZSSb2jGJ33AH7IaV-1": "<p>See More</p>",
+        "text_tX5jvewh0rqW2AIv-1": "<p>Every camera is unique, so all repairs are quote-based after our bench inspection. Below are example price ranges to help you plan. Your actual quote may vary based on your camera&apos;s specific condition and required parts.</p>",
+        "text_pjrwESGDUEHrdTL5-1": "<h3>$85–150</h3>",
+        "text_faarjtbb0IW5JBxo-1": "<h4>Light Seals </h4>",
+        "text_A7hnSbkawoWazFh9-1": "<h3>$80–200</h3>",
+        "text_6HLaDCdaTccEYJs6-1": "<h4>Shutter Calibration</h4>",
+        "text_jPpNrAJEvHro8fGY-1": "<h3>$~325</h3>",
+        "text_4tRf1aJI5bUz2mCE-1": "<h4>CLA</h4>",
+        "text_vdrhx0h7YdsU1RYN-1": "<h3>$90</h3>",
+        "text_5SQU26miURpbtVBd-1": "<h4>Unjam</h4>",
+        "text_7aESZrg5i4gIDe2I-1": "<h3>Frequently Asked Questions</h3>",
+        "text_9eTXhF2Jl59s8a6I-1": "<p>Everything you need to know about our camera repair service. Can&apos;t find your answer? Reach out to our team directly.</p>",
+        "url_hkfu6CK8SSCaCMoo-1": "",
+        "text_suzeb1nmUompX5cX-1": "<p>Contact Us</p>",
+        "text_yPOfQDQyudoffbEH-1": "<h4>What is the $50 bench fee and is it refundable?</h4>",
+        "text_DyX1AepcieaXngSX-1": "<p>The $50 bench fee is a non-refundable inspection charge that covers our technician&apos;s time to thoroughly assess your camera. This fee is applied toward your final repair cost if you proceed with the repair. If repairs aren&apos;t possible due to any reason, the bench fee still cannot be refunded.</p>",
+        "text_2uvk73piGaJVfSA1-1": "<h4>How long will my repair take?</h4>",
+        "text_ENPmwIUdsO9w8ai3-1": "<p>Standard repair turnaround is 2–4 weeks from when we receive your camera. Complex repairs or situations requiring special parts may take longer. We do not guarantee any timeframe as multiple factors go into repair times. </p>",
+        "text_m9G2IMZMMGgH3J3w-1": "<h4>What cameras do you repair?</h4>",
+        "text_1YqXpD4kvhmSlv9K-1": "<p>We specialize in 35mm and medium format film cameras including Canon, Nikon, Pentax, Olympus, Minolta, Contax, Leica, Hasselblad, Mamiya, Bronica, Rolleiflex, Yashica, and so many more! If you&apos;re unsure whether we service your camera model, contact us before submitting a repair request.</p>",
+        "text_JUKnHXd2MfaYQ4lL-1": "<h4>Do you repair Polaroid cameras?</h4>",
+        "text_nKyOLcNCxQ9BU6Lx-1": "<p>Polaroid cameras require specialized service. Please visit our dedicated Polaroid Repairs page for information on instant camera repair options and pricing.</p>",
+        "text_9SpfQZ8nomRE73wp-1": "<h4>How should I pack my camera for shipping?</h4>",
+        "text_Ek5DbpeAU9rLi2mh-1": "<p>Wrap your camera in bubble wrap or foam padding and place it in a sturdy box with additional packing material to prevent movement. Remove batteries and any detachable lenses (pack separately if sending). </p>",
+        "text_ReexIItutqMaLTuP-1": "<h4>Will I receive a quote before any work is done?</h4>",
+        "text_U5chG9FSxzdJdnk9-1": "<p>Absolutely. After the bench inspection, we&apos;ll contact you with a detailed quote outlining all recommended repairs and costs. No repair work proceeds until you approve the estimate. You can decline the repair, though the bench fee is non-refundable.</p>",
+        "text_YIEerFC852DhgYeL-1": "<h4>What payment methods do you accept?</h4>",
+        "text_Xqgk9OZXuw21n0iY-1": "<p>We accept all major credit cards, PayPal, and Shop Pay. The bench fee is collected when you submit your repair request. The remaining balance is due upon recieving the quote.</p>",
+        "text_QNSMFgbyON2JQ9sv-1": "<h4>Can I drop off my camera in person?</h4>",
+        "text_FAZaZxa8kpRb1gbS-1": "<p>Yes! Local customers can drop off and pick up cameras at our Brooklyn location: 855 Grand St, Brooklyn. Please submit your repair request online first, then drop off your camera any day we are open.</p>",
+        "text_B6eNUe5cX9LOchif-1": "<h3>Secure Shipping &amp; Handling</h3>",
+        "text_9RZitkmjBUPjFcoq-1": "<p></p><p>Getting your camera to us has never been easier. No more complicated forms, notes, or fears of loosing it - simply buy a label on our portal and get a label instantly.</p><p></p><p>Your camera is handled with the utmost care throughout the repair process. We photograph every camera upon arrival to document its condition. Return shipping options include USPS Priority, UPS Ground, or expedited services. Local Brooklyn customers can arrange pickup at our Grand Street location. All shipments are fully insured for your peace of mind.</p>",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "hero_banner_6XmHf4": {
+      "type": "hero-banner",
+      "blocks": {
+        "slide_q6ALKe": {
+          "type": "slide",
+          "settings": {
+            "banner_layout": "hero-banner--full",
+            "color_scheme": "scheme-cff46e11-510f-466f-8591-6bd732f3a314",
+            "header_menu_text_color": "#ffffff",
+            "heading": "<h2><em><strong>Get Your Camera</strong></em></h2><h2><em><strong> Repaired Now</strong></em></h2>",
+            "subheading": "",
+            "subheading_link": "",
+            "text": "",
+            "button_link_1": "shopify://products/35mm-and-medium-format-repair",
+            "button_link_1_type": "button",
+            "button_label_1": "",
+            "button_style_1": "button--filled",
+            "button_link_2": "/",
+            "button_label_2": "",
+            "button_style_2": "button--outlined",
+            "content_position": "end",
+            "content_alignment": "start",
+            "image": "shopify://shop_images/REPAIRS_DESKTOP.jpg",
+            "video_external": "",
+            "show_controls_on_video": false,
+            "enable_media_overlay_desktop": false,
+            "content_position_mobile": "end",
+            "content_alignment_mobile": "center",
+            "image_mobile": "shopify://shop_images/REPAIRS_MOBILE.jpg",
+            "video_external_mobile": "",
+            "show_controls_on_video_mobile": false,
+            "enable_media_overlay_mobile": true,
+            "mobile_text_offset_y": 0
+          }
+        }
+      },
+      "block_order": [
+        "slide_q6ALKe"
+      ],
+      "name": "t:sections.hero-banner.name",
+      "settings": {
+        "enable_transparent_header": true,
+        "slider_height_desktop": 50,
+        "slider_height_mobile": 65,
+        "slideshow_autoplay_interval": 6,
+        "show_slideshow_navigation": true,
+        "slideshow_navigation_position": "hero__swiper-buttons--start",
+        "color_scheme_arrows": "scheme-cff46e11-510f-466f-8591-6bd732f3a314",
+        "show_slideshow_pagination": true,
+        "slideshow_pagination_style": "style-1",
+        "floating_bar": false
+      }
+    },
+    "custom_liquid_TJL9aP": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.name",
+      "settings": {
+        "custom_liquid": "",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    },
+    "instant_section_73Nqpf": {
+      "type": "instant-section",
+      "disabled": true,
+      "name": "Repair Below Section",
+      "settings": {
+        "text_b1ethHm88r6HXMAG-1": "<h4><strong>Step 1: Purchase Repair Quote</strong></h4>",
+        "text_zK5b4fQevS7bQERJ-1": "<p>Complete our online form with your camera details above, </p><p>describe the issues you're experiencing, and upload photos if available. </p>",
+        "text_0si98RFp5joWJ1B8-1": "<h4><strong>Step 2: Ship Your Camera to Brooklyn</strong></h4>",
+        "text_3lXcPM5OEDXNzDbL-1": "<p>Pack your camera securely and ship it to our workshop. Labels are easily purchased via our service portal. Ensure you pack your camera well!</p>",
+        "text_uoM6sBLNDaHyMRgg-1": "<h4><strong>Step 3 : Assessment</strong></h4>",
+        "text_RPTUdA1bfP1WKHbf-1": "<p>Our technician performs a comprehensive diagnostic assessment of your camera. This $50 inspection fee is applied toward your final repair cost.</p>",
+        "text_HrsD7nsiZ51a7coM-1": "<h4><strong>Step 5: Expert Repair Work</strong></h4>",
+        "text_T4nRNJtWXNje3fMK-1": "<p>Once approved, our skilled technicians perform the necessary repairs using quality parts and time-tested techniques honed over years of film camera expertise.</p>",
+        "text_bWF9lADjf58RmD6y-1": "<h4><strong>Step 4: Receive Your Repair Quote</strong></h4>",
+        "text_IdTYOB7FDYASZcxP-1": "<p>We'll contact you with a detailed breakdown of what needs to be repaired and the associated costs. No work proceeds until you approve the estimate.</p>",
+        "text_kxIcPYlQOEUWoLHz-1": "<h4><strong>Step 6: Quality Testing & Return</strong></h4>",
+        "text_dAmEcKiEXHxfrQ9v-1": "<p>Your camera undergoes thorough testing to ensure everything functions perfectly. We then carefully pack and ship it back to you, ready for your next roll of film.</p>",
+        "url_44r2z7TSjcGHkDEt-1": "shopify://products/35mm-and-medium-format-repair",
+        "text_OGVmSdENOpRpSm1q-1": "<p>Start Repair</p>",
+        "text_N7qzcLWFQqCVBAbv-1": "<h3>What We Repair</h3>",
+        "text_nsHGXN0PI3XSWcih-1": "<p>We are actively expanding our menu. If you don't see your camera listed in the menu above you can book it through Unlisted to still get a quote. If you want to check if we can service it first, you can message our tehcnicians</p>",
+        "text_6JvkZISk15Bqlgxg-1": "<p>Full CLA & Complex Repairs</p>",
+        "text_SLsE9eGYVTapAVsT-1": "<p>Select Models</p>",
+        "text_Xnf3rDE7I6jdSF6e-1": "<p>Most Models</p>",
+        "text_p16dy95MBPo29XDR-1": "<p>All Models</p>",
+        "text_2Ia3UGzMFDRiRyHP-1": "<p>Unjams / Minor Mechanical Failures</p>",
+        "text_TC2mKpvMFOVA9liS-1": "<p>Select Models</p>",
+        "text_AwqfbBv5ZiLI12LQ-1": "<p>Most Models</p>",
+        "text_pT4WojU8cNf8fHHz-1": "<p>All Models</p>",
+        "text_HaY04RxLvTzJest3-1": "<p>Cleaning & Light Seals</p>",
+        "text_vKzf5j31Fq2Du83Z-1": "<p>Select Models</p>",
+        "text_Il75qUf7bnn4qvRa-1": "<p>Most Models</p>",
+        "text_czuh60iuC9PY90RE-1": "<p>All Models</p>",
+        "text_MbFTa8lVxtxk1MyV-1": "<h3>Full CLA Service</h3>",
+        "text_e3IgUtmnx0JCNiDZ-1": "<h3>Canon AE-1 Program</h3>",
+        "text_nSvnmtcQ01027Xj7-1": "<p>One of our most popular services we can perform everything on a Canon AE-1 Program.</p>",
+        "text_0GXley78XRccVff6-1": "<h3>K1000</h3>",
+        "text_4V3mnOu74Winkojf-1": "<p>Another popular service, we are setup to handle every issue with the K1000</p>",
+        "text_P6UogtMNA3NTe4iU-1": "<h3>Hasselblad 500 Series</h3>",
+        "text_xj27KEgUVzPLcNGZ-1": "<p>Our dedicated Hasselblad tech can perform full CLA on any 500 series body.</p>",
+        "text_huNJv1FaXJPXBXne-1": "<h3>Contax T</h3>",
+        "text_fpHh06dolmevW9rt-1": "<p>Specializing in Contax for years, our technicians can do throuoguh repairs on Contaxt T</p>",
+        "text_pXhOtTQSfrgaTNZM-1": "<h3>Contax G2</h3>",
+        "text_wTI1WAcR4j4D1JgN-1": "<p>Calibration, full CLAs, repairs, and more—if it’s acting up, just bring it in!</p>",
+        "text_zj5YYBoqEAS4JhTb-1": "<h3>Other Cameras</h3>",
+        "text_AnBPyLkv0Y3ci8Wo-1": "<p>We also CLA - Contax T, TVS, T2's, Canonet's, canon P's. Don't see your camera? Email us, we do more!</p>",
+        "text_AmElW6xnkWf22Fkd-1": "<h3>Other Repairs - Most Models</h3>",
+        "text_f4piqP05EzMfEZYr-1": "<h3>Light Seals</h3>",
+        "text_OanafuXt1OjroSZu-1": "<p>Light seals can be done on all models</p>",
+        "text_OXdu84QbSBevWBqf-1": "<h3>Unjam & Stuck Shutters</h3>",
+        "text_ZjVPrYjV4ny7YV5h-1": "<p>Most mechanical cameras we can perform unjam and stuck shutter repairs. </p>",
+        "text_3ubSAIis1Z8OAXms-1": "<h3>Door Replacement</h3>",
+        "text_rgCiunvUGsyflbjz-1": "<p>Model & Part dependent but many mechanical models point & shoots can have the doors replaced</p>",
+        "text_GbMFJFCngCgXVmer-1": "<h3>Lens CLA</h3>",
+        "text_IO0SzTfLrMc9Hmjy-1": "<p>We can CLA almost every lens out there. As well as all lens specific repairs. </p>",
+        "text_Rz7yyO07IB3auE3t-1": "<h3>Parts Replacement</h3>",
+        "text_GFGnDjbsSg1sSZmu-1": "<p>Deopending on the model and part we can perform many exterior parts replacements</p>",
+        "text_UGmDsnOqjIyIyy3i-1": "<h3>Other Cameras</h3>",
+        "text_K5rgZXTlX3nGlRJF-1": "<p>There is a vast array of other issues we can solve. Select other camera, or contact us!</p>",
+        "text_cQqIVEgqDtrrxC69-1": "<p>Transparent Pricing</p>",
+        "text_qP8N4jH6z2NMGl9a-1": "<h1>Sample Repair Price Ranges</h1>",
+        "url_vXX8izTIbPsVDqLd-1": "shopify://products/35mm-and-medium-format-repair",
+        "text_ZSSb2jGJ33AH7IaV-1": "<p>See More</p>",
+        "text_tX5jvewh0rqW2AIv-1": "<p>Every camera is unique, so all repairs are quote-based after our bench inspection. Below are example price ranges to help you plan. Your actual quote may vary based on your camera's specific condition and required parts.</p>",
+        "text_pjrwESGDUEHrdTL5-1": "<h3>$85–150</h3>",
+        "text_faarjtbb0IW5JBxo-1": "<h4>Light Seals </h4>",
+        "text_A7hnSbkawoWazFh9-1": "<h3>$80–200</h3>",
+        "text_6HLaDCdaTccEYJs6-1": "<h4>Shutter Calibration</h4>",
+        "text_jPpNrAJEvHro8fGY-1": "<h3>$~325</h3>",
+        "text_4tRf1aJI5bUz2mCE-1": "<h4>CLA</h4>",
+        "text_vdrhx0h7YdsU1RYN-1": "<h3>$90</h3>",
+        "text_5SQU26miURpbtVBd-1": "<h4>Unjam</h4>",
+        "text_7aESZrg5i4gIDe2I-1": "<h3>Frequently Asked Questions</h3>",
+        "text_9eTXhF2Jl59s8a6I-1": "<p>Everything you need to know about our camera repair service. Can't find your answer? Reach out to our team directly.</p>",
+        "url_hkfu6CK8SSCaCMoo-1": "shopify://pages/visit",
+        "text_suzeb1nmUompX5cX-1": "<p>Contact Us</p>",
+        "text_yPOfQDQyudoffbEH-1": "<h4>What is the $50 bench fee and is it refundable?</h4>",
+        "text_DyX1AepcieaXngSX-1": "<p>The $50 bench fee is a non-refundable inspection charge that covers our technician's time to thoroughly assess your camera. This fee is applied toward your final repair cost if you proceed with the repair. If repairs aren't possible due to any reason, the bench fee still cannot be refunded.</p>",
+        "text_2uvk73piGaJVfSA1-1": "<h4>How long will my repair take?</h4>",
+        "text_ENPmwIUdsO9w8ai3-1": "<p>Standard repair turnaround is 2–4 weeks from when we receive your camera. Complex repairs or situations requiring special parts may take longer. We do not guarantee any timeframe as multiple factors go into repair times. </p>",
+        "text_m9G2IMZMMGgH3J3w-1": "<h4>What cameras do you repair?</h4>",
+        "text_1YqXpD4kvhmSlv9K-1": "<p>We specialize in 35mm and medium format film cameras including Canon, Nikon, Pentax, Olympus, Minolta, Contax, Leica, Hasselblad, Mamiya, Bronica, Rolleiflex, Yashica, and so many more! If you're unsure whether we service your camera model, contact us before submitting a repair request.</p>",
+        "text_JUKnHXd2MfaYQ4lL-1": "<h4>Do you repair Polaroid cameras?</h4>",
+        "text_nKyOLcNCxQ9BU6Lx-1": "<p>Polaroid cameras require specialized service. Please visit our dedicated Polaroid Repairs page for information on instant camera repair options and pricing.</p>",
+        "text_9SpfQZ8nomRE73wp-1": "<h4>How should I pack my camera for shipping?</h4>",
+        "text_Ek5DbpeAU9rLi2mh-1": "<p>Wrap your camera in bubble wrap or foam padding and place it in a sturdy box with additional packing material to prevent movement. Remove batteries and any detachable lenses (pack separately if sending). </p>",
+        "text_ReexIItutqMaLTuP-1": "<h4>Will I receive a quote before any work is done?</h4>",
+        "text_U5chG9FSxzdJdnk9-1": "<p>Absolutely. After the bench inspection, we'll contact you with a detailed quote outlining all recommended repairs and costs. No repair work proceeds until you approve the estimate. You can decline the repair, though the bench fee is non-refundable.</p>",
+        "text_YIEerFC852DhgYeL-1": "<h4>What payment methods do you accept?</h4>",
+        "text_Xqgk9OZXuw21n0iY-1": "<p>We accept all major credit cards, PayPal, and Shop Pay. The bench fee is collected when you submit your repair request. The remaining balance is due upon recieving the quote.</p>",
+        "text_QNSMFgbyON2JQ9sv-1": "<h4>Can I drop off my camera in person?</h4>",
+        "text_FAZaZxa8kpRb1gbS-1": "<p>Yes! Local customers can drop off and pick up cameras at our Brooklyn location: 855 Grand St, Brooklyn. Please submit your repair request online first, then drop off your camera any day we are open.</p>",
+        "text_B6eNUe5cX9LOchif-1": "<h3>Secure Shipping & Handling</h3>",
+        "text_9RZitkmjBUPjFcoq-1": "<p></p><p>Getting your camera to us has never been easier. No more complicated forms, notes, or fears of loosing it - simply buy a label on our portal and get a label instantly.</p><p></p><p>Your camera is handled with the utmost care throughout the repair process. We photograph every camera upon arrival to document its condition. Return shipping options include USPS Priority, UPS Ground, or expedited services. Local Brooklyn customers can arrange pickup at our Grand Street location. All shipments are fully insured for your peace of mind.</p>",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1754512899714fc58c",
+    "instant_section_JVtWqX",
+    "hero_banner_6XmHf4",
+    "custom_liquid_TJL9aP",
+    "instant_section_73Nqpf"
+  ]
+}

@@ -1,1 +1,383 @@
-{"sections":{"page_banner_jWtyM4":{"type":"page-banner","disabled":true,"settings":{"enable_transparent_header":true,"heading":"","heading_size":"h6","text":"","show_default_description":true,"show_on_description":"desktop","content_position":"center","content_alignment":"center","media_position":"background","page_menu":"","enable_breadcrumbs":true,"enable_minimal_layout":true,"section_height":"33svh","content_width":"100%","video_external":"","show_controls_on_video":false,"section_height_mobile":"50svh","video_external_mobile":"","show_controls_on_video_mobile":false,"section_width":"max-w-narrow","color_scheme":"scheme-1","color_scheme_for_media":"scheme-6","spacing_top":"2","spacing_bottom":"4"}},"bfc_collection_editorial_bgkWxM":{"type":"bfc-collection-editorial","blocks":{"category_cover_AcaihT":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/4x5_Group_1912.png","title":"4x5","subtitle":"","url":"https:\/\/brooklynfilmcamera.com\/collections\/film?sort_by=best-selling&filter.v.m.custom.film_type=4X5","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_XXfFfc":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Rare_Group_1910.png","title":"Rare Film","subtitle":"","url":"#rare-finds","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_kYYVMW":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/Instant_Group_1919.png","title":"Instant Film","subtitle":"","url":"https:\/\/brooklynfilmcamera.com\/collections\/film?sort_by=best-selling&filter.v.m.custom.film_type=Instant&filter.v.m.custom.film_type=Instant","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_zjTMMk":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/35mm_Group_1901.png","title":"35mm","subtitle":"","url":"https:\/\/brooklynfilmcamera.com\/collections\/film?sort_by=best-selling&filter.v.m.custom.film_type=35mm","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_qyCjNe":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/8mm_Group_1905.png","title":"Super 8","subtitle":"","url":"https:\/\/brooklynfilmcamera.com\/collections\/film?sort_by=best-selling&filter.v.m.custom.film_type=Super+8","badge":"","bg_tint":0,"text_align":"left"}},"category_cover_zrHY96":{"type":"category_cover","settings":{"image":"shopify:\/\/shop_images\/120_Group_1904.png","title":"120","subtitle":"","url":"https:\/\/brooklynfilmcamera.com\/collections\/film?sort_by=best-selling&filter.v.m.custom.film_type=120","badge":"","bg_tint":0,"text_align":"left"}}},"block_order":["category_cover_AcaihT","category_cover_XXfFfc","category_cover_kYYVMW","category_cover_zjTMMk","category_cover_qyCjNe","category_cover_zrHY96"],"disabled":true,"name":"Category covers strip (styled)","settings":{"header_enable":true,"header_eyebrow":"","header_title":"Narrow your search","header_subtitle":"","header_divider":false,"header_align":"left","header_max_width":820,"heading_font":"sans","header_title_font_size_mobile":1.8,"header_title_font_size_desktop":2.2,"header_font_weight":"400","columns_mobile":3,"columns_tablet":4,"columns_desktop":6,"mobile_show_count":6,"gap_px":12,"padding_top":0,"padding_bottom":0,"background_color":"#ffffff","text_color":"#1c1c1c","media_aspect":"square","media_aspect_desktop":"short","media_radius":0,"enable_media_overlay":false,"overlay_color":"#000000","overlay_opacity":25,"badge_text":"","badge_font":"sans","badge_transform":"upper","badge_position":"above_title","badge_style":"solid","badge_background":"#1c1c1c","badge_text_color":"#ffffff","badge_padding":12,"badge_radius":28,"scroll_hint_enable":true,"scroll_hint_label":"Shop all"}},"featured_collections_ybC3xQ":{"type":"featured-collections","blocks":{"collection_slide_LQym8A":{"type":"collection-slide","settings":{"collection":"","heading":"Shampoo","heading_size":"h4","subheading":""}}},"block_order":["collection_slide_LQym8A"],"disabled":true,"settings":{"layout":"layout-2","heading":"","heading_size":"h3","subheading":"","content_padding":"0","button_label":"","button_link":"shopify:\/\/collections","button_style":"button--filled","card_layout":"product","card_style":"compact","image_aspect_ratio":"3\/4","card_content_alignment":"start","card_title_style":"card-single-text","collection_product_count":"show","slides_per_view":3,"slides_per_view_mobile":1,"show_carousel_arrows":true,"slideshow_alignment_center":false,"enable_slideshow_overflow":false,"slideshow_border":"none","section_width":"max-w-page","color_scheme":"","color_scheme_for_cards":"","spacing_top":"2","spacing_bottom":"2"}},"main":{"type":"main-collection","blocks":{"text_card_J6n8hm":{"type":"text-card","disabled":true,"settings":{"color_scheme":"scheme-2","text":"","button_link":"shopify:\/\/products\/polaroid-600-taz","link_type":"button","button_label":"","button_style":"button--text","content_position":"center","content_alignment":"end","content_position_mobile":"center","content_alignment_mobile":"center","position":7,"column_factor":2,"row_factor":1,"card_image":"shopify:\/\/shop_images\/Taz_0130.gif"}},"text_card_z8df4a":{"type":"text-card","disabled":true,"settings":{"color_scheme":"scheme-1","text":"","button_link":"","link_type":"button","button_label":"","button_style":"button--text","content_position":"center","content_alignment":"center","content_position_mobile":"center","content_alignment_mobile":"center","position":11,"column_factor":2,"row_factor":1,"card_image":"shopify:\/\/shop_images\/WEB72_BFC-0094_1.jpg"}}},"block_order":["text_card_J6n8hm","text_card_z8df4a"],"settings":{"show_top_border_for_utilities_bar":false,"enable_products_count":true,"enable_sorting":true,"enable_opened_accordions":true,"filters":"sidebar","products_per_row":"4","products_per_row_mobile":"2","products_per_page":19,"pagination_style":"default","enable_infinity_scroll":false,"section_width":"max-w-fluid","color_scheme":"scheme-1","spacing_top":"0","spacing_bottom":"6"}},"f8303da3-c3cb-4a90-a63a-7a628615aa6f":{"type":"seo-content","disabled":true,"settings":{"section_layout":"normal","heading":"Heading for SEO Content","heading_size":"h4","text":"<p>Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand.<\/p>","content_alignment":"center","section_width":"max-w-fluid","color_scheme":"scheme-5","spacing_inner":"2","spacing_top":"4","spacing_bottom":"4"}},"new_items_mX6NA3":{"type":"new-items","name":"New Arrivals Grid","settings":{"anchor_id":"rare-finds","heading":"Rare Finds","text":"<p><\/p>","text_align":"center","text_max_width":820,"header_align":"center","header_max_width":820,"header_title_font_size_mobile":1.8,"header_title_font_size_desktop":2.2,"header_font_weight":"600","header_letter_spacing":0,"header_uppercase":false,"manual_products":["fujifilm-fp-100c","film-fuji-fp-3000b","konica-vx100-super","ilford-pan-50-b-w-expired-2007"],"collection":"","use_newest_from_collection":false,"full_rows_only":false,"full_rows_columns_desktop":5,"disable_see_more":false,"items_to_show":12,"initial_items":12,"show_more_label":"Display more","collapse_label":"Collapse","show_back_to_top":true,"back_to_top_label":"Back to top","info_display":"hover","background_color":"#ffffff","text_color":"#1c1c1c","padding_top":40,"padding_bottom":40,"product_radius":8,"button_text":"SEE ALL","button_link":""}},"custom_liquid_D3VAMd":{"type":"custom-liquid","name":"t:sections.custom-liquid.name","settings":{"custom_liquid":"<script>\ndocument.addEventListener('DOMContentLoaded', function () {\n  var grid = document.getElementById('product-grid');\n  if (!grid) return;\n\n  \/\/ Only scroll if user came from your special page\n  \/\/ Replace '\/pages\/film' with your actual source page path if different\n  var ref = document.referrer || '';\n  if (ref.indexOf('\/pages\/film') === -1) {\n    return; \/\/ came from somewhere else (or via filter change) → do nothing\n  }\n\n  \/\/ One simple smooth scroll, never touching filters or URL\n  setTimeout(function () {\n    grid.scrollIntoView({\n      behavior: 'smooth',\n      block: 'start'\n    });\n  }, 200);\n});\n<\/script>","section_width":"max-w-page","color_scheme":"","spacing_top":"2","spacing_bottom":"2"}},"product_recommendations_QrVpBw":{"type":"product-recommendations","disabled":true,"name":"t:sections.product-recommendations.name","settings":{"layout":"layout-1","enable_slideshow_overflow":false,"heading":"You may also like","heading_size":"h3","subheading":"","button_label":"View all","button_link":"shopify:\/\/collections\/all","button_style":"button--filled","show_navigation_arrows":true,"slider_autoplay":3,"tabs_button_style":"tab-btn-filled","max_products":8,"show_unavailable_products":false,"section_width":"max-w-page","color_scheme":"","spacing_top":"2","spacing_bottom":"2"}}},"order":["page_banner_jWtyM4","bfc_collection_editorial_bgkWxM","featured_collections_ybC3xQ","main","f8303da3-c3cb-4a90-a63a-7a628615aa6f","new_items_mX6NA3","custom_liquid_D3VAMd","product_recommendations_QrVpBw"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page_banner_jWtyM4": {
+      "type": "page-banner",
+      "disabled": true,
+      "settings": {
+        "enable_transparent_header": true,
+        "heading": "",
+        "heading_size": "h6",
+        "text": "",
+        "show_default_description": true,
+        "show_on_description": "desktop",
+        "content_position": "center",
+        "content_alignment": "center",
+        "media_position": "background",
+        "page_menu": "",
+        "enable_breadcrumbs": true,
+        "enable_minimal_layout": true,
+        "section_height": "33svh",
+        "content_width": "100%",
+        "video_external": "",
+        "show_controls_on_video": false,
+        "section_height_mobile": "50svh",
+        "video_external_mobile": "",
+        "show_controls_on_video_mobile": false,
+        "section_width": "max-w-narrow",
+        "color_scheme": "scheme-1",
+        "color_scheme_for_media": "scheme-6",
+        "spacing_top": "2",
+        "spacing_bottom": "4"
+      }
+    },
+    "bfc_collection_editorial_bgkWxM": {
+      "type": "bfc-collection-editorial",
+      "blocks": {
+        "category_cover_AcaihT": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/4x5_Group_1912.png",
+            "title": "4x5",
+            "subtitle": "",
+            "url": "https://brooklynfilmcamera.com/collections/film?sort_by=best-selling&filter.v.m.custom.film_type=4X5",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_XXfFfc": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Rare_Group_1910.png",
+            "title": "Rare Film",
+            "subtitle": "",
+            "url": "#rare-finds",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_kYYVMW": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Instant_Group_1919.png",
+            "title": "Instant Film",
+            "subtitle": "",
+            "url": "https://brooklynfilmcamera.com/collections/film?sort_by=best-selling&filter.v.m.custom.film_type=Instant&filter.v.m.custom.film_type=Instant",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_zjTMMk": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/35mm_Group_1901.png",
+            "title": "35mm",
+            "subtitle": "",
+            "url": "https://brooklynfilmcamera.com/collections/film?sort_by=best-selling&filter.v.m.custom.film_type=35mm",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_qyCjNe": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/8mm_Group_1905.png",
+            "title": "Super 8",
+            "subtitle": "",
+            "url": "https://brooklynfilmcamera.com/collections/film?sort_by=best-selling&filter.v.m.custom.film_type=Super+8",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_zrHY96": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/120_Group_1904.png",
+            "title": "120",
+            "subtitle": "",
+            "url": "https://brooklynfilmcamera.com/collections/film?sort_by=best-selling&filter.v.m.custom.film_type=120",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        }
+      },
+      "block_order": [
+        "category_cover_AcaihT",
+        "category_cover_XXfFfc",
+        "category_cover_kYYVMW",
+        "category_cover_zjTMMk",
+        "category_cover_qyCjNe",
+        "category_cover_zrHY96"
+      ],
+      "disabled": true,
+      "name": "Category covers strip (styled)",
+      "settings": {
+        "header_enable": true,
+        "header_eyebrow": "",
+        "header_title": "Narrow your search",
+        "header_subtitle": "",
+        "header_divider": false,
+        "header_align": "left",
+        "header_max_width": 820,
+        "heading_font": "sans",
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "400",
+        "columns_mobile": 3,
+        "columns_tablet": 4,
+        "columns_desktop": 6,
+        "mobile_show_count": 6,
+        "gap_px": 12,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "background_color": "#ffffff",
+        "text_color": "#1c1c1c",
+        "media_aspect": "square",
+        "media_aspect_desktop": "short",
+        "media_radius": 0,
+        "enable_media_overlay": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 25,
+        "badge_text": "",
+        "badge_font": "sans",
+        "badge_transform": "upper",
+        "badge_position": "above_title",
+        "badge_style": "solid",
+        "badge_background": "#1c1c1c",
+        "badge_text_color": "#ffffff",
+        "badge_padding": 12,
+        "badge_radius": 28,
+        "scroll_hint_enable": true,
+        "scroll_hint_label": "Shop all"
+      }
+    },
+    "featured_collections_ybC3xQ": {
+      "type": "featured-collections",
+      "blocks": {
+        "collection_slide_LQym8A": {
+          "type": "collection-slide",
+          "settings": {
+            "collection": "",
+            "heading": "Shampoo",
+            "heading_size": "h4",
+            "subheading": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_slide_LQym8A"
+      ],
+      "disabled": true,
+      "settings": {
+        "layout": "layout-2",
+        "heading": "",
+        "heading_size": "h3",
+        "subheading": "",
+        "content_padding": "0",
+        "button_label": "",
+        "button_link": "shopify://collections",
+        "button_style": "button--filled",
+        "card_layout": "product",
+        "card_style": "compact",
+        "image_aspect_ratio": "3/4",
+        "card_content_alignment": "start",
+        "card_title_style": "card-single-text",
+        "collection_product_count": "show",
+        "slides_per_view": 3,
+        "slides_per_view_mobile": 1,
+        "show_carousel_arrows": true,
+        "slideshow_alignment_center": false,
+        "enable_slideshow_overflow": false,
+        "slideshow_border": "none",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "color_scheme_for_cards": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "blocks": {
+        "text_card_J6n8hm": {
+          "type": "text-card",
+          "disabled": true,
+          "settings": {
+            "color_scheme": "scheme-2",
+            "text": "",
+            "button_link": "shopify://products/polaroid-600-taz",
+            "link_type": "button",
+            "button_label": "",
+            "button_style": "button--text",
+            "content_position": "center",
+            "content_alignment": "end",
+            "content_position_mobile": "center",
+            "content_alignment_mobile": "center",
+            "position": 7,
+            "column_factor": 2,
+            "row_factor": 1,
+            "card_image": "shopify://shop_images/Taz_0130.gif"
+          }
+        },
+        "text_card_z8df4a": {
+          "type": "text-card",
+          "disabled": true,
+          "settings": {
+            "color_scheme": "scheme-1",
+            "text": "",
+            "button_link": "",
+            "link_type": "button",
+            "button_label": "",
+            "button_style": "button--text",
+            "content_position": "center",
+            "content_alignment": "center",
+            "content_position_mobile": "center",
+            "content_alignment_mobile": "center",
+            "position": 11,
+            "column_factor": 2,
+            "row_factor": 1,
+            "card_image": "shopify://shop_images/WEB72_BFC-0094_1.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "text_card_J6n8hm",
+        "text_card_z8df4a"
+      ],
+      "settings": {
+        "show_top_border_for_utilities_bar": false,
+        "enable_products_count": true,
+        "enable_sorting": true,
+        "enable_opened_accordions": true,
+        "filters": "sidebar",
+        "products_per_row": "4",
+        "products_per_row_mobile": "2",
+        "products_per_page": 19,
+        "pagination_style": "default",
+        "enable_infinity_scroll": false,
+        "section_width": "max-w-fluid",
+        "color_scheme": "scheme-1",
+        "spacing_top": "0",
+        "spacing_bottom": "6"
+      }
+    },
+    "f8303da3-c3cb-4a90-a63a-7a628615aa6f": {
+      "type": "seo-content",
+      "disabled": true,
+      "settings": {
+        "section_layout": "normal",
+        "heading": "Heading for SEO Content",
+        "heading_size": "h4",
+        "text": "<p>Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand.</p>",
+        "content_alignment": "center",
+        "section_width": "max-w-fluid",
+        "color_scheme": "scheme-5",
+        "spacing_inner": "2",
+        "spacing_top": "4",
+        "spacing_bottom": "4"
+      }
+    },
+    "new_items_mX6NA3": {
+      "type": "new-items",
+      "name": "New Arrivals Grid",
+      "settings": {
+        "anchor_id": "rare-finds",
+        "heading": "Rare Finds",
+        "text": "<p></p>",
+        "text_align": "center",
+        "text_max_width": 820,
+        "header_align": "center",
+        "header_max_width": 820,
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "600",
+        "header_letter_spacing": 0,
+        "header_uppercase": false,
+        "manual_products": [
+          "fujifilm-fp-100c",
+          "film-fuji-fp-3000b",
+          "konica-vx100-super",
+          "ilford-pan-50-b-w-expired-2007"
+        ],
+        "collection": "",
+        "use_newest_from_collection": false,
+        "full_rows_only": false,
+        "full_rows_columns_desktop": 5,
+        "disable_see_more": false,
+        "items_to_show": 12,
+        "initial_items": 12,
+        "show_more_label": "Display more",
+        "collapse_label": "Collapse",
+        "show_back_to_top": true,
+        "back_to_top_label": "Back to top",
+        "info_display": "hover",
+        "background_color": "#ffffff",
+        "text_color": "#1c1c1c",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "product_radius": 8,
+        "button_text": "SEE ALL",
+        "button_link": ""
+      }
+    },
+    "custom_liquid_D3VAMd": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.name",
+      "settings": {
+        "custom_liquid": "<script>\ndocument.addEventListener('DOMContentLoaded', function () {\n  var grid = document.getElementById('product-grid');\n  if (!grid) return;\n\n  // Only scroll if user came from your special page\n  // Replace '/pages/film' with your actual source page path if different\n  var ref = document.referrer || '';\n  if (ref.indexOf('/pages/film') === -1) {\n    return; // came from somewhere else (or via filter change) → do nothing\n  }\n\n  // One simple smooth scroll, never touching filters or URL\n  setTimeout(function () {\n    grid.scrollIntoView({\n      behavior: 'smooth',\n      block: 'start'\n    });\n  }, 200);\n});\n</script>",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    },
+    "product_recommendations_QrVpBw": {
+      "type": "product-recommendations",
+      "disabled": true,
+      "name": "t:sections.product-recommendations.name",
+      "settings": {
+        "layout": "layout-1",
+        "enable_slideshow_overflow": false,
+        "heading": "You may also like",
+        "heading_size": "h3",
+        "subheading": "",
+        "button_label": "View all",
+        "button_link": "shopify://collections/all",
+        "button_style": "button--filled",
+        "show_navigation_arrows": true,
+        "slider_autoplay": 3,
+        "tabs_button_style": "tab-btn-filled",
+        "max_products": 8,
+        "show_unavailable_products": false,
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    }
+  },
+  "order": [
+    "page_banner_jWtyM4",
+    "bfc_collection_editorial_bgkWxM",
+    "featured_collections_ybC3xQ",
+    "main",
+    "f8303da3-c3cb-4a90-a63a-7a628615aa6f",
+    "new_items_mX6NA3",
+    "custom_liquid_D3VAMd",
+    "product_recommendations_QrVpBw"
+  ]
+}

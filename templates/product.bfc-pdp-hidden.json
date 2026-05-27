@@ -1,1 +1,73 @@
-{"sections":{"main":{"type":"bfc-pdp-hidden","blocks":{"link_TcyePz":{"type":"link","settings":{"kicker":"","title":"Develop & Scans","url":"https:\/\/brooklynfilmcamera.com\/pages\/film-processing"}},"link_6W7xxG":{"type":"link","settings":{"kicker":"","title":"Extended Warranty","url":"https:\/\/brooklynfilmcamera.com\/pages\/purchase-extended-warranty"}}},"block_order":["link_TcyePz","link_6W7xxG"],"settings":{"eyebrow":"Add-on Product","headline":"This is an add-on item.","notice_text":"Uh-oh, you found yourself on a page that should be hidden :0 \n\nThis product can only be purchased on its applicable product page or as an add-on to another item.","links_label":"You may be looking for"}},"1778503267d0da4345":{"type":"apps","blocks":{"judge_me_reviews_review_widget_wfktdD":{"type":"shopify:\/\/apps\/judge-me-reviews\/blocks\/review_widget\/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8","settings":{"review_data":"sample_data","max_width":1200,"show_shop_reviews":false,"empty_state":"empty_widget"}}},"block_order":["judge_me_reviews_review_widget_wfktdD"],"settings":{"section_layout":"normal","spacing_inner":"2","section_width":"max-w-page","color_scheme":"","spacing_top":"2","spacing_bottom":"2"}}},"order":["main","1778503267d0da4345"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "bfc-pdp-hidden",
+      "blocks": {
+        "link_TcyePz": {
+          "type": "link",
+          "settings": {
+            "kicker": "",
+            "title": "Develop & Scans",
+            "url": "https://brooklynfilmcamera.com/pages/film-processing"
+          }
+        },
+        "link_6W7xxG": {
+          "type": "link",
+          "settings": {
+            "kicker": "",
+            "title": "Extended Warranty",
+            "url": "https://brooklynfilmcamera.com/pages/purchase-extended-warranty"
+          }
+        }
+      },
+      "block_order": [
+        "link_TcyePz",
+        "link_6W7xxG"
+      ],
+      "settings": {
+        "eyebrow": "Add-on Product",
+        "headline": "This is an add-on item.",
+        "notice_text": "Uh-oh, you found yourself on a page that should be hidden :0 \n\nThis product can only be purchased on its applicable product page or as an add-on to another item.",
+        "links_label": "You may be looking for"
+      }
+    },
+    "1778503267d0da4345": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_wfktdD": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_wfktdD"
+      ],
+      "settings": {
+        "section_layout": "normal",
+        "spacing_inner": "2",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1778503267d0da4345"
+  ]
+}

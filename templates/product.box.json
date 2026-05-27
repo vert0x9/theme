@@ -1,1 +1,234 @@
-{"sections":{"main":{"type":"bfc-pdp-box","blocks":{"kit_film_color":{"type":"kit_item","settings":{"label":"Film","custom_label":"600 Color","column":"Film","product":"polaroid-600-color-film","variant_id":"","discount_percent":0,"is_developing":false,"is_starter_kit":true}},"kit_film_bw":{"type":"kit_item","settings":{"label":"Film","custom_label":"600 B&W","column":"Film","product":"polaroid-600-bw-film","variant_id":"","discount_percent":0,"is_developing":false,"is_starter_kit":true}},"kit_optic_kaleidoscope":{"type":"kit_item","settings":{"label":"Instant Optics","custom_label":"Kaleidoscope Prism","column":"Instant Optics","product":"kaleidoscope-prism","variant_id":"","discount_percent":10,"is_developing":false,"is_starter_kit":false}},"kit_optic_diamond":{"type":"kit_item","settings":{"label":"Instant Optics","custom_label":"Diamond Prism","column":"Instant Optics","product":"diamond-prism","variant_id":"","discount_percent":10,"is_developing":false,"is_starter_kit":false}},"kit_optic_split":{"type":"kit_item","settings":{"label":"Instant Optics","custom_label":"Split Prism","column":"Instant Optics","product":"split-prism","variant_id":"","discount_percent":10,"is_developing":false,"is_starter_kit":false}},"kit_optic_vortex":{"type":"kit_item","settings":{"label":"Instant Optics","custom_label":"Vortex Prism","column":"Instant Optics","product":"vortex-prism","variant_id":"","discount_percent":10,"is_developing":false,"is_starter_kit":false}},"kit_optic_linear":{"type":"kit_item","settings":{"label":"Instant Optics","custom_label":"Linear Prism","column":"Instant Optics","product":"linear-prism","variant_id":"","discount_percent":10,"is_developing":false,"is_starter_kit":false}},"kit_optic_637":{"type":"kit_item","settings":{"label":"Instant Optics","custom_label":"637 Adapter","column":"Instant Optics","product":"637-adapter","variant_id":"","discount_percent":10,"is_developing":false,"is_starter_kit":false}},"kit_optic_wide":{"type":"kit_item","settings":{"label":"Instant Optics","custom_label":"Wide Angle Lens","column":"Instant Optics","product":"wide-angle-lens","variant_id":"","discount_percent":10,"is_developing":false,"is_starter_kit":false}},"kit_optic_fisheye":{"type":"kit_item","settings":{"label":"Instant Optics","custom_label":"Fisheye Lens","column":"Instant Optics","product":"fisheye-lens","variant_id":"","discount_percent":10,"is_developing":false,"is_starter_kit":false}},"kit_optic_telephoto":{"type":"kit_item","settings":{"label":"Instant Optics","custom_label":"Telephoto Lens","column":"Instant Optics","product":"telephoto-lens","variant_id":"","discount_percent":10,"is_developing":false,"is_starter_kit":false}},"kit_optic_macro":{"type":"kit_item","settings":{"label":"Instant Optics","custom_label":"Macro Lens Set","column":"Instant Optics","product":"macro-lens-set","variant_id":"","discount_percent":10,"is_developing":false,"is_starter_kit":false}},"kit_optic_nd":{"type":"kit_item","settings":{"label":"Instant Optics","custom_label":"ND Filter","column":"Instant Optics","product":"nd-filter","variant_id":"","discount_percent":10,"is_developing":false,"is_starter_kit":false}}},"block_order":["kit_film_color","kit_film_bw","kit_optic_kaleidoscope","kit_optic_diamond","kit_optic_split","kit_optic_vortex","kit_optic_linear","kit_optic_637","kit_optic_wide","kit_optic_fisheye","kit_optic_telephoto","kit_optic_macro","kit_optic_nd"],"settings":{"also_collection":"polaroid-600-cameras"}},"17735047409f77fd41":{"type":"apps","blocks":{"judge_me_reviews_review_widget_xgVpwA":{"type":"shopify:\/\/apps\/judge-me-reviews\/blocks\/review_widget\/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8","settings":{"review_data":"sample_data","max_width":1200,"show_shop_reviews":false,"empty_state":"empty_widget"}}},"block_order":["judge_me_reviews_review_widget_xgVpwA"],"settings":{"section_layout":"normal","spacing_inner":"2","section_width":"max-w-page","color_scheme":"","spacing_top":"2","spacing_bottom":"2"}}},"order":["main","17735047409f77fd41"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "bfc-pdp-box",
+      "blocks": {
+        "kit_film_color": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "600 Color",
+            "column": "Film",
+            "product": "polaroid-600-color-film",
+            "variant_id": "",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": true
+          }
+        },
+        "kit_film_bw": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "600 B&W",
+            "column": "Film",
+            "product": "polaroid-600-bw-film",
+            "variant_id": "",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": true
+          }
+        },
+        "kit_optic_kaleidoscope": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Instant Optics",
+            "custom_label": "Kaleidoscope Prism",
+            "column": "Instant Optics",
+            "product": "kaleidoscope-prism",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_optic_diamond": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Instant Optics",
+            "custom_label": "Diamond Prism",
+            "column": "Instant Optics",
+            "product": "diamond-prism",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_optic_split": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Instant Optics",
+            "custom_label": "Split Prism",
+            "column": "Instant Optics",
+            "product": "split-prism",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_optic_vortex": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Instant Optics",
+            "custom_label": "Vortex Prism",
+            "column": "Instant Optics",
+            "product": "vortex-prism",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_optic_linear": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Instant Optics",
+            "custom_label": "Linear Prism",
+            "column": "Instant Optics",
+            "product": "linear-prism",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_optic_637": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Instant Optics",
+            "custom_label": "637 Adapter",
+            "column": "Instant Optics",
+            "product": "637-adapter",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_optic_wide": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Instant Optics",
+            "custom_label": "Wide Angle Lens",
+            "column": "Instant Optics",
+            "product": "wide-angle-lens",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_optic_fisheye": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Instant Optics",
+            "custom_label": "Fisheye Lens",
+            "column": "Instant Optics",
+            "product": "fisheye-lens",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_optic_telephoto": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Instant Optics",
+            "custom_label": "Telephoto Lens",
+            "column": "Instant Optics",
+            "product": "telephoto-lens",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_optic_macro": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Instant Optics",
+            "custom_label": "Macro Lens Set",
+            "column": "Instant Optics",
+            "product": "macro-lens-set",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_optic_nd": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Instant Optics",
+            "custom_label": "ND Filter",
+            "column": "Instant Optics",
+            "product": "nd-filter",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        }
+      },
+      "block_order": [
+        "kit_film_color",
+        "kit_film_bw",
+        "kit_optic_kaleidoscope",
+        "kit_optic_diamond",
+        "kit_optic_split",
+        "kit_optic_vortex",
+        "kit_optic_linear",
+        "kit_optic_637",
+        "kit_optic_wide",
+        "kit_optic_fisheye",
+        "kit_optic_telephoto",
+        "kit_optic_macro",
+        "kit_optic_nd"
+      ],
+      "settings": {
+        "also_collection": "polaroid-600-cameras"
+      }
+    },
+    "17735047409f77fd41": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_xgVpwA": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_xgVpwA"
+      ],
+      "settings": {
+        "section_layout": "normal",
+        "spacing_inner": "2",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "17735047409f77fd41"
+  ]
+}

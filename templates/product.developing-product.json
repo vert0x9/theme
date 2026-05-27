@@ -1,1 +1,200 @@
-{"sections":{"main":{"type":"main-product","blocks":{"badge_Hkd38r":{"type":"badge","settings":{"spacing_bottom":"1","show_badges":true,"show_badges_discount":true,"show_badges_sold":true}},"1e0c79e9-7de0-4eee-b9c5-f27132635fb8":{"type":"title","settings":{"heading_size":"h6","spacing_bottom":"1"}},"8effeb43-55b7-4ec4-ab9b-68bcd89b865b":{"type":"price","settings":{"spacing_bottom":"1","show_price_tax_info":true,"show_price_shipping_info":false,"show_price_custom_info":""}},"description_qA3HqH":{"type":"description","settings":{"spacing_bottom":"4","behaviour":"plain","heading":"","text_truncate":0,"icon":"theme-box","metafield_for_product_variant":"","show_block_content":true}},"1e939cd6-0958-4135-a9e5-c50faef01437":{"type":"variant_picker","settings":{"spacing_bottom":"4","title":"Variant picker","enable_back_in_stock":true,"picker_type":"dropdown","variant_options_with_thumbnails":"Color","size_guide_page":"size-guide","sizes_option":"Size"}},"1e939cd6-0955-4135-a9e5-c50faef01437":{"type":"purchase_options","settings":{"spacing_bottom":"1","show_subscription_title":true,"show_subscription_custom_info":"","show_subscription_policy":true}},"globo_product_options_variant_app_block_Vqkqzg":{"type":"shopify:\/\/apps\/globo-product-options\/blocks\/app-block\/fdc9fad5-1a0f-4bd4-9c8a-1af6a6eef6b8","settings":{}},"8604a6ff-ad0b-44dd-8068-1de4e062f8e8":{"type":"buy_buttons","settings":{"spacing_bottom":"4","show_quantity":true,"layout":"inline","show_dynamic_checkout":true,"show_gift_card_recipient":false}},"custom_liquid_xqAt6H":{"type":"custom_liquid","settings":{"spacing_bottom":"1","custom_liquid":""}},"content_grid_W3Mqy6":{"type":"content_grid","settings":{"heading":"2-3 Day Turnaround","icon":"theme-box"}},"content_grid_iCJFCN":{"type":"content_grid","settings":{"heading":"Notristu Scanning","icon":"theme-box"}},"content_grid_HTRRPP":{"type":"content_grid","settings":{"heading":"High Quality Scans","icon":"theme-box"}},"content_grid_AAkHkC":{"type":"content_grid","settings":{"heading":"Affordable Rates","icon":"theme-box"}},"complementary_products_tKerNK":{"type":"complementary_products","settings":{"spacing_bottom":"1","heading":"You may also like","icon":"theme-box","limit":4}}},"block_order":["badge_Hkd38r","1e0c79e9-7de0-4eee-b9c5-f27132635fb8","8effeb43-55b7-4ec4-ab9b-68bcd89b865b","description_qA3HqH","1e939cd6-0958-4135-a9e5-c50faef01437","1e939cd6-0955-4135-a9e5-c50faef01437","globo_product_options_variant_app_block_Vqkqzg","8604a6ff-ad0b-44dd-8068-1de4e062f8e8","custom_liquid_xqAt6H","content_grid_W3Mqy6","content_grid_iCJFCN","content_grid_HTRRPP","content_grid_AAkHkC","complementary_products_tKerNK"],"settings":{"product_media_layout":"product__media-layout--grid","product_media_layout_mobile":"product__media-layout--partial--sm","product_media_aspect_ratio":"fit","product_media_object_fit":"cover","product_slider_auto_height":false,"media_transparent_background":true,"display_media_zoom":"click","product_media_with_thumbs":"only_mobile","product_media_thumbs_ratio":"square","product_media_thumbs_object_fit":"cover","gallery_arrows_show_on":"desktop","display_media_gallery_pagination":"none","media_gallery_info":"","metafield_as_seen_on":"theme.as_seen_on","color_scheme_gallery":"","enable_sticky_info":true,"enable_actions_bar":true,"media_grid_size":"large","media_grid_position":"start","grid_gap":"2","spacing_grid":1.6,"grid_content_alignment":"start","section_width":"max-w-fluid","color_scheme":"scheme-1","spacing_top":"2","spacing_bottom":"0"}},"1754512899714fc58c":{"type":"apps","settings":{"section_layout":"normal","spacing_inner":"2","section_width":"max-w-page","color_scheme":"","spacing_top":"2","spacing_bottom":"2"}},"custom_liquid_cPLmCC":{"type":"custom-liquid","name":"t:sections.custom-liquid.name","settings":{"custom_liquid":"","section_width":"max-w-page","color_scheme":"","spacing_top":"2","spacing_bottom":"2"}}},"order":["main","1754512899714fc58c","custom_liquid_cPLmCC"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "badge_Hkd38r": {
+          "type": "badge",
+          "settings": {
+            "spacing_bottom": "1",
+            "show_badges": true,
+            "show_badges_discount": true,
+            "show_badges_sold": true
+          }
+        },
+        "1e0c79e9-7de0-4eee-b9c5-f27132635fb8": {
+          "type": "title",
+          "settings": {
+            "heading_size": "h6",
+            "spacing_bottom": "1"
+          }
+        },
+        "8effeb43-55b7-4ec4-ab9b-68bcd89b865b": {
+          "type": "price",
+          "settings": {
+            "spacing_bottom": "1",
+            "show_price_tax_info": true,
+            "show_price_shipping_info": false,
+            "show_price_custom_info": ""
+          }
+        },
+        "description_qA3HqH": {
+          "type": "description",
+          "settings": {
+            "spacing_bottom": "4",
+            "behaviour": "plain",
+            "heading": "",
+            "text_truncate": 0,
+            "icon": "theme-box",
+            "metafield_for_product_variant": "",
+            "show_block_content": true
+          }
+        },
+        "1e939cd6-0958-4135-a9e5-c50faef01437": {
+          "type": "variant_picker",
+          "settings": {
+            "spacing_bottom": "4",
+            "title": "Variant picker",
+            "enable_back_in_stock": true,
+            "picker_type": "dropdown",
+            "variant_options_with_thumbnails": "Color",
+            "size_guide_page": "size-guide",
+            "sizes_option": "Size"
+          }
+        },
+        "1e939cd6-0955-4135-a9e5-c50faef01437": {
+          "type": "purchase_options",
+          "settings": {
+            "spacing_bottom": "1",
+            "show_subscription_title": true,
+            "show_subscription_custom_info": "",
+            "show_subscription_policy": true
+          }
+        },
+        "8604a6ff-ad0b-44dd-8068-1de4e062f8e8": {
+          "type": "buy_buttons",
+          "settings": {
+            "spacing_bottom": "4",
+            "show_quantity": true,
+            "layout": "inline",
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": false
+          }
+        },
+        "custom_liquid_xqAt6H": {
+          "type": "custom_liquid",
+          "settings": {
+            "spacing_bottom": "1",
+            "custom_liquid": ""
+          }
+        },
+        "content_grid_W3Mqy6": {
+          "type": "content_grid",
+          "settings": {
+            "heading": "2-3 Day Turnaround",
+            "icon": "theme-box"
+          }
+        },
+        "content_grid_iCJFCN": {
+          "type": "content_grid",
+          "settings": {
+            "heading": "Notristu Scanning",
+            "icon": "theme-box"
+          }
+        },
+        "content_grid_HTRRPP": {
+          "type": "content_grid",
+          "settings": {
+            "heading": "High Quality Scans",
+            "icon": "theme-box"
+          }
+        },
+        "content_grid_AAkHkC": {
+          "type": "content_grid",
+          "settings": {
+            "heading": "Affordable Rates",
+            "icon": "theme-box"
+          }
+        },
+        "complementary_products_tKerNK": {
+          "type": "complementary_products",
+          "settings": {
+            "spacing_bottom": "1",
+            "heading": "You may also like",
+            "icon": "theme-box",
+            "limit": 4
+          }
+        }
+      },
+      "block_order": [
+        "badge_Hkd38r",
+        "1e0c79e9-7de0-4eee-b9c5-f27132635fb8",
+        "8effeb43-55b7-4ec4-ab9b-68bcd89b865b",
+        "description_qA3HqH",
+        "1e939cd6-0958-4135-a9e5-c50faef01437",
+        "1e939cd6-0955-4135-a9e5-c50faef01437",
+        "8604a6ff-ad0b-44dd-8068-1de4e062f8e8",
+        "custom_liquid_xqAt6H",
+        "content_grid_W3Mqy6",
+        "content_grid_iCJFCN",
+        "content_grid_HTRRPP",
+        "content_grid_AAkHkC",
+        "complementary_products_tKerNK"
+      ],
+      "settings": {
+        "product_media_layout": "product__media-layout--grid",
+        "product_media_layout_mobile": "product__media-layout--partial--sm",
+        "product_media_aspect_ratio": "fit",
+        "product_media_object_fit": "cover",
+        "product_slider_auto_height": false,
+        "media_transparent_background": true,
+        "display_media_zoom": "click",
+        "product_media_with_thumbs": "only_mobile",
+        "product_media_thumbs_ratio": "square",
+        "product_media_thumbs_object_fit": "cover",
+        "gallery_arrows_show_on": "desktop",
+        "display_media_gallery_pagination": "none",
+        "media_gallery_info": "",
+        "metafield_as_seen_on": "theme.as_seen_on",
+        "color_scheme_gallery": "",
+        "enable_sticky_info": true,
+        "enable_actions_bar": true,
+        "media_grid_size": "large",
+        "media_grid_position": "start",
+        "grid_gap": "2",
+        "spacing_grid": 1.6,
+        "grid_content_alignment": "start",
+        "section_width": "max-w-fluid",
+        "color_scheme": "scheme-1",
+        "spacing_top": "2",
+        "spacing_bottom": "0"
+      }
+    },
+    "1754512899714fc58c": {
+      "type": "apps",
+      "settings": {
+        "section_layout": "normal",
+        "spacing_inner": "2",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    },
+    "custom_liquid_cPLmCC": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.name",
+      "settings": {
+        "custom_liquid": "",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1754512899714fc58c",
+    "custom_liquid_cPLmCC"
+  ]
+}

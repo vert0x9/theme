@@ -1,1 +1,499 @@
-{"order":["main","1769711816bbdcace5","complete_the_set_QRxhyG","multitile_KDV8BX","recommendations","166904322806a89075","complete_the_set_Mf7jik","175641204134f8dd6a"],"sections":{"166904322806a89075":{"block_order":["glow_loyalty_points_rewards_product_page_glow_rwUxyU"],"blocks":{"glow_loyalty_points_rewards_product_page_glow_rwUxyU":{"settings":{"custom_css":"","display_style":"filled","hide_icon":false,"primary_color":"#D81E5B","primary_font":"system_ui_n4","secondary_color":"#E0E7FF"},"type":"shopify://apps/glow-loyalty-points-rewards/blocks/product-page-glow/8e06b0b7-8ed0-4c1c-b8df-ddd1b65e0607"}},"settings":{"color_scheme":"","section_layout":"normal","section_width":"max-w-page","spacing_bottom":"2","spacing_inner":"2","spacing_top":"2"},"type":"apps"},"175641204134f8dd6a":{"block_order":["subi_subscriptions_app_block_nptcyw"],"blocks":{"subi_subscriptions_app_block_nptcyw":{"settings":{"delivery_frequency_text":"Delivery frequency","from":"from","max_discount_badge_title":"UP To","one_time_purchase_text":"One-Time Purchase","pay":"Pay","prepaid_subscription_text":"Subscription with prepaid","price_save_up_to":"save up to","product":"{{product}}","skin1_normal_payment_title":"pay as you go","skin1_prepaid_payment_title":"prepaid","skin1_priceSuffix":"each","skin1_save":"Save(skin1)","skin2_discountSuffix":"Save","skin3_discountSuffix":"Off","skin3_fullPrice":"Full price","skin3_priceSuffix":"each","skin4_discountSuffix":"Off","skin4_fullPrice":"(Full price)","skin4_justOnce":"Just once","skin4_priceSuffix":"each","skin4_sellingPlansTitle":"Renews every:","subscription_text":"Subscribe and save","use_app_block_wording":false,"widget_label":"Purchase options"},"type":"shopify://apps/subi-subscriptions/blocks/app-block/bc0dba25-cd46-4841-bea4-6bdfe9ac815f"}},"disabled":true,"settings":{"color_scheme":"","section_layout":"normal","section_width":"max-w-page","spacing_bottom":"2","spacing_inner":"2","spacing_top":"2"},"type":"apps"},"1769711816bbdcace5":{"settings":{"color_scheme":"","section_layout":"normal","section_width":"max-w-page","spacing_bottom":"2","spacing_inner":"2","spacing_top":"2"},"type":"apps"},"complete_the_set_Mf7jik":{"block_order":["collapsible_QQzpVG","collapsible_4ijA4L","collapsible_xFw8rk"],"blocks":{"collapsible_4ijA4L":{"settings":{"block_type":"drawer","content":"\u003cp\u003eShipping and returns can be inserted here.\u003c/p\u003e","heading":"Delivery \u0026 Returns","link":"","page":""},"type":"collapsible"},"collapsible_QQzpVG":{"settings":{"block_type":"collapsible","content":"\u003cp\u003e[description]\u003c/p\u003e","heading":"Description","link":"","page":""},"type":"collapsible"},"collapsible_xFw8rk":{"settings":{"block_type":"drawer","content":"\u003cp\u003eContact information can be entered here.\u003c/p\u003e","heading":"Contact us","link":"","page":""},"type":"collapsible"}},"disabled":true,"name":"t:sections.complete-the-set.name","settings":{"color_scheme":"","content_heading":"Similar items","content_type":"products","featured_image_aspect_ratio":"4/3","flip_desktop":true,"flip_mobile":true,"heading":"More info","heading_size":"h3","open_first_collapsible":true,"section_width":"max-w-page","spacing_bottom":"2","spacing_top":"2"},"type":"complete-the-set"},"complete_the_set_QRxhyG":{"block_order":["collapsible_Y3m9DD","collapsible_RLd3Xc"],"blocks":{"collapsible_RLd3Xc":{"settings":{"block_type":"collapsible","content":"\u003cp\u003eWe ship most orders same day, but our processing times are based on 2 day delivery. We delivery via USPS \u0026 UPS or whatever carrier you select. Most domestic shipments are delivered within 2-4 days.\u003cbr/\u003e\u003cbr/\u003eIt is always free to choose pickup in store and your item is typically ready within a few hours\u003c/p\u003e","heading":"Delivery \u0026 Pickup","link":"","page":""},"type":"collapsible"},"collapsible_Y3m9DD":{"settings":{"block_type":"collapsible","content":"\u003cp\u003eYou can view our whole warranty policy \u003ca href=\"/pages/warranty-new-delete-old-when-swap\" target=\"_blank\" title=\"Warranty\"\u003ehere.\u003c/a\u003e Cameras come with a variable based warranty and are guaranteed working and fully refurbished. \u003cbr/\u003e\u003cbr/\u003eWe accept returns by choice on cameras and non film items 14 days after sale with a 15% restocking fee. Returned items must be brought back to us in the same physical condition they got to you.\u003c/p\u003e","heading":"Warranty, Returns and Exchanges","link":"","page":""},"type":"collapsible"}},"settings":{"color_scheme":"","content_heading":"Similar items","content_type":"products","featured_image_aspect_ratio":"4/3","flip_desktop":true,"flip_mobile":true,"heading":"More info","heading_size":"h5","open_first_collapsible":false,"section_width":"max-w-fluid","spacing_bottom":"2","spacing_top":"6"},"type":"complete-the-set"},"main":{"block_order":["badge_Hkd38r","1e0c79e9-7de0-4eee-b9c5-f27132635fb8","1e939cd6-0958-4135-a9e5-c50faef01437","8effeb43-55b7-4ec4-ab9b-68bcd89b865b","description_qA3HqH","1e939cd6-0955-4135-a9e5-c50faef01437","fbp_fast_bundle_add_on_position_RWRP8m","8604a6ff-ad0b-44dd-8068-1de4e062f8e8","e6d841d6-2f71-40b3-956a-912df13f9f6e","7be6b89c-da83-4ff2-9b85-44fb28cbfa27","content_grid_W3Mqy6","content_grid_iCJFCN","content_grid_HTRRPP","content_grid_AAkHkC","complementary_products_tKerNK"],"blocks":{"1e0c79e9-7de0-4eee-b9c5-f27132635fb8":{"settings":{"heading_size":"h6","spacing_bottom":"1"},"type":"title"},"1e939cd6-0955-4135-a9e5-c50faef01437":{"settings":{"show_subscription_custom_info":"","show_subscription_policy":true,"show_subscription_title":true,"spacing_bottom":"1"},"type":"purchase_options"},"1e939cd6-0958-4135-a9e5-c50faef01437":{"settings":{"enable_back_in_stock":false,"picker_type":"swatch","size_guide_page":"size-guide","sizes_option":"Size","spacing_bottom":"4","title":"Variant picker","variant_options_with_thumbnails":"Color"},"type":"variant_picker"},"7be6b89c-da83-4ff2-9b85-44fb28cbfa27":{"settings":{"spacing_bottom":"1"},"type":"pickup-availability"},"8604a6ff-ad0b-44dd-8068-1de4e062f8e8":{"settings":{"layout":"seperate","show_dynamic_checkout":true,"show_gift_card_recipient":false,"show_quantity":true,"spacing_bottom":"2"},"type":"buy_buttons"},"8effeb43-55b7-4ec4-ab9b-68bcd89b865b":{"settings":{"show_price_custom_info":"","show_price_shipping_info":false,"show_price_tax_info":true,"spacing_bottom":"1"},"type":"price"},"badge_Hkd38r":{"settings":{"show_badges":true,"show_badges_discount":true,"show_badges_sold":true,"spacing_bottom":"1"},"type":"badge"},"complementary_products_tKerNK":{"disabled":true,"settings":{"heading":"You may also like","icon":"theme-box","limit":4,"spacing_bottom":"1"},"type":"complementary_products"},"content_grid_AAkHkC":{"disabled":true,"settings":{"heading":"Free climate compensated shipping","icon":"theme-box"},"type":"content_grid"},"content_grid_HTRRPP":{"disabled":true,"settings":{"heading":"100% secure payments","icon":"theme-box"},"type":"content_grid"},"content_grid_W3Mqy6":{"settings":{"heading":"fast global shipping","icon":"theme-box"},"type":"content_grid"},"content_grid_iCJFCN":{"settings":{"heading":"local business","icon":"theme-box"},"type":"content_grid"},"description_qA3HqH":{"settings":{"behaviour":"plain","heading":"","icon":"theme-box","metafield_for_product_variant":"","show_block_content":true,"spacing_bottom":"1","text_truncate":0},"type":"description"},"e6d841d6-2f71-40b3-956a-912df13f9f6e":{"settings":{"inventory_threshold":15,"notice_just_text":false,"spacing_bottom":"1"},"type":"inventory_notice"},"fbp_fast_bundle_add_on_position_RWRP8m":{"settings":{},"type":"shopify://apps/fbp-fast-bundle/blocks/addOn_position/9e87fbe2-9041-4c23-acf5-322413994cef"}},"settings":{"color_scheme":"scheme-1","color_scheme_gallery":"","display_media_gallery_pagination":"none","display_media_zoom":"click","enable_actions_bar":true,"enable_sticky_info":true,"gallery_arrows_show_on":"desktop","grid_content_alignment":"start","grid_gap":"2","media_gallery_info":"","media_grid_position":"start","media_grid_size":"large","media_transparent_background":true,"metafield_as_seen_on":"theme.as_seen_on","product_media_aspect_ratio":"fit","product_media_layout":"product__media-layout--full","product_media_layout_mobile":"product__media-layout--full--sm","product_media_object_fit":"cover","product_media_thumbs_object_fit":"contain","product_media_thumbs_ratio":"square","product_media_with_thumbs":"only_mobile","product_slider_auto_height":false,"section_width":"max-w-fluid","spacing_bottom":"0","spacing_grid":1.6,"spacing_top":"2"},"type":"main-product"},"multitile_KDV8BX":{"block_order":["tile_qpzFf7","tile_kkJDV4","tile_aT3xD9"],"blocks":{"tile_aT3xD9":{"settings":{"button_label":"","button_link":"","button_style":"button--filled","color_scheme":"scheme-8","column_factor":3,"content_alignment":"align-center text-center","content_alignment_for_mobile":"start","content_position_vertical":"justify-center","gradient_background_color":"","heading":"Amazing details. Organic fabrics.","heading_size":"h3","media_position":"background","row_factor":1,"show_controls_on_video":false,"show_controls_on_video_mobile":false,"show_on":"both","spacing_inner":"6","text":"","tile_aspect_ratio":"auto","video_external":"","video_external_mobile":""},"type":"tile"},"tile_kkJDV4":{"settings":{"button_label":"","button_link":"","button_style":"button--filled","color_scheme":"","column_factor":3,"content_alignment":"align-center text-center","content_alignment_for_mobile":"start","content_position_vertical":"justify-center","gradient_background_color":"","heading":"","heading_size":"h3","media_position":"background","row_factor":2,"show_controls_on_video":false,"show_controls_on_video_mobile":false,"show_on":"both","spacing_inner":"2","text":"","tile_aspect_ratio":"auto","video_external":"","video_external_mobile":""},"type":"tile"},"tile_qpzFf7":{"settings":{"button_label":"","button_link":"","button_style":"button--filled","color_scheme":"","column_factor":3,"content_alignment":"align-center text-center","content_alignment_for_mobile":"start","content_position_vertical":"justify-center","gradient_background_color":"","heading":"","heading_size":"h3","media_position":"background","row_factor":1,"show_controls_on_video":false,"show_controls_on_video_mobile":false,"show_on":"both","spacing_inner":"2","text":"","tile_aspect_ratio":"1/1","video_external":"","video_external_mobile":""},"type":"tile"}},"disabled":true,"settings":{"block_order_mobile":false,"color_scheme":"","heading":"","heading_alignment":"start","heading_size":"h3","section_width":"max-w-fluid","spacing_bottom":"2","spacing_tile":"default","spacing_top":"2"},"type":"multitile"},"recommendations":{"settings":{"button_label":"View all","button_link":"shopify://collections/all","button_style":"button--filled","color_scheme":"","enable_slideshow_overflow":false,"heading":"You may also like","heading_size":"h4","layout":"layout-1","max_products":8,"section_width":"max-w-fluid","show_navigation_arrows":true,"show_unavailable_products":false,"slider_autoplay":10,"spacing_bottom":"4","spacing_top":"4","subheading":"","tabs_button_style":"tab-btn-filled"},"type":"product-recommendations"}}}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "order": [
+    "main",
+    "1769711816bbdcace5",
+    "complete_the_set_QRxhyG",
+    "multitile_KDV8BX",
+    "recommendations",
+    "166904322806a89075",
+    "complete_the_set_Mf7jik",
+    "175641204134f8dd6a"
+  ],
+  "sections": {
+    "166904322806a89075": {
+      "type": "apps",
+      "blocks": {
+        "glow_loyalty_points_rewards_product_page_glow_rwUxyU": {
+          "type": "shopify://apps/glow-loyalty-points-rewards/blocks/product-page-glow/8e06b0b7-8ed0-4c1c-b8df-ddd1b65e0607",
+          "settings": {
+            "primary_color": "#D81E5B",
+            "secondary_color": "#E0E7FF",
+            "display_style": "filled",
+            "primary_font": "system_ui_n4",
+            "hide_icon": false,
+            "custom_css": ""
+          }
+        }
+      },
+      "block_order": [
+        "glow_loyalty_points_rewards_product_page_glow_rwUxyU"
+      ],
+      "settings": {
+        "section_layout": "normal",
+        "spacing_inner": "2",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    },
+    "175641204134f8dd6a": {
+      "type": "apps",
+      "blocks": {
+        "subi_subscriptions_app_block_nptcyw": {
+          "type": "shopify://apps/subi-subscriptions/blocks/app-block/bc0dba25-cd46-4841-bea4-6bdfe9ac815f",
+          "settings": {
+            "product": "{{product}}",
+            "use_app_block_wording": false,
+            "widget_label": "Purchase options",
+            "one_time_purchase_text": "One-Time Purchase",
+            "subscription_text": "Subscribe and save",
+            "delivery_frequency_text": "Delivery frequency",
+            "prepaid_subscription_text": "Subscription with prepaid",
+            "skin1_priceSuffix": "each",
+            "skin1_save": "Save(skin1)",
+            "skin1_prepaid_payment_title": "prepaid",
+            "skin1_normal_payment_title": "pay as you go",
+            "skin2_discountSuffix": "Save",
+            "skin3_fullPrice": "Full price",
+            "skin3_priceSuffix": "each",
+            "skin3_discountSuffix": "Off",
+            "skin4_justOnce": "Just once",
+            "skin4_discountSuffix": "Off",
+            "skin4_priceSuffix": "each",
+            "skin4_fullPrice": "(Full price)",
+            "skin4_sellingPlansTitle": "Renews every:",
+            "from": "from",
+            "max_discount_badge_title": "UP To",
+            "pay": "Pay",
+            "price_save_up_to": "save up to"
+          }
+        }
+      },
+      "block_order": [
+        "subi_subscriptions_app_block_nptcyw"
+      ],
+      "disabled": true,
+      "settings": {
+        "section_layout": "normal",
+        "spacing_inner": "2",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    },
+    "1769711816bbdcace5": {
+      "type": "apps",
+      "settings": {
+        "section_layout": "normal",
+        "spacing_inner": "2",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    },
+    "complete_the_set_Mf7jik": {
+      "type": "complete-the-set",
+      "blocks": {
+        "collapsible_4ijA4L": {
+          "type": "collapsible",
+          "settings": {
+            "block_type": "drawer",
+            "heading": "Delivery & Returns",
+            "link": "",
+            "content": "<p>Shipping and returns can be inserted here.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_QQzpVG": {
+          "type": "collapsible",
+          "settings": {
+            "block_type": "collapsible",
+            "heading": "Description",
+            "link": "",
+            "content": "<p>[description]</p>",
+            "page": ""
+          }
+        },
+        "collapsible_xFw8rk": {
+          "type": "collapsible",
+          "settings": {
+            "block_type": "drawer",
+            "heading": "Contact us",
+            "link": "",
+            "content": "<p>Contact information can be entered here.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_QQzpVG",
+        "collapsible_4ijA4L",
+        "collapsible_xFw8rk"
+      ],
+      "disabled": true,
+      "name": "t:sections.complete-the-set.name",
+      "settings": {
+        "heading": "More info",
+        "content_heading": "Similar items",
+        "heading_size": "h3",
+        "content_type": "products",
+        "featured_image_aspect_ratio": "4/3",
+        "open_first_collapsible": true,
+        "flip_desktop": true,
+        "flip_mobile": true,
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    },
+    "complete_the_set_QRxhyG": {
+      "type": "complete-the-set",
+      "blocks": {
+        "collapsible_RLd3Xc": {
+          "type": "collapsible",
+          "settings": {
+            "block_type": "collapsible",
+            "heading": "Delivery & Pickup",
+            "link": "",
+            "content": "<p>We ship most orders same day, but our processing times are based on 2 day delivery. We delivery via USPS & UPS or whatever carrier you select. Most domestic shipments are delivered within 2-4 days.<br/><br/>It is always free to choose pickup in store and your item is typically ready within a few hours</p>",
+            "page": ""
+          }
+        },
+        "collapsible_Y3m9DD": {
+          "type": "collapsible",
+          "settings": {
+            "block_type": "collapsible",
+            "heading": "Warranty, Returns and Exchanges",
+            "link": "",
+            "content": "<p>You can view our whole warranty policy <a href=\"/pages/warranty-new-delete-old-when-swap\" target=\"_blank\" title=\"Warranty\">here.</a> Cameras come with a variable based warranty and are guaranteed working and fully refurbished. <br/><br/>We accept returns by choice on cameras and non film items 14 days after sale with a 15% restocking fee. Returned items must be brought back to us in the same physical condition they got to you.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_Y3m9DD",
+        "collapsible_RLd3Xc"
+      ],
+      "settings": {
+        "heading": "More info",
+        "content_heading": "Similar items",
+        "heading_size": "h5",
+        "content_type": "products",
+        "featured_image_aspect_ratio": "4/3",
+        "open_first_collapsible": false,
+        "flip_desktop": true,
+        "flip_mobile": true,
+        "section_width": "max-w-fluid",
+        "color_scheme": "",
+        "spacing_top": "6",
+        "spacing_bottom": "2"
+      }
+    },
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "1e0c79e9-7de0-4eee-b9c5-f27132635fb8": {
+          "type": "title",
+          "settings": {
+            "heading_size": "h6",
+            "spacing_bottom": "1"
+          }
+        },
+        "1e939cd6-0955-4135-a9e5-c50faef01437": {
+          "type": "purchase_options",
+          "settings": {
+            "spacing_bottom": "1",
+            "show_subscription_title": true,
+            "show_subscription_custom_info": "",
+            "show_subscription_policy": true
+          }
+        },
+        "1e939cd6-0958-4135-a9e5-c50faef01437": {
+          "type": "variant_picker",
+          "settings": {
+            "spacing_bottom": "4",
+            "title": "Variant picker",
+            "enable_back_in_stock": false,
+            "picker_type": "swatch",
+            "variant_options_with_thumbnails": "Color",
+            "size_guide_page": "size-guide",
+            "sizes_option": "Size"
+          }
+        },
+        "7be6b89c-da83-4ff2-9b85-44fb28cbfa27": {
+          "type": "pickup-availability",
+          "settings": {
+            "spacing_bottom": "1"
+          }
+        },
+        "8604a6ff-ad0b-44dd-8068-1de4e062f8e8": {
+          "type": "buy_buttons",
+          "settings": {
+            "spacing_bottom": "2",
+            "show_quantity": true,
+            "layout": "seperate",
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": false
+          }
+        },
+        "8effeb43-55b7-4ec4-ab9b-68bcd89b865b": {
+          "type": "price",
+          "settings": {
+            "spacing_bottom": "1",
+            "show_price_tax_info": true,
+            "show_price_shipping_info": false,
+            "show_price_custom_info": ""
+          }
+        },
+        "badge_Hkd38r": {
+          "type": "badge",
+          "settings": {
+            "spacing_bottom": "1",
+            "show_badges": true,
+            "show_badges_discount": true,
+            "show_badges_sold": true
+          }
+        },
+        "complementary_products_tKerNK": {
+          "type": "complementary_products",
+          "disabled": true,
+          "settings": {
+            "spacing_bottom": "1",
+            "heading": "You may also like",
+            "icon": "theme-box",
+            "limit": 4
+          }
+        },
+        "content_grid_AAkHkC": {
+          "type": "content_grid",
+          "disabled": true,
+          "settings": {
+            "heading": "Free climate compensated shipping",
+            "icon": "theme-box"
+          }
+        },
+        "content_grid_HTRRPP": {
+          "type": "content_grid",
+          "disabled": true,
+          "settings": {
+            "heading": "100% secure payments",
+            "icon": "theme-box"
+          }
+        },
+        "content_grid_W3Mqy6": {
+          "type": "content_grid",
+          "settings": {
+            "heading": "fast global shipping",
+            "icon": "theme-box"
+          }
+        },
+        "content_grid_iCJFCN": {
+          "type": "content_grid",
+          "settings": {
+            "heading": "local business",
+            "icon": "theme-box"
+          }
+        },
+        "description_qA3HqH": {
+          "type": "description",
+          "settings": {
+            "spacing_bottom": "1",
+            "behaviour": "plain",
+            "heading": "",
+            "text_truncate": 0,
+            "icon": "theme-box",
+            "metafield_for_product_variant": "",
+            "show_block_content": true
+          }
+        },
+        "e6d841d6-2f71-40b3-956a-912df13f9f6e": {
+          "type": "inventory_notice",
+          "settings": {
+            "spacing_bottom": "1",
+            "inventory_threshold": 15,
+            "notice_just_text": false
+          }
+        }
+      },
+      "block_order": [
+        "badge_Hkd38r",
+        "1e0c79e9-7de0-4eee-b9c5-f27132635fb8",
+        "1e939cd6-0958-4135-a9e5-c50faef01437",
+        "8effeb43-55b7-4ec4-ab9b-68bcd89b865b",
+        "description_qA3HqH",
+        "1e939cd6-0955-4135-a9e5-c50faef01437",
+        "8604a6ff-ad0b-44dd-8068-1de4e062f8e8",
+        "e6d841d6-2f71-40b3-956a-912df13f9f6e",
+        "7be6b89c-da83-4ff2-9b85-44fb28cbfa27",
+        "content_grid_W3Mqy6",
+        "content_grid_iCJFCN",
+        "content_grid_HTRRPP",
+        "content_grid_AAkHkC",
+        "complementary_products_tKerNK"
+      ],
+      "settings": {
+        "product_media_layout": "product__media-layout--full",
+        "product_media_layout_mobile": "product__media-layout--full--sm",
+        "product_media_aspect_ratio": "fit",
+        "product_media_object_fit": "cover",
+        "product_slider_auto_height": false,
+        "media_transparent_background": true,
+        "display_media_zoom": "click",
+        "product_media_with_thumbs": "only_mobile",
+        "product_media_thumbs_ratio": "square",
+        "product_media_thumbs_object_fit": "contain",
+        "gallery_arrows_show_on": "desktop",
+        "display_media_gallery_pagination": "none",
+        "media_gallery_info": "",
+        "metafield_as_seen_on": "theme.as_seen_on",
+        "color_scheme_gallery": "",
+        "enable_sticky_info": true,
+        "enable_actions_bar": true,
+        "media_grid_size": "large",
+        "media_grid_position": "start",
+        "grid_gap": "2",
+        "spacing_grid": 1.6,
+        "grid_content_alignment": "start",
+        "section_width": "max-w-fluid",
+        "color_scheme": "scheme-1",
+        "spacing_top": "2",
+        "spacing_bottom": "0"
+      }
+    },
+    "multitile_KDV8BX": {
+      "type": "multitile",
+      "blocks": {
+        "tile_aT3xD9": {
+          "type": "tile",
+          "settings": {
+            "show_on": "both",
+            "column_factor": 3,
+            "row_factor": 1,
+            "color_scheme": "scheme-8",
+            "gradient_background_color": "",
+            "tile_aspect_ratio": "auto",
+            "content_position_vertical": "justify-center",
+            "content_alignment": "align-center text-center",
+            "content_alignment_for_mobile": "start",
+            "media_position": "background",
+            "heading": "Amazing details. Organic fabrics.",
+            "heading_size": "h3",
+            "text": "",
+            "button_label": "",
+            "button_link": "",
+            "button_style": "button--filled",
+            "video_external": "",
+            "show_controls_on_video": false,
+            "video_external_mobile": "",
+            "show_controls_on_video_mobile": false,
+            "spacing_inner": "6"
+          }
+        },
+        "tile_kkJDV4": {
+          "type": "tile",
+          "settings": {
+            "show_on": "both",
+            "column_factor": 3,
+            "row_factor": 2,
+            "color_scheme": "",
+            "gradient_background_color": "",
+            "tile_aspect_ratio": "auto",
+            "content_position_vertical": "justify-center",
+            "content_alignment": "align-center text-center",
+            "content_alignment_for_mobile": "start",
+            "media_position": "background",
+            "heading": "",
+            "heading_size": "h3",
+            "text": "",
+            "button_label": "",
+            "button_link": "",
+            "button_style": "button--filled",
+            "video_external": "",
+            "show_controls_on_video": false,
+            "video_external_mobile": "",
+            "show_controls_on_video_mobile": false,
+            "spacing_inner": "2"
+          }
+        },
+        "tile_qpzFf7": {
+          "type": "tile",
+          "settings": {
+            "show_on": "both",
+            "column_factor": 3,
+            "row_factor": 1,
+            "color_scheme": "",
+            "gradient_background_color": "",
+            "tile_aspect_ratio": "1/1",
+            "content_position_vertical": "justify-center",
+            "content_alignment": "align-center text-center",
+            "content_alignment_for_mobile": "start",
+            "media_position": "background",
+            "heading": "",
+            "heading_size": "h3",
+            "text": "",
+            "button_label": "",
+            "button_link": "",
+            "button_style": "button--filled",
+            "video_external": "",
+            "show_controls_on_video": false,
+            "video_external_mobile": "",
+            "show_controls_on_video_mobile": false,
+            "spacing_inner": "2"
+          }
+        }
+      },
+      "block_order": [
+        "tile_qpzFf7",
+        "tile_kkJDV4",
+        "tile_aT3xD9"
+      ],
+      "disabled": true,
+      "settings": {
+        "block_order_mobile": false,
+        "heading": "",
+        "heading_size": "h3",
+        "heading_alignment": "start",
+        "spacing_tile": "default",
+        "color_scheme": "",
+        "section_width": "max-w-fluid",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "layout": "layout-1",
+        "enable_slideshow_overflow": false,
+        "heading": "You may also like",
+        "heading_size": "h4",
+        "subheading": "",
+        "button_label": "View all",
+        "button_link": "shopify://collections/all",
+        "button_style": "button--filled",
+        "show_navigation_arrows": true,
+        "slider_autoplay": 10,
+        "tabs_button_style": "tab-btn-filled",
+        "max_products": 8,
+        "show_unavailable_products": false,
+        "section_width": "max-w-fluid",
+        "color_scheme": "",
+        "spacing_top": "4",
+        "spacing_bottom": "4"
+      }
+    }
+  }
+}

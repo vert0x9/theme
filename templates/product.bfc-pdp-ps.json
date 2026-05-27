@@ -1,1 +1,262 @@
-{"sections":{"main":{"type":"bfc-pdp-ps","blocks":{"kit_item_XjEV9p":{"type":"kit_item","settings":{"label":"Film","custom_label":"Film Box","column":"Cases, Straps, Etc","product":"35mm-film-box-by-larkhill-prints","product_alt_1":"","product_alt_2":"","variant_id":"","discount_percent":0,"is_developing":false,"is_starter_kit":false,"only_show_for":""}},"kit_item_WP8VYU":{"type":"kit_item","settings":{"label":"Film","custom_label":"Do Not X-Ray Pouch","column":"Cases, Straps, Etc","product":"do-not-x-ray-film-pouch","product_alt_1":"","product_alt_2":"","variant_id":"","discount_percent":10,"is_developing":false,"is_starter_kit":false,"only_show_for":""}},"kit_item_ERyWxH":{"type":"kit_item","settings":{"label":"Film","custom_label":"Small Cleaned Strap","column":"Cases, Straps, Etc","product":"vintage-point-shoot-strap","product_alt_1":"","product_alt_2":"","variant_id":"","discount_percent":0,"is_developing":false,"is_starter_kit":false,"only_show_for":""}},"kit_item_F6akef":{"type":"kit_item","settings":{"label":"Film","custom_label":"Canon Red Case","column":"Cases, Straps, Etc","product":"canon-wp-1-case","product_alt_1":"","product_alt_2":"","variant_id":"","discount_percent":0,"is_developing":false,"is_starter_kit":false,"only_show_for":"canon-wp-1-case"}},"kit_item_fPkHq6":{"type":"kit_item","settings":{"label":"Film","custom_label":"Fit Black Case","column":"Cases, Straps, Etc","product":"point-shoot-case","product_alt_1":"","product_alt_2":"","variant_id":"44728591286444","discount_percent":0,"is_developing":false,"is_starter_kit":true,"only_show_for":""}},"kit_item_EDpdTP":{"type":"kit_item","settings":{"label":"Case","custom_label":"","column":"Bundles & more","product":"film-case-loaded-with-expired-film","product_alt_1":"","product_alt_2":"","variant_id":"45053858218156","discount_percent":0,"is_developing":false,"is_starter_kit":false,"only_show_for":""}},"kit_item_AyYWRd":{"type":"kit_item","settings":{"label":"Case","custom_label":"Expired Film","column":"Bundles & more","product":"expired-35mm-films-pack-of-three","product_alt_1":"","product_alt_2":"","variant_id":"","discount_percent":0,"is_developing":false,"is_starter_kit":false,"only_show_for":""}},"kit_item_ib9CFb":{"type":"kit_item","settings":{"label":"Case","custom_label":"Film Trimmer","column":"Bundles & more","product":"rezivot-monorail-35mm-film-trimmer","product_alt_1":"","product_alt_2":"","variant_id":"","discount_percent":0,"is_developing":false,"is_starter_kit":false,"only_show_for":""}},"kit_item_qgYRaA":{"type":"kit_item","settings":{"label":"Film","custom_label":"Portra 400","column":"Film","product":"kodak-portra-400-35mm","product_alt_1":"","product_alt_2":"","variant_id":"40027148648620","discount_percent":0,"is_developing":false,"is_starter_kit":true,"only_show_for":""}},"kit_item_X93QMf":{"type":"kit_item","settings":{"label":"Film","custom_label":"Ektar 100","column":"Film","product":"kodak-ektar-35mm","product_alt_1":"","product_alt_2":"","variant_id":"","discount_percent":0,"is_developing":false,"is_starter_kit":false,"only_show_for":""}},"kit_item_KyQamX":{"type":"kit_item","settings":{"label":"Film","custom_label":"Gold 200","column":"Film","product":"eastman-kodak-gold-200-color","product_alt_1":"","product_alt_2":"","variant_id":"","discount_percent":10,"is_developing":false,"is_starter_kit":false,"only_show_for":""}},"kit_item_Kn6TH3":{"type":"kit_item","settings":{"label":"Film","custom_label":"Ilford HP5","column":"Film","product":"ilford-hp5-400-35mm","product_alt_1":"","product_alt_2":"","variant_id":"40027060142252","discount_percent":10,"is_developing":false,"is_starter_kit":true,"only_show_for":""}},"kit_item_nhcPiy":{"type":"kit_item","settings":{"label":"Film","custom_label":"Ultramax","column":"Film","product":"eastman-kodak-ultramax-400-color","product_alt_1":"","product_alt_2":"","variant_id":"","discount_percent":10,"is_developing":false,"is_starter_kit":false,"only_show_for":""}},"kit_item_KPVH4P":{"type":"kit_item","settings":{"label":"Film","custom_label":"Cinestill 800T","column":"Film","product":"cinestill-800t-120mm","product_alt_1":"","product_alt_2":"","variant_id":"","discount_percent":0,"is_developing":false,"is_starter_kit":false,"only_show_for":""}}},"block_order":["kit_item_XjEV9p","kit_item_WP8VYU","kit_item_ERyWxH","kit_item_F6akef","kit_item_fPkHq6","kit_item_EDpdTP","kit_item_AyYWRd","kit_item_ib9CFb","kit_item_qgYRaA","kit_item_X93QMf","kit_item_KyQamX","kit_item_Kn6TH3","kit_item_nhcPiy","kit_item_KPVH4P"],"settings":{"also_collection":""}},"apps_n7M8dp":{"type":"apps","blocks":{"judge_me_reviews_review_widget_bbpTPN":{"type":"shopify:\/\/apps\/judge-me-reviews\/blocks\/review_widget\/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8","settings":{"review_data":"sample_data","max_width":1200,"show_shop_reviews":false,"empty_state":"empty_widget"}}},"block_order":["judge_me_reviews_review_widget_bbpTPN"],"settings":{"section_layout":"normal","spacing_inner":"2","section_width":"max-w-page","color_scheme":"","spacing_top":"2","spacing_bottom":"2"}}},"order":["main","apps_n7M8dp"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "bfc-pdp-ps",
+      "blocks": {
+        "kit_item_XjEV9p": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Film Box",
+            "column": "Cases, Straps, Etc",
+            "product": "35mm-film-box-by-larkhill-prints",
+            "variant_id": "",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": false,
+            "only_show_for": ""
+          }
+        },
+        "kit_item_WP8VYU": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Do Not X-Ray Pouch",
+            "column": "Cases, Straps, Etc",
+            "product": "do-not-x-ray-film-pouch",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false,
+            "only_show_for": ""
+          }
+        },
+        "kit_item_ERyWxH": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Small Cleaned Strap",
+            "column": "Cases, Straps, Etc",
+            "product": "vintage-point-shoot-strap",
+            "variant_id": "",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": false,
+            "only_show_for": ""
+          }
+        },
+        "kit_item_F6akef": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Canon Red Case",
+            "column": "Cases, Straps, Etc",
+            "product": "canon-wp-1-case",
+            "variant_id": "",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": false,
+            "only_show_for": "canon-wp-1-case"
+          }
+        },
+        "kit_item_fPkHq6": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Fit Black Case",
+            "column": "Cases, Straps, Etc",
+            "product": "point-shoot-case",
+            "variant_id": "44728591286444",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": true,
+            "only_show_for": ""
+          }
+        },
+        "kit_item_EDpdTP": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Case",
+            "custom_label": "",
+            "column": "Bundles & more",
+            "product": "film-case-loaded-with-expired-film",
+            "variant_id": "45053858218156",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": false,
+            "only_show_for": ""
+          }
+        },
+        "kit_item_AyYWRd": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Case",
+            "custom_label": "Expired Film",
+            "column": "Bundles & more",
+            "product": "expired-35mm-films-pack-of-three",
+            "variant_id": "",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": false,
+            "only_show_for": ""
+          }
+        },
+        "kit_item_ib9CFb": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Case",
+            "custom_label": "Film Trimmer",
+            "column": "Bundles & more",
+            "product": "rezivot-monorail-35mm-film-trimmer",
+            "variant_id": "",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": false,
+            "only_show_for": ""
+          }
+        },
+        "kit_item_qgYRaA": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Portra 400",
+            "column": "Film",
+            "product": "kodak-portra-400-35mm",
+            "variant_id": "40027148648620",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": true,
+            "only_show_for": ""
+          }
+        },
+        "kit_item_X93QMf": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Ektar 100",
+            "column": "Film",
+            "product": "kodak-ektar-35mm",
+            "variant_id": "",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": false,
+            "only_show_for": ""
+          }
+        },
+        "kit_item_KyQamX": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Gold 200",
+            "column": "Film",
+            "product": "eastman-kodak-gold-200-color",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false,
+            "only_show_for": ""
+          }
+        },
+        "kit_item_Kn6TH3": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Ilford HP5",
+            "column": "Film",
+            "product": "ilford-hp5-400-35mm",
+            "variant_id": "40027060142252",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": true,
+            "only_show_for": ""
+          }
+        },
+        "kit_item_nhcPiy": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Ultramax",
+            "column": "Film",
+            "product": "eastman-kodak-ultramax-400-color",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false,
+            "only_show_for": ""
+          }
+        },
+        "kit_item_KPVH4P": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Cinestill 800T",
+            "column": "Film",
+            "product": "cinestill-800t-120mm",
+            "variant_id": "",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": false,
+            "only_show_for": ""
+          }
+        }
+      },
+      "block_order": [
+        "kit_item_XjEV9p",
+        "kit_item_WP8VYU",
+        "kit_item_ERyWxH",
+        "kit_item_F6akef",
+        "kit_item_fPkHq6",
+        "kit_item_EDpdTP",
+        "kit_item_AyYWRd",
+        "kit_item_ib9CFb",
+        "kit_item_qgYRaA",
+        "kit_item_X93QMf",
+        "kit_item_KyQamX",
+        "kit_item_Kn6TH3",
+        "kit_item_nhcPiy",
+        "kit_item_KPVH4P"
+      ],
+      "settings": {
+        "also_collection": ""
+      }
+    },
+    "apps_n7M8dp": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_bbpTPN": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_bbpTPN"
+      ],
+      "settings": {
+        "section_layout": "normal",
+        "spacing_inner": "2",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "apps_n7M8dp"
+  ]
+}
