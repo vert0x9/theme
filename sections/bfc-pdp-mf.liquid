@@ -1743,7 +1743,34 @@
   for block in sk_blocks
     if block.settings.is_starter_kit and block.settings.product != blank
       assign sk_bp  = block.settings.product
-      assign sk_dv  = sk_bp.variants.first
+      assign sk_specific_vid = block.settings.variant_id | strip
+      assign sk_dv = sk_bp.variants.first
+      assign sk_resolved = false
+      unless sk_specific_vid == blank
+        for v in sk_bp.variants
+          assign vid_str = v.id | append: ''
+          if vid_str == sk_specific_vid
+            assign sk_dv = v
+            assign sk_resolved = true
+            break
+          endif
+        endfor
+      endunless
+      comment
+        MF PDP heuristic: when no variant_id is pinned, prefer a variant whose title
+        contains "120" (case-insensitive). This is the medium-format file, so any film
+        product with 35mm + 120 variants should default to 120.
+      endcomment
+      unless sk_resolved
+        for v in sk_bp.variants
+          assign v_title_low = v.title | downcase
+          if v_title_low contains '120' and v.available
+            assign sk_dv = v
+            assign sk_resolved = true
+            break
+          endif
+        endfor
+      endunless
       unless sk_dv.available
         for v in sk_bp.variants
           if v.available
@@ -2014,7 +2041,34 @@
         {%- assign sk_d   = block.settings.discount_percent -%}
         {%- assign sk_dev = block.settings.is_developing -%}
         {%- assign sk_starter = block.settings.is_starter_kit -%}
-        {%- assign sk_dv  = sk_bp.variants.first -%}
+        {%- comment -%} Variant resolution order (must match the sk_total liquid block above):
+            1. block.settings.variant_id (manual pin per kit_item block)
+            2. First variant whose title contains "120" (MF PDP auto-default for film)
+            3. First available variant
+            4. variants.first as last resort {%- endcomment -%}
+        {%- assign sk_specific_vid = block.settings.variant_id | strip -%}
+        {%- assign sk_dv = sk_bp.variants.first -%}
+        {%- assign sk_resolved = false -%}
+        {%- unless sk_specific_vid == blank -%}
+          {%- for v in sk_bp.variants -%}
+            {%- assign vid_str = v.id | append: '' -%}
+            {%- if vid_str == sk_specific_vid -%}
+              {%- assign sk_dv = v -%}
+              {%- assign sk_resolved = true -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endunless -%}
+        {%- unless sk_resolved -%}
+          {%- for v in sk_bp.variants -%}
+            {%- assign v_title_low = v.title | downcase -%}
+            {%- if v_title_low contains '120' and v.available -%}
+              {%- assign sk_dv = v -%}
+              {%- assign sk_resolved = true -%}
+              {%- break -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endunless -%}
         {%- unless sk_dv.available -%}
           {%- for v in sk_bp.variants -%}
             {%- if v.available -%}{%- assign sk_dv = v -%}{%- break -%}{%- endif -%}
