@@ -1,0 +1,795 @@
+{{- 'section-collection.css' | asset_url | stylesheet_tag -}}
+{{- 'component-card-product.css' | asset_url | stylesheet_tag -}}
+{{- 'component-card-text.css' | asset_url | stylesheet_tag -}}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} > div {
+    padding-block-start: calc(var(--section-spacing-unit-size) * {{ section.settings.spacing_top }});
+    padding-block-end: calc(var(--section-spacing-unit-size) * {{ section.settings.spacing_bottom }});
+    --products_per_row: {{ section.settings.products_per_row_mobile }};
+  }
+  {%- if section.settings.show_top_border_for_utilities_bar -%}
+    #shopify-section-{{ section.id }} .collection-facets__inner {
+      padding-block-start: var(--spacing-5);
+      border-block-start: 0.1rem solid rgba(var(--color-border), var(--alpha-border));
+    }
+  {%- endif -%}
+  #shopify-section-{{ section.id }} .collection__grid {
+    grid-auto-rows: minmax(var(--collection-product-card-height), auto);
+  }
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section.id }} > div {
+      --products_per_row: {{ section.settings.products_per_row }};
+    }
+  }
+
+  {%- comment -%} ── BFC: card image aspect ratio + fit controls ── {%- endcomment -%}
+  {%- if section.settings.image_ratio != 'natural' -%}
+    #shopify-section-{{ section.id }} .collection__grid .card-product__media,
+    #shopify-section-{{ section.id }} .collection__grid .card__media,
+    #shopify-section-{{ section.id }} .collection__grid .card-product .media {
+      aspect-ratio: {{ section.settings.image_ratio }};
+    }
+    #shopify-section-{{ section.id }} .collection__grid .card-product__media img,
+    #shopify-section-{{ section.id }} .collection__grid .card__media img,
+    #shopify-section-{{ section.id }} .collection__grid .card-product .media img {
+      width: 100%;
+      height: 100%;
+      object-fit: {{ section.settings.image_fit }};
+    }
+  {%- else -%}
+    #shopify-section-{{ section.id }} .collection__grid .card-product__media img,
+    #shopify-section-{{ section.id }} .collection__grid .card__media img,
+    #shopify-section-{{ section.id }} .collection__grid .card-product .media img {
+      object-fit: {{ section.settings.image_fit }};
+    }
+  {%- endif -%}
+
+  /* --- START: Inline Header Filter Styles --- */
+  #shopify-section-{{ section.id }} .facets__utility-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap; /* Allows wrapping if needed */
+  }
+
+  /* Hide the original container */
+  #shopify-section-{{ section.id }} #CustomHeaderFilters {
+     display: none !important; /* Force hide */
+  }
+
+  /* Style the form *after* it's moved */
+  /* Target the moved facet-filters-form directly within the utility bar */
+  #shopify-section-{{ section.id }} .facets__utility-bar > facet-filters-form.collection-header-filters {
+     display: block; /* Make sure it's visible after moving */
+     margin: 0;
+     padding: 0;
+     /* Add order if needed, e.g., order: 3; to place it after filter and sort */
+  }
+  #shopify-section-{{ section.id }} .facets__utility-bar > facet-filters-form.collection-header-filters form {
+     display: contents; /* Allows ul to integrate */
+  }
+
+  #shopify-section-{{ section.id }} .collection-header-filters__list {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4, 1.5rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex-shrink: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+   #shopify-section-{{ section.id }} .collection-header-filters__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  #shopify-section-{{ section.id }} .collection-header-filters__link,
+  #shopify-section-{{ section.id }} .collection-header-filters__label {
+    display: inline-block;
+    padding: 0;
+    font-size: var(--font-size-sm, 1.4rem);
+    white-space: nowrap;
+    text-decoration: none;
+    color: rgba(var(--color-foreground), 0.75);
+    cursor: pointer;
+  }
+  #shopify-section-{{ section.id }} .collection-header-filters__link:hover,
+  #shopify-section-{{ section.id }} .collection-header-filters__label:hover {
+    color: rgba(var(--color-foreground), 1);
+  }
+
+  #shopify-section-{{ section.id }} .collection-header-filters__link:not(.is-active),
+  #shopify-section-{{ section.id }} .collection-header-filters__label:not(.is-active) {
+    font-weight: normal !important;
+  }
+
+  #shopify-section-{{ section.id }} .collection-header-filters__link.is-active,
+  #shopify-section-{{ section.id }} .collection-header-filters__label.is-active {
+    text-decoration: underline;
+    text-underline-offset: 0.3rem;
+    font-weight: bold !important;
+    color: rgba(var(--color-foreground), 1);
+  }
+
+  #shopify-section-{{ section.id }} .collection-header-filters__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+  /* --- END: Inline Header Filter Styles --- */
+{%- endstyle -%}
+
+{%- if section.settings.filters != 'none' or section.settings.enable_sorting -%}
+  <script src="{{- 'facets.js' | asset_url -}}" defer="defer"></script>
+{%- endif -%}
+
+{%- if section.settings.pagination_style == 'load_more' -%}
+  <script src="{{- 'collection-load-more.js' | asset_url -}}" defer="defer"></script>
+  <script src="{{- 'collection-load-previous.js' | asset_url -}}" defer="defer"></script>
+  {%- if section.settings.enable_infinity_scroll -%}
+    <script src="{{- 'collection-infinity-scroll.js' | asset_url -}}" defer="defer"></script>
+  {%- endif -%}
+{%- endif -%}
+
+{%- liquid
+  assign product_cells_on_page = section.settings.products_per_page
+  assign card_cells_on_page = 0
+  for block in section.blocks
+    if block.type == 'text-card'
+      assign block_area = block.settings.column_factor | times: block.settings.row_factor
+      assign card_cells_on_page = card_cells_on_page | plus: block_area
+    endif
+  endfor
+  assign cells_on_page = product_cells_on_page | plus: card_cells_on_page
+  assign cells_correction = cells_on_page | modulo: section.settings.products_per_row
+  assign cells_correction = section.settings.products_per_row | minus: cells_correction
+
+  assign products_per_page = section.settings.products_per_page | plus: cells_correction
+  if products_per_page > 96
+    assign products_per_page = 96
+  endif
+
+  if section.settings.filters != 'none' or section.settings.enable_sorting or section.settings.enable_products_count
+    render 'css', css: 'component-facets.css'
+
+    capture facets_html
+      render 'facets', results: collection, filters: section.settings.filters, enable_sorting: section.settings.enable_sorting, section_id: section.id, container_width: section.settings.section_width, opened_accordions: section.settings.enable_opened_accordions, pagination_style: section.settings.pagination_style, products_per_page: products_per_page
+    endcapture
+  endif
+
+  comment
+    ── BFC: build a handle → override-image lookup from image-override blocks ──
+    Each image-override block pairs a product with a chosen image. We store the
+    image's media id in two parallel pipe-delimited strings so we can look up the
+    override per product inside the grid loop (Liquid has no real maps/dicts).
+  endcomment
+  assign bfc_ovr_handles = ''
+  assign bfc_ovr_image_ids = ''
+  assign bfc_has_overrides = false
+  for block in section.blocks
+    if block.type == 'image-override' and block.settings.product != blank and block.settings.image != blank
+      assign bfc_has_overrides = true
+      assign bfc_ovr_handles = bfc_ovr_handles | append: '|' | append: block.settings.product.handle | append: '|'
+      assign bfc_ovr_image_ids = bfc_ovr_image_ids | append: '||' | append: block.settings.product.handle | append: '::' | append: block.settings.image | append: '||'
+    endif
+  endfor
+-%}
+
+<div class="collection js-animation-fade-in color-{{ section.settings.color_scheme }} filters--{{ section.settings.filters }} {{ settings.card_product_layout }}">
+
+  {{ facets_html }}
+
+  {%- liquid
+    assign camera_type_filter = null
+    for filter in collection.filters
+      if filter.label == 'Camera Type'
+        assign camera_type_filter = filter
+        break
+      endif
+    endfor
+
+    assign desired_values = 'SLR,TLR,Point & Shoot,Instant,Single Use' | split: ','
+  -%}
+
+  {%- if camera_type_filter -%}
+    {% comment %} This container will be hidden and its contents moved by JS {% endcomment %}
+    <div id="CustomHeaderFilters" style="display: none !important;" data-section-id="{{ section.id }}">
+      <facet-filters-form class="collection-header-filters">
+        <form id="HeaderFacetFiltersForm" class="facets__form">
+          <ul class="collection-header-filters__list list-unstyled" role="list">
+            <li>
+              <a href="{{ camera_type_filter.url_to_remove }}"
+                 class="collection-header-filters__link js-facet-remove {% if camera_type_filter.active == false %}is-active{% endif %}"
+              >
+                 View All
+              </a>
+            </li>
+            {%- for value in camera_type_filter.values -%}
+              {%- if desired_values contains value.label -%}
+                <li>
+                  <input type="checkbox"
+                    class="collection-header-filters__input"
+                    name="{{ value.param_name }}"
+                    value="{{ value.value }}"
+                    id="HeaderFilter-{{ camera_type_filter.label | handle }}-{{ forloop.index }}"
+                    {% if value.active %}checked{% endif %}
+                  >
+                  <label for="HeaderFilter-{{ camera_type_filter.label | handle }}-{{ forloop.index }}"
+                    class="collection-header-filters__label {% if value.active %}is-active{% endif %}"
+                  >
+                    {{ value.label }}
+                  </label>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        </form>
+      </facet-filters-form>
+     </div>
+  {%- endif -%}
+  <div class="container {{ section.settings.section_width }} collection__container" id="ProductGridContainer">
+    <h1 class="collection__heading">{{ collection.title }}</h1>
+    {%- paginate collection.products by products_per_page -%}
+
+        {%- if section.settings.filters == 'sidebar' -%}
+          <facet-filters-form class="collection-facets collection__facets--sidebar" data-section-id="{{- section.id -}}">
+            <form id="FacetFiltersForm" class="facets__form">
+              <div class="collection-grid__filter">
+                <accordion-default class="accordion facets__accordion collection-grid__sidebar-filter">
+                  <span class="facets__accordion-header">{{- 'collection.filter_by' | t -}}</span>
+                  {% assign total_active_values = 0 %}
+                  {%- for filter in collection.filters -%}
+                    {%- render 'facet', index: forloop.index, section_id: section.id, filter: filter, opened_accordions: section.settings.enable_opened_accordions, total_active_values: total_active_values -%}
+                  {%- endfor -%}
+                </accordion-default>
+              </div>
+            </form>
+          </facet-filters-form>
+        {%- endif -%}
+        <div class="collection-grid-container collection-grid-container--{{ section.settings.filters }} js-collection-grid{% if section.settings.pagination_style == 'load_more' and section.settings.enable_infinity_scroll %} infinity-scroll-active{% endif %}">
+
+          {% if section.settings.pagination_style == 'load_more' and paginate.previous and paginate.pages > 1 and paginate.current_page <= paginate.pages %}
+            <collection-load-previous class="text-center no-js-hidden color-{{ section.settings.color_scheme }}" data-current-page="{{- paginate.current_page -}}">
+              {%- liquid
+                assign load_more_button_data_href = 'data-href="' | append: paginate.previous.url | append: '"'
+                assign load_previous_value = 'theme.actions.load_previous' | t
+                render 'button', class: 'button js-btn-load-previous', button_style: 'button--outlined', attr: load_more_button_data_href, value: load_previous_value, loading_spinner: true
+              -%}
+            </collection-load-previous>
+          {% endif %}
+          <div
+            class="collection__grid{% if section.settings.products_per_row_mobile != '2' %} collection__grid-single{% endif %}{% if section.settings.filters == 'drawer' %} collection-grid-container__products{% endif %}"
+            id="product-grid"
+            data-id="{{- section.id -}}"
+            data-cols="{{- section.settings.products_per_row -}}"
+          >
+            {%- if collection.products_count == 0 -%}
+              <h3 class="collection__title collection__no-result text-center">
+                {{- 'collection.no_products' | t -}}
+              </h3>
+            {%- else -%}
+
+              {%- comment -%}
+                ── BFC: Sold-out-to-bottom reorder ──────────────────────
+                Only kicks in when sort is "manual" (Featured) or "best-selling".
+                Other sort options (price, date, title, etc.) keep their true order.
+                Text-card blocks only render on page 1; we preserve that behavior.
+              {%- endcomment -%}
+              {%- assign bfc_current_sort = collection.sort_by | default: collection.default_sort_by -%}
+              {%- assign bfc_reorder_sorts = 'manual,best-selling' | split: ',' -%}
+              {%- assign bfc_should_reorder = false -%}
+              {%- if bfc_reorder_sorts contains bfc_current_sort -%}
+                {%- assign bfc_should_reorder = true -%}
+              {%- endif -%}
+
+              {% capture product_list %}
+                {%- liquid
+                  if bfc_should_reorder
+                    assign bfc_avail_idx = 0
+                    for product_ref in collection.products
+                      if product_ref.available
+                        assign bfc_avail_idx = bfc_avail_idx | plus: 1
+                        if section.blocks.size > 0 and paginate.current_page == 1
+                          for block in section.blocks
+                            if block.type != 'text-card'
+                              continue
+                            endif
+                            assign display_card_text = false
+                            if bfc_avail_idx == block.settings.position
+                              assign display_card_text = true
+                            endif
+                            if display_card_text and section.settings.pagination_style == 'default' or paginate.current_page == 1 and section.settings.pagination_style == 'load_more'
+                              assign block_additional_classes = 'collection__card-text js-card-text' | append: ' color-' | append: block.settings.color_scheme
+                              render 'card-text', block_id: block.id, class: block_additional_classes, text: block.settings.text, link_type: block.settings.link_type, button_label: block.settings.button_label, button_link: block.settings.button_link, button_style: block.settings.button_style, card_image: block.settings.card_image, column_factor: block.settings.column_factor, row_factor: block.settings.row_factor, column_count: section.settings.products_per_row, column_count_mobile: section.settings.products_per_row_mobile, content_position: block.settings.content_position, content_alignment: block.settings.content_alignment, content_position_mobile: block.settings.content_position_mobile, content_alignment_mobile: block.settings.content_alignment_mobile
+                            endif
+                          endfor
+                        endif
+                        assign bfc_override_image = null
+                        if bfc_has_overrides
+                          assign bfc_handle_token = '|' | append: product_ref.handle | append: '|'
+                          if bfc_ovr_handles contains bfc_handle_token
+                            assign bfc_pair_marker = '||' | append: product_ref.handle | append: '::'
+                            assign bfc_after = bfc_ovr_image_ids | split: bfc_pair_marker | last
+                            assign bfc_img_id_str = bfc_after | split: '||' | first
+                            assign bfc_override_image = bfc_img_id_str
+                          endif
+                        endif
+                        render 'card-product', product_ref: product_ref, section_id: section.id, product_index: bfc_avail_idx, override_image: bfc_override_image
+                      endif
+                    endfor
+                    for product_ref in collection.products
+                      unless product_ref.available
+                        assign bfc_avail_idx = bfc_avail_idx | plus: 1
+                        assign bfc_override_image = null
+                        if bfc_has_overrides
+                          assign bfc_handle_token = '|' | append: product_ref.handle | append: '|'
+                          if bfc_ovr_handles contains bfc_handle_token
+                            assign bfc_pair_marker = '||' | append: product_ref.handle | append: '::'
+                            assign bfc_after = bfc_ovr_image_ids | split: bfc_pair_marker | last
+                            assign bfc_img_id_str = bfc_after | split: '||' | first
+                            assign bfc_override_image = bfc_img_id_str
+                          endif
+                        endif
+                        render 'card-product', product_ref: product_ref, section_id: section.id, product_index: bfc_avail_idx, override_image: bfc_override_image
+                      endunless
+                    endfor
+                  else
+                    for product_ref in collection.products
+                      assign product_loop = forloop
+                      if section.blocks.size > 0 and paginate.current_page == 1
+                        for block in section.blocks
+                          if block.type != 'text-card'
+                            continue
+                          endif
+                          assign display_card_text = false
+                          if product_loop.index == block.settings.position
+                            assign display_card_text = true
+                          endif
+                          if display_card_text and section.settings.pagination_style == 'default' or paginate.current_page == 1 and section.settings.pagination_style == 'load_more'
+                            assign block_additional_classes = 'collection__card-text js-card-text' | append: ' color-' | append: block.settings.color_scheme
+                            render 'card-text', block_id: block.id, class: block_additional_classes, text: block.settings.text, link_type: block.settings.link_type, button_label: block.settings.button_label, button_link: block.settings.button_link, button_style: block.settings.button_style, card_image: block.settings.card_image, column_factor: block.settings.column_factor, row_factor: block.settings.row_factor, column_count: section.settings.products_per_row, column_count_mobile: section.settings.products_per_row_mobile, content_position: block.settings.content_position, content_alignment: block.settings.content_alignment, content_position_mobile: block.settings.content_position_mobile, content_alignment_mobile: block.settings.content_alignment_mobile
+                          endif
+                        endfor
+                      endif
+                      assign bfc_override_image = null
+                      if bfc_has_overrides
+                        assign bfc_handle_token = '|' | append: product_ref.handle | append: '|'
+                        if bfc_ovr_handles contains bfc_handle_token
+                          assign bfc_pair_marker = '||' | append: product_ref.handle | append: '::'
+                          assign bfc_after = bfc_ovr_image_ids | split: bfc_pair_marker | last
+                          assign bfc_img_id_str = bfc_after | split: '||' | first
+                          assign bfc_override_image = bfc_img_id_str
+                        endif
+                      endif
+                      render 'card-product', product_ref: product_ref, section_id: section.id, product_index: product_loop.index, override_image: bfc_override_image
+                    endfor
+                  endif
+                -%}
+              {% endcapture %}
+              {%- if section.settings.filters == 'sidebar' -%}
+                {{ product_list }}
+              {%- else -%}
+                {{ product_list }}
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+
+          {%- if paginate.pages > 1 -%}
+            {% if section.settings.pagination_style == 'load_more' %}
+              <collection-load-more class="text-center no-js-hidden{% unless paginate.next %} hidden{% endunless %} color-{{ section.settings.color_scheme }}" data-current-page="{{- paginate.current_page -}}">
+                {%- liquid
+                  assign load_more_button_data_href = 'data-href="' | append: paginate.next.url | append: '"'
+                  assign load_more_value = 'theme.actions.load_more' | t
+
+                  render 'button', class: 'button js-btn-load-more', button_style: 'button--outlined', attr: load_more_button_data_href, value: load_more_value, loading_spinner: true
+                -%}
+              </collection-load-more>
+            {% else %}
+              <div class="collection__actions">
+                {%- render 'pagination', paginate: paginate, anchor: '' -%}
+              </div>
+            {% endif %}
+          {%- endif -%}
+        </div>
+    {%- endpaginate -%}
+  </div>
+</div>
+
+<script>
+  function runMove_{{ section.id }}() {
+    const sectionEl = document.getElementById('shopify-section-{{ section.id }}');
+    if (!sectionEl) return; // Exit if section element not found
+
+    // Find the hidden container *within this specific section*
+    const customFiltersContainer = sectionEl.querySelector('#CustomHeaderFilters');
+    // Find the form *within the hidden container*
+    const customFilterFormToMove = customFiltersContainer ? customFiltersContainer.querySelector('facet-filters-form.collection-header-filters') : null;
+    // Find the target utility bar *within this specific section*
+    const targetUtilityBar = sectionEl.querySelector('.facets__utility-bar');
+
+    // Ensure both elements exist and the custom form hasn't already been moved
+    if (customFilterFormToMove && targetUtilityBar && customFilterFormToMove.parentElement.id === 'CustomHeaderFilters') {
+      console.log('Moving custom filters into utility bar for section {{ section.id }}.');
+      targetUtilityBar.appendChild(customFilterFormToMove);
+      customFilterFormToMove.style.display = 'block';
+    } else {
+      if (!customFilterFormToMove) console.log('Could not find custom filter form to move (or it was already moved). ID: #CustomHeaderFilters > facet-filters-form.collection-header-filters');
+      if (!targetUtilityBar) console.log('Could not find target utility bar. Class: .facets__utility-bar');
+    }
+  }
+
+  let hasMoved_{{ section.id }} = false;
+
+  const tryMoveOnce_{{ section.id }} = () => {
+    if (!hasMoved_{{ section.id }}) {
+      runMove_{{ section.id }}();
+      const movedForm = document.querySelector('#shopify-section-{{ section.id }} .facets__utility-bar > facet-filters-form.collection-header-filters');
+      if (movedForm) {
+        hasMoved_{{ section.id }} = true;
+      }
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', tryMoveOnce_{{ section.id }});
+
+  document.addEventListener('shopify:section:load', function(event) {
+    if (event.detail.sectionId === '{{ section.id }}') {
+      hasMoved_{{ section.id }} = false;
+      setTimeout(tryMoveOnce_{{ section.id }}, 50);
+    }
+  });
+</script>
+
+{%- if collection -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": {{ collection.title | json }},
+  "url": {{ shop.url | append: collection.url | json }},
+  {% if collection.description != blank %}"description": {{ collection.description | strip_html | truncate: 5000 | json }},{% endif %}
+  {% if collection.image %}"image": {{ collection.image | image_url: width: 1200 | prepend: 'https:' | json }},{% endif %}
+  "numberOfItems": {{ collection.products_count }},
+  "mainEntity": {
+    "@type": "ItemList",
+    "numberOfItems": {{ collection.products_count }},
+    "itemListElement": [
+      {%- for product in collection.products limit: 20 -%}
+        {
+          "@type": "ListItem",
+          "position": {{ forloop.index }},
+          "url": {{ shop.url | append: product.url | json }},
+          "name": {{ product.title | json }}
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  }
+}
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "BFC Collection",
+  "tag": "section",
+  "class": "section-collection",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Utilities bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_border_for_utilities_bar",
+      "label": "Show top border for utilities bar",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_products_count",
+      "label": "Enable products count",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_opened_accordions",
+      "label": "Open filter accordions by default",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "filters",
+      "label": "Filters",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "drawer", "label": "Drawer" },
+        { "value": "sidebar", "label": "Sidebar" }
+      ],
+      "default": "drawer"
+    },
+    {
+      "type": "header",
+      "content": "Products grid"
+    },
+    {
+      "type": "select",
+      "id": "products_per_row",
+      "label": "Products per row (desktop)",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "products_per_row_mobile",
+      "label": "Products per row (mobile)",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Card image ratio",
+      "options": [
+        { "value": "natural", "label": "Natural (use image's own ratio)" },
+        { "value": "1 / 1", "label": "Square (1:1)" },
+        { "value": "4 / 3", "label": "Landscape (4:3)" },
+        { "value": "3 / 4", "label": "Portrait (3:4)" },
+        { "value": "16 / 9", "label": "Wide (16:9)" }
+      ],
+      "default": "natural"
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Card image fit",
+      "info": "Cover fills the card and may crop. Contain shows the whole image and may letterbox.",
+      "options": [
+        { "value": "cover", "label": "Cover (fill, may crop)" },
+        { "value": "contain", "label": "Contain (fit, may letterbox)" }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 12,
+      "max": 96,
+      "step": 1,
+      "default": 48
+    },
+    {
+      "type": "select",
+      "id": "pagination_style",
+      "label": "Pagination style",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "load_more", "label": "Load more" }
+      ],
+      "default": "default"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_infinity_scroll",
+      "label": "Enable infinite scroll",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "options": [
+        { "value": "max-w-page", "label": "Page" },
+        { "value": "max-w-fluid", "label": "Fluid" }
+      ],
+      "default": "max-w-page",
+      "label": "Section width"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme-1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "select",
+      "id": "spacing_top",
+      "label": "Spacing top",
+      "options": [
+        { "value": "0", "label": "No" },
+        { "value": "1", "label": "S" },
+        { "value": "2", "label": "M" },
+        { "value": "4", "label": "L" },
+        { "value": "6", "label": "XL" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "spacing_bottom",
+      "label": "Spacing bottom",
+      "options": [
+        { "value": "0", "label": "No" },
+        { "value": "1", "label": "S" },
+        { "value": "2", "label": "M" },
+        { "value": "4", "label": "L" },
+        { "value": "6", "label": "XL" }
+      ],
+      "default": "2"
+    }
+  ],
+  "max_blocks": 50,
+  "blocks": [
+    {
+      "type": "image-override",
+      "name": "Product image override",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Pick a product and the image to show for it in this grid. Overrides the product's default featured image here only."
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Grid image"
+        }
+      ]
+    },
+    {
+      "type": "text-card",
+      "name": "Text card",
+      "settings": [
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "label": "Color scheme",
+          "default": "scheme-1"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<h3>Heading goes here</h3>"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "link_type",
+          "label": "Link type",
+          "options": [
+            { "value": "button", "label": "Button" },
+            { "value": "card", "label": "Card" }
+          ],
+          "default": "button"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "options": [
+            { "value": "button--filled", "label": "Filled" },
+            { "value": "button--outlined", "label": "Outlined" },
+            { "value": "button--text", "label": "Text" }
+          ],
+          "default": "button--text"
+        },
+        {
+          "type": "select",
+          "id": "content_position",
+          "label": "Content position",
+          "options": [
+            { "value": "start", "label": "Start" },
+            { "value": "center", "label": "Center" },
+            { "value": "end", "label": "End" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "select",
+          "id": "content_alignment",
+          "label": "Content alignment",
+          "options": [
+            { "value": "start", "label": "Start" },
+            { "value": "center", "label": "Center" },
+            { "value": "end", "label": "End" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "select",
+          "id": "content_position_mobile",
+          "label": "Content position (mobile)",
+          "options": [
+            { "value": "start", "label": "Start" },
+            { "value": "center", "label": "Center" },
+            { "value": "end", "label": "End" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "select",
+          "id": "content_alignment_mobile",
+          "label": "Content alignment (mobile)",
+          "options": [
+            { "value": "start", "label": "Start" },
+            { "value": "center", "label": "Center" },
+            { "value": "end", "label": "End" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "header",
+          "content": "General"
+        },
+        {
+          "type": "range",
+          "id": "position",
+          "min": 1,
+          "max": 50,
+          "step": 1,
+          "label": "Position",
+          "default": 8
+        },
+        {
+          "type": "range",
+          "id": "column_factor",
+          "label": "Column factor",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "row_factor",
+          "label": "Row factor",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "default": 1
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image",
+          "label": "Image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
