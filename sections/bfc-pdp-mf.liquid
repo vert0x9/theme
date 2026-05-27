@@ -1487,8 +1487,47 @@
   .bfc4-mini-spec:nth-child(odd) { padding-right: 0; }
   .bfc4-mini-spec:nth-child(even) { padding-left: 0; border-left: none; }
   .bfc4 .ba-film-promo-icon { display: none; }
-  .bfc4 .ba-film-promo-text { flex: 4; }
-  .bfc4 .ba-film-promo-status { flex: 1; text-align: right; font-size: 9px; }
+  .bfc4 .ba-film-promo-text { flex: 1 1 auto; min-width: 0; }
+  /* Keep "✓ UNLOCKED" on one line — don't let flex shrink it and don't allow wrapping.
+     Tighter letter-spacing so it fits the narrow column without breaking. */
+  .bfc4 .ba-film-promo-status {
+    flex: 0 0 auto;
+    text-align: right;
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  /* Trust strip — 2x2 grid on mobile so items align cleanly instead of wrapping
+     unevenly (the "Restored inside & out (i)" item is wider than the others). */
+  .bfc4 .bfc4-trust-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 14px;
+    padding-top: 14px;
+  }
+  .bfc4 .bfc4-trust-strip li { font-size: 11.5px; }
+  /* Read more — bump font + add real tap target on mobile (11px was too small to tap). */
+  .bfc4 .bfc4-desc-toggle {
+    font-size: 13px;
+    padding: 8px 0;
+  }
+  /* Camera Only — was a 9px text link; on mobile make it a proper outlined button
+     so it reads as a real "skip the kit" choice next to the orange ATC. */
+  .bfc4-cam-only {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--ch);
+    background: transparent;
+    border: 1px solid rgba(32,32,9,0.15);
+    padding: 14px;
+    margin-top: 8px;
+  }
+  .bfc4-cam-only:hover {
+    color: var(--bk);
+    border-color: rgba(32,32,9,0.4);
+    background: rgba(32,32,9,0.02);
+  }
   .bfc4-ext-w-options { grid-template-columns: repeat(2, 1fr); }
   
   .bfc4-policy-col { padding: 32px 20px 36px; }
