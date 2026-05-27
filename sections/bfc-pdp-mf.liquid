@@ -121,7 +121,7 @@
 /* ── RIGHT: SCROLLABLE CONTENT ───────────── */
 .bfc4-right {
   background: var(--cv);
-  padding: 36px 40px 56px;
+  padding: 18px 40px 56px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -304,9 +304,117 @@
   width: 16px; height: 1px; background: var(--ch); display: block;
 }
 
+/* ── BREADCRUMBS ─────────────────────────── */
+.bfc4 .bfc4-crumbs {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 4px 6px;
+  font-family: var(--sn);
+  font-size: 11px;
+  color: var(--ch);
+  margin-bottom: 10px;
+}
+.bfc4 .bfc4-crumb {
+  color: var(--ch);
+  text-decoration: none;
+  transition: color var(--t);
+}
+.bfc4 .bfc4-crumb:hover { color: var(--or); }
+.bfc4 .bfc4-crumb-current {
+  color: var(--bk);
+  font-weight: 500;
+}
+.bfc4 .bfc4-crumb-sep {
+  color: rgba(32,32,9,0.3);
+  user-select: none;
+}
+
+/* ── TRUST STRIP (refurbishment differentiators) ─ */
+.bfc4 .bfc4-trust-strip {
+  display: flex; flex-wrap: wrap;
+  gap: 4px 14px;
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 12px 0 0;
+  border-top: 1px solid rgba(32,32,9,0.08);
+}
+.bfc4 .bfc4-trust-strip li {
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--sn);
+  font-size: 10.5px;
+  line-height: 1.3;
+  color: var(--ch);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.bfc4 .bfc4-trust-strip li svg { color: var(--or); flex-shrink: 0; }
+/* "Restored inside & out" is a button that opens a popup. Match the other items visually
+   (same font/size/color) but add a small (i) icon to telegraph that it's interactive,
+   and underline on hover. */
+.bfc4 .bfc4-trust-strip li .bfc4-trust-link {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sn);
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+.bfc4 .bfc4-trust-strip li .bfc4-trust-link .bfc4-trust-check { color: var(--or); }
+.bfc4 .bfc4-trust-strip li .bfc4-trust-link .bfc4-trust-info {
+  color: rgba(32,32,9,0.4);
+  transition: color 0.15s;
+}
+.bfc4 .bfc4-trust-strip li .bfc4-trust-link:hover { color: var(--bk); }
+.bfc4 .bfc4-trust-strip li .bfc4-trust-link:hover span {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.bfc4 .bfc4-trust-strip li .bfc4-trust-link:hover .bfc4-trust-info { color: var(--bk); }
+@media (max-width: 700px) {
+  .bfc4 .bfc4-trust-strip { gap: 4px 12px; }
+  .bfc4 .bfc4-trust-strip li { font-size: 10px; }
+}
+
+/* ── DESCRIPTION CLAMP + READ MORE ───────── */
+.bfc4 .bfc4-desc-wrap { position: relative; }
+.bfc4 .bfc4-desc-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.bfc4 .bfc4-desc-wrap.is-expanded .bfc4-desc-clamp {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+.bfc4 .bfc4-desc-toggle {
+  background: transparent; border: none; padding: 4px 0;
+  margin-top: 4px;
+  font-family: var(--sn);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--or);
+  cursor: pointer;
+  display: none; /* JS reveals when text overflows the 4-line clamp */
+  align-items: center; gap: 4px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.bfc4 .bfc4-desc-toggle.is-visible { display: inline-flex; }
+.bfc4 .bfc4-desc-toggle svg { transition: transform 0.2s ease; }
+.bfc4 .bfc4-desc-wrap.is-expanded .bfc4-desc-toggle svg { transform: rotate(180deg); }
+
 /* ── KIT HEADING ─────────────────────────── */
 .bfc4-kit-head {
-  border-top: 1px solid rgba(32,32,9,0.1);
   padding-top: 16px;
 }
 .bfc4-kit-eyebrow {
@@ -1765,7 +1873,23 @@
 
     {%- comment -%} 1. Product header + description {%- endcomment -%}
     <div class="bfc4-header">
-      <span class="bfc4-eyebrow">{{ product.type | default: 'Medium Format' }} — Fully Refurbished &middot; <a href="https://brooklynfilmcamera.com/pages/warranty" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">6-Month Warranty</a></span>
+      {%- comment -%}
+        Breadcrumbs: Home / [collection if user arrived from one, else product.type] / Product title.
+        Shopify's `collection` global is present when navigated from a collection URL.
+      {%- endcomment -%}
+      <nav class="bfc4-crumbs" aria-label="Breadcrumb">
+        <a href="/" class="bfc4-crumb">Home</a>
+        <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
+        {%- if collection -%}
+          <a href="{{ collection.url }}" class="bfc4-crumb">{{ collection.title }}</a>
+        {%- elsif product.type != blank -%}
+          <a href="/collections/all?filter.p.product_type={{ product.type | url_encode }}" class="bfc4-crumb">{{ product.type }}</a>
+        {%- else -%}
+          <a href="/collections/all" class="bfc4-crumb">Shop</a>
+        {%- endif -%}
+        <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
+        <span class="bfc4-crumb bfc4-crumb-current" aria-current="page">{{ product.title }}</span>
+      </nav>
       <h1 class="bfc4-title">{{ product.title }}</h1>
       <span id="bfc4-star-placeholder"></span>
       {%- comment -%} Extract prose only from __desc, skipping spec grid {%- endcomment -%}
@@ -1780,11 +1904,49 @@
       {%- if desc_text == blank -%}
         {%- assign desc_text = product.description | strip_html | strip -%}
       {%- endif -%}
-      <p class="bfc4-kit-desc">{{ desc_text }}</p>
-      <span class="bfc4-free-dev-mini">
-        <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="0.5" stroke="#ABCC99" stroke-width="1.2"/><circle cx="7" cy="7" r="2.5" stroke="#ABCC99" stroke-width="1.2"/><line x1="1" y1="4" x2="13" y2="4" stroke="#ABCC99" stroke-width="0.8"/><line x1="1" y1="10" x2="13" y2="10" stroke="#ABCC99" stroke-width="0.8"/></svg>
-        Add 2 rolls of 120 film &mdash; get a free developing credit with your order
-      </span>
+      {%- comment -%}
+        Description with 4-line clamp + Read more toggle. The button visibility is decided
+        in Liquid based on character count (~280 chars ≈ 4 lines at this column width). This
+        bypasses unreliable JS overflow detection on -webkit-box clamped elements (Safari
+        sometimes reports scrollHeight === clientHeight even when text is clipped).
+      {%- endcomment -%}
+      {%- assign desc_len = desc_text | strip | size -%}
+      {%- assign needs_read_more = false -%}
+      {%- if desc_len > 280 -%}{%- assign needs_read_more = true -%}{%- endif -%}
+      <div class="bfc4-desc-wrap" id="bfc4-desc-wrap">
+        <p class="bfc4-kit-desc{% if needs_read_more %} bfc4-desc-clamp{% endif %}" id="bfc4-desc">{{ desc_text }}</p>
+        {%- if needs_read_more -%}
+          <button type="button" class="bfc4-desc-toggle is-visible" id="bfc4-desc-toggle" onclick="bfc4ToggleDesc()" aria-expanded="false" aria-controls="bfc4-desc">
+            <span class="bfc4-desc-toggle-label">Read more</span>
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        {%- endif -%}
+      </div>
+      {%- comment -%}
+        Refurbishment trust strip. No battery mention since most MF cameras are fully
+        mechanical and a "new battery" claim would be misleading.
+      {%- endcomment -%}
+      <ul class="bfc4-trust-strip">
+        <li>
+          <button type="button" class="bfc4-trust-link" onclick="baOpenPopup('bfc4-restoration-popup')" aria-label="Learn how we restore each camera">
+            <svg class="bfc4-trust-check" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6.5 11.5 3 8l1-1 2.5 2.5L12 4l1 1z"/></svg>
+            <span>Restored inside &amp; out</span>
+            <svg class="bfc4-trust-info" width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><line x1="7" y1="6.5" x2="7" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="4" r="0.7" fill="currentColor"/></svg>
+          </button>
+        </li>
+        <li><svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6.5 11.5 3 8l1-1 2.5 2.5L12 4l1 1z"/></svg>Bench-tested by techs</li>
+        <li><svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6.5 11.5 3 8l1-1 2.5 2.5L12 4l1 1z"/></svg>New light seals</li>
+        <li><svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6.5 11.5 3 8l1-1 2.5 2.5L12 4l1 1z"/></svg>6-month warranty</li>
+      </ul>
+      {%- comment -%}
+        Hidden popup data div consumed by baOpenPopup() (same popup system used by kit-item info icons).
+        Click "Restored inside & out" anywhere in the trust strip → this content opens in the shared modal.
+      {%- endcomment -%}
+      <div id="ba-popup-data-bfc4-restoration-popup" style="display:none"
+        data-title="How We Restore Each Camera"
+        data-desc="Every camera in our shop is fully serviced by our in-house technicians before it leaves Brooklyn. We open up each body, replace light seals and foam, adjust shutter speeds across the full range, fix any malfunctioning functions, and modify circuitry when needed. Lenses are cleaned, lubricated, and adjusted. Mirrors and viewfinders cleared. Every reading, click, and motion is checked and tuned against professional bench equipment. All necessary fixes are made, and every camera is brought back to factory specs before it ships. This is the standard for every camera we sell, regardless of model or age."
+        data-imgs=""
+      ></div>
     </div>
 
     {%- comment -%} 2. Build Your Kit heading {%- endcomment -%}
@@ -1964,6 +2126,21 @@
     {%- for block in sk_blocks -%}
       {%- if block.settings.is_starter_kit and block.settings.product != blank -%}{%- assign has_starter = true -%}{%- endif -%}
     {%- endfor -%}
+    {%- comment -%}
+      Dev credit banner sits ABOVE the starter-kit banner. Hidden by default; bfc4Render shows it
+      when 2+ rolls of film are in the kit (filmCount >= 2). When visible, the user reads:
+      "You unlocked a free developing credit" → THEN → "We put together a starter kit for you".
+    {%- endcomment -%}
+    <div class="ba-film-promo" id="ba-film-promo" style="display:none">
+      <div class="ba-film-promo-icon">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="16" height="16" rx="1" stroke="#ABCC99" stroke-width="1.5"/><circle cx="9" cy="9" r="3" stroke="#ABCC99" stroke-width="1.5"/><line x1="1" y1="5" x2="17" y2="5" stroke="#ABCC99" stroke-width="1"/><line x1="1" y1="13" x2="17" y2="13" stroke="#ABCC99" stroke-width="1"/></svg>
+      </div>
+      <div class="ba-film-promo-text">
+        <div class="ba-film-promo-title">You unlocked a free developing credit</div>
+        <div class="ba-film-promo-sub">A standard developing credit will be included with your order.</div>
+      </div>
+      <div class="ba-film-promo-status" id="ba-promo-status" style="color:var(--ce);">✓ Unlocked</div>
+    </div>
     {%- if has_starter -%}
       <div class="ba-film-promo" style="background: linear-gradient(135deg, #3a1a05 0%, #5a2e0a 100%); border: none;">
         <div class="ba-film-promo-icon">
@@ -1976,16 +2153,6 @@
         <button onclick="bfc4ClearTiles()" class="ba-film-promo-status" style="background:none;border:none;cursor:pointer;font-family:var(--sn);white-space:nowrap;">Clear</button>
       </div>
     {%- endif -%}
-    <div class="ba-film-promo" id="ba-film-promo" style="display:none">
-      <div class="ba-film-promo-icon">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="16" height="16" rx="1" stroke="#ABCC99" stroke-width="1.5"/><circle cx="9" cy="9" r="3" stroke="#ABCC99" stroke-width="1.5"/><line x1="1" y1="5" x2="17" y2="5" stroke="#ABCC99" stroke-width="1"/><line x1="1" y1="13" x2="17" y2="13" stroke="#ABCC99" stroke-width="1"/></svg>
-      </div>
-      <div class="ba-film-promo-text">
-        <div class="ba-film-promo-title">Free developing credit unlocked!</div>
-        <div class="ba-film-promo-sub">A standard C-41 developing credit will be included with your order.</div>
-      </div>
-      <div class="ba-film-promo-status" id="ba-promo-status" style="color:var(--ce);">✓ Unlocked</div>
-    </div>
 
     {%- comment -%} 6. (Mini-specs removed above-fold; see chapter quick-view below) {%- endcomment -%}
 
@@ -3262,6 +3429,19 @@
       });
     }, { threshold: 0 }).observe(mainAtc);
   }
+
+  // ── Description "Read more" toggle ──
+  // Button visibility is decided server-side in Liquid (based on description length).
+  // This handler only manages the click-to-expand-collapse interaction.
+  window.bfc4ToggleDesc = function() {
+    var wrap = document.getElementById('bfc4-desc-wrap');
+    if (!wrap) return;
+    var btn = document.getElementById('bfc4-desc-toggle');
+    var label = btn && btn.querySelector('.bfc4-desc-toggle-label');
+    var expanded = wrap.classList.toggle('is-expanded');
+    if (label) label.textContent = expanded ? 'Read less' : 'Read more';
+    if (btn) btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  };
 })();
 
 /* ─── PHOTO LIGHTBOX — used by hero slider + Shot On gallery ─── */
