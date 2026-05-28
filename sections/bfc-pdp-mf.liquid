@@ -307,22 +307,20 @@
 /* ── BREADCRUMBS ─────────────────────────── */
 .bfc4 .bfc4-crumbs {
   display: flex; flex-wrap: wrap; align-items: center;
-  gap: 4px 6px;
+  gap: 5px;
   font-family: var(--sn);
-  font-size: 11px;
-  color: var(--ch);
-  margin-bottom: 10px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
 }
 .bfc4 .bfc4-crumb {
-  color: var(--ch);
+  color: rgba(32,32,9,0.5);
   text-decoration: none;
+  text-transform: uppercase;
   transition: color var(--t);
 }
 .bfc4 .bfc4-crumb:hover { color: var(--or); }
-.bfc4 .bfc4-crumb-current {
-  color: var(--bk);
-  font-weight: 500;
-}
 .bfc4 .bfc4-crumb-sep {
   color: rgba(32,32,9,0.3);
   user-select: none;
@@ -1967,9 +1965,7 @@
         <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
         <a href="/collections/cameras" class="bfc4-crumb">Cameras</a>
         <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
-        <a href="/collections/medium-format-cameras" class="bfc4-crumb">Medium Format Cameras</a>
-        <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
-        <span class="bfc4-crumb bfc4-crumb-current" aria-current="page">{{ product.title }}</span>
+        <a href="/collections/medium-format-cameras" class="bfc4-crumb">Medium Format</a>
       </nav>
       <h1 class="bfc4-title">{{ product.title }}</h1>
       <span id="bfc4-star-placeholder"></span>
