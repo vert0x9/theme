@@ -11,7 +11,59 @@
   "sections": {
     "main": {
       "type": "bfc-pdp-110",
-      "settings": {}
+      "blocks": {
+        "kit_item_zejCLa": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "",
+            "column": "",
+            "product": "lomography-color-92-color-1",
+            "variant_id": "",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": true,
+            "only_show_for": ""
+          }
+        },
+        "kit_item_J8yUkp": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "",
+            "column": "",
+            "product": "lomography-orca-lobster",
+            "variant_id": "",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": true,
+            "only_show_for": ""
+          }
+        },
+        "kit_item_6dngKa": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "",
+            "column": "",
+            "product": "point-shoot-case",
+            "variant_id": "",
+            "discount_percent": 0,
+            "is_developing": false,
+            "is_starter_kit": true,
+            "only_show_for": ""
+          }
+        }
+      },
+      "block_order": [
+        "kit_item_zejCLa",
+        "kit_item_J8yUkp",
+        "kit_item_6dngKa"
+      ],
+      "settings": {
+        "also_collection": "",
+        "restoration_prose": ""
+      }
     },
     "1778503267d0da4345": {
       "type": "apps",
