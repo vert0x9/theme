@@ -525,7 +525,7 @@
         <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
         <a href="/collections/cameras" class="bfc4-crumb">Cameras</a>
         <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
-        <a href="/collections/110-cameras" class="bfc4-crumb">110 Film</a>
+        <a href="/collections/110-cameras" class="bfc4-crumb">110 Cameras</a>
       </nav>
       <h1 class="bfc4-title">{{ product.title }}</h1>
       <span id="bfc4-star-placeholder"></span>
@@ -701,31 +701,6 @@
       <button class="bfc4-cam-only" onclick="bfc4CameraOnly()"{% unless current_variant.available %} disabled{% endunless %}>{% if current_variant.available %}Camera Only &mdash; {{ current_variant.price | money }}{% else %}Camera Currently Unavailable{% endif %}</button>
     </div>
 
-    {%- comment -%} 4b. Ease-of-use strip {%- endcomment -%}
-    <div class="bfc4-howto">
-      <div class="bfc4-howto-step">
-        <div class="bfc4-howto-icon">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="14" height="14" rx="1" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.3"/><line x1="1" y1="4.5" x2="15" y2="4.5" stroke="currentColor" stroke-width="0.9"/><line x1="1" y1="11.5" x2="15" y2="11.5" stroke="currentColor" stroke-width="0.9"/></svg>
-        </div>
-        <span class="bfc4-howto-label">Load Film</span>
-        <span class="bfc4-howto-sub">Drop in a 110 cartridge — no threading, no fuss</span>
-      </div>
-      <div class="bfc4-howto-step">
-        <div class="bfc4-howto-icon">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.3"/><circle cx="8" cy="8" r="2" fill="currentColor"/><line x1="8" y1="1" x2="8" y2="3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-        </div>
-        <span class="bfc4-howto-label">Point &amp; Shoot</span>
-        <span class="bfc4-howto-sub">Simple to use — load film and shoot</span>
-      </div>
-      <div class="bfc4-howto-step">
-        <div class="bfc4-howto-icon">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 13V6L8 3L13 6V13H3Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><rect x="6" y="9" width="4" height="4" stroke="currentColor" stroke-width="1.1"/></svg>
-        </div>
-        <span class="bfc4-howto-label">Develop &amp; Scan</span>
-        <span class="bfc4-howto-sub">Drop off at BFC — we develop, scan, and deliver online</span>
-      </div>
-    </div>
-
     {%- comment -%} 5. Starter kit + free developing banners {%- endcomment -%}
     {%- assign has_starter = false -%}
     {%- for block in sk_blocks -%}
@@ -808,10 +783,6 @@
 
     {%- comment -%} 7. Quick nav buttons {%- endcomment -%}
     <div class="bfc4-nav-btns">
-      <button class="bfc4-customize" onclick="document.getElementById('bfc4-custom').scrollIntoView({behavior:'smooth'})">
-        Expand your kit
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false"><path d="M6 2v8M2 6l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="square"/></svg>
-      </button>
       <button class="bfc4-customize" onclick="document.getElementById('bfc4-photos').scrollIntoView({behavior:'smooth'})">
         Photos &amp; specs
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false"><path d="M6 2v8M2 6l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="square"/></svg>
@@ -1008,228 +979,6 @@
       </div>
     </div>{%- comment -%} /bfc4-chapter-body {%- endcomment -%}
   </div>{%- comment -%} /bfc4-chapter {%- endcomment -%}
-
-  {%- comment -%} Custom kit section {%- endcomment -%}
-  <section class="bfc4-custom" id="bfc4-custom" aria-label="Build your own kit">
-    <div class="bfc4-custom-head">
-      <span class="bfc4-custom-eyebrow">Build Your Own</span>
-      <h2 class="bfc4-custom-title">Mix &amp; match.</h2>
-
-    </div>
-
-    {%- comment -%} Collect columns {%- endcomment -%}
-    {%- assign col_names = '' -%}
-    {%- for block in section.blocks -%}
-      {%- if block.type == 'kit_item' and block.settings.product != blank -%}
-        {%- if block.settings.only_show_for == blank or block.settings.only_show_for.handle == product.handle -%}
-        {%- assign col = block.settings.column | default: block.settings.label -%}
-        {%- unless col_names contains col -%}
-          {%- if col_names == '' -%}{%- assign col_names = col -%}
-          {%- else -%}{%- assign col_names = col_names | append: '||' | append: col -%}
-          {%- endif -%}
-        {%- endunless -%}
-        {%- endif -%}
-      {%- endif -%}
-    {%- endfor -%}
-    {%- assign col_name_arr = col_names | split: '||' -%}
-
-    <div class="ba-columns" role="list">
-      {%- for col_name in col_name_arr -%}
-        <div class="ba-col" id="bfc4-col-{{ forloop.index }}" data-col-name="{{ col_name | escape }}">
-          <div class="ba-col-head" onclick="baToggleCol(this.closest('.ba-col'))">
-            <div class="ba-col-title">
-              {% if col_name == 'More' %}Accessories{% else %}{{ col_name }}{% endif %}
-              <span class="ba-col-count" id="ba-col-count-{{ forloop.index }}">0</span>
-            </div>
-            <svg class="ba-col-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
-          </div>
-          <div class="ba-col-body">
-          {%- assign col_item_index = 0 -%}
-          {%- assign col_item_total = 0 -%}
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'kit_item' and block.settings.product != blank -%}
-              {%- if block.settings.only_show_for == blank or block.settings.only_show_for.handle == product.handle -%}
-              {%- assign block_col = block.settings.column | default: block.settings.label -%}
-              {%- if block_col == col_name -%}{%- assign col_item_total = col_item_total | plus: 1 -%}{%- endif -%}
-              {%- endif -%}
-            {%- endif -%}
-          {%- endfor -%}
-
-          {%- for block in section.blocks -%}
-            {%- if block.type != 'kit_item' -%}{% continue %}{%- endif -%}
-            {%- assign bp = block.settings.product -%}
-            {%- if bp == blank -%}{% continue %}{%- endif -%}
-            {%- if block.settings.only_show_for != blank and block.settings.only_show_for.handle != product.handle -%}{% continue %}{%- endif -%}
-            {%- assign block_col = block.settings.column | default: block.settings.label -%}
-            {%- unless block_col == col_name -%}{% continue %}{%- endunless -%}
-            {%- assign col_item_index = col_item_index | plus: 1 -%}
-
-            {%- liquid
-              assign is_dev       = block.settings.is_developing
-              assign disc         = block.settings.discount_percent
-              assign specific_vid = block.settings.variant_id | strip
-              assign cat_id       = 'ba-cat-' | append: forloop.index
-              assign show_variants = false
-              if bp.variants.size > 1 and specific_vid == blank
-                assign show_variants = true
-              endif
-              assign display_variant = bp.variants.first
-            -%}
-            {%- unless specific_vid == blank -%}
-              {%- for v in bp.variants -%}
-                {%- assign vid_str = v.id | append: '' -%}
-                {%- if vid_str == specific_vid -%}{%- assign display_variant = v -%}{%- endif -%}
-              {%- endfor -%}
-            {%- endunless -%}
-            {%- liquid
-              assign orig_cents = display_variant.price
-              if is_dev
-                assign sale_cents = 0
-              elsif disc > 0
-                assign disc_float = disc | times: 1.0 | divided_by: 100
-                assign save_cents = orig_cents | times: disc_float | floor
-                assign sale_cents = orig_cents | minus: save_cents
-              else
-                assign sale_cents = orig_cents
-              endif
-            -%}
-            {%- assign popup_imgs = '' -%}
-            {%- for media in bp.media limit: 6 -%}
-              {%- if media.media_type == 'image' -%}
-                {%- assign img_url = media | image_url: width: 600 -%}
-                {%- if popup_imgs == '' -%}{%- assign popup_imgs = img_url -%}
-                {%- else -%}{%- assign popup_imgs = popup_imgs | append: '||' | append: img_url -%}
-                {%- endif -%}
-              {%- endif -%}
-            {%- endfor -%}
-
-            <div
-              class="ba-mini-card{% if col_item_index > 2 %} is-hidden{% endif %}{% unless display_variant.available %} is-oos{% endunless %}"
-              id="{{ cat_id }}"
-              data-variant-id="{{ display_variant.id }}"
-              data-product-id="{{ bp.id }}"
-              data-product-title="{{ bp.title | escape }}"
-              data-orig="{{ orig_cents }}"
-              data-sale="{{ orig_cents }}"
-              data-is-dev="{{ is_dev }}"
-              data-disc="{{ disc }}"
-              data-cat="{{ cat_id }}"
-              data-col-id="bfc4-col-{{ forloop.parentloop.index }}"
-              data-col-name="{{ col_name | escape }}"
-              data-starter="{{ block.settings.is_starter_kit }}"
-              {% if display_variant.available %}onclick="baMiniSelect(this, event)"{% endif %}
-              {{ block.shopify_attributes }}
-            >
-              <div class="ba-mini-img-wrap">
-                {%- if bp.featured_image -%}
-                  <img class="ba-mini-img" src="{{ bp.featured_image | image_url: width: 400 }}" alt="{{ bp.title | escape }}" loading="lazy"/>
-                {%- else -%}
-                  <div class="ba-mini-img-ph"></div>
-                {%- endif -%}
-                {%- unless display_variant.available -%}<span class="ba-mini-oos">Out of Stock</span>{%- endunless -%}
-                <button
-                  class="ba-mini-info-icon"
-                  onclick="event.stopPropagation(); baOpenPopup('{{ cat_id }}')"
-                  aria-label="View details"
-                ><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><line x1="7" y1="6.5" x2="7" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="4" r="0.7" fill="currentColor"/></svg></button>
-              </div>
-              <div class="ba-mini-body">
-                <div class="ba-mini-info">
-                  <div class="ba-mini-name">{{ block.settings.custom_label | default: bp.title }}</div>
-                </div>
-                <div class="ba-mini-right">
-                  {%- unless is_dev -%}<span class="ba-mini-price">{{ orig_cents | money }}</span>{%- endunless -%}
-                </div>
-              </div>
-              {%- if show_variants -%}
-                <div class="ba-mini-vars" onclick="event.stopPropagation()">
-                  {%- for variant in bp.variants -%}
-                    {%- if variant.available -%}
-                      {%- liquid
-                        assign v_orig = variant.price
-                        if is_dev
-                          assign v_sale = 0
-                        elsif disc > 0
-                          assign v_df = disc | times: 1.0 | divided_by: 100
-                          assign v_sv = v_orig | times: v_df | floor
-                          assign v_sale = v_orig | minus: v_sv
-                        else
-                          assign v_sale = v_orig
-                        endif
-                      -%}
-                      <button
-                        class="ba-mini-var-btn{% if forloop.first %} is-sel{% endif %}"
-                        data-variant-id="{{ variant.id }}"
-                        data-product-title="{{ bp.title | escape }}"
-                        data-orig="{{ variant.price }}"
-                        data-sale="{{ variant.price }}"
-                        data-is-dev="{{ is_dev }}"
-                        data-disc="{{ disc }}"
-                        data-cat="{{ cat_id }}"
-                        onclick="baMiniSelectVar(this)"
-                      >{{ variant.title }} – {%- if is_dev -%}Free{%- else -%}{{ v_sale | money }}{%- endif -%}</button>
-                    {%- endif -%}
-                  {%- endfor -%}
-                </div>
-              {%- endif -%}
-            </div>
-            <div id="ba-popup-data-{{ cat_id }}" style="display:none"
-              data-title="{{ bp.title | escape }}"
-              data-desc="{{ bp.description | strip_html | escape }}"
-              data-imgs="{{ popup_imgs | escape }}"
-            ></div>
-          {%- endfor -%}
-          {%- if col_item_total > 2 -%}
-            <button class="ba-col-more" onclick="event.stopPropagation(); baExpandCol(this.closest('.ba-col'))">
-              <span class="ba-col-more-text">{{ col_item_total | minus: 2 }} more &rsaquo;</span>
-            </button>
-          {%- endif -%}
-          </div>
-        </div>
-      {%- endfor -%}
-    </div>
-
-    {%- comment -%} Promo banners {%- endcomment -%}
-
-
-    {%- comment -%} Selected add-ons row + checkout {%- endcomment -%}
-    <div class="bfc4-below-checkout">
-      <div class="bfc4-selected-row" id="bfc4-selected-row">
-        <div class="bfc4-selected-items" id="bfc4-selected-items">
-          {%- comment -%} Populated by JS {%- endcomment -%}
-        </div>
-        <div class="bfc4-below-atc">
-          {%- if product.variants.size > 1 -%}
-            <div class="bfc4-grade-compact">
-              <span class="bfc4-grade-label">Grade</span>
-              <div class="bfc4-grade-row">
-                {%- for variant in product.variants -%}
-                  <button
-                    class="bfc4-var-btn{% if variant.id == current_variant.id %} is-active{% endif %}"
-                    data-variant-id="{{ variant.id }}"
-                    data-variant-price="{{ variant.price }}"
-                    data-variant-price-fmt="{{ variant.price | money }}"
-                    data-variant-available="{{ variant.available }}"
-                    onclick="bfc4SelectVariant(this)"
-                    {%- unless variant.available -%}disabled{%- endunless -%}
-                  >{{ variant.title }}</button>
-                {%- endfor -%}
-              </div>
-            </div>
-          {%- endif -%}
-          <div class="bfc4-price-row">
-            <span class="bfc4-price-label">Total</span>
-            <span class="bfc4-price" id="bfc4-total-2">{{ sk_total | money }}</span>
-          </div>
-
-          <button class="bfc4-atc" onclick="bfc4AddToCart()"{% unless current_variant.available %} disabled{% endunless %}>
-            <span>{% if current_variant.available %}Add Starter Kit{% else %}Sold Out{% endif %}</span>
-          </button>
-          <button class="bfc4-cam-only" onclick="bfc4CameraOnly()"{% unless current_variant.available %} disabled{% endunless %}>{% if current_variant.available %}Camera Only &mdash; {{ current_variant.price | money }}{% else %}Camera Currently Unavailable{% endif %}</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   {%- comment -%} Also in this collection {%- endcomment -%}
   {%- assign also_col = section.settings.also_collection -%}
