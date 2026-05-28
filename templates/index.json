@@ -284,9 +284,9 @@
       "custom_css": [],
       "settings": {
         "enable_transparent_header": true,
-        "slider_height_desktop": 90,
+        "slider_height_desktop": 100,
         "slider_height_mobile": 85,
-        "slideshow_autoplay_interval": 0,
+        "slideshow_autoplay_interval": 5,
         "show_slideshow_navigation": true,
         "slideshow_navigation_position": "hero__swiper-buttons--sides",
         "color_scheme_arrows": "scheme-1",
