@@ -10,14 +10,8 @@
 {
   "sections": {
     "main": {
-      "type": "bfc-pdp-default",
-      "settings": {
-        "show_recs": true,
-        "rec_count": 4,
-        "show_best_sellers": true,
-        "best_sellers_collection": "",
-        "best_sellers_count": 8
-      }
+      "type": "bfc-pdp-110",
+      "settings": {}
     },
     "1778503267d0da4345": {
       "type": "apps",
