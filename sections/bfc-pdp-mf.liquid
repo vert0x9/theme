@@ -542,6 +542,25 @@
 }
 .bfc4-cam-only:hover { color: var(--bk); }
 
+/* ATC error banner — appears on add-to-cart failure (OOS, already in cart, etc.) */
+.bfc4-atc-error {
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: rgba(155,77,30,0.08);
+  border: 1px solid rgba(155,77,30,0.3);
+  color: #9B4D1E;
+  font-family: var(--sn);
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 500;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.bfc4-atc-error[hidden] { display: none; }
+.bfc4-atc-error svg { flex-shrink: 0; margin-top: 1px; }
+.bfc4-atc-error a { color: inherit; text-decoration: underline; text-underline-offset: 2px; font-weight: 600; }
+
 /* ── KIT SUMMARY (what's in it) ──────────── */
 .bfc4-kit-summary {
   border-top: 1px solid rgba(32,32,9,0.08);
@@ -2208,6 +2227,11 @@
         <span id="bfc4-atc-text">Add Starter Kit</span>
       </button>
       <button class="bfc4-cam-only" onclick="bfc4CameraOnly()">Camera Only &mdash; {{ current_variant.price | money }}</button>
+      {%- comment -%} ATC error banner — hidden until a cart/add failure (e.g. OOS, already-in-cart 422). {%- endcomment -%}
+      <div class="bfc4-atc-error" id="bfc4-atc-error" role="alert" aria-live="assertive" hidden></div>
+      {%- comment -%} Activity / urgency line ("X people have this in their cart"). Reads from
+          Base44; the Customer Events pixel handles writing. {%- endcomment -%}
+      {% render 'bfc-pdp-urgency', variant: current_variant, handle: product.handle %}
     </div>
 
     {%- comment -%} 5. Starter kit + free developing banners {%- endcomment -%}
@@ -3176,15 +3200,99 @@
   };
 
   // ── ATC ─────────────────────────────────────────
+  // Show / clear the ATC error banner. msgHtml may contain a link (e.g. to /cart).
+  function bfc4ShowError(msgHtml) {
+    var el = document.getElementById('bfc4-atc-error');
+    if (!el) { console.warn('[BFC4]', msgHtml); return; }
+    el.innerHTML = '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.4"/><line x1="8" y1="4.5" x2="8" y2="9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="11.5" r="0.9" fill="currentColor"/></svg><span>' + msgHtml + '</span>';
+    el.hidden = false;
+  }
+  function bfc4ClearError() {
+    var el = document.getElementById('bfc4-atc-error');
+    if (el) { el.hidden = true; el.innerHTML = ''; }
+  }
+
+  // Refresh + open the theme's cart drawer. This theme (Release) uses a <cart-drawer>
+  // web component with renderContents(data) + open(). renderContents needs the rendered
+  // section HTML, which /cart/add.js only returns if you ask for `sections`. Since our
+  // adds didn't request sections, we do ONE fetch here to /cart/update.js (a no-op body)
+  // with sections, then hand that to the drawer. This is what makes the drawer show the
+  // current cart AND rebinds its remove buttons to fresh DOM (the stale-DOM bug).
+  function bfc4OpenCartDrawer() {
+    var drawer = document.querySelector('cart-drawer');
+    var payload = JSON.stringify({ sections: 'cart-drawer,cart-icon-bubble', sections_url: window.location.pathname });
+    return bfc4Xhr('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: payload })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        // Update the cart icon bubble count if the theme returned it
+        try {
+          if (data && data.sections && data.sections['cart-icon-bubble']) {
+            var existing = document.getElementById('cart-icon-bubble');
+            if (existing) {
+              var temp = document.createElement('div');
+              temp.innerHTML = data.sections['cart-icon-bubble'];
+              var fresh = temp.querySelector('#cart-icon-bubble');
+              if (fresh) existing.innerHTML = fresh.innerHTML;
+            }
+          }
+        } catch (e) { /* non-fatal */ }
+        // Preferred: web-component drawer refresh + open
+        if (drawer && typeof drawer.renderContents === 'function') {
+          try {
+            drawer.renderContents(data);
+            if (typeof drawer.open === 'function') { drawer.open(); return; }
+          } catch (e) { /* fall through to events/redirect below */ }
+        }
+        // Fallbacks for other cart UIs: fire the theme's update/open events, then
+        // try clicking the cart toggle. Last resort: go to /cart so the user still
+        // sees their cart even if the drawer wiring isn't found.
+        document.dispatchEvent(new CustomEvent('cart:refresh', { bubbles: true }));
+        document.dispatchEvent(new CustomEvent('cart:updated', { bubbles: true, detail: data }));
+        var toggle = document.querySelector('[data-cart-toggle], .cart-toggle, cart-drawer-toggle, [aria-controls="CartDrawer"]');
+        if (toggle) { toggle.click(); return; }
+        window.location.href = '/cart';
+      })
+      .catch(function() { window.location.href = '/cart'; });
+  }
+
+  // Turn a Shopify cart 422 response into a friendly message. Shopify returns
+  // { status, message, description } — description is usually the human-readable
+  // reason ("All N ... are in your cart." or "...is out of stock.").
+  function bfc4FriendlyCartError(errBody) {
+    var desc = errBody && (errBody.description || errBody.message);
+    if (desc && /in your cart/i.test(desc)) {
+      // Already-maxed case — most common here. Point them to the cart.
+      return 'You already have the maximum available quantity in your cart. <a href="/cart">View cart &rsaquo;</a>';
+    }
+    if (desc && /(out of stock|sold out|not available|unavailable|can\u2019t|cannot)/i.test(desc)) {
+      return 'Sorry, this is currently out of stock and can\u2019t be added.';
+    }
+    return desc || 'Sorry, we couldn\u2019t add this to your cart. Please try again or contact us.';
+  }
+
   window.bfc4AddToCart = async function() {
     var btn    = document.getElementById('bfc4-atc');
     var textEl = document.getElementById('bfc4-atc-text');
     var stickyBtn  = document.getElementById('bfc4-sticky-btn');
     var stickyText = document.getElementById('bfc4-sticky-btn-text');
+    bfc4ClearError();
     if (btn) { btn.disabled = true; }
     if (stickyBtn) { stickyBtn.disabled = true; }
     if (textEl) { textEl.textContent = 'Adding\u2026'; }
     if (stickyText) { stickyText.textContent = 'Adding\u2026'; }
+
+    // Reset button label to its idle state — used by both success-timeout and error paths.
+    function bfc4ResetBtn() {
+      if (btn) { btn.classList.remove('is-success'); btn.disabled = false; }
+      if (stickyBtn) { stickyBtn.disabled = false; }
+      if (textEl) { textEl.textContent = 'Add Starter Kit'; }
+      if (stickyText) { stickyText.textContent = 'Add to Cart'; }
+    }
+    // Fail path: show message, reset button immediately (no success state).
+    function bfc4Fail(msgHtml) {
+      bfc4ShowError(msgHtml);
+      bfc4ResetBtn();
+    }
 
     var items = [];
     var filmCount = 0;
@@ -3213,45 +3321,75 @@
       items.push({ id: parseInt(STATE.extWarranty.variantId, 10), quantity: 1, properties: { _extended_warranty: 'true' } });
     }
 
+    var camVid = STATE.variantId;
+    if (!camVid) { return bfc4Fail('Please select a condition / option first.'); }
+
     try {
-      // Cart attributes — AWAIT this. Previously fire-and-forget which created
-      // a race condition: if the page navigated before cart/update completed,
-      // stale attributes from prior sessions (e.g. _free_developing_credit: true
-      // from an earlier kit with film) would survive and corrupt the current
-      // order. Awaiting guarantees the attrs reflect THIS order's state.
+      // 1. Add the CAMERA first, via XHR, so a 422 (OOS / already-maxed) is catchable
+      //    and we can show a message. Previously the camera went through the hidden
+      //    Shopify form (submitBtn.click) which threw its own 422 OUTSIDE this try,
+      //    so the user saw nothing. Adding it here lets us surface the real reason.
+      var camRes = await bfc4Xhr('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: JSON.stringify({ items: [{ id: parseInt(camVid, 10), quantity: 1 }] }) });
+      if (!camRes.ok) {
+        var camErr = await camRes.json().catch(function() { return {}; });
+        console.error('[BFC4] camera add failed:', camRes.status, camErr);
+        return bfc4Fail(bfc4FriendlyCartError(camErr));
+      }
+
+      // 2. Camera is in. Set cart attributes (await to avoid stale-attr race).
       var cartAttrs = { attributes: { '_kit_bundle': 'true', '_kit_camera': '{{ product.title | escape }}', '_free_developing_credit': filmCount >= 2 ? 'true' : 'false' } };
       await bfc4Xhr('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: JSON.stringify(cartAttrs) });
+
+      // 3. Add kit items. These are best-effort — if a kit item is OOS we don't want
+      //    to block the camera that already succeeded. Add them as a batch; on failure
+      //    log it but still proceed to open the drawer with the camera in cart.
       if (items.length > 0) {
         var res = await bfc4Xhr('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: JSON.stringify({ items: items }) });
         if (!res.ok) {
           var errBody = await res.json().catch(function() { return {}; });
-          console.error('[BFC4] cart/add.js error:', res.status, errBody);
-          throw new Error(res.status);
+          console.warn('[BFC4] kit items add failed (camera still added):', res.status, errBody);
+          // Non-fatal: camera is in the cart. Surface a soft notice but continue.
+          bfc4ShowError('Your camera was added, but one or more kit add-ons are unavailable and were skipped.');
         }
       }
-      var submitBtn = document.getElementById('ProductSubmitButton-{{ section.id }}');
-      if (submitBtn) submitBtn.click();
+
+      // 4. Refresh + open the cart drawer (renders fresh DOM so remove buttons work,
+      //    and shows the items we just added). Await so the success state lines up.
+      await bfc4OpenCartDrawer();
+
       if (btn) { btn.classList.add('is-success'); }
       if (textEl) { textEl.textContent = 'Added!'; }
       if (stickyText) { stickyText.textContent = 'Added!'; }
-      setTimeout(function() {
-        if (btn) { btn.classList.remove('is-success'); btn.disabled = false; }
-        if (stickyBtn) { stickyBtn.disabled = false; }
-        if (textEl) { textEl.textContent = 'Add Starter Kit'; }
-        if (stickyText) { stickyText.textContent = 'Add to Cart'; }
-      }, 2400);
+      setTimeout(bfc4ResetBtn, 2400);
     } catch(e) {
       console.error('[BFC4] ATC error:', e);
-      if (btn) { btn.disabled = false; }
-      if (stickyBtn) { stickyBtn.disabled = false; }
-      if (textEl) { textEl.textContent = 'Add Starter Kit'; }
-      if (stickyText) { stickyText.textContent = 'Add to Cart'; }
+      bfc4Fail('Something went wrong adding to your cart. Please try again.');
     }
   };
 
-  window.bfc4CameraOnly = function() {
-    var submitBtn = document.getElementById('ProductSubmitButton-{{ section.id }}');
-    if (submitBtn) submitBtn.click();
+  window.bfc4CameraOnly = async function() {
+    bfc4ClearError();
+    var camBtn = document.querySelector('.bfc4-cam-only');
+    var camVid = STATE.variantId;
+    if (!camVid) { bfc4ShowError('Please select a condition / option first.'); return; }
+    if (camBtn) camBtn.disabled = true;
+    try {
+      var res = await bfc4Xhr('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: JSON.stringify({ items: [{ id: parseInt(camVid, 10), quantity: 1 }] }) });
+      if (!res.ok) {
+        var errBody = await res.json().catch(function() { return {}; });
+        console.error('[BFC4] camera-only add failed:', res.status, errBody);
+        bfc4ShowError(bfc4FriendlyCartError(errBody));
+        if (camBtn) camBtn.disabled = false;
+        return;
+      }
+      document.dispatchEvent(new CustomEvent('cart:refresh'));
+      await bfc4OpenCartDrawer();
+      if (camBtn) camBtn.disabled = false;
+    } catch(e) {
+      console.error('[BFC4] camera-only error:', e);
+      bfc4ShowError('Something went wrong adding to your cart. Please try again.');
+      if (camBtn) camBtn.disabled = false;
+    }
   };
 
   // ── Accordion (shared with custom kit) ──────────
