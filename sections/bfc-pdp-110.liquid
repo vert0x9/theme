@@ -414,10 +414,7 @@
       assign sk_bp  = block.settings.product
       assign sk_dv  = sk_bp.variants.first
       assign sk_d   = block.settings.discount_percent
-      assign sk_dev = block.settings.is_developing
-      if sk_dev
-        assign sk_sale = 0
-      elsif sk_d > 0
+      if sk_d > 0
         assign sk_df   = sk_d | times: 1.0 | divided_by: 100
         assign sk_sv   = sk_dv.price | times: sk_df | floor
         assign sk_sale = sk_dv.price | minus: sk_sv
@@ -613,12 +610,10 @@
         {%- if block.settings.only_show_for != blank and block.settings.only_show_for.handle != product.handle -%}{% continue %}{%- endif -%}
         {%- assign sk_bp  = block.settings.product -%}
         {%- assign sk_d   = block.settings.discount_percent -%}
-        {%- assign sk_dev = block.settings.is_developing -%}
         {%- assign sk_starter = block.settings.is_starter_kit -%}
         {%- assign sk_dv  = sk_bp.variants.first -%}
         {%- assign sk_col = block.settings.column | default: block.settings.label -%}
-        {%- if sk_dev -%}{%- assign sk_sale = 0 -%}
-        {%- elsif sk_d > 0 -%}
+        {%- if sk_d > 0 -%}
           {%- assign sk_df = sk_d | times: 1.0 | divided_by: 100 -%}
           {%- assign sk_sv = sk_dv.price | times: sk_df | floor -%}
           {%- assign sk_sale = sk_dv.price | minus: sk_sv -%}
@@ -640,7 +635,6 @@
           data-product-title="{{ sk_bp.title | escape }}"
           data-orig="{{ sk_dv.price | default: 0 }}"
           data-sale="{{ sk_dv.price | default: 0 }}"
-          data-is-dev="{{ sk_dev | default: false }}"
           data-disc="{{ sk_d | default: 0 }}"
           data-img="{{ sk_bp.featured_image | image_url: width: 400 }}"
           {% if sk_dv.available %}onclick="bfc4TileToggle(this)"{% endif %}
@@ -659,7 +653,7 @@
             <span class="bfc4-tile-label">{{ sk_col }}</span>
             <span class="bfc4-tile-name">{{ block.settings.custom_label | default: sk_bp.title }}</span>
             
-            {%- unless sk_dev -%}<span class="bfc4-tile-price">{{ sk_dv.price | money }}</span>{%- endunless -%}
+            <span class="bfc4-tile-price">{{ sk_dv.price | money }}</span>
           </div>
         </div>
         <div id="ba-popup-data-{{ sk_tile_id }}" style="display:none"
@@ -699,34 +693,6 @@
         <span id="bfc4-atc-text">{% if current_variant.available %}Add Starter Kit{% else %}Sold Out{% endif %}</span>
       </button>
       <button class="bfc4-cam-only" onclick="bfc4CameraOnly()"{% unless current_variant.available %} disabled{% endunless %}>{% if current_variant.available %}Camera Only &mdash; {{ current_variant.price | money }}{% else %}Camera Currently Unavailable{% endif %}</button>
-    </div>
-
-    {%- comment -%} 5. Starter kit + free developing banners {%- endcomment -%}
-    {%- assign has_starter = false -%}
-    {%- for block in sk_blocks -%}
-      {%- if block.settings.is_starter_kit and block.settings.product != blank -%}{%- assign has_starter = true -%}{%- endif -%}
-    {%- endfor -%}
-    {%- if has_starter -%}
-      <div class="ba-film-promo" style="background: linear-gradient(135deg, #3a1a05 0%, #5a2e0a 100%); border: none;">
-        <div class="ba-film-promo-icon">
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2L11 7H16.5L12.2 10.5L13.9 16L9 12.5L4.1 16L5.8 10.5L1.5 7H7L9 2Z" stroke="#F4A027" stroke-width="1.5" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="ba-film-promo-text">
-          <div class="ba-film-promo-title">Ready to shoot right away</div>
-          <div class="ba-film-promo-sub">Film, strap &amp; developing — pre-selected, ready to go.</div>
-        </div>
-        <button onclick="bfc4ClearTiles()" class="ba-film-promo-status" style="background:none;border:none;cursor:pointer;font-family:var(--sn);white-space:nowrap;">Clear</button>
-      </div>
-    {%- endif -%}
-    <div class="ba-film-promo" id="ba-film-promo" style="display:none">
-      <div class="ba-film-promo-icon">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="16" height="16" rx="1" stroke="#ABCC99" stroke-width="1.5"/><circle cx="9" cy="9" r="3" stroke="#ABCC99" stroke-width="1.5"/><line x1="1" y1="5" x2="17" y2="5" stroke="#ABCC99" stroke-width="1"/><line x1="1" y1="13" x2="17" y2="13" stroke="#ABCC99" stroke-width="1"/></svg>
-      </div>
-      <div class="ba-film-promo-text">
-        <div class="ba-film-promo-title">Free developing credit unlocked!</div>
-        <div class="ba-film-promo-sub">A standard C-41 developing credit will be included with your order.</div>
-      </div>
-      <div class="ba-film-promo-status" id="ba-promo-status" style="color:var(--ce);">✓ Unlocked</div>
     </div>
 
     {%- comment -%} 6. Extended Warranty (mini-specs removed — now lives in below-fold chapter)
@@ -1353,21 +1319,16 @@ bfc4Render();
 };
 function bfc4Render() {
 var total = STATE.variantPrice;
-var filmCount = 0;
 Object.values(STATE.kit).forEach(function(sel) {
 total += sel.sale;
-if (sel.isFilm) filmCount++;
 });
 if (STATE.extWarranty) total += STATE.extWarranty.price;
-var devValue = filmCount >= 2 ? 1800 : 0;
 var totalEl   = document.getElementById('bfc4-total');
 var totalEl2  = document.getElementById('bfc4-total-2');
 if (totalEl)   totalEl.textContent   = fmt(total);
 if (totalEl2)  totalEl2.textContent  = fmt(total);
 var stickyPrice = document.getElementById('bfc4-sticky-price-2');
 if (stickyPrice) stickyPrice.textContent = fmt(total);
-var promoEl = document.getElementById('ba-film-promo');
-if (promoEl) promoEl.style.display = filmCount >= 2 ? 'flex' : 'none';
 var selEl = document.getElementById('bfc4-selected-items');
 if (selEl) {
 var html = '';
@@ -1413,26 +1374,15 @@ if (stickyBtn) { stickyBtn.disabled = true; }
 if (textEl) { textEl.textContent = 'Adding\u2026'; }
 if (stickyText) { stickyText.textContent = 'Adding\u2026'; }
 var items = [];
-var filmCount = 0;
-// First pass: count film
-Object.values(STATE.kit).forEach(function(sel) {
-if (sel.isFilm) filmCount++;
-});
-// Second pass: build items — skip developing if < 2 film rolls
+// Build items from selected kit tiles
 Object.values(STATE.kit).forEach(function(sel) {
 if (!sel.variantId) return;
 var vid = parseInt(sel.variantId, 10);
 if (isNaN(vid) || vid === 0) return;
-if (sel.isDev && filmCount < 2) return; // skip free developing if not enough film
-var props = { _kit_bundle: 'true' };
-if (sel.isDev) {
-props._free_developing      = 'true';
-props._bundle_discount_type = 'free_developing';
-}
-items.push({ id: vid, quantity: 1, properties: props });
+items.push({ id: vid, quantity: 1, properties: { _kit_bundle: 'true' } });
 });
 try {
-var cartAttrs = { attributes: { '_kit_bundle': 'true', '_kit_camera': '{{ product.title | escape }}', '_free_developing_credit': filmCount >= 2 ? 'true' : 'false' } };
+var cartAttrs = { attributes: { '_kit_bundle': 'true', '_kit_camera': '{{ product.title | escape }}' } };
 await bfc4Xhr('/cart/update.js', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: JSON.stringify(cartAttrs) });
 if (items.length > 0) {
 var res = await bfc4Xhr('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: JSON.stringify({ items: items }) });
@@ -1474,7 +1424,7 @@ try {
 await bfc4Xhr('/cart/update.js', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-body: JSON.stringify({ attributes: { '_kit_bundle': 'false', '_free_developing_credit': 'false', '_kit_camera': '' } })
+body: JSON.stringify({ attributes: { '_kit_bundle': 'false', '_kit_camera': '' } })
 });
 if (STATE.extWarranty && STATE.extWarranty.variantId) {
 await bfc4Xhr('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, body: JSON.stringify({ items: [{ id: STATE.extWarranty.variantId, quantity: 1 }] }) });
@@ -1827,7 +1777,6 @@ if (stickyBar && mainAtc) {
         { "type": "product", "id": "product", "label": "Product" },
         { "type": "text", "id": "variant_id", "label": "Specific variant ID (optional)" },
         { "type": "range", "id": "discount_percent", "min": 0, "max": 50, "step": 5, "unit": "%", "label": "Discount %", "default": 10 },
-        { "type": "checkbox", "id": "is_developing", "label": "Is free developing", "default": false },
         { "type": "checkbox", "id": "is_starter_kit", "label": "Include in Starter Kit", "default": false },
         { "type": "product", "id": "only_show_for", "label": "Only show for product", "info": "If set, this item only appears when the main product matches. Leave blank to show on all products." }
       ]
@@ -1837,11 +1786,10 @@ if (stickyBar && mainAtc) {
     {
       "name": "BFC 110 Page v1",
       "blocks": [
-        { "type": "kit_item", "settings": { "label": "Film", "column": "Film", "discount_percent": 10, "is_developing": false, "is_starter_kit": true } },
-        { "type": "kit_item", "settings": { "label": "Film", "column": "Film", "discount_percent": 10, "is_developing": false, "is_starter_kit": true } },
-        { "type": "kit_item", "settings": { "label": "Strap", "column": "Strap", "discount_percent": 15, "is_developing": false, "is_starter_kit": true } },
-        { "type": "kit_item", "settings": { "label": "Batteries", "column": "Batteries", "discount_percent": 10, "is_developing": false, "is_starter_kit": false } },
-        { "type": "kit_item", "settings": { "label": "Developing", "column": "Developing Credits", "discount_percent": 0, "is_developing": true, "is_starter_kit": false } }
+        { "type": "kit_item", "settings": { "label": "Film", "column": "Film", "discount_percent": 10, "is_starter_kit": true } },
+        { "type": "kit_item", "settings": { "label": "Film", "column": "Film", "discount_percent": 10, "is_starter_kit": true } },
+        { "type": "kit_item", "settings": { "label": "Strap", "column": "Strap", "discount_percent": 15, "is_starter_kit": true } },
+        { "type": "kit_item", "settings": { "label": "Batteries", "column": "Batteries", "discount_percent": 10, "is_starter_kit": false } }
       ]
     }
   ]
