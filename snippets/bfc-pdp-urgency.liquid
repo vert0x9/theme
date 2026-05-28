@@ -9,7 +9,7 @@
   Base44 setup required:
   - Create entity "ProductActivity" with fields: handle (text), event (text)
   - Base44 auto-adds created_date timestamps
-  - API endpoint: https://api.base44.app/api/apps/6910fd9136cfabdf03f66780/functions/productActivity
+  - API endpoint: https://app--6910fd9136cfabdf03f66780.base44.app/api/apps/6910fd9136cfabdf03f66780/functions/productActivity
 {%- endcomment -%}
 
 {%- assign low_stock_threshold = 5 -%}
@@ -17,6 +17,11 @@
 {%- if variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny' and variant.inventory_quantity > 0 and variant.inventory_quantity <= low_stock_threshold -%}
   {%- assign show_stock = true -%}
 {%- endif -%}
+
+{%- comment -%} Price drives the free-shipping message. Was never assigned before, so the
+    >= threshold always evaluated against nil (false). Pull it from the passed variant. {%- endcomment -%}
+{%- assign price = variant.price | default: 0 -%}
+{%- assign free_ship_threshold = 40000 -%}{%- comment -%} $400 in cents {%- endcomment -%}
 
 <div class="bfc-urgency" id="bfc-urgency" style="display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin-top:6px;font-size:10px;line-height:1.3;">
   {%- if show_stock -%}
@@ -31,9 +36,9 @@
       Restored &amp; Warrantied
     </span>
   {%- endif -%}
-  <span style="display:inline-flex;align-items:center;gap:3px;font-weight:600;color:{%- if price >= 39900 -%}#2a4820{%- else -%}var(--ch,#4E4741);opacity:0.55{%- endif -%};">
+  <span style="display:inline-flex;align-items:center;gap:3px;font-weight:600;color:{%- if price >= free_ship_threshold -%}#2a4820{%- else -%}var(--ch,#4E4741);opacity:0.55{%- endif -%};">
     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-    {%- if price >= 39900 -%}Ships Free &middot; 1 Day{%- else -%}Ships in 1 Day{%- endif -%}
+    {%- if price >= free_ship_threshold -%}Ships Fast &amp; Free{%- else -%}Ships Fast{%- endif -%}
   </span>
   <span id="bfc-urgency-activity" style="display:none;color:var(--ch,#4E4741);opacity:0.6;"></span>
 </div>
@@ -47,9 +52,24 @@
 
 <script>
 (function(){
-  var BFC_ACTIVITY_API = 'https://api.base44.app/api/apps/6910fd9136cfabdf03f66780/functions/productActivity';
-  var handle = '{{ handle | escape }}';
-  if (!handle) return;
+  // Correct Base44 host is the app-subdomain form. The api.base44.app / api.base44.com
+  // variants do NOT resolve (confirmed via console test — only this host returns data).
+  var BFC_ACTIVITY_API = 'https://app--6910fd9136cfabdf03f66780.base44.app/api/apps/6910fd9136cfabdf03f66780/functions/productActivity';
+  var rawHandle = '{{ handle | escape }}';
+  if (!rawHandle) return;
+
+  // Normalize handles the same way card-product.liquid does, so this matches whatever
+  // the Customer Events pixel wrote (it extracts the slug from product.url).
+  function normHandle(h) {
+    if (h == null) return '';
+    var s = String(h).trim().toLowerCase();
+    s = s.split('?')[0].split('#')[0];
+    if (s.indexOf('/products/') >= 0) s = s.substring(s.indexOf('/products/') + 10);
+    s = s.replace(/^\/+/, '').replace(/\/+$/, '');
+    if (s.indexOf('/') >= 0) s = s.split('/').pop();
+    return s;
+  }
+  var handle = normHandle(rawHandle);
 
   /* ── Fetch recent activity, filter client-side ── */
   fetch(BFC_ACTIVITY_API + '?sort=-created_date&limit=500', {
@@ -62,38 +82,35 @@
     var atcCount = 0;
     var purchaseCount = 0;
     records.forEach(function(r) {
-      if (!r || r.handle !== handle || !r.created_date) return;
+      if (!r || !r.created_date) return;
+      if (normHandle(r.handle) !== handle) return;
       var ts = new Date(r.created_date).getTime();
       if (ts < cutoff) return;
       if (r.event === 'atc') atcCount++;
       if (r.event === 'purchase') purchaseCount++;
     });
-    
+
     var el = document.getElementById('bfc-urgency-activity');
     if (!el) return;
-    
-    var parts = [];
-    if (purchaseCount > 0) {
-      parts.push(purchaseCount + ' purchased recently');
+
+    // Prefer the stronger purchase signal; otherwise show cart activity if it clears
+    // a small threshold so a single add doesn't look weak. Matches card-product wording.
+    var msg = '';
+    if (purchaseCount >= 1) {
+      msg = purchaseCount + (purchaseCount === 1 ? ' person' : ' people') + ' bought this recently';
+    } else if (atcCount >= 3) {
+      msg = atcCount + ' people have this in their cart';
     }
-    if (atcCount > 0) {
-      parts.push(atcCount + ' added to cart recently');
-    }
-    
-    if (parts.length > 0) {
-      el.textContent = parts.join(' · ');
+
+    if (msg) {
+      el.textContent = msg;
       el.style.display = 'block';
     }
   })
   .catch(function() { /* fail silently */ });
 
-  /* ── Global tracking function — called from ATC handlers ── */
-  window.bfcTrackActivity = function(eventType) {
-    fetch(BFC_ACTIVITY_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ handle: handle, event: eventType || 'atc' })
-    }).catch(function() {});
-  };
+  /* Writing is handled globally by the Shopify Customer Events pixel
+     (Settings → Customer events), which fires an 'atc' event on every
+     add to cart sitewide. No per-page writer needed here. */
 })();
 </script>

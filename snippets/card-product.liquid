@@ -632,23 +632,78 @@
   // append the cart message as a second line.
   function loadActivity() {
     var cartCheckList = renderInventoryMessages();
-    if (!cartCheckList.length) return;
+    console.log('[BFC-ACTIVITY] cards on page with .bfc-card-activity:', cartCheckList.length,
+      '| handles:', cartCheckList.map(function(el){ return el.dataset.handle; }));
+    if (!cartCheckList.length) {
+      console.warn('[BFC-ACTIVITY] No activity elements found — bailing. (Card markup may not be rendering .bfc-card-activity)');
+      return;
+    }
 
-    fetch('https://app--6910fd9136cfabdf03f66780.base44.app/api/apps/6910fd9136cfabdf03f66780/functions/productActivity?sort=-created_date&limit=500')
-      .then(function(r) { return r.json(); })
+    var ACTIVITY_URL = 'https://app--6910fd9136cfabdf03f66780.base44.app/api/apps/6910fd9136cfabdf03f66780/functions/productActivity?sort=-created_date&limit=500';
+    console.log('[BFC-ACTIVITY] fetching:', ACTIVITY_URL);
+
+    fetch(ACTIVITY_URL)
+      .then(function(r) {
+        console.log('[BFC-ACTIVITY] fetch response status:', r.status, r.statusText, '| ok:', r.ok);
+        if (!r.ok) {
+          console.error('[BFC-ACTIVITY] Non-OK response. The endpoint may be down, moved, or auth-gated.');
+        }
+        return r.json();
+      })
       .then(function(data) {
+        console.log('[BFC-ACTIVITY] raw response (typeof ' + typeof data + '):', data);
         var events = Array.isArray(data) ? data : (data.results || data.data || []);
-        if (!events.length) return;
+        console.log('[BFC-ACTIVITY] parsed events array length:', events.length,
+          '| was top-level array?', Array.isArray(data));
+        if (!events.length) {
+          console.warn('[BFC-ACTIVITY] events array is EMPTY. Either the endpoint returned nothing, ' +
+            'or the response shape changed (code looks for a top-level array, or .results / .data). ' +
+            'Check the "raw response" log above for the actual shape.');
+          return;
+        }
+
+        // Log the shape of the first event so we can verify field names match what we filter on
+        console.log('[BFC-ACTIVITY] sample event[0]:', events[0],
+          '| keys:', events[0] ? Object.keys(events[0]) : '(none)');
+
         var now = Date.now();
         var counts = {};
+        // Diagnostic tallies for each filter stage
+        var rejNull = 0, rejEvent = 0, rejHandle = 0, rejDate = 0, rejAge = 0, kept = 0;
+        var seenEventTypes = {};
+        var oldestKept = 0, newestKept = 0;
         events.forEach(function(e) {
-          if (!e || e.event !== 'atc' || !e.handle || !e.created_date) return;
+          if (!e) { rejNull++; return; }
+          if (e.event) seenEventTypes[e.event] = (seenEventTypes[e.event] || 0) + 1;
+          if (e.event !== 'atc') { rejEvent++; return; }
+          if (!e.handle) { rejHandle++; return; }
+          if (!e.created_date) { rejDate++; return; }
           var age = now - new Date(e.created_date).getTime();
-          if (age > 2505600000) return; // 29 days
+          if (age > 2505600000) { rejAge++; return; } // 29 days
+          if (oldestKept === 0 || age > oldestKept) oldestKept = age;
+          if (newestKept === 0 || age < newestKept) newestKept = age;
           counts[e.handle] = (counts[e.handle] || 0) + 1;
+          kept++;
         });
+        console.log('[BFC-ACTIVITY] event types seen across ALL events:', seenEventTypes);
+        console.log('[BFC-ACTIVITY] filter results:',
+          '\n  kept (atc, valid, <29d):', kept,
+          '\n  rejected null:', rejNull,
+          '\n  rejected non-atc event type:', rejEvent,
+          '\n  rejected missing handle:', rejHandle,
+          '\n  rejected missing created_date:', rejDate,
+          '\n  rejected too old (>29d):', rejAge);
+        if (kept > 0) {
+          console.log('[BFC-ACTIVITY] kept-event age range: newest', (newestKept/86400000).toFixed(1) + 'd',
+            'oldest', (oldestKept/86400000).toFixed(1) + 'd');
+        }
+        console.log('[BFC-ACTIVITY] per-handle counts:', counts);
+
+        var shown = 0, belowThreshold = 0, noData = 0;
         cartCheckList.forEach(function(el) {
           var n = counts[el.dataset.handle] || 0;
+          if (n === 0) { noData++; }
+          else if (n < 3) { belowThreshold++; }
           if (n < 3) return;
           var cartMsg = n + ' people have this in their cart';
           if (el.classList.contains('is-visible')) {
@@ -658,9 +713,23 @@
             el.textContent = cartMsg;
             el.classList.add('is-visible');
           }
+          shown++;
         });
+        console.log('[BFC-ACTIVITY] display results:',
+          '\n  shown (count >= 3):', shown,
+          '\n  hidden (count 1-2, below threshold):', belowThreshold,
+          '\n  hidden (no matching events for that handle):', noData);
+        if (shown === 0 && kept > 0) {
+          console.warn('[BFC-ACTIVITY] Events exist but NONE matched a card handle, or all were below the 3-count threshold. ' +
+            'Compare the per-handle counts above against the card handles logged at the top. ' +
+            'If the handles don\'t match, the events may be keyed by a different field (product id? title?).');
+        }
       })
-      .catch(function() {});
+      .catch(function(err) {
+        console.error('[BFC-ACTIVITY] fetch/parse FAILED:', err,
+          '\n  This was previously swallowed silently. Likely causes: CORS block, network error, ' +
+          'endpoint moved/down, or response was not valid JSON.');
+      });
   }
 
   if (document.readyState === 'loading') {
