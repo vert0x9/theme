@@ -128,9 +128,17 @@
       ],
       "name": "BFC Featured Camera",
       "settings": {
+        "source": "auto",
+        "auto_collection": "",
+        "auto_pool": 8,
+        "auto_eyebrow": "Featured Camera",
+        "layout_mode": "vary",
         "randomize": true,
         "show_shuffle": false,
-        "theme": "light"
+        "theme": "light",
+        "cta_label": "Shop this camera",
+        "show_grade_badge": true,
+        "grade_badge_text": "Restored"
       }
     },
     "main": {
@@ -227,6 +235,7 @@
     },
     "bfc_refurb_process_AAxDrq": {
       "type": "bfc-refurb-process",
+      "disabled": true,
       "name": "BFC Refurb Process",
       "settings": {
         "camera_type": "generic",
