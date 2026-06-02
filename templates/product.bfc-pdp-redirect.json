@@ -10,43 +10,17 @@
 {
   "sections": {
     "main": {
-      "type": "bfc-pdp-default",
+      "type": "bfc-pdp-redirect",
       "settings": {
-        "show_recs": true,
-        "rec_count": 4,
-        "show_best_sellers": true,
-        "best_sellers_collection": "",
-        "best_sellers_count": 8
-      }
-    },
-    "1778503267d0da4345": {
-      "type": "apps",
-      "blocks": {
-        "judge_me_reviews_review_widget_wfktdD": {
-          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "review_data": "sample_data",
-            "max_width": 1200,
-            "show_shop_reviews": false,
-            "empty_state": "empty_widget"
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_review_widget_wfktdD"
-      ],
-      "settings": {
-        "section_layout": "normal",
-        "spacing_inner": "2",
-        "section_width": "max-w-page",
-        "color_scheme": "",
-        "spacing_top": "2",
-        "spacing_bottom": "2"
+        "message": "We no longer carry this item, but we have plenty of similar cameras in stock. Browse below to find something you'll love.",
+        "shop_heading": "Find something you'll love",
+        "shop_sub": "",
+        "fallback_col_1": "",
+        "fallback_col_2": "",
+        "fallback_col_3": "",
+        "fallback_col_4": ""
       }
     }
   },
-  "order": [
-    "main",
-    "1778503267d0da4345"
-  ]
+  "order": ["main"]
 }
