@@ -257,6 +257,7 @@
   -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
           mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
 }
+.bfc4 .bfc4-desc-readmore[hidden] { display: none !important; }
 .bfc4 .bfc4-desc-readmore {
   display: inline-flex; align-items: center; gap: 5px; margin-top: 8px; padding: 0;
   background: none; border: none; cursor: pointer;
@@ -1643,6 +1644,27 @@
   .ba-lightbox-arrow { width: 44px; height: 44px; background: rgba(255,255,255,0.15); }
   .ba-lightbox-close { top: 12px; right: 12px; }
 }
+/* ── Breadcrumbs (ported from MF/PS) ── */
+.bfc4 .bfc4-crumbs{display:flex !important;flex-wrap:wrap;align-items:center;gap:5px;margin-bottom:12px;font-family:var(--sn) !important;font-size:10px;font-weight:600;letter-spacing:0.04em;list-style:none !important;padding:0 !important}
+.bfc4 .bfc4-crumb{font-family:var(--sn) !important;color:rgba(32,32,9,0.5);text-decoration:none;transition:color var(--t);text-transform:uppercase}
+.bfc4 .bfc4-crumb:hover{color:var(--or)}
+.bfc4 .bfc4-crumb-sep{font-family:var(--sn) !important;color:rgba(32,32,9,0.3)}
+/* ── Refurbishment trust strip (ported from MF/PS; SLR mentions battery/meter) ──
+   !important beats the theme's external section-product.css generic ul/li styling. */
+.bfc4 ul.bfc4-trust-strip{list-style:none !important;margin:14px 0 0 !important;padding:0 !important;display:flex !important;flex-wrap:wrap;gap:8px 18px}
+.bfc4 ul.bfc4-trust-strip li{list-style:none !important;margin:0 !important;padding:0 !important;display:flex !important;align-items:center;gap:5px;font-family:var(--sn) !important;font-size:10.5px;font-weight:500;color:var(--ch);line-height:1.3}
+.bfc4 ul.bfc4-trust-strip li::before,.bfc4 ul.bfc4-trust-strip li::marker{content:none !important;display:none !important}
+.bfc4 ul.bfc4-trust-strip li svg{color:#2a4820;flex-shrink:0}
+.bfc4 .bfc4-trust-link{display:inline-flex !important;align-items:center;gap:5px;background:none !important;border:none !important;cursor:pointer;font-family:var(--sn) !important;font-size:10.5px;font-weight:500;color:var(--ch);padding:0 !important;transition:color var(--t)}
+.bfc4 .bfc4-trust-link:hover{color:var(--or)}
+.bfc4 .bfc4-trust-link .bfc4-trust-check{color:#2a4820;flex-shrink:0}
+.bfc4 .bfc4-trust-link .bfc4-trust-info{color:rgba(32,32,9,0.4);flex-shrink:0}
+.bfc4 .bfc4-trust-link:hover .bfc4-trust-info{color:var(--or)}
+@media (max-width:900px){
+.bfc4 ul.bfc4-trust-strip{display:grid !important;grid-template-columns:1fr 1fr;gap:8px 14px}
+.bfc4 ul.bfc4-trust-strip li,.bfc4 .bfc4-trust-link{font-size:11.5px}
+.bfc4 .bfc4-crumbs{font-size:9.5px}
+}
 </style>
 
 <div class="bfc4">
@@ -1777,7 +1799,14 @@
 
     {%- comment -%} 1. Product header + description {%- endcomment -%}
     <div class="bfc4-header">
-      <span class="bfc4-eyebrow">{{ product.type | default: '35mm SLR' }} — Professionally Restored &middot; 6-Month Warranty</span>
+      {%- comment -%} Breadcrumbs hardcoded for the SLR PDP: Home > Cameras > 35mm SLR Cameras. Ends at category (H1 below shows product). {%- endcomment -%}
+      <nav class="bfc4-crumbs" aria-label="Breadcrumb">
+        <a href="/" class="bfc4-crumb">Home</a>
+        <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
+        <a href="/collections/cameras" class="bfc4-crumb">Cameras</a>
+        <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
+        <a href="/collections/35mm-slr-cameras" class="bfc4-crumb">35mm SLR</a>
+      </nav>
       <h1 class="bfc4-title">{{ product.title }}</h1>
       <span id="bfc4-star-placeholder"></span>
       {%- comment -%}
@@ -1812,10 +1841,27 @@
           <button type="button" class="bfc4-desc-readmore" data-readmore-btn aria-expanded="false" hidden>Read more</button>
         </div>
       {%- endif -%}
-      <span class="bfc4-free-dev-mini">
-        <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="12" height="12" rx="0.5" stroke="#ABCC99" stroke-width="1.2"/><circle cx="7" cy="7" r="2.5" stroke="#ABCC99" stroke-width="1.2"/><line x1="1" y1="4" x2="13" y2="4" stroke="#ABCC99" stroke-width="0.8"/><line x1="1" y1="10" x2="13" y2="10" stroke="#ABCC99" stroke-width="0.8"/></svg>
-        Add 2 rolls of film &mdash; get a free developing credit with your order
-      </span>
+      {%- comment -%}
+        Refurbishment trust strip. SLRs typically have battery-powered light meters,
+        so we mention battery. Warranty is 6-month for SLRs.
+      {%- endcomment -%}
+      <ul class="bfc4-trust-strip">
+        <li>
+          <button type="button" class="bfc4-trust-link" onclick="baOpenPopup('bfc4-restoration-popup')" aria-label="Learn how we restore each camera">
+            <svg class="bfc4-trust-check" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6.5 11.5 3 8l1-1 2.5 2.5L12 4l1 1z"/></svg>
+            <span>Restored inside &amp; out</span>
+            <svg class="bfc4-trust-info" width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><line x1="7" y1="6.5" x2="7" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="4" r="0.7" fill="currentColor"/></svg>
+          </button>
+        </li>
+        <li><svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6.5 11.5 3 8l1-1 2.5 2.5L12 4l1 1z"/></svg>Bench-tested by techs</li>
+        <li><svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6.5 11.5 3 8l1-1 2.5 2.5L12 4l1 1z"/></svg>New seals &amp; batteries</li>
+        <li><svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6.5 11.5 3 8l1-1 2.5 2.5L12 4l1 1z"/></svg>6-month warranty</li>
+      </ul>
+      <div id="ba-popup-data-bfc4-restoration-popup" style="display:none"
+        data-title="How We Restore Each Camera"
+        data-desc="Every camera in our shop is fully serviced by our in-house technicians before it leaves Brooklyn. We open up each body, replace light seals and foam, adjust shutter speeds across the full range, calibrate the light meter and install a fresh battery, fix any malfunctioning functions, and modify circuitry when needed. Lenses are cleaned, lubricated, and adjusted. Mirrors and viewfinders cleared. Every reading, click, and motion is checked and tuned against professional bench equipment. All necessary fixes are made before it ships. This is the standard for every camera we sell, regardless of model or age."
+        data-imgs=""
+      ></div>
     </div>
 
     {%- comment -%} 2. Build Your Kit heading {%- endcomment -%}
@@ -1934,7 +1980,7 @@
       </div>
 
       <button class="bfc4-atc" id="bfc4-atc" onclick="bfc4AddToCart()"{% unless current_variant.available %} disabled{% endunless %}>
-        <span id="bfc4-atc-text">{% if current_variant.available %}Add Starter Kit{% else %}Sold Out{% endif %}</span>
+        <span id="bfc4-atc-text">{% if current_variant.available %}Add Starter Kit to Cart{% else %}Sold Out{% endif %}</span>
       </button>
       <button class="bfc4-cam-only" onclick="bfc4CameraOnly()"{% unless current_variant.available %} disabled{% endunless %}>{% if current_variant.available %}Camera Only &mdash; {{ current_variant.price | money }}{% else %}Camera Currently Unavailable{% endif %}</button>
     </div>
@@ -2530,7 +2576,7 @@
           </div>
 
           <button class="bfc4-atc" onclick="bfc4AddToCart()"{% unless current_variant.available %} disabled{% endunless %}>
-            <span>{% if current_variant.available %}Add Starter Kit{% else %}Sold Out{% endif %}</span>
+            <span>{% if current_variant.available %}Add Starter Kit to Cart{% else %}Sold Out{% endif %}</span>
           </button>
           <button class="bfc4-cam-only" onclick="bfc4CameraOnly()"{% unless current_variant.available %} disabled{% endunless %}>{% if current_variant.available %}Camera Only &mdash; {{ current_variant.price | money }}{% else %}Camera Currently Unavailable{% endif %}</button>
         </div>
@@ -3050,7 +3096,7 @@
       if (btn) { btn.disabled = false; btn.style.background = '#a33'; }
       if (stickyBtn) { stickyBtn.disabled = false; }
       setTimeout(function() {
-        setStatus('Add Starter Kit');
+        setStatus('Add Starter Kit to Cart');
         if (btn) btn.style.background = '';
       }, 5000);
     }
@@ -3111,7 +3157,7 @@
       setTimeout(function() {
         if (btn) { btn.classList.remove('is-success'); btn.disabled = false; }
         if (stickyBtn) { stickyBtn.disabled = false; }
-        setStatus('Add Starter Kit');
+        setStatus('Add Starter Kit to Cart');
         if (stickyText) stickyText.textContent = 'Add to Cart';
       }, 2400);
     } catch(e) {
@@ -3681,7 +3727,11 @@ window.bfc4TocAddToCart = function() {
         var btn  = wrap.querySelector('[data-readmore-btn]');
         if (!body || !btn) return;
         var lineH = parseFloat(getComputedStyle(body).lineHeight) || 21;
-        if (body.scrollHeight > (lineH * 6) + 8) {
+        // CSS clamps collapsed body to 7.8em. Only show the button when the content
+        // actually exceeds that clamp (plus a small tolerance to avoid false positives
+        // from trailing margins on the last element).
+        var clampPx = lineH * 7.8;
+        if (body.scrollHeight > clampPx + 6) {
           wrap.setAttribute('data-collapsed', 'true');
           btn.hidden = false;
           btn.addEventListener('click', function() {

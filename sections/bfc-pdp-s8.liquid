@@ -668,6 +668,33 @@
 @media (max-width: 900px) {
   .bfc4-sticky-bar.is-visible { display: flex; }
 }
+/* ── Breadcrumbs (ported) ── */
+.bfc4 .bfc4-crumbs{display:flex !important;flex-wrap:wrap;align-items:center;gap:5px;margin-bottom:12px;font-family:var(--sn) !important;font-size:10px;font-weight:600;letter-spacing:0.04em;list-style:none !important;padding:0 !important}
+.bfc4 .bfc4-crumb{font-family:var(--sn) !important;color:rgba(32,32,9,0.5);text-decoration:none;transition:color var(--t);text-transform:uppercase}
+.bfc4 .bfc4-crumb:hover{color:var(--or)}
+.bfc4 .bfc4-crumb-sep{font-family:var(--sn) !important;color:rgba(32,32,9,0.3)}
+/* ── Refurbishment trust strip (ported) ── */
+.bfc4 ul.bfc4-trust-strip{list-style:none !important;margin:14px 0 0 !important;padding:0 !important;display:flex !important;flex-wrap:wrap;gap:8px 18px}
+.bfc4 ul.bfc4-trust-strip li{list-style:none !important;margin:0 !important;padding:0 !important;display:flex !important;align-items:center;gap:5px;font-family:var(--sn) !important;font-size:10.5px;font-weight:500;color:var(--ch);line-height:1.3}
+.bfc4 ul.bfc4-trust-strip li::before,.bfc4 ul.bfc4-trust-strip li::marker{content:none !important;display:none !important}
+.bfc4 ul.bfc4-trust-strip li svg{color:#2a4820;flex-shrink:0}
+.bfc4 .bfc4-trust-link{display:inline-flex !important;align-items:center;gap:5px;background:none !important;border:none !important;cursor:pointer;font-family:var(--sn) !important;font-size:10.5px;font-weight:500;color:var(--ch);padding:0 !important;transition:color var(--t)}
+.bfc4 .bfc4-trust-link:hover{color:var(--or)}
+.bfc4 .bfc4-trust-link .bfc4-trust-check{color:#2a4820;flex-shrink:0}
+.bfc4 .bfc4-trust-link .bfc4-trust-info{color:rgba(32,32,9,0.4);flex-shrink:0}
+.bfc4 .bfc4-trust-link:hover .bfc4-trust-info{color:var(--or)}
+/* ── Film tile quantity stepper (compact, inline beside price) ── */
+.bfc4 .bfc4-film-tile-priceline{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.bfc4 .bfc4-film-qty{display:none;align-items:center;gap:2px}
+.bfc4 .bfc4-film-tile.is-sel .bfc4-film-qty{display:flex}
+.bfc4 .bfc4-film-qty-btn{width:18px;height:18px;border:1px solid rgba(32,32,9,0.15);background:#fff;cursor:pointer;font-family:var(--sn);font-size:12px;font-weight:600;color:var(--ch);line-height:1;display:flex;align-items:center;justify-content:center;transition:color var(--t),border-color var(--t);padding:0}
+.bfc4 .bfc4-film-qty-btn:hover{color:var(--or);border-color:var(--or)}
+.bfc4 .bfc4-film-qty-val{min-width:14px;text-align:center;font-family:var(--sn);font-size:11px;font-weight:700;color:var(--bk)}
+@media (max-width:900px){
+.bfc4 ul.bfc4-trust-strip{display:grid !important;grid-template-columns:1fr 1fr;gap:8px 14px}
+.bfc4 ul.bfc4-trust-strip li,.bfc4 .bfc4-trust-link{font-size:11.5px}
+.bfc4 .bfc4-crumbs{font-size:9.5px}
+}
 </style>
 
 <div class="bfc4">
@@ -760,7 +787,14 @@
 
     {%- comment -%} 1. Product header {%- endcomment -%}
     <div class="bfc4-header">
-      <span class="bfc4-eyebrow">Super 8 Camera — Professionally Refurbished &middot; 6-Month Warranty</span>
+      {%- comment -%} Breadcrumbs hardcoded for the Super 8 PDP: Home > Cameras > Super 8 Cameras. {%- endcomment -%}
+      <nav class="bfc4-crumbs" aria-label="Breadcrumb">
+        <a href="/" class="bfc4-crumb">Home</a>
+        <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
+        <a href="/collections/cameras" class="bfc4-crumb">Cameras</a>
+        <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
+        <a href="/collections/super-8-cameras" class="bfc4-crumb">Super 8</a>
+      </nav>
       <h1 class="bfc4-title">{{ product.title }}</h1>
       {%- liquid
         assign desc_text = ''
@@ -953,6 +987,28 @@
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#fff" stroke-width="1"/><circle cx="8" cy="8" r="2" fill="#fff"/><path d="M8 1.5V4M8 12V14.5M1.5 8H4M12 8H14.5" stroke="#fff" stroke-width="0.8"/></svg>
         True 24 FPS &mdash; Modified &amp; calibrated for cinema-standard frame rate
       </div>
+      {%- comment -%}
+        Refurbishment trust strip. Super 8 cameras are motor-driven and battery-powered,
+        so we mention battery. Warranty is 6-month. (BFC does not develop Super 8 film,
+        so no developing mention here.)
+      {%- endcomment -%}
+      <ul class="bfc4-trust-strip">
+        <li>
+          <button type="button" class="bfc4-trust-link" onclick="baOpenPopup('bfc4-restoration-popup')" aria-label="Learn how we restore each camera">
+            <svg class="bfc4-trust-check" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6.5 11.5 3 8l1-1 2.5 2.5L12 4l1 1z"/></svg>
+            <span>Restored inside &amp; out</span>
+            <svg class="bfc4-trust-info" width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><line x1="7" y1="6.5" x2="7" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="4" r="0.7" fill="currentColor"/></svg>
+          </button>
+        </li>
+        <li><svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6.5 11.5 3 8l1-1 2.5 2.5L12 4l1 1z"/></svg>Bench-tested by techs</li>
+        <li><svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6.5 11.5 3 8l1-1 2.5 2.5L12 4l1 1z"/></svg>New seals &amp; batteries</li>
+        <li><svg viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><path fill="currentColor" d="M6.5 11.5 3 8l1-1 2.5 2.5L12 4l1 1z"/></svg>6-month warranty</li>
+      </ul>
+      <div id="ba-popup-data-bfc4-restoration-popup" style="display:none"
+        data-title="How We Restore Each Camera"
+        data-desc="Every Super 8 camera in our shop is fully serviced by our in-house technicians before it leaves Brooklyn. We open up each body, replace light seals and foam, service the film transport and motor, calibrate the frame rate to a true 24 FPS, clean the battery contacts and install fresh batteries, and fix any malfunctioning functions. Lenses are cleaned, lubricated, and adjusted. Viewfinders cleared. Every reading, click, and motion is checked and tuned against professional bench equipment before it ships. This is the standard for every camera we sell, regardless of model or age."
+        data-imgs=""
+      ></div>
     </div>
 
     {%- comment -%} 2. Add Film section — compact tiles {%- endcomment -%}
@@ -1009,7 +1065,14 @@
             </div>
             <div class="bfc4-film-tile-body">
               <span class="bfc4-film-tile-name">{{ block.settings.custom_label | default: fp.title }}</span>
-              <span class="bfc4-film-tile-price">{{ fv.price | money }}</span>
+              <div class="bfc4-film-tile-priceline">
+                <span class="bfc4-film-tile-price">{{ fv.price | money }}</span>
+                <div class="bfc4-film-qty" onclick="event.stopPropagation()">
+                  <button type="button" class="bfc4-film-qty-btn" onclick="bfc4FilmQty(event, '{{ f_tile_id }}', -1)" aria-label="Decrease quantity">&minus;</button>
+                  <span class="bfc4-film-qty-val" id="{{ f_tile_id }}-qty">1</span>
+                  <button type="button" class="bfc4-film-qty-btn" onclick="bfc4FilmQty(event, '{{ f_tile_id }}', 1)" aria-label="Increase quantity">+</button>
+                </div>
+              </div>
             </div>
             <div class="bfc4-film-tile-sel-check">&#10003;</div>
           </div>
@@ -1400,9 +1463,29 @@
         orig:      parseInt(tile.dataset.orig, 10),
         sale:      parseInt(tile.dataset.sale, 10),
         disc:      parseInt(tile.dataset.disc, 10),
-        img:       tile.dataset.img || null
+        img:       tile.dataset.img || null,
+        qty:       1
       };
+      // Reset the visible qty value to 1 when (re)selecting
+      var qtyEl = document.getElementById(id + '-qty');
+      if (qtyEl) qtyEl.textContent = '1';
     }
+    bfc4Render();
+  };
+
+  // ── Film quantity stepper ──────────────────────
+  // delta is +1 / -1. Clamped 1–10. stopPropagation in the markup keeps the
+  // tile from toggling off when the buttons are clicked.
+  window.bfc4FilmQty = function(e, tileId, delta) {
+    if (e) e.stopPropagation();
+    var sel = STATE.film[tileId];
+    if (!sel) return; // tile not selected; ignore
+    var q = (sel.qty || 1) + delta;
+    if (q < 1) q = 1;
+    if (q > 10) q = 10;
+    sel.qty = q;
+    var qtyEl = document.getElementById(tileId + '-qty');
+    if (qtyEl) qtyEl.textContent = q;
     bfc4Render();
   };
 
@@ -1427,8 +1510,9 @@
     var total = STATE.variantPrice;
     var filmCount = 0;
     Object.values(STATE.film).forEach(function(sel) {
-      total += sel.sale;
-      filmCount++;
+      var q = sel.qty || 1;
+      total += sel.sale * q;
+      filmCount += q;
     });
     if (STATE.extWarranty && !isNaN(STATE.extWarranty.price)) total += STATE.extWarranty.price;
     var totalEl = document.getElementById('bfc4-total');
@@ -1466,7 +1550,8 @@
       if (!sel.variantId) return;
       var vid = parseInt(sel.variantId, 10);
       if (isNaN(vid) || vid === 0) return;
-      items.push({ id: vid, quantity: 1, properties: { _s8_bundle: 'true' } });
+      var q = sel.qty || 1;
+      items.push({ id: vid, quantity: q, properties: { _s8_bundle: 'true' } });
     });
 
     // Add extended warranty if selected
