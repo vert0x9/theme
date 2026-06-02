@@ -1,0 +1,95 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "bfc-pdp-110",
+      "blocks": {
+        "kit_item_zejCLa": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "",
+            "column": "",
+            "product": "lomography-color-92-color-1",
+            "variant_id": "",
+            "discount_percent": 0,
+            "is_starter_kit": true,
+            "only_show_for": ""
+          }
+        },
+        "kit_item_J8yUkp": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "",
+            "column": "",
+            "product": "lomography-orca-lobster",
+            "variant_id": "",
+            "discount_percent": 0,
+            "is_starter_kit": true,
+            "only_show_for": ""
+          }
+        },
+        "kit_item_6dngKa": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "",
+            "column": "",
+            "product": "point-shoot-case",
+            "variant_id": "",
+            "discount_percent": 0,
+            "is_starter_kit": true,
+            "only_show_for": ""
+          }
+        }
+      },
+      "block_order": [
+        "kit_item_zejCLa",
+        "kit_item_J8yUkp",
+        "kit_item_6dngKa"
+      ],
+      "settings": {
+        "also_collection": "",
+        "restoration_prose": ""
+      }
+    },
+    "1778503267d0da4345": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_wfktdD": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_wfktdD"
+      ],
+      "settings": {
+        "section_layout": "normal",
+        "spacing_inner": "2",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1778503267d0da4345"
+  ]
+}
