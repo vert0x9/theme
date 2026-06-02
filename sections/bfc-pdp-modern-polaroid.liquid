@@ -397,7 +397,7 @@
               {%- if m.media_type == 'image' -%}
                 <button type="button"
                   class="bfc4-photo-thumb{% if forloop.first %} is-active{% endif %}"
-                  data-img="{{ m | image_url: width: 1200 }}"
+                  data-img="{{ m.preview_image | image_url: width: 1200 }}"
                   onclick="bfc4SetPhoto(this)"
                   aria-label="View image {{ forloop.index }}">
                   <img src="{{ m | image_url: width: 200 }}" alt="" loading="lazy"/>
@@ -617,7 +617,8 @@ window.bfc4SetPhoto = function(btn) {
   var url = btn.dataset.img;
   var img = document.getElementById('bfc4-photo-img');
   if (img && url) {
-    // Clear srcset first — otherwise the browser ignores src changes
+    // Ensure protocol — Shopify CDN URLs are sometimes protocol-relative
+    if (url.indexOf('//') === 0) url = 'https:' + url;
     img.removeAttribute('srcset');
     img.removeAttribute('sizes');
     img.src = url;
@@ -717,9 +718,11 @@ window.bfc4ToggleDescMore = function(btn) {
     if (v.featured_image) {
       var img = document.getElementById('bfc4-photo-img');
       if (img) {
+        var vurl = v.featured_image;
+        if (vurl.indexOf('//') === 0) vurl = 'https:' + vurl;
         img.removeAttribute('srcset');
         img.removeAttribute('sizes');
-        img.src = v.featured_image;
+        img.src = vurl;
       }
     }
 
