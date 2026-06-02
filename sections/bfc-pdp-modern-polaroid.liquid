@@ -63,11 +63,16 @@
   aspect-ratio: 1/1;
   background: var(--gr);
   overflow: hidden;
+  border: none;
+  box-shadow: none;
+  outline: none;
 }
 .bfc4-photo img {
   width: 100%; height: 100%;
   object-fit: contain;
   display: block;
+  border: none;
+  box-shadow: none;
 }
 .bfc4-photo-thumbs {
   display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
@@ -78,11 +83,21 @@
   background: var(--gr);
   cursor: pointer;
   border: 1.5px solid transparent;
+  box-shadow: none;
   overflow: hidden;
   transition: border-color var(--t);
 }
 .bfc4-photo-thumb.is-active { border-color: var(--or); }
-.bfc4-photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.bfc4-photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; border: none; }
+
+/* ── Nuke any Release-theme borders/lines injected around the media area ── */
+.bfc4 .bfc4-photo-wrap::after,
+.bfc4 .bfc4-photo::after,
+.bfc4 .bfc4-photo-wrap::before,
+.bfc4 .bfc4-photo::before { display: none !important; content: none !important; }
+.bfc4 .bfc4-photo { border-bottom: none !important; }
+.bfc4 .bfc4-left > *,
+.bfc4 .bfc4-photo-wrap > * { border-bottom: none !important; box-shadow: none !important; }
 
 .bfc4-right {
   background: var(--cv);
