@@ -59,7 +59,7 @@
 }
 
 /* ── BREADCRUMBS ───────────────────────────── */
-.bfc4d-crumbs{padding:14px 40px;font-size:10px;color:rgba(32,32,9,0.5);letter-spacing:0.06em;text-transform:uppercase;font-weight:500;border-bottom:1px solid rgba(32,32,9,0.06)}
+.bfc4d-crumbs{font-size:10px;color:rgba(32,32,9,0.5);letter-spacing:0.06em;text-transform:uppercase;font-weight:500}
 .bfc4d-crumbs a{color:inherit;text-decoration:none;transition:color var(--t)}
 .bfc4d-crumbs a:hover{color:var(--or)}
 .bfc4d-crumbs span{margin:0 8px;opacity:0.4}
@@ -242,7 +242,6 @@
 
 /* ── MOBILE ────────────────────────────────── */
 @media(max-width:900px){
-  .bfc4d-crumbs{padding:12px 20px;font-size:9px}
   .bfc4d-split{grid-template-columns:1fr}
   .bfc4d-left{position:relative;width:100%;height:100vw;max-height:520px}
   .bfc4d-slide{width:100%}
@@ -262,17 +261,6 @@
 </style>
 
 <div class="bfc4d" data-section-id="{{ section.id }}">
-
-  {%- comment -%} ── Breadcrumbs ── {%- endcomment -%}
-  <div class="bfc4d-crumbs" aria-label="Breadcrumb">
-    <a href="/">Home</a>
-    <span>/</span>
-    {%- if first_collection -%}
-      <a href="{{ first_collection.url }}">{{ first_collection.title }}</a>
-      <span>/</span>
-    {%- endif -%}
-    <strong>{{ product.title | truncate: 60 }}</strong>
-  </div>
 
   <!-- ═══ SPLIT ═══ -->
   <div class="bfc4d-split">
@@ -314,10 +302,16 @@
     <!-- RIGHT: Info -->
     <div class="bfc4d-right">
 
-      {%- assign brand_name = product.metafields.custom.brand | default: product.vendor -%}
-      {%- if brand_name != blank -%}
-        <div><span class="bfc4d-eyebrow">{{ brand_name }}</span></div>
-      {%- endif -%}
+      {%- comment -%} Breadcrumbs {%- endcomment -%}
+      <div class="bfc4d-crumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        {%- if first_collection -%}
+          <a href="{{ first_collection.url }}">{{ first_collection.title }}</a>
+          <span>/</span>
+        {%- endif -%}
+        <strong>{{ product.title | truncate: 60 }}</strong>
+      </div>
 
       <div>
         <h1 class="bfc4d-title">{{ product.title }}</h1>
