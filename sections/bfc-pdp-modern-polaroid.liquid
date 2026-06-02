@@ -288,6 +288,73 @@
   text-decoration: underline; text-underline-offset: 3px;
 }
 
+/* ── YOU MAY ALSO LIKE RAIL ──────────────────── */
+.bfc4-also {
+  background: var(--cv);
+  border-top: 1px solid rgba(32,32,9,0.1);
+  padding: 48px 0 56px;
+  overflow: hidden;
+}
+.bfc4-also-head {
+  padding: 0 48px 24px;
+  display: flex; align-items: baseline; justify-content: space-between;
+}
+.bfc4-also-title {
+  font-family: var(--sr); font-size: 36px; font-weight: 300; line-height: 1;
+  color: var(--bk); margin: 0;
+}
+.bfc4-also-link {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--or); text-decoration: none;
+}
+.bfc4-also-link:hover { text-decoration: underline; }
+.bfc4-also-track-wrap { position: relative; }
+.bfc4-also-track {
+  display: flex; gap: 12px;
+  overflow-x: auto; scroll-behavior: smooth;
+  scrollbar-width: none; -ms-overflow-style: none;
+  padding: 0 48px;
+}
+.bfc4-also-track::-webkit-scrollbar { display: none; }
+.bfc4-also-card {
+  flex-shrink: 0; width: 200px;
+  background: #fff; border: 1px solid rgba(32,32,9,0.08);
+  text-decoration: none; color: var(--bk);
+  display: flex; flex-direction: column;
+  transition: border-color var(--t);
+}
+.bfc4-also-card:hover { border-color: rgba(32,32,9,0.25); }
+.bfc4-also-img-wrap {
+  aspect-ratio: 1/1; overflow: hidden; background: var(--gr);
+}
+.bfc4-also-img-wrap img {
+  width: 100%; height: 100%; object-fit: contain;
+  display: block; transition: transform 0.4s ease;
+}
+.bfc4-also-card:hover .bfc4-also-img-wrap img { transform: scale(1.04); }
+.bfc4-also-body {
+  padding: 12px 12px 14px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.bfc4-also-name {
+  font-size: 11px; font-weight: 600; line-height: 1.3;
+  overflow: hidden; display: -webkit-box;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+}
+.bfc4-also-price { font-size: 12px; font-weight: 700; color: var(--or); }
+.bfc4-also-arr {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: #fff; border: 1px solid rgba(32,32,9,0.12);
+  width: 36px; height: 36px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 2; transition: border-color var(--t), box-shadow var(--t);
+  box-shadow: 0 2px 8px rgba(32,32,9,0.08);
+}
+.bfc4-also-arr:hover { border-color: var(--or); box-shadow: 0 2px 12px rgba(32,32,9,0.15); }
+.bfc4-also-arr.is-prev { left: 12px; }
+.bfc4-also-arr.is-next { right: 12px; }
+.bfc4-also-arr[disabled] { opacity: 0.3; pointer-events: none; }
+
 /* ── MOBILE ─────────────────────────────────── */
 @media (max-width: 900px) {
   .bfc4-grid { grid-template-columns: 1fr; }
@@ -299,6 +366,11 @@
   .bfc4-title { font-size: 24px; }
   .bfc4-trust-strip { grid-template-columns: repeat(2, 1fr); }
   .bfc4-vintage-grid { grid-template-columns: repeat(2, 1fr); }
+  .bfc4-also { padding: 36px 0 40px; }
+  .bfc4-also-head { padding: 0 20px 20px; }
+  .bfc4-also-track { padding: 0 20px; gap: 8px; }
+  .bfc4-also-card { width: 160px; }
+  .bfc4-also-arr { display: none; }
 }
 </style>
 
@@ -491,9 +563,50 @@
 </div>{%- comment -%} /.bfc4 {%- endcomment -%}
 
 {%- comment -%}
-  Reviews snippet — same one V4b/MF use. Populates the star
-  placeholder via JS inside the snippet, with shop-reviews fallback.
+  You may also like — same bfc4-also pattern as V4.
+  Falls back to product.collections | first if no collection is set in schema.
 {%- endcomment -%}
+{%- assign also_col = section.settings.also_collection -%}
+{%- if also_col == blank -%}{%- assign also_col = product.collections | first -%}{%- endif -%}
+{%- if also_col != blank -%}
+  {%- assign also_count = 0 -%}
+  {%- for p in also_col.products -%}{%- unless p.id == product.id -%}{%- assign also_count = also_count | plus: 1 -%}{%- endunless -%}{%- endfor -%}
+  {%- if also_count > 0 -%}
+<div class="bfc4-also" id="bfc4-also">
+  <div class="bfc4-also-head">
+    <h2 class="bfc4-also-title">You may also like</h2>
+    <a class="bfc4-also-link" href="{{ also_col.url }}">View all &rsaquo;</a>
+  </div>
+  <div class="bfc4-also-track-wrap">
+    <button class="bfc4-also-arr is-prev" aria-label="Previous" onclick="bfc4AlsoSlide(-1)" disabled>
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M8 2L4 6L8 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+    </button>
+    <div class="bfc4-also-track" id="bfc4-also-track">
+      {%- for p in also_col.products limit: 20 -%}
+        {%- unless p.id == product.id -%}
+          {%- assign p_variant = p.selected_or_first_available_variant -%}
+          <a class="bfc4-also-card" href="{{ p.url }}">
+            <div class="bfc4-also-img-wrap">
+              {%- if p.featured_image -%}
+                <img src="{{ p.featured_image | image_url: width: 400 }}" alt="{{ p.title | escape }}" loading="lazy" width="400" height="400"/>
+              {%- endif -%}
+            </div>
+            <div class="bfc4-also-body">
+              <div class="bfc4-also-name">{{ p.title }}</div>
+              <div class="bfc4-also-price">{{ p_variant.price | money }}</div>
+            </div>
+          </a>
+        {%- endunless -%}
+      {%- endfor -%}
+    </div>
+    <button class="bfc4-also-arr is-next" aria-label="Next" onclick="bfc4AlsoSlide(1)">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M4 2L8 6L4 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+    </button>
+  </div>
+</div>
+  {%- endif -%}
+{%- endif -%}
+
 <div id="bfc4-reviews">
   {% render 'bfc-pdp-reviews', pdp_handle: product.handle, pdp_title: product.title %}
 </div>
@@ -503,7 +616,12 @@
 window.bfc4SetPhoto = function(btn) {
   var url = btn.dataset.img;
   var img = document.getElementById('bfc4-photo-img');
-  if (img && url) img.src = url;
+  if (img && url) {
+    // Clear srcset first — otherwise the browser ignores src changes
+    img.removeAttribute('srcset');
+    img.removeAttribute('sizes');
+    img.src = url;
+  }
   document.querySelectorAll('.bfc4-photo-thumb').forEach(function(t) {
     t.classList.toggle('is-active', t === btn);
   });
@@ -598,7 +716,11 @@ window.bfc4ToggleDescMore = function(btn) {
     // Update featured image (if variant has its own)
     if (v.featured_image) {
       var img = document.getElementById('bfc4-photo-img');
-      if (img) img.src = v.featured_image;
+      if (img) {
+        img.removeAttribute('srcset');
+        img.removeAttribute('sizes');
+        img.src = v.featured_image;
+      }
     }
 
     // Update stock + ATC
@@ -661,6 +783,23 @@ window.bfc4AddToCart = async function() {
     atcText.textContent = 'Try again';
   }
 };
+/* ─── You may also like slider ─── */
+(function() {
+  var track = document.getElementById('bfc4-also-track');
+  if (!track) return;
+  var prevBtn = document.querySelector('.bfc4-also-arr.is-prev');
+  var nextBtn = document.querySelector('.bfc4-also-arr.is-next');
+  function updateArrows() {
+    if (prevBtn) prevBtn.disabled = track.scrollLeft <= 4;
+    if (nextBtn) nextBtn.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
+  }
+  window.bfc4AlsoSlide = function(dir) {
+    track.scrollLeft += dir * 440;
+    setTimeout(updateArrows, 350);
+  };
+  track.addEventListener('scroll', updateArrows, { passive: true });
+  updateArrows();
+})();
 </script>
 
 {% schema %}
@@ -668,6 +807,16 @@ window.bfc4AddToCart = async function() {
   "name": "BFC Modern Polaroid PDP",
   "tag": "div",
   "settings": [
+    {
+      "type": "header",
+      "content": "You may also like"
+    },
+    {
+      "type": "collection",
+      "id": "also_collection",
+      "label": "'You may also like' collection",
+      "info": "Products from this collection appear in the rail below reviews. Defaults to the product's first collection if left blank."
+    },
     {
       "type": "header",
       "content": "Vintage upsell"
