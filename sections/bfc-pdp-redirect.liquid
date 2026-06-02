@@ -1,0 +1,658 @@
+{%- comment -%}
+============================================================
+  BFC Unlisted / Discontinued Product PDP
+  bfc-pdp-unlisted.liquid
+  ------------------------------------------------------------
+  For products we no longer carry. Shows:
+    - Product image + title with "no longer available" state
+    - Auto-detected similar collections based on product type/tags
+    - Featured collections grid pulled from schema settings as fallback
+============================================================
+{%- endcomment -%}
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/></noscript>
+
+{%- comment -%}
+  Auto-detect relevant collections from product type and tags.
+  We look for collections whose handle or title contains the product type
+  or any of the product's tags.
+{%- endcomment -%}
+{%- assign pt_lower = product.type | downcase | strip -%}
+{%- assign auto_cols = '' -%}
+{%- assign auto_col_list = '' | split: ',' -%}
+
+{%- comment -%} Build a deduplicated list of collections that match the product type or tags {%- endcomment -%}
+{%- for col in collections -%}
+  {%- assign col_handle_lower = col.handle | downcase -%}
+  {%- assign col_title_lower = col.title | downcase -%}
+  {%- assign is_match = false -%}
+
+  {%- comment -%} Match on product type {%- endcomment -%}
+  {%- if pt_lower != blank -%}
+    {%- if col_handle_lower contains pt_lower or col_title_lower contains pt_lower -%}
+      {%- assign is_match = true -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- comment -%} Match on tags {%- endcomment -%}
+  {%- unless is_match -%}
+    {%- for tag in product.tags -%}
+      {%- assign tag_lower = tag | downcase | strip -%}
+      {%- if col_handle_lower contains tag_lower or col_title_lower contains tag_lower -%}
+        {%- assign is_match = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endunless -%}
+
+  {%- comment -%} Skip "all", "frontpage", hidden or catch-all collections {%- endcomment -%}
+  {%- if col.handle == 'all' or col.handle == 'frontpage' or col.handle == 'unlisted' or col.handle == 'discontinued' -%}
+    {%- assign is_match = false -%}
+  {%- endif -%}
+
+  {%- if is_match and col.products_count > 0 -%}
+    {%- assign auto_col_list = auto_col_list | push: col -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- comment -%} Schema fallback collections {%- endcomment -%}
+{%- assign fb1 = section.settings.fallback_col_1 -%}
+{%- assign fb2 = section.settings.fallback_col_2 -%}
+{%- assign fb3 = section.settings.fallback_col_3 -%}
+{%- assign fb4 = section.settings.fallback_col_4 -%}
+
+<style>
+.bfcu *, .bfcu *::before, .bfcu *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.bfcu {
+  --or: #E36E15;
+  --go: #F4A027;
+  --ce: #ABCC99;
+  --cv: #F8F6EE;
+  --bk: #202009;
+  --ch: #4E4741;
+  --gr: #E3DDDA;
+  --sr: 'Cormorant Garamond', Georgia, serif;
+  --sn: 'Poppins', sans-serif;
+  --t: 0.2s ease;
+  font-family: var(--sn);
+  color: var(--bk);
+  background: var(--cv);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── BREADCRUMBS ─────────────────────────────────── */
+.bfcu-crumbs {
+  padding: 14px 48px;
+  font-size: 10px; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase; color: rgba(32,32,9,0.5);
+  border-bottom: 1px solid rgba(32,32,9,0.07);
+}
+.bfcu-crumbs a { color: inherit; text-decoration: none; transition: color var(--t); }
+.bfcu-crumbs a:hover { color: var(--or); }
+.bfcu-crumbs-sep { margin: 0 8px; opacity: 0.35; }
+.bfcu-crumbs-current { color: var(--bk); font-weight: 500; }
+
+/* ── HERO SPLIT ──────────────────────────────────── */
+.bfcu-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 70vh;
+  align-items: stretch;
+}
+
+/* ── LEFT: faded product image ───────────────────── */
+.bfcu-left {
+  position: relative;
+  background: var(--gr);
+  overflow: hidden;
+}
+.bfcu-img-wrap {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  padding: 48px;
+}
+.bfcu-img {
+  width: 100%; max-width: 560px;
+  aspect-ratio: 1/1;
+  object-fit: contain;
+  display: block;
+  opacity: 0.45;
+  filter: grayscale(40%);
+}
+.bfcu-img-none {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(32,32,9,0.2);
+}
+/* Diagonal "sold out" stamp over the image */
+.bfcu-stamp {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-18deg);
+  font-family: var(--sn);
+  font-size: 13px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(32,32,9,0.18);
+  border: 2px solid rgba(32,32,9,0.12);
+  padding: 8px 18px;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── RIGHT: copy + CTAs ──────────────────────────── */
+.bfcu-right {
+  background: var(--cv);
+  padding: 56px 48px 56px 52px;
+  display: flex; flex-direction: column;
+  justify-content: center;
+  gap: 0;
+}
+.bfcu-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--ch); opacity: 0.5;
+  margin-bottom: 12px;
+}
+.bfcu-title {
+  font-family: var(--sn);
+  font-size: 32px; font-weight: 600; line-height: 1.1;
+  letter-spacing: -0.3px;
+  color: rgba(32,32,9,0.35);
+  margin-bottom: 20px;
+}
+.bfcu-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(32,32,9,0.06);
+  padding: 8px 14px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ch);
+  margin-bottom: 28px;
+  width: fit-content;
+}
+.bfcu-badge svg { flex-shrink: 0; opacity: 0.5; }
+.bfcu-message {
+  font-size: 14px; line-height: 1.65; color: var(--ch);
+  margin-bottom: 32px;
+  max-width: 44ch;
+}
+.bfcu-message strong { color: var(--bk); font-weight: 600; }
+
+/* ── CTA GROUP ───────────────────────────────────── */
+.bfcu-ctas {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 32px;
+}
+.bfcu-cta-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--ch);
+  margin-bottom: 4px;
+}
+.bfcu-cta-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.bfcu-cta-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 22px;
+  background: var(--bk); color: #fff;
+  font-family: var(--sn); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  text-decoration: none;
+  transition: background var(--t);
+  border: none; cursor: pointer;
+}
+.bfcu-cta-btn:hover { background: var(--or); }
+.bfcu-cta-btn.is-secondary {
+  background: transparent;
+  color: var(--bk);
+  border: 1px solid rgba(32,32,9,0.2);
+}
+.bfcu-cta-btn.is-secondary:hover { border-color: var(--or); color: var(--or); background: transparent; }
+.bfcu-cta-btn svg { flex-shrink: 0; }
+
+/* ── DIVIDER ─────────────────────────────────────── */
+.bfcu-divider {
+  width: 40px; height: 1px;
+  background: rgba(32,32,9,0.15);
+  margin-bottom: 24px;
+}
+
+/* ── META ────────────────────────────────────────── */
+.bfcu-meta {
+  font-size: 11px; color: rgba(32,32,9,0.4);
+  display: flex; flex-wrap: wrap; gap: 6px 16px;
+}
+.bfcu-meta-item { display: flex; gap: 6px; }
+.bfcu-meta-key { font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: 9px; }
+
+/* ── COLLECTIONS SECTION ─────────────────────────── */
+.bfcu-shop {
+  padding: 64px 48px 72px;
+  border-top: 1px solid rgba(32,32,9,0.08);
+  background: var(--cv);
+}
+.bfcu-shop-head {
+  margin-bottom: 36px;
+}
+.bfcu-shop-eyebrow {
+  display: block;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--or);
+  margin-bottom: 10px;
+}
+.bfcu-shop-title {
+  font-family: var(--sr);
+  font-size: 42px; font-weight: 300; line-height: 1;
+  color: var(--bk);
+}
+.bfcu-shop-sub {
+  font-size: 13px; color: var(--ch); line-height: 1.6;
+  margin-top: 10px; max-width: 60ch;
+}
+.bfcu-cols-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+.bfcu-col-card {
+  display: block; text-decoration: none; color: var(--bk);
+  background: #fff;
+  border: 1px solid rgba(32,32,9,0.08);
+  overflow: hidden;
+  transition: border-color var(--t), transform var(--t);
+  position: relative;
+}
+.bfcu-col-card:hover { border-color: var(--or); transform: translateY(-2px); }
+.bfcu-col-img-wrap {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: var(--gr);
+}
+.bfcu-col-img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform 0.4s ease;
+}
+.bfcu-col-card:hover .bfcu-col-img { transform: scale(1.04); }
+.bfcu-col-img-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: rgba(32,32,9,0.2);
+}
+.bfcu-col-body {
+  padding: 16px 18px 18px;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.bfcu-col-info { flex: 1; min-width: 0; }
+.bfcu-col-title {
+  font-family: var(--sn);
+  font-size: 13px; font-weight: 600; line-height: 1.2;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.bfcu-col-count {
+  font-size: 10px; color: var(--ch); margin-top: 2px;
+}
+.bfcu-col-arrow {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  border: 1px solid rgba(32,32,9,0.12);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--bk); transition: border-color var(--t), background var(--t), color var(--t);
+}
+.bfcu-col-card:hover .bfcu-col-arrow {
+  border-color: var(--or);
+  background: var(--or);
+  color: #fff;
+}
+
+/* ── PRODUCT SAMPLES ─────────────────────────────── */
+.bfcu-samples {
+  padding: 0 48px 72px;
+}
+.bfcu-samples-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 24px;
+}
+.bfcu-samples-title {
+  font-family: var(--sr); font-size: 32px; font-weight: 300;
+  color: var(--bk);
+}
+.bfcu-samples-link {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--or);
+  text-decoration: none;
+}
+.bfcu-samples-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.bfcu-samples-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+.bfcu-sample-card {
+  display: flex; flex-direction: column;
+  background: #fff; border: 1px solid rgba(32,32,9,0.08);
+  text-decoration: none; color: var(--bk);
+  transition: border-color var(--t);
+}
+.bfcu-sample-card:hover { border-color: rgba(32,32,9,0.22); }
+.bfcu-sample-img-wrap {
+  aspect-ratio: 1/1; background: var(--gr); overflow: hidden;
+}
+.bfcu-sample-img {
+  width: 100%; height: 100%; object-fit: contain; display: block;
+  transition: transform 0.35s ease;
+}
+.bfcu-sample-card:hover .bfcu-sample-img { transform: scale(1.04); }
+.bfcu-sample-body { padding: 10px 12px 12px; }
+.bfcu-sample-name {
+  font-size: 11px; font-weight: 600; line-height: 1.3;
+  overflow: hidden; display: -webkit-box;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  margin-bottom: 4px;
+}
+.bfcu-sample-price { font-size: 11px; font-weight: 700; color: var(--or); }
+
+/* ── MOBILE ──────────────────────────────────────── */
+@media (max-width: 900px) {
+  .bfcu-crumbs { padding: 12px 20px; }
+  .bfcu-split { grid-template-columns: 1fr; min-height: 0; }
+  .bfcu-left { min-height: 60vw; }
+  .bfcu-img-wrap { padding: 32px; }
+  .bfcu-right { padding: 32px 20px 40px; justify-content: flex-start; }
+  .bfcu-title { font-size: 24px; }
+  .bfcu-shop { padding: 40px 20px 48px; }
+  .bfcu-shop-title { font-size: 32px; }
+  .bfcu-cols-grid { grid-template-columns: 1fr 1fr; }
+  .bfcu-samples { padding: 0 20px 48px; }
+  .bfcu-samples-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+
+<div class="bfcu">
+
+  {%- comment -%} Breadcrumbs {%- endcomment -%}
+  <nav class="bfcu-crumbs" aria-label="Breadcrumb">
+    <a href="/">Home</a>
+    <span class="bfcu-crumbs-sep">/</span>
+    {%- if product.collections.size > 0 -%}
+      {%- assign first_col = product.collections | first -%}
+      <a href="{{ first_col.url }}">{{ first_col.title }}</a>
+      <span class="bfcu-crumbs-sep">/</span>
+    {%- elsif product.type != blank -%}
+      <a href="/collections/all?filter.p.product_type={{ product.type | url_encode }}">{{ product.type }}</a>
+      <span class="bfcu-crumbs-sep">/</span>
+    {%- endif -%}
+    <span class="bfcu-crumbs-current">{{ product.title }}</span>
+  </nav>
+
+  {%- comment -%} Hero split {%- endcomment -%}
+  <div class="bfcu-split">
+
+    {%- comment -%} LEFT: faded product photo {%- endcomment -%}
+    <div class="bfcu-left">
+      <div class="bfcu-img-wrap">
+        {%- if product.featured_image -%}
+          <img class="bfcu-img"
+            src="{{ product.featured_image | image_url: width: 900 }}"
+            alt="{{ product.title | escape }}"
+            loading="eager"
+            fetchpriority="high"/>
+        {%- else -%}
+          <div class="bfcu-img-none">No image</div>
+        {%- endif -%}
+      </div>
+      <div class="bfcu-stamp">No longer available</div>
+    </div>
+
+    {%- comment -%} RIGHT: messaging + CTAs {%- endcomment -%}
+    <div class="bfcu-right">
+
+      {%- if product.type != blank -%}
+        <p class="bfcu-eyebrow">{{ product.type }}</p>
+      {%- endif -%}
+
+      <h1 class="bfcu-title">{{ product.title }}</h1>
+
+      <div class="bfcu-badge">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M6 4v2.5M6 8h.01" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        No longer available
+      </div>
+
+      <p class="bfcu-message">
+        {{ section.settings.message | default: "We no longer carry this item, but we have plenty of similar cameras in stock. Browse below to find something you'll love." }}
+      </p>
+
+      {%- comment -%} Primary CTAs — shop link + contact {%- endcomment -%}
+      <div class="bfcu-ctas">
+        <p class="bfcu-cta-label">Find something similar</p>
+        <div class="bfcu-cta-btns">
+          {%- if auto_col_list.size > 0 -%}
+            {%- assign cta_col = auto_col_list | first -%}
+            <a class="bfcu-cta-btn" href="{{ cta_col.url }}">
+              Shop {{ cta_col.title }}
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+            </a>
+          {%- elsif fb1 != blank -%}
+            <a class="bfcu-cta-btn" href="{{ fb1.url }}">
+              Shop {{ fb1.title }}
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+            </a>
+          {%- else -%}
+            <a class="bfcu-cta-btn" href="/collections/all">
+              Browse all cameras
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+            </a>
+          {%- endif -%}
+          <a class="bfcu-cta-btn is-secondary" href="mailto:hello@brooklynfilmcamera.com">
+            Ask us for a rec
+          </a>
+        </div>
+      </div>
+
+      <div class="bfcu-divider"></div>
+
+      {%- comment -%} Light meta strip {%- endcomment -%}
+      <div class="bfcu-meta">
+        {%- if product.type != blank -%}
+          <span class="bfcu-meta-item">
+            <span class="bfcu-meta-key">Type</span>
+            {{ product.type }}
+          </span>
+        {%- endif -%}
+        {%- if product.vendor != blank -%}
+          <span class="bfcu-meta-item">
+            <span class="bfcu-meta-key">Brand</span>
+            {{ product.vendor }}
+          </span>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+
+  {%- comment -%}
+    Collections grid — auto-detected from product type/tags, with schema fallbacks.
+    Shows up to 4 collections max.
+  {%- endcomment -%}
+
+  {%- assign display_cols = '' | split: ',' -%}
+  {%- for col in auto_col_list limit: 4 -%}
+    {%- assign display_cols = display_cols | push: col -%}
+  {%- endfor -%}
+  {%- comment -%} Pad with schema fallbacks if we have fewer than 4 {%- endcomment -%}
+  {%- for _i in (1..4) -%}
+    {%- assign fb = blank -%}
+    {%- if _i == 1 -%}{%- assign fb = fb1 -%}
+    {%- elsif _i == 2 -%}{%- assign fb = fb2 -%}
+    {%- elsif _i == 3 -%}{%- assign fb = fb3 -%}
+    {%- elsif _i == 4 -%}{%- assign fb = fb4 -%}
+    {%- endif -%}
+    {%- if fb != blank and display_cols.size < 4 -%}
+      {%- assign already = false -%}
+      {%- for dc in display_cols -%}
+        {%- if dc.handle == fb.handle -%}{%- assign already = true -%}{%- endif -%}
+      {%- endfor -%}
+      {%- unless already -%}
+        {%- assign display_cols = display_cols | push: fb -%}
+      {%- endunless -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if display_cols.size > 0 -%}
+    <section class="bfcu-shop" aria-label="Shop similar">
+      <div class="bfcu-shop-head">
+        <span class="bfcu-shop-eyebrow">Still looking?</span>
+        <h2 class="bfcu-shop-title">{{ section.settings.shop_heading }}</h2>
+        {%- if section.settings.shop_sub != blank -%}
+          <p class="bfcu-shop-sub">{{ section.settings.shop_sub }}</p>
+        {%- endif -%}
+      </div>
+      <div class="bfcu-cols-grid">
+        {%- for col in display_cols -%}
+          <a class="bfcu-col-card" href="{{ col.url }}">
+            <div class="bfcu-col-img-wrap">
+              {%- assign col_img_product = col.products | first -%}
+              {%- if col_img_product.featured_image -%}
+                <img class="bfcu-col-img"
+                  src="{{ col_img_product.featured_image | image_url: width: 600 }}"
+                  alt="{{ col.title | escape }}"
+                  loading="lazy"/>
+              {%- else -%}
+                <div class="bfcu-col-img-placeholder">{{ col.title }}</div>
+              {%- endif -%}
+            </div>
+            <div class="bfcu-col-body">
+              <div class="bfcu-col-info">
+                <div class="bfcu-col-title">{{ col.title }}</div>
+                <div class="bfcu-col-count">{{ col.products_count }} item{% if col.products_count != 1 %}s{% endif %}</div>
+              </div>
+              <div class="bfcu-col-arrow">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h6M5 2l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
+              </div>
+            </div>
+          </a>
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- comment -%}
+    Product samples — pulls up to 8 available products from the best-matched collection.
+    Excludes the current (unlisted) product.
+  {%- endcomment -%}
+  {%- assign sample_col = auto_col_list | first -%}
+  {%- if sample_col == blank and fb1 != blank -%}{%- assign sample_col = fb1 -%}{%- endif -%}
+  {%- if sample_col != blank -%}
+    {%- assign sample_count = 0 -%}
+    {%- for sp in sample_col.products -%}
+      {%- if sp.id != product.id and sp.available -%}
+        {%- assign sample_count = sample_count | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if sample_count > 0 -%}
+      <section class="bfcu-samples" aria-label="Products from {{ sample_col.title }}">
+        <div class="bfcu-samples-head">
+          <h2 class="bfcu-samples-title">In stock now</h2>
+          <a class="bfcu-samples-link" href="{{ sample_col.url }}">View all &rsaquo;</a>
+        </div>
+        <div class="bfcu-samples-grid">
+          {%- assign sample_shown = 0 -%}
+          {%- for sp in sample_col.products -%}
+            {%- if sp.id != product.id and sp.available and sample_shown < 8 -%}
+              {%- assign sample_shown = sample_shown | plus: 1 -%}
+              {%- assign sp_v = sp.selected_or_first_available_variant -%}
+              <a class="bfcu-sample-card" href="{{ sp.url }}">
+                <div class="bfcu-sample-img-wrap">
+                  {%- if sp.featured_image -%}
+                    <img class="bfcu-sample-img"
+                      src="{{ sp.featured_image | image_url: width: 400 }}"
+                      alt="{{ sp.title | escape }}"
+                      loading="lazy"
+                      width="400" height="400"/>
+                  {%- endif -%}
+                </div>
+                <div class="bfcu-sample-body">
+                  <div class="bfcu-sample-name">{{ sp.title }}</div>
+                  <div class="bfcu-sample-price">{{ sp_v.price | money }}</div>
+                </div>
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </section>
+    {%- endif -%}
+  {%- endif -%}
+
+</div>
+
+{% schema %}
+{
+  "name": "BFC Unlisted Product",
+  "tag": "section",
+  "class": "bfc-unlisted-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Messaging"
+    },
+    {
+      "type": "textarea",
+      "id": "message",
+      "label": "Unavailable message",
+      "default": "We no longer carry this item, but we have plenty of similar cameras in stock. Browse below to find something you'll love."
+    },
+    {
+      "type": "header",
+      "content": "Shop section"
+    },
+    {
+      "type": "text",
+      "id": "shop_heading",
+      "label": "Section heading",
+      "default": "Find something you'll love"
+    },
+    {
+      "type": "text",
+      "id": "shop_sub",
+      "label": "Section subheading",
+      "info": "Optional. Leave blank to hide."
+    },
+    {
+      "type": "header",
+      "content": "Fallback collections",
+      "info": "Shown if no collections match the product's type or tags. Also used to pad the grid up to 4 columns."
+    },
+    {
+      "type": "collection",
+      "id": "fallback_col_1",
+      "label": "Fallback collection 1"
+    },
+    {
+      "type": "collection",
+      "id": "fallback_col_2",
+      "label": "Fallback collection 2"
+    },
+    {
+      "type": "collection",
+      "id": "fallback_col_3",
+      "label": "Fallback collection 3"
+    },
+    {
+      "type": "collection",
+      "id": "fallback_col_4",
+      "label": "Fallback collection 4"
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Unlisted Product"
+    }
+  ],
+  "templates": ["product"]
+}
+{% endschema %}
