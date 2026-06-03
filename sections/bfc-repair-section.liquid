@@ -149,54 +149,55 @@
    0. HERO
    ============================================================ */
 .bfc-hero {
-  padding: 72px 0 64px;
-  background: var(--bk);
   position: relative;
   overflow: hidden;
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  background: #000;
 }
 
-/* Subtle textured top-right accent */
-.bfc-hero::after {
+.bfc-hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.bfc-hero__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center right;
+  display: block;
+}
+.bfc-hero__bg::after {
   content: '';
   position: absolute;
-  top: -60px;
-  right: -60px;
-  width: 380px;
-  height: 380px;
-  border: 1px solid rgba(227, 110, 21, 0.12);
-  border-radius: 50%;
-  pointer-events: none;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.88) 35%, rgba(0,0,0,0.4) 65%, rgba(0,0,0,0.05) 100%);
 }
 
 .bfc-hero__inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  align-items: center;
+  position: relative;
+  z-index: 1;
+  max-width: 580px;
+  padding: 96px 0;
 }
-
-.bfc-hero__content { position: relative; z-index: 1; }
 
 .bfc-hero__content h1 {
   font-family: var(--sr);
   font-weight: 500;
-  font-size: clamp(40px, 5vw, 72px);
+  font-size: clamp(40px, 5vw, 68px);
   line-height: 1.0;
   color: var(--cv);
   margin: 0 0 20px;
 }
 
-.bfc-hero__content h1 em {
-  font-style: italic;
-  color: var(--go);
-}
-
 .bfc-hero__tagline {
-  font-size: 15px;
-  line-height: 1.7;
-  color: rgba(248, 246, 238, 0.65);
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgba(248, 246, 238, 0.7);
   margin: 0 0 36px;
-  max-width: 460px;
+  white-space: pre-line;
 }
 
 .bfc-hero__actions {
@@ -208,35 +209,21 @@
 
 .bfc-hero__proof {
   font-size: 11px;
-  color: rgba(248, 246, 238, 0.4);
+  color: rgba(248, 246, 238, 0.32);
   letter-spacing: 0.05em;
-  margin-top: 28px;
-}
-
-.bfc-hero__image {
-  position: relative;
-  aspect-ratio: 4/5;
-  overflow: hidden;
-}
-.bfc-hero__image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
+  margin-top: 24px;
 }
 
 @media (max-width: 900px) {
-  .bfc-hero__inner {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-  .bfc-hero__image {
-    aspect-ratio: 16/9;
-    order: -1;
-  }
   .bfc-hero {
-    padding: 48px 0 48px;
+    min-height: 420px;
+  }
+  .bfc-hero__bg::after {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0.95) 100%);
+  }
+  .bfc-hero__inner {
+    padding: 56px 0;
+    max-width: 100%;
   }
 }
 
@@ -322,7 +309,7 @@
 
 .bfc-steps__track {
   display: grid;
-  grid-template-columns: 1fr 48px 1fr 48px 1fr;
+  grid-template-columns: 1fr 32px 1fr 32px 1fr;
   align-items: start;
   gap: 0;
   margin-bottom: 48px;
@@ -333,7 +320,12 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 0 20px;
+  padding: 0 16px;
+  min-width: 0;
+}
+
+.bfc-step-v2 > div {
+  width: 100%;
 }
 
 .bfc-step-v2__num {
@@ -373,7 +365,7 @@
 .bfc-steps__connector {
   display: flex;
   align-items: flex-start;
-  padding-top: 24px;
+  padding-top: 48px; /* half of 48px num box = vertically centers with number */
 }
 .bfc-steps__connector::before {
   content: '';
@@ -381,7 +373,6 @@
   width: 100%;
   height: 1px;
   background: var(--mg);
-  margin-top: 0;
 }
 
 .bfc-steps__cta {
@@ -1122,32 +1113,28 @@
      0. HERO
      ══════════════════════════════════════════════════════════ -->
 <div class="bfc-hero">
-  <div class="bfc-inner">
-    <div class="bfc-hero__inner">
+  <!-- Background image -->
+  <div class="bfc-hero__bg">
+    {%- if section.settings.hero_image != blank -%}
+      {{ section.settings.hero_image | image_url: width: 2000 | image_tag: loading: 'eager', fetchpriority: 'high', alt: 'Film camera repair at Brooklyn Film Camera' }}
+    {%- else -%}
+      <img src="https://cdn.shopify.com/s/files/1/0575/8638/5068/files/REPAIRS_DESKTOP.jpg?v=1772749166" alt="Film camera repair at Brooklyn Film Camera" loading="eager" fetchpriority="high" width="2000" height="900">
+    {%- endif -%}
+  </div>
 
-      <div class="bfc-hero__content bfc-reveal">
-        <p class="bfc-label bfc-label--light">Camera Repair</p>
-        <h1>
-          {{ section.settings.hero_headline | default: 'Expert repair for cameras <em>worth keeping</em>' }}
-        </h1>
-        <p class="bfc-hero__tagline">
-          {{ section.settings.hero_tagline | default: 'In-house technicians. Transparent quotes. No work starts until you approve. Mail-in or drop off at 855 Grand St, Brooklyn.' }}
-        </p>
+  <div class="bfc-inner">
+    <div class="bfc-hero__inner bfc-reveal">
+      <div class="bfc-hero__content">
+        <p class="bfc-label bfc-label--light">Mail In or Drop Off in Brooklyn</p>
+        <h1>Film Camera Repairs</h1>
+        <p class="bfc-hero__tagline">Whether you're in Brooklyn or Boise,
+getting your camera fixed has never been easier.</p>
         <div class="bfc-hero__actions">
           <a href="{{ repair_btn_url }}" class="bfc-btn bfc-btn--primary">{{ repair_btn_text }}</a>
           <a href="{{ section.settings.url_hkfu6CK8SSCaCMoo-1 | default: visit_url }}" class="bfc-btn bfc-btn--outline-light">Contact Us</a>
         </div>
         <p class="bfc-hero__proof">Bench fee applied toward your repair &nbsp;/&nbsp; 2-4 week standard turnaround</p>
       </div>
-
-      <div class="bfc-hero__image bfc-reveal" style="--bfc-delay:120ms;">
-        {%- if section.settings.hero_image != blank -%}
-          {{ section.settings.hero_image | image_url: width: 900 | image_tag: loading: 'eager', fetchpriority: 'high', alt: 'Camera repair at Brooklyn Film Camera' }}
-        {%- else -%}
-          <img src="https://cdn.instant.so/sites/vmtACb1rp8N2aQE8/assets/JDNeBfKHRncTHkuE/TVqpLWievcfsg2vT.png?width=900" alt="Camera technician at work" loading="eager" fetchpriority="high" width="900" height="672">
-        {%- endif -%}
-      </div>
-
     </div>
   </div>
 </div>
