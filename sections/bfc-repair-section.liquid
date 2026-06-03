@@ -1299,7 +1299,7 @@ getting your camera fixed has never been easier.</p>
         <h2 class="bfc-h2">What we repair</h2>
       </div>
       {%- assign what_desc = section.settings['text_nsHGXN0PI3XSWcih-1'] | strip_html -%}
-      {%- if what_desc == blank -%}{%- assign what_desc = "We are actively expanding our repair menu. If you don't see your camera listed you can still request a quote by selecting unlisted." -%}{%- endif -%}
+      {%- if what_desc == blank -%}{%- assign what_desc = "We are actively expanding our repair menu. Start a repair to see our full list of repairable models." -%}{%- endif -%}
       <p class="bfc-what__desc">{{ what_desc }}</p>
     </div>
 
@@ -1402,7 +1402,7 @@ getting your camera fixed has never been easier.</p>
 
     <div class="bfc-what__cta bfc-reveal" style="--bfc-delay:220ms">
       <a href="{{ repair_btn_url }}" class="bfc-btn bfc-btn--outline-light">{{ repair_btn_text }}</a>
-      <p class="bfc-what__cta-note">Don't see yours listed? Select &ldquo;Unlisted&rdquo; to fill out the form and request a quote.</p>
+
     </div>
 
   </div>
@@ -1451,9 +1451,6 @@ getting your camera fixed has never been easier.</p>
 
     <div class="bfc-pricing__cta bfc-reveal" style="--bfc-delay:260ms">
       <a href="{{ repair_btn_url }}" class="bfc-btn bfc-btn--primary">{{ repair_btn_text }}</a>
-      <a href="{{ section.settings.url_vXX8izTIbPsVDqLd-1 | default: repair_url }}" class="bfc-btn bfc-btn--outline">
-        {{ section.settings['text_ZSSb2jGJ33AH7IaV-1'] | strip_html | default: 'See Full Price List' }}
-      </a>
     </div>
 
   </div>
@@ -1793,6 +1790,149 @@ getting your camera fixed has never been easier.</p>
 
 </section>
 
+<!-- ══════════════════════════════════════════════════════════
+     DISCLAIMER / FINE PRINT
+     ══════════════════════════════════════════════════════════ -->
+<style>
+.bfc-disclaimer {
+  background: var(--bk);
+  padding: 48px 0;
+  border-top: 1px solid rgba(248,246,238,0.08);
+}
+.bfc-disclaimer__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.bfc-disclaimer__label {
+  font-family: var(--sn);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(248,246,238,0.25);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.bfc-disclaimer__label::after {
+  content: '';
+  display: block;
+  flex: 1;
+  height: 1px;
+  background: rgba(248,246,238,0.08);
+}
+.bfc-disclaimer__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px 48px;
+}
+.bfc-disclaimer__group-title {
+  font-family: var(--sn);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(248,246,238,0.3);
+  margin-bottom: 10px;
+}
+.bfc-disclaimer__group ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.bfc-disclaimer__group ul li {
+  font-family: var(--sn);
+  font-size: 11px;
+  line-height: 1.6;
+  color: rgba(248,246,238,0.35);
+  padding-left: 12px;
+  position: relative;
+}
+.bfc-disclaimer__group ul li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: rgba(248,246,238,0.15);
+  font-size: 10px;
+}
+@media (max-width: 900px) {
+  .bfc-disclaimer__grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 540px) {
+  .bfc-disclaimer__grid { grid-template-columns: 1fr; }
+  .bfc-disclaimer__inner { padding: 0 20px; }
+}
+</style>
+
+<div class="bfc-disclaimer">
+  <div class="bfc-disclaimer__inner">
+
+    <div class="bfc-disclaimer__label">Terms &amp; Conditions</div>
+
+    <div class="bfc-disclaimer__grid">
+
+      <div class="bfc-disclaimer__group">
+        <div class="bfc-disclaimer__group-title">Inspection &amp; Bench Fee</div>
+        <ul>
+          <li>Bench fee is non-refundable.</li>
+          <li>Bench fee is applied toward repair cost if you proceed.</li>
+          <li>Inspection covers professional bench testing only — does not include test rolls.</li>
+          <li>A detailed quote is provided after inspection. No work begins until you approve.</li>
+        </ul>
+      </div>
+
+      <div class="bfc-disclaimer__group">
+        <div class="bfc-disclaimer__group-title">Pricing &amp; Warranties</div>
+        <ul>
+          <li>All prices are estimates. Final cost is determined after bench inspection.</li>
+          <li>Warranties are subject to individual repair quote.</li>
+          <li>Complex repairs or parts availability may affect final cost and timeline.</li>
+        </ul>
+      </div>
+
+      <div class="bfc-disclaimer__group">
+        <div class="bfc-disclaimer__group-title">Turnaround</div>
+        <ul>
+          <li>Standard turnaround is 2&ndash;4 weeks from receipt of camera.</li>
+          <li>Complex repairs may take longer. You will be notified of any delays.</li>
+        </ul>
+      </div>
+
+      <div class="bfc-disclaimer__group">
+        <div class="bfc-disclaimer__group-title">What We Don't Do</div>
+        <ul>
+          <li>We do not film-test cameras. All testing is professional bench testing only.</li>
+          <li>Repairs are limited to listed services. Unlisted repairs are subject to technician review and quote.</li>
+        </ul>
+      </div>
+
+      <div class="bfc-disclaimer__group">
+        <div class="bfc-disclaimer__group-title">Shipping</div>
+        <ul>
+          <li>BFC is not responsible for damage incurred during inbound shipping.</li>
+          <li>Pack securely: bubble wrap, sturdy box, batteries and lenses removed.</li>
+          <li>Return shipping carrier and speed are selected at checkout.</li>
+        </ul>
+      </div>
+
+      <div class="bfc-disclaimer__group">
+        <div class="bfc-disclaimer__group-title">General</div>
+        <ul>
+          <li>Repair outcomes are not guaranteed on cameras with pre-existing or undisclosed damage.</li>
+          <li>BFC reserves the right to decline any repair at the technician's discretion.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
 {%- render 'bfc-service-schema', service_name: 'Camera Repair Service', service_type: 'Camera Repair', service_description: 'Professional repair and restoration for 35mm, medium format, Polaroid, and Super 8 cameras. Full CLA, light seal replacement, lens cleaning, and shutter calibration.' -%}
 
 {% schema %}
@@ -1822,7 +1962,7 @@ getting your camera fixed has never been easier.</p>
     { "type": "richtext", "id": "text_kxIcPYlQOEUWoLHz-1", "label": "Step 6 Title", "default": "<h4><strong>Step 6: Quality Testing &amp; Return</strong></h4>" },
     { "type": "richtext", "id": "text_dAmEcKiEXHxfrQ9v-1", "label": "Step 6 Body", "default": "<p>Your camera undergoes thorough testing to ensure everything functions perfectly, then ships back to you.</p>" },
     { "type": "header", "content": "What We Repair" },
-    { "type": "richtext", "id": "text_nsHGXN0PI3XSWcih-1", "label": "Section Description", "default": "<p>We are actively expanding our repair menu. If you don't see your camera listed you can still request a quote by selecting unlisted.</p>" },
+    { "type": "richtext", "id": "text_nsHGXN0PI3XSWcih-1", "label": "Section Description", "default": "<p>We are actively expanding our repair menu. Start a repair to see our full list of repairable models.</p>" },
     { "type": "richtext", "id": "text_e3IgUtmnx0JCNiDZ-1", "label": "Camera 1 Name", "default": "<h3>Canon AE-1 Program</h3>" },
     { "type": "richtext", "id": "text_nSvnmtcQ01027Xj7-1", "label": "Camera 1 Description", "default": "<p>One of our most popular services.</p>" },
     { "type": "richtext", "id": "text_0GXley78XRccVff6-1", "label": "Camera 2 Name", "default": "<h3>Pentax K1000</h3>" },
