@@ -235,7 +235,6 @@
     },
     "bfc_refurb_process_AAxDrq": {
       "type": "bfc-refurb-process",
-      "disabled": true,
       "name": "BFC Refurb Process",
       "settings": {
         "camera_type": "generic",
