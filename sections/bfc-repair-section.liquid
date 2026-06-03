@@ -179,7 +179,10 @@
 .bfc-hero__inner {
   position: relative;
   z-index: 1;
+  width: 100%;
   max-width: 580px;
+  margin-left: 0;
+  margin-right: auto;
   padding: 96px 0;
 }
 
@@ -309,7 +312,7 @@
 
 .bfc-steps__track {
   display: grid;
-  grid-template-columns: 1fr 32px 1fr 32px 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   align-items: start;
   gap: 0;
   margin-bottom: 48px;
@@ -320,17 +323,22 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 0 16px;
+  padding: 0 24px;
   min-width: 0;
+  overflow: hidden;
 }
 
-.bfc-step-v2 > div {
+.bfc-step-v2__title,
+.bfc-step-v2__body {
   width: 100%;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .bfc-step-v2__num {
   width: 48px;
   height: 48px;
+  flex-shrink: 0;
   background: var(--bk);
   color: var(--cv);
   font-family: var(--sr);
@@ -340,7 +348,6 @@
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  flex-shrink: 0;
   position: relative;
   z-index: 1;
 }
@@ -361,19 +368,8 @@
   color: var(--ch);
 }
 
-/* Connector lines */
-.bfc-steps__connector {
-  display: flex;
-  align-items: flex-start;
-  padding-top: 48px; /* half of 48px num box = vertically centers with number */
-}
-.bfc-steps__connector::before {
-  content: '';
-  display: block;
-  width: 100%;
-  height: 1px;
-  background: var(--mg);
-}
+/* Connector — hidden, track::before handles it */
+.bfc-steps__connector { display: none; }
 
 .bfc-steps__cta {
   display: flex;
@@ -498,7 +494,7 @@
     grid-template-columns: 1fr;
     gap: 0;
   }
-  .bfc-steps__connector { display: none; }
+
   .bfc-step-v2 {
     flex-direction: row;
     text-align: left;
@@ -1213,8 +1209,6 @@ getting your camera fixed has never been easier.</p>
         </div>
       </div>
 
-      <div class="bfc-steps__connector" aria-hidden="true"></div>
-
       <div class="bfc-step-v2 bfc-reveal" style="--bfc-delay:130ms">
         <div class="bfc-step-v2__num">2</div>
         <div>
@@ -1222,8 +1216,6 @@ getting your camera fixed has never been easier.</p>
           <div class="bfc-step-v2__body">Our tech fully inspects your camera and sends you a detailed quote. Nothing happens until you give the green light.</div>
         </div>
       </div>
-
-      <div class="bfc-steps__connector" aria-hidden="true"></div>
 
       <div class="bfc-step-v2 bfc-reveal" style="--bfc-delay:200ms">
         <div class="bfc-step-v2__num">3</div>
@@ -1300,7 +1292,7 @@ getting your camera fixed has never been easier.</p>
         <h2 class="bfc-h2">What we repair</h2>
       </div>
       {%- assign what_desc = section.settings['text_nsHGXN0PI3XSWcih-1'] | strip_html -%}
-      {%- if what_desc == blank -%}{%- assign what_desc = "We are actively expanding our menu. If you don't see your camera listed, book through Unlisted for a quote." -%}{%- endif -%}
+      {%- if what_desc == blank -%}{%- assign what_desc = "We are actively expanding our repair menu. If you don't see your camera listed you can still request a quote by selecting unlisted." -%}{%- endif -%}
       <p class="bfc-what__desc">{{ what_desc }}</p>
     </div>
 
@@ -1403,7 +1395,7 @@ getting your camera fixed has never been easier.</p>
 
     <div class="bfc-what__cta bfc-reveal" style="--bfc-delay:220ms">
       <a href="{{ repair_btn_url }}" class="bfc-btn bfc-btn--outline-light">{{ repair_btn_text }}</a>
-      <p class="bfc-what__cta-note">Don't see yours listed? Book under Unlisted Camera for a quote.</p>
+      <p class="bfc-what__cta-note">Don't see yours listed? Select &ldquo;Unlisted&rdquo; to fill out the form and request a quote.</p>
     </div>
 
   </div>
@@ -1823,7 +1815,7 @@ getting your camera fixed has never been easier.</p>
     { "type": "richtext", "id": "text_kxIcPYlQOEUWoLHz-1", "label": "Step 6 Title", "default": "<h4><strong>Step 6: Quality Testing &amp; Return</strong></h4>" },
     { "type": "richtext", "id": "text_dAmEcKiEXHxfrQ9v-1", "label": "Step 6 Body", "default": "<p>Your camera undergoes thorough testing to ensure everything functions perfectly, then ships back to you.</p>" },
     { "type": "header", "content": "What We Repair" },
-    { "type": "richtext", "id": "text_nsHGXN0PI3XSWcih-1", "label": "Section Description", "default": "<p>We are actively expanding our menu. If you don't see your camera listed, book through Unlisted for a quote.</p>" },
+    { "type": "richtext", "id": "text_nsHGXN0PI3XSWcih-1", "label": "Section Description", "default": "<p>We are actively expanding our repair menu. If you don't see your camera listed you can still request a quote by selecting unlisted.</p>" },
     { "type": "richtext", "id": "text_e3IgUtmnx0JCNiDZ-1", "label": "Camera 1 Name", "default": "<h3>Canon AE-1 Program</h3>" },
     { "type": "richtext", "id": "text_nSvnmtcQ01027Xj7-1", "label": "Camera 1 Description", "default": "<p>One of our most popular services.</p>" },
     { "type": "richtext", "id": "text_0GXley78XRccVff6-1", "label": "Camera 2 Name", "default": "<h3>Pentax K1000</h3>" },
@@ -1835,7 +1827,7 @@ getting your camera fixed has never been easier.</p>
     { "type": "richtext", "id": "text_pXhOtTQSfrgaTNZM-1", "label": "Camera 5 Name", "default": "<h3>Contax G2</h3>" },
     { "type": "richtext", "id": "text_wTI1WAcR4j4D1JgN-1", "label": "Camera 5 Description", "default": "<p>Calibration, full CLAs, repairs, and more.</p>" },
     { "type": "richtext", "id": "text_zj5YYBoqEAS4JhTb-1", "label": "Camera 6 Name", "default": "<h3>Other Cameras</h3>" },
-    { "type": "richtext", "id": "text_AnBPyLkv0Y3ci8Wo-1", "label": "Camera 6 Description", "default": "<p>We also CLA Contax T, TVS, T2s, Canonets, Canon Ps. Don't see yours? Email us.</p>" },
+    { "type": "richtext", "id": "text_AnBPyLkv0Y3ci8Wo-1", "label": "Camera 6 Description", "default": "<p>We also CLA Contax T, T2s, Canonets, Canon Ps. Don't see your camera? Fill out the form, we do more!</p>" },
     { "type": "richtext", "id": "text_f4piqP05EzMfEZYr-1", "label": "Service 1 Name", "default": "<h3>Light Seals</h3>" },
     { "type": "richtext", "id": "text_OanafuXt1OjroSZu-1", "label": "Service 1 Description", "default": "<p>Can be replaced on all models.</p>" },
     { "type": "richtext", "id": "text_OXdu84QbSBevWBqf-1", "label": "Service 2 Name", "default": "<h3>Unjam &amp; Stuck Shutters</h3>" },
