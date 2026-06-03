@@ -12,6 +12,54 @@
     "main": {
       "type": "bfc-pdp-sx70",
       "blocks": {
+        "kit_item_Dap8L7": {
+          "type": "kit_item",
+          "settings": {
+            "product": "sx-37-adapter",
+            "product_alt_1": "",
+            "product_alt_2": "",
+            "column": "Lenses & Optics",
+            "column_custom": "",
+            "label": "",
+            "only_show_for": ""
+          }
+        },
+        "kit_item_RyTRGh": {
+          "type": "kit_item",
+          "settings": {
+            "product": "fisheye-lens",
+            "product_alt_1": "",
+            "product_alt_2": "",
+            "column": "Lenses & Optics",
+            "column_custom": "",
+            "label": "",
+            "only_show_for": ""
+          }
+        },
+        "kit_item_8NCPBE": {
+          "type": "kit_item",
+          "settings": {
+            "product": "linear-prism",
+            "product_alt_1": "",
+            "product_alt_2": "",
+            "column": "Lenses & Optics",
+            "column_custom": "",
+            "label": "",
+            "only_show_for": ""
+          }
+        },
+        "kit_item_LM3G7g": {
+          "type": "kit_item",
+          "settings": {
+            "product": "kaleidoscope-prism",
+            "product_alt_1": "",
+            "product_alt_2": "",
+            "column": "Lenses & Optics",
+            "column_custom": "",
+            "label": "",
+            "only_show_for": ""
+          }
+        },
         "optic_showcase_BryVcc": {
           "type": "optic_showcase",
           "settings": {
@@ -132,18 +180,6 @@
             "only_show_for": ""
           }
         },
-        "kit_item_Dap8L7": {
-          "type": "kit_item",
-          "settings": {
-            "product": "sx-37-adapter",
-            "product_alt_1": "",
-            "product_alt_2": "",
-            "column": "Lenses & Optics",
-            "column_custom": "",
-            "label": "",
-            "only_show_for": ""
-          }
-        },
         "kit_item_Ex44RT": {
           "type": "kit_item",
           "settings": {
@@ -233,6 +269,10 @@
         }
       },
       "block_order": [
+        "kit_item_Dap8L7",
+        "kit_item_RyTRGh",
+        "kit_item_8NCPBE",
+        "kit_item_LM3G7g",
         "optic_showcase_BryVcc",
         "optic_showcase_qgxmwK",
         "optic_showcase_y3mBRq",
@@ -244,7 +284,6 @@
         "kit_item_VTnfRx",
         "kit_item_iAUU7r",
         "kit_item_tae7Wg",
-        "kit_item_Dap8L7",
         "kit_item_Ex44RT",
         "schematic_hotspot_gYgpYc",
         "schematic_hotspot_DDAeBW",
