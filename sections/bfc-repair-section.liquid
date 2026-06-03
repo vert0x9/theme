@@ -180,10 +180,17 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 580px;
-  margin-left: 0;
-  margin-right: auto;
+  max-width: 560px;
   padding: 96px 0;
+}
+
+/* Override the shared bfc-inner centering inside the hero */
+.bfc-hero .bfc-inner {
+  margin-left: 0;
+  max-width: none;
+  width: 100%;
+  padding-left: 40px;
+  padding-right: 40px;
 }
 
 .bfc-hero__content h1 {
@@ -1159,7 +1166,7 @@ getting your camera fixed has never been easier.</p>
         </svg>
         <div class="bfc-trust__text">
           <strong>In-House Technicians</strong>
-          <span>Dedicated techs for Hasselblad, Contax, SLRs and more.</span>
+          <span>Every repair handled by our own technicians, in-house.</span>
         </div>
       </div>
 
@@ -1168,8 +1175,8 @@ getting your camera fixed has never been easier.</p>
           <path d="M247.42,117l-14-35A15.93,15.93,0,0,0,218.58,72H184V64a8,8,0,0,0-8-8H24A16,16,0,0,0,8,72V184a16,16,0,0,0,16,16H41a32,32,0,0,0,62,0h50a32,32,0,0,0,62,0h17a16,16,0,0,0,16-16V120A7.94,7.94,0,0,0,247.42,117ZM72,208a16,16,0,1,1,16-16A16,16,0,0,1,72,208Zm112,0a16,16,0,1,1,16-16A16,16,0,0,1,184,208Zm0-112H184V88h34.58l9.6,24Z"/>
         </svg>
         <div class="bfc-trust__text">
-          <strong>Fully Insured Shipping</strong>
-          <span>Buy a prepaid label via our portal. Returns fully insured.</span>
+          <strong>Easy Shipping</strong>
+          <span>Buy a prepaid label instantly via our portal. Drop at any carrier.</span>
         </div>
       </div>
 
@@ -1467,17 +1474,17 @@ getting your camera fixed has never been easier.</p>
     <div class="bfc-reviews__grid">
 
       {%- assign r1_body = section.settings.review_1_body -%}
-      {%- if r1_body == blank -%}{%- assign r1_body = "Sent in my AE-1 Program that had been sitting in a drawer for years. They diagnosed it quickly, sent a clear quote, and had it back to me shooting perfectly in under 3 weeks." -%}{%- endif -%}
-      {%- assign r1_name = section.settings.review_1_name | default: "Marcus T." -%}
-      {%- assign r1_service = section.settings.review_1_service | default: "Canon AE-1 Program CLA" -%}
+      
+      {%- assign r1_name = section.settings.review_1_name -%}
+      {%- assign r1_service = section.settings.review_1_service -%}
       {%- assign r2_body = section.settings.review_2_body -%}
-      {%- if r2_body == blank -%}{%- assign r2_body = "Brought my Hasselblad in for a full CLA. Isabelle did incredible work. Communication throughout was excellent and the camera came back feeling brand new." -%}{%- endif -%}
-      {%- assign r2_name = section.settings.review_2_name | default: "Priya L." -%}
-      {%- assign r2_service = section.settings.review_2_service | default: "Hasselblad 500CM CLA" -%}
+      
+      {%- assign r2_name = section.settings.review_2_name -%}
+      {%- assign r2_service = section.settings.review_2_service -%}
       {%- assign r3_body = section.settings.review_3_body -%}
-      {%- if r3_body == blank -%}{%- assign r3_body = "Mailed in a Contax T2 with a stuck shutter. Got a detailed quote within days, approved it, and had it back shooting within two weeks. Could not be happier." -%}{%- endif -%}
-      {%- assign r3_name = section.settings.review_3_name | default: "Daniel K." -%}
-      {%- assign r3_service = section.settings.review_3_service | default: "Contax T2 Repair" -%}
+      
+      {%- assign r3_name = section.settings.review_3_name -%}
+      {%- assign r3_service = section.settings.review_3_service -%}
 
       <div class="bfc-review bfc-reveal" style="--bfc-delay:60ms">
         <div class="bfc-review__stars">
@@ -1651,7 +1658,7 @@ getting your camera fixed has never been easier.</p>
     <div class="bfc-reveal">
       <p class="bfc-label bfc-label--light">Mail-In Repairs</p>
       <h2 class="bfc-h2">{{ section.settings['text_B6eNUe5cX9LOchif-1'] | strip_html | default: 'Ready to ship? We make it easy.' }}</h2>
-      <p>Buy a prepaid label through our portal, pack it up, and drop it at any carrier location. Every camera is photographed on arrival and returned fully insured.</p>
+      <p>Buy a prepaid label through our portal, pack it up, and drop it at any carrier location. Every camera is photographed on arrival to document its condition.</p>
 
       <div class="bfc-shipping__callouts">
         <div class="bfc-shipping__callout">
@@ -1677,8 +1684,8 @@ getting your camera fixed has never been easier.</p>
             <path d="M190.13,34.18a8,8,0,0,0-7.94-.29L128,61.89,73.81,33.89a8,8,0,0,0-11.6,7.16V179.13a8,8,0,0,0,4.47,7.17l56,28a8,8,0,0,0,7.18,0l56-28a8,8,0,0,0,4.47-7.17V41.05A8,8,0,0,0,190.13,34.18Z"/>
           </svg>
           <div>
-            <strong>Fully Insured Return</strong>
-            <span>Your camera is covered from the moment it leaves your hands.</span>
+            <strong>Return Shipping</strong>
+            <span>USPS Priority, UPS Ground, or expedited — your choice.</span>
           </div>
         </div>
       </div>
@@ -1855,15 +1862,15 @@ getting your camera fixed has never been easier.</p>
     { "type": "richtext", "id": "text_ZSSb2jGJ33AH7IaV-1", "label": "See More Button Text", "default": "<p>See Full Price List</p>" },
     { "type": "header", "content": "Reviews" },
     { "type": "url", "id": "reviews_url", "label": "Reviews page URL" },
-    { "type": "text", "id": "review_1_body", "label": "Review 1 Body", "default": "Sent in my AE-1 Program that had been sitting in a drawer for years. They diagnosed it quickly, sent a clear quote, and had it back shooting perfectly in under 3 weeks." },
-    { "type": "text", "id": "review_1_name", "label": "Review 1 Reviewer", "default": "Marcus T." },
-    { "type": "text", "id": "review_1_service", "label": "Review 1 Service", "default": "Canon AE-1 Program CLA" },
-    { "type": "text", "id": "review_2_body", "label": "Review 2 Body", "default": "Brought my Hasselblad in for a full CLA. Isabelle did incredible work. Communication throughout was excellent and the camera came back feeling brand new." },
-    { "type": "text", "id": "review_2_name", "label": "Review 2 Reviewer", "default": "Priya L." },
-    { "type": "text", "id": "review_2_service", "label": "Review 2 Service", "default": "Hasselblad 500CM CLA" },
-    { "type": "text", "id": "review_3_body", "label": "Review 3 Body", "default": "Mailed in a Contax T2 with a stuck shutter. Got a detailed quote within days, approved it, and had it back shooting within two weeks." },
-    { "type": "text", "id": "review_3_name", "label": "Review 3 Reviewer", "default": "Daniel K." },
-    { "type": "text", "id": "review_3_service", "label": "Review 3 Service", "default": "Contax T2 Repair" },
+    { "type": "text", "id": "review_1_body", "label": "Review 1 Body", "default": "Paste review text here." },
+    { "type": "text", "id": "review_1_name", "label": "Review 1 Reviewer", "default": "Reviewer name" },
+    { "type": "text", "id": "review_1_service", "label": "Review 1 Service", "default": "Service performed" },
+    { "type": "text", "id": "review_2_body", "label": "Review 2 Body", "default": "Paste review text here." },
+    { "type": "text", "id": "review_2_name", "label": "Review 2 Reviewer", "default": "Reviewer name" },
+    { "type": "text", "id": "review_2_service", "label": "Review 2 Service", "default": "Service performed" },
+    { "type": "text", "id": "review_3_body", "label": "Review 3 Body", "default": "Paste review text here." },
+    { "type": "text", "id": "review_3_name", "label": "Review 3 Reviewer", "default": "Reviewer name" },
+    { "type": "text", "id": "review_3_service", "label": "Review 3 Service", "default": "Service performed" },
     { "type": "header", "content": "FAQ" },
     { "type": "richtext", "id": "text_7aESZrg5i4gIDe2I-1", "label": "FAQ Title", "default": "<h3>Frequently Asked Questions</h3>" },
     { "type": "richtext", "id": "text_9eTXhF2Jl59s8a6I-1", "label": "FAQ Subtitle", "default": "<p>Everything you need to know about our camera repair service. Can't find your answer? Reach out directly.</p>" },
