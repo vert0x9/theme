@@ -5,12 +5,20 @@
 {%- endcomment -%}
 
 {%- liquid
-  assign ft_blocks = section.blocks | where: 'type', 'job_listing' | where: 'settings.category', 'fulltime'
-  assign pt_blocks = section.blocks | where: 'type', 'job_listing' | where: 'settings.category', 'parttime'
-  assign ot_blocks = section.blocks | where: 'type', 'job_listing' | where: 'settings.category', 'other'
-  assign ft_count = ft_blocks | size
-  assign pt_count = pt_blocks | size
-  assign ot_count = ot_blocks | size
+  assign ft_count = 0
+  assign pt_count = 0
+  assign ot_count = 0
+  for block in section.blocks
+    if block.type == 'job_listing'
+      if block.settings.category == 'fulltime'
+        assign ft_count = ft_count | plus: 1
+      elsif block.settings.category == 'parttime'
+        assign pt_count = pt_count | plus: 1
+      elsif block.settings.category == 'other'
+        assign ot_count = ot_count | plus: 1
+      endif
+    endif
+  endfor
 -%}
 
 <div id="bfc-openings-{{ section.id }}" class="bfc-openings" role="region" aria-label="Open Positions">
@@ -54,7 +62,8 @@
           </p>
         </article>
       {%- else -%}
-        {%- for block in ft_blocks -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'job_listing' and block.settings.category == 'fulltime' -%}
           {%- liquid
             assign b = block.settings
           -%}
@@ -116,6 +125,7 @@
               </div>
             </div>
           </article>
+          {%- endif -%}
         {%- endfor -%}
       {%- endif -%}
     </div>
@@ -135,7 +145,8 @@
           </p>
         </article>
       {%- else -%}
-        {%- for block in pt_blocks -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'job_listing' and block.settings.category == 'parttime' -%}
           {%- liquid
             assign b = block.settings
           -%}
@@ -197,6 +208,7 @@
               </div>
             </div>
           </article>
+          {%- endif -%}
         {%- endfor -%}
       {%- endif -%}
     </div>
@@ -216,7 +228,8 @@
           </p>
         </article>
       {%- else -%}
-        {%- for block in ot_blocks -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'job_listing' and block.settings.category == 'other' -%}
           {%- liquid
             assign b = block.settings
           -%}
@@ -278,6 +291,7 @@
               </div>
             </div>
           </article>
+          {%- endif -%}
         {%- endfor -%}
       {%- endif -%}
     </div>
