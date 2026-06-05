@@ -298,19 +298,33 @@
                   %}
                   <article class="bfc-ts__card" role="listitem">
                     <a class="bfc-ts__img" href="{{ product.url }}" aria-label="{{ product.title | escape }}" tabindex="-1" aria-hidden="true">
-                      {% if product.featured_image %}
+                      {%- liquid
+                        assign override_img = nil
+                        assign ph = product.handle | downcase
+                        for i in (1..5)
+                          assign override_handle_key = 'img_override_handle_' | append: i
+                          assign override_img_key = 'img_override_image_' | append: i
+                          assign override_handle = block.settings[override_handle_key] | downcase | strip
+                          if override_handle != blank and override_handle == ph
+                            assign override_img = block.settings[override_img_key]
+                            break
+                          endif
+                        endfor
+                        assign display_img = override_img | default: product.featured_image
+                      -%}
+                      {% if display_img %}
                         <img
-                          src="{{ product.featured_image | image_url: width: 720 }}"
+                          src="{{ display_img | image_url: width: 720 }}"
                           srcset="
-                            {{ product.featured_image | image_url: width: 360 }} 360w,
-                            {{ product.featured_image | image_url: width: 540 }} 540w,
-                            {{ product.featured_image | image_url: width: 720 }} 720w
+                            {{ display_img | image_url: width: 360 }} 360w,
+                            {{ display_img | image_url: width: 540 }} 540w,
+                            {{ display_img | image_url: width: 720 }} 720w
                           "
                           sizes="(min-width: 990px) 260px, 70vw"
                           alt=""
                           loading="lazy"
-                          width="{{ product.featured_image.width }}"
-                          height="{{ product.featured_image.height }}"
+                          width="{{ display_img.width }}"
+                          height="{{ display_img.height }}"
                         >
                       {% else %}
                         <span aria-hidden="true">{{ 'product-1' | placeholder_svg_tag: 'bfc-ts__placeholder' }}</span>
@@ -1302,6 +1316,64 @@
           "id": "add_label",
           "label": "Add button label",
           "default": "Add"
+        },
+        {
+          "type": "header",
+          "content": "Cover Photo Overrides"
+        },
+        {
+          "type": "paragraph",
+          "content": "Enter a product handle and pick a replacement image. Up to 5 overrides."
+        },
+        {
+          "type": "text",
+          "id": "img_override_handle_1",
+          "label": "Override 1 — product handle"
+        },
+        {
+          "type": "image_picker",
+          "id": "img_override_image_1",
+          "label": "Override 1 — replacement image"
+        },
+        {
+          "type": "text",
+          "id": "img_override_handle_2",
+          "label": "Override 2 — product handle"
+        },
+        {
+          "type": "image_picker",
+          "id": "img_override_image_2",
+          "label": "Override 2 — replacement image"
+        },
+        {
+          "type": "text",
+          "id": "img_override_handle_3",
+          "label": "Override 3 — product handle"
+        },
+        {
+          "type": "image_picker",
+          "id": "img_override_image_3",
+          "label": "Override 3 — replacement image"
+        },
+        {
+          "type": "text",
+          "id": "img_override_handle_4",
+          "label": "Override 4 — product handle"
+        },
+        {
+          "type": "image_picker",
+          "id": "img_override_image_4",
+          "label": "Override 4 — replacement image"
+        },
+        {
+          "type": "text",
+          "id": "img_override_handle_5",
+          "label": "Override 5 — product handle"
+        },
+        {
+          "type": "image_picker",
+          "id": "img_override_image_5",
+          "label": "Override 5 — replacement image"
         }
       ]
     }
