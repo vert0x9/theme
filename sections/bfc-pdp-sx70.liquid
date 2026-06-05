@@ -1609,7 +1609,7 @@
     aspect-ratio: 1 / 1;
     object-fit: contain;
     object-position: center;
-    background: var(--gr);
+    background: var(--cv);
   }
   .bfcsx .sx-feat-carousel:has(.sx-feat-radio--1:checked) .sx-feat-li-wrap--1 .sx-feat-li-img,
   .bfcsx .sx-feat-carousel:has(.sx-feat-radio--2:checked) .sx-feat-li-wrap--2 .sx-feat-li-img,
@@ -2558,17 +2558,10 @@
     gap: 0;
   }
 
-  /* Build Your Kit — collapsed by default on mobile, tap toggle to expand */
+  /* Build Your Kit — always expanded on mobile, no toggle needed */
   .bfcsx .sx-kit-sub { margin-bottom: 16px; }
-  .bfcsx .sx-kit-toggle { display: flex; }
-  .bfcsx .sx-kit-body {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows .25s ease;
-    overflow: hidden;
-  }
-  .bfcsx .sx-kit-body > * { min-height: 0; }
-  .bfcsx .sx-kit.is-kit-open .sx-kit-body { grid-template-rows: 1fr; margin-top: 16px; }
+  .bfcsx .sx-kit-toggle { display: none; }
+  .bfcsx .sx-kit-body { display: block; margin-top: 16px; }
   .bfcsx .sx-photos { position: static; height: auto; max-height: none; }
   .bfcsx .sx-hero { aspect-ratio: 1 / 1; height: auto; }
   .bfcsx .sx-info-pane { padding: 24px 20px 32px; max-width: 100%; }
@@ -4931,18 +4924,24 @@ window.sxTocAddToCart = function() {
       var paneEmpty = car.querySelector('[data-sx-feat-pane-empty]');
       var fallback = pane ? pane.getAttribute('data-fallback') || '' : '';
       items.forEach(function(li) {
-        li.addEventListener('click', function() {
-          /* On mobile: if this item's radio is already checked, uncheck it
-             (collapse). Radios can't natively uncheck on click, so we do it
-             manually. Only applies on mobile — desktop always shows the pane. */
+        /* Mobile collapse: intercept pointerdown BEFORE the radio gets checked,
+           so we can detect "already checked" and cancel the click entirely. */
+        var _wasChecked = false;
+        li.addEventListener('pointerdown', function() {
           var radio = li.previousElementSibling;
-          if (radio && radio.type === 'radio' && window.innerWidth <= 768) {
-            if (radio.checked) {
-              radio.checked = false;
-              li.classList.remove('is-active');
-              li.setAttribute('aria-selected', 'false');
-              return;
-            }
+          _wasChecked = !!(radio && radio.type === 'radio' && radio.checked && window.innerWidth <= 768);
+        });
+
+        li.addEventListener('click', function(e) {
+          if (_wasChecked) {
+            /* Already-open item tapped on mobile — uncheck to collapse */
+            e.preventDefault();
+            var radio = li.previousElementSibling;
+            if (radio) radio.checked = false;
+            li.classList.remove('is-active');
+            li.setAttribute('aria-selected', 'false');
+            _wasChecked = false;
+            return;
           }
           items.forEach(function(x) {
             x.classList.remove('is-active');
