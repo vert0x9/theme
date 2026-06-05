@@ -561,10 +561,13 @@
               object-fit: cover;
               display: block;
               transform: scale(1);
-              transition: transform .25s ease;
+              transition: transform .35s ease, opacity .35s ease;
             }
             #{{ block_id }} .bfc-ts__card:hover .bfc-ts__img img{
               transform: scale(1.03);
+            }
+            #{{ block_id }} .bfc-ts__img:has(.bfc-ts__img-hover):hover img:not(.bfc-ts__img-hover){
+              opacity: 0;
             }
             #{{ block_id }} .bfc-ts__badge{
               position: absolute;
@@ -1099,9 +1102,12 @@
               object-fit: cover;
               display: block;
               transform: scale(1);
-              transition: transform .25s ease;
+              transition: transform .35s ease, opacity .35s ease;
             }
             #{{ block_id }} .bfc-ts__card:hover .bfc-ts__img img{ transform: scale(1.03); }
+            #{{ block_id }} .bfc-ts__img:has(.bfc-ts__img-hover):hover img:not(.bfc-ts__img-hover){
+              opacity: 0;
+            }
             #{{ block_id }} .bfc-ts__img-hover{
               position: absolute;
               inset: 0;
