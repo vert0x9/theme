@@ -592,7 +592,13 @@
             "section_padding_y": 28,
             "side_padding_vw": 0,
             "ignore_padding_mobile": false,
-            "add_label": "Add"
+            "add_label": "Add",
+            "img_override_handle_1": "",
+            "img_override_image_1": "shopify://shop_images/Olympus_MJU_a7caf8fd-25f8-4662-bf2a-3e197f806618.png",
+            "img_override_handle_2": "",
+            "img_override_handle_3": "",
+            "img_override_handle_4": "",
+            "img_override_handle_5": ""
           }
         }
       },
