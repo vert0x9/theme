@@ -550,6 +550,50 @@
     "fixed_bfc_top_sellers_qYMXxr": {
       "type": "FIXED-bfc-top-sellers",
       "blocks": {
+        "manual_sellers_YCyERB": {
+          "type": "manual_sellers",
+          "disabled": true,
+          "settings": {
+            "heading": "Top Sellers",
+            "subheading": "The cameras everyone's buying",
+            "product_1": "olympus-stylus-mjui",
+            "product_1_image": "shopify://shop_images/Summer_2026_Photobooth-3364.png",
+            "product_2": "pentax-k1000",
+            "product_2_image": "shopify://shop_images/Summer_2026_Triangle_Park-2734.png",
+            "product_3": "canon-ae-1-program",
+            "product_4": "",
+            "product_5": "",
+            "product_6": "",
+            "product_7": "",
+            "product_8": "",
+            "product_9": "",
+            "product_10": "",
+            "product_11": "",
+            "product_12": "",
+            "show_vendor": false,
+            "show_stock": true,
+            "show_variant_count": false,
+            "show_price": true,
+            "show_quick_add": true,
+            "add_label": "Add",
+            "hide_oos": false,
+            "enable_badges": true,
+            "badge_tag_1": "best seller, best-seller",
+            "badge_label_1": "Best Seller",
+            "badge_tag_2": "just arrived, new",
+            "badge_label_2": "Just Arrived",
+            "badge_tag_3": "limited, limited edition",
+            "badge_label_3": "Limited",
+            "show_view_all": false,
+            "view_all_url": "",
+            "view_all_label": "Shop all",
+            "show_arrows": true,
+            "edge_fade": true,
+            "square_corners": true,
+            "section_padding_y": 28,
+            "side_padding_vw": 0
+          }
+        },
         "top_sellers_e8xVCT": {
           "type": "top_sellers",
           "settings": {
@@ -603,6 +647,7 @@
         }
       },
       "block_order": [
+        "manual_sellers_YCyERB",
         "top_sellers_e8xVCT"
       ],
       "name": "BFC Top Sellers",
