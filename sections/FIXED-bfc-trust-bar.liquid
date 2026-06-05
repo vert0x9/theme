@@ -197,12 +197,19 @@
               color:rgba(248,246,238,0.42);line-height:1.3;
             }
             @media(max-width:768px){
-              .bfc-tb__inner{ flex-wrap:wrap;gap:0; }
-              .bfc-tb__item{ flex:1 1 calc(50% - 24px);max-width:none;padding:10px 12px;gap:8px; }
+              .bfc-tb__inner{
+                display:grid;
+                grid-template-columns:1fr 1fr;
+                gap:0;
+                background-image:
+                  linear-gradient(rgba(255,255,255,0.1) 0, rgba(255,255,255,0.1) 100%),
+                  linear-gradient(90deg, rgba(255,255,255,0.1) 0, rgba(255,255,255,0.1) 100%);
+                background-size: 1px 100%, 100% 1px;
+                background-position: center left 50%, center top 50%;
+                background-repeat: no-repeat;
+              }
+              .bfc-tb__item{ flex:unset;max-width:none;padding:12px 14px;gap:8px; }
               .bfc-tb__item::before{ display:none; }
-              .bfc-tb__item:nth-child(even){ border-left:1px solid rgba(255,255,255,0.1); }
-              .bfc-tb__item:nth-child(3),
-              .bfc-tb__item:nth-child(4){ border-top:1px solid rgba(255,255,255,0.07); }
               .bfc-tb__icon{ width:22px;height:22px; }
               .bfc-tb__icon svg{ width:16px;height:16px; }
               .bfc-tb__stat{ font-size:17px; }
