@@ -785,6 +785,298 @@
             })();
           </script>
         </section>
+      {% when 'manual_sellers' %}
+        {% liquid
+          assign heading = block.settings.heading | default: 'Top Sellers'
+          assign section_pad_y = block.settings.section_padding_y | default: 28
+          assign block_id = 'bfc-top-sellers-' | append: section.id | append: '-' | append: block.id
+          assign ts_radius = 18
+          if block.settings.square_corners
+            assign ts_radius = 0
+          endif
+          assign manual_products = '' | split: ','
+          for i in (1..12)
+            assign prod_key = 'product_' | append: i
+            assign p = block.settings[prod_key]
+            if p != blank
+              assign manual_products = manual_products | concat: p.variants
+            endif
+          endfor
+        %}
+        <section
+          id="{{ block_id }}"
+          class="bfc-block bfc-ts"
+          aria-label="{{ heading | escape }}"
+          style="
+            --bfc-ts-page-width: {{ page_width_px }}px;
+            --bfc-block-pad: calc(var(--bfc-align-pad) + {{ block.settings.side_padding_vw }}vw);
+            --bfc-ts-gutter: var(--bfc-block-pad);
+            --bfc-ts-pad-y: {{ section_pad_y }}px;
+            --bfc-ts-radius: {{ ts_radius }}px;
+          "
+          {{ block.shopify_attributes }}
+        >
+          <div class="bfc-ts__header">
+            <div class="bfc-ts__header-row">
+              {% if heading != blank %}
+                <h2 class="bfc-ts__title bfc-heading">{{ heading | escape }}</h2>
+              {% endif %}
+              {% if block.settings.show_view_all and block.settings.view_all_url != blank %}
+                <a class="bfc-ts__viewall" href="{{ block.settings.view_all_url }}">
+                  {{ block.settings.view_all_label | default: 'Shop all' | escape }}
+                </a>
+              {% endif %}
+            </div>
+            {% if block.settings.subheading != blank %}
+              <p class="bfc-ts__subheading">{{ block.settings.subheading | escape }}</p>
+            {% endif %}
+          </div>
+          <div class="bfc-ts__rail-wrap" data-bfc-ts>
+            {% if block.settings.show_arrows %}
+              <button class="bfc-ts__arrow bfc-ts__arrow--prev" type="button" aria-label="Scroll left" data-bfc-ts-prev>‹</button>
+              <button class="bfc-ts__arrow bfc-ts__arrow--next" type="button" aria-label="Scroll right" data-bfc-ts-next>›</button>
+            {% endif %}
+            <div class="bfc-ts__rail" role="list" data-bfc-ts-rail>
+              {% assign has_any = false %}
+              {% for i in (1..12) %}
+                {% assign prod_key = 'product_' | append: i %}
+                {% assign img_key = 'product_' | append: i | append: '_image' %}
+                {% assign product = block.settings[prod_key] %}
+                {% assign override_img = block.settings[img_key] %}
+                {% if product == blank %}{% continue %}{% endif %}
+                {% if block.settings.hide_oos and product.available == false %}{% continue %}{% endif %}
+                {% assign has_any = true %}
+                {% liquid
+                  assign variant = product.selected_or_first_available_variant
+                  assign display_img = override_img | default: product.featured_image
+                  assign tags_down = product.tags | join: ',' | downcase
+                  assign badge = ''
+                  if block.settings.enable_badges
+                    assign badge_tags_1 = block.settings.badge_tag_1 | downcase | split: ','
+                    assign badge_tags_2 = block.settings.badge_tag_2 | downcase | split: ','
+                    assign badge_tags_3 = block.settings.badge_tag_3 | downcase | split: ','
+                    if badge == ''
+                      for tag in badge_tags_1
+                        assign clean_tag = tag | strip
+                        if clean_tag != '' and tags_down contains clean_tag
+                          assign badge = block.settings.badge_label_1
+                          break
+                        endif
+                      endfor
+                    endif
+                    if badge == ''
+                      for tag in badge_tags_2
+                        assign clean_tag = tag | strip
+                        if clean_tag != '' and tags_down contains clean_tag
+                          assign badge = block.settings.badge_label_2
+                          break
+                        endif
+                      endfor
+                    endif
+                    if badge == ''
+                      for tag in badge_tags_3
+                        assign clean_tag = tag | strip
+                        if clean_tag != '' and tags_down contains clean_tag
+                          assign badge = block.settings.badge_label_3
+                          break
+                        endif
+                      endfor
+                    endif
+                  endif
+                %}
+                <article class="bfc-ts__card" role="listitem">
+                  <a class="bfc-ts__img" href="{{ product.url }}" aria-label="{{ product.title | escape }}" tabindex="-1" aria-hidden="true">
+                    {% if display_img %}
+                      <img
+                        src="{{ display_img | image_url: width: 720 }}"
+                        srcset="
+                          {{ display_img | image_url: width: 360 }} 360w,
+                          {{ display_img | image_url: width: 540 }} 540w,
+                          {{ display_img | image_url: width: 720 }} 720w
+                        "
+                        sizes="(min-width: 990px) 260px, 70vw"
+                        alt=""
+                        loading="lazy"
+                        width="{{ display_img.width }}"
+                        height="{{ display_img.height }}"
+                      >
+                    {% else %}
+                      <span aria-hidden="true">{{ 'product-1' | placeholder_svg_tag: 'bfc-ts__placeholder' }}</span>
+                    {% endif %}
+                    {% if badge != blank %}
+                      <span class="bfc-ts__badge" aria-hidden="true">{{ badge }}</span>
+                    {% endif %}
+                  </a>
+                  <div class="bfc-ts__meta">
+                    {% if block.settings.show_vendor and product.vendor != blank %}
+                      <div class="bfc-ts__vendor">{{ product.vendor | escape }}</div>
+                    {% endif %}
+                    <a class="bfc-ts__name" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+                      {{ product.title | escape }}
+                    </a>
+                    <div class="bfc-ts__subline">
+                      {% if block.settings.show_stock %}
+                        <span class="bfc-ts__stock">
+                          {% if product.available %}In stock{% else %}Sold out{% endif %}
+                        </span>
+                      {% endif %}
+                      {% if block.settings.show_variant_count %}
+                        <span class="bfc-ts__dot" aria-hidden="true">•</span>
+                        <span class="bfc-ts__variants">
+                          {{ product.variants.size }} option{% if product.variants.size != 1 %}s{% endif %}
+                        </span>
+                      {% endif %}
+                    </div>
+                    <div class="bfc-ts__bottom">
+                      {% if block.settings.show_price %}
+                        <div class="bfc-ts__price">
+                          {% if product.compare_at_price_max > product.price %}
+                            <span class="bfc-ts__price-now">{{ product.price | money }}</span>
+                            <span class="bfc-ts__price-was">{{ product.compare_at_price_max | money }}</span>
+                          {% else %}
+                            <span class="bfc-ts__price-now">{{ product.price | money }}</span>
+                          {% endif %}
+                        </div>
+                      {% endif %}
+                      {% if block.settings.show_quick_add %}
+                        <form class="bfc-ts__add" method="post" action="{{ routes.cart_add_url }}" aria-label="Add {{ product.title | escape }} to cart">
+                          <input type="hidden" name="id" value="{{ variant.id }}">
+                          <input type="hidden" name="quantity" value="1">
+                          <button
+                            type="submit"
+                            class="bfc-ts__add-btn"
+                            {% unless product.available %}disabled aria-disabled="true"{% endunless %}
+                          >
+                            {{ block.settings.add_label | default: 'Add' | escape }}
+                          </button>
+                        </form>
+                      {% endif %}
+                    </div>
+                  </div>
+                </article>
+              {% endfor %}
+              {% unless has_any %}
+                {% for i in (1..6) %}
+                  <article class="bfc-ts__card" role="listitem" aria-hidden="true">
+                    <div class="bfc-ts__img">
+                      <span aria-hidden="true">{{ 'product-1' | placeholder_svg_tag: 'bfc-ts__placeholder' }}</span>
+                    </div>
+                    <div class="bfc-ts__meta">
+                      <div class="bfc-ts__name">Pick products in the block settings</div>
+                      <div class="bfc-ts__bottom">
+                        <div class="bfc-ts__price"><span class="bfc-ts__price-now">$0</span></div>
+                        <button class="bfc-ts__add-btn" type="button" disabled>Add</button>
+                      </div>
+                    </div>
+                  </article>
+                {% endfor %}
+              {% endunless %}
+            </div>
+            {% if block.settings.edge_fade %}
+              <span class="bfc-ts__fade bfc-ts__fade--left" aria-hidden="true"></span>
+              <span class="bfc-ts__fade bfc-ts__fade--right" aria-hidden="true"></span>
+            {% endif %}
+          </div>
+          <style>
+            #{{ block_id }}{
+              --bfc-ts-fg: var(--bfc-text);
+              --bfc-ts-bg: var(--bfc-bg);
+              --bfc-ts-border: color-mix(in srgb, var(--bfc-ts-fg) 12%, transparent);
+              --bfc-ts-muted: color-mix(in srgb, var(--bfc-ts-fg) 65%, transparent);
+              color: var(--bfc-ts-fg);
+              background: transparent;
+              padding: var(--bfc-ts-pad-y) 0;
+            }
+            #{{ block_id }} .bfc-ts__header{
+              width: min(calc(100% - (2 * var(--bfc-ts-gutter))), var(--bfc-ts-page-width));
+              max-width: var(--bfc-ts-page-width);
+              margin-left: var(--bfc-ts-gutter);
+              margin-right: var(--bfc-ts-gutter);
+              padding: 0;
+            }
+            #{{ block_id }} .bfc-ts__header-row{
+              display: flex;
+              align-items: baseline;
+              justify-content: space-between;
+              gap: 16px;
+            }
+            #{{ block_id }} .bfc-ts__title{ margin: 0; letter-spacing: -0.02em; }
+            #{{ block_id }} .bfc-ts__viewall{
+              color: var(--bfc-ts-fg);
+              text-decoration: none;
+              font-size: var(--bfc-body-size-small);
+              opacity: .85;
+            }
+            #{{ block_id }} .bfc-ts__viewall:hover{ opacity: 1; text-decoration: underline; }
+            #{{ block_id }} .bfc-ts__subheading{
+              margin: 10px 0 0;
+              color: var(--bfc-ts-muted);
+              font-size: var(--bfc-body-size);
+              line-height: 1.35;
+              max-width: 70ch;
+            }
+          </style>
+          <script>
+            (function(){
+              const root = document.getElementById('{{ block_id }}');
+              if (!root) return;
+              const rail = root.querySelector('[data-bfc-ts-rail]');
+              const prev = root.querySelector('[data-bfc-ts-prev]');
+              const next = root.querySelector('[data-bfc-ts-next]');
+              if (!rail) return;
+              const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+              const behavior = prefersReduced ? 'auto' : 'smooth';
+              function scrollByAmount(dir) {
+                const amount = Math.max(240, Math.floor(rail.clientWidth * 0.85));
+                rail.scrollBy({ left: dir * amount, behavior });
+              }
+              function updateArrows() {
+                if (!prev || !next) return;
+                const max = rail.scrollWidth - rail.clientWidth - 2;
+                prev.disabled = rail.scrollLeft <= 2;
+                next.disabled = rail.scrollLeft >= max;
+                prev.style.opacity = prev.disabled ? '0.35' : '1';
+                next.style.opacity = next.disabled ? '0.35' : '1';
+              }
+              if (prev) prev.addEventListener('click', () => scrollByAmount(-1));
+              if (next) next.addEventListener('click', () => scrollByAmount(1));
+              root.addEventListener('submit', function(event) {
+                const form = event.target;
+                if (!form.classList || !form.classList.contains('bfc-ts__add')) return;
+                event.preventDefault();
+                const button = form.querySelector('button');
+                if (button) { button.disabled = true; button.setAttribute('aria-busy', 'true'); }
+                const formData = new FormData(form);
+                if (!formData.get('quantity')) formData.append('quantity', '1');
+                const body = new URLSearchParams(formData).toString();
+                fetch('{{ routes.cart_add_url }}.js', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', 'X-Requested-With': 'XMLHttpRequest' },
+                  body: body,
+                  credentials: 'same-origin'
+                })
+                .then(res => { if (!res.ok) throw new Error('Add to cart failed'); return res.json(); })
+                .then(() => fetch('/cart/update.js', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                  body: JSON.stringify({ updates: {}, sections: ['cart-drawer', 'cart-icon-bubble'], sections_url: window.location.pathname }),
+                  credentials: 'same-origin'
+                }))
+                .then(res => { if (!res.ok) throw new Error('Cart update failed'); return res.json(); })
+                .then(state => {
+                  const drawer = document.querySelector('cart-drawer');
+                  if (drawer && typeof drawer.renderContents === 'function') drawer.renderContents(state);
+                  if (drawer && typeof drawer.open === 'function') drawer.open();
+                })
+                .catch(err => console.error('Quick add failed', err))
+                .finally(() => { if (button) { button.disabled = false; button.removeAttribute('aria-busy'); } });
+              });
+              rail.addEventListener('scroll', () => window.requestAnimationFrame(updateArrows), { passive: true });
+              window.addEventListener('resize', () => window.requestAnimationFrame(updateArrows));
+              updateArrows();
+            })();
+          </script>
+        </section>
     {% endcase %}
   {% endfor %}
 </section>
@@ -1374,6 +1666,197 @@
           "type": "image_picker",
           "id": "img_override_image_5",
           "label": "Override 5 — replacement image"
+        }
+      ]
+    },
+    {
+      "type": "manual_sellers",
+      "name": "Manual Product Rail",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Top Sellers"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading"
+        },
+        {
+          "type": "header",
+          "content": "Products (up to 12)"
+        },
+        {
+          "type": "paragraph",
+          "content": "Pick each product and optionally override its cover photo."
+        },
+        { "type": "product", "id": "product_1", "label": "Product 1" },
+        { "type": "image_picker", "id": "product_1_image", "label": "Product 1 — cover photo override" },
+        { "type": "product", "id": "product_2", "label": "Product 2" },
+        { "type": "image_picker", "id": "product_2_image", "label": "Product 2 — cover photo override" },
+        { "type": "product", "id": "product_3", "label": "Product 3" },
+        { "type": "image_picker", "id": "product_3_image", "label": "Product 3 — cover photo override" },
+        { "type": "product", "id": "product_4", "label": "Product 4" },
+        { "type": "image_picker", "id": "product_4_image", "label": "Product 4 — cover photo override" },
+        { "type": "product", "id": "product_5", "label": "Product 5" },
+        { "type": "image_picker", "id": "product_5_image", "label": "Product 5 — cover photo override" },
+        { "type": "product", "id": "product_6", "label": "Product 6" },
+        { "type": "image_picker", "id": "product_6_image", "label": "Product 6 — cover photo override" },
+        { "type": "product", "id": "product_7", "label": "Product 7" },
+        { "type": "image_picker", "id": "product_7_image", "label": "Product 7 — cover photo override" },
+        { "type": "product", "id": "product_8", "label": "Product 8" },
+        { "type": "image_picker", "id": "product_8_image", "label": "Product 8 — cover photo override" },
+        { "type": "product", "id": "product_9", "label": "Product 9" },
+        { "type": "image_picker", "id": "product_9_image", "label": "Product 9 — cover photo override" },
+        { "type": "product", "id": "product_10", "label": "Product 10" },
+        { "type": "image_picker", "id": "product_10_image", "label": "Product 10 — cover photo override" },
+        { "type": "product", "id": "product_11", "label": "Product 11" },
+        { "type": "image_picker", "id": "product_11_image", "label": "Product 11 — cover photo override" },
+        { "type": "product", "id": "product_12", "label": "Product 12" },
+        { "type": "image_picker", "id": "product_12_image", "label": "Product 12 — cover photo override" },
+        {
+          "type": "header",
+          "content": "Display"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_vendor",
+          "label": "Show vendor",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "show_stock",
+          "label": "Show stock status",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_variant_count",
+          "label": "Show variant count",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_price",
+          "label": "Show price",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_quick_add",
+          "label": "Show quick add button",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "add_label",
+          "label": "Add button label",
+          "default": "Add"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_oos",
+          "label": "Hide out-of-stock products",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_badges",
+          "label": "Enable tag-based badges",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "badge_tag_1",
+          "label": "Badge 1 tag match (comma-separated)",
+          "default": "best seller, best-seller"
+        },
+        {
+          "type": "text",
+          "id": "badge_label_1",
+          "label": "Badge 1 label",
+          "default": "Best Seller"
+        },
+        {
+          "type": "text",
+          "id": "badge_tag_2",
+          "label": "Badge 2 tag match (comma-separated)",
+          "default": "just arrived, new"
+        },
+        {
+          "type": "text",
+          "id": "badge_label_2",
+          "label": "Badge 2 label",
+          "default": "Just Arrived"
+        },
+        {
+          "type": "text",
+          "id": "badge_tag_3",
+          "label": "Badge 3 tag match (comma-separated)",
+          "default": "limited, limited edition"
+        },
+        {
+          "type": "text",
+          "id": "badge_label_3",
+          "label": "Badge 3 label",
+          "default": "Limited"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_view_all",
+          "label": "Show 'Shop all' link",
+          "default": false
+        },
+        {
+          "type": "url",
+          "id": "view_all_url",
+          "label": "View all URL"
+        },
+        {
+          "type": "text",
+          "id": "view_all_label",
+          "label": "View all label",
+          "default": "Shop all"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_arrows",
+          "label": "Show arrows on desktop",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "edge_fade",
+          "label": "Show edge fade overlays",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "square_corners",
+          "label": "Square corners",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "section_padding_y",
+          "label": "Section vertical padding (px)",
+          "min": 0,
+          "max": 72,
+          "step": 4,
+          "default": 28
+        },
+        {
+          "type": "range",
+          "id": "side_padding_vw",
+          "label": "Side padding add-on (vw)",
+          "min": 0,
+          "max": 10,
+          "step": 0.5,
+          "unit": "vw",
+          "default": 0
         }
       ]
     }
