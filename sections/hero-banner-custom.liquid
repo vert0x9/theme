@@ -175,13 +175,23 @@
       endcase
     -%}
     @media screen and (min-width: 750px) {
+      #shopify-section-{{ section.id }} .hero__inner[data-block-id="{{ block.id }}"] {
+        display: flex !important;
+        align-items: {{ vpos_desktop }} !important;
+      }
       #shopify-section-{{ section.id }} .hero__inner[data-block-id="{{ block.id }}"] .hero__content {
-        align-content: {{ vpos_desktop }};
+        max-width: {{ block.settings.content_width_desktop | default: 100 }}% !important;
+        width: {{ block.settings.content_width_desktop | default: 100 }}% !important;
       }
     }
     @media screen and (max-width: 749px) {
+      #shopify-section-{{ section.id }} .hero__inner[data-block-id="{{ block.id }}"] {
+        display: flex !important;
+        align-items: {{ vpos_mobile }} !important;
+      }
       #shopify-section-{{ section.id }} .hero__inner[data-block-id="{{ block.id }}"] .hero__content {
-        align-content: {{ vpos_mobile }};
+        max-width: {{ block.settings.content_width_mobile | default: 100 }}% !important;
+        width: {{ block.settings.content_width_mobile | default: 100 }}% !important;
       }
     }
   {%- endfor -%}
@@ -629,6 +639,16 @@
           "default": "center"
         },
         {
+          "type": "range",
+          "id": "content_width_desktop",
+          "label": "Text box width (desktop)",
+          "min": 20,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "default": 50
+        },
+        {
           "type": "image_picker",
           "id": "image",
           "label": "t:sections.hero-banner.blocks.slide.settings.image.label"
@@ -694,6 +714,16 @@
             { "value": "bottom", "label": "Bottom" }
           ],
           "default": "center"
+        },
+        {
+          "type": "range",
+          "id": "content_width_mobile",
+          "label": "Text box width (mobile)",
+          "min": 20,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "default": 100
         },
         {
           "type": "image_picker",
