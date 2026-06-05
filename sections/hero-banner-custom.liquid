@@ -305,7 +305,7 @@
           {%- endif -%}
 
           {%- if block.settings.text != blank -%}
-            <div class="hero__entry entry{% unless block.settings.content_position contains 'start' %} entry--list-padding-none{% endunless %}">
+            <div class="hero__entry entry{% unless block.settings.content_position contains 'start' %} entry--list-padding-none{% endunless %}"{% if block.settings.description_max_width > 0 %} style="max-width: {{ block.settings.description_max_width }}px;"{% endif %}>
               {{- block.settings.text -}}
             </div>
           {%- endif -%}
@@ -538,6 +538,17 @@
           "id": "text",
           "label": "t:sections.global.element.text.label",
           "default": "<p>Highlight your promotion</p>"
+        },
+        {
+          "type": "range",
+          "id": "description_max_width",
+          "label": "Description max width",
+          "info": "Limits how wide the body text can stretch. 0 = no limit.",
+          "min": 0,
+          "max": 900,
+          "step": 20,
+          "unit": "px",
+          "default": 560
         },
         {
           "type": "header",
