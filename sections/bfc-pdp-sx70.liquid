@@ -1564,18 +1564,68 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
+/* ── Inline image slot inside each list item (mobile only) ── */
+.bfcsx .sx-feat-li-img {
+  display: none; /* hidden on desktop; mobile overrides below */
+}
+
 @media (max-width: 768px) {
+  /* Single-column — the pane is gone, list is everything */
   .bfcsx .sx-feat-carousel-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 0;
   }
+  /* Hide the side pane entirely — image shows inline under each item instead */
   .bfcsx .sx-feat-pane {
-    position: static;
-    aspect-ratio: 4 / 3;
-    order: -1;
+    display: none;
   }
   .bfcsx .sx-feat-li-name { font-size: 17px; }
   .bfcsx .sx-feat-li-desc { font-size: 13px; }
+
+  /* Add a chevron to the right of each label so it reads as a tap target */
+  .bfcsx .sx-feat-li {
+    grid-template-columns: 28px 1fr 16px;
+  }
+  .bfcsx .sx-feat-li::after {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-right: 1.5px solid rgba(32,32,9,0.3);
+    border-bottom: 1.5px solid rgba(32,32,9,0.3);
+    transform: rotate(45deg) translateY(-3px);
+    align-self: center;
+    transition: transform 0.2s ease, border-color 0.18s ease;
+  }
+  .bfcsx .sx-feat-radio:checked + .sx-feat-li::after {
+    transform: rotate(-135deg) translateY(3px);
+    border-color: var(--or);
+  }
+
+  /* Inline image slot: hidden by default, revealed when its radio is checked */
+  .bfcsx .sx-feat-li-img {
+    display: none;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    object-position: center;
+  }
+  .bfcsx .sx-feat-carousel:has(.sx-feat-radio--1:checked) .sx-feat-li-wrap--1 .sx-feat-li-img,
+  .bfcsx .sx-feat-carousel:has(.sx-feat-radio--2:checked) .sx-feat-li-wrap--2 .sx-feat-li-img,
+  .bfcsx .sx-feat-carousel:has(.sx-feat-radio--3:checked) .sx-feat-li-wrap--3 .sx-feat-li-img,
+  .bfcsx .sx-feat-carousel:has(.sx-feat-radio--4:checked) .sx-feat-li-wrap--4 .sx-feat-li-img,
+  .bfcsx .sx-feat-carousel:has(.sx-feat-radio--5:checked) .sx-feat-li-wrap--5 .sx-feat-li-img,
+  .bfcsx .sx-feat-carousel:has(.sx-feat-radio--6:checked) .sx-feat-li-wrap--6 .sx-feat-li-img {
+    display: block;
+  }
+
+  /* Dongle context: chevron in light colors on the dark background */
+  .bfcsx .sx-dongle .sx-feat-li::after {
+    border-color: rgba(255,255,255,0.25);
+  }
+  .bfcsx .sx-dongle .sx-feat-radio:checked + .sx-feat-li::after {
+    border-color: var(--or);
+  }
 }
 
 /* ── Dongle context: light-on-dark for the feature carousel ──
@@ -3262,7 +3312,15 @@
               {%- assign parts = entry | split: '|' -%}
               {%- assign p_name = parts[0] -%}
               {%- assign p_desc = parts[1] -%}
-              <li class="sx-feat-li-wrap">
+              {%- assign p_key  = parts[2] -%}
+              {%- assign p_img  = section.settings[p_key] -%}
+              {%- assign p_inline_src = '' -%}
+              {%- if p_img != blank -%}
+                {%- assign p_inline_src = p_img | image_url: width: 900 -%}
+              {%- elsif feat_fallback != blank -%}
+                {%- assign p_inline_src = feat_fallback | image_url: width: 900 -%}
+              {%- endif -%}
+              <li class="sx-feat-li-wrap sx-feat-li-wrap--{{ forloop.index }}">
                 <input type="radio"
                        class="sx-feat-radio sx-feat-radio--{{ forloop.index }}"
                        tabindex="-1"
@@ -3276,6 +3334,9 @@
                     <div class="sx-feat-li-desc">{{ p_desc }}</div>
                   </div>
                 </label>
+                {%- if p_inline_src != '' -%}
+                  <img class="sx-feat-li-img" src="{{ p_inline_src }}" alt="{{ p_name | escape }}" loading="lazy">
+                {%- endif -%}
               </li>
             {%- endfor -%}
           </ul>
@@ -3424,7 +3485,15 @@
               {%- assign parts = entry | split: '|' -%}
               {%- assign p_name = parts[0] -%}
               {%- assign p_desc = parts[1] -%}
-              <li class="sx-feat-li-wrap">
+              {%- assign p_key  = parts[2] -%}
+              {%- assign p_img  = section.settings[p_key] -%}
+              {%- assign p_inline_src = '' -%}
+              {%- if p_img != blank -%}
+                {%- assign p_inline_src = p_img | image_url: width: 900 -%}
+              {%- elsif dng_fallback != blank -%}
+                {%- assign p_inline_src = dng_fallback | image_url: width: 900 -%}
+              {%- endif -%}
+              <li class="sx-feat-li-wrap sx-feat-li-wrap--{{ forloop.index }}">
                 <input type="radio"
                        class="sx-feat-radio sx-feat-radio--{{ forloop.index }}"
                        tabindex="-1"
@@ -3438,6 +3507,9 @@
                     <div class="sx-feat-li-desc">{{ p_desc }}</div>
                   </div>
                 </label>
+                {%- if p_inline_src != '' -%}
+                  <img class="sx-feat-li-img" src="{{ p_inline_src }}" alt="{{ p_name | escape }}" loading="lazy">
+                {%- endif -%}
               </li>
             {%- endfor -%}
           </ul>
