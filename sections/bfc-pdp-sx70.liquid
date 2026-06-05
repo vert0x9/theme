@@ -4005,6 +4005,50 @@ window.bfcsxToggleCompare = function() {
       const max = slider.children.length - 1;
       goTo(cur === max ? 0 : cur + 1);
     });
+
+    /* ── One-slide-at-a-time touch swipe (mobile) ──
+       Intercepts touchstart/move/end on the slider and manually advances
+       by exactly ±1 slide. This prevents fast flicks from jumping across
+       multiple images, which native scroll-snap momentum allows. */
+    let _touchStartX = null;
+    let _touchStartY = null;
+    let _touchLocked = false; // true once we've claimed the gesture as horizontal
+    const SWIPE_THRESHOLD = 40; // px horizontal travel to trigger a slide change
+    const AXIS_LOCK_THRESHOLD = 8; // px to decide horizontal vs vertical
+
+    slider.addEventListener('touchstart', function(e) {
+      if (e.touches.length !== 1) return;
+      _touchStartX = e.touches[0].clientX;
+      _touchStartY = e.touches[0].clientY;
+      _touchLocked = false;
+    }, { passive: true });
+
+    slider.addEventListener('touchmove', function(e) {
+      if (_touchStartX === null) return;
+      const dx = e.touches[0].clientX - _touchStartX;
+      const dy = e.touches[0].clientY - _touchStartY;
+      if (!_touchLocked && Math.abs(dx) < AXIS_LOCK_THRESHOLD && Math.abs(dy) < AXIS_LOCK_THRESHOLD) return;
+      if (!_touchLocked) {
+        // Decide axis: if more vertical than horizontal, bail and let page scroll
+        if (Math.abs(dy) > Math.abs(dx)) { _touchStartX = null; return; }
+        _touchLocked = true;
+      }
+      // We own this gesture — block native scroll so it doesn't drift
+      e.preventDefault();
+    }, { passive: false });
+
+    slider.addEventListener('touchend', function(e) {
+      if (_touchStartX === null || !_touchLocked) { _touchStartX = null; return; }
+      const dx = (e.changedTouches[0] || e.touches[0]).clientX - _touchStartX;
+      _touchStartX = null;
+      _touchLocked = false;
+      if (Math.abs(dx) < SWIPE_THRESHOLD) return; // too short — stay on current slide
+      const cur = Math.round(slider.scrollLeft / slider.offsetWidth);
+      const max = slider.children.length - 1;
+      goTo(dx < 0
+        ? (cur === max ? max : cur + 1)   // swipe left → next
+        : (cur === 0  ? 0   : cur - 1));  // swipe right → prev
+    }, { passive: true });
   }
 
   /* ── Variant picker ── */
