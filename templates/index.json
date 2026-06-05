@@ -297,16 +297,16 @@
     "hero_banner_custom_w73wcr": {
       "type": "hero-banner-custom",
       "blocks": {
-        "slide_i4QgGF": {
+        "slide_c7LKPw": {
           "type": "slide",
           "settings": {
             "banner_layout": "hero-banner--full",
             "color_scheme": "scheme-1",
             "header_menu_text_color": "#ffffff",
-            "heading": "<h1>Your Summer <br/><em><strong>Camera</strong></em> is Ready</h1>",
-            "subheading": "",
+            "heading": "<p>Highlight your promotion</p>",
+            "subheading": "Highlight your promotion",
             "subheading_link": "",
-            "text": "<p>A curated shelf of fully refurbished film cameras — ready for road trips, rooftops, and every golden hour between now and September.</p>",
+            "text": "<p>Highlight your promotion</p>",
             "button_link_1": "/",
             "button_link_1_type": "button",
             "button_label_1": "View more",
@@ -316,13 +316,15 @@
             "button_style_2": "button--outlined",
             "content_position": "end",
             "content_alignment": "end",
-            "content_position_vertical": "center",
+            "content_position_vertical": "bottom",
+            "content_width_desktop": 85,
             "video_external": "",
             "show_controls_on_video": false,
             "enable_media_overlay_desktop": true,
             "content_position_mobile": "center",
             "content_alignment_mobile": "center",
             "content_position_vertical_mobile": "center",
+            "content_width_mobile": 100,
             "video_external_mobile": "",
             "show_controls_on_video_mobile": false,
             "enable_media_overlay_mobile": true,
@@ -331,7 +333,7 @@
         }
       },
       "block_order": [
-        "slide_i4QgGF"
+        "slide_c7LKPw"
       ],
       "disabled": true,
       "name": "Custom Hero Banner",
