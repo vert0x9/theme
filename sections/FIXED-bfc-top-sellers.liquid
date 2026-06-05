@@ -330,7 +330,7 @@
                         {%- if hover_img and hover_img != display_img -%}
                           <img
                             class="bfc-ts__img-hover"
-                            src="{{ hover_img | image_url: width: 720 }}"
+                            src="{{ hover_img | image_url: width: 540 }}"
                             srcset="
                               {{ hover_img | image_url: width: 360 }} 360w,
                               {{ hover_img | image_url: width: 540 }} 540w,
@@ -338,9 +338,7 @@
                             "
                             sizes="(min-width: 990px) 260px, 70vw"
                             alt=""
-                            loading="lazy"
-                            width="{{ hover_img.width }}"
-                            height="{{ hover_img.height }}"
+                            loading="eager"
                           >
                         {%- endif -%}
                       {% else %}
@@ -563,12 +561,21 @@
               transform: scale(1);
               transition: transform .35s ease, opacity .35s ease;
             }
-            #{{ block_id }} .bfc-ts__card:hover .bfc-ts__img img{
+            #{{ block_id }} .bfc-ts__img:hover img:first-child{
               transform: scale(1.03);
             }
-            #{{ block_id }} .bfc-ts__img:has(.bfc-ts__img-hover):hover img:not(.bfc-ts__img-hover){
+            #{{ block_id }} .bfc-ts__img-hover{
+              position: absolute;
+              inset: 0;
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              display: block;
               opacity: 0;
+              transition: opacity .35s ease;
             }
+            #{{ block_id }} .bfc-ts__img:hover img:first-child{ opacity: 0; }
+            #{{ block_id }} .bfc-ts__img:hover .bfc-ts__img-hover{ opacity: 1; }
             #{{ block_id }} .bfc-ts__badge{
               position: absolute;
               left: 12px;
@@ -924,7 +931,7 @@
                       {%- if hover_img and hover_img != display_img -%}
                         <img
                           class="bfc-ts__img-hover"
-                          src="{{ hover_img | image_url: width: 720 }}"
+                          src="{{ hover_img | image_url: width: 540 }}"
                           srcset="
                             {{ hover_img | image_url: width: 360 }} 360w,
                             {{ hover_img | image_url: width: 540 }} 540w,
@@ -932,9 +939,7 @@
                           "
                           sizes="(min-width: 990px) 260px, 70vw"
                           alt=""
-                          loading="lazy"
-                          width="{{ hover_img.width }}"
-                          height="{{ hover_img.height }}"
+                          loading="eager"
                         >
                       {%- endif -%}
                     {% else %}
@@ -1104,10 +1109,7 @@
               transform: scale(1);
               transition: transform .35s ease, opacity .35s ease;
             }
-            #{{ block_id }} .bfc-ts__card:hover .bfc-ts__img img{ transform: scale(1.03); }
-            #{{ block_id }} .bfc-ts__img:has(.bfc-ts__img-hover):hover img:not(.bfc-ts__img-hover){
-              opacity: 0;
-            }
+            #{{ block_id }} .bfc-ts__img:hover img:first-child{ transform: scale(1.03); opacity: 0; }
             #{{ block_id }} .bfc-ts__img-hover{
               position: absolute;
               inset: 0;
@@ -1118,7 +1120,7 @@
               opacity: 0;
               transition: opacity .35s ease;
             }
-            #{{ block_id }} .bfc-ts__card:hover .bfc-ts__img-hover{ opacity: 1; }
+            #{{ block_id }} .bfc-ts__img:hover .bfc-ts__img-hover{ opacity: 1; }
             #{{ block_id }} .bfc-ts__badge{
               position: absolute;
               left: 12px;
