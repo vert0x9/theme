@@ -1606,7 +1606,7 @@
   .bfcsx .sx-feat-li-img {
     display: none;
     width: 100%;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 8 / 7;
     object-fit: cover;
     object-position: center;
   }
@@ -4931,6 +4931,18 @@ window.sxTocAddToCart = function() {
       var fallback = pane ? pane.getAttribute('data-fallback') || '' : '';
       items.forEach(function(li) {
         li.addEventListener('click', function() {
+          /* On mobile: if this item's radio is already checked, uncheck it
+             (collapse). Radios can't natively uncheck on click, so we do it
+             manually. Only applies on mobile — desktop always shows the pane. */
+          var radio = li.previousElementSibling;
+          if (radio && radio.type === 'radio' && window.innerWidth <= 768) {
+            if (radio.checked) {
+              radio.checked = false;
+              li.classList.remove('is-active');
+              li.setAttribute('aria-selected', 'false');
+              return;
+            }
+          }
           items.forEach(function(x) {
             x.classList.remove('is-active');
             x.setAttribute('aria-selected', 'false');
