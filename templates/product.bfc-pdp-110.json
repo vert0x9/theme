@@ -21,7 +21,6 @@
             "product": "lomography-color-92-color-1",
             "variant_id": "",
             "discount_percent": 0,
-            "is_developing": false,
             "is_starter_kit": true,
             "only_show_for": ""
           }
@@ -35,7 +34,6 @@
             "product": "lomography-orca-lobster",
             "variant_id": "",
             "discount_percent": 0,
-            "is_developing": false,
             "is_starter_kit": true,
             "only_show_for": ""
           }
@@ -49,7 +47,6 @@
             "product": "point-shoot-case",
             "variant_id": "",
             "discount_percent": 0,
-            "is_developing": false,
             "is_starter_kit": true,
             "only_show_for": ""
           }
