@@ -4,10 +4,9 @@
 
 .blog__head {
   display: flex;
-  overflow: auto hidden;
-  margin-block-end: calc(4rem - (var(--h3-multiplier) / 5.0));
   justify-content: center;
   padding: 0 var(--page-gutter);
+  margin-block-end: 3rem;
 }
 
 .blog__filters {
@@ -17,21 +16,36 @@
 .blog__filters a,
 .blog__filters span {
   display: block;
-  width: max-content;
-  line-height: var(--line-height-static-sm);
+  padding: 0.6rem 1.4rem;
+  border: 1px solid rgb(var(--color-foreground));
+  border-radius: 0;
+  line-height: 1.4;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .blog__filters-item:not(.is-active) {
-  color: rgba(var(--color-foreground), 0.25);
+  color: rgb(var(--color-foreground));
 }
-.blog__filters-item:not(.is-active):hover {
-  color: rgba(var(--color-foreground), 0.5);
+.blog__filters-item:not(.is-active):hover a {
+  background-color: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
 }
 
+.blog__filters-item.is-active a,
+.blog__filters-item.is-active span {
+  background-color: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+}
 
 .blog__filters-items {
   display: flex;
-  column-gap: var(--section-spacing-unit-size);
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
 }
 
 .blog__articles-grid {
@@ -53,8 +67,9 @@
 }
 
 @media (hover: hover) {
-  .blog__filters a:hover {
-    background-color: rgb(var(--color-background));
+  .blog__filters-item:not(.is-active) a:hover {
+    background-color: rgb(var(--color-foreground));
+    color: rgb(var(--color-background));
   }
 }
 
@@ -76,11 +91,12 @@
 
 @media screen and (min-width: 750px) {
   .blog__head {
-    margin-block-end: calc(6.4rem - (var(--h4-multiplier) / 5.0));
+    margin-block-end: 4rem;
   }
-  .blog__filters-items {
-    font-size: calc(var(--font-heading-scale) * var(--h4-multiplier));
-    padding-block: calc(var(--h4-multiplier) / 5.0);
+  .blog__filters a,
+  .blog__filters span {
+    font-size: 1.4rem;
+    padding: 0.6rem 1.6rem;
   }
   .blog__articles-grid {
     margin: 0;
@@ -95,11 +111,5 @@
 
   .blog__filters-items {
     justify-content: center;
-    overflow: visible;
-    margin: 0;
-  }
-
-  .blog__filters-item + .blog__filters-item {
-    margin-inline-start: 0;
   }
 }

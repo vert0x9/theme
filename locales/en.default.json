@@ -216,7 +216,8 @@
     "comment_success": "Your comment was posted successfully! Thank you!",
     "comment_success_moderated": "Your comment was posted successfully. We will publish it in a little while, as our blog is moderated.",
     "comment_moderated": "Please note, comments need to be approved before they are published.",
-    "sample_content": "Share your brand's story with your customers"
+    "sample_content": "Share your brand's story with your customers",
+    "related_articles": "Related Articles"
   },
   "contact": {
     "label": "Contact",

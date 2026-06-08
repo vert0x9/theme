@@ -1,0 +1,102 @@
+{% comment %}
+  Renders related articles for SEO internal linking and crawl depth.
+  Two strategies:
+    1. Tag-based matching (topical relevance) — used when article has tags
+    2. Recency fallback (most recent from same blog) — used when no tags exist
+
+  Server-side Liquid — zero JS overhead. Semantic HTML with <section>, <article>, <time datetime>.
+
+  Usage:
+  {%- render 'related-articles' -%}
+{% endcomment %}
+
+{% liquid
+  assign counter = 0
+  assign max_related = 3
+%}
+
+{% paginate blog.articles by 999 %}
+  {% capture related_cards %}
+    {% if article.tags.size > 0 %}
+      {% assign skip_handles = article.handle | split: '.....' %}
+
+      {% for tag in article.tags %}
+        {% for related_article in blog.articles %}
+          {% unless skip_handles contains related_article.handle %}
+            {% if related_article.tags contains tag and counter < max_related %}
+              {% assign counter = counter | plus: 1 %}
+              {% assign temp = related_article.handle | split: '.....' %}
+              {% assign skip_handles = skip_handles | concat: temp %}
+
+              <article class="related-article-card card-article">
+                {% if related_article.image %}
+                  <a href="{{ related_article.url }}" class="related-article-card__image" aria-label="{{ 'blog.read_more' | t | default: 'Read more' }}: {{ related_article.title | escape }}">
+                    <div class="media related-article-card__media">
+                      {% render 'image', image: related_article.image, alt: related_article.title | escape %}
+                    </div>
+                  </a>
+                {% endif %}
+                <div class="related-article-card__content">
+                  <h3 class="related-article-card__title h6">
+                    <a href="{{ related_article.url }}">{{- related_article.title | escape -}}</a>
+                  </h3>
+                  <time datetime="{{ related_article.published_at | date: '%Y-%m-%d' }}">
+                    {{- related_article.published_at | date: '%B %d, %Y' -}}
+                  </time>
+                  {% if related_article.excerpt_or_content != blank %}
+                    <p>{{- related_article.excerpt_or_content | strip_html | truncatewords: 25 -}}</p>
+                  {% endif %}
+                </div>
+              </article>
+
+            {% endif %}
+          {% endunless %}
+        {% endfor %}
+      {% endfor %}
+
+    {% else %}
+      {% for related_article in blog.articles %}
+        {% unless related_article.handle == article.handle %}
+          {% if counter < max_related %}
+            {% assign counter = counter | plus: 1 %}
+
+            <article class="related-article-card card-article">
+              {% if related_article.image %}
+                <a href="{{ related_article.url }}" class="related-article-card__image" aria-label="{{ 'blog.read_more' | t | default: 'Read more' }}: {{ related_article.title | escape }}">
+                  <div class="media related-article-card__media">
+                    {% render 'image', image: related_article.image, alt: related_article.title | escape %}
+                  </div>
+                </a>
+              {% endif %}
+              <div class="related-article-card__content">
+                <h3 class="related-article-card__title h6">
+                  <a href="{{ related_article.url }}">{{- related_article.title | escape -}}</a>
+                </h3>
+                <time datetime="{{ related_article.published_at | date: '%Y-%m-%d' }}">
+                  {{- related_article.published_at | date: '%B %d, %Y' -}}
+                </time>
+                {% if related_article.excerpt_or_content != blank %}
+                  <p>{{- related_article.excerpt_or_content | strip_html | truncatewords: 25 -}}</p>
+                {% endif %}
+              </div>
+            </article>
+
+          {% endif %}
+        {% endunless %}
+      {% endfor %}
+    {% endif %}
+  {% endcapture %}
+{% endpaginate %}
+
+{% if counter > 0 %}
+  <section class="related-articles color-scheme-1" aria-labelledby="related-heading">
+    <div class="container">
+      <h2 id="related-heading" class="related-articles__title h3">
+        {{- 'blog.related_articles' | t | default: 'Related Articles' -}}
+      </h2>
+      <div class="related-articles__grid">
+        {{- related_cards -}}
+      </div>
+    </div>
+  </section>
+{% endif %}
