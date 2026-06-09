@@ -1,5 +1,59 @@
 {{ 'section-article.css' | asset_url | stylesheet_tag }}
 
+{%- comment -%} Resolve author identity once: metafields → name map → generic fallback. Shared by the visible card and the JSON-LD. {%- endcomment -%}
+{%- liquid
+  assign mf = article.metafields.custom
+  assign author_key = article.author | strip | downcase
+
+  assign author_name = article.author
+  assign author_bio = ''
+  assign author_instagram = ''
+  assign author_url = ''
+  assign author_url_label = ''
+  assign author_type = 'Person'
+
+  if mf.author_bio != blank
+    assign author_name = mf.author_name.value | default: article.author
+    assign author_bio = mf.author_bio.value
+    assign author_instagram = mf.author_instagram.value | default: ''
+    assign author_url = mf.author_website.value | default: ''
+    assign author_url_label = mf.author_website_label.value | default: ''
+  elsif author_key contains 'ben'
+    assign author_name = 'Ben'
+    assign author_bio = 'Ben owns and operates Brooklyn Film Camera.'
+  elsif author_key contains 'hannah'
+    assign author_name = 'Hannah Leahy'
+    assign author_bio = 'Hannah manages social media, design, and events planning. She enjoys tactile forms of creation just as much as she loves pushing pixels.'
+    assign author_instagram = 'https://www.instagram.com/hannahleahy__'
+  elsif author_key contains 'dan'
+    assign author_name = 'Dan Hureira'
+    assign author_bio = 'Dan Hureira is a photographer and music enthusiast. He throws parties and produces music as part of his record label Bouquet, and is one of the many faces you will see behind the counter at BFC.'
+    assign author_instagram = 'https://www.instagram.com/ifeellikedan'
+  elsif author_key contains 'taylor'
+    assign author_name = 'Taylor'
+    assign author_bio = 'Taylor is a freelance camera assistant, graphic designer, and lens tech at BFC. There is an art to fixing something broken — restoring a lens, cleaning out the years, and revealing what was always there.'
+    assign author_instagram = 'https://www.instagram.com/filmsbytaylor/'
+  elsif author_key contains 'james'
+    assign author_name = 'James'
+    assign author_bio = 'James was formally trained in film camera repair by some of the last factory-trained film camera technicians in the world during his tenure at Nippon Photo Clinic Inc. These days he tends to fix more cameras than he breaks.'
+    assign author_instagram = 'https://www.instagram.com/the_whitest_latino/'
+  elsif author_key contains 'sydney' or author_key contains 'syd'
+    assign author_name = 'Sydney Task'
+    assign author_bio = 'Sydney Task (also known as Syd) is a photographer, filmmaker, animator, and serial hobbyist. When not clerking at BFC, she might be rock climbing, learning the banjo, or roaming the streets with a camera in hand.'
+    assign author_instagram = 'https://www.instagram.com/sydneytask/'
+  elsif author_key contains 'mitch'
+    assign author_name = 'Mitch'
+    assign author_bio = 'Mitch has been involved in the film photography world since joining the Impossible Project in 2014, and is now the lead camera buyer for BFC.'
+  endif
+
+  if author_bio == ''
+    assign author_name = 'Brooklyn Film Camera'
+    assign author_bio = 'Brooklyn Film Camera is a specialty camera and film shop in Brooklyn, NY. We sell, service, and obsess over film cameras — and write guides to help photographers get the most out of their gear.'
+    assign author_instagram = 'https://www.instagram.com/brooklynfilmcamera'
+    assign author_type = 'Organization'
+  endif
+-%}
+
 {%- style -%}
   #shopify-section-{{ section.id }} > div {
     {%- if section.settings.hide_header_image_and_padding -%}
@@ -107,7 +161,20 @@
 
         {%- when 'content'-%}
           <div class="article__content js-article-content container {{ section.settings.section_width }}" itemprop="articleBody" {{ block.shopify_attributes }}>
-            <div class="article__content-inner">{{- article.content -}}</div>
+            <div class="article__content-inner">
+              {{- article.content -}}
+              {%- if section.settings.show_author_card -%}
+                {%- render 'author-bio',
+                  article: article,
+                  author_name: author_name,
+                  author_bio: author_bio,
+                  author_type: author_type,
+                  author_instagram: author_instagram,
+                  author_url: author_url,
+                  author_url_label: author_url_label
+                -%}
+              {%- endif -%}
+            </div>
           </div>
       {%- endcase -%}
     {%- endfor -%}
@@ -322,7 +389,7 @@
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     "@id": {{ shop.url | append: article.url | append: '/#article' | json }},
     "articleBody": {{ article.content | strip_html | json }},
     "mainEntityOfPage": {
@@ -344,7 +411,7 @@
     "dateCreated": {{ article.created_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
     "dateModified": {{ article.updated_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
     "wordCount": {{ article.content | strip_html | split: ' ' | size }},
-    "inLanguage": "en",
+    "inLanguage": {{ request.locale.iso_code | json }},
     {% if article.tags.size > 0 %}
       "keywords": [
         {% for tag in article.tags %}
@@ -356,8 +423,24 @@
       "articleSection": {{ blog.title | json }},
     {% endif %}
     "author": {
-      "@type": "Person",
-      "name": {{ article.author | json }}
+      "@type": {{ author_type | json }},
+      "name": {{ author_name | json }},
+      "description": {{ author_bio | json }}
+      {%- assign author_same_as = '' -%}
+      {%- if author_instagram != '' -%}
+        {%- assign author_same_as = author_same_as | append: author_instagram | append: '|' -%}
+      {%- endif -%}
+      {%- if author_url != '' -%}
+        {%- assign author_same_as = author_same_as | append: author_url | append: '|' -%}
+      {%- endif -%}
+      {%- if author_same_as != '' -%}
+        ,"sameAs": [
+          {%- assign author_same_as_list = author_same_as | split: '|' -%}
+          {%- for link in author_same_as_list -%}
+            {{ link | json }}{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+        ]
+      {%- endif -%}
     },
     "publisher": {
       "@id": "{{ shop.url }}/#organization"
@@ -411,6 +494,12 @@
       "id": "show_socials_sharing",
       "default": true,
       "label": "t:sections.main-article.settings.show_socials_sharing.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author_card",
+      "default": true,
+      "label": "Show author card (dates, bio, socials)"
     },
     {
       "type": "checkbox",

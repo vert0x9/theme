@@ -123,6 +123,8 @@
     "name": {{ blog.title | json }},
     {% if blog.metafields.global.description_tag != blank %}
       "description": {{ blog.metafields.global.description_tag | json }},
+    {% elsif blog.description != blank %}
+      "description": {{ blog.description | strip_html | truncate: 320 | json }},
     {% endif %}
     "url": {{ shop.url | append: blog.url | json }},
     "blogPost": [

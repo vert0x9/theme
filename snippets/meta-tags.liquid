@@ -8,6 +8,13 @@
     assign meta_type = 'product'
   elsif request.page_type == 'article'
     assign meta_type = 'article'
+    if page_description == blank
+      assign meta_description = article.excerpt_or_content | strip_html | truncate: 320
+    endif
+  elsif request.page_type == 'blog'
+    if page_description == blank and blog.description != blank
+      assign meta_description = blog.description | strip_html | truncate: 320
+    endif
   elsif request.page_type == 'collection'
     assign meta_type = 'product.group'
   elsif request.page_type == 'password'
@@ -44,6 +51,9 @@
 
 {%- liquid
   assign og_image = page_image | default: settings.share_image
+  if request.page_type == 'article' and page_image == blank and article.image != blank
+    assign og_image = article.image
+  endif
 -%}
 {%- if og_image -%}
   <meta property="og:image" content="https:{{ og_image | image_url: width: 1200 }}">
