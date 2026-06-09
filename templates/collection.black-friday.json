@@ -1,0 +1,542 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "blackfriday_UjVBRE": {
+      "type": "blackfriday",
+      "blocks": {
+        "hero_jdbefG": {
+          "type": "hero",
+          "settings": {
+            "anchor_id": "",
+            "image": "shopify://shop_images/thisdone.png",
+            "full_bleed": true,
+            "eyebrow": "BFC's First ever",
+            "hed": "Black Friday Sale",
+            "dek": "15% off all accessories, up to 50% off cameras, 30% off memberships and more!",
+            "cta_label": "Shop All",
+            "cta_url": "shopify://products/hasselblad-500cm",
+            "cta_scroll_target": "ghfhfhfh",
+            "secondary_label": "15% off all accessories",
+            "secondary_url": "shopify://collections/accessories",
+            "secondary_scroll_target": "",
+            "show_secondary_cta": true,
+            "cta_3_label": "up to 40% off cameras",
+            "cta_3_url": "",
+            "cta_3_scroll_target": "abcddd",
+            "cta_4_label": "Hassy 800 dollars off",
+            "cta_4_url": "shopify://products/hasselblad-500cm",
+            "cta_4_scroll_target": "",
+            "max_height": 0
+          }
+        },
+        "featured_product_PnxbTg": {
+          "type": "featured_product",
+          "settings": {
+            "anchor_id": "",
+            "product": "hasselblad-500c-80mm-f2-8-fully-refurbished",
+            "enable_second_product": false,
+            "product_2": "hasselblad-500cm-80mm-t-f2-8-fully-refurbished",
+            "eyebrow": "Upgrade your kit",
+            "hed": "Hasselblad 500 C",
+            "dek": "This camera has undergone a Fully Service CLA and comes with an extended 6 month warranty.",
+            "hed_2": "",
+            "dek_2": "",
+            "use_product_description_fallback": true,
+            "sticker_text": "800 Dollars Off",
+            "feature_width": 0,
+            "image_side": "right",
+            "cta_label": "Shop now",
+            "secondary_label": "Learn more",
+            "secondary_url": "",
+            "show_secondary_cta": false,
+            "max_height": 0
+          }
+        },
+        "collection_grid_iXGkYE": {
+          "type": "collection_grid",
+          "settings": {
+            "anchor_id": "abcddd",
+            "collection": "",
+            "product_source": "manual",
+            "eyebrow": "Top picks",
+            "hed": "Our best cameras at our best prices, ever.",
+            "dek": "",
+            "sticker_text": "",
+            "limit": 8,
+            "show_vendor": false,
+            "show_badge": true,
+            "badge_label": "Sale",
+            "product_1": "canon-ae-1-program",
+            "product_2": "pentax-k1000",
+            "product_3": "canon-wp-1",
+            "product_4": "polaroid-600-hello-kitty",
+            "product_5": "olympus-xa2",
+            "product_6": "olympus-xa-2-flash",
+            "product_7": "hasselblad-500cm",
+            "product_8": "minolta-hi-matic-af2",
+            "max_height": 0
+          }
+        },
+        "collection_highlight_XUCwei": {
+          "type": "collection_highlight",
+          "settings": {
+            "anchor_id": "",
+            "collection": "accessories",
+            "layout_style": "product_grid",
+            "image": "shopify://shop_images/larkhill_prints_35mm_1.png",
+            "eyebrow": "Good for Gifts",
+            "hed": "15% off All Accessories",
+            "dek": "Straps, film boxes, polaroid adapters, scanners, and more, all 15% off",
+            "sticker_text": "",
+            "chips": "",
+            "cta_label": "Explore",
+            "cta_url": "",
+            "secondary_label": "",
+            "secondary_url": "",
+            "show_secondary_cta": false,
+            "mini_image_height": 60,
+            "tile_image_1": "shopify://shop_images/larkhill_prints_35mm_2.png",
+            "tile_label_1": "Film Boxes",
+            "tile_link_1": "shopify://collections/accessories",
+            "tile_image_2": "shopify://shop_images/Leather_SX-70_Sonar_Case_Tan_LS2.jpg",
+            "tile_label_2": "Cases",
+            "tile_link_2": "shopify://collections/accessories",
+            "tile_image_3": "shopify://shop_images/637_Adapter_1.png",
+            "tile_label_3": "Adapters",
+            "tile_link_3": "shopify://collections/accessories",
+            "tile_label_4": "Tile four",
+            "tile_link_4": "",
+            "tile_label_5": "Tile five",
+            "tile_link_5": "",
+            "tile_label_6": "Tile six",
+            "tile_link_6": "",
+            "max_height": 0
+          }
+        },
+        "two_up_UrpThX": {
+          "type": "two_up",
+          "settings": {
+            "anchor_id": "",
+            "eyebrow": "Jump into our memberships",
+            "hed": "",
+            "dek": "",
+            "sticker_text": "",
+            "image_1": "shopify://shop_images/Expired_35mm_Film_V2.jpg",
+            "card_sticker_1": "30% Off First Purchase",
+            "eyebrow_1": "Good Gift",
+            "hed_1": "Expired Film Club",
+            "dek_1": "3 Expired Rolls delivered to your house every month. Fun surprises, curated picks, cancel anytime.",
+            "cta_label_1": "BUY NOW",
+            "cta_url_1": "shopify://pages/expired-film-club",
+            "image_2": "shopify://shop_images/EX_50__Develop_Hero_2.jpg",
+            "card_sticker_2": "30% Off First Purchase",
+            "eyebrow_2": "Members Favorite",
+            "hed_2": "Developing Membership",
+            "dek_2": "Pays for itself instantly! Get 30% your first month or year and dev + scan credits will only cost you 9.00 a roll!",
+            "cta_label_2": "BUY NOW",
+            "cta_url_2": "shopify://pages/membership",
+            "max_height": 0
+          }
+        },
+        "banner_6aqt4T": {
+          "type": "banner",
+          "settings": {
+            "anchor_id": "",
+            "eyebrow": "Black Friday",
+            "message": "EVERY ORDER ENTERS YOU TO WIN A YASHICA T3",
+            "countdown_label": "",
+            "countdown_fallback": "Weekend Only",
+            "countdown_iso": "2024-11-30T05:00:00Z",
+            "cta_label": "Shop deals",
+            "cta_url": "",
+            "max_height": 0
+          }
+        },
+        "featured_product_JaXm8j": {
+          "type": "featured_product",
+          "settings": {
+            "anchor_id": "",
+            "product": "polaroid-sx-70-the-button",
+            "enable_second_product": true,
+            "product_2": "polaroid-sx70-onestep",
+            "eyebrow": "SX70",
+            "hed": "The Button",
+            "dek": "",
+            "hed_2": "",
+            "dek_2": "",
+            "use_product_description_fallback": false,
+            "sticker_text": "",
+            "feature_width": 1100,
+            "image_side": "left",
+            "cta_label": "Shop now",
+            "secondary_label": "Learn more",
+            "secondary_url": "shopify://products/polaroid-sx70-onestep",
+            "show_secondary_cta": false,
+            "max_height": 0
+          }
+        },
+        "product_spotlights_4fgFVD": {
+          "type": "product_spotlights",
+          "settings": {
+            "anchor_id": "",
+            "eyebrow": "Staff favorites",
+            "hed": "8x10 Processors",
+            "dek": "",
+            "alt_image_side": true,
+            "show_vendor": false,
+            "show_badge": true,
+            "badge_label": "Deal",
+            "body_copy": "",
+            "use_product_description_fallback": true,
+            "sticker_text": "",
+            "cta_label": "Shop",
+            "secondary_label": "Details",
+            "show_secondary_cta": true,
+            "product_1": "polaroid-8x10-processor-kit-electric",
+            "product_2": "polaroid-8x10-processor-kit-manual",
+            "product_3": "",
+            "max_height": 0
+          }
+        }
+      },
+      "block_order": [
+        "hero_jdbefG",
+        "featured_product_PnxbTg",
+        "collection_grid_iXGkYE",
+        "collection_highlight_XUCwei",
+        "two_up_UrpThX",
+        "banner_6aqt4T",
+        "featured_product_JaXm8j",
+        "product_spotlights_4fgFVD"
+      ],
+      "name": "BFC Black Friday",
+      "settings": {
+        "bg": "#f8fafc",
+        "accent": "#cf4949",
+        "secondary_accent": "#ca8a47",
+        "sans_font": "Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial",
+        "serif_font": "Georgia, Times New Roman, Times, serif",
+        "max_width": 1200,
+        "gap": 20,
+        "section_pad": 28,
+        "section_max_height": 0,
+        "card_image_height": 320,
+        "card_max_height": 560,
+        "square_corners": true
+      }
+    },
+    "bfc_collection_editorial_DpKYCF": {
+      "type": "bfc-collection-editorial",
+      "blocks": {
+        "category_cover_Y4PMa8": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/hello_Kitty_Kit.png",
+            "title": "Hello Kitty",
+            "subtitle": "Save $200",
+            "url": "shopify://products/hello-kitty-bundle",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_bwTjPU": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Pentax_k1000_Kit_2.png",
+            "title": "K1000 Bundle",
+            "subtitle": "Save over $75",
+            "url": "shopify://products/pentax-k1000-bundle",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_LLnXjM": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Cool_Cam_Pink_Kit_931d5749-bfa1-4e8f-8875-6f4ee72bbf1a.png",
+            "title": "Cool Cam Pink",
+            "subtitle": "Save over $40",
+            "url": "shopify://products/cool-cam-pink-bundle",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_zLVgyp": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/WP-1_Canon_Kit.png",
+            "title": "WP-1 Kit",
+            "subtitle": "save $75",
+            "url": "shopify://products/canon-wp-2",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_MwUtMf": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Cool_Cam_Red_Kit.png",
+            "title": "Cool Cam Red",
+            "subtitle": "All the filters included!",
+            "url": "shopify://products/cool-cam-red-bundle",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_gQ3iaE": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/120_Film_Kits_1_e07250dd-ed52-4b4a-9f4c-69940b9a2269.png",
+            "title": "Expired Film Kit",
+            "subtitle": "Great Gift!",
+            "url": "shopify://products/film-case-loaded-with-expired-film",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_3r9FyU": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/35mm_Film_Kits.png",
+            "title": "Expired Film 35mm Kit",
+            "subtitle": "",
+            "url": "shopify://products/film-case-loaded-with-expired-film",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        },
+        "category_cover_6gG9iq": {
+          "type": "category_cover",
+          "settings": {
+            "image": "shopify://shop_images/Canon_AE-1_Kit.png",
+            "title": "Canon Bundle",
+            "subtitle": "",
+            "url": "shopify://products/canon-ae1-program-bundle",
+            "badge": "",
+            "bg_tint": 0,
+            "text_align": "left"
+          }
+        }
+      },
+      "block_order": [
+        "category_cover_Y4PMa8",
+        "category_cover_bwTjPU",
+        "category_cover_LLnXjM",
+        "category_cover_zLVgyp",
+        "category_cover_MwUtMf",
+        "category_cover_gQ3iaE",
+        "category_cover_3r9FyU",
+        "category_cover_6gG9iq"
+      ],
+      "name": "Category covers strip (styled)",
+      "settings": {
+        "header_enable": true,
+        "header_eyebrow": "",
+        "header_title": "Holiday Bundles - Discounted for a limited time!",
+        "header_subtitle": "",
+        "header_divider": false,
+        "header_align": "left",
+        "header_max_width": 820,
+        "heading_font": "serif",
+        "header_title_font_size_mobile": 1.8,
+        "header_title_font_size_desktop": 2.2,
+        "header_font_weight": "600",
+        "columns_mobile": 3,
+        "columns_tablet": 3,
+        "columns_desktop": 4,
+        "mobile_show_count": 6,
+        "gap_px": 12,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "background_color": "#f8fafc",
+        "text_color": "#1c1c1c",
+        "media_aspect": "portrait",
+        "media_aspect_desktop": "inherit",
+        "media_radius": 0,
+        "enable_media_overlay": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 25,
+        "badge_text": "",
+        "badge_font": "sans",
+        "badge_transform": "upper",
+        "badge_position": "above_title",
+        "badge_style": "solid",
+        "badge_background": "#1c1c1c",
+        "badge_text_color": "#f8fafc",
+        "badge_padding": 12,
+        "badge_radius": 28,
+        "scroll_hint_enable": false,
+        "scroll_hint_label": "Shop all"
+      }
+    },
+    "blackfriday_cEEBEH": {
+      "type": "blackfriday",
+      "blocks": {
+        "cta_band_dwEzee": {
+          "type": "cta_band",
+          "settings": {
+            "anchor_id": "ghfhfhfh",
+            "eyebrow": "Shop Everything discounted",
+            "hed": "",
+            "dek": "Deals disappear soon!",
+            "cta_label": "SHOP ALL BELOW",
+            "cta_url": "shopify://collections/black-friday",
+            "secondary_label": "VIEW JUST ACCESSORIES",
+            "secondary_url": "shopify://collections/accessories",
+            "sticker_text": "",
+            "show_secondary_cta": true,
+            "max_height": 0
+          }
+        }
+      },
+      "block_order": [
+        "cta_band_dwEzee"
+      ],
+      "name": "BFC Black Friday",
+      "settings": {
+        "bg": "#f8fafc",
+        "accent": "#e2a94f",
+        "secondary_accent": "#ca8a47",
+        "sans_font": "Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial",
+        "serif_font": "Georgia, Times New Roman, Times, serif",
+        "max_width": 1200,
+        "gap": 20,
+        "section_pad": 28,
+        "section_max_height": 0,
+        "card_image_height": 320,
+        "card_max_height": 560,
+        "square_corners": false
+      }
+    },
+    "announcement_bar_heJ7hw": {
+      "type": "announcement-bar",
+      "blocks": {
+        "text_slide_6enhD6": {
+          "type": "text-slide",
+          "settings": {
+            "content": "<p>Shop All</p>",
+            "icon": "theme-box"
+          }
+        }
+      },
+      "block_order": [
+        "text_slide_6enhD6"
+      ],
+      "name": "t:sections.announcement-bar.name",
+      "settings": {
+        "text_block_behaviour": "slider",
+        "slider_autoplay_interval": 3,
+        "font_weight": "700",
+        "section_width": "max-w-fluid",
+        "color_scheme": "scheme-5"
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "blocks": {
+        "text_card_z8df4a": {
+          "type": "text-card",
+          "disabled": true,
+          "settings": {
+            "color_scheme": "scheme-1",
+            "text": "<h3>a card</h3>",
+            "button_link": "",
+            "link_type": "button",
+            "button_label": "",
+            "button_style": "button--text",
+            "content_position": "center",
+            "content_alignment": "center",
+            "content_position_mobile": "center",
+            "content_alignment_mobile": "center",
+            "position": 19,
+            "column_factor": 2,
+            "row_factor": 2
+          }
+        },
+        "text_card_J6n8hm": {
+          "type": "text-card",
+          "disabled": true,
+          "settings": {
+            "color_scheme": "scheme-2",
+            "text": "",
+            "button_link": "",
+            "link_type": "button",
+            "button_label": "",
+            "button_style": "button--text",
+            "content_position": "center",
+            "content_alignment": "start",
+            "content_position_mobile": "end",
+            "content_alignment_mobile": "center",
+            "position": 7,
+            "column_factor": 2,
+            "row_factor": 1,
+            "card_image": "shopify://shop_images/3_d4a0d78d-d64c-404a-9b43-77889ada6597.jpg"
+          }
+        },
+        "text_card_NeqRrh": {
+          "type": "text-card",
+          "disabled": true,
+          "settings": {
+            "color_scheme": "scheme-6",
+            "text": "",
+            "button_link": "",
+            "link_type": "button",
+            "button_label": "",
+            "button_style": "button--text",
+            "content_position": "center",
+            "content_alignment": "center",
+            "content_position_mobile": "center",
+            "content_alignment_mobile": "center",
+            "position": 11,
+            "column_factor": 1,
+            "row_factor": 1,
+            "card_image": "shopify://shop_images/film_photography.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "text_card_z8df4a",
+        "text_card_J6n8hm",
+        "text_card_NeqRrh"
+      ],
+      "settings": {
+        "show_top_border_for_utilities_bar": false,
+        "enable_products_count": true,
+        "enable_sorting": true,
+        "enable_opened_accordions": true,
+        "filters": "drawer",
+        "products_per_row": "4",
+        "products_per_row_mobile": "2",
+        "products_per_page": 19,
+        "pagination_style": "default",
+        "enable_infinity_scroll": false,
+        "section_width": "max-w-fluid",
+        "color_scheme": "scheme-5",
+        "spacing_top": "2",
+        "spacing_bottom": "6"
+      }
+    }
+  },
+  "order": [
+    "blackfriday_UjVBRE",
+    "bfc_collection_editorial_DpKYCF",
+    "blackfriday_cEEBEH",
+    "announcement_bar_heJ7hw",
+    "main"
+  ]
+}

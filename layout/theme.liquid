@@ -8,129 +8,24 @@
   {%- endif -%}
 >
   <head>
-    <script>// Load Google Tag Manager
-(function(w,d,s,l,i){
-  w[l]=w[l]||[];
-  w[l].push({
-    'gtm.start': new Date().getTime(),
-    event:'gtm.js'
-  });
-
-  var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),
-      dl=l!='dataLayer' ? '&l='+l : '';
-
-  j.async=true;
-  j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
-  f.parentNode.insertBefore(j,f);
-
-})(window,document,'script','dataLayer','GTM-MFF5MBG7');
-
-
-// PRODUCT VIEW
-analytics.subscribe("product_viewed", (event) => {
-  window.dataLayer.push({
-    event: "view_item",
-    ecommerce: {
-      items: [{
-        item_id: event.data.productVariant?.id || '',
-        item_name: event.data.productVariant?.product?.title || '',
-        price: event.data.productVariant?.price?.amount || ''
-      }]
-    }
-  });
-});
-
-
-// ADD TO CART
-analytics.subscribe("product_added_to_cart", (event) => {
-  window.dataLayer.push({
-    event: "add_to_cart",
-    ecommerce: {
-      items: [{
-        item_id: event.data.cartLine?.merchandise?.id || '',
-        item_name: event.data.cartLine?.merchandise?.product?.title || '',
-        quantity: event.data.cartLine?.quantity || 1
-      }]
-    }
-  });
-});
-
-
-// BEGIN CHECKOUT
-analytics.subscribe("checkout_started", (event) => {
-  window.dataLayer.push({
-    event: "begin_checkout",
-    ecommerce: {
-      currency: event.data.checkout?.currencyCode || '',
-      value: event.data.checkout?.totalPrice?.amount || ''
-    }
-  });
-});
-
-
-// ADD PAYMENT INFO
-analytics.subscribe("payment_info_submitted", (event) => {
-  window.dataLayer.push({
-    event: "add_payment_info",
-    ecommerce: {
-      currency: event.data.checkout?.currencyCode || '',
-      value: event.data.checkout?.totalPrice?.amount || ''
-    }
-  });
-});
-
-
-// PURCHASE
-analytics.subscribe("checkout_completed", (event) => {
-  window.dataLayer.push({
-    event: "purchase",
-    ecommerce: {
-      transaction_id: event.data.checkout?.order?.id || '',
-      currency: event.data.checkout?.currencyCode || '',
-      value: event.data.checkout?.totalPrice?.amount || ''
-    }
-  });
-});
-
-
-// SEARCH
-analytics.subscribe("search_submitted", (event) => {
-  window.dataLayer.push({
-    event: "search",
-    search_term: event.data.searchResult?.query || ''
-  });
-});
-
-
-// FORM START
-document.addEventListener("focusin", function(e) {
-  if (
-    e.target &&
-    (e.target.tagName === "INPUT" ||
-     e.target.tagName === "TEXTAREA" ||
-     e.target.tagName === "SELECT")
-  ) {
-    window.dataLayer.push({
-      event: "form_start"
-    });
-  }
-}, { once: true });
-
-
-// FORM SUBMIT
-document.addEventListener("submit", function() {
-  window.dataLayer.push({
-    event: "form_submit"
-  });
-});</script>
     {% render 'shogun-optimizer' %}
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WRNQ3TJD');</script>
+<!-- End Google Tag Manager -->
+
+
+
+
 
 <!-- Start of Shoplift scripts -->
 {% render 'shoplift' %}
 <!-- End of Shoplift scripts -->
 
- {%- render 'ecom_header' -%}
 
 
 
@@ -288,10 +183,10 @@ document.addEventListener("submit", function() {
 </head>
 
   <body class="template template--{{ template.name }}{% if template.suffix %} template--{{- template.suffix -}}{% endif %} is-at-top">
-{% comment %} <!-- Google Tag Manager (noscript) -->
+ <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WRNQ3TJD"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) --> {% endcomment %}
+<!-- End Google Tag Manager (noscript) --> 
 
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
       {{- 'theme.accessibility.skip_to_content' | t -}}
