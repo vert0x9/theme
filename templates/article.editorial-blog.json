@@ -40,10 +40,10 @@
         }
       },
       "block_order": [
+        "b9b26636-4100-497f-bd96-33811ff69949",
         "f7fb3fae-1127-45cc-ad5a-6e59418b6ef5",
         "49dec847-5c39-4243-98ff-d31ae7b80081",
-        "86ec49f0-5185-4270-96d6-23ad2d7aecdc",
-        "b9b26636-4100-497f-bd96-33811ff69949"
+        "86ec49f0-5185-4270-96d6-23ad2d7aecdc"
       ],
       "settings": {
         "show_back_to_blog_button": true,

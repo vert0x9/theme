@@ -12,54 +12,6 @@
     "main": {
       "type": "bfc-pdp-sx70",
       "blocks": {
-        "kit_item_Dap8L7": {
-          "type": "kit_item",
-          "settings": {
-            "product": "sx-37-adapter",
-            "product_alt_1": "",
-            "product_alt_2": "",
-            "column": "Lenses & Optics",
-            "column_custom": "",
-            "label": "",
-            "only_show_for": ""
-          }
-        },
-        "kit_item_RyTRGh": {
-          "type": "kit_item",
-          "settings": {
-            "product": "fisheye-lens",
-            "product_alt_1": "",
-            "product_alt_2": "",
-            "column": "Lenses & Optics",
-            "column_custom": "",
-            "label": "",
-            "only_show_for": ""
-          }
-        },
-        "kit_item_8NCPBE": {
-          "type": "kit_item",
-          "settings": {
-            "product": "linear-prism",
-            "product_alt_1": "",
-            "product_alt_2": "",
-            "column": "Lenses & Optics",
-            "column_custom": "",
-            "label": "",
-            "only_show_for": ""
-          }
-        },
-        "kit_item_LM3G7g": {
-          "type": "kit_item",
-          "settings": {
-            "product": "kaleidoscope-prism",
-            "product_alt_1": "",
-            "product_alt_2": "",
-            "column": "Lenses & Optics",
-            "column_custom": "",
-            "label": "",
-            "only_show_for": ""
-          }
-        },
         "optic_showcase_BryVcc": {
           "type": "optic_showcase",
           "settings": {
@@ -180,6 +132,18 @@
             "only_show_for": ""
           }
         },
+        "kit_item_Dap8L7": {
+          "type": "kit_item",
+          "settings": {
+            "product": "sx-37-adapter",
+            "product_alt_1": "",
+            "product_alt_2": "",
+            "column": "Lenses & Optics",
+            "column_custom": "",
+            "label": "",
+            "only_show_for": ""
+          }
+        },
         "kit_item_Ex44RT": {
           "type": "kit_item",
           "settings": {
@@ -269,10 +233,6 @@
         }
       },
       "block_order": [
-        "kit_item_Dap8L7",
-        "kit_item_RyTRGh",
-        "kit_item_8NCPBE",
-        "kit_item_LM3G7g",
         "optic_showcase_BryVcc",
         "optic_showcase_qgxmwK",
         "optic_showcase_y3mBRq",
@@ -284,6 +244,7 @@
         "kit_item_VTnfRx",
         "kit_item_iAUU7r",
         "kit_item_tae7Wg",
+        "kit_item_Dap8L7",
         "kit_item_Ex44RT",
         "schematic_hotspot_gYgpYc",
         "schematic_hotspot_DDAeBW",
@@ -295,15 +256,9 @@
         "show_board_pill": true,
         "board_pill_text": "OpenSX70 V2 Board",
         "intro_text": "Every SX-70 we restore is a complete rebuild — full mechanical and optical service, and our exclusive OpenSX70 board. Incredible low-light metering, hold-to-eject, and a 6-month warranty come standard.",
-        "sample_photo_1": "shopify://shop_images/2026-06-08-0020_c25a4069-5005-433b-b71d-139fb34e5b0d.jpg",
-        "sample_photo_1_caption": "",
-        "sample_photo_1_artist": "",
+        "sample_photo_1": "shopify://shop_images/Polaroid_1.jpg",
         "sample_photo_2": "shopify://shop_images/Polaroid_2.jpg",
-        "sample_photo_2_caption": "",
-        "sample_photo_2_artist": "",
         "sample_photo_3": "shopify://shop_images/Polaroid_3.jpg",
-        "sample_photo_3_caption": "",
-        "sample_photo_3_artist": "",
         "optics_guide_eyebrow": "Instant Optics",
         "optics_guide_title": "Make your polaroid magical",
         "optics_guide_intro": "A growing system of filters and lenses for the SX-70. Each one threads onto our SX-37 adapter — pick the adapter once, build the kit over time.",
@@ -313,19 +268,6 @@
         "schematic_lead": "",
         "schematic_auto_preview": true,
         "schematic_panels_boxed": false,
-        "feat_fallback_img": "{{ product.featured_image }}",
-        "feat_img_1": "shopify://shop_images/2026-06-08-0020.jpg",
-        "feat_img_2": "shopify://shop_images/img20260531_13513526.jpg",
-        "feat_img_3": "shopify://shop_images/img20260531_13265563.jpg",
-        "feat_img_4": "shopify://shop_images/img20260531_13443948.jpg",
-        "feat_img_5": "shopify://shop_images/Polaroid_1.jpg",
-        "feat_img_6": "shopify://shop_images/img20260518_12044995.jpg",
-        "dng_fallback_img": "shopify://shop_images/img20260531_13443948.jpg",
-        "dng_img_1": "shopify://shop_images/img20260528_12231596.jpg",
-        "dng_img_2": "shopify://shop_images/img20260531_13430321.jpg",
-        "dng_img_3": "shopify://shop_images/img20260531_13265563.jpg",
-        "dng_img_5": "shopify://shop_images/2026-06-08-0014.jpg",
-        "dng_img_6": "shopify://shop_images/img20260528_12231596.jpg",
         "pillar_1_title": "Open source",
         "pillar_1_body": "",
         "pillar_2_title": "Built to last",
