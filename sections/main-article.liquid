@@ -1,56 +1,55 @@
 {{ 'section-article.css' | asset_url | stylesheet_tag }}
 
-{%- comment -%} Resolve author identity once: metafields → name map → generic fallback. Shared by the visible card and the JSON-LD. {%- endcomment -%}
+{%- comment -%}
+  Resolve author identity once; shared by the visible card and the JSON-LD.
+  Name always comes from the article's native Author field (article.author).
+  Bio + socials come from metafields, else a curated map keyed on that name.
+{%- endcomment -%}
 {%- liquid
   assign mf = article.metafields.custom
   assign author_key = article.author | strip | downcase
 
   assign author_name = article.author
+  assign author_type = 'Person'
   assign author_bio = ''
   assign author_instagram = ''
   assign author_url = ''
   assign author_url_label = ''
-  assign author_type = 'Person'
 
   if mf.author_bio != blank
-    assign author_name = mf.author_name.value | default: article.author
     assign author_bio = mf.author_bio.value
     assign author_instagram = mf.author_instagram.value | default: ''
     assign author_url = mf.author_website.value | default: ''
     assign author_url_label = mf.author_website_label.value | default: ''
-  elsif author_key contains 'ben'
-    assign author_name = 'Ben'
-    assign author_bio = 'Ben owns and operates Brooklyn Film Camera.'
   elsif author_key contains 'hannah'
-    assign author_name = 'Hannah Leahy'
     assign author_bio = 'Hannah manages social media, design, and events planning. She enjoys tactile forms of creation just as much as she loves pushing pixels.'
     assign author_instagram = 'https://www.instagram.com/hannahleahy__'
   elsif author_key contains 'dan'
-    assign author_name = 'Dan Hureira'
     assign author_bio = 'Dan Hureira is a photographer and music enthusiast. He throws parties and produces music as part of his record label Bouquet, and is one of the many faces you will see behind the counter at BFC.'
     assign author_instagram = 'https://www.instagram.com/ifeellikedan'
   elsif author_key contains 'taylor'
-    assign author_name = 'Taylor'
     assign author_bio = 'Taylor is a freelance camera assistant, graphic designer, and lens tech at BFC. There is an art to fixing something broken — restoring a lens, cleaning out the years, and revealing what was always there.'
     assign author_instagram = 'https://www.instagram.com/filmsbytaylor/'
   elsif author_key contains 'james'
-    assign author_name = 'James'
     assign author_bio = 'James was formally trained in film camera repair by some of the last factory-trained film camera technicians in the world during his tenure at Nippon Photo Clinic Inc. These days he tends to fix more cameras than he breaks.'
     assign author_instagram = 'https://www.instagram.com/the_whitest_latino/'
   elsif author_key contains 'sydney' or author_key contains 'syd'
-    assign author_name = 'Sydney Task'
     assign author_bio = 'Sydney Task (also known as Syd) is a photographer, filmmaker, animator, and serial hobbyist. When not clerking at BFC, she might be rock climbing, learning the banjo, or roaming the streets with a camera in hand.'
     assign author_instagram = 'https://www.instagram.com/sydneytask/'
   elsif author_key contains 'mitch'
-    assign author_name = 'Mitch'
     assign author_bio = 'Mitch has been involved in the film photography world since joining the Impossible Project in 2014, and is now the lead camera buyer for BFC.'
   endif
 
-  if author_bio == ''
+  comment
+    # No author set on the article at all — attribute to the shop.
+  endcomment
+  if author_name == blank
     assign author_name = 'Brooklyn Film Camera'
-    assign author_bio = 'Brooklyn Film Camera is a specialty camera and film shop in Brooklyn, NY. We sell, service, and obsess over film cameras — and write guides to help photographers get the most out of their gear.'
-    assign author_instagram = 'https://www.instagram.com/brooklynfilmcamera'
     assign author_type = 'Organization'
+    if author_bio == ''
+      assign author_bio = 'Brooklyn Film Camera is a specialty camera and film shop in Brooklyn, NY. We sell, service, and obsess over film cameras — and write guides to help photographers get the most out of their gear.'
+      assign author_instagram = 'https://www.instagram.com/brooklynfilmcamera'
+    endif
   endif
 -%}
 
@@ -424,8 +423,10 @@
     {% endif %}
     "author": {
       "@type": {{ author_type | json }},
-      "name": {{ author_name | json }},
-      "description": {{ author_bio | json }}
+      "name": {{ author_name | json }}
+      {%- if author_bio != blank -%}
+        ,"description": {{ author_bio | json }}
+      {%- endif -%}
       {%- assign author_same_as = '' -%}
       {%- if author_instagram != '' -%}
         {%- assign author_same_as = author_same_as | append: author_instagram | append: '|' -%}

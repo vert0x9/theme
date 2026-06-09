@@ -35,7 +35,9 @@
 
   <div class="article__author-body" itemprop="author" itemscope itemtype="https://schema.org/{{ author_type | default: 'Person' }}">
     <p class="article__author-name" itemprop="name">{{ author_name }}</p>
-    <p class="article__author-text" itemprop="description">{{ author_bio }}</p>
+    {%- if author_bio != blank -%}
+      <p class="article__author-text" itemprop="description">{{ author_bio }}</p>
+    {%- endif -%}
 
     {%- if author_instagram != '' or author_url != '' -%}
       <ul class="article__author-socials list-unstyled">
