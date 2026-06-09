@@ -1,0 +1,1014 @@
+{%- comment -%}
+  BFC Open Positions — Schema-driven Liquid section
+  Add, edit, and reorder job listings entirely from the Shopify theme editor.
+  No code edits needed for content changes.
+{%- endcomment -%}
+
+{%- liquid
+  assign ft_count = 0
+  assign pt_count = 0
+  assign ot_count = 0
+  for block in section.blocks
+    if block.type == 'job_listing'
+      if block.settings.category == 'fulltime'
+        assign ft_count = ft_count | plus: 1
+      elsif block.settings.category == 'parttime'
+        assign pt_count = pt_count | plus: 1
+      elsif block.settings.category == 'other'
+        assign ot_count = ot_count | plus: 1
+      endif
+    endif
+  endfor
+-%}
+
+<div id="bfc-openings-{{ section.id }}" class="bfc-openings" role="region" aria-label="Open Positions">
+
+  <div class="bfc-header">
+    <p class="bfc-eyebrow">Brooklyn Film Camera</p>
+    <h1 class="bfc-title">Open<br>Positions</h1>
+    <div class="bfc-rule" aria-hidden="true"></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="bfc-tabs" role="tablist" aria-label="Open Positions Categories">
+    <button type="button" id="tab-fulltime-{{ section.id }}" class="bfc-tab" role="tab" data-tab="fulltime"
+      aria-controls="panel-fulltime-{{ section.id }}" aria-selected="false">
+      <span class="bfc-tab-label">Full Time</span>
+      <span class="bfc-tab-count" aria-label="{{ ft_count }} open {{ ft_count | pluralize: 'role', 'roles' }}">{{ ft_count }}</span>
+    </button>
+    <button type="button" id="tab-parttime-{{ section.id }}" class="bfc-tab" role="tab" data-tab="parttime"
+      aria-controls="panel-parttime-{{ section.id }}" aria-selected="false">
+      <span class="bfc-tab-label">Part Time</span>
+      <span class="bfc-tab-count" aria-label="{{ pt_count }} open {{ pt_count | pluralize: 'role', 'roles' }}">{{ pt_count }}</span>
+    </button>
+    <button type="button" id="tab-other-{{ section.id }}" class="bfc-tab" role="tab" data-tab="other"
+      aria-controls="panel-other-{{ section.id }}" aria-selected="false">
+      <span class="bfc-tab-label">Other</span>
+      <span class="bfc-tab-count" aria-label="{{ ot_count }} open {{ ot_count | pluralize: 'role', 'roles' }}">{{ ot_count }}</span>
+    </button>
+  </div>
+
+  <!-- ═══════════════════ FULL TIME ═══════════════════ -->
+  <section class="bfc-panel" id="panel-fulltime-{{ section.id }}" role="tabpanel"
+    aria-labelledby="tab-fulltime-{{ section.id }}" hidden>
+    <div class="bfc-stack">
+      {%- if ft_count == 0 -%}
+        <article class="bfc-card bfc-card--empty">
+          <div class="bfc-empty-icon" aria-hidden="true">—</div>
+          <h3 class="bfc-empty-title">No full time roles right now</h3>
+          <p class="bfc-muted">
+            Check back soon, or send a quick intro to
+            <a href="mailto:hello@brooklynfilmcamera.com">hello@brooklynfilmcamera.com</a>.
+          </p>
+        </article>
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'job_listing' and block.settings.category == 'fulltime' -%}
+          {%- liquid
+            assign b = block.settings
+          -%}
+          <article class="bfc-card bfc-accordion" data-listing="true" {{ block.shopify_attributes }}>
+            <header class="bfc-card-head">
+              <button class="bfc-accordion-toggle" type="button" aria-expanded="false"
+                aria-controls="job-content-{{ section.id }}-{{ block.id | replace: '-', '' }}">
+                <div class="bfc-card-title-block">
+                  <span class="bfc-role-title">{{ b.title }}</span>
+                  <span class="bfc-meta-row">
+                    {%- assign tag_type_val = b.tag_type | strip -%}{%- if tag_type_val != blank -%}<span class="bfc-tag">{{ tag_type_val }}</span>{%- endif -%}
+                    {%- assign tag_location_val = b.tag_location | strip -%}{%- if tag_location_val != blank -%}<span class="bfc-tag">{{ tag_location_val }}</span>{%- endif -%}
+                    {%- assign tag_extra_val = b.tag_extra | strip -%}{%- if tag_extra_val != blank -%}<span class="bfc-tag">{{ tag_extra_val }}</span>{%- endif -%}
+                    {%- assign tag_pay_val = b.tag_pay | strip -%}{%- if tag_pay_val != blank -%}<span class="bfc-tag bfc-tag--pay">{{ tag_pay_val }}</span>{%- endif -%}
+                    {%- assign tag_hours_val = b.tag_hours | strip -%}{%- if tag_hours_val != blank -%}<span class="bfc-tag bfc-tag--hours">{{ tag_hours_val }}</span>{%- endif -%}
+                    {%- assign tag_exp_val = b.tag_experience | strip -%}{%- if tag_exp_val != blank -%}<span class="bfc-tag bfc-tag--exp">{{ tag_exp_val }}</span>{%- endif -%}
+                  </span>
+                </div>
+                <svg class="bfc-caret" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </button>
+            </header>
+            <div id="job-content-{{ section.id }}-{{ block.id | replace: '-', '' }}" class="bfc-accordion-content" hidden>
+              <div class="bfc-card-text">
+                {%- if b.intro != blank -%}<p class="bfc-intro">{{ b.intro }}</p>{%- endif -%}
+                {%- if b.responsibilities != blank -%}
+                  <h4>Responsibilities</h4>
+                  <ul>
+                    {%- assign resp_lines = b.responsibilities | newline_to_br | split: '<br />' -%}
+                    {%- for line in resp_lines -%}{%- assign lc = line | strip -%}{%- if lc != blank -%}<li>{{ lc }}</li>{%- endif -%}{%- endfor -%}
+                  </ul>
+                {%- endif -%}
+                {%- if b.requirements != blank -%}
+                  <h4>Requirements</h4>
+                  <ul>
+                    {%- assign req_lines = b.requirements | newline_to_br | split: '<br />' -%}
+                    {%- for line in req_lines -%}{%- assign lc = line | strip -%}{%- if lc != blank -%}<li>{{ lc }}</li>{%- endif -%}{%- endfor -%}
+                  </ul>
+                {%- endif -%}
+                {%- if b.nice_to_have != blank -%}
+                  <h4>Nice to Have</h4>
+                  <ul>
+                    {%- assign nth_lines = b.nice_to_have | newline_to_br | split: '<br />' -%}
+                    {%- for line in nth_lines -%}{%- assign lc = line | strip -%}{%- if lc != blank -%}<li>{{ lc }}</li>{%- endif -%}{%- endfor -%}
+                  </ul>
+                {%- endif -%}
+                <h4>How to Apply</h4>
+                {%- if b.apply_method == 'email' -%}
+                  <p>{{ b.apply_label }} Email <a href="mailto:{{ b.apply_email }}?subject={{ b.apply_email_subject | url_encode }}">{{ b.apply_email }}</a>.</p>
+                {%- else -%}
+                  <p>{{ b.apply_label }}{%- if b.apply_url != blank %} <a href="{{ b.apply_url }}" target="_blank" rel="noopener">Apply here</a>.{%- endif -%}</p>
+                {%- endif -%}
+              </div>
+              <div class="bfc-action-row">
+                {%- if b.apply_method == 'email' -%}
+                  <a class="bfc-btn bfc-btn--primary" href="mailto:{{ b.apply_email }}?subject={{ b.apply_email_subject | url_encode }}">{{ b.apply_btn_label }}</a>
+                  <button type="button" class="bfc-btn bfc-btn--ghost" data-email="{{ b.apply_email }}">Copy Email</button>
+                {%- elsif b.apply_url != blank -%}
+                  <a class="bfc-btn bfc-btn--primary" href="{{ b.apply_url }}" target="_blank" rel="noopener">{{ b.apply_btn_label }}</a>
+                {%- endif -%}
+              </div>
+            </div>
+          </article>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </section>
+
+  <!-- ═══════════════════ PART TIME ═══════════════════ -->
+  <section class="bfc-panel" id="panel-parttime-{{ section.id }}" role="tabpanel"
+    aria-labelledby="tab-parttime-{{ section.id }}" hidden>
+    <div class="bfc-stack">
+      {%- if pt_count == 0 -%}
+        <article class="bfc-card bfc-card--empty">
+          <div class="bfc-empty-icon" aria-hidden="true">—</div>
+          <h3 class="bfc-empty-title">No part time roles right now</h3>
+          <p class="bfc-muted">
+            Check back soon, or send a quick intro to
+            <a href="mailto:hello@brooklynfilmcamera.com">hello@brooklynfilmcamera.com</a>.
+          </p>
+        </article>
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'job_listing' and block.settings.category == 'parttime' -%}
+          {%- liquid
+            assign b = block.settings
+          -%}
+          <article class="bfc-card bfc-accordion" data-listing="true" {{ block.shopify_attributes }}>
+            <header class="bfc-card-head">
+              <button class="bfc-accordion-toggle" type="button" aria-expanded="false"
+                aria-controls="job-content-{{ section.id }}-{{ block.id | replace: '-', '' }}">
+                <div class="bfc-card-title-block">
+                  <span class="bfc-role-title">{{ b.title }}</span>
+                  <span class="bfc-meta-row">
+                    {%- assign tag_type_val = b.tag_type | strip -%}{%- if tag_type_val != blank -%}<span class="bfc-tag">{{ tag_type_val }}</span>{%- endif -%}
+                    {%- assign tag_location_val = b.tag_location | strip -%}{%- if tag_location_val != blank -%}<span class="bfc-tag">{{ tag_location_val }}</span>{%- endif -%}
+                    {%- assign tag_extra_val = b.tag_extra | strip -%}{%- if tag_extra_val != blank -%}<span class="bfc-tag">{{ tag_extra_val }}</span>{%- endif -%}
+                    {%- assign tag_pay_val = b.tag_pay | strip -%}{%- if tag_pay_val != blank -%}<span class="bfc-tag bfc-tag--pay">{{ tag_pay_val }}</span>{%- endif -%}
+                    {%- assign tag_hours_val = b.tag_hours | strip -%}{%- if tag_hours_val != blank -%}<span class="bfc-tag bfc-tag--hours">{{ tag_hours_val }}</span>{%- endif -%}
+                    {%- assign tag_exp_val = b.tag_experience | strip -%}{%- if tag_exp_val != blank -%}<span class="bfc-tag bfc-tag--exp">{{ tag_exp_val }}</span>{%- endif -%}
+                  </span>
+                </div>
+                <svg class="bfc-caret" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </button>
+            </header>
+            <div id="job-content-{{ section.id }}-{{ block.id | replace: '-', '' }}" class="bfc-accordion-content" hidden>
+              <div class="bfc-card-text">
+                {%- if b.intro != blank -%}<p class="bfc-intro">{{ b.intro }}</p>{%- endif -%}
+                {%- if b.responsibilities != blank -%}
+                  <h4>Responsibilities</h4>
+                  <ul>
+                    {%- assign resp_lines = b.responsibilities | newline_to_br | split: '<br />' -%}
+                    {%- for line in resp_lines -%}{%- assign lc = line | strip -%}{%- if lc != blank -%}<li>{{ lc }}</li>{%- endif -%}{%- endfor -%}
+                  </ul>
+                {%- endif -%}
+                {%- if b.requirements != blank -%}
+                  <h4>Requirements</h4>
+                  <ul>
+                    {%- assign req_lines = b.requirements | newline_to_br | split: '<br />' -%}
+                    {%- for line in req_lines -%}{%- assign lc = line | strip -%}{%- if lc != blank -%}<li>{{ lc }}</li>{%- endif -%}{%- endfor -%}
+                  </ul>
+                {%- endif -%}
+                {%- if b.nice_to_have != blank -%}
+                  <h4>Nice to Have</h4>
+                  <ul>
+                    {%- assign nth_lines = b.nice_to_have | newline_to_br | split: '<br />' -%}
+                    {%- for line in nth_lines -%}{%- assign lc = line | strip -%}{%- if lc != blank -%}<li>{{ lc }}</li>{%- endif -%}{%- endfor -%}
+                  </ul>
+                {%- endif -%}
+                <h4>How to Apply</h4>
+                {%- if b.apply_method == 'email' -%}
+                  <p>{{ b.apply_label }} Email <a href="mailto:{{ b.apply_email }}?subject={{ b.apply_email_subject | url_encode }}">{{ b.apply_email }}</a>.</p>
+                {%- else -%}
+                  <p>{{ b.apply_label }}{%- if b.apply_url != blank %} <a href="{{ b.apply_url }}" target="_blank" rel="noopener">Apply here</a>.{%- endif -%}</p>
+                {%- endif -%}
+              </div>
+              <div class="bfc-action-row">
+                {%- if b.apply_method == 'email' -%}
+                  <a class="bfc-btn bfc-btn--primary" href="mailto:{{ b.apply_email }}?subject={{ b.apply_email_subject | url_encode }}">{{ b.apply_btn_label }}</a>
+                  <button type="button" class="bfc-btn bfc-btn--ghost" data-email="{{ b.apply_email }}">Copy Email</button>
+                {%- elsif b.apply_url != blank -%}
+                  <a class="bfc-btn bfc-btn--primary" href="{{ b.apply_url }}" target="_blank" rel="noopener">{{ b.apply_btn_label }}</a>
+                {%- endif -%}
+              </div>
+            </div>
+          </article>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </section>
+
+  <!-- ═══════════════════ OTHER ═══════════════════ -->
+  <section class="bfc-panel" id="panel-other-{{ section.id }}" role="tabpanel"
+    aria-labelledby="tab-other-{{ section.id }}" hidden>
+    <div class="bfc-stack">
+      {%- if ot_count == 0 -%}
+        <article class="bfc-card bfc-card--empty">
+          <div class="bfc-empty-icon" aria-hidden="true">—</div>
+          <h3 class="bfc-empty-title">No other roles right now</h3>
+          <p class="bfc-muted">
+            Check back soon, or send a quick intro to
+            <a href="mailto:hello@brooklynfilmcamera.com">hello@brooklynfilmcamera.com</a>.
+          </p>
+        </article>
+      {%- else -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'job_listing' and block.settings.category == 'other' -%}
+          {%- liquid
+            assign b = block.settings
+          -%}
+          <article class="bfc-card bfc-accordion" data-listing="true" {{ block.shopify_attributes }}>
+            <header class="bfc-card-head">
+              <button class="bfc-accordion-toggle" type="button" aria-expanded="false"
+                aria-controls="job-content-{{ section.id }}-{{ block.id | replace: '-', '' }}">
+                <div class="bfc-card-title-block">
+                  <span class="bfc-role-title">{{ b.title }}</span>
+                  <span class="bfc-meta-row">
+                    {%- assign tag_type_val = b.tag_type | strip -%}{%- if tag_type_val != blank -%}<span class="bfc-tag">{{ tag_type_val }}</span>{%- endif -%}
+                    {%- assign tag_location_val = b.tag_location | strip -%}{%- if tag_location_val != blank -%}<span class="bfc-tag">{{ tag_location_val }}</span>{%- endif -%}
+                    {%- assign tag_extra_val = b.tag_extra | strip -%}{%- if tag_extra_val != blank -%}<span class="bfc-tag">{{ tag_extra_val }}</span>{%- endif -%}
+                    {%- assign tag_pay_val = b.tag_pay | strip -%}{%- if tag_pay_val != blank -%}<span class="bfc-tag bfc-tag--pay">{{ tag_pay_val }}</span>{%- endif -%}
+                    {%- assign tag_hours_val = b.tag_hours | strip -%}{%- if tag_hours_val != blank -%}<span class="bfc-tag bfc-tag--hours">{{ tag_hours_val }}</span>{%- endif -%}
+                    {%- assign tag_exp_val = b.tag_experience | strip -%}{%- if tag_exp_val != blank -%}<span class="bfc-tag bfc-tag--exp">{{ tag_exp_val }}</span>{%- endif -%}
+                  </span>
+                </div>
+                <svg class="bfc-caret" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </button>
+            </header>
+            <div id="job-content-{{ section.id }}-{{ block.id | replace: '-', '' }}" class="bfc-accordion-content" hidden>
+              <div class="bfc-card-text">
+                {%- if b.intro != blank -%}<p class="bfc-intro">{{ b.intro }}</p>{%- endif -%}
+                {%- if b.responsibilities != blank -%}
+                  <h4>Responsibilities</h4>
+                  <ul>
+                    {%- assign resp_lines = b.responsibilities | newline_to_br | split: '<br />' -%}
+                    {%- for line in resp_lines -%}{%- assign lc = line | strip -%}{%- if lc != blank -%}<li>{{ lc }}</li>{%- endif -%}{%- endfor -%}
+                  </ul>
+                {%- endif -%}
+                {%- if b.requirements != blank -%}
+                  <h4>Requirements</h4>
+                  <ul>
+                    {%- assign req_lines = b.requirements | newline_to_br | split: '<br />' -%}
+                    {%- for line in req_lines -%}{%- assign lc = line | strip -%}{%- if lc != blank -%}<li>{{ lc }}</li>{%- endif -%}{%- endfor -%}
+                  </ul>
+                {%- endif -%}
+                {%- if b.nice_to_have != blank -%}
+                  <h4>Nice to Have</h4>
+                  <ul>
+                    {%- assign nth_lines = b.nice_to_have | newline_to_br | split: '<br />' -%}
+                    {%- for line in nth_lines -%}{%- assign lc = line | strip -%}{%- if lc != blank -%}<li>{{ lc }}</li>{%- endif -%}{%- endfor -%}
+                  </ul>
+                {%- endif -%}
+                <h4>How to Apply</h4>
+                {%- if b.apply_method == 'email' -%}
+                  <p>{{ b.apply_label }} Email <a href="mailto:{{ b.apply_email }}?subject={{ b.apply_email_subject | url_encode }}">{{ b.apply_email }}</a>.</p>
+                {%- else -%}
+                  <p>{{ b.apply_label }}{%- if b.apply_url != blank %} <a href="{{ b.apply_url }}" target="_blank" rel="noopener">Apply here</a>.{%- endif -%}</p>
+                {%- endif -%}
+              </div>
+              <div class="bfc-action-row">
+                {%- if b.apply_method == 'email' -%}
+                  <a class="bfc-btn bfc-btn--primary" href="mailto:{{ b.apply_email }}?subject={{ b.apply_email_subject | url_encode }}">{{ b.apply_btn_label }}</a>
+                  <button type="button" class="bfc-btn bfc-btn--ghost" data-email="{{ b.apply_email }}">Copy Email</button>
+                {%- elsif b.apply_url != blank -%}
+                  <a class="bfc-btn bfc-btn--primary" href="{{ b.apply_url }}" target="_blank" rel="noopener">{{ b.apply_btn_label }}</a>
+                {%- endif -%}
+              </div>
+            </div>
+          </article>
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </section>
+
+  <!-- ═══════════════════ PERKS ═══════════════════ -->
+  <article class="bfc-card bfc-card--benefits">
+    <h3 class="bfc-benefits-title">Working with Us</h3>
+    <ul class="bfc-benefits-grid">
+      {%- assign benefit_keys = 'benefit_1,benefit_2,benefit_3,benefit_4,benefit_5,benefit_6,benefit_7,benefit_8' | split: ',' -%}
+      {%- for key in benefit_keys -%}
+        {%- assign val = section.settings[key] -%}
+        {%- if val != blank -%}
+          <li>{{ val }}</li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </article>
+
+</div>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Poppins:wght@400;500;600;700;900&display=swap');
+
+  #bfc-openings-{{ section.id }} {
+    --ink:       #202009;
+    --canvas:    #F8F6EE;
+    --orange:    #E36E15;
+    --golden:    #F4A027;
+    --olive:     #525741;
+    --celadon:   #ABCC99;
+    --border:    rgba(32,32,9,.12);
+    --shadow:    0 4px 20px rgba(32,32,9,.07);
+    --shadow-lg: 0 10px 32px rgba(32,32,9,.12);
+  }
+
+  #bfc-openings-{{ section.id }} {
+    font-family: 'Poppins', system-ui, sans-serif;
+    color: var(--ink);
+    background: var(--canvas);
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(32px, 5vw, 64px) clamp(24px, 4vw, 48px);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-header { margin-bottom: 52px; }
+
+  #bfc-openings-{{ section.id }} .bfc-eyebrow {
+    font-family: 'Poppins', sans-serif;
+    font-size: .9rem;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin: 0 0 14px;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(60px, 9vw, 100px);
+    font-weight: 700;
+    line-height: .92;
+    letter-spacing: -.02em;
+    margin: 0 0 18px;
+    color: var(--ink);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-rule {
+    width: 48px;
+    height: 3px;
+    background: var(--orange);
+    border: none;
+    margin: 0;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 28px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-tab {
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    padding: .9rem 1.8rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: .95rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color .15s, border-color .15s;
+    line-height: 1;
+    color: color-mix(in srgb, var(--ink) 45%, transparent);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-tab:hover { color: var(--ink); }
+
+  #bfc-openings-{{ section.id }} .bfc-tab[aria-selected="true"] {
+    color: var(--ink);
+    border-bottom-color: var(--orange);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-tab-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 7px;
+    font-family: 'Poppins', sans-serif;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    color: color-mix(in srgb, var(--ink) 55%, transparent);
+    background: var(--canvas);
+    border: 1px solid var(--border);
+    transition: background .15s, color .15s, border-color .15s;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-tab[aria-selected="true"] .bfc-tab-count {
+    background: var(--orange);
+    color: #fff;
+    border-color: var(--orange);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-panel[hidden] { display: none !important; }
+  #bfc-openings-{{ section.id }} .bfc-stack { display: grid; gap: 18px; }
+
+  #bfc-openings-{{ section.id }} .bfc-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: box-shadow .2s, transform .2s;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-card[data-listing="true"]:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-card-head { margin: 0; }
+
+  #bfc-openings-{{ section.id }} .bfc-accordion-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    padding: 28px 30px;
+    text-align: left;
+    color: var(--ink);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-card-title-block {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-role-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -.01em;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-tag {
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    background: var(--canvas);
+    color: var(--olive);
+    border: 1px solid color-mix(in srgb, var(--olive) 25%, transparent);
+    padding: 5px 11px;
+    white-space: nowrap;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-tag--pay {
+    color: #2a6b2a;
+    background: #f0f7ed;
+    border-color: rgba(42,107,42,0.25);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-tag--hours {
+    color: #1a4f7a;
+    background: #edf4fa;
+    border-color: rgba(26,79,122,0.25);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-tag--exp {
+    color: #7a4a1a;
+    background: #faf2ed;
+    border-color: rgba(122,74,26,0.25);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-caret {
+    flex-shrink: 0;
+    opacity: .5;
+    transition: transform .22s, opacity .15s;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-accordion-toggle[aria-expanded="true"] .bfc-caret {
+    transform: rotate(180deg);
+    opacity: 1;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-accordion-content {
+    padding: 0 30px 30px;
+    border-top: 1px solid var(--border);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-card-text {
+    padding-top: 24px;
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-intro {
+    margin: 0 0 20px;
+    color: color-mix(in srgb, var(--ink) 70%, transparent);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-card-text h4 {
+    font-family: 'Poppins', sans-serif;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin: 24px 0 10px;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-card-text ul {
+    margin: 0 0 16px;
+    padding: 0;
+    list-style: none;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-card-text ul li {
+    padding-left: 1.3rem;
+    position: relative;
+    margin-bottom: 6px;
+    color: color-mix(in srgb, var(--ink) 80%, transparent);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-card-text ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-card-text p {
+    margin: 0 0 14px;
+    color: color-mix(in srgb, var(--ink) 80%, transparent);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-card-text a {
+    color: var(--orange);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-action-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: .85rem 1.8rem;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: .88rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none !important;
+    line-height: 1;
+    border: 1.5px solid transparent;
+    transition: transform .15s, background .15s, color .15s;
+    white-space: nowrap;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-btn:hover { transform: translateY(-1px); }
+
+  #bfc-openings-{{ section.id }} .bfc-btn--primary {
+    background: var(--orange);
+    color: #fff;
+    border-color: var(--orange);
+    box-shadow: 0 3px 12px rgba(227,110,21,.3);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-btn--ghost {
+    background: transparent;
+    color: color-mix(in srgb, var(--ink) 50%, transparent);
+    border-color: transparent;
+    font-size: .82rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-btn--ghost:hover {
+    color: var(--ink);
+    background: var(--canvas);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-card--empty {
+    padding: 52px 36px;
+    text-align: center;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-empty-icon {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 3.5rem;
+    color: var(--border);
+    margin-bottom: 14px;
+    line-height: 1;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-empty-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0 0 10px;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-muted {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: color-mix(in srgb, var(--ink) 55%, transparent);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-muted a { color: var(--orange); text-underline-offset: 2px; }
+
+  #bfc-openings-{{ section.id }} .bfc-card--benefits {
+    margin-top: 32px;
+    padding: 32px 36px 36px;
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+    box-shadow: none;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-benefits-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: .82rem;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--golden);
+    margin: 0 0 16px;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-benefits-grid {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px 24px;
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-benefits-grid li {
+    font-size: 1rem;
+    line-height: 1.6;
+    padding-left: 1.3rem;
+    position: relative;
+    color: rgba(255,255,255,.85);
+  }
+
+  #bfc-openings-{{ section.id }} .bfc-benefits-grid li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  @media (max-width: 640px) {
+    #bfc-openings-{{ section.id }} .bfc-tab { padding: .75rem .9rem; font-size: .78rem; gap: 7px; }
+    #bfc-openings-{{ section.id }} .bfc-tab-count { min-width: 19px; height: 19px; font-size: .68rem; padding: 0 5px; }
+    #bfc-openings-{{ section.id }} .bfc-accordion-toggle { padding: 22px 20px; }
+    #bfc-openings-{{ section.id }} .bfc-accordion-content { padding: 0 20px 24px; }
+    #bfc-openings-{{ section.id }} .bfc-benefits-grid { grid-template-columns: 1fr 1fr; }
+    #bfc-openings-{{ section.id }} .bfc-role-title { font-size: 1.1rem; }
+  }
+</style>
+
+<script>
+(function () {
+  var root = document.getElementById("bfc-openings-{{ section.id }}");
+  if (!root) return;
+
+  var tabs = Array.prototype.slice.call(root.querySelectorAll(".bfc-tab"));
+  var panels = {
+    fulltime: root.querySelector("#panel-fulltime-{{ section.id }}"),
+    parttime: root.querySelector("#panel-parttime-{{ section.id }}"),
+    other:    root.querySelector("#panel-other-{{ section.id }}")
+  };
+
+  function setActive(key) {
+    tabs.forEach(function (t) {
+      t.setAttribute("aria-selected", t.getAttribute("data-tab") === key ? "true" : "false");
+    });
+    Object.keys(panels).forEach(function (k) {
+      if (panels[k]) panels[k].hidden = (k !== key);
+    });
+  }
+
+  // Default to first tab with listings
+  var defaultTab = "fulltime";
+  var order = ["fulltime", "parttime", "other"];
+  for (var i = 0; i < order.length; i++) {
+    var p = panels[order[i]];
+    if (p && p.querySelectorAll('[data-listing="true"]').length > 0) {
+      defaultTab = order[i];
+      break;
+    }
+  }
+  setActive(defaultTab);
+
+  tabs.forEach(function (tab) {
+    tab.addEventListener("click", function (e) {
+      e.preventDefault();
+      setActive(tab.getAttribute("data-tab"));
+    });
+  });
+
+  root.querySelectorAll(".bfc-accordion-toggle").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var expanded = btn.getAttribute("aria-expanded") === "true";
+      var content  = root.querySelector("#" + btn.getAttribute("aria-controls"));
+      btn.setAttribute("aria-expanded", expanded ? "false" : "true");
+      if (content) content.hidden = expanded;
+    });
+  });
+
+  root.querySelectorAll("[data-email]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var email = btn.getAttribute("data-email");
+      function flash() {
+        var prev = btn.textContent;
+        btn.textContent = "Copied!";
+        setTimeout(function () { btn.textContent = prev; }, 1400);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(email).then(flash).catch(function () { window.prompt("Copy email:", email); });
+      } else {
+        window.prompt("Copy email:", email);
+      }
+    });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "BFC Open Positions",
+  "tag": "section",
+  "enabled_on": { "templates": ["*"] },
+  "max_blocks": 25,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Benefits — Working With Us"
+    },
+    { "type": "text", "id": "benefit_1", "label": "Benefit 1", "default": "Employee first culture" },
+    { "type": "text", "id": "benefit_2", "label": "Benefit 2", "default": "Flexible schedules when needed" },
+    { "type": "text", "id": "benefit_3", "label": "Benefit 3", "default": "Profit sharing" },
+    { "type": "text", "id": "benefit_4", "label": "Benefit 4", "default": "Extra paid days off" },
+    { "type": "text", "id": "benefit_5", "label": "Benefit 5", "default": "Paid lunches" },
+    { "type": "text", "id": "benefit_6", "label": "Benefit 6", "default": "Free film stipend" },
+    { "type": "text", "id": "benefit_7", "label": "Benefit 7", "default": "Office snacks and drinks" },
+    { "type": "text", "id": "benefit_8", "label": "Benefit 8", "default": "Expanding benefits as we grow" }
+  ],
+  "blocks": [
+    {
+      "type": "job_listing",
+      "name": "Job Listing",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Role Info"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Role Title",
+          "default": "Job Title"
+        },
+        {
+          "type": "select",
+          "id": "category",
+          "label": "Category (Tab)",
+          "options": [
+            { "value": "fulltime", "label": "Full Time" },
+            { "value": "parttime", "label": "Part Time" },
+            { "value": "other",    "label": "Other" }
+          ],
+          "default": "fulltime"
+        },
+        {
+          "type": "text",
+          "id": "tag_type",
+          "label": "Type Tag (e.g. Part Time / Freelance)",
+          "default": "Full Time"
+        },
+        {
+          "type": "text",
+          "id": "tag_location",
+          "label": "Location Tag (e.g. Williamsburg HQ)",
+          "default": "Williamsburg HQ"
+        },
+        {
+          "type": "text",
+          "id": "tag_extra",
+          "label": "Extra Tag (e.g. On Site) — delete text to hide",
+          "default": "On Site"
+        },
+        {
+          "type": "text",
+          "id": "tag_pay",
+          "label": "Pay Tag (e.g. $35/hr) — delete text to hide",
+          "default": "Pay rate"
+        },
+        {
+          "type": "text",
+          "id": "tag_hours",
+          "label": "Hours Tag (e.g. 40hrs/week) — delete text to hide",
+          "default": "Hours"
+        },
+        {
+          "type": "text",
+          "id": "tag_experience",
+          "label": "Experience Tag (e.g. 2+ Years) — delete text to hide",
+          "default": "Experience level"
+        },
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "textarea",
+          "id": "intro",
+          "label": "Intro paragraph",
+          "default": "Describe this role in a few sentences."
+        },
+        {
+          "type": "textarea",
+          "id": "responsibilities",
+          "label": "Responsibilities — one per line",
+          "default": "First responsibility\nSecond responsibility\nThird responsibility"
+        },
+        {
+          "type": "textarea",
+          "id": "requirements",
+          "label": "Requirements — one per line",
+          "default": "First requirement\nSecond requirement"
+        },
+        {
+          "type": "textarea",
+          "id": "nice_to_have",
+          "label": "Nice to Have — one per line (clear text to hide section)",
+          "default": "Nice to have item"
+        },
+        {
+          "type": "header",
+          "content": "How to Apply"
+        },
+        {
+          "type": "select",
+          "id": "apply_method",
+          "label": "Apply Method",
+          "options": [
+            { "value": "form",  "label": "Form / URL" },
+            { "value": "email", "label": "Email" }
+          ],
+          "default": "form"
+        },
+        {
+          "type": "text",
+          "id": "apply_label",
+          "label": "How to Apply — instructions text",
+          "default": "Fill out our application form and we will be in touch."
+        },
+        {
+          "type": "url",
+          "id": "apply_url",
+          "label": "Apply URL (if apply method is Form)"
+        },
+        {
+          "type": "text",
+          "id": "apply_email",
+          "label": "Apply Email (if apply method is Email)",
+          "default": "hello@brooklynfilmcamera.com"
+        },
+        {
+          "type": "text",
+          "id": "apply_email_subject",
+          "label": "Email Subject Line (if apply method is Email)",
+          "default": "Job Application"
+        },
+        {
+          "type": "text",
+          "id": "apply_btn_label",
+          "label": "Apply Button Label",
+          "default": "Apply Now"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "BFC Open Positions",
+      "blocks": [
+        {
+          "type": "job_listing",
+          "settings": {
+            "title": "Product Photographer",
+            "category": "parttime",
+            "tag_type": "Part Time / Freelance",
+            "tag_location": "Williamsburg HQ",
+            "tag_extra": "On Site",
+            "tag_pay": "Rate TBD",
+            "tag_hours": "Flexible",
+            "tag_experience": "Portfolio required",
+            "intro": "We're hiring a product photographer to shoot vintage and refurbished cameras, film, and accessories for our product display pages across Shopify, Etsy, and eBay. Shoots run on a regular cadence. This role starts as PDP product photography and could grow into more editorial and creative work. Rate depends on structure.",
+            "responsibilities": "Light and shoot cameras and accessories in our studio using Profoto strobe lighting\nShoot tethered in Capture One; handle capture, culling, and color\nEdit, retouch, and composite in Photoshop\nMatch the look and style of our existing PDP photography so listings stay consistent\nDeliver catalog-ready images with consistent quality\nKeep the studio and gear organized during and after shoots",
+            "requirements": "Proven Profoto strobe lighting experience for product work\nStrong product photography portfolio\nProficient in Capture One, including tethered shooting\nStrong Photoshop skills: layering, compositing, masking, retouching\nAble to study existing photography and emulate its lighting, framing, and editing\nConsistent, efficient, and detail-obsessed: catches dust, reflections, alignment, and color issues\nAble to work independently without supervision",
+            "nice_to_have": "Interest in film and analog cameras\nEditorial or creative still life range, since the role may expand in that direction",
+            "apply_method": "form",
+            "apply_label": "Fill out our application form and we will be in touch.",
+            "apply_url": "https://forms.gle/U1YC3o25vyYG4C3z7",
+            "apply_btn_label": "Apply Now"
+          }
+        },
+        {
+          "type": "job_listing",
+          "settings": {
+            "title": "Educators, Workshop & Photowalk Leaders",
+            "category": "other",
+            "tag_type": "Contract / Revenue Share",
+            "tag_location": "Williamsburg HQ",
+            "tag_extra": "On Site",
+            "tag_pay": "Revenue Share",
+            "tag_hours": "Flexible",
+            "tag_experience": "Teaching experience",
+            "intro": "We are looking for educators to lead classes, lectures, workshops, and photowalks at our Williamsburg HQ. We handle marketing, ticketing, and supplies, and offer a share of revenue.",
+            "responsibilities": "Lead classes, workshops, lectures, or photowalks at our Williamsburg HQ",
+            "requirements": "Teaching or facilitation experience in photography or a related field",
+            "nice_to_have": "Experience teaching analog or film photography",
+            "apply_method": "email",
+            "apply_label": "Email us with the subject EDUCATION. Tell us about your teaching background, what you currently lead, and any ideas that would be a great fit at BFC.",
+            "apply_email": "hello@brooklynfilmcamera.com",
+            "apply_email_subject": "EDUCATION",
+            "apply_btn_label": "Email Us"
+          }
+        },
+        {
+          "type": "job_listing",
+          "settings": {
+            "title": "Email Marketer",
+            "category": "fulltime",
+            "tag_type": "Full Time",
+            "tag_location": "Williamsburg HQ",
+            "tag_extra": "On Site",
+            "tag_pay": "$35/hr",
+            "tag_hours": "40hrs/week",
+            "tag_experience": "Klaviyo required",
+            "intro": "We are looking for an email marketer to own our Klaviyo program end-to-end. You will write the copy, design the flows, build the campaigns, and report on performance. This is a hands-on role at a fast-moving independent camera shop in Brooklyn. Rate: $35/hr.",
+            "responsibilities": "Write all email copy — campaigns, flows, and automations\nDesign and build emails in Klaviyo\nOwn our flow architecture: welcome series, post-purchase, win-back, browse abandonment, and more\nSegment our list and develop targeting strategies\nAnalyze campaign and flow performance and report on key metrics\nCollaborate with the team on promotions, product launches, and seasonal campaigns",
+            "requirements": "Hands-on Klaviyo experience — flows, campaigns, segmentation, and reporting\nStrong copywriting skills with a proven ability to write for ecommerce\nAble to design emails from scratch inside Klaviyo or an equivalent tool\nUnderstanding of email deliverability best practices\nData-driven: comfortable pulling numbers and making decisions from them\nAble to work independently and manage your own priorities",
+            "nice_to_have": "Experience marketing for an ecommerce or retail brand\nFamiliarity with Shopify and how it integrates with Klaviyo\nInterest in film photography or analog cameras",
+            "apply_method": "email",
+            "apply_label": "Email us with the subject EMAIL MARKETER. Include examples of emails or flows you have built and a brief note on your Klaviyo experience.",
+            "apply_email": "hello@brooklynfilmcamera.com",
+            "apply_email_subject": "EMAIL MARKETER",
+            "apply_btn_label": "Apply Now"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

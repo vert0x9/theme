@@ -1564,18 +1564,69 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
+/* ── Inline image slot inside each list item (mobile only) ── */
+.bfcsx .sx-feat-li-img {
+  display: none; /* hidden on desktop; mobile overrides below */
+}
+
 @media (max-width: 768px) {
+  /* Single-column — the pane is gone, list is everything */
   .bfcsx .sx-feat-carousel-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 0;
   }
+  /* Hide the side pane entirely — image shows inline under each item instead */
   .bfcsx .sx-feat-pane {
-    position: static;
-    aspect-ratio: 4 / 3;
-    order: -1;
+    display: none;
   }
   .bfcsx .sx-feat-li-name { font-size: 17px; }
   .bfcsx .sx-feat-li-desc { font-size: 13px; }
+
+  /* Add a chevron to the right of each label so it reads as a tap target */
+  .bfcsx .sx-feat-li {
+    grid-template-columns: 28px 1fr 16px;
+  }
+  .bfcsx .sx-feat-li::after {
+    content: '';
+    display: block;
+    width: 8px;
+    height: 8px;
+    border-right: 1.5px solid rgba(32,32,9,0.3);
+    border-bottom: 1.5px solid rgba(32,32,9,0.3);
+    transform: rotate(45deg) translateY(-3px);
+    align-self: center;
+    transition: transform 0.2s ease, border-color 0.18s ease;
+  }
+  .bfcsx .sx-feat-radio:checked + .sx-feat-li::after {
+    transform: rotate(-135deg) translateY(3px);
+    border-color: var(--or);
+  }
+
+  /* Inline image slot: hidden by default, revealed when its radio is checked */
+  .bfcsx .sx-feat-li-img {
+    display: none;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    object-position: center;
+    background: var(--cv);
+  }
+  .bfcsx .sx-feat-carousel:has(.sx-feat-radio--1:checked) .sx-feat-li-wrap--1 .sx-feat-li-img,
+  .bfcsx .sx-feat-carousel:has(.sx-feat-radio--2:checked) .sx-feat-li-wrap--2 .sx-feat-li-img,
+  .bfcsx .sx-feat-carousel:has(.sx-feat-radio--3:checked) .sx-feat-li-wrap--3 .sx-feat-li-img,
+  .bfcsx .sx-feat-carousel:has(.sx-feat-radio--4:checked) .sx-feat-li-wrap--4 .sx-feat-li-img,
+  .bfcsx .sx-feat-carousel:has(.sx-feat-radio--5:checked) .sx-feat-li-wrap--5 .sx-feat-li-img,
+  .bfcsx .sx-feat-carousel:has(.sx-feat-radio--6:checked) .sx-feat-li-wrap--6 .sx-feat-li-img {
+    display: block;
+  }
+
+  /* Dongle context: chevron in light colors on the dark background */
+  .bfcsx .sx-dongle .sx-feat-li::after {
+    border-color: rgba(255,255,255,0.25);
+  }
+  .bfcsx .sx-dongle .sx-feat-radio:checked + .sx-feat-li::after {
+    border-color: var(--or);
+  }
 }
 
 /* ── Dongle context: light-on-dark for the feature carousel ──
@@ -2507,21 +2558,15 @@
     gap: 0;
   }
 
-  /* Build Your Kit — collapsed by default on mobile, tap toggle to expand */
+  /* Build Your Kit — always expanded on mobile, no toggle needed */
   .bfcsx .sx-kit-sub { margin-bottom: 16px; }
-  .bfcsx .sx-kit-toggle { display: flex; }
-  .bfcsx .sx-kit-body {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows .25s ease;
-    overflow: hidden;
-  }
-  .bfcsx .sx-kit-body > * { min-height: 0; }
-  .bfcsx .sx-kit.is-kit-open .sx-kit-body { grid-template-rows: 1fr; margin-top: 16px; }
+  .bfcsx .sx-kit-toggle { display: none; }
+  .bfcsx .sx-kit-body { display: block; margin-top: 16px; }
   .bfcsx .sx-photos { position: static; height: auto; max-height: none; }
   .bfcsx .sx-hero { aspect-ratio: 1 / 1; height: auto; }
   .bfcsx .sx-info-pane { padding: 24px 20px 32px; max-width: 100%; }
   .bfcsx .sx-thumbs { display: none; }
+  .bfcsx .sx-arrow { display: none; }
   .bfcsx .sx-mini-specs { gap: 0; }
   .bfcsx .sx-osx-intro { padding: 48px 20px; }
   .bfcsx .sx-osx-intro-inner {
@@ -3261,7 +3306,15 @@
               {%- assign parts = entry | split: '|' -%}
               {%- assign p_name = parts[0] -%}
               {%- assign p_desc = parts[1] -%}
-              <li class="sx-feat-li-wrap">
+              {%- assign p_key  = parts[2] -%}
+              {%- assign p_img  = section.settings[p_key] -%}
+              {%- assign p_inline_src = '' -%}
+              {%- if p_img != blank -%}
+                {%- assign p_inline_src = p_img | image_url: width: 900 -%}
+              {%- elsif feat_fallback != blank -%}
+                {%- assign p_inline_src = feat_fallback | image_url: width: 900 -%}
+              {%- endif -%}
+              <li class="sx-feat-li-wrap sx-feat-li-wrap--{{ forloop.index }}">
                 <input type="radio"
                        class="sx-feat-radio sx-feat-radio--{{ forloop.index }}"
                        tabindex="-1"
@@ -3275,6 +3328,9 @@
                     <div class="sx-feat-li-desc">{{ p_desc }}</div>
                   </div>
                 </label>
+                {%- if p_inline_src != '' -%}
+                  <img class="sx-feat-li-img" src="{{ p_inline_src }}" alt="{{ p_name | escape }}" loading="lazy">
+                {%- endif -%}
               </li>
             {%- endfor -%}
           </ul>
@@ -3423,7 +3479,15 @@
               {%- assign parts = entry | split: '|' -%}
               {%- assign p_name = parts[0] -%}
               {%- assign p_desc = parts[1] -%}
-              <li class="sx-feat-li-wrap">
+              {%- assign p_key  = parts[2] -%}
+              {%- assign p_img  = section.settings[p_key] -%}
+              {%- assign p_inline_src = '' -%}
+              {%- if p_img != blank -%}
+                {%- assign p_inline_src = p_img | image_url: width: 900 -%}
+              {%- elsif dng_fallback != blank -%}
+                {%- assign p_inline_src = dng_fallback | image_url: width: 900 -%}
+              {%- endif -%}
+              <li class="sx-feat-li-wrap sx-feat-li-wrap--{{ forloop.index }}">
                 <input type="radio"
                        class="sx-feat-radio sx-feat-radio--{{ forloop.index }}"
                        tabindex="-1"
@@ -3437,6 +3501,9 @@
                     <div class="sx-feat-li-desc">{{ p_desc }}</div>
                   </div>
                 </label>
+                {%- if p_inline_src != '' -%}
+                  <img class="sx-feat-li-img" src="{{ p_inline_src }}" alt="{{ p_name | escape }}" loading="lazy">
+                {%- endif -%}
               </li>
             {%- endfor -%}
           </ul>
@@ -4005,6 +4072,50 @@ window.bfcsxToggleCompare = function() {
       const max = slider.children.length - 1;
       goTo(cur === max ? 0 : cur + 1);
     });
+
+    /* ── One-slide-at-a-time touch swipe (mobile) ──
+       Intercepts touchstart/move/end on the slider and manually advances
+       by exactly ±1 slide. This prevents fast flicks from jumping across
+       multiple images, which native scroll-snap momentum allows. */
+    let _touchStartX = null;
+    let _touchStartY = null;
+    let _touchLocked = false; // true once we've claimed the gesture as horizontal
+    const SWIPE_THRESHOLD = 40; // px horizontal travel to trigger a slide change
+    const AXIS_LOCK_THRESHOLD = 8; // px to decide horizontal vs vertical
+
+    slider.addEventListener('touchstart', function(e) {
+      if (e.touches.length !== 1) return;
+      _touchStartX = e.touches[0].clientX;
+      _touchStartY = e.touches[0].clientY;
+      _touchLocked = false;
+    }, { passive: true });
+
+    slider.addEventListener('touchmove', function(e) {
+      if (_touchStartX === null) return;
+      const dx = e.touches[0].clientX - _touchStartX;
+      const dy = e.touches[0].clientY - _touchStartY;
+      if (!_touchLocked && Math.abs(dx) < AXIS_LOCK_THRESHOLD && Math.abs(dy) < AXIS_LOCK_THRESHOLD) return;
+      if (!_touchLocked) {
+        // Decide axis: if more vertical than horizontal, bail and let page scroll
+        if (Math.abs(dy) > Math.abs(dx)) { _touchStartX = null; return; }
+        _touchLocked = true;
+      }
+      // We own this gesture — block native scroll so it doesn't drift
+      e.preventDefault();
+    }, { passive: false });
+
+    slider.addEventListener('touchend', function(e) {
+      if (_touchStartX === null || !_touchLocked) { _touchStartX = null; return; }
+      const dx = (e.changedTouches[0] || e.touches[0]).clientX - _touchStartX;
+      _touchStartX = null;
+      _touchLocked = false;
+      if (Math.abs(dx) < SWIPE_THRESHOLD) return; // too short — stay on current slide
+      const cur = Math.round(slider.scrollLeft / slider.offsetWidth);
+      const max = slider.children.length - 1;
+      goTo(dx < 0
+        ? (cur === max ? max : cur + 1)   // swipe left → next
+        : (cur === 0  ? 0   : cur - 1));  // swipe right → prev
+    }, { passive: true });
   }
 
   /* ── Variant picker ── */
@@ -4813,7 +4924,25 @@ window.sxTocAddToCart = function() {
       var paneEmpty = car.querySelector('[data-sx-feat-pane-empty]');
       var fallback = pane ? pane.getAttribute('data-fallback') || '' : '';
       items.forEach(function(li) {
-        li.addEventListener('click', function() {
+        /* Mobile collapse: intercept pointerdown BEFORE the radio gets checked,
+           so we can detect "already checked" and cancel the click entirely. */
+        var _wasChecked = false;
+        li.addEventListener('pointerdown', function() {
+          var radio = li.previousElementSibling;
+          _wasChecked = !!(radio && radio.type === 'radio' && radio.checked && window.innerWidth <= 768);
+        });
+
+        li.addEventListener('click', function(e) {
+          if (_wasChecked) {
+            /* Already-open item tapped on mobile — uncheck to collapse */
+            e.preventDefault();
+            var radio = li.previousElementSibling;
+            if (radio) radio.checked = false;
+            li.classList.remove('is-active');
+            li.setAttribute('aria-selected', 'false');
+            _wasChecked = false;
+            return;
+          }
           items.forEach(function(x) {
             x.classList.remove('is-active');
             x.setAttribute('aria-selected', 'false');

@@ -24,9 +24,10 @@
   <div class="color-{{ section.settings.color_scheme }} gradient">
     <div class="blog">
       {%- if blog.articles.size > 0 and section.settings.enable_filtering_by_tags -%}
-        <div class="blog__head no-scrollbar">
+        <div class="container {{ section.settings.section_width }}">
+        <div class="blog__head">
           <div class="blog__filters">
-            <ul class="blog__filters-items list-unstyled h3">
+            <ul class="blog__filters-items list-unstyled">
 
               {%- liquid
                 assign all_tags_visible = true
@@ -48,23 +49,21 @@
               </li>
 
               {%- for tag in blog.all_tags -%}
-                {%- liquid
-                  assign tags_counter = 0
-                  assign tags_counter = tags_counter | plus: 1
-                -%}
+                {%- assign tag_label = tag | replace: '-', ' ' | capitalize -%}
 
                 {%- if current_tags contains tag -%}
                   <li class='blog__filters-item is-active'>
-                    <span>{{- tag -}}</span>
+                    <span>{{- tag_label -}}</span>
                   </li>
                 {%- else -%}
                   <li class='blog__filters-item'>
-                    {{- tag | link_to_tag: tag -}}
+                    {{ tag_label | link_to_tag: tag }}
                   </li>
                 {%- endif -%}
               {%- endfor -%}
             </ul>
           </div>
+        </div>
         </div>
       {%- endif -%}
       <div class="container {{ section.settings.section_width }}">
@@ -114,6 +113,55 @@
     </div>
   </div>
 {%- endpaginate -%}
+
+{% if blog.articles.size > 0 %}
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": {{ shop.url | append: blog.url | append: '/#blog' | json }},
+    "name": {{ blog.title | json }},
+    {% if blog.metafields.global.description_tag != blank %}
+      "description": {{ blog.metafields.global.description_tag | json }},
+    {% endif %}
+    "url": {{ shop.url | append: blog.url | json }},
+    "blogPost": [
+      {% for article in blog.articles limit: 20 %}
+        {
+          "@type": "BlogPosting",
+          "@id": {{ shop.url | append: article.url | append: '/#article' | json }},
+          "headline": {{ article.title | json }},
+          "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
+          "url": {{ shop.url | append: article.url | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    ],
+    "publisher": {
+      "@id": "{{ shop.url }}/#organization"
+    }
+  }
+</script>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": {{ 'theme.breadcrumb.home' | t | json }},
+        "item": {{ shop.url | json }}
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": {{ blog.title | json }}
+      }
+    ]
+  }
+</script>
+{% endif %}
 
 {% schema %}
 {

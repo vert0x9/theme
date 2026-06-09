@@ -602,6 +602,28 @@
   .bfc-ew-result-price { text-align: left; }
   .bfc-ew-lookup-card { padding: 22px 20px 20px; }
 }
+
+/* ── DISCLAIMER ─────────────────────────────── */
+.bfc-ew-disclaimer {
+  margin-top: 64px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(32,32,9,0.1);
+}
+.bfc-ew-disclaimer-ey {
+  display: block;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(32,32,9,0.4);
+  margin-bottom: 16px;
+}
+.bfc-ew-disclaimer-body {
+  font-size: 11.5px;
+  line-height: 1.75;
+  color: rgba(32,32,9,0.5);
+}
+.bfc-ew-disclaimer-body p { margin: 0 0 10px; }
+.bfc-ew-disclaimer-body p:last-child { margin-bottom: 0; }
+.bfc-ew-disclaimer-body strong { color: rgba(32,32,9,0.7); font-weight: 600; }
 {% endstyle %}
 
 <div class="bfc-ew">
@@ -643,6 +665,12 @@
           <span class="bfc-ew-warning-rule-num">03</span>
           <div class="bfc-ew-warning-rule-body">
             <strong>Coverage starts from the camera purchase date.</strong> The extension is added to the date you bought the camera, not the date you bought the warranty. A +6 month extension on a camera bought 20 days ago gives you 6 additional months from the original purchase.
+          </div>
+        </li>
+        <li>
+          <span class="bfc-ew-warning-rule-num">04</span>
+          <div class="bfc-ew-warning-rule-body">
+            <strong>No cosmetic coverage.</strong> Extended warranties cover mechanical and electrical defects only. Scratches, dents, finish wear, brassing, leatherette condition, and all other cosmetic issues are <strong>not covered</strong> under any BFC warranty.
           </div>
         </li>
       </ol>
@@ -767,7 +795,7 @@
         </button>
       </div>
       <div class="bfc-ew-result-note">
-        Coverage activates the day your original warranty ends. Extends mechanical &amp; electrical defect coverage for the chosen duration.
+        Coverage activates the day your original warranty ends. Covers mechanical &amp; electrical defects only. Cosmetic issues are not covered under any BFC warranty.
       </div>
     </div>
 
@@ -816,6 +844,19 @@
         </div>
       </div>
     {%- endif -%}
+
+    {%- comment -%} ── DISCLAIMER ── {%- endcomment -%}
+    <div class="bfc-ew-disclaimer">
+      <span class="bfc-ew-disclaimer-ey">Warranty Disclaimer</span>
+      <div class="bfc-ew-disclaimer-body">
+        <p><strong>Mechanical and electrical defects only.</strong> BFC extended warranties cover mechanical and electrical failures under normal use. Coverage does not extend to cosmetic issues of any kind, including but not limited to scratches, dents, dings, finish wear, brassing, paint loss, leatherette condition, viewfinder dust, or any other aesthetic deterioration.</p>
+        <p><strong>Eligibility.</strong> Extended warranties are available exclusively for cameras purchased directly from Brooklyn Film Camera. Coverage must be purchased within 30 days of the original camera purchase date. Warranties are non-transferable and apply only to the original purchaser.</p>
+        <p><strong>Coverage period.</strong> The extended warranty period begins on the date of the original camera purchase, not the date the extended warranty was purchased. Coverage is additive to the included base warranty (6 months for SLR/Rangefinder, Medium Format, Polaroid/SX-70, and Super 8; 3 months for Point &amp; Shoot).</p>
+        <p><strong>Exclusions.</strong> Coverage does not apply to damage resulting from modifications, unauthorized repairs, or use of incompatible film, batteries, or accessories. Film-related failures (light leaks, advance issues attributable to film load) are evaluated on a case-by-case basis.</p>
+        <p><strong>Service.</strong> All warranty service must be performed by Brooklyn Film Camera. Repairs performed by third parties void remaining coverage. BFC reserves the right to repair or replace a covered camera at its discretion.</p>
+        <p>For questions about coverage eligibility or to initiate a warranty claim, contact us at <a href="mailto:info@brooklynfilmcamera.com" style="color:var(--or);text-decoration:none;">info@brooklynfilmcamera.com</a>.</p>
+      </div>
+    </div>
 
   </div>
 </div>

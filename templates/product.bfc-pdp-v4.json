@@ -100,7 +100,7 @@
             "variant_id": "",
             "discount_percent": 15,
             "is_developing": false,
-            "is_starter_kit": true
+            "is_starter_kit": false
           }
         },
         "kit_strap": {
@@ -113,7 +113,7 @@
             "variant_id": "",
             "discount_percent": 10,
             "is_developing": false,
-            "is_starter_kit": false
+            "is_starter_kit": true
           }
         },
         "kit_item_M9nYQq": {
@@ -240,7 +240,8 @@
         "kit_item_MGdxpT"
       ],
       "settings": {
-        "also_collection": "slr-other"
+        "also_collection": "slr-other",
+        "restoration_prose": ""
       }
     },
     "17735047409f77fd41": {
