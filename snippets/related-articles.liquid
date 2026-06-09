@@ -1,0 +1,145 @@
+{% comment %}
+  snippets/related-articles.liquid
+  Renders up to 3 other articles from the same blog, excluding the current one.
+  Expects: article, blog (pass from main-article: {% render 'related-articles', article: article, blog: blog %})
+  Outputs nothing if blog has fewer than 2 articles or objects are missing.
+{% endcomment %}
+
+{%- if blog and article and blog.articles_count > 1 -%}
+  {%- assign related_count = 0 -%}
+  {%- capture related_cards -%}
+    {%- for related in blog.articles limit: 8 -%}
+      {%- if related.id != article.id and related_count < 3 -%}
+        {%- assign related_count = related_count | plus: 1 -%}
+        <a class="bfc-related-card" href="{{ related.url }}">
+          {%- if related.image -%}
+            <div class="bfc-related-img-wrap">
+              <img
+                class="bfc-related-img"
+                src="{{ related.image | image_url: width: 600 }}"
+                srcset="{{ related.image | image_url: width: 400 }} 400w, {{ related.image | image_url: width: 600 }} 600w, {{ related.image | image_url: width: 800 }} 800w"
+                sizes="(max-width: 640px) 100vw, 33vw"
+                alt="{{ related.image.alt | default: related.title | escape }}"
+                loading="lazy"
+                width="600"
+                height="400">
+            </div>
+          {%- endif -%}
+          <p class="bfc-related-date">{{ related.published_at | date: '%B %-d, %Y' }}</p>
+          <p class="bfc-related-title">{{ related.title | escape }}</p>
+          {%- if related.excerpt != blank -%}
+            <p class="bfc-related-excerpt">{{ related.excerpt | strip_html | truncate: 110 }}</p>
+          {%- endif -%}
+          <span class="bfc-related-cta">Read More</span>
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- if related_count > 0 -%}
+    <section class="bfc-related" aria-label="Related articles">
+      <p class="bfc-related-eyebrow">Keep Reading</p>
+      <h2 class="bfc-related-heading">More From the Blog</h2>
+      <div class="bfc-related-grid">
+        {{ related_cards }}
+      </div>
+    </section>
+
+    <style>
+      .bfc-related {
+        max-width: 1100px;
+        margin: 64px auto 48px;
+        padding: 48px 24px 0;
+        border-top: 1px solid var(--bk, #202009);
+      }
+      .bfc-related-eyebrow {
+        margin: 0 0 8px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 12px;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        color: var(--bk, #202009);
+        opacity: .7;
+        text-align: center;
+      }
+      .bfc-related-heading {
+        margin: 0 0 32px;
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-weight: 500;
+        font-size: clamp(28px, 4vw, 42px);
+        line-height: 1.1;
+        color: var(--bk, #202009);
+        text-align: center;
+      }
+      .bfc-related-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+      .bfc-related-card {
+        display: flex;
+        flex-direction: column;
+        background: var(--cv, #F8F6EE);
+        border: 1px solid var(--bk, #202009);
+        padding: 12px;
+        text-decoration: none;
+        color: var(--bk, #202009);
+        transition: transform .15s ease;
+      }
+      .bfc-related-card:hover {
+        transform: translateY(-2px);
+      }
+      .bfc-related-img-wrap {
+        aspect-ratio: 1.5;
+        overflow: hidden;
+        margin-bottom: 12px;
+      }
+      .bfc-related-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .bfc-related-date {
+        margin: 0 0 4px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 11px;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        opacity: .6;
+      }
+      .bfc-related-title {
+        margin: 0 0 8px;
+        font-family: 'Cormorant Garamond', Georgia, serif;
+        font-weight: 600;
+        font-size: 22px;
+        line-height: 1.2;
+      }
+      .bfc-related-excerpt {
+        margin: 0 0 12px;
+        font-family: 'Poppins', sans-serif;
+        font-size: 13px;
+        line-height: 1.5;
+        opacity: .8;
+      }
+      .bfc-related-cta {
+        margin-top: auto;
+        font-family: 'Poppins', sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        color: var(--or, #E36E15);
+      }
+      @media (max-width: 640px) {
+        .bfc-related-grid {
+          grid-template-columns: 1fr;
+        }
+        .bfc-related {
+          margin-top: 40px;
+          padding-top: 32px;
+        }
+      }
+    </style>
+  {%- endif -%}
+{%- endif -%}
