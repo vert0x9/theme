@@ -3,7 +3,8 @@
 {%- comment -%}
   Resolve author identity once; shared by the visible card and the JSON-LD.
   Name always comes from the article's native Author field (article.author).
-  Bio + socials come from metafields, else a curated map keyed on that name.
+  Bio + socials: article metafields first, else the default about-us roster
+  in the 'author-directory' snippet, else (no author) the shop fallback.
 {%- endcomment -%}
 {%- liquid
   assign mf = article.metafields.custom
@@ -21,23 +22,18 @@
     assign author_instagram = mf.author_instagram.value | default: ''
     assign author_url = mf.author_website.value | default: ''
     assign author_url_label = mf.author_website_label.value | default: ''
-  elsif author_key contains 'hannah'
-    assign author_bio = 'Hannah manages social media, design, and events planning. She enjoys tactile forms of creation just as much as she loves pushing pixels.'
-    assign author_instagram = 'https://www.instagram.com/hannahleahy__'
-  elsif author_key contains 'dan'
-    assign author_bio = 'Dan Hureira is a photographer and music enthusiast. He throws parties and produces music as part of his record label Bouquet, and is one of the many faces you will see behind the counter at BFC.'
-    assign author_instagram = 'https://www.instagram.com/ifeellikedan'
-  elsif author_key contains 'taylor'
-    assign author_bio = 'Taylor is a freelance camera assistant, graphic designer, and lens tech at BFC. There is an art to fixing something broken — restoring a lens, cleaning out the years, and revealing what was always there.'
-    assign author_instagram = 'https://www.instagram.com/filmsbytaylor/'
-  elsif author_key contains 'james'
-    assign author_bio = 'James was formally trained in film camera repair by some of the last factory-trained film camera technicians in the world during his tenure at Nippon Photo Clinic Inc. These days he tends to fix more cameras than he breaks.'
-    assign author_instagram = 'https://www.instagram.com/the_whitest_latino/'
-  elsif author_key contains 'sydney' or author_key contains 'syd'
-    assign author_bio = 'Sydney Task (also known as Syd) is a photographer, filmmaker, animator, and serial hobbyist. When not clerking at BFC, she might be rock climbing, learning the banjo, or roaming the streets with a camera in hand.'
-    assign author_instagram = 'https://www.instagram.com/sydneytask/'
-  elsif author_key contains 'mitch'
-    assign author_bio = 'Mitch has been involved in the film photography world since joining the Impossible Project in 2014, and is now the lead camera buyer for BFC.'
+  else
+    capture author_dir
+      render 'author-directory', author_key: author_key
+    endcapture
+    assign author_dir = author_dir | strip
+    if author_dir != ''
+      assign author_parts = author_dir | split: '~~~'
+      assign author_bio = author_parts[0] | default: ''
+      assign author_instagram = author_parts[1] | default: ''
+      assign author_url = author_parts[2] | default: ''
+      assign author_url_label = author_parts[3] | default: ''
+    endif
   endif
 
   comment
