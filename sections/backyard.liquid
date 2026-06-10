@@ -87,8 +87,18 @@
     max-width: 640px;
     margin: 0 auto 2.5rem;
   }
+  .bfc4-by-hero__confirm {
+    margin-top: 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--go);
+    opacity: 0;
+    transition: opacity 0.3s;
+    min-height: 1.25rem;
+  }
   .bfc4-by-cta {
     display: inline-block;
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
     font-size: 1rem;
     letter-spacing: 0.08em;
@@ -334,7 +344,8 @@
       <p class="bfc4-by-hero__tag">{{ section.settings.hero_tag }}</p>
       <h1 class="bfc4-by-hero__title">{{ section.settings.hero_title }}</h1>
       <p class="bfc4-by-hero__sub">{{ section.settings.hero_subtitle }}</p>
-      <a href="{{ section.settings.form_url | default: 'https://docs.google.com/forms/d/1dOn6EIQ-MlE0KvOHVDVfTzCN1tQq5FfU18IoaGoOsy0/viewform' }}" target="_blank" rel="noopener" class="bfc4-by-cta">{{ section.settings.hero_cta }}</a>
+      <button type="button" class="bfc4-by-cta bfc-copy-email" data-email="{{ section.settings.contact_email }}">{{ section.settings.hero_cta }}</button>
+      <p class="bfc4-by-hero__confirm" data-copy-confirm>Copied to clipboard!</p>
     </div>
   </section>
 
@@ -389,7 +400,7 @@
       <p class="bfc4-by-body">{{ section.settings.rev_body }}</p>
       <div class="bfc4-by-revsplit__cta-row">
         <span class="bfc4-by-revsplit__cta-label">{{ section.settings.rev_cta }}</span>
-        <button type="button" class="bfc4-by-cta bfc4-by-cta--green bfc-copy-email" data-email="coco@brooklynfilmcamera.com">
+        <button type="button" class="bfc4-by-cta bfc4-by-cta--green bfc-copy-email" data-email="{{ section.settings.contact_email }}">
           Copy Email
         </button>
       </div>
@@ -398,13 +409,13 @@
 
   <!-- ══════ CONTACT ══════ -->
   <section class="bfc4-by-contact" id="bfc-backyard-inquire">
-    <p class="bfc4-by-tag">Prefer Email?</p>
+    <p class="bfc4-by-tag">Get In Touch</p>
     <h2 class="bfc4-by-heading">Reach Out Directly</h2>
     <div class="bfc4-by-divider bfc4-by-divider--center"></div>
     <p class="bfc4-by-body" style="margin: 0 auto 2.5rem;">
-      If filling out a form isn't your thing, email our events coordinator directly. Tell us about your event, your preferred date, and any special requirements.
+      Email our events coordinator directly. Tell us about your event, your preferred date, and any special requirements, and we'll get back to you within a couple of business days.
     </p>
-    <button type="button" class="bfc4-by-cta bfc-copy-email" id="bfc-copy-email" data-email="coco@brooklynfilmcamera.com">
+    <button type="button" class="bfc4-by-cta bfc-copy-email" id="bfc-copy-email" data-email="{{ section.settings.contact_email }}">
       Copy Email Address
     </button>
     <p id="bfc-copy-confirm" style="margin-top:1rem;font-size:0.95rem;font-weight:500;color:var(--or);opacity:0;transition:opacity 0.3s;">
@@ -436,21 +447,49 @@
       }
     }
 
-    /* Copy email (handles all .bfc-copy-email buttons) */
+    /* Copy email (handles all .bfc-copy-email buttons across the page) */
     var copyBtns = document.querySelectorAll('.bfc-copy-email');
     copyBtns.forEach(function(btn) {
       var originalText = btn.textContent.trim();
       btn.addEventListener('click', function() {
         var email = btn.getAttribute('data-email');
-        navigator.clipboard.writeText(email).then(function() {
+        if (!email) return;
+
+        var doCopy = function() {
           btn.textContent = 'Copied!';
-          var msg = document.getElementById('bfc-copy-confirm');
-          if (msg) msg.style.opacity = '1';
+
+          /* Show the main contact-section confirm if this is that button */
+          var globalMsg = document.getElementById('bfc-copy-confirm');
+          if (globalMsg && btn.id === 'bfc-copy-email') globalMsg.style.opacity = '1';
+
+          /* Show the hero confirm if this button is inside the hero */
+          var heroConfirm = btn.parentElement && btn.parentElement.querySelector('[data-copy-confirm]');
+          if (heroConfirm) heroConfirm.style.opacity = '1';
+
           setTimeout(function() {
             btn.textContent = originalText;
-            if (msg) msg.style.opacity = '0';
+            if (globalMsg && btn.id === 'bfc-copy-email') globalMsg.style.opacity = '0';
+            if (heroConfirm) heroConfirm.style.opacity = '0';
           }, 2500);
-        });
+        };
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(email).then(doCopy).catch(function() {
+            /* Fallback if clipboard API is blocked */
+            var ta = document.createElement('textarea');
+            ta.value = email;
+            ta.setAttribute('readonly', '');
+            ta.style.position = 'absolute';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand('copy'); } catch (e) {}
+            document.body.removeChild(ta);
+            doCopy();
+          });
+        } else {
+          doCopy();
+        }
       });
     });
   });
@@ -464,13 +503,18 @@
   "settings": [
     {
       "type": "header",
-      "content": "Hero"
+      "content": "Contact"
     },
     {
-      "type": "url",
-      "id": "form_url",
-      "label": "Inquiry form URL",
-      "info": "Google Form (or any URL) used by the hero and revenue-split CTAs. Opens in a new tab."
+      "type": "text",
+      "id": "contact_email",
+      "label": "Contact email",
+      "default": "coco@brooklynfilmcamera.com",
+      "info": "All Copy Email buttons across the page copy this address to the clipboard."
+    },
+    {
+      "type": "header",
+      "content": "Hero"
     },
     {
       "type": "select",
@@ -532,8 +576,9 @@
     {
       "type": "text",
       "id": "hero_cta",
-      "label": "CTA text",
-      "default": "Inquire About Your Event"
+      "label": "CTA button text",
+      "default": "Email Us About Your Event",
+      "info": "Clicking this button copies the contact email to the visitor's clipboard."
     },
     {
       "type": "header",
@@ -549,7 +594,7 @@
       "type": "textarea",
       "id": "overview_body",
       "label": "Description",
-      "default": "A versatile, open-air space tucked behind our Grand Street storefront. Whether you're throwing a birthday, hosting a pop-up, or organizing a creative workshop, The Backyard brings the atmosphere — you bring the vision."
+      "default": "A versatile, open-air space tucked behind our Grand Street storefront. Whether you're throwing a birthday, hosting a pop-up, or organizing a creative workshop, The Backyard brings the atmosphere. You bring the vision."
     },
     {
       "type": "text",
@@ -589,7 +634,7 @@
       "type": "textarea",
       "id": "rate_note",
       "label": "Sliding scale note",
-      "default": "Sliding scale options available depending on the type of event and amount of space used. We're happy to work with you — reach out and let's figure out a rate that fits."
+      "default": "Sliding scale options available depending on the type of event and amount of space used. We're happy to work with you. Reach out and let's figure out a rate that fits."
     },
     {
       "type": "textarea",
@@ -653,7 +698,7 @@
           "type": "textarea",
           "id": "description",
           "label": "Description",
-          "default": "Birthdays, milestones, celebrations — an unforgettable Brooklyn setting."
+          "default": "Birthdays, milestones, celebrations. An unforgettable Brooklyn setting."
         }
       ]
     }
@@ -669,7 +714,7 @@
           "type": "use_case",
           "settings": {
             "title": "Private Parties",
-            "description": "Birthdays, milestones, celebrations — an unforgettable Brooklyn setting."
+            "description": "Birthdays, milestones, celebrations. An unforgettable Brooklyn setting."
           }
         },
         {
@@ -683,14 +728,14 @@
           "type": "use_case",
           "settings": {
             "title": "Workshops & Classes",
-            "description": "Photography walks, art workshops, skill shares — creative energy on tap."
+            "description": "Photography walks, art workshops, skill shares. Creative energy on tap."
           }
         },
         {
           "type": "use_case",
           "settings": {
             "title": "Community Events",
-            "description": "Meetups, screenings, listening parties — bring your people together."
+            "description": "Meetups, screenings, listening parties. Bring your people together."
           }
         }
       ]
