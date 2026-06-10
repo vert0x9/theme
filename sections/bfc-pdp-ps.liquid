@@ -444,45 +444,26 @@
   endfor
 -%}
 
-{%- comment -%} ── System Compatibility matches (system_compatibility metafield) ──
-     Mirrors V4's auto-inject: any product in lenses-and-accessories sharing a
-     compatibility tag with this camera (different product type, not already a
-     kit_item block on this page) gets pulled in automatically. Count + type
-     list computed once here, reused by the top flag (3b) and the auto column
+{%- comment -%} ── Complementary products (Shopify Search & Discovery) ──
+     Direct product references set per product in Admin: product page →
+     Complementary products (or via the Search & Discovery app), max 10.
+     Set these ON THE CAMERA pointing to its accessories. No collection
+     dependency, no tag matching, no 50-product loop cap. Count + type list
+     computed once here, reused by the top flag (3b) and the auto column
      in Mix & Match. {%- endcomment -%}
-{%- assign compat_tags = product.metafields.custom.system_compatibility.value -%}
+{%- assign compat_products = product.metafields['shopify--discovery--product_recommendation']['complementary_products'].value -%}
 {%- assign compat_count = 0 -%}
 {%- assign compat_types = '' -%}
-{%- if compat_tags != blank -%}
-  {%- assign compat_collection = collections['lenses-and-accessories'] | default: collections.all -%}
-  {%- assign compat_block_handles = '' -%}
-  {%- for block in sk_blocks -%}
-    {%- if block.settings.product != blank -%}
-      {%- if block.settings.only_show_for == blank or block.settings.only_show_for.handle == product.handle -%}
-        {%- assign compat_block_handles = compat_block_handles | append: block.settings.product.handle | append: '||' -%}
-      {%- endif -%}
-    {%- endif -%}
-  {%- endfor -%}
-  {%- for cp in compat_collection.products -%}
-    {%- if cp.id == product.id -%}{%- continue -%}{%- endif -%}
-    {%- comment -%} Exclude same product type (don't show cameras as accessories for cameras) {%- endcomment -%}
-    {%- if cp.type == product.type -%}{%- continue -%}{%- endif -%}
-    {%- if compat_block_handles contains cp.handle -%}{%- continue -%}{%- endif -%}
-    {%- assign cp_compat = cp.metafields.custom.system_compatibility.value -%}
-    {%- if cp_compat == blank -%}{%- continue -%}{%- endif -%}
-    {%- assign compat_matched = false -%}
-    {%- for tag in compat_tags -%}
-      {%- if cp_compat contains tag -%}{%- assign compat_matched = true -%}{%- break -%}{%- endif -%}
-    {%- endfor -%}
-    {%- if compat_matched -%}
-      {%- assign compat_count = compat_count | plus: 1 -%}
-      {%- if cp.type != blank -%}
-        {%- unless compat_types contains cp.type -%}
-          {%- if compat_types == '' -%}{%- assign compat_types = cp.type -%}
-          {%- else -%}{%- assign compat_types = compat_types | append: '||' | append: cp.type -%}
-          {%- endif -%}
-        {%- endunless -%}
-      {%- endif -%}
+{%- if compat_products != blank -%}
+  {%- for cp in compat_products -%}
+    {%- if cp == blank or cp.id == product.id -%}{%- continue -%}{%- endif -%}
+    {%- assign compat_count = compat_count | plus: 1 -%}
+    {%- if cp.type != blank -%}
+      {%- unless compat_types contains cp.type -%}
+        {%- if compat_types == '' -%}{%- assign compat_types = cp.type -%}
+        {%- else -%}{%- assign compat_types = compat_types | append: '||' | append: cp.type -%}
+        {%- endif -%}
+      {%- endunless -%}
     {%- endif -%}
   {%- endfor -%}
 {%- endif -%}
@@ -1263,9 +1244,9 @@
       {%- endfor -%}
 
       {%- comment -%} ── AUTO COLUMN: For This Camera ──
-           Auto-injected via system_compatibility metafield, same matching logic
-           as V4's More column. Cards reuse ba-mini-card markup so baMiniSelect,
-           baMiniSelectVar, baOpenPopup, and baUpdateColCounts all work as-is. {%- endcomment -%}
+           Built from the camera's Complementary products (Search & Discovery).
+           Cards reuse ba-mini-card markup so baMiniSelect, baMiniSelectVar,
+           baOpenPopup, and baUpdateColCounts all work as-is. {%- endcomment -%}
       {%- if compat_count > 0 -%}
         <div class="ba-col is-compat" id="bfc4-col-compat" data-col-name="System">
           <div class="ba-col-head" onclick="baToggleCol(this.closest('.ba-col'))">
@@ -1277,17 +1258,8 @@
           </div>
           <div class="ba-col-body">
           {%- assign compat_item_index = 0 -%}
-          {%- for cp in compat_collection.products -%}
-            {%- if cp.id == product.id -%}{%- continue -%}{%- endif -%}
-            {%- if cp.type == product.type -%}{%- continue -%}{%- endif -%}
-            {%- if compat_block_handles contains cp.handle -%}{%- continue -%}{%- endif -%}
-            {%- assign cp_compat = cp.metafields.custom.system_compatibility.value -%}
-            {%- if cp_compat == blank -%}{%- continue -%}{%- endif -%}
-            {%- assign compat_matched = false -%}
-            {%- for tag in compat_tags -%}
-              {%- if cp_compat contains tag -%}{%- assign compat_matched = true -%}{%- break -%}{%- endif -%}
-            {%- endfor -%}
-            {%- unless compat_matched -%}{%- continue -%}{%- endunless -%}
+          {%- for cp in compat_products -%}
+            {%- if cp == blank or cp.id == product.id -%}{%- continue -%}{%- endif -%}
 
             {%- assign compat_item_index = compat_item_index | plus: 1 -%}
             {%- assign auto_cat_id = 'ba-auto-' | append: cp.id -%}
