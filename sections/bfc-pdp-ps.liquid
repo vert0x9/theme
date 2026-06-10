@@ -392,6 +392,21 @@
 .bfc4 .bfc4-desc-toggle{font-size:13px;padding:8px 0}
 .bfc4 .bfc4-crumbs{font-size:9.5px}
 }
+/* ── System compatibility flag (top, near kit tiles) ── */
+.bfc4 .bfc4-compat-flag{display:flex;align-items:center;gap:10px;width:100%;background:#fff;border:1px solid rgba(32,32,9,0.12);border-left:3px solid var(--or);padding:10px 14px;cursor:pointer;font-family:var(--sn);text-align:left;transition:border-color var(--t),background var(--t)}
+.bfc4 .bfc4-compat-flag:hover{border-color:var(--or);background:rgba(227,110,21,0.03)}
+.bfc4 .bfc4-compat-flag-icon{width:26px;height:26px;background:rgba(227,110,21,0.08);color:var(--or);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bfc4 .bfc4-compat-flag-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.bfc4 .bfc4-compat-flag-title{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--bk)}
+.bfc4 .bfc4-compat-flag-sub{font-size:10.5px;color:var(--ch);line-height:1.4}
+.bfc4 .bfc4-compat-flag-cta{font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--or);flex-shrink:0;white-space:nowrap}
+/* ── Auto compat column accent in Mix & Match ── */
+.bfc4 .ba-col.is-compat{border-color:rgba(227,110,21,0.45)}
+.bfc4 .ba-col.is-compat .ba-col-title{color:var(--or)}
+@media (max-width:900px){
+.bfc4 .bfc4-compat-flag{padding:10px 12px}
+.bfc4 .bfc4-compat-flag-sub{font-size:11px}
+}
 </style>
 
 <main id="bfc4-main" aria-label="{{ product.title | escape }} product page">
@@ -428,6 +443,50 @@
     endif
   endfor
 -%}
+
+{%- comment -%} ── System Compatibility matches (system_compatibility metafield) ──
+     Mirrors V4's auto-inject: any product in lenses-and-accessories sharing a
+     compatibility tag with this camera (different product type, not already a
+     kit_item block on this page) gets pulled in automatically. Count + type
+     list computed once here, reused by the top flag (3b) and the auto column
+     in Mix & Match. {%- endcomment -%}
+{%- assign compat_tags = product.metafields.custom.system_compatibility.value -%}
+{%- assign compat_count = 0 -%}
+{%- assign compat_types = '' -%}
+{%- if compat_tags != blank -%}
+  {%- assign compat_collection = collections['lenses-and-accessories'] | default: collections.all -%}
+  {%- assign compat_block_handles = '' -%}
+  {%- for block in sk_blocks -%}
+    {%- if block.settings.product != blank -%}
+      {%- if block.settings.only_show_for == blank or block.settings.only_show_for.handle == product.handle -%}
+        {%- assign compat_block_handles = compat_block_handles | append: block.settings.product.handle | append: '||' -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- for cp in compat_collection.products -%}
+    {%- if cp.id == product.id -%}{%- continue -%}{%- endif -%}
+    {%- comment -%} Exclude same product type (don't show cameras as accessories for cameras) {%- endcomment -%}
+    {%- if cp.type == product.type -%}{%- continue -%}{%- endif -%}
+    {%- if compat_block_handles contains cp.handle -%}{%- continue -%}{%- endif -%}
+    {%- assign cp_compat = cp.metafields.custom.system_compatibility.value -%}
+    {%- if cp_compat == blank -%}{%- continue -%}{%- endif -%}
+    {%- assign compat_matched = false -%}
+    {%- for tag in compat_tags -%}
+      {%- if cp_compat contains tag -%}{%- assign compat_matched = true -%}{%- break -%}{%- endif -%}
+    {%- endfor -%}
+    {%- if compat_matched -%}
+      {%- assign compat_count = compat_count | plus: 1 -%}
+      {%- if cp.type != blank -%}
+        {%- unless compat_types contains cp.type -%}
+          {%- if compat_types == '' -%}{%- assign compat_types = cp.type -%}
+          {%- else -%}{%- assign compat_types = compat_types | append: '||' | append: cp.type -%}
+          {%- endif -%}
+        {%- endunless -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+{%- assign compat_type_arr = compat_types | split: '||' -%}
 
 {%- comment -%} ── SPLIT: left image + right content ── {%- endcomment -%}
 <div class="bfc4-split">
@@ -669,6 +728,21 @@
         ></div>
       {%- endfor -%}
     </div>
+
+    {%- comment -%} 3b. System compatibility flag — only renders when compat matches exist.
+         Click scrolls to + flashes the auto compat column in Mix & Match. {%- endcomment -%}
+    {%- if compat_count > 0 -%}
+      <button type="button" class="bfc4-compat-flag" onclick="bfc4GoToCompat()" aria-label="View compatible system accessories for this camera">
+        <span class="bfc4-compat-flag-icon">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6.5 9.5L9.5 6.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M7.5 11.5L6 13C4.9 14.1 3.1 14.1 2 13C0.9 11.9 0.9 10.1 2 9L3.5 7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M8.5 4.5L10 3C11.1 1.9 12.9 1.9 14 3C15.1 4.1 15.1 5.9 14 7L12.5 8.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </span>
+        <span class="bfc4-compat-flag-text">
+          <span class="bfc4-compat-flag-title">Made for this camera</span>
+          <span class="bfc4-compat-flag-sub">{% if compat_type_arr.size > 0 %}{% for ct in compat_type_arr limit: 3 %}{{ ct }}{% unless forloop.last %}, {% endunless %}{% endfor %}{% if compat_type_arr.size > 3 %} and more{% endif %} available for this system{% else %}{{ compat_count }} compatible add-on{% if compat_count != 1 %}s{% endif %} available for this system{% endif %}</span>
+        </span>
+        <span class="bfc4-compat-flag-cta">View &rsaquo;</span>
+      </button>
+    {%- endif -%}
 
     {%- comment -%} 4. Grade selector (compact) + price + ATC {%- endcomment -%}
     <div class="bfc4-buy">
@@ -1187,6 +1261,122 @@
           </div>
         </div>
       {%- endfor -%}
+
+      {%- comment -%} ── AUTO COLUMN: For This Camera ──
+           Auto-injected via system_compatibility metafield, same matching logic
+           as V4's More column. Cards reuse ba-mini-card markup so baMiniSelect,
+           baMiniSelectVar, baOpenPopup, and baUpdateColCounts all work as-is. {%- endcomment -%}
+      {%- if compat_count > 0 -%}
+        <div class="ba-col is-compat" id="bfc4-col-compat" data-col-name="System">
+          <div class="ba-col-head" onclick="baToggleCol(this.closest('.ba-col'))">
+            <div class="ba-col-title">
+              For This Camera
+              <span class="ba-col-count" id="ba-col-count-compat">0</span>
+            </div>
+            <svg class="ba-col-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/></svg>
+          </div>
+          <div class="ba-col-body">
+          {%- assign compat_item_index = 0 -%}
+          {%- for cp in compat_collection.products -%}
+            {%- if cp.id == product.id -%}{%- continue -%}{%- endif -%}
+            {%- if cp.type == product.type -%}{%- continue -%}{%- endif -%}
+            {%- if compat_block_handles contains cp.handle -%}{%- continue -%}{%- endif -%}
+            {%- assign cp_compat = cp.metafields.custom.system_compatibility.value -%}
+            {%- if cp_compat == blank -%}{%- continue -%}{%- endif -%}
+            {%- assign compat_matched = false -%}
+            {%- for tag in compat_tags -%}
+              {%- if cp_compat contains tag -%}{%- assign compat_matched = true -%}{%- break -%}{%- endif -%}
+            {%- endfor -%}
+            {%- unless compat_matched -%}{%- continue -%}{%- endunless -%}
+
+            {%- assign compat_item_index = compat_item_index | plus: 1 -%}
+            {%- assign auto_cat_id = 'ba-auto-' | append: cp.id -%}
+            {%- assign cp_variant = cp.selected_or_first_available_variant -%}
+            {%- assign cp_show_variants = false -%}
+            {%- if cp.variants.size > 1 -%}{%- assign cp_show_variants = true -%}{%- endif -%}
+
+            {%- assign auto_popup_imgs = '' -%}
+            {%- for media in cp.media limit: 6 -%}
+              {%- if media.media_type == 'image' -%}
+                {%- assign aimg = media | image_url: width: 600 -%}
+                {%- if auto_popup_imgs == '' -%}{%- assign auto_popup_imgs = aimg -%}
+                {%- else -%}{%- assign auto_popup_imgs = auto_popup_imgs | append: '||' | append: aimg -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+
+            <div
+              class="ba-mini-card{% if compat_item_index > 2 %} is-hidden{% endif %}{% unless cp_variant.available %} is-oos{% endunless %}"
+              id="{{ auto_cat_id }}"
+              data-variant-id="{{ cp_variant.id }}"
+              data-product-id="{{ cp.id }}"
+              data-product-title="{{ cp.title | escape }}"
+              data-orig="{{ cp_variant.price }}"
+              data-sale="{{ cp_variant.price }}"
+              data-is-dev="false"
+              data-disc="0"
+              data-cat="{{ auto_cat_id }}"
+              data-col-id="bfc4-col-compat"
+              data-col-name="System"
+              data-starter="false"
+              data-auto-compat="true"
+              {% if cp_variant.available %}onclick="baMiniSelect(this, event)"{% endif %}
+            >
+              <div class="ba-mini-img-wrap">
+                {%- if cp.featured_image -%}
+                  <img class="ba-mini-img" src="{{ cp.featured_image | image_url: width: 400 }}" alt="{{ cp.title | escape }}" loading="lazy"/>
+                {%- else -%}
+                  <div class="ba-mini-img-ph"></div>
+                {%- endif -%}
+                {%- unless cp_variant.available -%}<span class="ba-mini-oos">Out of Stock</span>{%- endunless -%}
+                <button
+                  class="ba-mini-info-icon"
+                  onclick="event.stopPropagation(); baOpenPopup('{{ auto_cat_id }}')"
+                  aria-label="View details"
+                ><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><line x1="7" y1="6.5" x2="7" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="4" r="0.7" fill="currentColor"/></svg></button>
+              </div>
+              <div class="ba-mini-body">
+                <div class="ba-mini-info">
+                  <div class="ba-mini-name">{{ cp.title }}</div>
+                </div>
+                <div class="ba-mini-right">
+                  <span class="ba-mini-price">{{ cp_variant.price | money }}</span>
+                </div>
+              </div>
+              {%- if cp_show_variants -%}
+                <div class="ba-mini-vars" onclick="event.stopPropagation()">
+                  {%- for variant in cp.variants -%}
+                    {%- if variant.available -%}
+                      <button
+                        class="ba-mini-var-btn{% if forloop.first %} is-sel{% endif %}"
+                        data-variant-id="{{ variant.id }}"
+                        data-product-title="{{ cp.title | escape }}"
+                        data-orig="{{ variant.price }}"
+                        data-sale="{{ variant.price }}"
+                        data-is-dev="false"
+                        data-disc="0"
+                        data-cat="{{ auto_cat_id }}"
+                        onclick="baMiniSelectVar(this)"
+                      >{{ variant.title }} &ndash; {{ variant.price | money }}</button>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+            </div>
+            <div id="ba-popup-data-{{ auto_cat_id }}" style="display:none"
+              data-title="{{ cp.title | escape }}"
+              data-desc="{{ cp.description | strip_html | escape }}"
+              data-imgs="{{ auto_popup_imgs | escape }}"
+            ></div>
+          {%- endfor -%}
+          {%- if compat_count > 2 -%}
+            <button class="ba-col-more" onclick="event.stopPropagation(); baExpandCol(this.closest('.ba-col'))">
+              <span class="ba-col-more-text">{{ compat_count | minus: 2 }} more &rsaquo;</span>
+            </button>
+          {%- endif -%}
+          </div>
+        </div>
+      {%- endif -%}
     </div>
 
     {%- comment -%} Promo banners {%- endcomment -%}
@@ -1531,6 +1721,20 @@ setTimeout(function() { col.classList.remove('flash-highlight'); }, 1600);
 }
 });
 }, 600);
+};
+window.bfc4GoToCompat = function() {
+var col = document.getElementById('bfc4-col-compat');
+if (!col) {
+var customSec = document.getElementById('bfc4-custom');
+if (customSec) customSec.scrollIntoView({ behavior: 'smooth' });
+return;
+}
+col.scrollIntoView({ behavior: 'smooth', block: 'center' });
+setTimeout(function() {
+col.classList.add('is-open');
+col.classList.add('flash-highlight');
+setTimeout(function() { col.classList.remove('flash-highlight'); }, 1600);
+}, 500);
 };
 
   // ── Also in collection slider ─────────────────────────────────────────
