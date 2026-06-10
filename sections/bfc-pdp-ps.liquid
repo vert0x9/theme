@@ -440,50 +440,93 @@
   endfor
 -%}
 
-{%- comment -%} ── Complementary products (Shopify Search & Discovery) ──
-     Direct product references set per product in Admin: product page →
-     Complementary products (or via the Search & Discovery app), max 10.
-     Set these ON THE CAMERA pointing to its accessories. No collection
-     dependency, no tag matching, no 50-product loop cap. Count + type list
-     computed once here, reused by the top flag (3b) and the auto column
-     in Mix & Match. {%- endcomment -%}
-{%- assign compat_products = product.metafields['shopify--discovery--product_recommendation']['complementary_products'].value -%}
+{%- comment -%} ── COMPATIBLE ITEMS: two sources, one union ──
+     1) Complementary products (Search & Discovery): direct refs set on the
+        camera in admin, max 10. Always shown. Primary source.
+     2) system_compatibility metafield scan: any product in the scan collection
+        (section setting, falls back to 'accessory') whose system_compatibility
+        list shares a value with the camera's. Scales to big lens/accessory
+        selections without hand-picking. Excludes same product type.
+     Both deduped against each other and against kit_item blocks already on
+     the page. Featured pick (camera tile slot): first IN-STOCK item across
+     the union, upgraded to the first in-stock flash (type/title/tag contains
+     'flash'). Direct refs loop first, so they win flash ties.
+     NOTE: this filter chain is mirrored in the For This Camera column render
+     loop in Mix & Match. Change one, change both. {%- endcomment -%}
+{%- assign compat_direct = product.metafields['shopify--discovery--product_recommendation']['complementary_products'].value -%}
+{%- if compat_direct == blank -%}{%- assign compat_direct = '' | split: '' -%}{%- endif -%}
+{%- assign compat_direct_size = compat_direct.size -%}
+
+{%- assign compat_cam_tags = product.metafields.custom.system_compatibility.value -%}
+{%- assign compat_scan_col = section.settings.compat_collection -%}
+{%- if compat_scan_col.handle == blank -%}{%- assign compat_scan_col = collections['accessory'] -%}{%- endif -%}
+{%- if compat_scan_col.handle == blank -%}{%- assign compat_scan_col = collections['accessories'] -%}{%- endif -%}
+{%- if compat_scan_col.handle == blank -%}{%- assign compat_scan_col = collections['lenses-and-accessories'] -%}{%- endif -%}
+{%- assign compat_scan_products = '' | split: '' -%}
+{%- if compat_cam_tags != blank and compat_scan_col.handle != blank -%}
+  {%- assign compat_scan_products = compat_scan_col.products -%}
+{%- endif -%}
+{%- assign compat_union = compat_direct | concat: compat_scan_products -%}
+
+{%- comment -%} Handles of kit_item blocks already rendered on this page {%- endcomment -%}
+{%- assign compat_block_handles = '' -%}
+{%- for block in sk_blocks -%}
+  {%- if block.settings.product != blank -%}
+    {%- if block.settings.only_show_for == blank or block.settings.only_show_for.handle == product.handle -%}
+      {%- assign compat_block_handles = compat_block_handles | append: '|' | append: block.settings.product.handle | append: '|' -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+
 {%- assign compat_count = 0 -%}
 {%- assign compat_types = '' -%}
 {%- assign compat_featured = blank -%}
 {%- assign compat_flash_found = false -%}
-{%- if compat_products != blank -%}
-  {%- for cp in compat_products -%}
-    {%- if cp == blank or cp.id == product.id -%}{%- continue -%}{%- endif -%}
-    {%- assign compat_count = compat_count | plus: 1 -%}
-    {%- if cp.type != blank -%}
-      {%- unless compat_types contains cp.type -%}
-        {%- if compat_types == '' -%}{%- assign compat_types = cp.type -%}
-        {%- else -%}{%- assign compat_types = compat_types | append: '||' | append: cp.type -%}
-        {%- endif -%}
-      {%- endunless -%}
-    {%- endif -%}
-    {%- comment -%} Featured pick: first IN-STOCK item, upgraded to the first
-         in-stock flash if one shows up (type, title, or tag contains 'flash').
-         The featured item takes over the camera tile slot up top. {%- endcomment -%}
-    {%- if cp.available -%}
-      {%- assign cp_type_dc = cp.type | downcase -%}
-      {%- assign cp_title_dc = cp.title | downcase -%}
-      {%- assign cp_tags_dc = cp.tags | join: ',' | downcase -%}
-      {%- assign cp_is_flash = false -%}
-      {%- if cp_type_dc contains 'flash' or cp_title_dc contains 'flash' or cp_tags_dc contains 'flash' -%}
-        {%- assign cp_is_flash = true -%}
+{%- assign compat_seen = '' -%}
+{%- for cp in compat_union -%}
+  {%- if cp == blank or cp.id == product.id -%}{%- continue -%}{%- endif -%}
+  {%- assign cp_key = '|' | append: cp.id | append: '|' -%}
+  {%- if compat_seen contains cp_key -%}{%- continue -%}{%- endif -%}
+  {%- assign cp_block_key = '|' | append: cp.handle | append: '|' -%}
+  {%- if compat_block_handles contains cp_block_key -%}{%- continue -%}{%- endif -%}
+  {%- comment -%} Direct refs (first compat_direct_size items) always match.
+       Scanned items must share a system_compatibility value and differ in type. {%- endcomment -%}
+  {%- if forloop.index > compat_direct_size -%}
+    {%- if cp.type == product.type -%}{%- continue -%}{%- endif -%}
+    {%- assign cp_compat = cp.metafields.custom.system_compatibility.value -%}
+    {%- if cp_compat == blank -%}{%- continue -%}{%- endif -%}
+    {%- assign compat_matched = false -%}
+    {%- for tag in compat_cam_tags -%}
+      {%- if cp_compat contains tag -%}{%- assign compat_matched = true -%}{%- break -%}{%- endif -%}
+    {%- endfor -%}
+    {%- unless compat_matched -%}{%- continue -%}{%- endunless -%}
+  {%- endif -%}
+  {%- assign compat_seen = compat_seen | append: cp_key -%}
+  {%- assign compat_count = compat_count | plus: 1 -%}
+  {%- if cp.type != blank -%}
+    {%- unless compat_types contains cp.type -%}
+      {%- if compat_types == '' -%}{%- assign compat_types = cp.type -%}
+      {%- else -%}{%- assign compat_types = compat_types | append: '||' | append: cp.type -%}
       {%- endif -%}
-      {%- if compat_featured == blank -%}
-        {%- assign compat_featured = cp -%}
-        {%- if cp_is_flash -%}{%- assign compat_flash_found = true -%}{%- endif -%}
-      {%- elsif cp_is_flash and compat_flash_found == false -%}
-        {%- assign compat_featured = cp -%}
-        {%- assign compat_flash_found = true -%}
-      {%- endif -%}
+    {%- endunless -%}
+  {%- endif -%}
+  {%- if cp.available -%}
+    {%- assign cp_type_dc = cp.type | downcase -%}
+    {%- assign cp_title_dc = cp.title | downcase -%}
+    {%- assign cp_tags_dc = cp.tags | join: ',' | downcase -%}
+    {%- assign cp_is_flash = false -%}
+    {%- if cp_type_dc contains 'flash' or cp_title_dc contains 'flash' or cp_tags_dc contains 'flash' -%}
+      {%- assign cp_is_flash = true -%}
     {%- endif -%}
-  {%- endfor -%}
-{%- endif -%}
+    {%- if compat_featured == blank -%}
+      {%- assign compat_featured = cp -%}
+      {%- if cp_is_flash -%}{%- assign compat_flash_found = true -%}{%- endif -%}
+    {%- elsif cp_is_flash and compat_flash_found == false -%}
+      {%- assign compat_featured = cp -%}
+      {%- assign compat_flash_found = true -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
 {%- assign compat_type_arr = compat_types | split: '||' -%}
 {%- assign compat_more_count = compat_count -%}
 {%- if compat_featured != blank -%}{%- assign compat_more_count = compat_count | minus: 1 -%}{%- endif -%}
@@ -1320,8 +1363,26 @@
           </div>
           <div class="ba-col-body">
           {%- assign compat_item_index = 0 -%}
-          {%- for cp in compat_products -%}
+          {%- assign compat_seen_r = '' -%}
+          {%- comment -%} Same filter chain as the computation block up top (3b area).
+               Change one, change both. {%- endcomment -%}
+          {%- for cp in compat_union -%}
             {%- if cp == blank or cp.id == product.id -%}{%- continue -%}{%- endif -%}
+            {%- assign cp_key = '|' | append: cp.id | append: '|' -%}
+            {%- if compat_seen_r contains cp_key -%}{%- continue -%}{%- endif -%}
+            {%- assign cp_block_key = '|' | append: cp.handle | append: '|' -%}
+            {%- if compat_block_handles contains cp_block_key -%}{%- continue -%}{%- endif -%}
+            {%- if forloop.index > compat_direct_size -%}
+              {%- if cp.type == product.type -%}{%- continue -%}{%- endif -%}
+              {%- assign cp_compat = cp.metafields.custom.system_compatibility.value -%}
+              {%- if cp_compat == blank -%}{%- continue -%}{%- endif -%}
+              {%- assign compat_matched = false -%}
+              {%- for tag in compat_cam_tags -%}
+                {%- if cp_compat contains tag -%}{%- assign compat_matched = true -%}{%- break -%}{%- endif -%}
+              {%- endfor -%}
+              {%- unless compat_matched -%}{%- continue -%}{%- endunless -%}
+            {%- endif -%}
+            {%- assign compat_seen_r = compat_seen_r | append: cp_key -%}
 
             {%- assign compat_item_index = compat_item_index | plus: 1 -%}
             {%- assign auto_cat_id = 'ba-auto-' | append: cp.id -%}
@@ -2281,6 +2342,7 @@ if (stickyBar && mainAtc) {
   "tag": "div",
   "settings": [
 { "type": "collection", "id": "also_collection", "label": "'More cameras' collection" },
+{ "type": "collection", "id": "compat_collection", "label": "System compatibility scan collection", "info": "Scanned for products whose system_compatibility metafield matches this camera's. Falls back to the 'accessory' collection if blank. Complementary products (set on the product in admin) always show regardless." },
     { "type": "image_picker", "id": "slide_1", "label": "Hero slide 1" },
     { "type": "image_picker", "id": "slide_2", "label": "Hero slide 2" },
     { "type": "image_picker", "id": "slide_3", "label": "Hero slide 3" },
