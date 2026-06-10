@@ -20,6 +20,8 @@
   {%- endif -%}
 {%- endif -%}
 
+{%- comment -%} Order by last activity: recently updated or newly published first. updated_at >= published_at, so both surface at the top. {%- endcomment -%}
+{%- assign sorted_articles = blog.articles | sort: 'updated_at' | reverse -%}
 {%- paginate blog.articles by section.settings.articles_per_page -%}
   <div class="color-{{ section.settings.color_scheme }} gradient">
     <div class="blog">
@@ -85,7 +87,9 @@
             {% endif %}
             <div class="blog__articles-grid text-center{% if section.settings.pagination_style == 'load_more' and section.settings.enable_infinity_scroll %} infinity-scroll-active{% endif %}" id="product-grid">
               {%- liquid
-                for article in blog.articles
+                assign page_offset = paginate.current_page | minus: 1 | times: paginate.page_size
+                assign page_articles = sorted_articles | slice: page_offset, paginate.page_size
+                for article in page_articles
                   render 'card-article', article: article, class: 'blog__card-article', show_tags: section.settings.show_tags, show_date: section.settings.show_date, show_author: section.settings.show_author, show_excerpt: section.settings.show_excerpt, tags_count: section.settings.tags_count, content_alignment: section.settings.content_alignment
                 endfor
               -%}
