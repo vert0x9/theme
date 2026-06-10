@@ -392,20 +392,16 @@
 .bfc4 .bfc4-desc-toggle{font-size:13px;padding:8px 0}
 .bfc4 .bfc4-crumbs{font-size:9.5px}
 }
-/* ── System compatibility flag (top, near kit tiles) ── */
-.bfc4 .bfc4-compat-flag{display:flex;align-items:center;gap:10px;width:100%;background:#fff;border:1px solid rgba(32,32,9,0.12);border-left:3px solid var(--or);padding:10px 14px;cursor:pointer;font-family:var(--sn);text-align:left;transition:border-color var(--t),background var(--t)}
-.bfc4 .bfc4-compat-flag:hover{border-color:var(--or);background:rgba(227,110,21,0.03)}
-.bfc4 .bfc4-compat-flag-icon{width:26px;height:26px;background:rgba(227,110,21,0.08);color:var(--or);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.bfc4 .bfc4-compat-flag-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
-.bfc4 .bfc4-compat-flag-title{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--bk)}
-.bfc4 .bfc4-compat-flag-sub{font-size:10.5px;color:var(--ch);line-height:1.4}
-.bfc4 .bfc4-compat-flag-cta{font-size:9px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--or);flex-shrink:0;white-space:nowrap}
+/* ── More compatible items note (under kit tiles) ── */
+.bfc4 .bfc4-compat-more{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;background:none;border:none;cursor:pointer;font-family:var(--sn);font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--or);padding:0;margin-top:-10px;transition:opacity var(--t);text-align:left}
+.bfc4 .bfc4-compat-more:hover{opacity:0.7}
+.bfc4 .bfc4-compat-more svg{transition:transform var(--t)}
+.bfc4 .bfc4-compat-more:hover svg{transform:translateY(3px)}
 /* ── Auto compat column accent in Mix & Match ── */
 .bfc4 .ba-col.is-compat{border-color:rgba(227,110,21,0.45)}
 .bfc4 .ba-col.is-compat .ba-col-title{color:var(--or)}
 @media (max-width:900px){
-.bfc4 .bfc4-compat-flag{padding:10px 12px}
-.bfc4 .bfc4-compat-flag-sub{font-size:11px}
+.bfc4 .bfc4-compat-more{font-size:11px;margin-top:-12px}
 }
 </style>
 
@@ -454,6 +450,8 @@
 {%- assign compat_products = product.metafields['shopify--discovery--product_recommendation']['complementary_products'].value -%}
 {%- assign compat_count = 0 -%}
 {%- assign compat_types = '' -%}
+{%- assign compat_featured = blank -%}
+{%- assign compat_flash_found = false -%}
 {%- if compat_products != blank -%}
   {%- for cp in compat_products -%}
     {%- if cp == blank or cp.id == product.id -%}{%- continue -%}{%- endif -%}
@@ -465,9 +463,30 @@
         {%- endif -%}
       {%- endunless -%}
     {%- endif -%}
+    {%- comment -%} Featured pick: first IN-STOCK item, upgraded to the first
+         in-stock flash if one shows up (type, title, or tag contains 'flash').
+         The featured item takes over the camera tile slot up top. {%- endcomment -%}
+    {%- if cp.available -%}
+      {%- assign cp_type_dc = cp.type | downcase -%}
+      {%- assign cp_title_dc = cp.title | downcase -%}
+      {%- assign cp_tags_dc = cp.tags | join: ',' | downcase -%}
+      {%- assign cp_is_flash = false -%}
+      {%- if cp_type_dc contains 'flash' or cp_title_dc contains 'flash' or cp_tags_dc contains 'flash' -%}
+        {%- assign cp_is_flash = true -%}
+      {%- endif -%}
+      {%- if compat_featured == blank -%}
+        {%- assign compat_featured = cp -%}
+        {%- if cp_is_flash -%}{%- assign compat_flash_found = true -%}{%- endif -%}
+      {%- elsif cp_is_flash and compat_flash_found == false -%}
+        {%- assign compat_featured = cp -%}
+        {%- assign compat_flash_found = true -%}
+      {%- endif -%}
+    {%- endif -%}
   {%- endfor -%}
 {%- endif -%}
 {%- assign compat_type_arr = compat_types | split: '||' -%}
+{%- assign compat_more_count = compat_count -%}
+{%- if compat_featured != blank -%}{%- assign compat_more_count = compat_count | minus: 1 -%}{%- endif -%}
 
 {%- comment -%} ── SPLIT: left image + right content ── {%- endcomment -%}
 <div class="bfc4-split">
@@ -631,7 +650,55 @@
 
     {%- comment -%} 3. Starter kit tiles (pre-selected, orange border) + all selectable {%- endcomment -%}
     <div class="bfc4-tiles" id="bfc4-tiles" role="group" aria-label="Kit items">
-      {%- comment -%} Camera tile {%- endcomment -%}
+      {%- comment -%} Camera tile — swapped for the featured compatible accessory when one
+           exists (flash priority). The camera is already the whole page, so its tile
+           slot goes to the accessory instead. Pre-selected via is-sel so the init JS
+           folds it into the starter kit and the total automatically. {%- endcomment -%}
+      {%- if compat_featured != blank -%}
+        {%- assign cf_v = compat_featured.selected_or_first_available_variant -%}
+        {%- assign cf_popup_imgs = '' -%}
+        {%- for media in compat_featured.media limit: 6 -%}
+          {%- if media.media_type == 'image' -%}
+            {%- assign cf_img = media | image_url: width: 600 -%}
+            {%- if cf_popup_imgs == '' -%}{%- assign cf_popup_imgs = cf_img -%}
+            {%- else -%}{%- assign cf_popup_imgs = cf_popup_imgs | append: '||' | append: cf_img -%}
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+        <div class="bfc4-tile is-sel"
+          data-col="{{ compat_featured.type | default: 'Accessory' | escape }}"
+          data-tile-id="bfc4-tile-compat"
+          data-variant-id="{{ cf_v.id }}"
+          data-product-title="{{ compat_featured.title | escape }}"
+          data-orig="{{ cf_v.price | default: 0 }}"
+          data-sale="{{ cf_v.price | default: 0 }}"
+          data-is-dev="false"
+          data-disc="0"
+          data-img="{{ compat_featured.featured_image | image_url: width: 400 }}"
+          onclick="bfc4TileToggle(this)"
+        >
+          <div class="bfc4-tile-img-wrap">
+            {%- if compat_featured.featured_image -%}
+              <img src="{{ compat_featured.featured_image | image_url: width: 400 }}" alt="" role="presentation" loading="eager"/>
+            {%- endif -%}
+            <span class="bfc4-tile-cam-badge">Made for this camera</span>
+            <div class="bfc4-tile-sel-check">✓</div>
+            <button class="bfc4-tile-info" onclick="event.stopPropagation(); baOpenPopup('bfc4-tile-compat')" aria-label="More info">
+              <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><line x1="7" y1="6.5" x2="7" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="4" r="0.7" fill="currentColor"/></svg>
+            </button>
+          </div>
+          <div class="bfc4-tile-body">
+            <span class="bfc4-tile-label">{{ compat_featured.type | default: 'Accessory' }}</span>
+            <span class="bfc4-tile-name">{{ compat_featured.title }}</span>
+            <span class="bfc4-tile-price">{{ cf_v.price | money }}</span>
+          </div>
+        </div>
+        <div id="ba-popup-data-bfc4-tile-compat" style="display:none"
+          data-title="{{ compat_featured.title | escape }}"
+          data-desc="{{ compat_featured.description | strip_html | escape }}"
+          data-imgs="{{ cf_popup_imgs | escape }}"
+        ></div>
+      {%- else -%}
       <div class="bfc4-tile is-cam">
         <div class="bfc4-tile-img-wrap">
           {%- if product.featured_image -%}
@@ -645,6 +712,7 @@
           <span class="bfc4-tile-price" id="bfc4-cam-price">{{ current_variant.price | money }}</span>
         </div>
       </div>
+      {%- endif -%}
 
       {%- comment -%} Starter kit tiles only {%- endcomment -%}
       {%- for block in sk_blocks -%}
@@ -710,18 +778,12 @@
       {%- endfor -%}
     </div>
 
-    {%- comment -%} 3b. System compatibility flag — only renders when compat matches exist.
-         Click scrolls to + flashes the auto compat column in Mix & Match. {%- endcomment -%}
-    {%- if compat_count > 0 -%}
-      <button type="button" class="bfc4-compat-flag" onclick="bfc4GoToCompat()" aria-label="View compatible system accessories for this camera">
-        <span class="bfc4-compat-flag-icon">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6.5 9.5L9.5 6.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M7.5 11.5L6 13C4.9 14.1 3.1 14.1 2 13C0.9 11.9 0.9 10.1 2 9L3.5 7.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M8.5 4.5L10 3C11.1 1.9 12.9 1.9 14 3C15.1 4.1 15.1 5.9 14 7L12.5 8.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-        </span>
-        <span class="bfc4-compat-flag-text">
-          <span class="bfc4-compat-flag-title">Made for this camera</span>
-          <span class="bfc4-compat-flag-sub">{% if compat_type_arr.size > 0 %}{% for ct in compat_type_arr limit: 3 %}{{ ct }}{% unless forloop.last %}, {% endunless %}{% endfor %}{% if compat_type_arr.size > 3 %} and more{% endif %} available for this system{% else %}{{ compat_count }} compatible add-on{% if compat_count != 1 %}s{% endif %} available for this system{% endif %}</span>
-        </span>
-        <span class="bfc4-compat-flag-cta">View &rsaquo;</span>
+    {%- comment -%} 3b. More compatible items note — only when matches remain beyond
+         the featured tile. Scrolls to + flashes the For This Camera column. {%- endcomment -%}
+    {%- if compat_more_count > 0 -%}
+      <button type="button" class="bfc4-compat-more" onclick="bfc4GoToCompat()" aria-label="View more items made for this camera">
+        View {{ compat_more_count }} {% if compat_featured != blank %}more {% endif %}compatible item{% if compat_more_count != 1 %}s{% endif %}
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" focusable="false"><path d="M6 2v8M2 6l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="square"/></svg>
       </button>
     {%- endif -%}
 
