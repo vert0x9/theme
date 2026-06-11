@@ -371,6 +371,9 @@
                           </span>
                         {% endif %}
                       </div>
+                      {% if block.settings.show_urgency %}
+                        {% render 'bfc-pdp-urgency', variant: variant, handle: product.handle, show_trust: block.settings.show_urgency_trust %}
+                      {% endif %}
                       <div class="bfc-ts__bottom">
                         {% if block.settings.show_price %}
                           <div class="bfc-ts__price">
@@ -969,6 +972,9 @@
                         </span>
                       {% endif %}
                     </div>
+                    {% if block.settings.show_urgency %}
+                      {% render 'bfc-pdp-urgency', variant: variant, handle: product.handle, show_trust: block.settings.show_urgency_trust %}
+                    {% endif %}
                     <div class="bfc-ts__bottom">
                       {% if block.settings.show_price %}
                         <div class="bfc-ts__price">
@@ -1692,6 +1698,19 @@
         },
         {
           "type": "checkbox",
+          "id": "show_urgency",
+          "label": "Show urgency trust signals",
+          "info": "Low-stock alert, ships fast/free, and recent-activity counter (renders bfc-pdp-urgency).",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "show_urgency_trust",
+          "label": "Include 'Restored & Warrantied' signal",
+          "default": true
+        },
+        {
+          "type": "checkbox",
           "id": "show_price",
           "label": "Show price",
           "default": true
@@ -1974,6 +1993,19 @@
           "type": "checkbox",
           "id": "show_variant_count",
           "label": "Show variant count",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_urgency",
+          "label": "Show urgency trust signals",
+          "info": "Low-stock alert, ships fast/free, and recent-activity counter (renders bfc-pdp-urgency).",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "show_urgency_trust",
+          "label": "Include 'Restored & Warrantied' signal",
           "default": true
         },
         {
