@@ -38,16 +38,11 @@
     assign ci_body = section.settings.intro_body
   endif
 
-  comment # Reset/back link target collection, falling back to the current collection. #
+  comment # Sub-mode back link target, falling back to the current collection. #
   endcomment
-  assign reset_url = section.settings.reset_collection.url
-  if reset_url == blank
-    assign reset_url = collection.url
-  endif
-
   assign back_url = section.settings.back_collection.url
   if back_url == blank
-    assign back_url = reset_url
+    assign back_url = collection.url
   endif
 -%}
 
@@ -73,14 +68,19 @@
 }
 #bfc-ci-{{ section.id }}.is-dark { background: var(--bk); color: #fff; }
 
+#bfc-ci-{{ section.id }} {
+  --ci-pad: clamp(20px, calc((100vw - min(100vw, 1240px)) / 2 + 32px), 120px);
+}
 #bfc-ci-{{ section.id }} .ci-wrap {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   gap: 48px;
   align-items: start;
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 56px 32px;
+  padding: 56px var(--ci-pad);
+}
+/* Sub-collection mode: text fills the row, back link hugs the right */
+#bfc-ci-{{ section.id }} .ci-wrap--sub {
+  grid-template-columns: 1fr auto;
 }
 
 /* ── LEFT: intro ── */
@@ -136,15 +136,6 @@
   font-size: 11px; font-weight: 400; color: var(--ch); letter-spacing: 0;
 }
 #bfc-ci-{{ section.id }}.is-dark .ci-nav-sub { color: rgba(255,255,255,0.55); }
-#bfc-ci-{{ section.id }} .ci-nav-reset {
-  margin-top: 4px;
-  font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--ch); text-decoration: none;
-  display: inline-flex; align-items: center; gap: 6px;
-  opacity: 0.7; transition: opacity 0.15s ease;
-}
-#bfc-ci-{{ section.id }} .ci-nav-reset:hover { opacity: 1; color: var(--or); }
-#bfc-ci-{{ section.id }}.is-dark .ci-nav-reset { color: rgba(255,255,255,0.6); }
 
 /* Sub-collection back link */
 #bfc-ci-{{ section.id }} .ci-aside--sub { justify-content: flex-start; }
@@ -164,18 +155,21 @@
 #bfc-ci-{{ section.id }}.is-dark .ci-back:hover { border-color: var(--or); color: var(--or); }
 
 @media (max-width: 860px) {
-  #bfc-ci-{{ section.id }} .ci-wrap {
+  #bfc-ci-{{ section.id }} .ci-wrap,
+  #bfc-ci-{{ section.id }} .ci-wrap--sub {
     grid-template-columns: 1fr;
-    gap: 32px;
-    padding: 40px 20px;
+    gap: 24px;
+    padding: 40px var(--ci-pad);
   }
   #bfc-ci-{{ section.id }} .ci-trust { gap: 10px 18px; margin-top: 18px; }
   #bfc-ci-{{ section.id }} .ci-trust li { font-size: 9.5px; }
+  /* On mobile the back link reads better at the top, before the title */
+  #bfc-ci-{{ section.id }} .ci-wrap--sub .ci-aside--sub { order: -1; }
 }
 </style>
 
 <section id="bfc-ci-{{ section.id }}" class="{% if theme == 'dark' %}is-dark{% endif %}" aria-label="{{ ci_title | default: 'Collection intro' | escape }}">
-  <div class="ci-wrap">
+  <div class="ci-wrap{% if sub_mode %} ci-wrap--sub{% endif %}">
 
     {%- comment -%} ── LEFT: intro ── {%- endcomment -%}
     <div class="ci-intro">
@@ -242,12 +236,6 @@
               {%- endif -%}
             {%- endfor -%}
           </nav>
-          {%- if section.settings.show_reset and reset_url != blank -%}
-            <a class="ci-nav-reset" href="{{ reset_url }}">
-              <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M11 7a4 4 0 1 1-1.2-2.8M11 2v3H8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              {{ section.settings.reset_label | default: 'View all cameras' | escape }}
-            </a>
-          {%- endif -%}
         </div>
       {%- endif -%}
     {%- endif -%}
@@ -276,17 +264,12 @@
     { "type": "text", "id": "sub_eyebrow", "label": "Sub eyebrow", "default": "A subset of All Cameras" },
     { "type": "text", "id": "sub_title", "label": "Sub title", "default": "Beginner Friendly" },
     { "type": "textarea", "id": "sub_body", "label": "Sub paragraph", "default": "Simple, reliable cameras that are easy to learn on. No fiddly settings, no surprises. Every one restored, bench-tested, and warrantied." },
-    { "type": "collection", "id": "back_collection", "label": "Back link goes to", "info": "e.g. the All Cameras collection. Falls back to the reset collection, then the current collection." },
+    { "type": "collection", "id": "back_collection", "label": "Back link goes to", "info": "e.g. the All Cameras collection. Falls back to the current collection if blank." },
     { "type": "text", "id": "back_label", "label": "Back link text", "default": "Back to All Cameras" },
 
     { "type": "header", "content": "Browse by (links)" },
     { "type": "paragraph", "content": "Each link points to a curated collection you build in admin (e.g. a 'Beginner Friendly' collection with automated conditions). This keeps these out of the filter sidebar entirely. Add Quick Nav Link blocks below." },
     { "type": "text", "id": "nav_title", "label": "Heading", "default": "Browse by" },
-
-    { "type": "header", "content": "Reset link" },
-    { "type": "checkbox", "id": "show_reset", "label": "Show 'View all' reset link", "default": true },
-    { "type": "collection", "id": "reset_collection", "label": "Reset links to", "info": "Where 'View all' points (e.g. the All Cameras collection). Defaults to the current collection if blank." },
-    { "type": "text", "id": "reset_label", "label": "Reset link text", "default": "View all cameras" },
 
     { "type": "header", "content": "Theme" },
     {
