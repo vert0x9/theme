@@ -347,7 +347,7 @@
                       {% if badge != blank %}
                         <span class="bfc-ts__badge" aria-hidden="true">{{ badge }}</span>
                       {% endif %}
-                      {% if block.settings.show_stock_sticker and variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny' and variant.inventory_quantity > 0 and variant.inventory_quantity <= 5 %}
+                      {% if block.settings.show_stock_sticker and variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny' and variant.inventory_quantity > 0 and variant.inventory_quantity < 3 %}
                         <span class="bfc-ts__stock-sticker" aria-hidden="true">Only {{ variant.inventory_quantity }} left</span>
                       {% endif %}
                     </a>
@@ -378,7 +378,7 @@
                         {%- assign bfc_price = variant.price | default: product.price | default: 0 -%}
                         <div class="bfc-card-meta">
                           {% if block.settings.show_urgency_trust %}
-                            <span class="bfc-card-meta-item">
+                            <span class="bfc-card-meta-item{% if bfc_price >= 40000 %} bfc-card-meta-free{% endif %}">
                               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                               {% if bfc_price >= 40000 %}Ships Fast &amp; Free{% else %}Ships Fast{% endif %}
                             </span>
@@ -984,7 +984,7 @@
                     {% if badge != blank %}
                       <span class="bfc-ts__badge" aria-hidden="true">{{ badge }}</span>
                     {% endif %}
-                    {% if block.settings.show_stock_sticker and variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny' and variant.inventory_quantity > 0 and variant.inventory_quantity <= 5 %}
+                    {% if block.settings.show_stock_sticker and variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny' and variant.inventory_quantity > 0 and variant.inventory_quantity < 3 %}
                       <span class="bfc-ts__stock-sticker" aria-hidden="true">Only {{ variant.inventory_quantity }} left</span>
                     {% endif %}
                   </a>
@@ -1012,7 +1012,7 @@
                       {%- assign bfc_price = variant.price | default: product.price | default: 0 -%}
                       <div class="bfc-card-meta">
                         {% if block.settings.show_urgency_trust %}
-                          <span class="bfc-card-meta-item">
+                          <span class="bfc-card-meta-item{% if bfc_price >= 40000 %} bfc-card-meta-free{% endif %}">
                             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                             {% if bfc_price >= 40000 %}Ships Fast &amp; Free{% else %}Ships Fast{% endif %}
                           </span>
@@ -1406,6 +1406,8 @@
     color: #4E4741;
   }
   .bfc-card-meta-item svg { color: #2a4820; flex-shrink: 0; }
+  .bfc-card-meta-free { color: #2a4820; }
+  .bfc-card-meta-free svg { color: #2a4820; }
   .bfc-card-activity {
     display: none; align-items: center; gap: 5px;
     font-size: 9.5px; font-weight: 600;
