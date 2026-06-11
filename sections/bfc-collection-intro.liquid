@@ -166,6 +166,38 @@
   /* On mobile the back link reads better at the top, before the title */
   #bfc-ci-{{ section.id }} .ci-wrap--sub .ci-aside--sub { order: -1; }
 }
+
+/* "More" toggle is desktop-hidden; all links always show on desktop. */
+#bfc-ci-{{ section.id }} .ci-more-toggle { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; }
+#bfc-ci-{{ section.id }} .ci-more-label { display: none; }
+
+@media (max-width: 860px) {
+  /* Compact the intro: drop the paragraph and trust row, shrink the title */
+  #bfc-ci-{{ section.id }} .ci-body { display: none; }
+  #bfc-ci-{{ section.id }} .ci-trust { display: none; }
+  #bfc-ci-{{ section.id }} .ci-title { font-size: 30px; margin-bottom: 4px; }
+  #bfc-ci-{{ section.id }} .ci-ey { margin-bottom: 10px; }
+  #bfc-ci-{{ section.id }} .ci-wrap { gap: 18px; padding: 28px var(--ci-pad); }
+
+  /* Tighter link rows */
+  #bfc-ci-{{ section.id }} .ci-nav-link { padding: 13px 2px; font-size: 15px; }
+  #bfc-ci-{{ section.id }} .ci-nav-title { margin-bottom: 0; }
+
+  /* Show only the first 3 links; reveal the rest on tap */
+  #bfc-ci-{{ section.id }} .ci-nav-link--extra { display: none; }
+  #bfc-ci-{{ section.id }} .ci-more-toggle:checked ~ .ci-nav .ci-nav-link--extra { display: flex; }
+  #bfc-ci-{{ section.id }} .ci-more-label {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 12px; cursor: pointer;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ch);
+  }
+  #bfc-ci-{{ section.id }} .ci-more-label svg { transition: transform 0.2s ease; }
+  #bfc-ci-{{ section.id }} .ci-more-toggle:checked ~ .ci-more-label svg { transform: rotate(180deg); }
+  #bfc-ci-{{ section.id }} .ci-more-close { display: none; }
+  #bfc-ci-{{ section.id }} .ci-more-toggle:checked ~ .ci-more-label .ci-more-open { display: none; }
+  #bfc-ci-{{ section.id }} .ci-more-toggle:checked ~ .ci-more-label .ci-more-close { display: inline; }
+}
 </style>
 
 <section id="bfc-ci-{{ section.id }}" class="{% if theme == 'dark' %}is-dark{% endif %}" aria-label="{{ ci_title | default: 'Collection intro' | escape }}">
@@ -215,9 +247,12 @@
           {%- if section.settings.nav_title != blank -%}
             <p class="ci-nav-title">{{ section.settings.nav_title | escape }}</p>
           {%- endif -%}
+          <input type="checkbox" id="ci-more-{{ section.id }}" class="ci-more-toggle" aria-hidden="true">
           <nav class="ci-nav" aria-label="{{ section.settings.nav_title | default: 'Browse by' | escape }}">
+            {%- assign shown = 0 -%}
             {%- for block in section.blocks -%}
               {%- if block.type == 'quick_nav' and block.settings.label != blank -%}
+                {%- assign shown = shown | plus: 1 -%}
                 {%- liquid
                   assign href = '#'
                   if block.settings.link_collection != blank
@@ -226,7 +261,7 @@
                     assign href = block.settings.custom_url
                   endif
                 -%}
-                <a class="ci-nav-link" href="{{ href }}" {{ block.shopify_attributes }}>
+                <a class="ci-nav-link{% if shown > 3 %} ci-nav-link--extra{% endif %}" href="{{ href }}" {{ block.shopify_attributes }}>
                   <span>
                     {{ block.settings.label | escape }}
                     {%- if block.settings.sublabel != blank -%}<br><span class="ci-nav-sub">{{ block.settings.sublabel | escape }}</span>{%- endif -%}
@@ -236,6 +271,13 @@
               {%- endif -%}
             {%- endfor -%}
           </nav>
+          {%- if nav_count > 3 -%}
+            <label for="ci-more-{{ section.id }}" class="ci-more-label">
+              <span class="ci-more-open">{{ 'More' }} ({{ nav_count | minus: 3 }})</span>
+              <span class="ci-more-close">Less</span>
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </label>
+          {%- endif -%}
         </div>
       {%- endif -%}
     {%- endif -%}
