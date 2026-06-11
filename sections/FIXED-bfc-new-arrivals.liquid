@@ -120,7 +120,7 @@
     #bfc-new-arrivals-{{ section.id }} .bfc-na-img-wrap {
       position: relative;
       padding-top: 100%;
-      background: #fff;
+      background: transparent;
       overflow: hidden;
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-img {
@@ -129,7 +129,7 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      padding: 8px;
+      padding: 0;
       transition: opacity 0.2s ease;
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-card:hover .bfc-na-img { opacity: 0.92; }
@@ -145,24 +145,36 @@
       text-transform: uppercase;
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-info {
-      padding: 14px 0 0;
+      padding: 12px 0 0;
       text-align: left;
+      text-indent: 0;
+    }
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-title,
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-price,
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-soldout {
+      padding-left: 0;
+      padding-right: 0;
+      text-indent: 0;
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-title {
       font-family: 'Poppins', sans-serif;
-      font-size: 13px;
+      font-size: 16px;
       font-weight: 500;
-      line-height: 1.35;
+      line-height: 1.15;
       color: var(--na-text);
       margin: 0 0 4px;
-      letter-spacing: -0.005em;
+      letter-spacing: -0.01em;
     }
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-link:hover .bfc-na-title { text-decoration: underline; }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-price {
       font-family: 'Poppins', sans-serif;
-      font-size: 12px;
-      font-weight: 400;
-      color: var(--na-secondary);
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--na-text);
       margin: 0;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-price--sale {
       color: var(--na-accent);
