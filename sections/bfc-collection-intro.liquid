@@ -138,7 +138,7 @@
 #bfc-ci-{{ section.id }}.is-dark .ci-nav-sub { color: rgba(255,255,255,0.55); }
 
 /* Sub-collection back link */
-#bfc-ci-{{ section.id }} .ci-aside--sub { justify-content: flex-start; }
+#bfc-ci-{{ section.id }} .ci-aside--sub { justify-content: flex-start; align-items: flex-start; }
 #bfc-ci-{{ section.id }} .ci-back {
   display: inline-flex; align-items: center; gap: 8px;
   align-self: flex-start;
@@ -165,6 +165,13 @@
   #bfc-ci-{{ section.id }} .ci-trust li { font-size: 9.5px; }
   /* On mobile the back link reads better at the top, before the title */
   #bfc-ci-{{ section.id }} .ci-wrap--sub .ci-aside--sub { order: -1; }
+  /* Keep the back link compact (hug content), not a full-width box */
+  #bfc-ci-{{ section.id }} .ci-back {
+    align-self: flex-start;
+    width: auto;
+    padding: 10px 14px;
+    font-size: 11px;
+  }
 }
 
 /* "More" toggle is desktop-hidden; all links always show on desktop. */
