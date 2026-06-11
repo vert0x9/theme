@@ -24,9 +24,9 @@
         "quick_nav_nqWaU4": {
           "type": "quick_nav",
           "settings": {
-            "label": "Best Image",
+            "label": "High Image Quality",
             "sublabel": "",
-            "link_collection": "",
+            "link_collection": "high-image-quality",
             "custom_url": ""
           }
         },
