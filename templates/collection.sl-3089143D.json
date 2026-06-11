@@ -16,28 +16,36 @@
           "type": "quick_nav",
           "settings": {
             "label": "Beginner Friendly",
-            "sublabel": ""
+            "sublabel": "",
+            "link_collection": "beginner-friendly",
+            "custom_url": ""
           }
         },
         "quick_nav_nqWaU4": {
           "type": "quick_nav",
           "settings": {
             "label": "Best Image",
-            "sublabel": ""
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": ""
           }
         },
         "quick_nav_LXTKrT": {
           "type": "quick_nav",
           "settings": {
             "label": "Under $150",
-            "sublabel": ""
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": ""
           }
         },
         "quick_nav_MKtKWp": {
           "type": "quick_nav",
           "settings": {
             "label": "Under $300",
-            "sublabel": ""
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": ""
           }
         }
       },
@@ -55,6 +63,16 @@
         "trust_1": "Restored & bench-tested in Brooklyn",
         "trust_2": "Warrantied",
         "trust_3": "Free shipping over $400",
+        "sub_mode": false,
+        "sub_eyebrow": "A subset of All Cameras",
+        "sub_title": "Beginner Friendly",
+        "sub_body": "Simple, reliable cameras that are easy to learn on. No fiddly settings, no surprises. Every one restored, bench-tested, and warrantied.",
+        "back_collection": "",
+        "back_label": "Back to All Cameras",
+        "nav_title": "Browse by",
+        "show_reset": true,
+        "reset_collection": "",
+        "reset_label": "View all cameras",
         "theme": "light"
       }
     },
