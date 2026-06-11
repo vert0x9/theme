@@ -120,6 +120,7 @@
         "quick_nav_CtU8pY",
         "quick_nav_WyiUFU"
       ],
+      "disabled": true,
       "name": "BFC Collection Intro",
       "settings": {
         "intro_eyebrow": "Shop all",
@@ -129,15 +130,13 @@
         "trust_2": "Warrantied",
         "trust_3": "Free shipping over $400",
         "sub_mode": true,
-        "sub_eyebrow": "A subset of All Cameras",
+        "sub_eyebrow": "High Quality Point & Shoots",
         "sub_title": "Beginner Friendly",
         "sub_body": "Simple, reliable cameras that are easy to learn on. No fiddly settings, no surprises. Every one restored, bench-tested, and warrantied.",
-        "back_collection": "",
+        "back_collection": "point-shoots",
         "back_label": "Back to All Cameras",
         "nav_title": "Browse by",
-        "show_reset": true,
-        "reset_collection": "",
-        "reset_label": "View all cameras",
+        "nav_style": "list",
         "theme": "light"
       }
     },
