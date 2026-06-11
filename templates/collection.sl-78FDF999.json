@@ -110,9 +110,10 @@
         "quick_nav_aFNwnt": {
           "type": "quick_nav",
           "settings": {
-            "label": "Premium compacts",
+            "label": "Travel Ready",
             "sublabel": "",
-            "link_collection": "",
+            "image": "shopify://shop_images/000076940031_a8101866-4445-4a7b-a50e-b29753e49b27.jpg",
+            "link_collection": "point-shoot-travel-ready",
             "custom_url": ""
           }
         }
