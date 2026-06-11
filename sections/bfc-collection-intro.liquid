@@ -1,14 +1,40 @@
+{% comment %}
+  ============================================================
+  BFC Collection Intro  (v2 — orient + start here + quick nav)
+  ------------------------------------------------------------
+  Orients a cold shopper on a collection page:
+    LEFT  → eyebrow + serif title + "is this for you" paragraph
+            + trust row (restored / warrantied / shipping)
+    RIGHT → a hand-picked "Start here" camera card, plus a set
+            of quick-nav links (added as blocks) to route deeper.
+
+  Type the copy per collection (place this section on each
+  collection template). All fields have defaults wired for
+  Point & Shoots as an example.
+
+  No featured-camera engine — this is a static, fast intro.
+  ============================================================
+{% endcomment %}
+
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/></noscript>
 
-<style>
-#bfc-feat-{{ section.id }} *, #bfc-feat-{{ section.id }} *::before, #bfc-feat-{{ section.id }} *::after { box-sizing: border-box; margin: 0; padding: 0; }
+{%- liquid
+  assign theme = section.settings.theme
+  assign sp = section.settings.start_product
+  assign sp_label = section.settings.start_label | default: 'Start here'
+  assign sp_cta = section.settings.start_cta | default: 'Shop this camera'
+-%}
 
-#bfc-feat-{{ section.id }} {
+<style>
+#bfc-ci-{{ section.id }} *, #bfc-ci-{{ section.id }} *::before, #bfc-ci-{{ section.id }} *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+#shopify-section-{{ section.id }} { width: 100%; }
+
+#bfc-ci-{{ section.id }} {
   --or: #E36E15;
-  --go: #F4A027;
   --ce: #ABCC99;
   --cv: #F8F6EE;
   --bk: #202009;
@@ -16,257 +42,144 @@
   --gr: #E3DDDA;
   --sr: 'Cormorant Garamond', Georgia, serif;
   --sn: 'Poppins', sans-serif;
-  --t: 0.25s ease;
   font-family: var(--sn);
   color: var(--bk);
   background: var(--cv);
   -webkit-font-smoothing: antialiased;
-  position: relative;
-  overflow: hidden;
 }
-#bfc-feat-{{ section.id }}.is-dark { background: var(--bk); color: #fff; }
+#bfc-ci-{{ section.id }}.is-dark { background: var(--bk); color: #fff; }
 
-{%- comment -%} ── TRACK: layout depends on mode set by JS ──
-   .mode-duo  → two cameras side by side, no photos
-   .mode-solo → one camera, wider, with its example photos {%- endcomment -%}
-#bfc-feat-{{ section.id }} .feat-track {
+#bfc-ci-{{ section.id }} .ci-wrap {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-#bfc-feat-{{ section.id }} .feat-track.mode-solo { grid-template-columns: 1fr; }
-#bfc-feat-{{ section.id }} .feat-track.is-showing-1 { grid-template-columns: 1fr; }
-
-{%- comment -%} Cards stay hidden until JS picks a layout mode and reveals one.
-   The .mode-* class on the track is the signal that JS has run. {%- endcomment -%}
-#bfc-feat-{{ section.id }} .feat-card { display: none; }
-#bfc-feat-{{ section.id }} .feat-track.mode-solo .feat-card.is-on,
-#bfc-feat-{{ section.id }} .feat-track.mode-duo .feat-card.is-on { display: grid; }
-
-#bfc-feat-{{ section.id }} .feat-card {
-  grid-template-columns: 0.82fr 1fr;
-  height: clamp(240px, 27vh, 330px);
-  align-items: stretch;
-  overflow: hidden;
-  border-left: 1px solid rgba(32,32,9,0.1);
-}
-#bfc-feat-{{ section.id }} .feat-card > * { min-width: 0; min-height: 0; }
-#bfc-feat-{{ section.id }} .feat-card:first-child { border-left: none; }
-#bfc-feat-{{ section.id }}.is-dark .feat-card { border-left-color: rgba(255,255,255,0.1); }
-
-{%- comment -%} Solo + has photos → three columns: camera | text | photos {%- endcomment -%}
-#bfc-feat-{{ section.id }} .mode-solo .feat-card.has-photos {
-  grid-template-columns: 0.82fr 1fr 0.95fr;
-}
-{%- comment -%} Photos hidden everywhere except solo+has-photos {%- endcomment -%}
-#bfc-feat-{{ section.id }} .feat-photos { display: none; }
-#bfc-feat-{{ section.id }} .mode-solo .feat-card.has-photos .feat-photos { display: grid; }
-
-{%- comment -%} ── CAMERA IMAGE (left of card) — always fit, never cropped ── {%- endcomment -%}
-#bfc-feat-{{ section.id }} .feat-cam {
-  position: relative;
-  background: var(--cv);
-  overflow: hidden;
-  display: flex; align-items: center; justify-content: center;
-  height: 100%;
-}
-#bfc-feat-{{ section.id }}.is-dark .feat-cam { background: #18180a; }
-#bfc-feat-{{ section.id }} .feat-cam img {
-  position: relative; z-index: 1;
-  width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;
-  transition: transform 0.5s ease;
-}
-#bfc-feat-{{ section.id }} .feat-cam:hover img { transform: scale(1.04); }
-#bfc-feat-{{ section.id }} .feat-cam-grade {
-  position: absolute; top: 14px; left: 14px; z-index: 2;
-  font-size: 8px; font-weight: 700; letter-spacing: 0.14em;
-  text-transform: uppercase; color: #fff; background: var(--or); padding: 3px 9px;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 48px;
+  align-items: start;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 56px 32px;
 }
 
-{%- comment -%} ── TEXT (right of card) ── {%- endcomment -%}
-#bfc-feat-{{ section.id }} .feat-text {
-  position: relative;
-  padding: 30px 34px;
-  display: flex; flex-direction: column; justify-content: center;
-  overflow: hidden;
-  border-left: 1px solid rgba(32,32,9,0.1);
-}
-#bfc-feat-{{ section.id }}.is-dark .feat-text { border-left-color: rgba(255,255,255,0.1); }
-#bfc-feat-{{ section.id }} .feat-eyebrow {
-  position: absolute; top: 22px; right: 34px; z-index: 2;
+/* ── LEFT: intro ── */
+#bfc-ci-{{ section.id }} .ci-ey {
   display: inline-flex; align-items: center; gap: 8px;
   font-size: 9px; font-weight: 700; letter-spacing: 0.2em;
-  text-transform: uppercase; color: var(--or);
+  text-transform: uppercase; color: var(--or); margin-bottom: 14px;
 }
-#bfc-feat-{{ section.id }} .feat-eyebrow::before { content: ''; width: 16px; height: 1px; background: var(--or); display: block; }
-#bfc-feat-{{ section.id }} .feat-title {
-  font-family: var(--sr); font-size: 23px; font-weight: 300;
-  line-height: 1.25; letter-spacing: -0.01em; margin-bottom: 9px;
-  max-width: 92%;
+#bfc-ci-{{ section.id }} .ci-ey::before { content: ''; width: 16px; height: 1px; background: var(--or); display: block; }
+#bfc-ci-{{ section.id }} .ci-title {
+  font-family: var(--sr); font-size: clamp(28px, 4vw, 44px); font-weight: 300;
+  line-height: 1.12; letter-spacing: -0.01em; margin-bottom: 16px;
 }
-#bfc-feat-{{ section.id }}.is-dark .feat-title { color: #fff; }
-#bfc-feat-{{ section.id }} .feat-desc {
-  font-size: 12px; line-height: 1.6; color: var(--ch);
-  margin-bottom: 18px; max-width: 46ch;
-  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+#bfc-ci-{{ section.id }}.is-dark .ci-title { color: #fff; }
+#bfc-ci-{{ section.id }} .ci-body {
+  font-size: 15px; line-height: 1.7; color: var(--ch); max-width: 56ch;
 }
-#bfc-feat-{{ section.id }}.is-dark .feat-desc { color: rgba(255,255,255,0.7); }
-#bfc-feat-{{ section.id }} .feat-buy { display: flex; align-items: center; gap: 14px; }
-#bfc-feat-{{ section.id }} .feat-price { font-family: var(--sr); font-size: 21px; font-weight: 300; line-height: 1; }
-#bfc-feat-{{ section.id }}.is-dark .feat-price { color: #fff; }
-#bfc-feat-{{ section.id }} .feat-price small {
-  display: block; font-family: var(--sn); font-size: 8px; font-weight: 700;
-  letter-spacing: 0.14em; text-transform: uppercase; color: var(--ch); margin-bottom: 4px;
+#bfc-ci-{{ section.id }}.is-dark .ci-body { color: rgba(255,255,255,0.74); }
+#bfc-ci-{{ section.id }} .ci-trust {
+  list-style: none; display: flex; flex-wrap: wrap; gap: 12px 26px; margin-top: 24px;
 }
-#bfc-feat-{{ section.id }}.is-dark .feat-price small { color: rgba(255,255,255,0.5); }
-#bfc-feat-{{ section.id }} .feat-cta {
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 10px 16px; background: var(--or); color: #fff;
-  font-family: var(--sn); font-size: 9px; font-weight: 700;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  text-decoration: none; transition: background var(--t); white-space: nowrap;
-}
-#bfc-feat-{{ section.id }} .feat-cta:hover { background: #c9600f; }
-#bfc-feat-{{ section.id }} .feat-cta svg { transition: transform var(--t); }
-#bfc-feat-{{ section.id }} .feat-cta:hover svg { transform: translateX(3px); }
-
-{%- comment -%} ── EXAMPLE PHOTOS (solo mode only) — layout adapts to count ── {%- endcomment -%}
-#bfc-feat-{{ section.id }} .feat-photos {
-  position: relative;
-  gap: 1px;
-  background: rgba(32,32,9,0.1);
-  height: 100%;
-  min-height: 0;
-  overflow: hidden;
-  border-left: 1px solid rgba(32,32,9,0.1);
-}
-#bfc-feat-{{ section.id }} .feat-photos > * { min-width: 0; min-height: 0; }
-#bfc-feat-{{ section.id }}.is-dark .feat-photos { background: rgba(255,255,255,0.1); border-left-color: rgba(255,255,255,0.1); }
-#bfc-feat-{{ section.id }} .feat-photos.is-1 { grid-template-columns: 1fr; grid-template-rows: 1fr; }
-#bfc-feat-{{ section.id }} .feat-photos.is-2 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; }
-#bfc-feat-{{ section.id }} .feat-photos.is-3 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
-#bfc-feat-{{ section.id }} .feat-photos.is-3 .feat-photo:first-child { grid-row: 1 / span 2; }
-#bfc-feat-{{ section.id }} .feat-photos.is-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
-#bfc-feat-{{ section.id }} .feat-photo {
-  position: relative; overflow: hidden; background: var(--gr);
-  display: block; line-height: 0;
-}
-#bfc-feat-{{ section.id }}.is-dark .feat-photo { background: #18180a; }
-#bfc-feat-{{ section.id }} .feat-photo img {
-  width: 100%; height: 100%; object-fit: cover; display: block;
-  transition: transform 0.5s ease;
-}
-#bfc-feat-{{ section.id }} .feat-photo:hover img { transform: scale(1.05); }
-#bfc-feat-{{ section.id }} .feat-photos-cap {
-  position: absolute; bottom: 0; left: 0; right: 0; padding: 6px 10px;
-  font-size: 8px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
-  color: #fff; background: rgba(32,32,9,0.55); text-align: center; z-index: 2; pointer-events: none;
-}
-
-{%- comment -%} ── SHUFFLE (optional) ── {%- endcomment -%}
-#bfc-feat-{{ section.id }} .feat-shuffle {
-  position: absolute; top: 12px; right: 16px; z-index: 6;
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 11px; background: rgba(248,246,238,0.9);
-  border: 1px solid rgba(32,32,9,0.12);
-  font-family: var(--sn); font-size: 8.5px; font-weight: 700;
-  letter-spacing: 0.12em; text-transform: uppercase; color: var(--ch);
-  cursor: pointer; transition: all var(--t);
-}
-#bfc-feat-{{ section.id }} .feat-shuffle:hover { color: var(--or); border-color: var(--or); }
-#bfc-feat-{{ section.id }}.is-dark .feat-shuffle { background: rgba(32,32,9,0.6); border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.75); }
-#bfc-feat-{{ section.id }} .feat-shuffle svg { transition: transform 0.4s ease; }
-#bfc-feat-{{ section.id }} .feat-shuffle:hover svg { transform: rotate(180deg); }
-
-{%- comment -%} ── TABLET: drop to one camera ── {%- endcomment -%}
-@media (max-width: 990px) {
-  #bfc-feat-{{ section.id }} .feat-track { grid-template-columns: 1fr; }
-}
-
-{%- comment -%} ── MOBILE: compact single strip, never show photos ── {%- endcomment -%}
-@media (max-width: 749px) {
-  #bfc-feat-{{ section.id }} .feat-card,
-  #bfc-feat-{{ section.id }} .mode-solo .feat-card.has-photos { grid-template-columns: 0.82fr 1fr; height: clamp(150px, 22vh, 200px); }
-  #bfc-feat-{{ section.id }} .feat-photos,
-  #bfc-feat-{{ section.id }} .mode-solo .feat-card.has-photos .feat-photos { display: none !important; }
-  #bfc-feat-{{ section.id }} .feat-cam:hover img { transform: none; }
-  #bfc-feat-{{ section.id }} .feat-text { padding: 14px 16px; }
-  #bfc-feat-{{ section.id }} .feat-eyebrow { position: static; margin-bottom: 8px; font-size: 8.5px; }
-  #bfc-feat-{{ section.id }} .feat-title { font-size: 18px; margin-bottom: 6px; }
-  #bfc-feat-{{ section.id }} .feat-desc { display: none; }
-  #bfc-feat-{{ section.id }} .feat-price { font-size: 18px; }
-  #bfc-feat-{{ section.id }} .feat-cta { padding: 9px 14px; }
-  #bfc-feat-{{ section.id }} .feat-cam-grade { top: 10px; left: 10px; }
-}
-@media (max-width: 480px) {
-  #bfc-feat-{{ section.id }} .feat-card { grid-template-columns: 0.78fr 1fr; height: clamp(135px, 20vh, 175px); }
-  #bfc-feat-{{ section.id }} .feat-title { font-size: 16px; }
-  #bfc-feat-{{ section.id }} .feat-buy { flex-direction: column; align-items: flex-start; gap: 8px; }
-}
-
-{%- comment -%} ── COLLECTION INTRO (orient line + "is this for you" + trust row) ── {%- endcomment -%}
-#bfc-feat-{{ section.id }} .feat-intro {
-  padding: 34px 34px 26px;
-  max-width: 760px;
-  border-bottom: 1px solid rgba(32,32,9,0.1);
-}
-#bfc-feat-{{ section.id }}.is-dark .feat-intro { border-bottom-color: rgba(255,255,255,0.12); }
-#bfc-feat-{{ section.id }} .feat-intro-ey {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 9px; font-weight: 700; letter-spacing: 0.2em;
-  text-transform: uppercase; color: var(--or); margin-bottom: 12px;
-}
-#bfc-feat-{{ section.id }} .feat-intro-ey::before { content: ''; width: 16px; height: 1px; background: var(--or); display: block; }
-#bfc-feat-{{ section.id }} .feat-intro-h {
-  font-family: var(--sr); font-size: clamp(22px, 3vw, 30px); font-weight: 300;
-  line-height: 1.2; letter-spacing: -0.01em; margin-bottom: 12px;
-}
-#bfc-feat-{{ section.id }}.is-dark .feat-intro-h { color: #fff; }
-#bfc-feat-{{ section.id }} .feat-intro-p {
-  font-size: 13.5px; line-height: 1.65; color: var(--ch); max-width: 60ch;
-}
-#bfc-feat-{{ section.id }}.is-dark .feat-intro-p { color: rgba(255,255,255,0.72); }
-#bfc-feat-{{ section.id }} .feat-intro-trust {
-  list-style: none; display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 18px;
-}
-#bfc-feat-{{ section.id }} .feat-intro-trust li {
+#bfc-ci-{{ section.id }} .ci-trust li {
   display: inline-flex; align-items: center; gap: 7px;
   font-size: 10.5px; font-weight: 600; letter-spacing: 0.06em;
   text-transform: uppercase; color: var(--ch);
 }
-#bfc-feat-{{ section.id }} .feat-intro-trust svg { color: #2a4820; flex-shrink: 0; }
-#bfc-feat-{{ section.id }}.is-dark .feat-intro-trust li { color: rgba(255,255,255,0.72); }
-#bfc-feat-{{ section.id }}.is-dark .feat-intro-trust svg { color: var(--ce); }
-@media (max-width: 749px) {
-  #bfc-feat-{{ section.id }} .feat-intro { padding: 24px 20px 20px; }
-  #bfc-feat-{{ section.id }} .feat-intro-trust { gap: 8px 16px; margin-top: 14px; }
-  #bfc-feat-{{ section.id }} .feat-intro-trust li { font-size: 9.5px; }
+#bfc-ci-{{ section.id }} .ci-trust svg { color: #2a4820; flex-shrink: 0; }
+#bfc-ci-{{ section.id }}.is-dark .ci-trust li { color: rgba(255,255,255,0.74); }
+#bfc-ci-{{ section.id }}.is-dark .ci-trust svg { color: var(--ce); }
+
+/* ── RIGHT: start-here card + quick nav ── */
+#bfc-ci-{{ section.id }} .ci-aside { display: flex; flex-direction: column; gap: 22px; }
+
+#bfc-ci-{{ section.id }} .ci-start {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 16px;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  background: #fff;
+  padding: 14px;
+  border: 1px solid var(--gr);
+  transition: border-color 0.2s ease;
+}
+#bfc-ci-{{ section.id }}.is-dark .ci-start { background: #18180a; border-color: rgba(255,255,255,0.12); }
+#bfc-ci-{{ section.id }} .ci-start:hover { border-color: var(--or); }
+#bfc-ci-{{ section.id }} .ci-start-img {
+  width: 96px; height: 96px; object-fit: contain; display: block;
+}
+#bfc-ci-{{ section.id }} .ci-start-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--or); margin-bottom: 6px;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+#bfc-ci-{{ section.id }} .ci-start-name {
+  font-family: var(--sr); font-size: 20px; font-weight: 400;
+  line-height: 1.15; margin-bottom: 4px;
+}
+#bfc-ci-{{ section.id }}.is-dark .ci-start-name { color: #fff; }
+#bfc-ci-{{ section.id }} .ci-start-price {
+  font-size: 13px; font-weight: 600; color: var(--bk);
+}
+#bfc-ci-{{ section.id }}.is-dark .ci-start-price { color: rgba(255,255,255,0.85); }
+#bfc-ci-{{ section.id }} .ci-start-cta {
+  margin-top: 8px;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--or);
+}
+
+/* Quick-nav links */
+#bfc-ci-{{ section.id }} .ci-nav-title {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--ch); margin-bottom: 2px;
+}
+#bfc-ci-{{ section.id }}.is-dark .ci-nav-title { color: rgba(255,255,255,0.55); }
+#bfc-ci-{{ section.id }} .ci-nav { display: flex; flex-direction: column; }
+#bfc-ci-{{ section.id }} .ci-nav-link {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  text-decoration: none; color: var(--bk);
+  font-size: 14px; font-weight: 500;
+  padding: 13px 2px;
+  border-bottom: 1px solid var(--gr);
+  transition: color 0.15s ease, padding-left 0.15s ease;
+}
+#bfc-ci-{{ section.id }} .ci-nav-link:first-child { border-top: 1px solid var(--gr); }
+#bfc-ci-{{ section.id }}.is-dark .ci-nav-link { color: #fff; border-color: rgba(255,255,255,0.12); }
+#bfc-ci-{{ section.id }}.is-dark .ci-nav-link:first-child { border-top-color: rgba(255,255,255,0.12); }
+#bfc-ci-{{ section.id }} .ci-nav-link:hover { color: var(--or); padding-left: 8px; }
+#bfc-ci-{{ section.id }} .ci-nav-link svg { flex-shrink: 0; color: currentColor; }
+#bfc-ci-{{ section.id }} .ci-nav-sub {
+  font-size: 11px; font-weight: 400; color: var(--ch); letter-spacing: 0;
+}
+#bfc-ci-{{ section.id }}.is-dark .ci-nav-sub { color: rgba(255,255,255,0.55); }
+
+@media (max-width: 860px) {
+  #bfc-ci-{{ section.id }} .ci-wrap {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 40px 20px;
+  }
+  #bfc-ci-{{ section.id }} .ci-trust { gap: 10px 18px; margin-top: 18px; }
+  #bfc-ci-{{ section.id }} .ci-trust li { font-size: 9.5px; }
 }
 </style>
 
-{%- comment -%} noscript: with JS off, show the first two cameras as a plain duo {%- endcomment -%}
-<noscript><style>
-  #bfc-feat-{{ section.id }} .feat-card:nth-child(-n+2) { display: grid !important; }
-  #bfc-feat-{{ section.id }} .feat-card .feat-photos { display: none !important; }
-  @media (max-width: 990px) { #bfc-feat-{{ section.id }} .feat-card:nth-child(n+2) { display: none !important; } }
-</style></noscript>
+<section id="bfc-ci-{{ section.id }}" class="{% if theme == 'dark' %}is-dark{% endif %}" aria-label="{{ section.settings.intro_title | default: 'Collection intro' | escape }}">
+  <div class="ci-wrap">
 
-<div id="bfc-feat-{{ section.id }}" class="{% if section.settings.theme == 'dark' %}is-dark{% endif %}"
-     data-layout="{{ section.settings.layout_mode }}"
-     data-shuffle="{{ section.settings.randomize }}">
-
-  {%- if section.settings.show_intro and section.settings.intro_title != blank -%}
-    <div class="feat-intro">
+    {%- comment -%} ── LEFT: intro ── {%- endcomment -%}
+    <div class="ci-intro">
       {%- if section.settings.intro_eyebrow != blank -%}
-        <p class="feat-intro-ey">{{ section.settings.intro_eyebrow | escape }}</p>
+        <p class="ci-ey">{{ section.settings.intro_eyebrow | escape }}</p>
       {%- endif -%}
-      <h2 class="feat-intro-h">{{ section.settings.intro_title | escape }}</h2>
+      {%- if section.settings.intro_title != blank -%}
+        <h2 class="ci-title">{{ section.settings.intro_title | escape }}</h2>
+      {%- endif -%}
       {%- if section.settings.intro_body != blank -%}
-        <p class="feat-intro-p">{{ section.settings.intro_body | escape | newline_to_br }}</p>
+        <p class="ci-body">{{ section.settings.intro_body | escape | newline_to_br }}</p>
       {%- endif -%}
-      {%- assign has_trust = false -%}
-      {%- if section.settings.trust_1 != blank or section.settings.trust_2 != blank or section.settings.trust_3 != blank -%}{%- assign has_trust = true -%}{%- endif -%}
-      {%- if has_trust -%}
-        <ul class="feat-intro-trust">
+      {%- if section.settings.trust_1 != blank or section.settings.trust_2 != blank or section.settings.trust_3 != blank -%}
+        <ul class="ci-trust">
           {%- if section.settings.trust_1 != blank -%}
             <li><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>{{ section.settings.trust_1 | escape }}</li>
           {%- endif -%}
@@ -279,499 +192,116 @@
         </ul>
       {%- endif -%}
     </div>
-  {%- endif -%}
 
-  {%- if section.settings.show_shuffle -%}
-    <button type="button" class="feat-shuffle" data-feat-shuffle aria-label="Show different cameras" style="display:none">
-      <svg width="11" height="11" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 4h3l5 6h2M2 10h3l5-6h2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.5 2.5L12 4l-1.5 1.5M10.5 8.5L12 10l-1.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Shuffle
-    </button>
-  {%- endif -%}
+    {%- comment -%} ── RIGHT: start-here + quick nav ── {%- endcomment -%}
+    <div class="ci-aside">
 
-  {%- comment -%} ── Decide the source of featured cameras ──
-       'auto'   → pull in-stock products from the collection being viewed (or a chosen one)
-       'manual' → use the Camera blocks added in the editor
-       On non-collection pages, auto falls back to the chosen collection, then to manual. {%- endcomment -%}
-  {%- liquid
-    assign feat_source = section.settings.source
-    assign auto_collection = section.settings.auto_collection
-
-    comment # In auto mode, prefer the collection currently being viewed #
-    endcomment
-    if feat_source == 'auto'
-      if collection != blank and auto_collection == blank
-        assign source_collection = collection
-      else
-        assign source_collection = auto_collection
-      endif
-    endif
-
-    comment # Auto pool size; needs at least 2 so duo mode always has a pair #
-    endcomment
-    assign auto_limit = section.settings.auto_pool | plus: 0
-    if auto_limit < 2
-      assign auto_limit = 2
-    endif
-  -%}
-
-  {%- comment -%} Count cameras we can actually feature (in stock). Editor shows sold-out too. {%- endcomment -%}
-  {%- assign available_cams = 0 -%}
-  {%- if feat_source == 'auto' and source_collection != blank -%}
-    {%- for cp in source_collection.products limit: auto_limit -%}
-      {%- if cp.available or request.design_mode -%}{%- assign available_cams = available_cams | plus: 1 -%}{%- endif -%}
-    {%- endfor -%}
-  {%- else -%}
-    {%- for block in section.blocks -%}
-      {%- if block.settings.product != blank -%}
-        {%- if block.settings.product.available or request.design_mode -%}{%- assign available_cams = available_cams | plus: 1 -%}{%- endif -%}
+      {%- if sp != blank -%}
+        <a class="ci-start" href="{{ sp.url }}" aria-label="{{ sp_label }}: {{ sp.title | escape }}">
+          {%- if sp.featured_image -%}
+            <img class="ci-start-img" src="{{ sp.featured_image | image_url: width: 280 }}" alt="{{ sp.title | escape }}" loading="lazy" width="96" height="96"/>
+          {%- endif -%}
+          <div>
+            <span class="ci-start-label">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+              {{ sp_label }}
+            </span>
+            <p class="ci-start-name">{{ sp.title | escape }}</p>
+            {%- if sp.available -%}
+              <p class="ci-start-price">{% if sp.price_varies %}From {% endif %}{{ sp.price | money }}</p>
+            {%- else -%}
+              <p class="ci-start-price">Sold out</p>
+            {%- endif -%}
+            <span class="ci-start-cta">
+              {{ sp_cta }}
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
+            </span>
+          </div>
+        </a>
       {%- endif -%}
-    {%- endfor -%}
-  {%- endif -%}
 
-  {%- if available_cams > 0 -%}
-    <div class="feat-track">
-
-      {%- if feat_source == 'auto' and source_collection != blank -%}
-        {%- comment -%} ── AUTO: cameras from the current/chosen collection ── {%- endcomment -%}
-        {%- for p in source_collection.products limit: auto_limit -%}
-          {%- liquid
-            unless p.available or request.design_mode
-              continue
-            endunless
-
-            comment # Look for an override block whose product matches this camera #
-            endcomment
-            assign ov = blank
-            for b in section.blocks
-              if b.settings.product != blank and b.settings.product.id == p.id
-                assign ov = b
-                break
-              endif
-            endfor
-
-            comment # Heading: override block's heading, else product title #
-            endcomment
-            if ov != blank and ov.settings.heading_override != blank
-              assign feat_heading = ov.settings.heading_override
-            else
-              assign feat_heading = p.title
-            endif
-
-            comment # Card text: override block's custom text, else product description #
-            endcomment
-            if ov != blank and ov.settings.card_text != blank
-              assign feat_desc = ov.settings.card_text
-              assign desc_is_custom = true
-            else
-              assign feat_desc = p.description | strip_html | strip | truncatewords: 26
-              assign desc_is_custom = false
-            endif
-
-            comment # Eyebrow + CTA: override block first, else section defaults #
-            endcomment
-            if ov != blank and ov.settings.eyebrow != blank
-              assign card_eyebrow = ov.settings.eyebrow
-            else
-              assign card_eyebrow = section.settings.auto_eyebrow | default: 'Featured Camera'
-            endif
-            if ov != blank and ov.settings.cta_label != blank
-              assign card_cta = ov.settings.cta_label
-            else
-              assign card_cta = section.settings.cta_label | default: 'Shop this camera'
-            endif
-
-            comment # Example photos: override block pickers first, else product gallery metafields #
-            endcomment
-            assign e1 = blank
-            assign e2 = blank
-            assign e3 = blank
-            assign e4 = blank
-            if ov != blank
-              assign e1 = ov.settings.photo_1
-              assign e2 = ov.settings.photo_2
-              assign e3 = ov.settings.photo_3
-              assign e4 = ov.settings.photo_4
-            endif
-            if e1 == blank and e2 == blank and e3 == blank and e4 == blank
-              assign e1 = p.metafields.custom.gallery_1.value
-              assign e2 = p.metafields.custom.gallery_2.value
-              assign e3 = p.metafields.custom.gallery_3.value
-              assign e4 = p.metafields.custom.gallery_4.value
-            endif
-            assign ph_list = ''
-            if e1 != blank
-              capture c1
-                echo e1 | image_url: width: 700
-              endcapture
-              assign ph_list = ph_list | append: c1 | append: '||'
-            endif
-            if e2 != blank
-              capture c2
-                echo e2 | image_url: width: 700
-              endcapture
-              assign ph_list = ph_list | append: c2 | append: '||'
-            endif
-            if e3 != blank
-              capture c3
-                echo e3 | image_url: width: 700
-              endcapture
-              assign ph_list = ph_list | append: c3 | append: '||'
-            endif
-            if e4 != blank
-              capture c4
-                echo e4 | image_url: width: 700
-              endcapture
-              assign ph_list = ph_list | append: c4 | append: '||'
-            endif
-            assign ph_arr = ph_list | split: '||'
-            assign ph_count = ph_arr | size
-          -%}
-          <div class="feat-card{% if ph_count > 0 %} has-photos{% endif %}" data-has-photos="{% if ph_count > 0 %}1{% else %}0{% endif %}">
-            <a class="feat-cam" href="{{ p.url }}" aria-label="{{ p.title | escape }}">
-              {%- if p.featured_image -%}
-                {%- assign fp = p.featured_image.presentation.focal_point | default: '50% 50%' -%}
-                <img
-                  src="{{ p.featured_image | image_url: width: 800 }}"
-                  srcset="{{ p.featured_image | image_url: width: 500 }} 500w, {{ p.featured_image | image_url: width: 800 }} 800w"
-                  sizes="(max-width: 749px) 40vw, 22vw"
-                  style="object-position: {{ fp }};"
-                  alt="{{ p.title | escape }}" loading="lazy" width="800" height="800"/>
-              {%- endif -%}
-              {%- if section.settings.show_grade_badge -%}
-                <span class="feat-cam-grade">{{ section.settings.grade_badge_text | default: 'Restored' }}</span>
-              {%- endif -%}
-            </a>
-            <div class="feat-text">
-              <span class="feat-eyebrow">{{ card_eyebrow }}</span>
-              <h2 class="feat-title">{{ feat_heading }}</h2>
-              {%- if feat_desc != blank -%}<p class="feat-desc">{% if desc_is_custom %}{{ feat_desc | escape | newline_to_br }}{% else %}{{ feat_desc }}{% endif %}</p>{%- endif -%}
-              <div class="feat-buy">
-                {%- if p.available -%}
-                  <div class="feat-price"><small>{% if p.price_varies %}From{% else %}Price{% endif %}</small>{{ p.price | money }}</div>
-                {%- else -%}
-                  <div class="feat-price"><small>Status</small>Sold Out</div>
-                {%- endif -%}
-                <a class="feat-cta" href="{{ p.url }}">
-                  {{ card_cta }}
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
-                </a>
-              </div>
-            </div>
-            {%- if ph_count > 0 -%}
-              <div class="feat-photos is-{{ ph_count }}">
-                {%- for purl in ph_arr -%}<a class="feat-photo" href="{{ p.url }}"><img src="{{ purl }}" alt="" loading="lazy"/></a>{%- endfor -%}
-              </div>
+      {%- assign nav_count = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'quick_nav' and block.settings.label != blank -%}{%- assign nav_count = nav_count | plus: 1 -%}{%- endif -%}
+      {%- endfor -%}
+      {%- if nav_count > 0 -%}
+        {%- if section.settings.nav_title != blank -%}
+          <p class="ci-nav-title">{{ section.settings.nav_title | escape }}</p>
+        {%- endif -%}
+        <nav class="ci-nav" aria-label="{{ section.settings.nav_title | default: 'Quick links' | escape }}">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'quick_nav' and block.settings.label != blank -%}
+              <a class="ci-nav-link" href="{{ block.settings.url | default: '#' }}" {{ block.shopify_attributes }}>
+                <span>
+                  {{ block.settings.label | escape }}
+                  {%- if block.settings.sublabel != blank -%}<br><span class="ci-nav-sub">{{ block.settings.sublabel | escape }}</span>{%- endif -%}
+                </span>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
+              </a>
             {%- endif -%}
-          </div>
-        {%- endfor -%}
-
-      {%- else -%}
-        {%- comment -%} ── MANUAL: hand-picked Camera blocks ── {%- endcomment -%}
-        {%- for block in section.blocks -%}
-          {%- liquid
-            assign p = block.settings.product
-            if p == blank
-              continue
-            endif
-            unless p.available or request.design_mode
-              continue
-            endunless
-            assign feat_heading = block.settings.heading_override | default: p.title
-            assign feat_desc = block.settings.card_text
-            assign desc_is_custom = true
-            if feat_desc == blank
-              assign feat_desc = p.description | strip_html | strip | truncatewords: 26
-              assign desc_is_custom = false
-            endif
-
-            comment # Example photos: block pickers first, then product gallery metafields #
-            endcomment
-            assign e1 = block.settings.photo_1
-            assign e2 = block.settings.photo_2
-            assign e3 = block.settings.photo_3
-            assign e4 = block.settings.photo_4
-            if e1 == blank and e2 == blank and e3 == blank and e4 == blank
-              assign e1 = p.metafields.custom.gallery_1.value
-              assign e2 = p.metafields.custom.gallery_2.value
-              assign e3 = p.metafields.custom.gallery_3.value
-              assign e4 = p.metafields.custom.gallery_4.value
-            endif
-            assign ph_list = ''
-            if e1 != blank
-              capture c1
-                echo e1 | image_url: width: 700
-              endcapture
-              assign ph_list = ph_list | append: c1 | append: '||'
-            endif
-            if e2 != blank
-              capture c2
-                echo e2 | image_url: width: 700
-              endcapture
-              assign ph_list = ph_list | append: c2 | append: '||'
-            endif
-            if e3 != blank
-              capture c3
-                echo e3 | image_url: width: 700
-              endcapture
-              assign ph_list = ph_list | append: c3 | append: '||'
-            endif
-            if e4 != blank
-              capture c4
-                echo e4 | image_url: width: 700
-              endcapture
-              assign ph_list = ph_list | append: c4 | append: '||'
-            endif
-            assign ph_arr = ph_list | split: '||'
-            assign ph_count = ph_arr | size
-          -%}
-          <div class="feat-card{% if ph_count > 0 %} has-photos{% endif %}" data-has-photos="{% if ph_count > 0 %}1{% else %}0{% endif %}" {{ block.shopify_attributes }}>
-            <a class="feat-cam" href="{{ p.url }}" aria-label="{{ p.title | escape }}">
-              {%- if p.featured_image -%}
-                {%- assign fp = p.featured_image.presentation.focal_point | default: '50% 50%' -%}
-                <img
-                  src="{{ p.featured_image | image_url: width: 800 }}"
-                  srcset="{{ p.featured_image | image_url: width: 500 }} 500w, {{ p.featured_image | image_url: width: 800 }} 800w"
-                  sizes="(max-width: 749px) 40vw, 22vw"
-                  style="object-position: {{ fp }};"
-                  alt="{{ p.title | escape }}" loading="lazy" width="800" height="800"/>
-              {%- endif -%}
-              {%- if block.settings.show_grade_badge -%}
-                <span class="feat-cam-grade">{{ block.settings.grade_badge_text | default: 'Restored' }}</span>
-              {%- endif -%}
-            </a>
-            <div class="feat-text">
-              <span class="feat-eyebrow">{{ block.settings.eyebrow | default: 'Featured Camera' }}</span>
-              <h2 class="feat-title">{{ feat_heading }}</h2>
-              {%- if feat_desc != blank -%}<p class="feat-desc">{% if desc_is_custom %}{{ feat_desc | escape | newline_to_br }}{% else %}{{ feat_desc }}{% endif %}</p>{%- endif -%}
-              <div class="feat-buy">
-                {%- if p.available -%}
-                  <div class="feat-price"><small>{% if p.price_varies %}From{% else %}Price{% endif %}</small>{{ p.price | money }}</div>
-                {%- else -%}
-                  <div class="feat-price"><small>Status</small>Sold Out</div>
-                {%- endif -%}
-                <a class="feat-cta" href="{{ p.url }}">
-                  {{ block.settings.cta_label | default: 'Shop this camera' }}
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
-                </a>
-              </div>
-            </div>
-            {%- if ph_count > 0 -%}
-              <div class="feat-photos is-{{ ph_count }}">
-                {%- for purl in ph_arr -%}<a class="feat-photo" href="{{ p.url }}"><img src="{{ purl }}" alt="" loading="lazy"/></a>{%- endfor -%}
-              </div>
-            {%- endif -%}
-          </div>
-        {%- endfor -%}
+          {%- endfor -%}
+        </nav>
       {%- endif -%}
 
     </div>
-  {%- elsif request.design_mode -%}
-    <div style="padding: 40px; text-align: center; font-size: 13px; color: #4E4741;">
-      {%- if feat_source == 'auto' -%}No in-stock cameras found for this collection, so this section is hidden on the live store.{%- else -%}Add one or more Camera blocks, or switch the source to a collection in this section's settings.{%- endif -%}
-    </div>
-  {%- endif -%}
 
-</div>
-
-<script>
-(function() {
-  var root = document.getElementById('bfc-feat-{{ section.id }}');
-  if (!root) return;
-  var track = root.querySelector('.feat-track');
-  var cards = root.querySelectorAll('.feat-card');
-  var n = cards.length;
-  if (!track || !n) return;
-
-  var key = 'bfcFeat3_{{ section.id }}';
-  var inEditor = !!(window.Shopify && window.Shopify.designMode);
-  var layout = root.getAttribute('data-layout') || 'vary';   // 'vary' | 'duo' | 'solo'
-  var randomize = root.getAttribute('data-shuffle') !== 'false';
-  var mqMobile = window.matchMedia('(max-width: 990px)');
-
-  // Which cards have example photos (eligible for solo-with-photos)
-  var withPhotos = [];
-  for (var i = 0; i < n; i++) if (cards[i].getAttribute('data-has-photos') === '1') withPhotos.push(i);
-
-  function allIdx() { var a = []; for (var i = 0; i < n; i++) a.push(i); return a; }
-  function shuffle(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
-
-  // Decide the layout mode for this load.
-  // duo needs 2+ cameras; solo-with-photos needs at least one camera that has photos.
-  function chooseMode() {
-    if (mqMobile.matches) return 'duo1';          // mobile = single strip, no photos
-    var canDuo  = n >= 2;
-    var canSolo = withPhotos.length >= 1;
-    if (layout === 'duo')  return canDuo ? 'duo' : 'solo';
-    if (layout === 'solo') return canSolo ? 'solo' : 'duo';
-    // vary: coin-flip between the modes that are actually possible
-    if (canDuo && canSolo) return Math.random() < 0.5 ? 'solo' : 'duo';
-    if (canSolo) return 'solo';
-    return 'duo';
-  }
-
-  function applyMode(mode) {
-    track.classList.toggle('mode-solo', mode === 'solo');
-    track.classList.toggle('mode-duo', mode !== 'solo');
-  }
-
-  function show(idxs, mode) {
-    for (var i = 0; i < n; i++) cards[i].classList.toggle('is-on', idxs.indexOf(i) >= 0);
-    track.classList.toggle('is-showing-1', idxs.length <= 1);
-    applyMode(mode);
-  }
-
-  // Pick the camera indices for a given mode.
-  function pickFor(mode, avoid) {
-    if (mode === 'solo') {
-      // one camera that has photos, fresh vs last when possible
-      var pool = withPhotos.slice();
-      shuffle(pool);
-      var choice = pool[0];
-      if (avoid != null && pool.length > 1 && String(choice) === avoid) choice = pool[1];
-      return [choice];
-    }
-    if (mode === 'duo1') {
-      // mobile single, any camera
-      var one = shuffle(allIdx()).slice(0, 1);
-      if (avoid && one.join(',') === avoid && n > 1) { one = shuffle(allIdx()).slice(0, 1); }
-      return one;
-    }
-    // duo: two distinct cameras
-    if (n <= 2) return allIdx().slice(0, 2);
-    var idxs, tries = 0;
-    do { idxs = shuffle(allIdx()).slice(0, 2).sort(function(a,b){return a-b;}); tries++; }
-    while (avoid && idxs.join(',') === avoid && tries < 8);
-    return idxs;
-  }
-
-  function roll(forceMode) {
-    var mode = forceMode || chooseMode();
-    var avoid = null;
-    try { avoid = sessionStorage.getItem(key); } catch (e) {}
-    var idxs = pickFor(mode, avoid);
-    try { sessionStorage.setItem(key, idxs.join(',')); } catch (e) {}
-    show(idxs, mode);
-    return mode;
-  }
-
-  var currentMode;
-  if (inEditor) {
-    // Stable while editing: prefer solo if the layout asks, else duo.
-    currentMode = (layout === 'solo' && withPhotos.length) ? 'solo' : (n >= 2 ? 'duo' : 'solo');
-    var startIdx = currentMode === 'solo'
-      ? [ withPhotos.length ? withPhotos[0] : 0 ]
-      : allIdx().slice(0, mqMobile.matches ? 1 : 2);
-    show(startIdx, mqMobile.matches ? 'duo1' : currentMode);
-  } else if (randomize) {
-    currentMode = roll();
-  } else {
-    // No randomize: deterministic — solo shows first photo-camera, duo shows first two.
-    currentMode = chooseMode();
-    var det = currentMode === 'solo' ? [ withPhotos[0] ] : allIdx().slice(0, mqMobile.matches ? 1 : 2);
-    show(det, mqMobile.matches ? 'duo1' : currentMode);
-  }
-
-  // Re-pick when crossing the mobile/desktop boundary (mode availability changes).
-  function reflow() {
-    if (randomize && !inEditor) { roll(); return; }
-    var mode = mqMobile.matches ? 'duo1' : (track.classList.contains('mode-solo') ? 'solo' : 'duo');
-    var idxs = mode === 'solo' ? [ withPhotos.length ? withPhotos[0] : 0 ] : allIdx().slice(0, mqMobile.matches ? 1 : 2);
-    show(idxs, mode);
-  }
-  if (mqMobile.addEventListener) mqMobile.addEventListener('change', reflow);
-  else if (mqMobile.addListener) mqMobile.addListener(reflow);
-
-  // Shuffle button — reroll (new mode + new cameras) without reloading.
-  root.querySelectorAll('[data-feat-shuffle]').forEach(function(btn) {
-    // Only useful if there's more than one camera, or a solo/duo choice to make.
-    if (n > 1 || (withPhotos.length && n >= 1)) btn.style.display = '';
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      roll();
-    });
-  });
-})();
-</script>
+  </div>
+</section>
 
 {% schema %}
 {
   "name": "BFC Collection Intro",
   "tag": "section",
   "class": "bfc-collection-intro-section",
-  "max_blocks": 30,
+  "max_blocks": 6,
   "settings": [
-    { "type": "header", "content": "Collection intro" },
-    { "type": "paragraph", "content": "An orienting intro shown above the cameras. Type a version per collection (place this section on each collection template). Tells a cold shopper where they are, whether it's for them, and why to buy here." },
-    { "type": "checkbox", "id": "show_intro", "label": "Show collection intro", "default": false },
-    { "type": "text", "id": "intro_eyebrow", "label": "Intro eyebrow", "default": "Shop by type", "info": "Small label above the title." },
-    { "type": "text", "id": "intro_title", "label": "Intro title", "default": "Point & Shoot Cameras", "info": "Where am I — name the collection plainly." },
-    { "type": "textarea", "id": "intro_body", "label": "Intro paragraph", "default": "The whole point is that there is no point. No focusing, no settings, no fuss. The camera does the thinking so you just press the button. If you want real film photos without the learning curve, start here.", "info": "Is this for you — two or three sentences, plain language." },
+    { "type": "header", "content": "Intro (left side)" },
+    { "type": "paragraph", "content": "Type a version per collection. Orients a cold shopper: where they are, whether it's for them, why to buy here." },
+    { "type": "text", "id": "intro_eyebrow", "label": "Eyebrow", "default": "Shop by type" },
+    { "type": "text", "id": "intro_title", "label": "Title", "default": "Point & Shoot Cameras" },
+    { "type": "textarea", "id": "intro_body", "label": "Paragraph", "default": "The whole point is that there is no point. No focusing, no settings, no fuss. The camera does the thinking so you just press the button. If you want real film photos without the learning curve, start here." },
     { "type": "text", "id": "trust_1", "label": "Trust point 1", "default": "Restored & bench-tested in Brooklyn" },
     { "type": "text", "id": "trust_2", "label": "Trust point 2", "default": "Warrantied" },
     { "type": "text", "id": "trust_3", "label": "Trust point 3", "default": "Free shipping over $400" },
-    { "type": "header", "content": "Cameras" },
-    {
-      "type": "select", "id": "source", "label": "Which cameras to feature", "default": "auto",
-      "info": "Auto = pull from the collection being viewed. You can still add Camera blocks below to set custom text/photos for specific cameras (any block whose product is in the collection overrides that camera's text). Manual = only show the hand-picked blocks.",
-      "options": [
-        { "value": "auto", "label": "Auto — from the current collection" },
-        { "value": "manual", "label": "Manual — hand-picked blocks" }
-      ]
-    },
-    { "type": "collection", "id": "auto_collection", "label": "Collection override (Auto)", "info": "Leave blank to use whatever collection the visitor is viewing. Set one to always pull from a specific collection (and for non-collection pages like the homepage)." },
-    { "type": "range", "id": "auto_pool", "label": "Auto: how many to draw from", "min": 2, "max": 24, "step": 1, "default": 8, "info": "The first N in-stock products from the collection become the pool the featured cameras are picked from." },
-    { "type": "text", "id": "auto_eyebrow", "label": "Auto: eyebrow label", "default": "Featured Camera" },
-    { "type": "paragraph", "content": "In the 1-camera layout, example photos are pulled from each product's gallery metafields (gallery_1 through gallery_4). Cameras without gallery photos simply show in the 2-camera layout." },
-    { "type": "header", "content": "Layout" },
-    {
-      "type": "select", "id": "layout_mode", "label": "Layout", "default": "vary",
-      "info": "Vary = randomly alternate each load between one camera with photos and two cameras without. Tablet and mobile always show a single camera.",
-      "options": [
-        { "value": "vary", "label": "Vary — sometimes 1 with photos, sometimes 2" },
-        { "value": "duo",  "label": "Always two (no photos)" },
-        { "value": "solo", "label": "Always one (with photos)" }
-      ]
-    },
-    { "type": "checkbox", "id": "randomize", "label": "Pick random cameras on each page load", "default": true, "info": "When on, a fresh set shows each reload. When off, shows the first cameras in the pool." },
-    { "type": "checkbox", "id": "show_shuffle", "label": "Show a Shuffle button", "default": false, "info": "Lets visitors swap to other cameras without reloading. Appears only when there are more cameras than shown." },
+
+    { "type": "header", "content": "Start here camera (right side)" },
+    { "type": "paragraph", "content": "Pick one camera as the safe default for shoppers who don't know where to begin. Leave blank to hide." },
+    { "type": "product", "id": "start_product", "label": "Start here camera" },
+    { "type": "text", "id": "start_label", "label": "Label", "default": "Start here" },
+    { "type": "text", "id": "start_cta", "label": "Link text", "default": "Shop this camera" },
+
+    { "type": "header", "content": "Quick links (right side)" },
+    { "type": "paragraph", "content": "Add Quick Nav Link blocks below to route shoppers deeper (e.g. 'Under $150', 'With flash'). Drag to reorder." },
+    { "type": "text", "id": "nav_title", "label": "Quick links heading", "default": "Or browse by" },
+
+    { "type": "header", "content": "Theme" },
     {
       "type": "select", "id": "theme", "label": "Theme", "default": "light",
       "options": [
         { "value": "light", "label": "Light (cream)" },
         { "value": "dark", "label": "Dark" }
       ]
-    },
-    { "type": "header", "content": "Auto mode: shared card style" },
-    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop this camera" },
-    { "type": "checkbox", "id": "show_grade_badge", "label": "Show badge on camera image", "default": true },
-    { "type": "text", "id": "grade_badge_text", "label": "Badge text", "default": "Restored" }
+    }
   ],
   "blocks": [
     {
-      "type": "camera",
-      "name": "Camera / override",
+      "type": "quick_nav",
+      "name": "Quick Nav Link",
       "settings": [
-        { "type": "paragraph", "content": "In Manual source, these are the cameras shown. In Auto source, a block customizes the matching collection product's text and photos (and is otherwise ignored)." },
-        { "type": "product", "id": "product", "label": "Camera" },
-        { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Featured Camera" },
-        { "type": "text", "id": "heading_override", "label": "Heading override", "info": "Leave blank to use the product title." },
-        { "type": "textarea", "id": "card_text", "label": "Custom card text", "info": "Write something interesting about this camera. Leave blank to fall back to the product description." },
-        { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop this camera" },
-        { "type": "header", "content": "Grade badge" },
-        { "type": "checkbox", "id": "show_grade_badge", "label": "Show badge on camera image", "default": true },
-        { "type": "text", "id": "grade_badge_text", "label": "Badge text", "default": "Restored" },
-        { "type": "header", "content": "Example photos (shown in the 1-camera layout)" },
-        { "type": "paragraph", "content": "Leave all four blank to auto-pull from the product's gallery metafields (gallery_1 through gallery_4)." },
-        { "type": "image_picker", "id": "photo_1", "label": "Example photo 1" },
-        { "type": "image_picker", "id": "photo_2", "label": "Example photo 2" },
-        { "type": "image_picker", "id": "photo_3", "label": "Example photo 3" },
-        { "type": "image_picker", "id": "photo_4", "label": "Example photo 4" }
+        { "type": "text", "id": "label", "label": "Label", "default": "Under $150" },
+        { "type": "text", "id": "sublabel", "label": "Sub-label (optional)", "info": "Small text below the label." },
+        { "type": "url", "id": "url", "label": "Link" }
       ]
     }
   ],
   "presets": [
     {
-      "name": "BFC Collection Intro"
+      "name": "BFC Collection Intro",
+      "blocks": [
+        { "type": "quick_nav", "settings": { "label": "Under $150" } },
+        { "type": "quick_nav", "settings": { "label": "Premium compacts" } },
+        { "type": "quick_nav", "settings": { "label": "Best for beginners" } }
+      ]
     }
   ]
 }
