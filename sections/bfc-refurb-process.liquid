@@ -141,7 +141,8 @@
 {%- assign s5_h = section.settings.step5_h | default: step5_h_default -%}
 {%- assign s5_p = section.settings.step5_p | default: step5_p_default -%}
 
-<section class="bfc-rp" data-section-id="{{ section.id }}" data-section-type="bfc-refurb-process">
+<section class="bfc-rp{% if section.settings.mobile_sticky %} bfc-rp--sticky{% endif %}" data-section-id="{{ section.id }}" data-section-type="bfc-refurb-process"{% if section.settings.mobile_sticky %} data-mobile-sticky="true"{% endif %}>
+  {%- if section.settings.mobile_sticky -%}<div class="bfc-rp-scrim" data-rp-scrim aria-hidden="true"></div>{%- endif -%}
   <details class="bfc-rp-details"{% if section.settings.open_by_default %} open{% endif %}>
 
     {%- comment -%} ── Collapsed bar (default state) ── {%- endcomment -%}
@@ -296,6 +297,59 @@
 
   </details>
 </section>
+
+<script>
+(function(){
+  var sec = document.querySelector('.bfc-rp[data-section-id="{{ section.id }}"]');
+  if (!sec || sec.getAttribute('data-mobile-sticky') !== 'true') return;
+  var details = sec.querySelector('.bfc-rp-details');
+  var summary = sec.querySelector('.bfc-rp-summary');
+  var scrim = sec.querySelector('[data-rp-scrim]');
+  if (!details || !summary) return;
+
+  var mq = window.matchMedia('(max-width: 768px)');
+
+  /* Reserve space at the bottom of the page so the fixed bar never covers the
+     footer. Only while sticky is active (mobile). Uses the collapsed bar height. */
+  function setOffset(){
+    if (mq.matches){
+      // measure the summary bar height (the always-visible part)
+      var h = summary.getBoundingClientRect().height || 64;
+      document.body.style.paddingBottom = Math.ceil(h) + 'px';
+    } else {
+      document.body.style.paddingBottom = '';
+    }
+  }
+
+  function syncOpen(){
+    var open = details.hasAttribute('open') && mq.matches;
+    sec.classList.toggle('is-open', open);
+    // lock page scroll behind the drawer on mobile when open
+    if (open){ document.documentElement.style.overflow = 'hidden'; }
+    else { document.documentElement.style.overflow = ''; }
+  }
+
+  details.addEventListener('toggle', syncOpen);
+
+  // Tapping the dimmed scrim closes the drawer
+  if (scrim){
+    scrim.addEventListener('click', function(){
+      details.removeAttribute('open');
+      syncOpen();
+    });
+  }
+
+  // In the editor, don't trap scroll
+  if (window.Shopify && window.Shopify.designMode){
+    details.removeAttribute('open');
+  }
+
+  setOffset();
+  syncOpen();
+  window.addEventListener('resize', function(){ setOffset(); syncOpen(); });
+  if (mq.addEventListener) mq.addEventListener('change', function(){ setOffset(); syncOpen(); });
+})();
+</script>
 
 <style>
   .bfc-rp {
@@ -712,6 +766,61 @@
     }
     .bfc-rp-guarantee-h { font-size: 22px; }
   }
+
+  /* ── Mobile sticky bottom bar (opt-in via "Mobile: dock to bottom of screen") ──
+     On phones, the whole details element fixes to the bottom of the viewport like
+     a sticky ATC. The summary stays visible; tapping expands the body upward as a
+     scrollable drawer. Desktop and the non-sticky case are unaffected. */
+  @media (max-width: 768px) {
+    .bfc-rp--sticky .bfc-rp-details {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 9990;
+      background: var(--rp-cv);
+      border-top: 1px solid var(--rp-bk);
+      border-bottom: none;
+      box-shadow: 0 -6px 24px rgba(32, 32, 9, 0.16);
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+    }
+    /* Summary pinned as the bar; body scrolls above it when open */
+    .bfc-rp--sticky .bfc-rp-summary {
+      flex: 0 0 auto;
+      order: 2;                 /* bar sits at the bottom of the fixed element */
+      border-top: 1px solid var(--rp-gr);
+    }
+    .bfc-rp--sticky .bfc-rp-body {
+      order: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      flex: 1 1 auto;
+      border-top: none;
+    }
+    /* Collapsed: only the bar shows. Open: drawer reveals above it. */
+    .bfc-rp--sticky .bfc-rp-details:not([open]) .bfc-rp-body { display: none; }
+    /* Re-show the open/close CTA label on the sticky bar (it's hidden by default on mobile) */
+    .bfc-rp--sticky .bfc-rp-summary-cta-open { display: inline !important; }
+    .bfc-rp--sticky .bfc-rp-details[open] .bfc-rp-summary-cta-open { display: none !important; }
+    .bfc-rp--sticky .bfc-rp-details[open] .bfc-rp-summary-cta-close { display: inline !important; }
+    .bfc-rp--sticky .bfc-rp-summary-toggle { flex-direction: row; align-items: center; }
+    /* Dim the page behind the open drawer */
+    .bfc-rp--sticky .bfc-rp-scrim {
+      position: fixed;
+      inset: 0;
+      background: rgba(32, 32, 9, 0.4);
+      z-index: 9989;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+    .bfc-rp--sticky.is-open .bfc-rp-scrim { opacity: 1; visibility: visible; }
+  }
+  /* Scrim never shows on desktop or when not sticky */
+  .bfc-rp-scrim { display: none; }
+  @media (max-width: 768px) { .bfc-rp--sticky .bfc-rp-scrim { display: block; } }
 </style>
 
 {% schema %}
@@ -748,6 +857,13 @@
       "label": "Expanded by default",
       "default": false,
       "info": "Default is collapsed bar. Tick to render expanded on page load."
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_sticky",
+      "label": "Mobile: dock to bottom of screen",
+      "default": false,
+      "info": "On phones, pins the bar to the bottom of the viewport like a sticky add-to-cart. Tapping opens the details as a drawer above it. Desktop is unaffected."
     },
     {
       "type": "header",
