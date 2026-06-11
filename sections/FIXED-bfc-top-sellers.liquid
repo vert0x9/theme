@@ -347,6 +347,9 @@
                       {% if badge != blank %}
                         <span class="bfc-ts__badge" aria-hidden="true">{{ badge }}</span>
                       {% endif %}
+                      {% if block.settings.show_stock_sticker and variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny' and variant.inventory_quantity > 0 and variant.inventory_quantity <= 5 %}
+                        <span class="bfc-ts__stock-sticker" aria-hidden="true">Only {{ variant.inventory_quantity }} left</span>
+                      {% endif %}
                     </a>
                     <div class="bfc-ts__meta">
                       {% if block.settings.show_vendor and product.vendor != blank %}
@@ -372,7 +375,20 @@
                         {% endif %}
                       </div>
                       {% if block.settings.show_urgency %}
-                        {% render 'bfc-pdp-urgency', variant: variant, handle: product.handle, show_trust: block.settings.show_urgency_trust %}
+                        {%- assign bfc_price = variant.price | default: product.price | default: 0 -%}
+                        <div class="bfc-card-meta">
+                          {% if block.settings.show_urgency_trust %}
+                            <span class="bfc-card-meta-item">
+                              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                              {% if bfc_price >= 40000 %}Ships Fast &amp; Free{% else %}Ships Fast{% endif %}
+                            </span>
+                          {% endif %}
+                          <span class="bfc-card-activity"
+                            data-handle="{{ product.handle }}"
+                            data-available="{{ product.available }}"
+                            data-qty="{{ product.variants | map: 'inventory_quantity' | sum }}"
+                          data-no-stock-text="true"></span>
+                        </div>
                       {% endif %}
                       <div class="bfc-ts__bottom">
                         {% if block.settings.show_price %}
@@ -590,6 +606,23 @@
               background: rgba(0,0,0,.72);
               color: #fff;
               backdrop-filter: blur(6px);
+            }
+            #{{ block_id }} .bfc-ts__stock-sticker{
+              position: absolute;
+              right: 12px;
+              top: 12px;
+              z-index: 2;
+              font-family: var(--bfc-body-family);
+              font-size: 11px;
+              font-weight: 600;
+              line-height: 1;
+              letter-spacing: 0.02em;
+              padding: 6px 9px;
+              border-radius: var(--bfc-ts-radius);
+              background: #E36E15;
+              color: #fff;
+              white-space: nowrap;
+              box-shadow: 0 1px 4px rgba(0,0,0,.18);
             }
             #{{ block_id }} .bfc-ts__meta{
               padding: 10px 12px 12px;
@@ -951,6 +984,9 @@
                     {% if badge != blank %}
                       <span class="bfc-ts__badge" aria-hidden="true">{{ badge }}</span>
                     {% endif %}
+                    {% if block.settings.show_stock_sticker and variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny' and variant.inventory_quantity > 0 and variant.inventory_quantity <= 5 %}
+                      <span class="bfc-ts__stock-sticker" aria-hidden="true">Only {{ variant.inventory_quantity }} left</span>
+                    {% endif %}
                   </a>
                   <div class="bfc-ts__meta">
                     {% if block.settings.show_vendor and product.vendor != blank %}
@@ -973,7 +1009,20 @@
                       {% endif %}
                     </div>
                     {% if block.settings.show_urgency %}
-                      {% render 'bfc-pdp-urgency', variant: variant, handle: product.handle, show_trust: block.settings.show_urgency_trust %}
+                      {%- assign bfc_price = variant.price | default: product.price | default: 0 -%}
+                      <div class="bfc-card-meta">
+                        {% if block.settings.show_urgency_trust %}
+                          <span class="bfc-card-meta-item">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                            {% if bfc_price >= 40000 %}Ships Fast &amp; Free{% else %}Ships Fast{% endif %}
+                          </span>
+                        {% endif %}
+                        <span class="bfc-card-activity"
+                          data-handle="{{ product.handle }}"
+                          data-available="{{ product.available }}"
+                          data-qty="{{ product.variants | map: 'inventory_quantity' | sum }}"
+                          data-no-stock-text="true"></span>
+                      </div>
                     {% endif %}
                     <div class="bfc-ts__bottom">
                       {% if block.settings.show_price %}
@@ -1138,6 +1187,23 @@
               background: rgba(0,0,0,.72);
               color: #fff;
               backdrop-filter: blur(6px);
+            #{{ block_id }} .bfc-ts__stock-sticker{
+              position: absolute;
+              right: 12px;
+              top: 12px;
+              z-index: 2;
+              font-family: var(--bfc-body-family);
+              font-size: 11px;
+              font-weight: 600;
+              line-height: 1;
+              letter-spacing: 0.02em;
+              padding: 6px 9px;
+              border-radius: var(--bfc-ts-radius);
+              background: #E36E15;
+              color: #fff;
+              white-space: nowrap;
+              box-shadow: 0 1px 4px rgba(0,0,0,.18);
+            }
             }
             #{{ block_id }} .bfc-ts__meta{
               padding: 10px 12px 12px;
@@ -1324,6 +1390,101 @@
     {% endcase %}
   {% endfor %}
 </section>
+
+{%- comment -%} ── BFC Top Sellers: activity meta row CSS + counter (matches collection cards) ── {%- endcomment -%}
+<style>
+  .bfc-card-meta {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+    margin: 6px 0 2px;
+    font-family: 'Poppins', sans-serif;
+  }
+  .bfc-card-meta:empty { display: none; }
+  .bfc-card-meta-item {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 9.5px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: #4E4741;
+  }
+  .bfc-card-meta-item svg { color: #2a4820; flex-shrink: 0; }
+  .bfc-card-activity {
+    display: none; align-items: center; gap: 5px;
+    font-size: 9.5px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: #E36E15;
+  }
+  .bfc-card-activity.is-visible { display: inline-flex; }
+  .bfc-card-activity::before {
+    content: ''; width: 5px; height: 5px; background: #E36E15;
+    flex-shrink: 0;
+    animation: bfc-card-pulse 2s ease-in-out infinite;
+  }
+  @keyframes bfc-card-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+</style>
+<script>
+(function() {
+  if (window.__bfcCardActivityInit) return;
+  window.__bfcCardActivityInit = true;
+
+  function renderInventoryMessages() {
+    var list = [];
+    document.querySelectorAll('.bfc-card-activity').forEach(function(el) {
+      // Top-sellers cards show low-stock as an image sticker, so skip the
+      // inline "Only N left" text for them (data-no-stock-text="true").
+      if (el.dataset.noStockText !== 'true') {
+        var available = el.dataset.available === 'true';
+        var qty = parseInt(el.dataset.qty, 10);
+        if (isNaN(qty)) qty = null;
+        if (available && qty !== null && qty > 0 && qty <= 3) {
+          el.textContent = qty === 1 ? 'Only 1 left' : 'Only ' + qty + ' left';
+          el.classList.add('is-visible');
+        }
+      }
+      list.push(el);
+    });
+    return list;
+  }
+
+  function loadActivity() {
+    var list = renderInventoryMessages();
+    if (!list.length) return;
+    var URL = 'https://app--6910fd9136cfabdf03f66780.base44.app/api/apps/6910fd9136cfabdf03f66780/functions/productActivity?sort=-created_date&limit=500';
+    fetch(URL)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var events = Array.isArray(data) ? data : (data.results || data.data || []);
+        if (!events.length) return;
+        var now = Date.now();
+        var counts = {};
+        events.forEach(function(e) {
+          if (!e || e.event !== 'atc' || !e.handle || !e.created_date) return;
+          if (now - new Date(e.created_date).getTime() > 2505600000) return; // 29 days
+          counts[e.handle] = (counts[e.handle] || 0) + 1;
+        });
+        list.forEach(function(el) {
+          var n = counts[el.dataset.handle] || 0;
+          if (n < 3) return;
+          var cartMsg = n + ' people have this in their cart';
+          if (el.classList.contains('is-visible')) {
+            el.textContent = el.textContent + ' & ' + cartMsg;
+          } else {
+            el.textContent = cartMsg;
+            el.classList.add('is-visible');
+          }
+        });
+      })
+      .catch(function() { /* fail silently */ });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadActivity);
+  } else {
+    loadActivity();
+  }
+})();
+</script>
 {% schema %}
 {
   "name": "BFC Top Sellers",
@@ -1699,15 +1860,22 @@
         {
           "type": "checkbox",
           "id": "show_urgency",
-          "label": "Show urgency trust signals",
-          "info": "Low-stock alert, ships fast/free, and recent-activity counter (renders bfc-pdp-urgency).",
+          "label": "Show meta row (ships + cart activity)",
+          "info": "Adds a row under the title with ships fast/free and a \"N people have this in their cart\" counter. Matches collection-page logic (29-day window, shows at 3+). Low-stock shows separately as the photo sticker below.",
           "default": false
         },
         {
           "type": "checkbox",
           "id": "show_urgency_trust",
-          "label": "Include 'Restored & Warrantied' signal",
+          "label": "Include 'Ships Fast / Ships Fast & Free' signal",
           "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_stock_sticker",
+          "label": "Show low-stock sticker on photo",
+          "info": "Super Orange 'Only X left' pill, top-right over the product image. Shows when tracked inventory is 5 or fewer and oversell is off.",
+          "default": false
         },
         {
           "type": "checkbox",
@@ -1998,15 +2166,22 @@
         {
           "type": "checkbox",
           "id": "show_urgency",
-          "label": "Show urgency trust signals",
-          "info": "Low-stock alert, ships fast/free, and recent-activity counter (renders bfc-pdp-urgency).",
+          "label": "Show meta row (ships + cart activity)",
+          "info": "Adds a row under the title with ships fast/free and a \"N people have this in their cart\" counter. Matches collection-page logic (29-day window, shows at 3+). Low-stock shows separately as the photo sticker below.",
           "default": false
         },
         {
           "type": "checkbox",
           "id": "show_urgency_trust",
-          "label": "Include 'Restored & Warrantied' signal",
+          "label": "Include 'Ships Fast / Ships Fast & Free' signal",
           "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_stock_sticker",
+          "label": "Show low-stock sticker on photo",
+          "info": "Super Orange 'Only X left' pill, top-right over the product image. Shows when tracked inventory is 5 or fewer and oversell is off.",
+          "default": false
         },
         {
           "type": "checkbox",
