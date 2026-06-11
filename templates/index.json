@@ -286,7 +286,7 @@
         "enable_transparent_header": true,
         "slider_height_desktop": 75,
         "slider_height_mobile": 85,
-        "slideshow_autoplay_interval": 0,
+        "slideshow_autoplay_interval": 6,
         "show_slideshow_navigation": true,
         "slideshow_navigation_position": "hero__swiper-buttons--sides",
         "color_scheme_arrows": "scheme-1",
