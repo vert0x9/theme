@@ -11,6 +11,46 @@
   "sections": {
     "bfc_collection_intro_YkT69G": {
       "type": "bfc-collection-intro",
+      "blocks": {
+        "quick_nav_LqnGQy": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Beginner Friendly",
+            "sublabel": "",
+            "url": ""
+          }
+        },
+        "quick_nav_nqWaU4": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Best Image",
+            "sublabel": "",
+            "url": ""
+          }
+        },
+        "quick_nav_LXTKrT": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Under $150",
+            "sublabel": "",
+            "url": ""
+          }
+        },
+        "quick_nav_MKtKWp": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Under $300",
+            "sublabel": "",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "quick_nav_LqnGQy",
+        "quick_nav_nqWaU4",
+        "quick_nav_LXTKrT",
+        "quick_nav_MKtKWp"
+      ],
       "name": "BFC Collection Intro",
       "settings": {
         "intro_eyebrow": "Shop by type",
