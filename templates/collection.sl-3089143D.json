@@ -33,19 +33,19 @@
         "quick_nav_LXTKrT": {
           "type": "quick_nav",
           "settings": {
-            "label": "Under $150",
+            "label": "Under $250",
             "sublabel": "",
             "link_collection": "",
-            "custom_url": ""
+            "custom_url": "https://brooklynfilmcamera.com/collections/cameras?sort_by=best-selling&filter.v.price.lte=250"
           }
         },
         "quick_nav_MKtKWp": {
           "type": "quick_nav",
           "settings": {
-            "label": "Under $300",
+            "label": "Under $500",
             "sublabel": "",
             "link_collection": "",
-            "custom_url": ""
+            "custom_url": "https://brooklynfilmcamera.com/collections/cameras?sort_by=best-selling&filter.v.price.lte=500"
           }
         }
       },
