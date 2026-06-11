@@ -631,6 +631,36 @@
             "url": "shopify://collections/35mm-film",
             "badge": ""
           }
+        },
+        "cover_item_jwgyVR": {
+          "type": "cover_item",
+          "settings": {
+            "image": "shopify://shop_images/img20260531_13443948.jpg",
+            "title": "Polaroid Film",
+            "subtitle": "",
+            "url": "shopify://collections/film-instant",
+            "badge": ""
+          }
+        },
+        "cover_item_hBbx6j": {
+          "type": "cover_item",
+          "settings": {
+            "image": "shopify://shop_images/Hero_Mobile_K1000.jpg",
+            "title": "Developing Membership",
+            "subtitle": "",
+            "url": "shopify://pages/film-developing-membership",
+            "badge": ""
+          }
+        },
+        "cover_item_ENcekM": {
+          "type": "cover_item",
+          "settings": {
+            "image": "shopify://shop_images/Hero_Mobile_SX-70.jpg",
+            "title": "SX-70 Accessories",
+            "subtitle": "",
+            "url": "shopify://collections/polaroid-sx-70-accessories",
+            "badge": ""
+          }
         }
       },
       "block_order": [
@@ -639,7 +669,10 @@
         "cover_item_xL7jVi",
         "cover_item_89qmHK",
         "cover_item_bYQBpH",
-        "cover_item_mrHgYD"
+        "cover_item_mrHgYD",
+        "cover_item_jwgyVR",
+        "cover_item_hBbx6j",
+        "cover_item_ENcekM"
       ],
       "custom_css": [
         "h2 {}"
