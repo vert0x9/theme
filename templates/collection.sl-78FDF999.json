@@ -90,7 +90,7 @@
         "quick_nav_mpwWzc": {
           "type": "quick_nav",
           "settings": {
-            "label": "Highest Quality",
+            "label": "Premium Compacts",
             "sublabel": "",
             "image": "shopify://shop_images/Summer_2026_Cafe-2896.png",
             "link_collection": "high-image-quality-point-shoots",
@@ -100,10 +100,11 @@
         "quick_nav_xQRfij": {
           "type": "quick_nav",
           "settings": {
-            "label": "Point & shoots",
+            "label": "Under 400",
             "sublabel": "",
+            "image": "shopify://shop_images/Summer_2026_Photobooth-3364.png",
             "link_collection": "",
-            "custom_url": ""
+            "custom_url": "https://brooklynfilmcamera.com/collections/point-shoots?sort_by=best-selling&filter.v.price.lte=400"
           }
         },
         "quick_nav_aFNwnt": {
