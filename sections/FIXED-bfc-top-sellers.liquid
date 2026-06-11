@@ -378,9 +378,9 @@
                         {%- assign bfc_price = variant.price | default: product.price | default: 0 -%}
                         <div class="bfc-card-meta">
                           {% if block.settings.show_urgency_trust %}
-                            <span class="bfc-card-meta-item{% if bfc_price >= 40000 %} bfc-card-meta-free{% endif %}">
-                              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                              {% if bfc_price >= 40000 %}Ships Fast &amp; Free{% else %}Ships Fast{% endif %}
+                            <span class="bfc-card-meta-item bfc-card-meta-free">
+                              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                              Restored &amp; Warrantied
                             </span>
                           {% endif %}
                           <span class="bfc-card-activity"
@@ -1012,9 +1012,9 @@
                       {%- assign bfc_price = variant.price | default: product.price | default: 0 -%}
                       <div class="bfc-card-meta">
                         {% if block.settings.show_urgency_trust %}
-                          <span class="bfc-card-meta-item{% if bfc_price >= 40000 %} bfc-card-meta-free{% endif %}">
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                            {% if bfc_price >= 40000 %}Ships Fast &amp; Free{% else %}Ships Fast{% endif %}
+                          <span class="bfc-card-meta-item bfc-card-meta-free">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                            Restored &amp; Warrantied
                           </span>
                         {% endif %}
                         <span class="bfc-card-activity"
@@ -1869,7 +1869,7 @@
         {
           "type": "checkbox",
           "id": "show_urgency_trust",
-          "label": "Include 'Ships Fast / Ships Fast & Free' signal",
+          "label": "Include 'Restored & Warrantied' signal",
           "default": true
         },
         {
@@ -2175,7 +2175,7 @@
         {
           "type": "checkbox",
           "id": "show_urgency_trust",
-          "label": "Include 'Ships Fast / Ships Fast & Free' signal",
+          "label": "Include 'Restored & Warrantied' signal",
           "default": true
         },
         {
