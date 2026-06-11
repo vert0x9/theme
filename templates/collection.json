@@ -84,6 +84,63 @@
         "spacing_bottom": "2"
       }
     },
+    "bfc_collection_intro_zVqc9H": {
+      "type": "bfc-collection-intro",
+      "blocks": {
+        "quick_nav_NcJy9K": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Beginner friendly",
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": ""
+          }
+        },
+        "quick_nav_CtU8pY": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Point & shoots",
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": ""
+          }
+        },
+        "quick_nav_WyiUFU": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Premium compacts",
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "quick_nav_NcJy9K",
+        "quick_nav_CtU8pY",
+        "quick_nav_WyiUFU"
+      ],
+      "name": "BFC Collection Intro",
+      "settings": {
+        "intro_eyebrow": "Shop all",
+        "intro_title": "Every Camera, Restored",
+        "intro_body": "Film cameras, brought back to life and ready to shoot. Every body here has been serviced, cleaned, and bench-tested by our techs in Brooklyn, then backed by a warranty. New to film or coming back to it, this is the whole shelf. Not sure where to start? Use the links to browse by what matters to you.",
+        "trust_1": "Restored & bench-tested in Brooklyn",
+        "trust_2": "Warrantied",
+        "trust_3": "Free shipping over $400",
+        "sub_mode": true,
+        "sub_eyebrow": "A subset of All Cameras",
+        "sub_title": "Beginner Friendly",
+        "sub_body": "Simple, reliable cameras that are easy to learn on. No fiddly settings, no surprises. Every one restored, bench-tested, and warrantied.",
+        "back_collection": "",
+        "back_label": "Back to All Cameras",
+        "nav_title": "Browse by",
+        "show_reset": true,
+        "reset_collection": "",
+        "reset_label": "View all cameras",
+        "theme": "light"
+      }
+    },
     "main": {
       "type": "main-collection",
       "blocks": {
@@ -176,6 +233,7 @@
       "settings": {
         "camera_type": "generic",
         "open_by_default": false,
+        "mobile_sticky": false,
         "eyebrow": "Why BFC",
         "bar_title": "",
         "open_label": "Learn how",
@@ -304,6 +362,7 @@
   "order": [
     "page_banner_jWtyM4",
     "featured_collections_ybC3xQ",
+    "bfc_collection_intro_zVqc9H",
     "main",
     "bfc_refurb_process_BaPGXJ",
     "bfc_sx70_guide_z4PmxW",
