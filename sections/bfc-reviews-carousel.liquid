@@ -274,23 +274,84 @@
   ordered.forEach(function(c){ track.appendChild(c); });
   cards = ordered;
 
-  var pos = 0;
+  var N = cards.length;
+
   function getStep(){
     var w = sec.offsetWidth;
     if (w < 600) return 1;
     if (w < 990) return 2;
     return {{ card_count }};
   }
-  function slide(dir){
-    var step = getStep();
-    var total = cards.length;
-    pos += dir * step;
-    if (pos >= total) pos = 0;
-    if (pos < 0) pos = Math.max(0, total - step);
-    var card = track.children[pos];
-    if (!card) { pos = 0; card = track.children[0]; }
-    track.style.transform = 'translateX(-' + card.offsetLeft + 'px)';
+
+  /* ── Seamless infinite loop via edge clones ──
+     Clone enough cards on each side to fill the widest viewport (max visible = 5),
+     so there's never an empty gap when looping. Real cards live at children
+     indices [CLONE .. CLONE+N-1]. After a slide lands on a clone, we silently
+     jump (transition off) to the matching real card, so swiping past the end or
+     before the start continues seamlessly instead of snapping to the front. */
+  var CLONE = Math.min(5, N);
+  if (N > 1) {
+    for (var i = 0; i < CLONE; i++) {
+      var head = cards[i].cloneNode(true);
+      head.setAttribute('data-rv-clone', 'tail');
+      head.setAttribute('aria-hidden', 'true');
+      track.appendChild(head); // clones of the FIRST cards go to the END
+    }
+    for (var j = N - 1; j >= N - CLONE; j--) {
+      var tail = cards[j].cloneNode(true);
+      tail.setAttribute('data-rv-clone', 'head');
+      tail.setAttribute('aria-hidden', 'true');
+      track.insertBefore(tail, track.firstChild); // clones of the LAST cards go to the START
+    }
   }
+
+  /* current = index into track.children (clones included). First real card sits at CLONE. */
+  var current = (N > 1) ? CLONE : 0;
+
+  function positionTo(index, animate){
+    var child = track.children[index];
+    if (!child) return;
+    if (!animate) {
+      track.style.transition = 'none';
+      track.style.transform = 'translateX(-' + child.offsetLeft + 'px)';
+      // force reflow so the next transform animates from here
+      track.offsetHeight; // eslint-disable-line no-unused-expressions
+      track.style.transition = '';
+    } else {
+      track.style.transform = 'translateX(-' + child.offsetLeft + 'px)';
+    }
+  }
+
+  var animating = false;
+  function slide(dir){
+    if (N <= 1 || animating) return;
+    var step = getStep();
+    animating = true;
+    current += dir * step;
+    positionTo(current, true);
+  }
+
+  /* When a slide animation ends on a clone, snap back to the equivalent real card
+     with no animation. Real range is [CLONE .. CLONE+N-1]. */
+  track.addEventListener('transitionend', function(e){
+    if (e.target !== track || e.propertyName !== 'transform') return;
+    animating = false;
+    if (N <= 1) return;
+    var realStart = CLONE, realEnd = CLONE + N - 1;
+    if (current > realEnd) {
+      current = realStart + ((current - realStart) % N);
+      positionTo(current, false);
+    } else if (current < realStart) {
+      var back = (realStart - current) % N;
+      current = realEnd - (back - 1);
+      positionTo(current, false);
+    }
+  });
+
+  /* Set initial position (offset past the leading clones) once layout is ready. */
+  function init(){ positionTo(current, false); }
+  if (document.readyState === 'complete') { init(); }
+  else { window.addEventListener('load', init); init(); }
 
   prevBtn.addEventListener('click', function(){ slide(-1); });
   nextBtn.addEventListener('click', function(){ slide(1); });
@@ -312,6 +373,7 @@
   }
   function dragStart(e){
     dragging = true;
+    animating = false;
     startX = e.touches ? e.touches[0].clientX : e.clientX;
     startTx = getTx();
     track.classList.add('is-dragging');
