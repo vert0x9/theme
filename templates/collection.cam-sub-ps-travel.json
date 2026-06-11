@@ -49,17 +49,18 @@
       "settings": {
         "intro_eyebrow": "Shop all",
         "intro_title": "Every Camera, Restored",
-        "intro_body": "Film cameras, brought back to life and ready to shoot. Every body here has been serviced, cleaned, and bench-tested by our techs in Brooklyn, then backed by a warranty. New to film or coming back to it, this is the whole shelf. Not sure where to start? Use the links to browse by what matters to you.",
+        "intro_body": "",
         "trust_1": "Restored & bench-tested in Brooklyn",
         "trust_2": "Warrantied",
         "trust_3": "Free shipping over $400",
         "sub_mode": true,
-        "sub_eyebrow": "A subset of All Cameras",
-        "sub_title": "The Good Stuff",
-        "sub_body": "The cameras worth saving up for. Premium compacts, pro-grade bodies, and the cult classics people obsess over, each one fully serviced and warrantied. If you want glass and build quality that holds up for decades, this is the shelf.",
-        "back_collection": "cameras",
+        "sub_eyebrow": "A subset of All Point & Shoots",
+        "sub_title": "Travel Ready",
+        "sub_body": "These point-and-shoots are the ones we'd throw in a bag when we are going on a trip",
+        "back_collection": "point-shoots",
         "back_label": "Back to All Cameras",
         "nav_title": "Browse by",
+        "nav_style": "list",
         "theme": "light"
       }
     },
