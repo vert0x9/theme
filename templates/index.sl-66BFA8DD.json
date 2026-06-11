@@ -696,85 +696,6 @@
         "section_padding_bottom": 48
       }
     },
-    "fixed_bfc_holiday_guides_YVbMD9": {
-      "type": "FIXED-bfc-holiday-guides",
-      "blocks": {
-        "holiday_guides_wpDReU": {
-          "type": "holiday_guides",
-          "settings": {
-            "group_id": "auto",
-            "eyebrow": "",
-            "heading": "Summer Point & Shoots",
-            "body": "<p>It's the season for pictures. Golden hour rooftop hangs, cross-country drives, backyard barbecues. Fully restored, check out all of our summer favorites.</p>",
-            "show_product_grid": true,
-            "product_collection": "",
-            "products_to_show": 2,
-            "products": [
-              "contax-tvs",
-              "minolta-explorer-freedom-zoom"
-            ],
-            "use_inline_links": true,
-            "link_label_1": "View Summer Collection",
-            "link_url_1": "shopify://collections/summer-collection",
-            "link_label_2": "",
-            "link_url_2": "shopify://collections/all",
-            "link_label_3": "",
-            "link_url_3": "shopify://collections/all",
-            "cta_label": "Shop the guides",
-            "cta_link": "",
-            "image": "shopify://shop_images/Summer_2026_Subway_Train-3242.png",
-            "media_layout": "slideshow",
-            "slide_1": "shopify://shop_images/Summer_2026_Subway_Train-3242.png",
-            "slide_1_mobile": "shopify://shop_images/Summer_2026_Subway-3099.png",
-            "slide_2": "shopify://shop_images/Summer_2026_Subway-3099.png",
-            "slide_3": "shopify://shop_images/Summer_2026_Streets_-2685.png",
-            "slide_interval": 5,
-            "slide_show_dots": false,
-            "slide_autoplay": true,
-            "lock_media_fit": false,
-            "media_ratio": "1.25",
-            "media_radius": 0,
-            "square_corners": false,
-            "gap": 36,
-            "full_width_content": true,
-            "keep_side_by_side_mobile": true,
-            "mobile_media_ratio": "third",
-            "mobile_grid_rows": 3,
-            "bg_color": "#f7f4f0",
-            "text_color": "#111111",
-            "border_color": "#e6e6e6",
-            "padding_top": 48,
-            "padding_bottom": 48,
-            "side_padding_vw": 0,
-            "ignore_padding_mobile": false
-          }
-        }
-      },
-      "block_order": [
-        "holiday_guides_wpDReU"
-      ],
-      "name": "BFC Holiday Guides",
-      "settings": {
-        "horizontal_padding": 24,
-        "header_font_weight": "400",
-        "body_font_weight": "400",
-        "body_font_size": 14,
-        "body_font_size_small": 12,
-        "text_color": "#111111",
-        "background_color": "#f7f4f0",
-        "heading_size_preset": "lg",
-        "header_line_height": "1.2",
-        "header_letter_spacing": 0,
-        "heading_color": "#111111",
-        "body_line_height": "1.5",
-        "body_letter_spacing": 0,
-        "section_padding_top": 12,
-        "section_padding_bottom": 40,
-        "accent_color": "#e36e15",
-        "secondary_text_color": "#82906b",
-        "item_title_font": "poppins_n5"
-      }
-    },
     "fixed_bfc_kit_builder_qL3Fdq": {
       "type": "FIXED-bfc-kit-builder",
       "blocks": {
@@ -1128,6 +1049,85 @@
         "polaroid_sx70_collection": "cameras-polaroid-sx-70",
         "polaroid_600_film_collection": "",
         "polaroid_sx70_film_collection": ""
+      }
+    },
+    "fixed_bfc_holiday_guides_YVbMD9": {
+      "type": "FIXED-bfc-holiday-guides",
+      "blocks": {
+        "holiday_guides_wpDReU": {
+          "type": "holiday_guides",
+          "settings": {
+            "group_id": "auto",
+            "eyebrow": "",
+            "heading": "Summer Point & Shoots",
+            "body": "<p>It's the season for pictures. Golden hour rooftop hangs, cross-country drives, backyard barbecues. Fully restored, check out all of our summer favorites.</p>",
+            "show_product_grid": true,
+            "product_collection": "",
+            "products_to_show": 2,
+            "products": [
+              "contax-tvs",
+              "minolta-explorer-freedom-zoom"
+            ],
+            "use_inline_links": true,
+            "link_label_1": "View Summer Collection",
+            "link_url_1": "shopify://collections/summer-collection",
+            "link_label_2": "",
+            "link_url_2": "shopify://collections/all",
+            "link_label_3": "",
+            "link_url_3": "shopify://collections/all",
+            "cta_label": "Shop the guides",
+            "cta_link": "",
+            "image": "shopify://shop_images/Summer_2026_Subway_Train-3242.png",
+            "media_layout": "slideshow",
+            "slide_1": "shopify://shop_images/Summer_2026_Subway_Train-3242.png",
+            "slide_1_mobile": "shopify://shop_images/Summer_2026_Subway-3099.png",
+            "slide_2": "shopify://shop_images/Summer_2026_Subway-3099.png",
+            "slide_3": "shopify://shop_images/Summer_2026_Streets_-2685.png",
+            "slide_interval": 5,
+            "slide_show_dots": false,
+            "slide_autoplay": true,
+            "lock_media_fit": false,
+            "media_ratio": "1.25",
+            "media_radius": 0,
+            "square_corners": false,
+            "gap": 36,
+            "full_width_content": true,
+            "keep_side_by_side_mobile": true,
+            "mobile_media_ratio": "third",
+            "mobile_grid_rows": 3,
+            "bg_color": "#f7f4f0",
+            "text_color": "#111111",
+            "border_color": "#e6e6e6",
+            "padding_top": 48,
+            "padding_bottom": 48,
+            "side_padding_vw": 0,
+            "ignore_padding_mobile": false
+          }
+        }
+      },
+      "block_order": [
+        "holiday_guides_wpDReU"
+      ],
+      "name": "BFC Holiday Guides",
+      "settings": {
+        "horizontal_padding": 24,
+        "header_font_weight": "400",
+        "body_font_weight": "400",
+        "body_font_size": 14,
+        "body_font_size_small": 12,
+        "text_color": "#111111",
+        "background_color": "#f7f4f0",
+        "heading_size_preset": "lg",
+        "header_line_height": "1.2",
+        "header_letter_spacing": 0,
+        "heading_color": "#111111",
+        "body_line_height": "1.5",
+        "body_letter_spacing": 0,
+        "section_padding_top": 12,
+        "section_padding_bottom": 40,
+        "accent_color": "#e36e15",
+        "secondary_text_color": "#82906b",
+        "item_title_font": "poppins_n5"
       }
     },
     "fixed_bfc_developing_membership_cta_DjALEd": {
@@ -1597,8 +1597,8 @@
     "fixed_bfc_top_sellers_qYMXxr",
     "fixed_bfc_category_strip_GjLLG7",
     "bfc_reviews_carousel_QW6LbR",
-    "fixed_bfc_holiday_guides_YVbMD9",
     "fixed_bfc_kit_builder_qL3Fdq",
+    "fixed_bfc_holiday_guides_YVbMD9",
     "fixed_bfc_developing_membership_cta_DjALEd",
     "fixed_bfc_icon_menu_4rUY4i",
     "fixed_bfc_holiday_guides_HieyhT",
