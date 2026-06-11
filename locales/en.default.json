@@ -204,7 +204,6 @@
     "posted": "Posted",
     "posted_by": "by {{author}}",
     "posted_on": "posted on {{date}}",
-    "updated_on": "updated on {{date}}",
     "comment": "Comment",
     "comment_count": {
       "one": "{{count}} comment",
