@@ -16,32 +16,28 @@
           "type": "quick_nav",
           "settings": {
             "label": "Beginner Friendly",
-            "sublabel": "",
-            "url": ""
+            "sublabel": ""
           }
         },
         "quick_nav_nqWaU4": {
           "type": "quick_nav",
           "settings": {
             "label": "Best Image",
-            "sublabel": "",
-            "url": ""
+            "sublabel": ""
           }
         },
         "quick_nav_LXTKrT": {
           "type": "quick_nav",
           "settings": {
             "label": "Under $150",
-            "sublabel": "",
-            "url": ""
+            "sublabel": ""
           }
         },
         "quick_nav_MKtKWp": {
           "type": "quick_nav",
           "settings": {
             "label": "Under $300",
-            "sublabel": "",
-            "url": ""
+            "sublabel": ""
           }
         }
       },
@@ -53,9 +49,9 @@
       ],
       "name": "BFC Collection Intro",
       "settings": {
-        "intro_eyebrow": "Shop by type",
-        "intro_title": "Point & Shoot Cameras",
-        "intro_body": "The whole point is that there is no point. No focusing, no settings, no fuss. The camera does the thinking so you just press the button. If you want real film photos without the learning curve, start here.",
+        "intro_eyebrow": "SHOP ALL",
+        "intro_title": "Every Camera, Restored",
+        "intro_body": "Film cameras, brought back to life and ready to shoot. Every body here has been serviced, cleaned, and bench-tested by our techs in Brooklyn, then backed by a warranty. New to film or coming back to it, this is the whole shelf.",
         "trust_1": "Restored & bench-tested in Brooklyn",
         "trust_2": "Warrantied",
         "trust_3": "Free shipping over $400",

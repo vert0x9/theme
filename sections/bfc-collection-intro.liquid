@@ -1,18 +1,26 @@
 {% comment %}
   ============================================================
-  BFC Collection Intro  (v2 — orient + start here + quick nav)
+  BFC Collection Intro  (v4 — All Cameras, filter quick-nav)
   ------------------------------------------------------------
-  Orients a cold shopper on a collection page:
-    LEFT  → eyebrow + serif title + "is this for you" paragraph
-            + trust row (restored / warrantied / shipping)
-    RIGHT → a hand-picked "Start here" camera card, plus a set
-            of quick-nav links (added as blocks) to route deeper.
+  Orients a cold shopper. Intro copy is baked in as defaults
+  (edit in the theme editor if needed). The "browse by" links
+  apply a native Shopify filter to the CURRENT collection, so
+  clicking one behaves exactly like choosing a filter from the
+  sidebar — correct across the whole collection, not just the
+  visible page.
 
-  Type the copy per collection (place this section on each
-  collection template). All fields have defaults wired for
-  Point & Shoots as an example.
+  Each Quick Nav Link block builds a filter URL:
+    Tag        → ?filter.p.tag=VALUE
+    Type       → ?filter.p.product_type=VALUE
+    Price max  → ?filter.v.price.lte=VALUE
+    Custom URL → uses the URL you paste
 
-  No featured-camera engine — this is a static, fast intro.
+  IMPORTANT: for Tag / Type / Price filters to actually work,
+  the matching filter must be enabled in Shopify under
+  Online Store > Navigation > Filters (or the Search &
+  Discovery app). This section just links to the filter URL.
+
+  Renders only on collection pages.
   ============================================================
 {% endcomment %}
 
@@ -23,11 +31,15 @@
 
 {%- liquid
   assign theme = section.settings.theme
-  assign sp = section.settings.start_product
-  assign sp_label = section.settings.start_label | default: 'Start here'
-  assign sp_cta = section.settings.start_cta | default: 'Shop this camera'
+  comment # Base URL to filter against: the current collection, else a fallback set in settings. #
+  endcomment
+  assign base_url = collection.url
+  if base_url == blank
+    assign base_url = section.settings.fallback_collection.url
+  endif
 -%}
 
+{%- if base_url != blank or request.design_mode -%}
 <style>
 #bfc-ci-{{ section.id }} *, #bfc-ci-{{ section.id }} *::before, #bfc-ci-{{ section.id }} *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -87,48 +99,8 @@
 #bfc-ci-{{ section.id }}.is-dark .ci-trust li { color: rgba(255,255,255,0.74); }
 #bfc-ci-{{ section.id }}.is-dark .ci-trust svg { color: var(--ce); }
 
-/* ── RIGHT: start-here card + quick nav ── */
+/* ── RIGHT: quick nav ── */
 #bfc-ci-{{ section.id }} .ci-aside { display: flex; flex-direction: column; gap: 22px; }
-
-#bfc-ci-{{ section.id }} .ci-start {
-  display: grid;
-  grid-template-columns: 96px 1fr;
-  gap: 16px;
-  align-items: center;
-  text-decoration: none;
-  color: inherit;
-  background: #fff;
-  padding: 14px;
-  border: 1px solid var(--gr);
-  transition: border-color 0.2s ease;
-}
-#bfc-ci-{{ section.id }}.is-dark .ci-start { background: #18180a; border-color: rgba(255,255,255,0.12); }
-#bfc-ci-{{ section.id }} .ci-start:hover { border-color: var(--or); }
-#bfc-ci-{{ section.id }} .ci-start-img {
-  width: 96px; height: 96px; object-fit: contain; display: block;
-}
-#bfc-ci-{{ section.id }} .ci-start-label {
-  font-size: 9px; font-weight: 700; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--or); margin-bottom: 6px;
-  display: inline-flex; align-items: center; gap: 6px;
-}
-#bfc-ci-{{ section.id }} .ci-start-name {
-  font-family: var(--sr); font-size: 20px; font-weight: 400;
-  line-height: 1.15; margin-bottom: 4px;
-}
-#bfc-ci-{{ section.id }}.is-dark .ci-start-name { color: #fff; }
-#bfc-ci-{{ section.id }} .ci-start-price {
-  font-size: 13px; font-weight: 600; color: var(--bk);
-}
-#bfc-ci-{{ section.id }}.is-dark .ci-start-price { color: rgba(255,255,255,0.85); }
-#bfc-ci-{{ section.id }} .ci-start-cta {
-  margin-top: 8px;
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--or);
-}
-
-/* Quick-nav links */
 #bfc-ci-{{ section.id }} .ci-nav-title {
   font-size: 9px; font-weight: 700; letter-spacing: 0.18em;
   text-transform: uppercase; color: var(--ch); margin-bottom: 2px;
@@ -138,8 +110,8 @@
 #bfc-ci-{{ section.id }} .ci-nav-link {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
   text-decoration: none; color: var(--bk);
-  font-size: 14px; font-weight: 500;
-  padding: 13px 2px;
+  font-size: 15px; font-weight: 500;
+  padding: 15px 2px;
   border-bottom: 1px solid var(--gr);
   transition: color 0.15s ease, padding-left 0.15s ease;
 }
@@ -152,6 +124,15 @@
   font-size: 11px; font-weight: 400; color: var(--ch); letter-spacing: 0;
 }
 #bfc-ci-{{ section.id }}.is-dark .ci-nav-sub { color: rgba(255,255,255,0.55); }
+#bfc-ci-{{ section.id }} .ci-nav-reset {
+  margin-top: 4px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ch); text-decoration: none;
+  display: inline-flex; align-items: center; gap: 6px;
+  opacity: 0.7; transition: opacity 0.15s ease;
+}
+#bfc-ci-{{ section.id }} .ci-nav-reset:hover { opacity: 1; color: var(--or); }
+#bfc-ci-{{ section.id }}.is-dark .ci-nav-reset { color: rgba(255,255,255,0.6); }
 
 @media (max-width: 860px) {
   #bfc-ci-{{ section.id }} .ci-wrap {
@@ -193,45 +174,39 @@
       {%- endif -%}
     </div>
 
-    {%- comment -%} ── RIGHT: start-here + quick nav ── {%- endcomment -%}
-    <div class="ci-aside">
-
-      {%- if sp != blank -%}
-        <a class="ci-start" href="{{ sp.url }}" aria-label="{{ sp_label }}: {{ sp.title | escape }}">
-          {%- if sp.featured_image -%}
-            <img class="ci-start-img" src="{{ sp.featured_image | image_url: width: 280 }}" alt="{{ sp.title | escape }}" loading="lazy" width="96" height="96"/>
-          {%- endif -%}
-          <div>
-            <span class="ci-start-label">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
-              {{ sp_label }}
-            </span>
-            <p class="ci-start-name">{{ sp.title | escape }}</p>
-            {%- if sp.available -%}
-              <p class="ci-start-price">{% if sp.price_varies %}From {% endif %}{{ sp.price | money }}</p>
-            {%- else -%}
-              <p class="ci-start-price">Sold out</p>
-            {%- endif -%}
-            <span class="ci-start-cta">
-              {{ sp_cta }}
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
-            </span>
-          </div>
-        </a>
-      {%- endif -%}
-
-      {%- assign nav_count = 0 -%}
-      {%- for block in section.blocks -%}
-        {%- if block.type == 'quick_nav' and block.settings.label != blank -%}{%- assign nav_count = nav_count | plus: 1 -%}{%- endif -%}
-      {%- endfor -%}
-      {%- if nav_count > 0 -%}
+    {%- comment -%} ── RIGHT: filter quick-nav ── {%- endcomment -%}
+    {%- assign nav_count = 0 -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'quick_nav' and block.settings.label != blank -%}{%- assign nav_count = nav_count | plus: 1 -%}{%- endif -%}
+    {%- endfor -%}
+    {%- if nav_count > 0 -%}
+      <div class="ci-aside">
         {%- if section.settings.nav_title != blank -%}
           <p class="ci-nav-title">{{ section.settings.nav_title | escape }}</p>
         {%- endif -%}
-        <nav class="ci-nav" aria-label="{{ section.settings.nav_title | default: 'Quick links' | escape }}">
+        <nav class="ci-nav" aria-label="{{ section.settings.nav_title | default: 'Browse by' | escape }}">
           {%- for block in section.blocks -%}
             {%- if block.type == 'quick_nav' and block.settings.label != blank -%}
-              <a class="ci-nav-link" href="{{ block.settings.url | default: '#' }}" {{ block.shopify_attributes }}>
+              {%- liquid
+                assign ft = block.settings.filter_type
+                assign fv = block.settings.filter_value | strip
+                assign href = '#'
+                case ft
+                  when 'tag'
+                    assign enc = fv | url_encode
+                    assign href = base_url | append: '?filter.p.tag=' | append: enc
+                  when 'type'
+                    assign enc = fv | url_encode
+                    assign href = base_url | append: '?filter.p.product_type=' | append: enc
+                  when 'price_max'
+                    assign href = base_url | append: '?filter.v.price.lte=' | append: fv
+                  when 'custom'
+                    assign href = block.settings.custom_url | default: '#'
+                  else
+                    assign href = base_url
+                endcase
+              -%}
+              <a class="ci-nav-link" href="{{ href }}" {{ block.shopify_attributes }}>
                 <span>
                   {{ block.settings.label | escape }}
                   {%- if block.settings.sublabel != blank -%}<br><span class="ci-nav-sub">{{ block.settings.sublabel | escape }}</span>{%- endif -%}
@@ -241,12 +216,18 @@
             {%- endif -%}
           {%- endfor -%}
         </nav>
-      {%- endif -%}
-
-    </div>
+        {%- if section.settings.show_reset and base_url != blank -%}
+          <a class="ci-nav-reset" href="{{ base_url }}">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M11 7a4 4 0 1 1-1.2-2.8M11 2v3H8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            {{ section.settings.reset_label | default: 'View all cameras' | escape }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
 
   </div>
 </section>
+{%- endif -%}
 
 {% schema %}
 {
@@ -256,23 +237,21 @@
   "max_blocks": 6,
   "settings": [
     { "type": "header", "content": "Intro (left side)" },
-    { "type": "paragraph", "content": "Type a version per collection. Orients a cold shopper: where they are, whether it's for them, why to buy here." },
-    { "type": "text", "id": "intro_eyebrow", "label": "Eyebrow", "default": "Shop by type" },
-    { "type": "text", "id": "intro_title", "label": "Title", "default": "Point & Shoot Cameras" },
-    { "type": "textarea", "id": "intro_body", "label": "Paragraph", "default": "The whole point is that there is no point. No focusing, no settings, no fuss. The camera does the thinking so you just press the button. If you want real film photos without the learning curve, start here." },
+    { "type": "text", "id": "intro_eyebrow", "label": "Eyebrow", "default": "Shop all" },
+    { "type": "text", "id": "intro_title", "label": "Title", "default": "Every Camera, Restored" },
+    { "type": "textarea", "id": "intro_body", "label": "Paragraph", "default": "Film cameras, brought back to life and ready to shoot. Every body here has been serviced, cleaned, and bench-tested by our techs in Brooklyn, then backed by a warranty. New to film or coming back to it, this is the whole shelf. Use the filters to narrow it down, or just browse." },
     { "type": "text", "id": "trust_1", "label": "Trust point 1", "default": "Restored & bench-tested in Brooklyn" },
     { "type": "text", "id": "trust_2", "label": "Trust point 2", "default": "Warrantied" },
     { "type": "text", "id": "trust_3", "label": "Trust point 3", "default": "Free shipping over $400" },
 
-    { "type": "header", "content": "Start here camera (right side)" },
-    { "type": "paragraph", "content": "Pick one camera as the safe default for shoppers who don't know where to begin. Leave blank to hide." },
-    { "type": "product", "id": "start_product", "label": "Start here camera" },
-    { "type": "text", "id": "start_label", "label": "Label", "default": "Start here" },
-    { "type": "text", "id": "start_cta", "label": "Link text", "default": "Shop this camera" },
+    { "type": "header", "content": "Browse by (filter links)" },
+    { "type": "paragraph", "content": "Each link applies a native Shopify filter to THIS collection page (like choosing a filter from the sidebar). For Tag / Type / Price links to work, that filter must be enabled under Online Store > Navigation > Filters. Add Quick Nav Link blocks below." },
+    { "type": "text", "id": "nav_title", "label": "Heading", "default": "Browse by" },
+    { "type": "collection", "id": "fallback_collection", "label": "Fallback collection", "info": "Used to build filter links when this section is NOT on a collection page (e.g. previewing on the homepage). On a collection page the current collection is always used." },
 
-    { "type": "header", "content": "Quick links (right side)" },
-    { "type": "paragraph", "content": "Add Quick Nav Link blocks below to route shoppers deeper (e.g. 'Under $150', 'With flash'). Drag to reorder." },
-    { "type": "text", "id": "nav_title", "label": "Quick links heading", "default": "Or browse by" },
+    { "type": "header", "content": "Reset link" },
+    { "type": "checkbox", "id": "show_reset", "label": "Show 'View all' reset link", "default": true },
+    { "type": "text", "id": "reset_label", "label": "Reset link text", "default": "View all cameras" },
 
     { "type": "header", "content": "Theme" },
     {
@@ -288,9 +267,19 @@
       "type": "quick_nav",
       "name": "Quick Nav Link",
       "settings": [
-        { "type": "text", "id": "label", "label": "Label", "default": "Under $150" },
-        { "type": "text", "id": "sublabel", "label": "Sub-label (optional)", "info": "Small text below the label." },
-        { "type": "url", "id": "url", "label": "Link" }
+        { "type": "text", "id": "label", "label": "Label", "default": "Beginner friendly" },
+        { "type": "text", "id": "sublabel", "label": "Sub-label (optional)" },
+        {
+          "type": "select", "id": "filter_type", "label": "Filter by", "default": "tag",
+          "options": [
+            { "value": "tag", "label": "Product tag" },
+            { "value": "type", "label": "Product type" },
+            { "value": "price_max", "label": "Price under (max)" },
+            { "value": "custom", "label": "Custom URL" }
+          ]
+        },
+        { "type": "text", "id": "filter_value", "label": "Filter value", "info": "Tag: the tag name (e.g. beginner-friendly). Type: the product type. Price under: a number in dollars, no $ (e.g. 150). Ignored for Custom URL." },
+        { "type": "url", "id": "custom_url", "label": "Custom URL", "info": "Only used when Filter by = Custom URL." }
       ]
     }
   ],
@@ -298,9 +287,9 @@
     {
       "name": "BFC Collection Intro",
       "blocks": [
-        { "type": "quick_nav", "settings": { "label": "Under $150" } },
-        { "type": "quick_nav", "settings": { "label": "Premium compacts" } },
-        { "type": "quick_nav", "settings": { "label": "Best for beginners" } }
+        { "type": "quick_nav", "settings": { "label": "Beginner friendly", "filter_type": "tag", "filter_value": "beginner-friendly" } },
+        { "type": "quick_nav", "settings": { "label": "Point & shoots", "filter_type": "type", "filter_value": "Point & Shoot" } },
+        { "type": "quick_nav", "settings": { "label": "Under $150", "filter_type": "price_max", "filter_value": "150" } }
       ]
     }
   ]
