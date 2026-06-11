@@ -137,6 +137,48 @@
 }
 #bfc-ci-{{ section.id }}.is-dark .ci-nav-sub { color: rgba(255,255,255,0.55); }
 
+/* Image-square grid */
+#bfc-ci-{{ section.id }} .ci-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+#bfc-ci-{{ section.id }} .ci-tile {
+  display: block;
+  text-decoration: none;
+  color: var(--bk);
+}
+#bfc-ci-{{ section.id }} .ci-tile-img {
+  display: block;
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: #fff;
+  border: 1px solid var(--gr);
+  overflow: hidden;
+}
+#bfc-ci-{{ section.id }}.is-dark .ci-tile-img { background: #18180a; border-color: rgba(255,255,255,0.12); }
+#bfc-ci-{{ section.id }} .ci-tile-img img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform 0.3s ease;
+}
+#bfc-ci-{{ section.id }} .ci-tile:hover .ci-tile-img { border-color: var(--or); }
+#bfc-ci-{{ section.id }} .ci-tile:hover .ci-tile-img img { transform: scale(1.04); }
+#bfc-ci-{{ section.id }} .ci-tile-ph {
+  position: absolute; inset: 0;
+  background: var(--gr);
+}
+#bfc-ci-{{ section.id }} .ci-tile-label {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px; font-weight: 500;
+  line-height: 1.25;
+  color: var(--bk);
+}
+#bfc-ci-{{ section.id }}.is-dark .ci-tile-label { color: #fff; }
+#bfc-ci-{{ section.id }} .ci-tile:hover .ci-tile-label { color: var(--or); }
+
 /* Sub-collection back link */
 #bfc-ci-{{ section.id }} .ci-aside--sub { justify-content: flex-start; align-items: flex-start; }
 #bfc-ci-{{ section.id }} .ci-back {
@@ -172,6 +214,9 @@
     padding: 10px 14px;
     font-size: 11px;
   }
+  /* Image grid: 3 across on phones */
+  #bfc-ci-{{ section.id }} .ci-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  #bfc-ci-{{ section.id }} .ci-tile-label { font-size: 11px; margin-top: 6px; }
 }
 
 /* "More" toggle is desktop-hidden; all links always show on desktop. */
@@ -250,41 +295,78 @@
         {%- if block.type == 'quick_nav' and block.settings.label != blank -%}{%- assign nav_count = nav_count | plus: 1 -%}{%- endif -%}
       {%- endfor -%}
       {%- if nav_count > 0 -%}
+        {%- assign nav_style = section.settings.nav_style -%}
         <div class="ci-aside">
           {%- if section.settings.nav_title != blank -%}
             <p class="ci-nav-title">{{ section.settings.nav_title | escape }}</p>
           {%- endif -%}
-          <input type="checkbox" id="ci-more-{{ section.id }}" class="ci-more-toggle" aria-hidden="true">
-          <nav class="ci-nav" aria-label="{{ section.settings.nav_title | default: 'Browse by' | escape }}">
-            {%- assign shown = 0 -%}
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'quick_nav' and block.settings.label != blank -%}
-                {%- assign shown = shown | plus: 1 -%}
-                {%- liquid
-                  assign href = '#'
-                  if block.settings.link_collection != blank
-                    assign href = block.settings.link_collection.url
-                  elsif block.settings.custom_url != blank
-                    assign href = block.settings.custom_url
-                  endif
-                -%}
-                <a class="ci-nav-link{% if shown > 3 %} ci-nav-link--extra{% endif %}" href="{{ href }}" {{ block.shopify_attributes }}>
-                  <span>
-                    {{ block.settings.label | escape }}
-                    {%- if block.settings.sublabel != blank -%}<br><span class="ci-nav-sub">{{ block.settings.sublabel | escape }}</span>{%- endif -%}
-                  </span>
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
-                </a>
-              {%- endif -%}
-            {%- endfor -%}
-          </nav>
-          {%- if nav_count > 3 -%}
-            <label for="ci-more-{{ section.id }}" class="ci-more-label">
-              <span class="ci-more-open">{{ 'More' }} ({{ nav_count | minus: 3 }})</span>
-              <span class="ci-more-close">Less</span>
-              <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </label>
+
+          {%- if nav_style == 'grid' -%}
+            {%- comment -%} ── Image-square grid ── {%- endcomment -%}
+            <div class="ci-grid" role="list">
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'quick_nav' and block.settings.label != blank -%}
+                  {%- liquid
+                    assign href = '#'
+                    if block.settings.link_collection != blank
+                      assign href = block.settings.link_collection.url
+                    elsif block.settings.custom_url != blank
+                      assign href = block.settings.custom_url
+                    endif
+                    assign tile_img = block.settings.image
+                    if tile_img == blank and block.settings.link_collection != blank
+                      assign tile_img = block.settings.link_collection.featured_image
+                    endif
+                  -%}
+                  <a class="ci-tile" href="{{ href }}" role="listitem" {{ block.shopify_attributes }}>
+                    <span class="ci-tile-img">
+                      {%- if tile_img != blank -%}
+                        <img src="{{ tile_img | image_url: width: 320 }}" alt="{{ block.settings.label | escape }}" loading="lazy" width="160" height="160">
+                      {%- else -%}
+                        <span class="ci-tile-ph" aria-hidden="true"></span>
+                      {%- endif -%}
+                    </span>
+                    <span class="ci-tile-label">{{ block.settings.label | escape }}</span>
+                  </a>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+
+          {%- else -%}
+            {%- comment -%} ── Text list (with mobile "more" toggle) ── {%- endcomment -%}
+            <input type="checkbox" id="ci-more-{{ section.id }}" class="ci-more-toggle" aria-hidden="true">
+            <nav class="ci-nav" aria-label="{{ section.settings.nav_title | default: 'Browse by' | escape }}">
+              {%- assign shown = 0 -%}
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'quick_nav' and block.settings.label != blank -%}
+                  {%- assign shown = shown | plus: 1 -%}
+                  {%- liquid
+                    assign href = '#'
+                    if block.settings.link_collection != blank
+                      assign href = block.settings.link_collection.url
+                    elsif block.settings.custom_url != blank
+                      assign href = block.settings.custom_url
+                    endif
+                  -%}
+                  <a class="ci-nav-link{% if shown > 3 %} ci-nav-link--extra{% endif %}" href="{{ href }}" {{ block.shopify_attributes }}>
+                    <span>
+                      {{ block.settings.label | escape }}
+                      {%- if block.settings.sublabel != blank -%}<br><span class="ci-nav-sub">{{ block.settings.sublabel | escape }}</span>{%- endif -%}
+                    </span>
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="square"/></svg>
+                  </a>
+                {%- endif -%}
+              {%- endfor -%}
+            </nav>
+            {%- if nav_count > 3 -%}
+              <label for="ci-more-{{ section.id }}" class="ci-more-label">
+                <span class="ci-more-open">More ({{ nav_count | minus: 3 }})</span>
+                <span class="ci-more-close">Less</span>
+                <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </label>
+            {%- endif -%}
           {%- endif -%}
+
         </div>
       {%- endif -%}
     {%- endif -%}
@@ -319,6 +401,13 @@
     { "type": "header", "content": "Browse by (links)" },
     { "type": "paragraph", "content": "Each link points to a curated collection you build in admin (e.g. a 'Beginner Friendly' collection with automated conditions). This keeps these out of the filter sidebar entirely. Add Quick Nav Link blocks below." },
     { "type": "text", "id": "nav_title", "label": "Heading", "default": "Browse by" },
+    {
+      "type": "select", "id": "nav_style", "label": "Nav style", "default": "list",
+      "options": [
+        { "value": "list", "label": "Text list" },
+        { "value": "grid", "label": "Image grid (squares)" }
+      ]
+    },
 
     { "type": "header", "content": "Theme" },
     {
@@ -336,6 +425,7 @@
       "settings": [
         { "type": "text", "id": "label", "label": "Label", "default": "Beginner friendly" },
         { "type": "text", "id": "sublabel", "label": "Sub-label (optional)" },
+        { "type": "image_picker", "id": "image", "label": "Tile image", "info": "Shown when the section's nav style is Image grid. Square works best." },
         { "type": "collection", "id": "link_collection", "label": "Links to collection", "info": "The curated collection this routes to. Build it in admin with automated conditions so it stays current." },
         { "type": "url", "id": "custom_url", "label": "Custom URL (optional)", "info": "Used only if no collection is chosen above." }
       ]
