@@ -98,10 +98,37 @@
     #bfc-new-arrivals-{{ section.id }} .bfc-na-text p { margin: 0 0 10px; }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-text p:last-child { margin: 0; }
 
-    /* ── Product grid ── */
+    /* ── Product rail (horizontal scroller, matches top-sellers) ── */
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-rail-wrap {
+      position: relative;
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+      margin-top: 14px;
+    }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-grid {
       display: grid;
-      gap: 24px 20px;
+      grid-auto-flow: column;
+      grid-auto-columns: clamp(220px, 24vw, 280px);
+      gap: 16px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scroll-padding-left: var(--na-align-pad);
+      padding-left: var(--na-align-pad);
+      padding-right: 0;
+      padding-top: 6px;
+      padding-bottom: 8px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      -webkit-overflow-scrolling: touch;
+      cursor: grab;
+    }
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-grid::-webkit-scrollbar { display: none; }
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-grid.is-dragging {
+      cursor: grabbing;
+      scroll-behavior: auto;
     }
 
     /* ── Product card ── */
@@ -109,6 +136,8 @@
       position: relative;
       background: transparent;
       transition: opacity 0.15s ease;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-card.is-hidden { display: none; }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-link {
@@ -292,7 +321,7 @@
         {% assign use_newest_from_collection = block.settings.use_newest_from_collection %}
         {% assign full_rows_only = block.settings.full_rows_only %}
         {% assign full_rows_columns_desktop = block.settings.full_rows_columns_desktop | default: 5 %}
-        {% assign disable_see_more = block.settings.disable_see_more %}
+        {% assign disable_see_more = true %}
         {% assign products_to_render = nil %}
         {% assign source_type = '' %}
         {% if has_manual %}
@@ -374,6 +403,7 @@
 
             {% assign total_products = products_to_render | size | default: 0 %}
             {% if products_to_render and total_products > 0 %}
+              <div class="bfc-na-rail-wrap">
               <div class="bfc-na-grid" id="{{ anchor_id }}-grid" role="list">
                 {% assign product_index = 0 %}
 
@@ -385,7 +415,7 @@
                     {% if product == blank %}{% continue %}{% endif %}
                     {% assign product_index = product_index | plus: 1 %}
                     {% assign image = product.featured_image %}
-                    <div class="bfc-na-card{% if product_index > initial_items %} is-hidden{% endif %}" data-index="{{ product_index }}" role="listitem">
+                    <div class="bfc-na-card" data-index="{{ product_index }}" role="listitem">
                       <a href="{{ product.url }}" class="bfc-na-link" aria-label="{{ product.title | escape }}">
                         <div class="bfc-na-img-wrap">
                           {% if image %}
@@ -422,7 +452,7 @@
                       {% assign rendered_count = rendered_count | plus: 1 %}
                       {% assign product_index = product_index | plus: 1 %}
                       {% assign image = product.featured_image %}
-                      <div class="bfc-na-card{% if product_index > initial_items %} is-hidden{% endif %}" data-index="{{ product_index }}" role="listitem">
+                      <div class="bfc-na-card" data-index="{{ product_index }}" role="listitem">
                         <a href="{{ product.url }}" class="bfc-na-link" aria-label="{{ product.title | escape }}">
                           <div class="bfc-na-img-wrap">
                             {% if image %}
@@ -451,6 +481,7 @@
                     {% endif %}
                   {% endfor %}
                 {% endif %}
+              </div>
               </div>
 
               {% if disable_see_more == false %}
@@ -497,16 +528,9 @@
 
           {% style %}
             #{{ anchor_id }} {
-              padding: {{ block.settings.padding_top }}px var(--na-align-pad) {{ block.settings.padding_bottom }}px;
+              padding: {{ block.settings.padding_top }}px 0 {{ block.settings.padding_bottom }}px;
             }
-            #{{ anchor_id }} .bfc-na-inner { margin: 0 auto; max-width: var(--na-page-width); }
-            #{{ anchor_id }} .bfc-na-grid {
-              {% if full_rows_only %}
-                grid-template-columns: repeat({{ full_rows_columns_desktop }}, minmax(0, 1fr));
-              {% else %}
-                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-              {% endif %}
-            }
+            #{{ anchor_id }} .bfc-na-inner { margin: 0 auto; max-width: var(--na-page-width); padding-left: var(--na-align-pad); padding-right: var(--na-align-pad); }
             {% case block.settings.header_text_align %}
               {% when 'left' %}
                 #{{ anchor_id }} .bfc-na-header { text-align: left; }
@@ -516,7 +540,6 @@
                 #{{ anchor_id }} .bfc-na-text { margin-left: auto; margin-right: 0; }
             {% endcase %}
             @media (max-width: 768px) {
-              #{{ anchor_id }} .bfc-na-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 14px; }
               #{{ anchor_id }} .bfc-na-controls { gap: 20px; margin-top: 28px; }
               #{{ anchor_id }} .bfc-na-header { margin-bottom: 28px; }
             }
