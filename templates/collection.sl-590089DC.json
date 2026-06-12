@@ -9,6 +9,63 @@
  */
 {
   "sections": {
+    "bfc_collection_intro_983CNq": {
+      "type": "bfc-collection-intro",
+      "blocks": {
+        "quick_nav_ggTnxd": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Rangefinders",
+            "sublabel": "",
+            "image": "shopify://shop_images/Leica_M2-May250022.png",
+            "link_collection": "",
+            "custom_url": "https://brooklynfilmcamera.com/collections/slr-other?sort_by=best-selling&filter.p.m.custom.camera_type=Rangefinder"
+          }
+        },
+        "quick_nav_DjtcKi": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "SLRs",
+            "sublabel": "",
+            "image": "shopify://shop_images/000067590033.jpg",
+            "link_collection": "",
+            "custom_url": "https://brooklynfilmcamera.com/collections/slr-other?sort_by=best-selling&filter.p.m.custom.camera_type=SLR"
+          }
+        },
+        "quick_nav_9zhr6c": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Rare Finds",
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "quick_nav_ggTnxd",
+        "quick_nav_DjtcKi",
+        "quick_nav_9zhr6c"
+      ],
+      "name": "BFC Collection Intro",
+      "settings": {
+        "intro_eyebrow": "Shop all",
+        "intro_title": "SLRs & Rangefinders",
+        "intro_body": "SLRs and rangefinders are the cameras most people picture when they think of a film camera. Lots of control, built to last, and capable of stunning photos with a vast array of lenses.",
+        "trust_1": "Restored & bench-tested in Brooklyn",
+        "trust_2": "Warrantied",
+        "trust_3": "Free shipping over $400",
+        "sub_mode": false,
+        "sub_eyebrow": "A subset of All Cameras",
+        "sub_title": "Beginner Friendly",
+        "sub_body": "Simple, reliable cameras that are easy to learn on. No fiddly settings, no surprises. Every one restored, bench-tested, and warrantied.",
+        "back_collection": "",
+        "back_label": "Back to All Cameras",
+        "nav_title": "Browse by",
+        "nav_style": "grid",
+        "theme": "light"
+      }
+    },
     "page_banner_jWtyM4": {
       "type": "page-banner",
       "disabled": true,
@@ -63,11 +120,11 @@
         "subheading": "",
         "content_padding": "0",
         "button_label": "",
-        "button_link": "shopify:\/\/collections",
+        "button_link": "shopify://collections",
         "button_style": "button--filled",
         "card_layout": "product",
         "card_style": "compact",
-        "image_aspect_ratio": "3\/4",
+        "image_aspect_ratio": "3/4",
         "card_content_alignment": "start",
         "card_title_style": "card-single-text",
         "collection_product_count": "show",
@@ -148,7 +205,7 @@
           "disabled": true,
           "settings": {
             "color_scheme": "scheme-1",
-            "text": "<h3>a card<\/h3>",
+            "text": "<h3>a card</h3>",
             "button_link": "",
             "link_type": "button",
             "button_label": "",
@@ -179,7 +236,7 @@
             "position": 7,
             "column_factor": 2,
             "row_factor": 1,
-            "card_image": "shopify:\/\/shop_images\/3_d4a0d78d-d64c-404a-9b43-77889ada6597.jpg"
+            "card_image": "shopify://shop_images/3_d4a0d78d-d64c-404a-9b43-77889ada6597.jpg"
           }
         },
         "text_card_NeqRrh": {
@@ -199,7 +256,7 @@
             "position": 11,
             "column_factor": 1,
             "row_factor": 1,
-            "card_image": "shopify:\/\/shop_images\/film_photography.jpg"
+            "card_image": "shopify://shop_images/film_photography.jpg"
           }
         }
       },
@@ -290,7 +347,7 @@
         "heading": "Understanding the SX-70 Family",
         "open_label": "Learn the lineup",
         "close_label": "Close",
-        "intro": "<p>Six folding cameras, nine years, a handful of naming conventions that can make the whole lineup feel like a puzzle. Here's how the pieces fit together.<\/p>",
+        "intro": "<p>Six folding cameras, nine years, a handful of naming conventions that can make the whole lineup feel like a puzzle. Here's how the pieces fit together.</p>",
         "url_original": "",
         "url_model_2": "",
         "url_alpha_1": "",
@@ -324,7 +381,7 @@
         "section_layout": "normal",
         "heading": "Heading for SEO Content",
         "heading_size": "h4",
-        "text": "<p>Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand.<\/p>",
+        "text": "<p>Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand. Enter your long text content here. This can include your store description or more detailed description of your brand.</p>",
         "content_alignment": "center",
         "section_width": "max-w-fluid",
         "color_scheme": "scheme-5",
@@ -344,7 +401,7 @@
         "heading_size": "h3",
         "subheading": "",
         "button_label": "View all",
-        "button_link": "shopify:\/\/collections\/all",
+        "button_link": "shopify://collections/all",
         "button_style": "button--filled",
         "show_navigation_arrows": true,
         "slider_autoplay": 3,
@@ -359,6 +416,7 @@
     }
   },
   "order": [
+    "bfc_collection_intro_983CNq",
     "page_banner_jWtyM4",
     "featured_collections_ybC3xQ",
     "bfc_collection_intro_zVqc9H",
