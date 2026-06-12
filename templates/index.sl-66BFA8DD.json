@@ -634,6 +634,7 @@
         },
         "cover_item_jwgyVR": {
           "type": "cover_item",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/img20260531_13443948.jpg",
             "title": "Polaroid Film",
@@ -644,6 +645,7 @@
         },
         "cover_item_hBbx6j": {
           "type": "cover_item",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Hero_Mobile_K1000.jpg",
             "title": "Developing Membership",
@@ -654,6 +656,7 @@
         },
         "cover_item_ENcekM": {
           "type": "cover_item",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Hero_Mobile_SX-70.jpg",
             "title": "SX-70 Accessories",
