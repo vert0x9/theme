@@ -138,7 +138,7 @@
         "back_collection": "",
         "back_label": "Back to All Cameras",
         "nav_title": "Browse by",
-        "nav_style": "grid",
+        "nav_style": "list",
         "theme": "light"
       }
     },
