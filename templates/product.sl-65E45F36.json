@@ -242,7 +242,7 @@
       "settings": {
         "also_collection": "slr-other",
         "compat_collection": "",
-        "enable_c_grade": true,
+        "enable_c_grade": false,
         "restoration_prose": ""
       }
     },
@@ -321,7 +321,7 @@
       "type": "apps",
       "blocks": {
         "judge_me_reviews_review_widget_xgVpwA": {
-          "type": "shopify:\/\/apps\/judge-me-reviews\/blocks\/review_widget\/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
             "review_data": "sample_data",
             "max_width": 1200,
