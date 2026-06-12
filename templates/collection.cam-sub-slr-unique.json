@@ -54,12 +54,13 @@
         "trust_2": "Warrantied",
         "trust_3": "Free shipping over $400",
         "sub_mode": true,
-        "sub_eyebrow": "A subset of All Cameras",
-        "sub_title": "The Good Stuff",
-        "sub_body": "The cameras worth saving up for. Premium compacts, pro-grade bodies, and the cult classics people obsess over, each one fully serviced and warrantied. If you want glass and build quality that holds up for decades, this is the shelf.",
-        "back_collection": "cameras",
+        "sub_eyebrow": "A subset of All SLR & Rangefinder Cameras",
+        "sub_title": "BFC Unique",
+        "sub_body": "The unusual stuff. Custom work, rare variants, and cameras we've rebuilt into something special. Still fully serviced and warrantied",
+        "back_collection": "slr-other",
         "back_label": "Back to All Cameras",
         "nav_title": "Browse by",
+        "nav_style": "list",
         "theme": "light"
       }
     },
