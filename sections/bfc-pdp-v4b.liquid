@@ -1669,15 +1669,15 @@
 .bfc4 .bfc4-crumbs{font-size:9.5px}
 }
 /* ── Cosmetic Grade popup content ── */
-.bfc4 .bfc4-gi-intro{font-size:12.5px;line-height:1.65;color:var(--ch);margin:0 0 14px}
+.bfc4 .bfc4-gi-intro{font-size:14px;line-height:1.7;color:var(--ch);margin:0 0 16px}
 .bfc4 .bfc4-gi-intro strong{color:var(--bk)}
 .bfc4 .bfc4-gi-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
 .bfc4 .bfc4-gi-cards.is-three{grid-template-columns:repeat(3,1fr)}
 .bfc4 .bfc4-gi-card{border:1px solid rgba(32,32,9,0.12);padding:12px;background:#fff}
-.bfc4 .bfc4-gi-grade{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--or);margin-bottom:6px}
-.bfc4 .bfc4-gi-text{font-size:11.5px;line-height:1.6;color:var(--ch)}
+.bfc4 .bfc4-gi-grade{font-size:11.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--or);margin-bottom:7px}
+.bfc4 .bfc4-gi-text{font-size:13px;line-height:1.7;color:var(--ch)}
 .bfc4 .bfc4-gi-text strong{color:var(--bk)}
-.bfc4 .bfc4-gi-note{background:rgba(171,204,153,0.22);border-left:3px solid #ABCC99;padding:11px 13px;font-size:11.5px;line-height:1.6;color:var(--bk)}
+.bfc4 .bfc4-gi-note{background:rgba(171,204,153,0.22);border-left:3px solid #ABCC99;padding:13px 15px;font-size:13px;line-height:1.7;color:var(--bk)}
 @media (max-width:640px){.bfc4 .bfc4-gi-cards,.bfc4 .bfc4-gi-cards.is-three{grid-template-columns:1fr}}
 /* ── Clickable Cosmetic Grade label ── */
 .bfc4 .bfc4-grade-label-link{display:inline-flex;align-items:center;gap:4px;background:none;border:none;padding:0;cursor:pointer;font-family:inherit;transition:color var(--t)}
@@ -2160,7 +2160,7 @@
                 {%- assign g_initial = variant.title | strip | slice: 0, 1 | upcase -%}
                 {%- case g_initial -%}
                   {%- when 'A' -%}{%- assign g_label = 'Best' -%}
-                  {%- when 'B' -%}{%- assign g_label = 'Average' -%}
+                  {%- when 'B' -%}{%- assign g_label = 'Great' -%}
                   {%- when 'C' -%}{%- assign g_label = 'Worn' -%}
                   {%- else -%}{%- assign g_label = variant.title -%}
                 {%- endcase -%}
@@ -2774,7 +2774,7 @@
                 {%- assign g_initial = variant.title | strip | slice: 0, 1 | upcase -%}
                 {%- case g_initial -%}
                   {%- when 'A' -%}{%- assign g_label = 'Best' -%}
-                  {%- when 'B' -%}{%- assign g_label = 'Average' -%}
+                  {%- when 'B' -%}{%- assign g_label = 'Great' -%}
                   {%- when 'C' -%}{%- assign g_label = 'Worn' -%}
                   {%- else -%}{%- assign g_label = variant.title -%}
                 {%- endcase -%}
@@ -2971,7 +2971,7 @@
           {%- assign sg_initial = current_variant.title | strip | slice: 0, 1 | upcase -%}
           {%- case sg_initial -%}
             {%- when 'A' -%}{%- assign sg_label = 'Best' -%}
-            {%- when 'B' -%}{%- assign sg_label = 'Average' -%}
+            {%- when 'B' -%}{%- assign sg_label = 'Great' -%}
             {%- when 'C' -%}{%- assign sg_label = 'Worn' -%}
           {%- endcase -%}
         {%- endif -%}
@@ -3558,10 +3558,10 @@
   window.bfc4OpenGradeInfo = function() {
     document.getElementById('ba-popup-title').textContent = 'Cosmetic Grade';
     document.getElementById('ba-popup-desc').innerHTML =
-      '<p class="bfc4-gi-intro">Grading is <strong>purely cosmetic</strong>. Every camera we sell, {% if section.settings.enable_c_grade %}Best, Average, or Worn{% else %}A or B{% endif %}, is fully restored, bench-tested, and covered by the <strong>same warranty</strong>. The grade only describes how the body looks.</p>' +
+      '<p class="bfc4-gi-intro">Grading is <strong>purely cosmetic</strong>. Every camera we sell, {% if section.settings.enable_c_grade %}Best, Great, or Worn{% else %}A or B{% endif %}, is fully restored, bench-tested, and covered by the <strong>same warranty</strong>. The grade only describes how the body looks.</p>' +
       '<div class="bfc4-gi-cards{% if section.settings.enable_c_grade %} is-three{% endif %}">' +
         '<div class="bfc4-gi-card"><div class="bfc4-gi-grade">{% if section.settings.enable_c_grade %}Best{% else %}Grade A{% endif %}</div><div class="bfc4-gi-text">Shows very little cosmetic wear. Closest to original condition.</div></div>' +
-        '<div class="bfc4-gi-card"><div class="bfc4-gi-grade">{% if section.settings.enable_c_grade %}Average{% else %}Grade B{% endif %}</div><div class="bfc4-gi-text">Shows light cosmetic wear including small scratches, spots, or worn finish. <strong>Still very clean for its age.</strong> We maintain a high bar for {% if section.settings.enable_c_grade %}Average{% else %}B{% endif %} grade.</div></div>' +
+        '<div class="bfc4-gi-card"><div class="bfc4-gi-grade">{% if section.settings.enable_c_grade %}Great{% else %}Grade B{% endif %}</div><div class="bfc4-gi-text">Shows light cosmetic wear including small scratches, spots, or worn finish. <strong>Still very clean for its age.</strong> We maintain a high bar for {% if section.settings.enable_c_grade %}Great{% else %}B{% endif %} grade.</div></div>' +
       '{% if section.settings.enable_c_grade %}<div class="bfc4-gi-card"><div class="bfc4-gi-grade">Worn</div><div class="bfc4-gi-text">Shows heavier cosmetic wear such as deeper scratches, brassing, or worn coverings. Currently out of stock.</div></div>{% endif %}' +
       '</div>' +
       '<div class="bfc4-gi-note">{% if section.settings.enable_c_grade %}<strong>A lower grade is not a lesser camera.</strong>{% else %}<strong>Grade B is not a lesser camera.</strong>{% endif %} Same restoration, same bench testing, same warranty. It just shows a little more life.</div>';
