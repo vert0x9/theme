@@ -84,6 +84,71 @@
         "spacing_bottom": "2"
       }
     },
+    "bfc_collection_intro_8DwwDA": {
+      "type": "bfc-collection-intro",
+      "blocks": {
+        "quick_nav_Ymq3pV": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Our Favorite, The Canon AE-1",
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": "https://brooklynfilmcamera.com/products/canon-ae-1-program?_pos=1&_psq=canon+ae-1&_ss=e&_v=1.0"
+          }
+        },
+        "quick_nav_fLRrtA": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Beginner friendly",
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": "https://brooklynfilmcamera.com/collections/beginner-friendly?sort_by=most-relevant&filter.p.m.custom.camera_type=SLR&filter.p.m.custom.camera_type=Point+%26+Shoot"
+          }
+        },
+        "quick_nav_7N34e7": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Point & shoots",
+            "sublabel": "",
+            "link_collection": "point-shoots",
+            "custom_url": ""
+          }
+        },
+        "quick_nav_BrG4Ve": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Premium compacts",
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": "https://brooklynfilmcamera.com/collections/high-image-quality?sort_by=most-relevant&filter.p.m.custom.camera_type=Point+%26+Shoot&pb=0"
+          }
+        }
+      },
+      "block_order": [
+        "quick_nav_Ymq3pV",
+        "quick_nav_fLRrtA",
+        "quick_nav_7N34e7",
+        "quick_nav_BrG4Ve"
+      ],
+      "name": "BFC Collection Intro",
+      "settings": {
+        "intro_eyebrow": "Shop all",
+        "intro_title": "Every Camera, Restored",
+        "intro_body": "Film cameras, brought back to life and ready to shoot. Every body here has been serviced, cleaned, and bench-tested by our techs in Brooklyn, then backed by a warranty. New to film or coming back to it, this is the whole shelf. Not sure where to start? Use the links to browse by what matters to you.",
+        "trust_1": "Restored & bench-tested in Brooklyn",
+        "trust_2": "Warrantied",
+        "trust_3": "Free shipping over $400",
+        "sub_mode": false,
+        "sub_eyebrow": "A subset of All Cameras",
+        "sub_title": "Beginner Friendly",
+        "sub_body": "Simple, reliable cameras that are easy to learn on. No fiddly settings, no surprises. Every one restored, bench-tested, and warrantied.",
+        "back_collection": "",
+        "back_label": "Back to All Cameras",
+        "nav_title": "Browse by",
+        "nav_style": "list",
+        "theme": "light"
+      }
+    },
     "main": {
       "type": "main-collection",
       "blocks": {
@@ -175,6 +240,7 @@
       "settings": {
         "camera_type": "ps",
         "open_by_default": false,
+        "mobile_sticky": false,
         "eyebrow": "Why BFC",
         "bar_title": "",
         "open_label": "Learn how",
@@ -230,6 +296,7 @@
       "settings": {
         "camera_type": "generic",
         "open_by_default": false,
+        "mobile_sticky": false,
         "eyebrow": "Why BFC",
         "bar_title": "",
         "open_label": "Learn how",
@@ -358,6 +425,7 @@
   "order": [
     "page_banner_jWtyM4",
     "featured_collections_ybC3xQ",
+    "bfc_collection_intro_8DwwDA",
     "main",
     "bfc_refurb_process_fCkhNR",
     "bfc_refurb_process_BaPGXJ",
