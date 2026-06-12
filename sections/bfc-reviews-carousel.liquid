@@ -51,14 +51,16 @@
       --rv-text: {{ base_text }};
       --rv-card-bg: {{ card_bg }};
       --rv-star: {{ star_color }};
-      --rv-align-pad: clamp({{ horizontal_pad }}px, calc((100vw - min(100vw, {{ page_width_px }}px)) / 2 + {{ horizontal_pad }}px), 120px);
+      --rv-pad: clamp({{ horizontal_pad }}px, calc((100vw - min(100vw, {{ page_width_px }}px)) / 2 + {{ horizontal_pad }}px), 120px);
       --rv-max: {{ page_width_px }}px;
       color: var(--rv-text);
       background: var(--rv-bg);
       font-family: var(--font-body-family, inherit);
     }
     #bfc-reviews-{{ section.id }} .rv__header{
-      padding: 0 var(--rv-align-pad) 28px;
+      max-width: var(--rv-max);
+      margin: 0 auto;
+      padding: 0 var(--rv-pad) 28px;
       display: flex;
       align-items: baseline;
       justify-content: space-between;
@@ -99,14 +101,16 @@
       border-color: var(--rv-text);
     }
     #bfc-reviews-{{ section.id }} .rv__track-wrap{
+      max-width: var(--rv-max);
+      margin: 0 auto;
+      padding: 0 var(--rv-pad);
       position: relative;
       overflow: hidden;
     }
     #bfc-reviews-{{ section.id }} .rv__track{
       display: flex;
       gap: 16px;
-      padding-left: var(--rv-align-pad);
-      padding-right: 0;
+      margin-right: calc(0px - var(--rv-pad));
       transition: transform 400ms ease;
       cursor: grab;
     }
@@ -395,6 +399,25 @@
       track.style.transform = 'translateX(' + startTx + 'px)';
     }
   }
+
+  /* Trackpad / mouse wheel horizontal scroll support */
+  var wheelTimer = null;
+  var wheelAccum = 0;
+  sec.addEventListener('wheel', function(e){
+    /* Only act on predominantly-horizontal scrolls (trackpad swipes) */
+    if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+    e.preventDefault();
+    wheelAccum += e.deltaX;
+    if (wheelTimer) return;
+    /* Throttle: process accumulated scroll every 120ms */
+    wheelTimer = setTimeout(function(){
+      if (Math.abs(wheelAccum) > 30) {
+        slide(wheelAccum > 0 ? 1 : -1);
+      }
+      wheelAccum = 0;
+      wheelTimer = null;
+    }, 120);
+  }, {passive: false});
 })();
 </script>
 
