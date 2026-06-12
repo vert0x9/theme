@@ -51,16 +51,15 @@
       --rv-text: {{ base_text }};
       --rv-card-bg: {{ card_bg }};
       --rv-star: {{ star_color }};
-      --rv-pad: clamp({{ horizontal_pad }}px, calc((100vw - min(100vw, {{ page_width_px }}px)) / 2 + {{ horizontal_pad }}px), 120px);
+      --rv-pad-base: {{ horizontal_pad }}px;
+      --rv-align-pad: max({{ horizontal_pad }}px, calc((100vw - {{ page_width_px }}px) / 2 + {{ horizontal_pad }}px));
       --rv-max: {{ page_width_px }}px;
       color: var(--rv-text);
       background: var(--rv-bg);
       font-family: var(--font-body-family, inherit);
     }
     #bfc-reviews-{{ section.id }} .rv__header{
-      max-width: var(--rv-max);
-      margin: 0 auto;
-      padding: 0 var(--rv-pad) 28px;
+      padding: 0 var(--rv-align-pad) 28px;
       display: flex;
       align-items: baseline;
       justify-content: space-between;
@@ -107,7 +106,8 @@
     #bfc-reviews-{{ section.id }} .rv__track{
       display: flex;
       gap: 16px;
-      padding: 0 var(--rv-pad);
+      padding-left: var(--rv-align-pad);
+      padding-right: 0;
       transition: transform 400ms ease;
       cursor: grab;
     }
