@@ -51,8 +51,7 @@
       --rv-text: {{ base_text }};
       --rv-card-bg: {{ card_bg }};
       --rv-star: {{ star_color }};
-      --rv-pad-base: {{ horizontal_pad }}px;
-      --rv-align-pad: max({{ horizontal_pad }}px, calc((100vw - {{ page_width_px }}px) / 2 + {{ horizontal_pad }}px));
+      --rv-align-pad: clamp({{ horizontal_pad }}px, calc((100vw - min(100vw, {{ page_width_px }}px)) / 2 + {{ horizontal_pad }}px), 120px);
       --rv-max: {{ page_width_px }}px;
       color: var(--rv-text);
       background: var(--rv-bg);
