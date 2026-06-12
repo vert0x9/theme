@@ -58,9 +58,11 @@
       font-family: var(--font-body-family, inherit);
     }
     #bfc-reviews-{{ section.id }} .rv__header{
+      width: min(calc(100% - 2 * var(--rv-pad)), var(--rv-max));
       max-width: var(--rv-max);
-      margin: 0 auto;
-      padding: 0 var(--rv-pad) 28px;
+      margin-left: var(--rv-pad);
+      margin-right: var(--rv-pad);
+      padding: 0 0 28px;
       display: flex;
       align-items: baseline;
       justify-content: space-between;
@@ -101,22 +103,26 @@
       border-color: var(--rv-text);
     }
     #bfc-reviews-{{ section.id }} .rv__track-wrap{
-      max-width: var(--rv-max);
-      margin: 0 auto;
-      padding: 0 var(--rv-pad);
       position: relative;
+      width: 100vw;
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
     }
     #bfc-reviews-{{ section.id }} .rv__track{
       display: flex;
       gap: 16px;
       overflow-x: auto;
       overflow-y: hidden;
+      overscroll-behavior-x: contain;
       scroll-behavior: smooth;
       scrollbar-width: none;
       -ms-overflow-style: none;
       -webkit-overflow-scrolling: touch;
-      margin-right: calc(0px - var(--rv-pad));
-      padding-right: var(--rv-pad);
+      scroll-padding-left: var(--rv-pad);
+      padding-left: var(--rv-pad);
+      padding-right: 0;
+      padding-top: 6px;
+      padding-bottom: 8px;
       cursor: grab;
     }
     #bfc-reviews-{{ section.id }} .rv__track::-webkit-scrollbar{
