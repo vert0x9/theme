@@ -9,64 +9,6 @@
  */
 {
   "sections": {
-    "bfc_collection_intro_983CNq": {
-      "type": "bfc-collection-intro",
-      "blocks": {
-        "quick_nav_ggTnxd": {
-          "type": "quick_nav",
-          "settings": {
-            "label": "Rangefinders",
-            "sublabel": "",
-            "image": "shopify://shop_images/Leica_M2-May250022.png",
-            "link_collection": "",
-            "custom_url": "https://brooklynfilmcamera.com/collections/slr-other?sort_by=best-selling&filter.p.m.custom.camera_type=Rangefinder"
-          }
-        },
-        "quick_nav_DjtcKi": {
-          "type": "quick_nav",
-          "settings": {
-            "label": "SLRs",
-            "sublabel": "",
-            "image": "shopify://shop_images/000067590033.jpg",
-            "link_collection": "",
-            "custom_url": "https://brooklynfilmcamera.com/collections/slr-other?sort_by=best-selling&filter.p.m.custom.camera_type=SLR"
-          }
-        },
-        "quick_nav_9zhr6c": {
-          "type": "quick_nav",
-          "settings": {
-            "label": "Rare Finds",
-            "sublabel": "",
-            "image": "shopify://shop_images/Summer_2026_Triangle_Park-2734.png",
-            "link_collection": "",
-            "custom_url": ""
-          }
-        }
-      },
-      "block_order": [
-        "quick_nav_ggTnxd",
-        "quick_nav_DjtcKi",
-        "quick_nav_9zhr6c"
-      ],
-      "name": "BFC Collection Intro",
-      "settings": {
-        "intro_eyebrow": "Shop all",
-        "intro_title": "SLRs & Rangefinders",
-        "intro_body": "SLRs and rangefinders are the cameras most people picture when they think of a film camera. Lots of control, built to last, and capable of stunning photos with a vast array of lenses.",
-        "trust_1": "Restored & bench-tested in Brooklyn",
-        "trust_2": "Warrantied",
-        "trust_3": "Free shipping over $400",
-        "sub_mode": false,
-        "sub_eyebrow": "A subset of All Cameras",
-        "sub_title": "Beginner Friendly",
-        "sub_body": "Simple, reliable cameras that are easy to learn on. No fiddly settings, no surprises. Every one restored, bench-tested, and warrantied.",
-        "back_collection": "",
-        "back_label": "Back to All Cameras",
-        "nav_title": "Browse by",
-        "nav_style": "grid",
-        "theme": "light"
-      }
-    },
     "page_banner_jWtyM4": {
       "type": "page-banner",
       "disabled": true,
@@ -417,7 +359,6 @@
     }
   },
   "order": [
-    "bfc_collection_intro_983CNq",
     "page_banner_jWtyM4",
     "featured_collections_ybC3xQ",
     "bfc_collection_intro_zVqc9H",
