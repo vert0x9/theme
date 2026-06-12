@@ -97,25 +97,13 @@
       transition: opacity 0.15s;
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-viewall:hover { opacity: 1; text-decoration: underline; }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-nav { display: flex; gap: 6px; }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-arrow {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: 1px solid rgba(0,0,0,0.15);
-      background: transparent;
-      color: var(--na-text);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
-      padding: 0;
-    }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-arrow:hover {
-      background: var(--na-text);
-      border-color: var(--na-text);
-      color: var(--na-bg);
+    /* ── Header row + viewall (matches top-sellers) ── */
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-header { margin: 0 0 16px; }
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-header-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-eyebrow {
       font-family: 'Poppins', sans-serif;
@@ -124,34 +112,46 @@
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--na-accent);
-      margin: 0 0 12px;
+      margin: 0 0 8px;
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-heading {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(32px, 4vw, 44px);
+      font-size: clamp(28px, 3vw, 36px);
       font-weight: 400;
       line-height: 1.1;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.02em;
       color: var(--na-text);
-      margin: 0 0 14px;
+      margin: 0;
+    }
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-viewall {
+      color: var(--na-text);
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 13px;
+      opacity: 0.85;
+    }
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-viewall:hover {
+      opacity: 1;
+      text-decoration: underline;
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-text {
+      font-family: 'Poppins', sans-serif;
       font-size: 14px;
-      line-height: 1.65;
+      line-height: 1.45;
       color: var(--na-secondary);
-      max-width: 580px;
-      margin: 0 auto;
+      margin: 10px 0 0;
+      max-width: 70ch;
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-text p { margin: 0 0 10px; }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-text p:last-child { margin: 0; }
 
-    /* ── Product rail (horizontal scroller, matches top-sellers) ── */
+    /* ── Product rail (matches top-sellers exactly) ── */
     #bfc-new-arrivals-{{ section.id }} .bfc-na-rail-wrap {
       position: relative;
+      margin-top: 14px;
       width: 100vw;
       margin-left: calc(50% - 50vw);
       margin-right: calc(50% - 50vw);
-      margin-top: 14px;
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-grid {
       display: grid;
@@ -159,7 +159,6 @@
       grid-auto-columns: clamp(220px, 24vw, 280px);
       gap: 16px;
       overflow-x: auto;
-      overflow-y: hidden;
       overscroll-behavior-x: contain;
       scroll-snap-type: x mandatory;
       scroll-padding-left: var(--na-align-pad);
@@ -167,9 +166,8 @@
       padding-right: 0;
       padding-top: 6px;
       padding-bottom: 8px;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
       -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
       cursor: grab;
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-grid::-webkit-scrollbar { display: none; }
@@ -178,186 +176,131 @@
       scroll-behavior: auto;
     }
 
-    /* ── Product card ── */
+    /* ── Product card (matches top-sellers exactly) ── */
     #bfc-new-arrivals-{{ section.id }} .bfc-na-card {
-      position: relative;
-      background: transparent;
-      transition: opacity 0.15s ease;
       scroll-snap-align: start;
       scroll-snap-stop: always;
-    }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-card.is-hidden { display: none; }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-link {
-      display: flex;
-      flex-direction: column;
-      text-decoration: none;
-      color: inherit;
-    }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-img-wrap {
-      position: relative;
-      padding-top: 100%;
-      background: transparent;
+      background: var(--na-bg);
+      border: 0;
+      border-radius: 0;
       overflow: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-height: 100%;
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-img {
-      position: absolute;
-      inset: 0;
+      position: relative;
+      display: block;
+      aspect-ratio: 4 / 3;
+      background: color-mix(in srgb, var(--na-text) 6%, transparent);
+      overflow: hidden;
+      text-decoration: none;
+    }
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-img img {
       width: 100%;
       height: 100%;
-      object-fit: contain;
-      padding: 0;
-      transition: opacity 0.2s ease;
+      object-fit: cover;
+      display: block;
+      transform: scale(1);
+      transition: transform 0.35s ease, opacity 0.35s ease;
     }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-card:hover .bfc-na-img { opacity: 0.92; }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-placeholder {
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-img:hover img { transform: scale(1.03); }
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-stock-sticker {
       position: absolute;
-      inset: 0;
+      right: 12px;
+      top: 12px;
+      z-index: 2;
+      font-family: 'Poppins', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: 0.02em;
+      padding: 6px 9px;
+      border-radius: 0;
+      background: #E36E15;
+      color: #fff;
+      white-space: nowrap;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    }
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-meta {
+      padding: 10px 12px 12px;
+      display: grid;
+      gap: 2px;
+    }
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-vendor {
+      font-family: 'Poppins', sans-serif;
+      font-size: 11px;
+      color: var(--na-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-name {
+      color: var(--na-text);
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 14px;
+      line-height: 1.15;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-name:hover { text-decoration: underline; }
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-subline {
       display: flex;
       align-items: center;
-      justify-content: center;
-      color: rgba(32,32,9,0.35);
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-info {
-      padding: 12px 0 0;
-      text-align: left;
-      text-indent: 0;
-    }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-title,
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-price,
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-soldout {
-      padding-left: 0;
-      padding-right: 0;
-      text-indent: 0;
-    }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-title {
-      font-family: 'Poppins', sans-serif;
-      font-size: 16px;
-      font-weight: 500;
-      line-height: 1.15;
-      color: var(--na-text);
-      margin: 0 0 4px;
-      letter-spacing: -0.01em;
-    }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-link:hover .bfc-na-title { text-decoration: underline; }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-price {
-      font-family: 'Poppins', sans-serif;
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--na-text);
-      margin: 0;
-      display: flex;
-      align-items: baseline;
       gap: 8px;
-    }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-price--sale {
-      color: var(--na-accent);
-    }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-price--compare {
-      text-decoration: line-through;
-      color: rgba(78,71,65,0.6);
-      margin-right: 6px;
-    }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-soldout {
-      font-family: 'Poppins', sans-serif;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(78,71,65,0.6);
-    }
-
-    /* ── Card badges, subline, bottom row, Add button ── */
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-title-link {
-      text-decoration: none;
-      color: inherit;
-      display: block;
-    }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-title-link:hover .bfc-na-title { text-decoration: underline; }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-badge {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      font-family: 'Poppins', sans-serif;
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 5px 8px;
-      border-radius: 2px;
-      pointer-events: none;
-    }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-badge--soldout {
-      background: rgba(32,32,9,0.85);
-      color: #F8F6EE;
-    }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-badge--sale {
-      background: var(--na-accent);
-      color: #F8F6EE;
-    }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-img-wrap { position: relative; }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-subline {
+      color: var(--na-secondary);
       font-family: 'Poppins', sans-serif;
       font-size: 11px;
-      color: rgba(78,71,65,0.7);
-      margin: 4px 0 0;
-      letter-spacing: 0.02em;
+      line-height: 1.2;
+      margin-top: 1px;
     }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-dot { margin: 0 4px; }
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-dot { opacity: 0.7; }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-bottom {
+      margin-top: 2px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      margin-top: 12px;
+      gap: 10px;
     }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-price-wrap {
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-price {
       display: flex;
       align-items: baseline;
-      gap: 6px;
+      gap: 8px;
+      min-height: 18px;
       font-family: 'Poppins', sans-serif;
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-price-now {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       color: var(--na-text);
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-price-was {
-      font-size: 12px;
-      color: rgba(78,71,65,0.6);
+      font-size: 11px;
+      color: var(--na-secondary);
       text-decoration: line-through;
     }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-add {
-      margin: 0;
-      flex-shrink: 0;
-    }
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-add { margin: 0; }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-add-btn {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--na-text);
+      border-radius: 0;
+      padding: 9px 12px;
       font-family: 'Poppins', sans-serif;
       font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--na-text);
-      background: transparent;
-      border: 1px solid var(--na-text);
-      border-radius: 2px;
-      padding: 8px 14px;
+      line-height: 1;
       cursor: pointer;
-      transition: background 0.15s, color 0.15s;
+      transition: background 0.18s ease, opacity 0.18s ease;
+      white-space: nowrap;
     }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-add-btn:hover {
-      background: var(--na-text);
-      color: var(--na-bg);
+      background: color-mix(in srgb, var(--na-text) 7%, transparent);
     }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-add-btn:disabled {
-      opacity: 0.4;
+    #bfc-new-arrivals-{{ section.id }} .bfc-na-add-btn[disabled] {
+      opacity: 0.45;
       cursor: not-allowed;
-    }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-add-btn:disabled:hover {
-      background: transparent;
-      color: var(--na-text);
     }
 
     /* ── Show-more / collapse / back-to-top as text links ── */
@@ -527,31 +470,18 @@
           <div class="bfc-na-inner">
             {%- if block.settings.eyebrow != blank or block.settings.heading != blank or block.settings.text != blank or block.settings.button_link != blank -%}
               <div class="bfc-na-header">
+                {% if block.settings.eyebrow != blank %}
+                  <p class="bfc-na-eyebrow">{{ block.settings.eyebrow }}</p>
+                {% endif %}
                 <div class="bfc-na-header-row">
-                  <div class="bfc-na-header-text">
-                    {% if block.settings.eyebrow != blank %}
-                      <p class="bfc-na-eyebrow">{{ block.settings.eyebrow }}</p>
-                    {% endif %}
-                    {% if block.settings.heading != blank %}
-                      <h2 class="bfc-na-heading">{{ block.settings.heading | strip_html | escape }}</h2>
-                    {% endif %}
-                  </div>
-                  <div class="bfc-na-header-controls">
-                    {% if block.settings.button_link != blank %}
-                      <a class="bfc-na-viewall" href="{{ block.settings.button_link }}">
-                        {{ block.settings.button_text | default: 'See all' | escape }}
-                        <svg viewBox="0 0 14 14" fill="none" aria-hidden="true" width="11" height="11"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                      </a>
-                    {% endif %}
-                    <div class="bfc-na-nav">
-                      <button type="button" class="bfc-na-arrow" data-na-prev aria-label="Previous">
-                        <svg viewBox="0 0 14 14" fill="none" width="14" height="14"><path d="M9 3L5 7l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                      </button>
-                      <button type="button" class="bfc-na-arrow" data-na-next aria-label="Next">
-                        <svg viewBox="0 0 14 14" fill="none" width="14" height="14"><path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                      </button>
-                    </div>
-                  </div>
+                  {% if block.settings.heading != blank %}
+                    <h2 class="bfc-na-heading">{{ block.settings.heading | strip_html | escape }}</h2>
+                  {% endif %}
+                  {% if block.settings.button_link != blank %}
+                    <a class="bfc-na-viewall" href="{{ block.settings.button_link }}">
+                      {{ block.settings.button_text | default: 'Shop all' | escape }}
+                    </a>
+                  {% endif %}
                 </div>
                 {% if block.settings.text != blank %}
                   <div class="bfc-na-text rte">{{ block.settings.text }}</div>
@@ -574,39 +504,59 @@
                     {% assign product_index = product_index | plus: 1 %}
                     {% assign image = product.featured_image %}
                     {% assign variant = product.selected_or_first_available_variant %}
-                    <div class="bfc-na-card" data-index="{{ product_index }}" role="listitem">
-                      <a href="{{ product.url }}" class="bfc-na-link" aria-label="{{ product.title | escape }}">
-                        <div class="bfc-na-img-wrap">
-                          {% if image %}
-                            <img class="bfc-na-img" src="{{ image | image_url: width: 800 }}" alt="{{ product.title | escape }}" loading="lazy" width="{{ image.width }}" height="{{ image.height }}">
-                          {% else %}
-                            <div class="bfc-na-placeholder" aria-hidden="true">No image</div>
-                          {% endif %}
-                          {% unless product.available %}
-                            <span class="bfc-na-badge bfc-na-badge--soldout" aria-hidden="true">Sold Out</span>
-                          {% else %}
-                            {% if product.compare_at_price > product.price %}
-                              <span class="bfc-na-badge bfc-na-badge--sale" aria-hidden="true">Sale</span>
-                            {% endif %}
-                          {% endunless %}
-                        </div>
+                    <article class="bfc-na-card" data-index="{{ product_index }}" role="listitem">
+                      <a class="bfc-na-img" href="{{ product.url }}" aria-label="{{ product.title | escape }}" tabindex="-1" aria-hidden="true">
+                        {% if image %}
+                          <img
+                            src="{{ image | image_url: width: 720 }}"
+                            srcset="{{ image | image_url: width: 360 }} 360w, {{ image | image_url: width: 540 }} 540w, {{ image | image_url: width: 720 }} 720w"
+                            sizes="(min-width: 990px) 260px, 70vw"
+                            alt=""
+                            loading="lazy"
+                            width="{{ image.width }}"
+                            height="{{ image.height }}"
+                          >
+                        {% else %}
+                          <span aria-hidden="true">{{ 'product-1' | placeholder_svg_tag: 'bfc-na-placeholder' }}</span>
+                        {% endif %}
+                        {% if variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny' and variant.inventory_quantity > 0 and variant.inventory_quantity < 3 %}
+                          <span class="bfc-na-stock-sticker" aria-hidden="true">Only {{ variant.inventory_quantity }} left</span>
+                        {% endif %}
                       </a>
-                      <div class="bfc-na-info">
-                        <a class="bfc-na-title-link" href="{{ product.url }}">
-                          <p class="bfc-na-title">{{ product.title }}</p>
+                      <div class="bfc-na-meta">
+                        {% if product.vendor != blank %}
+                          <div class="bfc-na-vendor">{{ product.vendor | escape }}</div>
+                        {% endif %}
+                        <a class="bfc-na-name" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+                          {{ product.title | escape }}
                         </a>
-                        <p class="bfc-na-subline">
-                          {% if product.available %}In stock{% else %}Sold out{% endif %}
+                        <div class="bfc-na-subline">
+                          <span class="bfc-na-stock">
+                            {% if product.available %}In stock{% else %}Sold out{% endif %}
+                          </span>
                           {% if product.variants.size > 1 %}
                             <span class="bfc-na-dot" aria-hidden="true">•</span>
-                            {{ product.variants.size }} option{% if product.variants.size != 1 %}s{% endif %}
+                            <span class="bfc-na-variants">
+                              {{ product.variants.size }} option{% if product.variants.size != 1 %}s{% endif %}
+                            </span>
                           {% endif %}
-                        </p>
+                        </div>
+                        <div class="bfc-card-meta">
+                          <span class="bfc-card-meta-item bfc-card-meta-free">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                            Restored &amp; Warrantied
+                          </span>
+                          <span class="bfc-card-activity"
+                            data-handle="{{ product.handle }}"
+                            data-available="{{ product.available }}"
+                            data-qty="{{ product.variants | map: 'inventory_quantity' | sum }}"
+                            data-no-stock-text="true"></span>
+                        </div>
                         <div class="bfc-na-bottom">
-                          <div class="bfc-na-price-wrap">
-                            {% if product.compare_at_price > product.price %}
+                          <div class="bfc-na-price">
+                            {% if product.compare_at_price_max > product.price %}
                               <span class="bfc-na-price-now">{{ product.price | money }}</span>
-                              <span class="bfc-na-price-was">{{ product.compare_at_price | money }}</span>
+                              <span class="bfc-na-price-was">{{ product.compare_at_price_max | money }}</span>
                             {% else %}
                               <span class="bfc-na-price-now">{{ product.price | money }}</span>
                             {% endif %}
@@ -620,7 +570,7 @@
                           </form>
                         </div>
                       </div>
-                    </div>
+                    </article>
                   {% endfor %}
                 {% else %}
                   {% assign rendered_count = 0 %}
@@ -633,39 +583,59 @@
                       {% assign product_index = product_index | plus: 1 %}
                       {% assign image = product.featured_image %}
                       {% assign variant = product.selected_or_first_available_variant %}
-                      <div class="bfc-na-card" data-index="{{ product_index }}" role="listitem">
-                        <a href="{{ product.url }}" class="bfc-na-link" aria-label="{{ product.title | escape }}">
-                          <div class="bfc-na-img-wrap">
-                            {% if image %}
-                              <img class="bfc-na-img" src="{{ image | image_url: width: 800 }}" alt="{{ product.title | escape }}" loading="lazy" width="{{ image.width }}" height="{{ image.height }}">
-                            {% else %}
-                              <div class="bfc-na-placeholder" aria-hidden="true">No image</div>
-                            {% endif %}
-                            {% unless product.available %}
-                              <span class="bfc-na-badge bfc-na-badge--soldout" aria-hidden="true">Sold Out</span>
-                            {% else %}
-                              {% if product.compare_at_price > product.price %}
-                                <span class="bfc-na-badge bfc-na-badge--sale" aria-hidden="true">Sale</span>
-                              {% endif %}
-                            {% endunless %}
-                          </div>
+                      <article class="bfc-na-card" data-index="{{ product_index }}" role="listitem">
+                        <a class="bfc-na-img" href="{{ product.url }}" aria-label="{{ product.title | escape }}" tabindex="-1" aria-hidden="true">
+                          {% if image %}
+                            <img
+                              src="{{ image | image_url: width: 720 }}"
+                              srcset="{{ image | image_url: width: 360 }} 360w, {{ image | image_url: width: 540 }} 540w, {{ image | image_url: width: 720 }} 720w"
+                              sizes="(min-width: 990px) 260px, 70vw"
+                              alt=""
+                              loading="lazy"
+                              width="{{ image.width }}"
+                              height="{{ image.height }}"
+                            >
+                          {% else %}
+                            <span aria-hidden="true">{{ 'product-1' | placeholder_svg_tag: 'bfc-na-placeholder' }}</span>
+                          {% endif %}
+                          {% if variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny' and variant.inventory_quantity > 0 and variant.inventory_quantity < 3 %}
+                            <span class="bfc-na-stock-sticker" aria-hidden="true">Only {{ variant.inventory_quantity }} left</span>
+                          {% endif %}
                         </a>
-                        <div class="bfc-na-info">
-                          <a class="bfc-na-title-link" href="{{ product.url }}">
-                            <p class="bfc-na-title">{{ product.title }}</p>
+                        <div class="bfc-na-meta">
+                          {% if product.vendor != blank %}
+                            <div class="bfc-na-vendor">{{ product.vendor | escape }}</div>
+                          {% endif %}
+                          <a class="bfc-na-name" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
+                            {{ product.title | escape }}
                           </a>
-                          <p class="bfc-na-subline">
-                            {% if product.available %}In stock{% else %}Sold out{% endif %}
+                          <div class="bfc-na-subline">
+                            <span class="bfc-na-stock">
+                              {% if product.available %}In stock{% else %}Sold out{% endif %}
+                            </span>
                             {% if product.variants.size > 1 %}
                               <span class="bfc-na-dot" aria-hidden="true">•</span>
-                              {{ product.variants.size }} option{% if product.variants.size != 1 %}s{% endif %}
+                              <span class="bfc-na-variants">
+                                {{ product.variants.size }} option{% if product.variants.size != 1 %}s{% endif %}
+                              </span>
                             {% endif %}
-                          </p>
+                          </div>
+                          <div class="bfc-card-meta">
+                            <span class="bfc-card-meta-item bfc-card-meta-free">
+                              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                              Restored &amp; Warrantied
+                            </span>
+                            <span class="bfc-card-activity"
+                              data-handle="{{ product.handle }}"
+                              data-available="{{ product.available }}"
+                              data-qty="{{ product.variants | map: 'inventory_quantity' | sum }}"
+                              data-no-stock-text="true"></span>
+                          </div>
                           <div class="bfc-na-bottom">
-                            <div class="bfc-na-price-wrap">
-                              {% if product.compare_at_price > product.price %}
+                            <div class="bfc-na-price">
+                              {% if product.compare_at_price_max > product.price %}
                                 <span class="bfc-na-price-now">{{ product.price | money }}</span>
-                                <span class="bfc-na-price-was">{{ product.compare_at_price | money }}</span>
+                                <span class="bfc-na-price-was">{{ product.compare_at_price_max | money }}</span>
                               {% else %}
                                 <span class="bfc-na-price-now">{{ product.price | money }}</span>
                               {% endif %}
@@ -679,7 +649,7 @@
                             </form>
                           </div>
                         </div>
-                      </div>
+                      </article>
                     {% endif %}
                   {% endfor %}
                 {% endif %}
@@ -788,19 +758,9 @@
                 });
               }
 
-              /* ── Rail navigation: arrow buttons + click-drag ── */
+              /* ── Rail click-and-drag (desktop) ── */
               var rail = root.querySelector('.bfc-na-grid');
-              var prevBtn = root.querySelector('[data-na-prev]');
-              var nextBtn = root.querySelector('[data-na-next]');
               if (rail) {
-                function scrollByDir(dir) {
-                  var amount = Math.max(rail.clientWidth * 0.8, 320);
-                  rail.scrollBy({ left: dir * amount, behavior: 'smooth' });
-                }
-                if (prevBtn) prevBtn.addEventListener('click', function() { scrollByDir(-1); });
-                if (nextBtn) nextBtn.addEventListener('click', function() { scrollByDir(1); });
-
-                /* Click-and-drag on desktop */
                 var isDown = false, startX = 0, startScroll = 0;
                 rail.addEventListener('mousedown', function(e) {
                   if (e.target.closest('.bfc-na-add-btn, a, button')) return;
@@ -825,6 +785,101 @@
     {% endcase %}
   {% endfor %}
 </section>
+
+{%- comment -%} ── BFC card meta CSS + activity counter (matches top-sellers) ── {%- endcomment -%}
+<style>
+  .bfc-card-meta {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+    margin: 6px 0 2px;
+    font-family: 'Poppins', sans-serif;
+  }
+  .bfc-card-meta:empty { display: none; }
+  .bfc-card-meta-item {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 9.5px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: #4E4741;
+  }
+  .bfc-card-meta-item svg { color: #2a4820; flex-shrink: 0; }
+  .bfc-card-meta-free { color: #2a4820; }
+  .bfc-card-meta-free svg { color: #2a4820; }
+  .bfc-card-activity {
+    display: none; align-items: center; gap: 5px;
+    font-size: 9.5px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: #E36E15;
+  }
+  .bfc-card-activity.is-visible { display: inline-flex; }
+  .bfc-card-activity::before {
+    content: ''; width: 5px; height: 5px; background: #E36E15;
+    flex-shrink: 0;
+    animation: bfc-card-pulse 2s ease-in-out infinite;
+  }
+  @keyframes bfc-card-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+</style>
+<script>
+(function() {
+  if (window.__bfcCardActivityInit) return;
+  window.__bfcCardActivityInit = true;
+
+  function renderInventoryMessages() {
+    var list = [];
+    document.querySelectorAll('.bfc-card-activity').forEach(function(el) {
+      if (el.dataset.noStockText !== 'true') {
+        var available = el.dataset.available === 'true';
+        var qty = parseInt(el.dataset.qty, 10);
+        if (isNaN(qty)) qty = null;
+        if (available && qty !== null && qty > 0 && qty <= 3) {
+          el.textContent = qty === 1 ? 'Only 1 left' : 'Only ' + qty + ' left';
+          el.classList.add('is-visible');
+        }
+      }
+      list.push(el);
+    });
+    return list;
+  }
+
+  function loadActivity() {
+    var list = renderInventoryMessages();
+    if (!list.length) return;
+    var URL = 'https://app--6910fd9136cfabdf03f66780.base44.app/api/apps/6910fd9136cfabdf03f66780/functions/productActivity?sort=-created_date&limit=500';
+    fetch(URL)
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var events = Array.isArray(data) ? data : (data.results || data.data || []);
+        if (!events.length) return;
+        var now = Date.now();
+        var counts = {};
+        events.forEach(function(e) {
+          if (!e || e.event !== 'atc' || !e.handle || !e.created_date) return;
+          if (now - new Date(e.created_date).getTime() > 2505600000) return;
+          counts[e.handle] = (counts[e.handle] || 0) + 1;
+        });
+        list.forEach(function(el) {
+          var n = counts[el.dataset.handle] || 0;
+          if (n < 3) return;
+          var cartMsg = n + ' people have this in their cart';
+          if (el.classList.contains('is-visible')) {
+            el.textContent = el.textContent + ' & ' + cartMsg;
+          } else {
+            el.textContent = cartMsg;
+            el.classList.add('is-visible');
+          }
+        });
+      })
+      .catch(function() { /* fail silently */ });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadActivity);
+  } else {
+    loadActivity();
+  }
+})();
+</script>
 
 {% schema %}
 {
