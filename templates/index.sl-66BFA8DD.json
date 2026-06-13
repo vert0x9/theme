@@ -687,8 +687,6 @@
         "subheading": "",
         "header_align": "left",
         "columns_mobile": 2,
-        "mobile_slider": true,
-        "mobile_slider_width": 30,
         "columns_desktop": 6,
         "grid_gap": 16,
         "media_aspect": "1 / 1",
