@@ -60,9 +60,6 @@
         "back_collection": "cameras",
         "back_label": "Back to All Cameras",
         "nav_title": "Browse by",
-        "show_reset": true,
-        "reset_collection": "",
-        "reset_label": "View all cameras",
         "theme": "light"
       }
     },
