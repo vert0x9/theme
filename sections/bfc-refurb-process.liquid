@@ -92,7 +92,7 @@
 {%- elsif t == 'generic' -%}
   {%- assign bar_title_default     = 'How we service every camera' -%}
   {%- assign hero_h_default        = 'How we service <em>every camera.</em>' -%}
-  {%- assign hero_p_default        = 'Every camera in our shop — SLR, rangefinder, medium format, TLR, point & shoot — goes through our bench before it goes on the shelf.' -%}
+  {%- assign hero_p_default        = 'Every camera in our shop, SLR, rangefinder, medium format, TLR, point & shoot, goes through our bench before it goes on the shelf. We service them to factory specs, back them with a warranty, and hold every one to a high cosmetic bar.' -%}
   {%- assign proc_h_default        = 'Our service process' -%}
   {%- assign proc_intro_default    = 'The specifics vary by camera type, but the principle is the same: nothing goes on the shelf until it is ready to shoot.' -%}
   {%- assign step1_h_default       = 'Full intake' -%}
@@ -128,7 +128,6 @@
 {%- assign bar_title  = section.settings.bar_title   | default: bar_title_default -%}
 {%- assign hero_h     = section.settings.hero_h      | default: hero_h_default -%}
 {%- assign hero_p     = section.settings.hero_p      | default: hero_p_default -%}
-{%- assign proc_h     = section.settings.proc_h      | default: proc_h_default -%}
 {%- assign proc_intro = section.settings.proc_intro  | default: proc_intro_default -%}
 {%- assign s1_h = section.settings.step1_h | default: step1_h_default -%}
 {%- assign s1_p = section.settings.step1_p | default: step1_p_default -%}
@@ -162,35 +161,12 @@
     <div class="bfc-rp-body">
       <div class="bfc-rp-inner">
 
-        {%- comment -%} Dark hero — type-specific headline plus the "why us not eBay" thesis. {%- endcomment -%}
-        <div class="bfc-rp-hero">
-          <p class="bfc-rp-hero-ey">{{ section.settings.hero_eyebrow }}</p>
-          <h2 class="bfc-rp-hero-h">{{ hero_h }}</h2>
-          <p class="bfc-rp-hero-p">{{ hero_p }}</p>
-        </div>
-
-        {%- comment -%} Pillars — the universal "why BFC" story, same across every type. {%- endcomment -%}
-        <div class="bfc-rp-pillars">
-          <div class="bfc-rp-pillar">
-            <p class="bfc-rp-pillar-num">01</p>
-            <h3 class="bfc-rp-pillar-h">{{ section.settings.pillar1_h }}</h3>
-            <p class="bfc-rp-pillar-p">{{ section.settings.pillar1_p }}</p>
-          </div>
-          <div class="bfc-rp-pillar">
-            <p class="bfc-rp-pillar-num">02</p>
-            <h3 class="bfc-rp-pillar-h">{{ section.settings.pillar2_h }}</h3>
-            <p class="bfc-rp-pillar-p">{{ section.settings.pillar2_p }}</p>
-          </div>
-          <div class="bfc-rp-pillar">
-            <p class="bfc-rp-pillar-num">03</p>
-            <h3 class="bfc-rp-pillar-h">{{ section.settings.pillar3_h }}</h3>
-            <p class="bfc-rp-pillar-p">{{ section.settings.pillar3_p }}</p>
-          </div>
-          <div class="bfc-rp-pillar">
-            <p class="bfc-rp-pillar-num">04</p>
-            <h3 class="bfc-rp-pillar-h">{{ section.settings.pillar4_h }}</h3>
-            <p class="bfc-rp-pillar-p">{{ section.settings.pillar4_p }}</p>
-          </div>
+        {%- comment -%} Lead block — green-styled (mirrors the guarantee band) and
+            answers the question up front instead of introducing it. {%- endcomment -%}
+        <div class="bfc-rp-lead">
+          <p class="bfc-rp-lead-ey">{{ section.settings.hero_eyebrow }}</p>
+          <h2 class="bfc-rp-lead-h">{{ hero_h }}</h2>
+          <p class="bfc-rp-lead-p">{{ hero_p }}</p>
         </div>
 
         {%- comment -%} BFC vs stranger online — head-to-head. {%- endcomment -%}
@@ -217,43 +193,47 @@
           </div>
         </div>
 
-        {%- comment -%} Type-specific 5 steps — headline format, not paragraphs. {%- endcomment -%}
-        <div class="bfc-rp-process">
-          <div class="bfc-rp-process-head">
-            <h3 class="bfc-rp-process-h">{{ proc_h }}</h3>
-            <span class="bfc-rp-process-tag">5 steps</span>
+        {%- comment -%} Type-specific 5 steps — tucked behind a "See our whole process"
+            expander so the lead and the table carry the page; the detail is there
+            for anyone who wants it. {%- endcomment -%}
+        <details class="bfc-rp-process-details">
+          <summary class="bfc-rp-process-summary">
+            <span class="bfc-rp-process-summary-label">{{ section.settings.proc_toggle_label | default: 'See our whole process' }}</span>
+            <span class="bfc-rp-process-summary-icon" aria-hidden="true"></span>
+          </summary>
+          <div class="bfc-rp-process">
+            {%- if proc_intro != blank -%}
+              <p class="bfc-rp-process-intro">{{ proc_intro }}</p>
+            {%- endif -%}
+            <div class="bfc-rp-steps">
+              <div class="bfc-rp-step">
+                <p class="bfc-rp-step-num">Step 01</p>
+                <h4 class="bfc-rp-step-h">{{ s1_h }}</h4>
+                <p class="bfc-rp-step-p">{{ s1_p }}</p>
+              </div>
+              <div class="bfc-rp-step">
+                <p class="bfc-rp-step-num">Step 02</p>
+                <h4 class="bfc-rp-step-h">{{ s2_h }}</h4>
+                <p class="bfc-rp-step-p">{{ s2_p }}</p>
+              </div>
+              <div class="bfc-rp-step">
+                <p class="bfc-rp-step-num">Step 03</p>
+                <h4 class="bfc-rp-step-h">{{ s3_h }}</h4>
+                <p class="bfc-rp-step-p">{{ s3_p }}</p>
+              </div>
+              <div class="bfc-rp-step">
+                <p class="bfc-rp-step-num">Step 04</p>
+                <h4 class="bfc-rp-step-h">{{ s4_h }}</h4>
+                <p class="bfc-rp-step-p">{{ s4_p }}</p>
+              </div>
+              <div class="bfc-rp-step">
+                <p class="bfc-rp-step-num">Step 05</p>
+                <h4 class="bfc-rp-step-h">{{ s5_h }}</h4>
+                <p class="bfc-rp-step-p">{{ s5_p }}</p>
+              </div>
+            </div>
           </div>
-          {%- if proc_intro != blank -%}
-            <p class="bfc-rp-process-intro">{{ proc_intro }}</p>
-          {%- endif -%}
-          <div class="bfc-rp-steps">
-            <div class="bfc-rp-step">
-              <p class="bfc-rp-step-num">Step 01</p>
-              <h4 class="bfc-rp-step-h">{{ s1_h }}</h4>
-              <p class="bfc-rp-step-p">{{ s1_p }}</p>
-            </div>
-            <div class="bfc-rp-step">
-              <p class="bfc-rp-step-num">Step 02</p>
-              <h4 class="bfc-rp-step-h">{{ s2_h }}</h4>
-              <p class="bfc-rp-step-p">{{ s2_p }}</p>
-            </div>
-            <div class="bfc-rp-step">
-              <p class="bfc-rp-step-num">Step 03</p>
-              <h4 class="bfc-rp-step-h">{{ s3_h }}</h4>
-              <p class="bfc-rp-step-p">{{ s3_p }}</p>
-            </div>
-            <div class="bfc-rp-step">
-              <p class="bfc-rp-step-num">Step 04</p>
-              <h4 class="bfc-rp-step-h">{{ s4_h }}</h4>
-              <p class="bfc-rp-step-p">{{ s4_p }}</p>
-            </div>
-            <div class="bfc-rp-step">
-              <p class="bfc-rp-step-num">Step 05</p>
-              <h4 class="bfc-rp-step-h">{{ s5_h }}</h4>
-              <p class="bfc-rp-step-p">{{ s5_p }}</p>
-            </div>
-          </div>
-        </div>
+        </details>
 
         {%- comment -%} "Risk, removed" — warranty wraps everything in the same dark band the hero uses. {%- endcomment -%}
         <div class="bfc-rp-guarantee">
@@ -473,21 +453,21 @@
   }
 
   /* ── Hero ── */
-  .bfc-rp-hero {
+  .bfc-rp-lead {
     padding: 40px 40px;
     background: var(--rp-bk);
     color: var(--rp-cv);
-    margin-bottom: 40px;
+    margin-bottom: 48px;
   }
-  .bfc-rp-hero-ey {
+  .bfc-rp-lead-ey {
     font-size: 10px;
     font-weight: 500;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--rp-or);
+    color: var(--rp-ce);
     margin: 0 0 12px;
   }
-  .bfc-rp-hero-h {
+  .bfc-rp-lead-h {
     font-family: 'Cormorant Garamond', serif;
     font-size: 34px;
     font-weight: 300;
@@ -496,53 +476,16 @@
     color: var(--rp-cv);
     letter-spacing: -0.005em;
   }
-  .bfc-rp-hero-h em {
+  .bfc-rp-lead-h em {
     font-style: italic;
-    color: var(--rp-go);
+    color: var(--rp-ce);
   }
-  .bfc-rp-hero-p {
+  .bfc-rp-lead-p {
     font-size: 15px;
     line-height: 1.65;
     color: rgba(248, 246, 238, 0.85);
     margin: 0;
     max-width: 640px;
-  }
-
-  /* ── Pillars ── */
-  .bfc-rp-pillars {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1px;
-    background: var(--rp-gr);
-    border: 1px solid var(--rp-gr);
-    margin-bottom: 48px;
-  }
-  .bfc-rp-pillar {
-    background: var(--rp-cv);
-    padding: 24px 22px 26px;
-    min-width: 0;
-  }
-  .bfc-rp-pillar-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 32px;
-    font-weight: 300;
-    color: var(--rp-or);
-    line-height: 1;
-    margin: 0 0 14px;
-  }
-  .bfc-rp-pillar-h {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 1.2;
-    margin: 0 0 10px;
-    color: var(--rp-bk);
-  }
-  .bfc-rp-pillar-p {
-    font-size: 13px;
-    line-height: 1.6;
-    color: var(--rp-ch);
-    margin: 0;
   }
 
   /* ── BFC vs stranger online ── */
@@ -588,30 +531,56 @@
     background: rgba(82, 87, 65, 0.025);
   }
 
-  /* ── Process steps ── */
-  .bfc-rp-process { margin-bottom: 48px; }
-  .bfc-rp-process-head {
+  /* ── Process steps (nested expander) ── */
+  .bfc-rp-process-details {
+    margin-bottom: 48px;
+    border: 1px solid var(--rp-gr);
+  }
+  .bfc-rp-process-summary {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-bottom: 16px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--rp-gr);
+    padding: 18px 22px;
+    cursor: pointer;
+    list-style: none;
+    background: #fff;
+    transition: background 0.2s ease;
   }
-  .bfc-rp-process-h {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 24px;
-    font-weight: 400;
-    margin: 0;
-    color: var(--rp-bk);
-  }
-  .bfc-rp-process-tag {
-    font-size: 10px;
+  .bfc-rp-process-summary::-webkit-details-marker { display: none; }
+  .bfc-rp-process-summary:hover { background: rgba(82, 87, 65, 0.03); }
+  .bfc-rp-process-summary-label {
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--rp-or);
+  }
+  .bfc-rp-process-summary-icon {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+  }
+  .bfc-rp-process-summary-icon::before,
+  .bfc-rp-process-summary-icon::after {
+    content: '';
+    position: absolute;
+    background: var(--rp-ch);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .bfc-rp-process-summary-icon::before {
+    top: 50%; left: 0; right: 0; height: 1.5px;
+    transform: translateY(-50%);
+  }
+  .bfc-rp-process-summary-icon::after {
+    left: 50%; top: 0; bottom: 0; width: 1.5px;
+    transform: translateX(-50%);
+  }
+  .bfc-rp-process-details[open] .bfc-rp-process-summary-icon::after { opacity: 0; }
+  .bfc-rp-process {
+    padding: 22px 22px 24px;
+    border-top: 1px solid var(--rp-gr);
   }
   .bfc-rp-process-intro {
     font-size: 13px;
@@ -736,7 +705,6 @@
 
   /* ── Responsive ── */
   @media (max-width: 1100px) {
-    .bfc-rp-pillars { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .bfc-rp-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   @media (max-width: 768px) {
@@ -746,17 +714,12 @@
     .bfc-rp-summary-cta-open,
     .bfc-rp-summary-cta-close { display: none !important; }
     .bfc-rp-inner { padding: 40px 20px 48px; }
-    .bfc-rp-hero { padding: 28px 24px; margin-bottom: 32px; }
-    .bfc-rp-hero-h { font-size: 26px; }
-    .bfc-rp-pillars {
-      grid-template-columns: minmax(0, 1fr);
-      margin-bottom: 36px;
-    }
-    .bfc-rp-pillar { padding: 22px 20px; }
+    .bfc-rp-lead { padding: 28px 24px; margin-bottom: 36px; }
+    .bfc-rp-lead-h { font-size: 26px; }
     .bfc-rp-vs-head > div,
     .bfc-rp-vs-row > div { padding: 12px 14px; font-size: 12px; }
-    .bfc-rp-process { margin-bottom: 36px; }
-    .bfc-rp-process-h { font-size: 20px; }
+    .bfc-rp-process-details { margin-bottom: 36px; }
+    .bfc-rp-process { padding: 18px 18px 20px; }
     .bfc-rp-steps { grid-template-columns: minmax(0, 1fr); }
     .bfc-rp-step { padding: 18px 18px 20px; }
     .bfc-rp-guarantee {
@@ -987,7 +950,7 @@
       "type": "text",
       "id": "vs_row1_left",
       "label": "Row 1 — BFC",
-      "default": "Fully refurbished, calibrated, warrantied"
+      "default": "Bench-tested, calibrated, warrantied"
     },
     {
       "type": "text",
@@ -1011,7 +974,7 @@
       "type": "text",
       "id": "vs_row3_left",
       "label": "Row 3 — BFC",
-      "default": "Honest condition notes from techs"
+      "default": "Full detail cleaning"
     },
     {
       "type": "text",
@@ -1023,13 +986,13 @@
       "type": "text",
       "id": "vs_row4_left",
       "label": "Row 4 — BFC",
-      "default": "Warranties standard, extended available"
+      "default": "Fast easy warranties"
     },
     {
       "type": "text",
       "id": "vs_row4_right",
       "label": "Row 4 — Other",
-      "default": "Open a case, wait three weeks"
+      "default": "Open a case, wait three weeks for a maybe"
     },
     {
       "type": "header",
@@ -1037,12 +1000,13 @@
     },
     {
       "type": "paragraph",
-      "content": "Title and intro for the 5-step process. Leave blank to use the type-specific default."
+      "content": "The 5-step process is tucked behind an expander. Set the expander label and the intro line. Leave blank to use defaults."
     },
     {
       "type": "text",
-      "id": "proc_h",
-      "label": "Process title"
+      "id": "proc_toggle_label",
+      "label": "Expander label",
+      "default": "See our whole process"
     },
     {
       "type": "textarea",
