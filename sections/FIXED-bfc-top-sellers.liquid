@@ -152,6 +152,18 @@
           assign heading = block.settings.heading | default: 'Top Sellers'
           assign collection = block.settings.collection
           assign limit = block.settings.products_limit | default: 12
+          assign source_mode = block.settings.source_mode | default: 'top_sellers'
+
+          comment
+            "New in stock" sorts the collection's loaded products by creation date
+            (newest first) and forces out-of-stock items to be skipped in the loop.
+            "Top sellers" keeps the collection's own sort order untouched.
+          endcomment
+          if source_mode == 'new_in_stock' and collection != blank
+            assign ts_products = collection.products | sort: 'created_at' | reverse
+          else
+            assign ts_products = collection.products
+          endif
           assign section_pad_y = block.settings.section_padding_y | default: 28
           assign block_id = 'bfc-top-sellers-' | append: section.id | append: '-' | append: block.id
           assign ts_radius = 18
@@ -211,7 +223,10 @@
             <div class="bfc-ts__rail" role="list" data-bfc-ts-rail>
               {% if collection != blank %}
                 {% assign ts_exclude_handles = block.settings.exclude_handles | remove: ' ' | downcase | split: ',' %}
-                {% for product in collection.products limit: limit %}
+                {% for product in ts_products limit: limit %}
+                  {% if source_mode == 'new_in_stock' and product.available == false %}
+                    {% continue %}
+                  {% endif %}
                   {% if block.settings.hide_oos and product.available == false %}
                     {% continue %}
                   {% endif %}
@@ -1777,6 +1792,17 @@
           "type": "collection",
           "id": "collection",
           "label": "Collection"
+        },
+        {
+          "type": "select",
+          "id": "source_mode",
+          "label": "Source mode",
+          "options": [
+            { "value": "top_sellers", "label": "Top sellers (collection order)" },
+            { "value": "new_in_stock", "label": "New in stock (newest first, in-stock only)" }
+          ],
+          "default": "top_sellers",
+          "info": "Top sellers uses the collection's own sort order. New in stock sorts by date added (newest first) and hides sold-out items. Note: newest is computed from the products loaded in the rail, so for a catalog-wide newest list, point this at a collection set to sort by Newest in Shopify admin."
         },
         {
           "type": "range",
