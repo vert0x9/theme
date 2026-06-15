@@ -1565,68 +1565,6 @@
         "floating_bar": false
       }
     },
-    "bfc_repair_hero_UFMb9f": {
-      "type": "bfc-repair-hero",
-      "name": "Repair Hero",
-      "settings": {
-        "heading_line_1": "Get Your Camera",
-        "heading_accent": "Repaired",
-        "heading_line_2": "Now",
-        "tagline": "Expert service from our in-house technicians",
-        "button_text": "START YOUR REPAIR",
-        "button_link": "shopify://pages/film-camera-repairs-1",
-        "image": "shopify://shop_images/Deconstructed_K1000_TP.png",
-        "image_offset": -9,
-        "section_height": 520,
-        "show_accent_line": true
-      }
-    },
-    "fixed_bfc_new_arrivals_ejGpXn": {
-      "type": "FIXED-bfc-new-arrivals",
-      "blocks": {
-        "new_arrivals_wzq7xP": {
-          "type": "new_arrivals",
-          "settings": {
-            "eyebrow": "Just In",
-            "heading": "New Arrivals",
-            "text": "",
-            "header_text_align": "left",
-            "manual_products": [],
-            "collection": "all",
-            "use_newest_from_collection": true,
-            "group_id": "new-arrivals-1",
-            "anchor_id": "new-arrivals",
-            "items_to_show": 12,
-            "initial_items": 12,
-            "full_rows_only": false,
-            "full_rows_columns_desktop": 5,
-            "disable_see_more": false,
-            "show_more_label": "Display more",
-            "collapse_label": "Collapse",
-            "show_back_to_top": false,
-            "back_to_top_label": "Back to top",
-            "button_text": "See All",
-            "button_link": "shopify://collections/all",
-            "padding_top": 40,
-            "padding_bottom": 40
-          }
-        }
-      },
-      "block_order": [
-        "new_arrivals_wzq7xP"
-      ],
-      "disabled": true,
-      "name": "BFC New Arrivals",
-      "settings": {
-        "background_color": "#f7f4f0",
-        "text_color": "#111111",
-        "accent_color": "#e36e15",
-        "secondary_text_color": "#82906b",
-        "horizontal_padding": 24,
-        "section_padding_top": 40,
-        "section_padding_bottom": 40
-      }
-    },
     "fixed_bfc_top_sellers_Yjg8tH": {
       "type": "FIXED-bfc-top-sellers",
       "blocks": {
@@ -1709,6 +1647,68 @@
         "secondary_text_color": "#82906B",
         "item_title_font": "poppins_n5"
       }
+    },
+    "bfc_repair_hero_UFMb9f": {
+      "type": "bfc-repair-hero",
+      "name": "Repair Hero",
+      "settings": {
+        "heading_line_1": "Get Your Camera",
+        "heading_accent": "Repaired",
+        "heading_line_2": "Now",
+        "tagline": "Expert service from our in-house technicians",
+        "button_text": "START YOUR REPAIR",
+        "button_link": "shopify://pages/film-camera-repairs-1",
+        "image": "shopify://shop_images/Deconstructed_K1000_TP.png",
+        "image_offset": -9,
+        "section_height": 520,
+        "show_accent_line": true
+      }
+    },
+    "fixed_bfc_new_arrivals_ejGpXn": {
+      "type": "FIXED-bfc-new-arrivals",
+      "blocks": {
+        "new_arrivals_wzq7xP": {
+          "type": "new_arrivals",
+          "settings": {
+            "eyebrow": "Just In",
+            "heading": "New Arrivals",
+            "text": "",
+            "header_text_align": "left",
+            "manual_products": [],
+            "collection": "all",
+            "use_newest_from_collection": true,
+            "group_id": "new-arrivals-1",
+            "anchor_id": "new-arrivals",
+            "items_to_show": 12,
+            "initial_items": 12,
+            "full_rows_only": false,
+            "full_rows_columns_desktop": 5,
+            "disable_see_more": false,
+            "show_more_label": "Display more",
+            "collapse_label": "Collapse",
+            "show_back_to_top": false,
+            "back_to_top_label": "Back to top",
+            "button_text": "See All",
+            "button_link": "shopify://collections/all",
+            "padding_top": 40,
+            "padding_bottom": 40
+          }
+        }
+      },
+      "block_order": [
+        "new_arrivals_wzq7xP"
+      ],
+      "disabled": true,
+      "name": "BFC New Arrivals",
+      "settings": {
+        "background_color": "#f7f4f0",
+        "text_color": "#111111",
+        "accent_color": "#e36e15",
+        "secondary_text_color": "#82906b",
+        "horizontal_padding": 24,
+        "section_padding_top": 40,
+        "section_padding_bottom": 40
+      }
     }
   },
   "order": [
@@ -1725,8 +1725,8 @@
     "fixed_bfc_holiday_guides_HieyhT",
     "fixed_bfc_holiday_guides_NttHwH",
     "hero_banner_TBbgPU",
+    "fixed_bfc_top_sellers_Yjg8tH",
     "bfc_repair_hero_UFMb9f",
-    "fixed_bfc_new_arrivals_ejGpXn",
-    "fixed_bfc_top_sellers_Yjg8tH"
+    "fixed_bfc_new_arrivals_ejGpXn"
   ]
 }
