@@ -241,6 +241,9 @@
       ],
       "settings": {
         "also_collection": "slr-other",
+        "compat_collection": "",
+        "enable_c_grade": true,
+        "kit_unchecked": true,
         "restoration_prose": ""
       }
     },
@@ -310,6 +313,9 @@
       "name": "BFC Kit Page v4",
       "settings": {
         "also_collection": "",
+        "compat_collection": "",
+        "enable_c_grade": false,
+        "kit_unchecked": false,
         "restoration_prose": ""
       }
     },
