@@ -1891,7 +1891,7 @@
       {%- assign total_slides = media_images | size -%}
 
       <div class="bfc4-slides" id="bfc4-slides">
-        {%- for media in media_images limit: 8 -%}
+        {%- for media in media_images limit: 20 -%}
           <div class="bfc4-slide" data-media-id="{{ media.id }}">
             <img
               src="{{ media | image_url: width: 900 }}"
