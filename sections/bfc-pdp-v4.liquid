@@ -1958,7 +1958,10 @@
     <div class="bfc4-buy">
       {%- if product.variants.size > 1 -%}
         <div class="bfc4-grade-compact">
-          <span class="bfc4-grade-label">Grade</span>
+          {%- assign bfc4_opt_name = product.options_with_values.first.name | default: '' | downcase | strip -%}
+          {%- if bfc4_opt_name == 'condition' -%}
+            <span class="bfc4-grade-label">Grade</span>
+          {%- endif -%}
           <div class="bfc4-grade-row">
             {%- for variant in product.variants -%}
               <button
@@ -2554,7 +2557,10 @@
         <div class="bfc4-below-atc">
           {%- if product.variants.size > 1 -%}
             <div class="bfc4-grade-compact">
-              <span class="bfc4-grade-label">Grade</span>
+              {%- assign bfc4_opt_name = product.options_with_values.first.name | default: '' | downcase | strip -%}
+              {%- if bfc4_opt_name == 'condition' -%}
+                <span class="bfc4-grade-label">Grade</span>
+              {%- endif -%}
               <div class="bfc4-grade-row">
                 {%- for variant in product.variants -%}
                   <button
