@@ -1,0 +1,68 @@
+{%- comment -%}
+  Default author bios — mirrored from /pages/about-us team section.
+
+  Liquid cannot read another page's section/block settings, so the about-us
+  roster is maintained here as the theme's default author source. Keep in sync
+  when the about-us team page changes.
+
+  Input:  author_key  (downcased article.author)
+  Output: a single string of 4 fields joined by '~~~':
+            bio ~~~ instagram_url ~~~ website_url ~~~ website_label
+          Empty string when no team member matches.
+
+  Note: Liquid string literals use single quotes and cannot contain
+  apostrophes, so bios are written without contractions.
+{%- endcomment -%}
+{%- liquid
+  assign bio = ''
+  assign ig = ''
+  assign web = ''
+  assign web_label = ''
+
+  if author_key contains 'ben'
+    assign bio = 'Ben owns and operates Brooklyn Film Camera.'
+  elsif author_key contains 'taylor'
+    assign bio = 'Taylor is a freelance camera assistant, graphic designer, and lens tech at BFC. There is an art to fixing something broken — restoring a lens, cleaning out the years, and revealing what was always there.'
+    assign ig = 'https://www.instagram.com/filmsbytaylor/'
+  elsif author_key contains 'griffin'
+    assign bio = 'Griffin does construction, project management, some photography, and bartending. When not working you may catch them playing pool, pinball, or biking around Brooklyn.'
+  elsif author_key contains 'james'
+    assign bio = 'James was formally trained in film camera repair by some of the last factory-trained film camera technicians in the world during his tenure at Nippon Photo Clinic Inc. These days he tends to fix more cameras than he breaks.'
+    assign ig = 'https://www.instagram.com/the_whitest_latino/'
+  elsif author_key contains 'coco'
+    assign bio = 'Coco is a multimedia artist and musician who lives in Brooklyn.'
+    assign ig = 'https://www.instagram.com/coco.simone/'
+  elsif author_key contains 'hannah'
+    assign bio = 'Hannah manages social media, design, and events planning. She enjoys tactile forms of creation just as much as she loves pushing pixels.'
+    assign ig = 'https://www.instagram.com/hannahleahy__'
+  elsif author_key contains 'dan'
+    assign bio = 'Dan Hureira is a photographer and music enthusiast. He throws parties and produces music as part of his record label Bouquet, and is one of the many faces you will see behind the counter at BFC.'
+    assign ig = 'https://www.instagram.com/ifeellikedan'
+  elsif author_key contains 'addie'
+    assign bio = 'If you have ever seen someone on a neon green bike on the hunt for vanity plates, it was probably Addie. The Office and Fulfillment Coordinator at BFC, Addie can otherwise be found behind the camera or off somewhere reading a book.'
+  elsif author_key contains 'sydney' or author_key contains 'syd'
+    assign bio = 'Sydney Task (also known as Syd) is a photographer, filmmaker, animator, and serial hobbyist. When not clerking at BFC, she might be rock climbing, learning the banjo, or roaming the streets with a camera in hand.'
+    assign ig = 'https://www.instagram.com/sydneytask/'
+  elsif author_key contains 'malaya'
+    assign bio = 'Malaya is a Brooklyn-based collage artist, collector and maximalist. She uses primarily found imagery and words in her work but occasionally incorporates her own photography.'
+    assign ig = 'https://www.instagram.com/uhmlaya/'
+  elsif author_key contains 'shanna'
+    assign bio = 'Shanna is a freelance photographer, retoucher, and the owner of Larkhill Prints. When she is not hanging out with her Frenchie or trotting the globe, you can find her at BFC.'
+    assign ig = 'https://www.instagram.com/shannahutchins'
+    assign web = 'https://larkhill-prints.square.site/'
+    assign web_label = 'Larkhill Prints'
+  elsif author_key contains 'isabelle'
+    assign bio = 'Isabelle is a visual artist with a focus in painting and printmaking. Often drawing from her own photography as reference for her artworks, film photography has been an exciting space for expanding this practice.'
+  elsif author_key contains 'mitch'
+    assign bio = 'Mitch is an old-time fiddle and banjo player currently living in southern Spain. He has been involved in the film photography world since joining the Impossible Project in 2014, and is now the lead camera buyer for BFC.'
+  elsif author_key contains 'ingridi'
+    assign bio = 'Ingridi Viruel is a photographer and filmmaker originally from Brazil. When she is not at BFC, she likes to experiment with portraiture and alternative processes.'
+    assign ig = 'https://www.instagram.com/ingridiviruel'
+  endif
+
+  if bio == ''
+    echo ''
+  else
+    echo bio | append: '~~~' | append: ig | append: '~~~' | append: web | append: '~~~' | append: web_label
+  endif
+-%}
