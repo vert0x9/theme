@@ -1,35 +1,4 @@
 {%- liquid
-  assign jm_count = 0
-  assign jm_avg = 0
-  assign jm_raw = product.metafields.judgeme.review_widget_data
-  if jm_raw != blank
-    assign jm_num = jm_raw.number_of_reviews
-    if jm_num != blank
-      assign jm_count = jm_num | plus: 0
-    endif
-    assign jm_ar = jm_raw.average_rating
-    if jm_ar != blank
-      assign jm_avg = jm_ar | times: 1.0
-    endif
-    if jm_count == 0
-      assign jm_str = jm_raw | json
-      if jm_str contains 'number_of_reviews'
-        assign jm_p1 = jm_str | split: '"number_of_reviews":'
-        if jm_p1.size > 1
-          assign jm_p2 = jm_p1[1] | split: ',' | first | split: '}' | first | strip
-          assign jm_count = jm_p2 | plus: 0
-        endif
-      endif
-      if jm_str contains 'average_rating'
-        assign jm_p3 = jm_str | split: '"average_rating":"'
-        if jm_p3.size > 1
-          assign jm_p4 = jm_p3[1] | split: '"' | first
-          assign jm_avg = jm_p4 | times: 1.0
-        endif
-      endif
-    endif
-  endif
-
   assign schema_condition = 'https://schema.org/RefurbishedCondition'
   assign product_type_lower = product.type | downcase
   if product_type_lower contains 'film' or product_type_lower contains 'accessor' or product_type_lower contains 'strap' or product_type_lower contains 'bag' or product_type_lower contains 'battery' or product_type_lower contains 'filter' or product_type_lower contains 'print' or product_type_lower contains 'gift' or product_type_lower contains 'membership' or product_type_lower contains 'subscription' or product_type_lower contains 'apparel' or product_type_lower contains 'book'
@@ -86,47 +55,54 @@
     {% elsif variant.barcode.size == 14 %},"gtin14": {{ variant.barcode | json }}
     {% endif %}{% endif %}
   }{% unless forloop.last %},{% endunless %}{% endfor %}]{% endif %}
-  {% if jm_count > 0 and jm_avg > 0 %}
-  ,"aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": {{ jm_avg | json }},
-    "reviewCount": {{ jm_count | json }},
-    "bestRating": 5,
-    "worstRating": 1
-  }
-  {% endif %}
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "OfferShippingDetails",
-  "@id": "{{ shop.url }}/#shipping_policy",
-  "shippingRate": {
-    "@type": "MonetaryAmount",
-    "value": "0",
-    "currency": "USD"
-  },
-  "shippingDestination": {
-    "@type": "DefinedRegion",
-    "addressCountry": "US"
-  },
-  "deliveryTime": {
-    "@type": "ShippingDeliveryTime",
-    "handlingTime": { "@type": "QuantitativeValue", "minValue": 1, "maxValue": 3, "unitCode": "DAY" },
-    "transitTime": { "@type": "QuantitativeValue", "minValue": 2, "maxValue": 7, "unitCode": "DAY" }
-  }
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "MerchantReturnPolicy",
-  "@id": "{{ shop.url }}/#return_policy",
-  "applicableCountry": "US",
-  "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-  "merchantReturnDays": 14,
-  "returnMethod": "https://schema.org/ReturnByMail",
-  "returnFees": "https://schema.org/ReturnShippingFees"
+  {%- comment -%} Reviews + aggregateRating from bfc.reviews_json blob (EEAT) {%- endcomment -%}
+  {%- assign rv_blob = shop.metafields.bfc.reviews_json.value -%}
+  {%- assign rv_all = rv_blob.reviews -%}
+  {%- assign rv_count = 0 -%}
+  {%- assign rv_sum = 0 -%}
+  {%- assign rv_emitted = 0 -%}
+  {%- assign rv_json = '' -%}
+  {%- capture rv_match_handle -%}{{ product.handle }}{%- endcapture -%}
+  {%- capture rv_pid_str -%}{{ product.id }}{%- endcapture -%}
+  {%- if rv_all != blank -%}
+    {%- for review in rv_all -%}
+      {%- capture rv_this_pid -%}{{ review.product_id }}{%- endcapture -%}
+      {%- assign rv_is_match = false -%}
+      {%- if review.product_handle != blank and review.product_handle == rv_match_handle -%}
+        {%- assign rv_is_match = true -%}
+      {%- elsif rv_this_pid != '0' and rv_this_pid == rv_pid_str -%}
+        {%- assign rv_is_match = true -%}
+      {%- endif -%}
+      {%- if rv_is_match and review.rating != blank -%}
+        {%- assign rv_count = rv_count | plus: 1 -%}
+        {%- assign rv_sum = rv_sum | plus: review.rating -%}
+        {%- if rv_emitted < 10 and review.body != blank -%}
+          {%- capture rv_one -%}{
+            "@type": "Review",
+            "reviewRating": { "@type": "Rating", "ratingValue": {{ review.rating | json }}, "bestRating": 5, "worstRating": 1 },
+            "author": { "@type": "Person", "name": {{ review.author | default: 'Verified Buyer' | json }} },
+            "datePublished": {{ review.created_at | date: '%Y-%m-%d' | json }},
+            "reviewBody": {{ review.body | strip_html | truncate: 1000 | json }}
+          }{%- endcapture -%}
+          {%- if rv_emitted == 0 -%}{%- assign rv_json = rv_one -%}{%- else -%}{%- assign rv_json = rv_json | append: ',' | append: rv_one -%}{%- endif -%}
+          {%- assign rv_emitted = rv_emitted | plus: 1 -%}
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+  {%- if rv_count > 0 -%}
+    {%- assign rv_avg_x100 = rv_sum | times: 100 | divided_by: rv_count -%}
+    {%- assign rv_avg = rv_avg_x100 | divided_by: 100.0 -%}
+    ,"aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": {{ rv_avg | json }},
+      "reviewCount": {{ rv_count | json }},
+      "bestRating": 5,
+      "worstRating": 1
+    }
+    {%- if rv_emitted > 0 -%}
+    ,"review": [{{ rv_json }}]
+    {%- endif -%}
+  {%- endif -%}
 }
 </script>

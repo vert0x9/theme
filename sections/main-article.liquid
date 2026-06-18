@@ -85,7 +85,7 @@
 
 
 <div class="color-{{ section.settings.color_scheme }} gradient">
-  <div class="article {% unless blog.comments_enabled? -%}article--comments-disabled{%- endunless -%}" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article {% unless blog.comments_enabled? -%}article--comments-disabled{%- endunless -%}">
 
     {%- if settings.enable_breadcrumbs_on_other_pages -%}
       <div class="article__breadcrumbs">
@@ -108,7 +108,7 @@
             {%- endstyle -%}
             {%- if article.image -%}
               <div class="article__hero container js-article-hero-media max-w-narrow" {{ block.shopify_attributes }}>
-                <div class="article__media media" itemprop="image">
+                <div class="article__media media">
                   {%- render 'image', image: article.image, alt: article.image.alt | escape -%}
                 </div>
               </div>
@@ -131,7 +131,7 @@
 
         {%- when 'title'-%}
           <div class="article__head container {{ section.settings.section_width }}" {{ block.shopify_attributes }}>
-            <h1 class="article__title h2" itemprop="headline">
+            <h1 class="article__title h2">
               {{- article.title | escape -}}
             </h1>
 
@@ -155,7 +155,7 @@
           </div>
 
         {%- when 'content'-%}
-          <div class="article__content js-article-content container {{ section.settings.section_width }}" itemprop="articleBody" {{ block.shopify_attributes }}>
+          <div class="article__content js-article-content container {{ section.settings.section_width }}" {{ block.shopify_attributes }}>
             <div class="article__content-inner">
               {{- article.content -}}
               {%- if section.settings.show_author_card -%}
@@ -399,7 +399,9 @@
     {% endif %}
     {% if article.image %}
       "image": [
-        {{ article.image | image_url: width: 1200 | prepend: "https:" | json }}
+        {{ article.image | image_url: width: 1200, height: 675, crop: 'center' | prepend: "https:" | json }},
+        {{ article.image | image_url: width: 1200, height: 900, crop: 'center' | prepend: "https:" | json }},
+        {{ article.image | image_url: width: 1200, height: 1200, crop: 'center' | prepend: "https:" | json }}
       ],
     {% endif %}
     "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
@@ -442,32 +444,6 @@
     "publisher": {
       "@id": "{{ shop.url }}/#organization"
     }
-  }
-</script>
-
-<script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": {{ 'theme.breadcrumb.home' | t | json }},
-        "item": {{ shop.url | json }}
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": {{ blog.title | json }},
-        "item": {{ shop.url | append: blog.url | json }}
-      },
-      {
-        "@type": "ListItem",
-        "position": 3,
-        "name": {{ article.title | json }}
-      }
-    ]
   }
 </script>
 

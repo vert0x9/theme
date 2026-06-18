@@ -23,32 +23,32 @@
 
 <div class="article__author-card">
   <div class="article__author-dates">
-    <time class="article__author-date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}" itemprop="datePublished">
+    <time class="article__author-date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
       {{- 'blog.posted' | t }} {{ published_at -}}
     </time>
     {%- if updated_at != published_at -%}
-      <time class="article__author-date article__author-date--updated" datetime="{{ article.updated_at | date: '%Y-%m-%d' }}" itemprop="dateModified">
+      <time class="article__author-date article__author-date--updated" datetime="{{ article.updated_at | date: '%Y-%m-%d' }}">
         {{- 'blog.updated_on' | t: date: updated_at -}}
       </time>
     {%- endif -%}
   </div>
 
-  <div class="article__author-body" itemprop="author" itemscope itemtype="https://schema.org/{{ author_type | default: 'Person' }}">
-    <p class="article__author-name" itemprop="name">{{ author_name }}</p>
+  <div class="article__author-body">
+    <p class="article__author-name">{{ author_name }}</p>
     {%- if author_bio != blank -%}
-      <p class="article__author-text" itemprop="description">{{ author_bio }}</p>
+      <p class="article__author-text">{{ author_bio }}</p>
     {%- endif -%}
 
     {%- if author_instagram != '' or author_url != '' -%}
       <ul class="article__author-socials list-unstyled">
         {%- if author_instagram != '' -%}
           <li>
-            <a href="{{ author_instagram }}" target="_blank" rel="noopener me" itemprop="sameAs">Instagram</a>
+            <a href="{{ author_instagram }}" target="_blank" rel="noopener me">Instagram</a>
           </li>
         {%- endif -%}
         {%- if author_url != '' -%}
           <li>
-            <a href="{{ author_url }}" target="_blank" rel="noopener me" itemprop="sameAs">{{ author_url_label | default: 'Website' }}</a>
+            <a href="{{ author_url }}" target="_blank" rel="noopener me">{{ author_url_label | default: 'Website' }}</a>
           </li>
         {%- endif -%}
       </ul>
