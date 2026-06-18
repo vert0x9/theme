@@ -225,21 +225,46 @@
     margin-top: 10px;
     max-width: 680px;
   }
+  /* Mobile: horizontal scroll-snap carousel (one-and-a-bit cards visible, swipe to advance).
+     Edge-to-edge scroll: negative margins escape the section's --bfc-align-pad, then we re-apply
+     the same padding inside the scroller so the FIRST card aligns with the heading and the LAST
+     card has matching breathing room on the right. */
   #bfc-category-strip-{{ section.id }} .bfc-cstrip__grid{
-    display: grid;
-    grid-template-columns: repeat({{ section.settings.columns_mobile }}, 1fr);
+    display: flex;
+    flex-wrap: nowrap;
     gap: {{ section.settings.grid_gap }}px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-left: calc(var(--bfc-align-pad) * -1);
+    margin-right: calc(var(--bfc-align-pad) * -1);
     padding: 0 var(--bfc-align-pad);
   }
-  @media (min-width: 750px){
-    #bfc-category-strip-{{ section.id }} .bfc-cstrip__grid{
-      grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
-    }
-  }
+  #bfc-category-strip-{{ section.id }} .bfc-cstrip__grid::-webkit-scrollbar{ display: none; }
   #bfc-category-strip-{{ section.id }} .bfc-cstrip__item{
+    flex: 0 0 calc((100% - {{ section.settings.grid_gap }}px * ({{ section.settings.columns_mobile }} - 1)) / {{ section.settings.columns_mobile }} - {% if section.settings.columns_mobile == 1 %}40px{% elsif section.settings.columns_mobile == 2 %}24px{% else %}12px{% endif %});
+    scroll-snap-align: start;
     display: block;
     text-decoration: none;
     color: inherit;
+  }
+  @media (min-width: 750px){
+    /* Desktop: revert to static grid */
+    #bfc-category-strip-{{ section.id }} .bfc-cstrip__grid{
+      display: grid;
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+      overflow: visible;
+      scroll-snap-type: none;
+      margin-left: 0;
+      margin-right: 0;
+      padding: 0 var(--bfc-align-pad);
+    }
+    #bfc-category-strip-{{ section.id }} .bfc-cstrip__item{
+      flex: initial;
+      scroll-snap-align: none;
+    }
   }
   #bfc-category-strip-{{ section.id }} .bfc-cstrip__media{
     position: relative;
