@@ -1,0 +1,347 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "bfc-pdp-v4b",
+      "blocks": {
+        "kit_film": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Portra 400",
+            "column": "Film",
+            "product": "kodak-portra-400-35mm",
+            "variant_id": "40027148648620",
+            "discount_percent": 5,
+            "is_developing": false,
+            "is_starter_kit": true
+          }
+        },
+        "kit_bag": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Ilford HP5",
+            "column": "Film",
+            "product": "ilford-hp5-400-35mm",
+            "variant_id": "40027060142252",
+            "discount_percent": 5,
+            "is_developing": false,
+            "is_starter_kit": true
+          }
+        },
+        "kit_item_iBVRFL": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Gold 200",
+            "column": "Film",
+            "product": "eastman-kodak-gold-200-color",
+            "variant_id": "45008822632620",
+            "discount_percent": 5,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_item_znpyjC": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Ultramax",
+            "column": "Film",
+            "product": "eastman-kodak-ultramax-400-color",
+            "variant_id": "40027148648620",
+            "discount_percent": 5,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_item_GrCMXE": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "FujiColor 400",
+            "column": "Film",
+            "product": "fujicolor-400-color",
+            "variant_id": "40027148648620",
+            "discount_percent": 5,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_item_M8ML6w": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Expired Roll",
+            "column": "Film",
+            "product": "expired-35mm-films-pack-of-three",
+            "variant_id": "40027148648620",
+            "discount_percent": 15,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_item_MMzyeQ": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Strap",
+            "custom_label": "Couch Strap",
+            "column": "Straps",
+            "product": "couch-camera-strap-electric-blue-hendrix",
+            "variant_id": "",
+            "discount_percent": 15,
+            "is_developing": false,
+            "is_starter_kit": true
+          }
+        },
+        "kit_strap": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "Couch Strap",
+            "column": "Straps",
+            "product": "couch-camera-strap-cork-and-orange-flowers",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_item_M9nYQq": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "",
+            "column": "Straps",
+            "product": "couch-camera-strap-recycled-army-green-seatbelt",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_item_AHk9aC": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "",
+            "column": "Straps",
+            "product": "couch-camera-strap-dylan-white-and-pink",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_item_JbLDd4": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "",
+            "column": "Straps",
+            "product": "couch-camera-strap-recycled-industrial-silver-seatbelt",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_item_M9J6gX": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Accessories",
+            "custom_label": "",
+            "column": "Straps",
+            "product": "couch-camera-strap-recycled-maroon-seatbelt",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_acc_2": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Accessories",
+            "custom_label": "Film Box",
+            "column": "More",
+            "product": "35mm-film-box-by-larkhill-prints",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_dev": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Accessories",
+            "custom_label": "",
+            "column": "More",
+            "product": "film-case-loaded-with-expired-film",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_item_TTacMq": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Accessories",
+            "custom_label": "Light Meter",
+            "column": "More",
+            "product": "keks-kf-01-flash",
+            "variant_id": "43976251539628",
+            "discount_percent": 5,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        },
+        "kit_item_MGdxpT": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Accessories",
+            "custom_label": "Light Meter Silver",
+            "column": "More",
+            "product": "keks-kf-01-flash",
+            "variant_id": "43976251572396",
+            "discount_percent": 5,
+            "is_developing": false,
+            "is_starter_kit": false
+          }
+        }
+      },
+      "block_order": [
+        "kit_film",
+        "kit_bag",
+        "kit_item_iBVRFL",
+        "kit_item_znpyjC",
+        "kit_item_GrCMXE",
+        "kit_item_M8ML6w",
+        "kit_item_MMzyeQ",
+        "kit_strap",
+        "kit_item_M9nYQq",
+        "kit_item_AHk9aC",
+        "kit_item_JbLDd4",
+        "kit_item_M9J6gX",
+        "kit_acc_2",
+        "kit_dev",
+        "kit_item_TTacMq",
+        "kit_item_MGdxpT"
+      ],
+      "settings": {
+        "also_collection": "slr-other",
+        "restoration_prose": ""
+      }
+    },
+    "bfc_pdp_v4b_EpPXWG": {
+      "type": "bfc-pdp-v4b",
+      "blocks": {
+        "kit_item_TfFazV": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "",
+            "column": "Film",
+            "product": "",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": true
+          }
+        },
+        "kit_item_AWTQUF": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Film",
+            "custom_label": "",
+            "column": "Film",
+            "product": "",
+            "variant_id": "",
+            "discount_percent": 10,
+            "is_developing": false,
+            "is_starter_kit": true
+          }
+        },
+        "kit_item_BYgKrq": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Strap",
+            "custom_label": "",
+            "column": "Strap",
+            "product": "",
+            "variant_id": "",
+            "discount_percent": 15,
+            "is_developing": false,
+            "is_starter_kit": true
+          }
+        },
+        "kit_item_bPbAwi": {
+          "type": "kit_item",
+          "settings": {
+            "label": "Developing",
+            "custom_label": "",
+            "column": "Developing Credits",
+            "product": "",
+            "variant_id": "",
+            "discount_percent": 0,
+            "is_developing": true,
+            "is_starter_kit": false
+          }
+        }
+      },
+      "block_order": [
+        "kit_item_TfFazV",
+        "kit_item_AWTQUF",
+        "kit_item_BYgKrq",
+        "kit_item_bPbAwi"
+      ],
+      "disabled": true,
+      "name": "BFC Kit Page v4",
+      "settings": {
+        "also_collection": "",
+        "restoration_prose": ""
+      }
+    },
+    "17735047409f77fd41": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_xgVpwA": {
+          "type": "shopify:\/\/apps\/judge-me-reviews\/blocks\/review_widget\/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_xgVpwA"
+      ],
+      "settings": {
+        "section_layout": "normal",
+        "spacing_inner": "2",
+        "section_width": "max-w-page",
+        "color_scheme": "",
+        "spacing_top": "2",
+        "spacing_bottom": "2"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "bfc_pdp_v4b_EpPXWG",
+    "17735047409f77fd41"
+  ]
+}
