@@ -218,7 +218,9 @@
   endif
 -%}
 
-{%- render 'bfc-product-schema' -%}
+<script type="application/ld+json">
+  {{ product | structured_data }}
+</script>
 
 {% schema %}
 {
