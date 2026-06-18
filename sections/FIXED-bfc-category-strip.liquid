@@ -225,28 +225,34 @@
     margin-top: 10px;
     max-width: 680px;
   }
-  /* Mobile: horizontal scroll-snap carousel (one-and-a-bit cards visible, swipe to advance).
-     Edge-to-edge scroll: negative margins escape the section's --bfc-align-pad, then we re-apply
-     the same padding inside the scroller so the FIRST card aligns with the heading and the LAST
-     card has matching breathing room on the right. */
+  /* Mobile: full-bleed horizontal scroll rail, matching BFC Top Sellers.
+     The grid goes edge-to-edge with 100vw, then re-applies the section gutter
+     via padding-left + scroll-padding-left so the FIRST card lines up with the
+     heading and snaps cleanly. padding-right stays 0 (last card runs to edge). */
   #bfc-category-strip-{{ section.id }} .bfc-cstrip__grid{
-    display: flex;
-    flex-wrap: nowrap;
-    gap: {{ section.settings.grid_gap }}px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 78vw;
+    gap: 12px;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
     overflow-x: auto;
     overflow-y: hidden;
+    overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
+    scroll-padding-left: var(--bfc-align-pad);
+    padding-left: var(--bfc-align-pad);
+    padding-right: 0;
+    padding-top: 6px;
+    padding-bottom: 8px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    margin-left: calc(var(--bfc-align-pad) * -1);
-    margin-right: calc(var(--bfc-align-pad) * -1);
-    padding: 0 var(--bfc-align-pad);
-    scroll-padding-left: var(--bfc-align-pad);
   }
   #bfc-category-strip-{{ section.id }} .bfc-cstrip__grid::-webkit-scrollbar{ display: none; }
   #bfc-category-strip-{{ section.id }} .bfc-cstrip__item{
-    flex: 0 0 calc((100% - {{ section.settings.grid_gap }}px * ({{ section.settings.columns_mobile }} - 1)) / {{ section.settings.columns_mobile }} - {% if section.settings.columns_mobile == 1 %}40px{% elsif section.settings.columns_mobile == 2 %}24px{% else %}12px{% endif %});
     scroll-snap-align: start;
+    scroll-snap-stop: always;
     display: block;
     text-decoration: none;
     color: inherit;
@@ -255,16 +261,22 @@
     /* Desktop: revert to static grid */
     #bfc-category-strip-{{ section.id }} .bfc-cstrip__grid{
       display: grid;
+      grid-auto-flow: row;
+      grid-auto-columns: auto;
       grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+      gap: {{ section.settings.grid_gap }}px;
+      width: auto;
       overflow: visible;
+      overscroll-behavior-x: auto;
       scroll-snap-type: none;
+      scroll-padding-left: 0;
       margin-left: 0;
       margin-right: 0;
       padding: 0 var(--bfc-align-pad);
     }
     #bfc-category-strip-{{ section.id }} .bfc-cstrip__item{
-      flex: initial;
       scroll-snap-align: none;
+      scroll-snap-stop: normal;
     }
   }
   #bfc-category-strip-{{ section.id }} .bfc-cstrip__media{
