@@ -15,17 +15,12 @@
   endif
 %}
 
-{%- comment -%}
-  Hreflang is emitted natively by Shopify through {{ content_for_header }} (see layout/theme.liquid)
-  for every published locale/market. Do NOT add a custom hreflang loop here.
-
-  The previous loop was removed because it:
-    1. Dropped the slash between locale and path -> /escollections/all
-    2. Double-prefixed the locale on already-localized pages -> /esde/collections/all
-    3. Duplicated the native tags, producing two entries per language.
-  Result was Ahrefs errors: "more than one page for same language",
-  "page referenced for more than one language", and "missing reciprocal hreflang".
-{%- endcomment -%}
+{%- for locale in shop.published_locales -%}
+  <link rel="alternate" hreflang="{{ locale.iso_code }}" href="{{ request.origin }}{{ locale.root_url }}{{ request.path | remove_first: '/' }}">
+  {%- if locale.primary -%}
+    <link rel="alternate" hreflang="x-default" href="{{ request.origin }}{{ locale.root_url }}{{ request.path | remove_first: '/' }}">
+  {%- endif -%}
+{%- endfor -%}
 
 <title>
   {{ meta_title }}
@@ -41,10 +36,6 @@
   <meta name="description" content="{{ meta_description | escape }}">
 {%- endif -%}
 
-{%- if request.page_type == 'article' -%}
-  <meta name="robots" content="max-image-preview:large">
-{%- endif -%}
-
 <meta property="og:site_name" content="{{ shop.name }}">
 <meta property="og:url" content="{{ meta_url }}">
 <meta property="og:title" content="{{ meta_title | escape }}">
@@ -55,19 +46,11 @@
   assign og_image = page_image | default: settings.share_image
 -%}
 {%- if og_image -%}
-  {%- if request.page_type == 'article' -%}
-    <meta property="og:image" content="https:{{ og_image | image_url: width: 1200 }}">
-    <meta property="og:image:secure_url" content="https:{{ og_image | image_url: width: 1200 }}">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="{{ 1200 | divided_by: og_image.aspect_ratio | round }}">
-    <meta name="twitter:image" content="https:{{ og_image | image_url: width: 1200 }}">
-  {%- else -%}
-    <meta property="og:image" content="https:{{ og_image | image_url: width: 1200 }}">
-    <meta property="og:image:secure_url" content="https:{{ og_image | image_url: width: 1200 }}">
-    <meta property="og:image:width" content="{{ og_image.width | at_most: 1200 }}">
-    <meta property="og:image:height" content="{{ og_image.height }}">
-    <meta name="twitter:image" content="https:{{ og_image | image_url: width: 1200 }}">
-  {%- endif -%}
+  <meta property="og:image" content="https:{{ og_image | image_url: width: 1200 }}">
+  <meta property="og:image:secure_url" content="https:{{ og_image | image_url: width: 1200 }}">
+  <meta property="og:image:width" content="{{ og_image.width | at_most: 1200 }}">
+  <meta property="og:image:height" content="{{ og_image.height }}">
+  <meta name="twitter:image" content="https:{{ og_image | image_url: width: 1200 }}">
 {%- endif -%}
 
 {%- if request.page_type == 'product' -%}
@@ -83,3 +66,94 @@
 <meta name="twitter:title" content="{{ meta_title | escape }}">
 <meta name="twitter:description" content="{{ meta_description | escape }}">
 
+{%- if request.page_type == 'index' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "{{ shop.url }}/#organization",
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | json }},
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https:{{ 'logo.png' | asset_url }}"
+      },
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "telephone": "+1-718-218-4023",
+          "email": "hello@brooklynfilmcamera.com",
+          "availableLanguage": "English"
+        },
+        {
+          "@type": "ContactPoint",
+          "contactType": "technical support",
+          "email": "repairs@brooklynfilmcamera.com",
+          "availableLanguage": "English"
+        }
+      ],
+      "sameAs": [
+        {%- if settings.social_instagram_link != blank -%}{{ settings.social_instagram_link | json }},{%- endif -%}
+        {%- if settings.social_twitter_link != blank -%}{{ settings.social_twitter_link | json }},{%- endif -%}
+        {%- if settings.social_facebook_link != blank -%}{{ settings.social_facebook_link | json }},{%- endif -%}
+        {%- if settings.social_tiktok_link != blank -%}{{ settings.social_tiktok_link | json }},{%- endif -%}
+        {%- if settings.social_youtube_link != blank -%}{{ settings.social_youtube_link | json }},{%- endif -%}
+        "https://brooklynfilmcamera.com"
+      ]
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": "{{ shop.url }}/#localbusiness",
+      "name": {{ shop.name | json }},
+      "url": {{ shop.url | json }},
+      "description": "Brooklyn's film camera shop. Refurbished 35mm and medium format cameras, film developing, camera repairs, and film supplies.",
+      "parentOrganization": { "@id": "{{ shop.url }}/#organization" },
+      "telephone": "+1-718-218-4023",
+      "email": "hello@brooklynfilmcamera.com",
+      "priceRange": "$$",
+      "image": "https:{{ 'logo.png' | asset_url }}",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "855 Grand St",
+        "addressLocality": "Brooklyn",
+        "addressRegion": "NY",
+        "postalCode": "11211",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 40.7128,
+        "longitude": -73.9387
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+          "opens": "11:00",
+          "closes": "19:00"
+        }
+      ],
+      "hasMap": "https://maps.google.com/?q=855+Grand+St+Brooklyn+NY+11211"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "{{ shop.url }}/#website",
+      "url": {{ shop.url | json }},
+      "name": {{ shop.name | json }},
+      "publisher": { "@id": "{{ shop.url }}/#organization" },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "{{ shop.url }}/search?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+  ]
+}
+</script>
+{%- endif -%}

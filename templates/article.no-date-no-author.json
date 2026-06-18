@@ -20,6 +20,7 @@
         },
         "f7fb3fae-1127-45cc-ad5a-6e59418b6ef5": {
           "type": "title",
+          "disabled": true,
           "settings": {
             "blog_show_date": false,
             "blog_show_author": false

@@ -63,29 +63,6 @@
     "bfc_open_positions_wqYYBX": {
       "type": "bfc-open-positions",
       "blocks": {
-        "job_listing_PKmihW": {
-          "type": "job_listing",
-          "settings": {
-            "title": "Retail Store Manager",
-            "category": "fulltime",
-            "tag_type": "Full Time",
-            "tag_location": "Williamsburg HQ",
-            "tag_extra": "On Site",
-            "tag_pay": "$23-$30 DOE to start",
-            "tag_hours": "40 hrs",
-            "tag_experience": "",
-            "intro": "Brooklyn Film Camera is hiring a Store Manager for our 855 Grand Street location. This is an in-person, working leadership role we want to grow. You will be our Store Manager who also works the floor as a clerk, leading by example. You'll do the full clerk job, and on top of that you're responsible for the showroom floor, the team, and the standard everyone works to. The goal is that the store runs without ownership in the day-to-day. The clerks report to you, you make the schedule, and you report to the owner and head of operations.\n\nThis role requires someone who will take real pride in the business and is genuinely invested in it. We want someone who actively looks for ways to make it better, cleaner, and more appealing, with the goal of improving the customer experience and growing revenue.",
-            "responsibilities": "Greet and help customers, ring up sales, and handle in-store pickups, film drop-offs, and the rest of the front-of-house work\nKnow the full product line — cameras, film, developing, repairs, and the Expired Film Club — and confidently explain and demonstrate every camera we sell (we'll train you to fill any gaps)\nConvert browsers into buyers, upsell, and actively promote developing memberships, repairs, and the Expired Film Club\nRun solo shifts: open and/or close and handle the whole store on your own\n\n\nManage the clerk team day to day; they report to you, and you're the first point of contact for floor questions and staff issues\nSet the standard for how the floor runs and how clerks conduct themselves — by doing the work yourself — and train and hold the team to it, addressing issues directly\nBuild and manage the shift schedule and ensure every shift is covered\n\n\nKeep the showroom clean, organized, and well-stocked — cases and shelves straight, film fridge full, nothing out of place at the POS or on the floor\nKeep the backyard clean and the deck swept\nMake and update price tags, menus, and signage as needed\nProactively look for ways to make the space cleaner and more appealing rather than waiting to be told\n\n\nTake in-store revenue seriously and actively work to grow it (strong performance can lead to bonuses and raises)\nBring ideas for the floor, customer experience, online reviews, and the business — and take the lead on making them real\n\n\nWeekly check-ins with ownership to flag opportunities and issues; otherwise run the store independently",
-            "requirements": "Experience managing a retail store and leading a team on a retail floor\nComfortable building schedules, setting and enforcing standards, and handling staff issues directly",
-            "nice_to_have": "Camera or film knowledge is a plus, but not required.\nA real interest in film photography and a willingness to learn.",
-            "apply_method": "form",
-            "apply_label": "Fill out our application form and we will be in touch.",
-            "apply_url": "https://forms.gle/jtPyoATDxZmtShQs5",
-            "apply_email": "hello@brooklynfilmcamera.com",
-            "apply_email_subject": "Job Application",
-            "apply_btn_label": "Apply Now"
-          }
-        },
         "job_listing_nicAxM": {
           "type": "job_listing",
           "settings": {
@@ -158,7 +135,6 @@
         }
       },
       "block_order": [
-        "job_listing_PKmihW",
         "job_listing_nicAxM",
         "job_listing_JYck3V",
         "job_listing_C4j3AK"

@@ -212,11 +212,7 @@
 .bfc4-leather-swatch[data-leather="oxblood"]  { background: #4a181a; border-color: rgba(0,0,0,0.25); }
 .bfc4-leather-swatch[data-leather="red"]      { background: #c8362b; border-color: rgba(0,0,0,0.15); }
 .bfc4-leather-swatch[data-leather="green"]    { background: #3a5c3a; border-color: rgba(0,0,0,0.2); }
-.bfc4-leather-swatch[data-leather="olive"]    { background: #5a5a2b; border-color: rgba(0,0,0,0.2); }
-.bfc4-leather-swatch[data-leather="forest"]   { background: #294024; border-color: rgba(0,0,0,0.25); }
-.bfc4-leather-swatch[data-leather="sage"]     { background: #8a9a72; border-color: rgba(0,0,0,0.15); }
 .bfc4-leather-swatch[data-leather="blue"]     { background: #2b4566; border-color: rgba(0,0,0,0.2); }
-.bfc4-leather-swatch[data-leather="charcoal"] { background: #3a3a36; border-color: rgba(0,0,0,0.25); }
 .bfc4-leather-swatch[data-leather="navy"]     { background: #1f2d4a; border-color: rgba(0,0,0,0.25); }
 .bfc4-leather-swatch[data-leather="gray"]     { background: #666660; border-color: rgba(0,0,0,0.15); }
 .bfc4-leather-swatch[data-leather="grey"]     { background: #666660; border-color: rgba(0,0,0,0.15); }
@@ -1891,7 +1887,7 @@
       {%- assign total_slides = media_images | size -%}
 
       <div class="bfc4-slides" id="bfc4-slides">
-        {%- for media in media_images limit: 20 -%}
+        {%- for media in media_images limit: 8 -%}
           <div class="bfc4-slide" data-media-id="{{ media.id }}">
             <img
               src="{{ media | image_url: width: 900 }}"
@@ -2766,7 +2762,7 @@
       </div>
       <div class="bfc4-policy-body">
         <p>Every medium format camera we sell includes a <strong>6-month warranty</strong> covering mechanical and electrical defects. If something goes wrong, we'll repair it or replace it with the exact same camera you purchased.</p>
-        <p style="margin-top:10px">To open a claim, visit the Shipping Label tab in your <a href="https://account.brooklynfilmcamera.com" rel="nofollow" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">BFC account</a>, or come into the store anytime.</p>
+        <p style="margin-top:10px">To open a claim, visit the Shipping Label tab in your <a href="https://account.brooklynfilmcamera.com" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">BFC account</a>, or come into the store anytime.</p>
         <p style="margin-top:10px;color:rgba(78,71,65,0.6);font-size:11px">Return shipping is covered by BFC within the first 30 days. After 30 days, the buyer is responsible for return shipping on warranty claims.</p>
         <p style="margin-top:12px"><a href="https://brooklynfilmcamera.com/pages/warranty" style="font-size:11px;color:var(--or);font-weight:600;letter-spacing:0.06em;text-decoration:underline;text-underline-offset:2px;">View full warranty policy &rsaquo;</a></p>
       </div>

@@ -520,6 +520,8 @@
         "subheading": "",
         "header_align": "left",
         "columns_mobile": 2,
+        "mobile_slider": false,
+        "mobile_slider_width": 30,
         "columns_desktop": 6,
         "grid_gap": 16,
         "media_aspect": "1 / 1",
@@ -603,7 +605,6 @@
             "heading": "Top Sellers",
             "subheading": "The cameras everyone's buying",
             "collection": "cameras",
-            "source_mode": "top_sellers",
             "products_limit": 24,
             "show_vendor": false,
             "show_custom_text": false,
@@ -617,9 +618,9 @@
             "custom_text_label_3": "Backorder",
             "show_stock": true,
             "show_variant_count": false,
-            "show_urgency": false,
+            "show_urgency": true,
             "show_urgency_trust": true,
-            "show_stock_sticker": false,
+            "show_stock_sticker": true,
             "show_price": true,
             "show_quick_add": true,
             "hide_oos": true,
@@ -1589,89 +1590,6 @@
         "section_padding_top": 40,
         "section_padding_bottom": 40
       }
-    },
-    "fixed_bfc_top_sellers_aJ8Thc": {
-      "type": "FIXED-bfc-top-sellers",
-      "blocks": {
-        "top_sellers_UEF7gr": {
-          "type": "top_sellers",
-          "settings": {
-            "heading": "New Arrivals",
-            "subheading": "",
-            "collection": "all",
-            "source_mode": "new_in_stock",
-            "products_limit": 35,
-            "show_vendor": false,
-            "show_custom_text": false,
-            "custom_text": "Custom text",
-            "custom_text_use_tags": false,
-            "custom_text_tag_1": "preorder, pre-order",
-            "custom_text_label_1": "Preorder",
-            "custom_text_tag_2": "exclusive, limited",
-            "custom_text_label_2": "Exclusive",
-            "custom_text_tag_3": "backorder, back-order",
-            "custom_text_label_3": "Backorder",
-            "show_stock": false,
-            "show_variant_count": true,
-            "show_urgency": true,
-            "show_urgency_trust": true,
-            "show_stock_sticker": true,
-            "show_price": true,
-            "show_quick_add": true,
-            "hide_oos": false,
-            "exclude_handles": "",
-            "show_two_variant_adds": false,
-            "variant_add_label": "Add",
-            "enable_badges": true,
-            "badge_tag_1": "best seller, best-seller",
-            "badge_label_1": "Best Seller",
-            "badge_tag_2": "just arrived, new",
-            "badge_label_2": "Just Arrived",
-            "badge_tag_3": "limited, limited edition",
-            "badge_label_3": "Limited",
-            "show_view_all": true,
-            "view_all_label": "Shop all",
-            "show_arrows": true,
-            "edge_fade": true,
-            "square_corners": false,
-            "mobile_limit_enabled": false,
-            "mobile_show_count": 6,
-            "section_padding_y": 28,
-            "side_padding_vw": 0,
-            "ignore_padding_mobile": false,
-            "add_label": "Add",
-            "img_override_handle_1": "",
-            "img_override_handle_2": "",
-            "img_override_handle_3": "",
-            "img_override_handle_4": "",
-            "img_override_handle_5": ""
-          }
-        }
-      },
-      "block_order": [
-        "top_sellers_UEF7gr"
-      ],
-      "name": "BFC Top Sellers",
-      "settings": {
-        "horizontal_padding": 24,
-        "header_font_weight": "300",
-        "body_font_weight": "400",
-        "body_font_size": 16,
-        "body_font_size_small": 12,
-        "text_color": "#111111",
-        "background_color": "#F7F4F0",
-        "heading_size_preset": "default",
-        "header_line_height": "1.05",
-        "header_letter_spacing": -2,
-        "heading_color": "#111111",
-        "body_line_height": "1.5",
-        "body_letter_spacing": 0,
-        "section_padding_top": 40,
-        "section_padding_bottom": 40,
-        "accent_color": "#E36E15",
-        "secondary_text_color": "#82906B",
-        "item_title_font": "poppins_n5"
-      }
     }
   },
   "order": [
@@ -1689,7 +1607,6 @@
     "fixed_bfc_holiday_guides_NttHwH",
     "hero_banner_TBbgPU",
     "bfc_repair_hero_UFMb9f",
-    "fixed_bfc_new_arrivals_ejGpXn",
-    "fixed_bfc_top_sellers_aJ8Thc"
+    "fixed_bfc_new_arrivals_ejGpXn"
   ]
 }

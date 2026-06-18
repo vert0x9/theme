@@ -161,7 +161,7 @@
   {% endif %}
 
   {% if section.blocks.size > 0 %}
-    <div class="bfc-cstrip__grid">
+    <div class="bfc-cstrip__grid{% if section.settings.mobile_slider %} bfc-cstrip__grid--mslider{% endif %}">
       {% for block in section.blocks %}
         {% if block.type == 'cover_item' %}
           {%- liquid
@@ -225,59 +225,21 @@
     margin-top: 10px;
     max-width: 680px;
   }
-  /* Mobile: full-bleed horizontal scroll rail, matching BFC Top Sellers.
-     The grid goes edge-to-edge with 100vw, then re-applies the section gutter
-     via padding-left + scroll-padding-left so the FIRST card lines up with the
-     heading and snaps cleanly. padding-right stays 0 (last card runs to edge). */
   #bfc-category-strip-{{ section.id }} .bfc-cstrip__grid{
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 78vw;
-    gap: 12px;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-    overflow-x: auto;
-    overflow-y: hidden;
-    overscroll-behavior-x: contain;
-    scroll-snap-type: x mandatory;
-    scroll-padding-left: var(--bfc-align-pad);
-    padding-left: var(--bfc-align-pad);
-    padding-right: 0;
-    padding-top: 6px;
-    padding-bottom: 8px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    grid-template-columns: repeat({{ section.settings.columns_mobile }}, 1fr);
+    gap: {{ section.settings.grid_gap }}px;
+    padding: 0 var(--bfc-align-pad);
   }
-  #bfc-category-strip-{{ section.id }} .bfc-cstrip__grid::-webkit-scrollbar{ display: none; }
+  @media (min-width: 750px){
+    #bfc-category-strip-{{ section.id }} .bfc-cstrip__grid{
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+    }
+  }
   #bfc-category-strip-{{ section.id }} .bfc-cstrip__item{
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
     display: block;
     text-decoration: none;
     color: inherit;
-  }
-  @media (min-width: 750px){
-    /* Desktop: revert to static grid */
-    #bfc-category-strip-{{ section.id }} .bfc-cstrip__grid{
-      display: grid;
-      grid-auto-flow: row;
-      grid-auto-columns: auto;
-      grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
-      gap: {{ section.settings.grid_gap }}px;
-      width: auto;
-      overflow: visible;
-      overscroll-behavior-x: auto;
-      scroll-snap-type: none;
-      scroll-padding-left: 0;
-      margin-left: 0;
-      margin-right: 0;
-      padding: 0 var(--bfc-align-pad);
-    }
-    #bfc-category-strip-{{ section.id }} .bfc-cstrip__item{
-      scroll-snap-align: none;
-      scroll-snap-stop: normal;
-    }
   }
   #bfc-category-strip-{{ section.id }} .bfc-cstrip__media{
     position: relative;
@@ -334,6 +296,35 @@
     padding: 2rem;
     text-align: center;
     color: var(--bfc-secondary-text);
+  }
+
+  /* ── Mobile horizontal slider (opt-in via "Mobile: horizontal slider") ──
+     Converts the grid into a swipeable, scroll-snapping rail with smaller tiles
+     on phones only. Desktop layout is untouched. Uses native overflow scroll so
+     there's momentum and no JS. */
+  @media (max-width: 749px){
+    #bfc-category-strip-{{ section.id }} .bfc-cstrip__grid--mslider{
+      display: flex;
+      grid-template-columns: none;
+      gap: {{ section.settings.grid_gap }}px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      /* edge padding so first/last tiles align with the section gutter */
+      padding-left: var(--bfc-align-pad);
+      padding-right: var(--bfc-align-pad);
+      scroll-padding-left: var(--bfc-align-pad);
+    }
+    #bfc-category-strip-{{ section.id }} .bfc-cstrip__grid--mslider::-webkit-scrollbar{
+      display: none;
+    }
+    #bfc-category-strip-{{ section.id }} .bfc-cstrip__grid--mslider .bfc-cstrip__item{
+      /* smaller tiles than the 2-up grid; ~3 visible with a peek of the next */
+      flex: 0 0 {{ section.settings.mobile_slider_width }}%;
+      scroll-snap-align: start;
+    }
   }
 </style>
 
@@ -395,6 +386,24 @@
       "max": 4,
       "step": 1,
       "default": 2
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_slider",
+      "label": "Mobile: horizontal slider",
+      "info": "On phones, show items as a swipeable rail with smaller tiles instead of the grid. Overrides mobile columns. Desktop is unaffected.",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "mobile_slider_width",
+      "label": "Mobile slider — tile width",
+      "info": "Each tile's width as a % of the screen when the mobile slider is on. Smaller = more tiles visible.",
+      "min": 24,
+      "max": 60,
+      "step": 2,
+      "unit": "%",
+      "default": 30
     },
     {
       "type": "range",

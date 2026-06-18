@@ -240,83 +240,7 @@
         "kit_item_MGdxpT"
       ],
       "settings": {
-        "also_collection": "slr-other",
-        "compat_collection": "",
-        "enable_c_grade": true,
-        "kit_unchecked": true,
-        "restoration_prose": ""
-      }
-    },
-    "bfc_pdp_v4b_EpPXWG": {
-      "type": "bfc-pdp-v4b",
-      "blocks": {
-        "kit_item_TfFazV": {
-          "type": "kit_item",
-          "settings": {
-            "label": "Film",
-            "custom_label": "",
-            "column": "Film",
-            "product": "",
-            "variant_id": "",
-            "discount_percent": 10,
-            "is_developing": false,
-            "is_starter_kit": true
-          }
-        },
-        "kit_item_AWTQUF": {
-          "type": "kit_item",
-          "settings": {
-            "label": "Film",
-            "custom_label": "",
-            "column": "Film",
-            "product": "",
-            "variant_id": "",
-            "discount_percent": 10,
-            "is_developing": false,
-            "is_starter_kit": true
-          }
-        },
-        "kit_item_BYgKrq": {
-          "type": "kit_item",
-          "settings": {
-            "label": "Strap",
-            "custom_label": "",
-            "column": "Strap",
-            "product": "",
-            "variant_id": "",
-            "discount_percent": 15,
-            "is_developing": false,
-            "is_starter_kit": true
-          }
-        },
-        "kit_item_bPbAwi": {
-          "type": "kit_item",
-          "settings": {
-            "label": "Developing",
-            "custom_label": "",
-            "column": "Developing Credits",
-            "product": "",
-            "variant_id": "",
-            "discount_percent": 0,
-            "is_developing": true,
-            "is_starter_kit": false
-          }
-        }
-      },
-      "block_order": [
-        "kit_item_TfFazV",
-        "kit_item_AWTQUF",
-        "kit_item_BYgKrq",
-        "kit_item_bPbAwi"
-      ],
-      "disabled": true,
-      "name": "BFC Kit Page v4",
-      "settings": {
-        "also_collection": "",
-        "compat_collection": "",
-        "enable_c_grade": false,
-        "kit_unchecked": false,
-        "restoration_prose": ""
+        "also_collection": "slr-other"
       }
     },
     "17735047409f77fd41": {
@@ -347,7 +271,6 @@
   },
   "order": [
     "main",
-    "bfc_pdp_v4b_EpPXWG",
     "17735047409f77fd41"
   ]
 }
