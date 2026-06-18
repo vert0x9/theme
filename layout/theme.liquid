@@ -55,6 +55,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     {%- endunless -%}
 
     {% render 'meta-tags' %}
+    {% render 'bfc-global-organization' %}
+    {% render 'bfc-breadcrumb-schema' %}
     <script src="{{- 'swiper-bundle.min.js' | asset_url -}}" defer="defer"></script>
     <script src="{{- 'bodyScrollLock.min.js' | asset_url -}}" defer="defer"></script>
     <script src="{{- 'pubsub.js' | asset_url -}}" defer="defer"></script>

@@ -282,6 +282,7 @@
     <div class="bfc4-header">
       <span class="bfc4-eyebrow">{{ product.type | default: 'Polaroid Instant Camera' }} — Professionally Restored &middot; <a href="https://brooklynfilmcamera.com/pages/warranty" style="color:inherit;text-decoration:underline;text-underline-offset:2px;">{{ warranty_base }}-Month Warranty</a></span>
       <h1 class="bfc4-title">{{ product.title }}</h1>
+      {%- render 'bfc-rating-stars', pdp_handle: product.handle -%}
       {%- comment -%} Extract prose only from __desc, skipping spec grid {%- endcomment -%}
       {%- assign desc_text = '' -%}
       {%- if product.description contains 'bfc-desc-specs__desc' -%}

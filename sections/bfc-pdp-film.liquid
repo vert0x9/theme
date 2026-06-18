@@ -362,6 +362,7 @@
       {%- comment -%} Brand eyebrow removed per request {%- endcomment -%}
 
       <div><h1 class="bfc4f-title">{{ product.title }}</h1>
+      {%- render 'bfc-rating-stars', pdp_handle: product.handle -%}
       <span id="bfc4-star-placeholder"></span></div>
 
       <!-- Description + specs right below title -->

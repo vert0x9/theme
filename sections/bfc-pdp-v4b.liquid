@@ -2886,6 +2886,7 @@
     <div class="bfc4-header">
       <div class="bfc4-title-row">
         <h1 class="bfc4-title">{{ product.title }}</h1>
+      {%- render 'bfc-rating-stars', pdp_handle: product.handle -%}
         <span class="bfc4-title-price" id="bfc4-title-price">{{ current_variant.price | money }}</span>
       </div>
       <span id="bfc4-star-placeholder"></span>

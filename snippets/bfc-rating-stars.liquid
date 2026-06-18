@@ -1,0 +1,93 @@
+{%- comment -%}
+  bfc-rating-stars.liquid — compact above-the-fold star badge for PDPs.
+
+  Single source of truth = shop.metafields.bfc.reviews_json blob (same data the
+  full reviews block and bfc-product-schema use), so the badge, the JSON-LD
+  aggregateRating, and the on-page reviews always agree. Does NOT use the
+  per-product judgeme.review_widget_data metafield (that path is unreliable).
+
+  Usage (place right after the product <h1>):
+    {%- render 'bfc-rating-stars', pdp_handle: product.handle -%}
+
+  Optional:
+    pdp_product : product object (defaults to global `product`)
+    anchor      : in-page target id (default 'bfc-rv-section' — the reviews block)
+
+  Renders nothing when the product has zero reviews.
+{%- endcomment -%}
+
+{%- liquid
+  unless pdp_product
+    assign pdp_product = product
+  endunless
+  unless pdp_handle
+    assign pdp_handle = pdp_product.handle
+  endunless
+  unless anchor
+    assign anchor = 'bfc-rv-section'
+  endunless
+
+  assign rs_blob = shop.metafields.bfc.reviews_json.value
+  assign rs_all = rs_blob.reviews
+  assign rs_count = 0
+  assign rs_sum = 0
+  capture rs_pid_str
+    echo pdp_product.id
+  endcapture
+
+  if rs_all != blank
+    for review in rs_all
+      capture rs_this_pid
+        echo review.product_id
+      endcapture
+      assign rs_match = false
+      if review.product_handle != blank and review.product_handle == pdp_handle
+        assign rs_match = true
+      elsif rs_this_pid != '0' and rs_this_pid == rs_pid_str
+        assign rs_match = true
+      endif
+      if rs_match and review.rating != blank
+        assign rs_count = rs_count | plus: 1
+        assign rs_sum = rs_sum | plus: review.rating
+      endif
+    endfor
+  endif
+-%}
+
+{%- if rs_count > 0 -%}
+  {%- liquid
+    assign rs_avg_x10 = rs_sum | times: 10 | divided_by: rs_count
+    assign rs_avg = rs_avg_x10 | divided_by: 10.0
+    assign rs_full = rs_avg_x10 | divided_by: 10
+    assign rs_rem = rs_avg_x10 | modulo: 10
+    assign rs_has_half = false
+    if rs_rem >= 3 and rs_rem < 8
+      assign rs_has_half = true
+    elsif rs_rem >= 8
+      assign rs_full = rs_full | plus: 1
+    endif
+    assign rs_half_idx = rs_full | plus: 1
+  -%}
+  <a class="bfc-rs" href="#{{ anchor }}" aria-label="Rated {{ rs_avg }} out of 5 from {{ rs_count }} review{% if rs_count != 1 %}s{% endif %}">
+    <span class="bfc-rs-stars" aria-hidden="true">
+      {%- for i in (1..5) -%}
+        {%- if i <= rs_full -%}
+          <svg class="bfc-rs-star is-full" width="14" height="14" viewBox="0 0 12 12" fill="currentColor"><path d="M6 .5l1.7 3.4 3.8.5-2.7 2.6.6 3.8L6 9l-3.4 1.8.6-3.8L.5 4.4l3.8-.5z"/></svg>
+        {%- elsif rs_has_half and i == rs_half_idx -%}
+          <svg class="bfc-rs-star is-half" width="14" height="14" viewBox="0 0 12 12"><defs><linearGradient id="bfcRsHalf{{ pdp_product.id }}"><stop offset="50%" stop-color="#E36E15"/><stop offset="50%" stop-color="rgba(32,32,9,0.18)"/></linearGradient></defs><path fill="url(#bfcRsHalf{{ pdp_product.id }})" d="M6 .5l1.7 3.4 3.8.5-2.7 2.6.6 3.8L6 9l-3.4 1.8.6-3.8L.5 4.4l3.8-.5z"/></svg>
+        {%- else -%}
+          <svg class="bfc-rs-star is-empty" width="14" height="14" viewBox="0 0 12 12" fill="currentColor"><path d="M6 .5l1.7 3.4 3.8.5-2.7 2.6.6 3.8L6 9l-3.4 1.8.6-3.8L.5 4.4l3.8-.5z"/></svg>
+        {%- endif -%}
+      {%- endfor -%}
+    </span>
+    <span class="bfc-rs-count">{{ rs_count }} review{% if rs_count != 1 %}s{% endif %}</span>
+  </a>
+  <style>
+    .bfc-rs{display:inline-flex;align-items:center;gap:8px;margin:6px 0 2px;text-decoration:none;line-height:1}
+    .bfc-rs-stars{display:inline-flex;gap:2px;color:#E36E15}
+    .bfc-rs-star{display:inline-block}
+    .bfc-rs-star.is-empty{color:rgba(32,32,9,0.18)}
+    .bfc-rs-count{font-family:'Poppins',sans-serif;font-size:11px;font-weight:500;color:rgba(32,32,9,0.55);letter-spacing:.02em}
+    .bfc-rs:hover .bfc-rs-count{color:#E36E15;text-decoration:underline}
+  </style>
+{%- endif -%}

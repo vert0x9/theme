@@ -764,6 +764,7 @@
               {{ product.title | split: ' ' | first }}<br/>
               <em>{{ product.title | split: ' ' | slice: 1, 10 | join: ' ' }}</em>
             </h1>
+            {%- render 'bfc-rating-stars', pdp_handle: product.handle -%}
           </div>
           <div class="ba-hero-text">
             <p class="ba-hero-desc">{{ product.description | strip_html }}</p>

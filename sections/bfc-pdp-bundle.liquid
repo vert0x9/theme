@@ -1148,6 +1148,7 @@
     <div class="bfc4-header">
       {% render 'bfc-pdp-breadcrumbs' %}
       <h1 class="bfc4-title">{{ product.title }}</h1>
+      {%- render 'bfc-rating-stars', pdp_handle: product.handle -%}
       <div id="bfc4-star-placeholder"></div>
       {%- comment -%} Extract description, stripping the bundle list block {%- endcomment -%}
       {%- assign desc_inner = product.description | split: 'bfc-desc-specs__desc">' | last | split: '</div>' | first -%}

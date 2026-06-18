@@ -910,6 +910,7 @@
     <div class="sx-info">
       <span class="sx-eyebrow">{{ product.type | default: 'Instant Film SLR' }} — Professionally Restored &middot; 6-Month Warranty</span>
       <h1 class="sx-title">{{ product.title }}</h1>
+      {%- render 'bfc-rating-stars', pdp_handle: product.handle -%}
 
       {%- comment -%} Mini specs {%- endcomment -%}
       <div class="sx-mini-specs">

@@ -796,6 +796,7 @@
         <a href="/collections/super-8-cameras" class="bfc4-crumb">Super 8</a>
       </nav>
       <h1 class="bfc4-title">{{ product.title }}</h1>
+      {%- render 'bfc-rating-stars', pdp_handle: product.handle -%}
       {%- liquid
         assign desc_text = ''
         assign desc_full = ''
