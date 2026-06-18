@@ -64,6 +64,54 @@
 {%- assign fb3 = section.settings.fallback_col_3 -%}
 {%- assign fb4 = section.settings.fallback_col_4 -%}
 
+{%- comment -%}
+  ── SEE SIMILAR: brand-name to collection mapping ──────────────
+  Maps the product's vendor/brand (and type as a fallback) to a
+  destination collection handle. Camera brands map to "cameras".
+  Edit the map_pairs string to add more mappings. Format:
+    "matchword:collection-handle"  comma separated.
+  Matching is substring based and case insensitive against the
+  product's vendor first, then its type.
+{%- endcomment -%}
+{%- assign map_pairs = section.settings.brand_map | default: "yashica:cameras,canon:cameras,nikon:cameras,minolta:cameras,olympus:cameras,pentax:cameras,leica:cameras,contax:cameras,konica:cameras,ricoh:cameras,fujifilm:cameras,fuji:cameras,kodak:cameras,polaroid:cameras,hasselblad:cameras,mamiya:cameras,bronica:cameras,rollei:cameras,voigtlander:cameras,film:film,lens:lenses,lenses:lenses,flash:accessories,accessory:accessories" -%}
+
+{%- assign similar_col = blank -%}
+{%- assign vendor_lower = product.vendor | downcase | strip -%}
+{%- assign type_lower = product.type | downcase | strip -%}
+{%- assign map_list = map_pairs | split: ',' -%}
+
+{%- comment -%} Try vendor match first, then type match {%- endcomment -%}
+{%- for pair in map_list -%}
+  {%- assign kv = pair | split: ':' -%}
+  {%- assign matchword = kv[0] | downcase | strip -%}
+  {%- assign target_handle = kv[1] | strip -%}
+  {%- if matchword != blank and target_handle != blank -%}
+    {%- if vendor_lower contains matchword -%}
+      {%- assign similar_col = collections[target_handle] -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if similar_col == blank -%}
+  {%- for pair in map_list -%}
+    {%- assign kv = pair | split: ':' -%}
+    {%- assign matchword = kv[0] | downcase | strip -%}
+    {%- assign target_handle = kv[1] | strip -%}
+    {%- if matchword != blank and target_handle != blank -%}
+      {%- if type_lower contains matchword -%}
+        {%- assign similar_col = collections[target_handle] -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- comment -%} Fall back to first auto-detected collection if no map hit {%- endcomment -%}
+{%- if similar_col == blank or similar_col.products_count == 0 -%}
+  {%- assign similar_col = auto_col_list | first -%}
+{%- endif -%}
+
 <style>
 .bfcu *, .bfcu *::before, .bfcu *::after { box-sizing: border-box; margin: 0; padding: 0; }
 .bfcu {
@@ -109,13 +157,11 @@
 }
 .bfcu-img-wrap {
   width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  padding: 48px;
+  display: block;
 }
 .bfcu-img {
-  width: 100%; max-width: 560px;
-  aspect-ratio: 1/1;
-  object-fit: contain;
+  width: 100%; height: 100%;
+  object-fit: cover;
   display: block;
   opacity: 0.45;
   filter: grayscale(40%);
@@ -216,13 +262,51 @@
   margin-bottom: 24px;
 }
 
-/* ── META ────────────────────────────────────────── */
-.bfcu-meta {
-  font-size: 11px; color: rgba(32,32,9,0.4);
-  display: flex; flex-wrap: wrap; gap: 6px 16px;
+/* ── SEE SIMILAR (inline rail) ───────────────────── */
+.bfcu-similar {
+  margin-top: 4px;
+  border-top: 1px solid rgba(32,32,9,0.08);
+  padding-top: 22px;
 }
-.bfcu-meta-item { display: flex; gap: 6px; }
-.bfcu-meta-key { font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; font-size: 9px; }
+.bfcu-similar-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--ch);
+  margin-bottom: 14px; display: block;
+}
+.bfcu-similar-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.bfcu-similar-card {
+  display: flex; flex-direction: column;
+  background: #fff; border: 1px solid rgba(32,32,9,0.08);
+  text-decoration: none; color: var(--bk);
+  transition: border-color var(--t);
+}
+.bfcu-similar-card:hover { border-color: var(--or); }
+.bfcu-similar-img-wrap {
+  aspect-ratio: 1/1; background: var(--gr); overflow: hidden;
+}
+.bfcu-similar-img {
+  width: 100%; height: 100%; object-fit: contain; display: block;
+  transition: transform 0.35s ease;
+}
+.bfcu-similar-card:hover .bfcu-similar-img { transform: scale(1.04); }
+.bfcu-similar-body { padding: 8px 10px 10px; }
+.bfcu-similar-name {
+  font-size: 10px; font-weight: 600; line-height: 1.3;
+  overflow: hidden; display: -webkit-box;
+  -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  margin-bottom: 3px;
+}
+.bfcu-similar-price { font-size: 10px; font-weight: 700; color: var(--or); }
+.bfcu-similar-all {
+  display: inline-block; margin-top: 14px;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--or); text-decoration: none;
+}
+.bfcu-similar-all:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 /* ── COLLECTIONS SECTION ─────────────────────────── */
 .bfcu-shop {
@@ -438,7 +522,6 @@
 @media (max-width: 900px) {
   .bfcu-split { grid-template-columns: 1fr; min-height: 0; }
   .bfcu-left { min-height: 60vw; }
-  .bfcu-img-wrap { padding: 32px; }
   .bfcu-right { padding: 32px 20px 40px; justify-content: flex-start; }
   .bfcu-title { font-size: 24px; }
   .bfcu-shop { padding: 40px 20px 48px; }
@@ -450,6 +533,7 @@
   .bfcu-also-title { font-size: 28px; }
   .bfcu-also-card { width: 160px; }
   .bfcu-also-arr { display: none; }
+  .bfcu-similar-grid { grid-template-columns: repeat(3, 1fr); }
 }
 </style>
 
@@ -537,23 +621,38 @@
         </div>
       </div>
 
-      <div class="bfcu-divider"></div>
-
-      {%- comment -%} Light meta strip {%- endcomment -%}
-      <div class="bfcu-meta">
-        {%- if product.type != blank -%}
-          <span class="bfcu-meta-item">
-            <span class="bfcu-meta-key">Type</span>
-            {{ product.type }}
-          </span>
-        {%- endif -%}
-        {%- if product.vendor != blank -%}
-          <span class="bfcu-meta-item">
-            <span class="bfcu-meta-key">Brand</span>
-            {{ product.vendor }}
-          </span>
-        {%- endif -%}
-      </div>
+      {%- comment -%}
+        See similar — top sellers from the brand-mapped collection.
+        Shows up to 6 available products, excluding the current item.
+      {%- endcomment -%}
+      {%- if similar_col != blank and similar_col.products_count > 0 -%}
+        <div class="bfcu-similar">
+          <span class="bfcu-similar-label">See similar</span>
+          <div class="bfcu-similar-grid">
+            {%- assign sim_shown = 0 -%}
+            {%- for sp in similar_col.products -%}
+              {%- if sp.id != product.id and sp.available and sim_shown < 6 -%}
+                {%- assign sim_shown = sim_shown | plus: 1 -%}
+                {%- assign sp_v = sp.selected_or_first_available_variant -%}
+                <a class="bfcu-similar-card" href="{{ sp.url }}">
+                  <div class="bfcu-similar-img-wrap">
+                    {%- if sp.featured_image -%}
+                      <img class="bfcu-similar-img" src="{{ sp.featured_image | image_url: width: 300 }}" alt="{{ sp.title | escape }}" loading="lazy" width="300" height="300"/>
+                    {%- endif -%}
+                  </div>
+                  <div class="bfcu-similar-body">
+                    <div class="bfcu-similar-name">{{ sp.title }}</div>
+                    <div class="bfcu-similar-price">{{ sp_v.price | money }}</div>
+                  </div>
+                </a>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          {%- if sim_shown > 0 -%}
+            <a class="bfcu-similar-all" href="{{ similar_col.url }}">View all {{ similar_col.title | downcase }} &rsaquo;</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
 
       {%- if product.description != blank -%}
         <div class="bfcu-desc">
@@ -718,6 +817,13 @@
       "id": "message",
       "label": "Unavailable message",
       "default": "We no longer carry this item, but we have plenty of similar cameras in stock. Browse below to find something you'll love."
+    },
+    {
+      "type": "textarea",
+      "id": "brand_map",
+      "label": "See similar brand mapping",
+      "info": "Maps a product's brand or type to a collection handle for the See similar rail. Format: matchword:collection-handle, comma separated. Leave blank to use the built-in camera-brand defaults.",
+      "default": "yashica:cameras,canon:cameras,nikon:cameras,minolta:cameras,olympus:cameras,pentax:cameras,leica:cameras,contax:cameras,konica:cameras,ricoh:cameras,fujifilm:cameras,fuji:cameras,kodak:cameras,polaroid:cameras,hasselblad:cameras,mamiya:cameras,bronica:cameras,rollei:cameras,voigtlander:cameras,film:film,lens:lenses,lenses:lenses,flash:accessories,accessory:accessories"
     },
     {
       "type": "header",
