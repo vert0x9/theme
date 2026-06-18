@@ -11,6 +11,7 @@
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {
         "breadcrumbs": false,
         "show_page_title": false,
@@ -19,19 +20,41 @@
         "info_content": "",
         "section_width": "max-w-narrower",
         "color_scheme": "",
-        "spacing_top": "2",
-        "spacing_bottom": "2"
+        "spacing_top": "0",
+        "spacing_bottom": "0"
       }
     },
-    "bfc_repair_status_A4dt9d": {
-      "type": "bfc-repair-status",
-      "disabled": true,
-      "name": "BFC Repair Status",
-      "settings": {}
+    "bfc_cancel_order": {
+      "type": "bfc-cancel-order",
+      "name": "BFC Cancel Order",
+      "settings": {
+        "eyebrow": "Help",
+        "heading": "Cancel Your Order",
+        "lead": "<p>Need to cancel or return something? Here is how it works.</p>",
+        "returns_heading": "Returns and cancellations",
+        "returns_body": "<p>We offer 14 days of free returns and cancellations on eligible orders. If you need to cancel or return something, just reach out and we will take care of it.</p>",
+        "contact_email": "addie@brooklynfilmcamera.com",
+        "warranty_heading": "Warranty coverage",
+        "warranty_body": "<p>Cameras and gear come with warranty coverage that varies by category. Read the full terms on our warranty page.</p>",
+        "warranty_url": "",
+        "warranty_link_label": "View warranty details",
+        "eu_heading": "Your right to cancel",
+        "eu_body": "<p>Under EU consumer law, you have the right to cancel your order within 14 days without giving a reason. Use the form below and we will confirm your cancellation by email.</p>",
+        "eu_button_label": "Cancel my order",
+        "success_message": "Thanks. Your cancellation request has been received and our team will confirm by email shortly.",
+        "horizontal_padding": 24,
+        "section_padding_top": 56,
+        "section_padding_bottom": 72,
+        "text_color": "#202009",
+        "background_color": "#f8f6ee",
+        "accent_color": "#e36e15",
+        "secondary_text_color": "#82906b",
+        "celadon_color": "#abcc99"
+      }
     }
   },
   "order": [
     "main",
-    "bfc_repair_status_A4dt9d"
+    "bfc_cancel_order"
   ]
 }
