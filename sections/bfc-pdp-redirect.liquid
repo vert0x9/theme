@@ -670,8 +670,20 @@
   {%- endcomment -%}
 
   {%- assign display_cols = '' | split: ',' -%}
+  {%- comment -%} Seed with the brand-mapped collection if present {%- endcomment -%}
+  {%- if similar_col != blank and similar_col.products_count > 0 -%}
+    {%- assign display_cols = display_cols | push: similar_col -%}
+  {%- endif -%}
   {%- for col in auto_col_list limit: 4 -%}
-    {%- assign display_cols = display_cols | push: col -%}
+    {%- assign in_list = false -%}
+    {%- for dc in display_cols -%}
+      {%- if dc.handle == col.handle -%}{%- assign in_list = true -%}{%- endif -%}
+    {%- endfor -%}
+    {%- unless in_list -%}
+      {%- if display_cols.size < 4 -%}
+        {%- assign display_cols = display_cols | push: col -%}
+      {%- endif -%}
+    {%- endunless -%}
   {%- endfor -%}
   {%- comment -%} Pad with schema fallbacks if we have fewer than 4 {%- endcomment -%}
   {%- for _i in (1..4) -%}
@@ -734,7 +746,8 @@
     Product samples — pulls up to 8 available products from the best-matched collection.
     Excludes the current (unlisted) product.
   {%- endcomment -%}
-  {%- assign sample_col = auto_col_list | first -%}
+  {%- assign sample_col = similar_col -%}
+  {%- if sample_col == blank -%}{%- assign sample_col = auto_col_list | first -%}{%- endif -%}
   {%- if sample_col == blank and fb1 != blank -%}{%- assign sample_col = fb1 -%}{%- endif -%}
   {%- if sample_col != blank -%}
     {%- assign sample_count = 0 -%}
