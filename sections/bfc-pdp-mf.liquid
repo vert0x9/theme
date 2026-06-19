@@ -2220,10 +2220,10 @@
         <span class="bfc4-price" id="bfc4-total">{{ sk_total | money }}</span>
       </div>
 
-      <button class="bfc4-atc" id="bfc4-atc" onclick="bfc4AddToCart()">
-        <span id="bfc4-atc-text">Add Starter Kit</span>
+      <button class="bfc4-atc" id="bfc4-atc" onclick="bfc4AddToCart()"{% unless current_variant.available %} disabled{% endunless %}>
+        <span id="bfc4-atc-text">{% if current_variant.available %}Add Starter Kit{% else %}Out of Stock{% endif %}</span>
       </button>
-      <button class="bfc4-cam-only" onclick="bfc4CameraOnly()">Camera Only &mdash; {{ current_variant.price | money }}</button>
+      <button class="bfc4-cam-only" onclick="bfc4CameraOnly()"{% unless current_variant.available %} disabled{% endunless %}>Camera Only &mdash; {{ current_variant.price | money }}</button>
       {%- comment -%} ATC error banner — hidden until a cart/add failure (e.g. OOS, already-in-cart 422). {%- endcomment -%}
       <div class="bfc4-atc-error" id="bfc4-atc-error" role="alert" aria-live="assertive" hidden></div>
       {%- comment -%} Activity / urgency line ("X people have this in their cart"). Reads from
@@ -2738,10 +2738,10 @@
             <span class="bfc4-price" id="bfc4-total-2">{{ sk_total | money }}</span>
           </div>
 
-          <button class="bfc4-atc" onclick="bfc4AddToCart()">
-            <span>Add Starter Kit</span>
+          <button class="bfc4-atc" id="bfc4-atc-2" onclick="bfc4AddToCart()"{% unless current_variant.available %} disabled{% endunless %}>
+            <span id="bfc4-atc-text-2">{% if current_variant.available %}Add Starter Kit{% else %}Out of Stock{% endif %}</span>
           </button>
-          <button class="bfc4-cam-only" onclick="bfc4CameraOnly()">Camera Only &mdash; {{ current_variant.price | money }}</button>
+          <button class="bfc4-cam-only" id="bfc4-cam-only-2" onclick="bfc4CameraOnly()"{% unless current_variant.available %} disabled{% endunless %}>Camera Only &mdash; {{ current_variant.price | money }}</button>
         </div>
       </div>
     </div>
@@ -3071,9 +3071,36 @@
     if (stickyGrade) stickyGrade.textContent = btn.textContent.trim();
     bfc4UpdateWarrantyTier(STATE.variantPrice);
     bfc4JumpToVariantImage(STATE.variantId);
+    bfc4SyncAvailability();
   };
 
-  // ── Leather Cover swatch handler ──
+  // ── Sync ATC buttons to the selected variant's stock state ──
+  // Greys out and relabels the kit/camera-only/sticky buttons when the
+  // current variant is out of stock. Reads availability from
+  // window.__bfc4Variants by STATE.variantId.
+  window.bfc4SyncAvailability = function() {
+    if (!window.__bfc4Variants) return;
+    var v = window.__bfc4Variants.find(function(x) { return x.id === STATE.variantId; });
+    var avail = v ? !!v.available : true;
+    var ids = ['bfc4-atc', 'bfc4-atc-2'];
+    ids.forEach(function(id) {
+      var b = document.getElementById(id);
+      if (!b) return;
+      b.disabled = !avail;
+      var t = b.querySelector('span');
+      if (t) t.textContent = avail ? 'Add Starter Kit' : 'Out of Stock';
+    });
+    var camIds = ['bfc4-cam-only-2'];
+    camIds.forEach(function(id) {
+      var b = document.getElementById(id);
+      if (b) b.disabled = !avail;
+    });
+    document.querySelectorAll('.bfc4-cam-only').forEach(function(b) { b.disabled = !avail; });
+    var stickyBtn  = document.getElementById('bfc4-sticky-btn');
+    var stickyText = document.getElementById('bfc4-sticky-btn-text');
+    if (stickyBtn) stickyBtn.disabled = !avail;
+    if (stickyText) stickyText.textContent = avail ? 'Add to Cart' : 'Out of Stock';
+  };
   // When a leather swatch is clicked, we need to find the variant whose
   // chosen options match the currently-selected Grade (if present) AND
   // the new leather value. The variants list is rendered as a JS object
@@ -3118,6 +3145,7 @@
     });
     bfc4UpdateWarrantyTier(STATE.variantPrice);
     bfc4JumpToVariantImage(match.id);
+    bfc4SyncAvailability();
   };
 
   // ── Also keep existing baSelectVariant alias ────
@@ -3270,19 +3298,25 @@
   window.bfc4AddToCart = async function() {
     var btn    = document.getElementById('bfc4-atc');
     var textEl = document.getElementById('bfc4-atc-text');
+    var btn2    = document.getElementById('bfc4-atc-2');
+    var textEl2 = document.getElementById('bfc4-atc-text-2');
     var stickyBtn  = document.getElementById('bfc4-sticky-btn');
     var stickyText = document.getElementById('bfc4-sticky-btn-text');
     bfc4ClearError();
     if (btn) { btn.disabled = true; }
+    if (btn2) { btn2.disabled = true; }
     if (stickyBtn) { stickyBtn.disabled = true; }
     if (textEl) { textEl.textContent = 'Adding\u2026'; }
+    if (textEl2) { textEl2.textContent = 'Adding\u2026'; }
     if (stickyText) { stickyText.textContent = 'Adding\u2026'; }
 
     // Reset button label to its idle state — used by both success-timeout and error paths.
     function bfc4ResetBtn() {
       if (btn) { btn.classList.remove('is-success'); btn.disabled = false; }
+      if (btn2) { btn2.disabled = false; }
       if (stickyBtn) { stickyBtn.disabled = false; }
       if (textEl) { textEl.textContent = 'Add Starter Kit'; }
+      if (textEl2) { textEl2.textContent = 'Add Starter Kit'; }
       if (stickyText) { stickyText.textContent = 'Add to Cart'; }
     }
     // Fail path: show message, reset button immediately (no success state).
@@ -3642,6 +3676,7 @@
   bfc4UpdateWarrantyTier(STATE.variantPrice);
 
   bfc4Render();
+  bfc4SyncAvailability();
 
   // ── Sticky Mobile ATC Bar ──────────────────────
   var stickyBar = document.getElementById('bfc4-sticky-bar');
