@@ -1,0 +1,391 @@
+{% liquid
+  assign base_text = section.settings.text_color | default: '#202009'
+  assign base_bg = section.settings.background_color | default: '#F8F6EE'
+  assign page_width_px = settings.page_width | default: 1200
+  assign horizontal_pad = section.settings.horizontal_padding | default: 24
+  assign accent_color = section.settings.accent_color | default: '#E36E15'
+  assign secondary_text_color = section.settings.secondary_text_color | default: '#82906B'
+  assign celadon = section.settings.celadon_color | default: '#ABCC99'
+  assign section_pad_top = section.settings.section_padding_top | default: 56
+  assign section_pad_bottom = section.settings.section_padding_bottom | default: 72
+  assign contact_email = section.settings.contact_email | default: 'addie@brooklynfilmcamera.com'
+  assign warranty_url = section.settings.warranty_url | default: '/pages/warranty'
+%}
+<section id="bfc-cancel-{{ section.id }}" class="bfc-cancel" aria-label="{{ section.settings.section_label | default: 'Cancel Your Order' }}">
+  <style>
+    #shopify-section-{{ section.id }} {
+      background-color: {{ base_bg }};
+      margin: 0;
+      padding: {{ section_pad_top }}px 0 {{ section_pad_bottom }}px;
+      width: 100%;
+    }
+    #bfc-cancel-{{ section.id }}{
+      --bfc-header-family: var(--font-heading-family, 'Cormorant Garamond', serif);
+      --bfc-body-family: var(--font-body-family, 'Poppins', sans-serif);
+      --bfc-horizontal-pad: {{ horizontal_pad }}px;
+      --bfc-page-width: {{ page_width_px }}px;
+      --bfc-align-pad: clamp(
+        var(--bfc-horizontal-pad),
+        calc((100vw - min(100vw, var(--bfc-page-width))) / 2 + var(--bfc-horizontal-pad)),
+        120px
+      );
+      --bfc-text: {{ base_text }};
+      --bfc-bg: {{ base_bg }};
+      --bfc-accent: {{ accent_color }};
+      --bfc-secondary: {{ secondary_text_color }};
+      --bfc-celadon: {{ celadon }};
+      --bfc-muted: color-mix(in srgb, var(--bfc-text) 62%, transparent);
+      --bfc-border: color-mix(in srgb, var(--bfc-text) 14%, transparent);
+      color: var(--bfc-text);
+      background: var(--bfc-bg);
+      font-family: var(--bfc-body-family);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__inner{
+      width: min(100%, var(--bfc-page-width));
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 var(--bfc-align-pad);
+    }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__eyebrow{
+      font-family: var(--bfc-body-family);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--bfc-secondary);
+      margin: 0 0 12px;
+    }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__title{
+      font-family: var(--bfc-header-family);
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      font-weight: 600;
+      line-height: 1.04;
+      letter-spacing: -0.01em;
+      margin: 0 0 20px;
+    }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__lead{
+      font-size: 18px;
+      line-height: 1.55;
+      color: var(--bfc-text);
+      margin: 0 0 28px;
+      max-width: 62ch;
+    }
+    #bfc-cancel-{{ section.id }} h2.bfc-cancel__h2{
+      font-family: var(--bfc-header-family);
+      font-size: clamp(1.6rem, 3.5vw, 2.1rem);
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin: 40px 0 14px;
+    }
+    #bfc-cancel-{{ section.id }} p{
+      margin: 0 0 16px;
+      max-width: 64ch;
+    }
+    #bfc-cancel-{{ section.id }} a.bfc-cancel__link{
+      color: var(--bfc-accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    #bfc-cancel-{{ section.id }} a.bfc-cancel__link:hover{ opacity: .8; }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__card{
+      border: 1px solid var(--bfc-border);
+      background: color-mix(in srgb, var(--bfc-celadon) 18%, var(--bfc-bg));
+      padding: 24px 26px;
+      margin: 22px 0;
+    }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__card p:last-child{ margin-bottom: 0; }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__email{
+      font-weight: 600;
+      color: var(--bfc-accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* EU block — hidden by default, revealed by JS when visitor is detected as EU/EEA */
+    #bfc-cancel-{{ section.id }} .bfc-cancel__eu{
+      display: none;
+      margin-top: 8px;
+      border-top: 1px solid var(--bfc-border);
+      padding-top: 8px;
+    }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__eu.is-visible{ display: block; }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__eu-flag{
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--bfc-accent);
+      padding: 5px 10px;
+      margin-bottom: 16px;
+    }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__toggle{
+      appearance: none;
+      cursor: pointer;
+      border: 1px solid var(--bfc-text);
+      background: var(--bfc-text);
+      color: var(--bfc-bg);
+      font-family: var(--bfc-body-family);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 14px 22px;
+      transition: opacity .18s ease;
+    }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__toggle:hover{ opacity: .86; }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__form-wrap{
+      display: none;
+      margin-top: 22px;
+      border: 1px solid var(--bfc-border);
+      background: var(--bfc-bg);
+      padding: 24px 26px;
+    }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__form-wrap.is-open{ display: block; }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__field{
+      display: block;
+      margin-bottom: 16px;
+    }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__label{
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin-bottom: 6px;
+    }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__input,
+    #bfc-cancel-{{ section.id }} .bfc-cancel__textarea{
+      width: 100%;
+      box-sizing: border-box;
+      font-family: var(--bfc-body-family);
+      font-size: 15px;
+      color: var(--bfc-text);
+      background: #fff;
+      border: 1px solid var(--bfc-border);
+      border-radius: 0;
+      padding: 12px 13px;
+    }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__input:focus,
+    #bfc-cancel-{{ section.id }} .bfc-cancel__textarea:focus{
+      outline: 2px solid var(--bfc-accent);
+      outline-offset: 1px;
+    }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__textarea{ min-height: 96px; resize: vertical; }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__submit{
+      appearance: none;
+      cursor: pointer;
+      border: 0;
+      background: var(--bfc-accent);
+      color: #fff;
+      font-family: var(--bfc-body-family);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 14px 24px;
+      transition: opacity .18s ease;
+    }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__submit:hover{ opacity: .9; }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__note{
+      font-size: 13px;
+      color: var(--bfc-muted);
+      margin-top: 14px;
+    }
+    #bfc-cancel-{{ section.id }} .bfc-cancel__success{
+      border: 1px solid var(--bfc-celadon);
+      background: color-mix(in srgb, var(--bfc-celadon) 26%, var(--bfc-bg));
+      padding: 18px 20px;
+      margin-bottom: 20px;
+    }
+    #bfc-cancel-{{ section.id }} a:focus-visible,
+    #bfc-cancel-{{ section.id }} button:focus-visible,
+    #bfc-cancel-{{ section.id }} input:focus-visible,
+    #bfc-cancel-{{ section.id }} textarea:focus-visible{
+      outline: 2px solid var(--bfc-accent);
+      outline-offset: 2px;
+    }
+  </style>
+
+  <div class="bfc-cancel__inner">
+    {% if section.settings.eyebrow != blank %}
+      <p class="bfc-cancel__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+    {% endif %}
+    <h1 class="bfc-cancel__title">{{ section.settings.heading | default: 'Cancel Your Order' | escape }}</h1>
+
+    {% if section.settings.lead != blank %}
+      <p class="bfc-cancel__lead">{{ section.settings.lead }}</p>
+    {% endif %}
+
+    {%- comment -%} ── Universal info: shown to everyone ── {%- endcomment -%}
+    <h2 class="bfc-cancel__h2">{{ section.settings.returns_heading | default: 'Returns and cancellations' | escape }}</h2>
+    <p>{{ section.settings.returns_body | default: 'We offer 14 days of free returns and cancellations on eligible orders. If you need to cancel or return something, just reach out and we will take care of it.' }}</p>
+
+    <div class="bfc-cancel__card">
+      <p>To cancel or return an order, email
+        <a class="bfc-cancel__email" href="mailto:{{ contact_email }}">{{ contact_email }}</a>
+        with your order number and we will get you sorted within 14 days of delivery.
+      </p>
+    </div>
+
+    {%- comment -%} ── Warranty ── {%- endcomment -%}
+    <h2 class="bfc-cancel__h2">{{ section.settings.warranty_heading | default: 'Warranty coverage' | escape }}</h2>
+    <p>{{ section.settings.warranty_body | default: 'Cameras and gear come with warranty coverage that varies by category. Read the full terms on our warranty page.' }}</p>
+    <p><a class="bfc-cancel__link" href="{{ warranty_url }}">{{ section.settings.warranty_link_label | default: 'View warranty details' | escape }}</a></p>
+
+    {%- comment -%} ── EU-only right to cancel block ── {%- endcomment -%}
+    <div class="bfc-cancel__eu" data-bfc-eu>
+      <span class="bfc-cancel__eu-flag">EU / EEA customers</span>
+      <h2 class="bfc-cancel__h2" style="margin-top:0;">{{ section.settings.eu_heading | default: 'Your right to cancel' | escape }}</h2>
+      <p>{{ section.settings.eu_body | default: 'Under EU consumer law, you have the right to cancel your order within 14 days without giving a reason. Use the form below and we will confirm your cancellation by email.' }}</p>
+
+      <button type="button" class="bfc-cancel__toggle" data-bfc-eu-toggle aria-expanded="false">
+        {{ section.settings.eu_button_label | default: 'Cancel my order' | escape }}
+      </button>
+
+      <div class="bfc-cancel__form-wrap" data-bfc-eu-form>
+        {% form 'contact', id: 'bfc-cancel-form-' | append: section.id %}
+          {% if form.posted_successfully? %}
+            <div class="bfc-cancel__success">
+              <p style="margin:0;">{{ section.settings.success_message | default: 'Thanks. Your cancellation request has been received and our team will confirm by email shortly.' | escape }}</p>
+            </div>
+          {% endif %}
+          {% if form.errors %}
+            <div class="bfc-cancel__success" style="border-color:{{ accent_color }};">
+              <p style="margin:0;">There was a problem submitting the form: {{ form.errors | default_errors }}</p>
+            </div>
+          {% endif %}
+
+          {%- comment -%} Tag so these submissions are easy to filter/forward to Addie {%- endcomment -%}
+          <input type="hidden" name="contact[subject]" value="EU Order Cancellation Request">
+          <input type="hidden" name="contact[request_type]" value="EU 14-day right to cancel">
+
+          <label class="bfc-cancel__field">
+            <span class="bfc-cancel__label">Your name</span>
+            <input class="bfc-cancel__input" type="text" name="contact[name]" autocomplete="name" required>
+          </label>
+
+          <label class="bfc-cancel__field">
+            <span class="bfc-cancel__label">Email address</span>
+            <input class="bfc-cancel__input" type="email" name="contact[email]" autocomplete="email" required>
+          </label>
+
+          <label class="bfc-cancel__field">
+            <span class="bfc-cancel__label">Order number</span>
+            <input class="bfc-cancel__input" type="text" name="contact[order_number]" placeholder="e.g. #1234" required>
+          </label>
+
+          <label class="bfc-cancel__field">
+            <span class="bfc-cancel__label">Items to cancel and any details</span>
+            <textarea class="bfc-cancel__textarea" name="contact[body]" placeholder="Tell us which items you want to cancel" required></textarea>
+          </label>
+
+          <button type="submit" class="bfc-cancel__submit">Submit cancellation request</button>
+          <p class="bfc-cancel__note">This request goes to our team and will be confirmed by email within 14 days.</p>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.getElementById('bfc-cancel-{{ section.id }}');
+      if (!root) return;
+      var euBlock = root.querySelector('[data-bfc-eu]');
+      var toggle = root.querySelector('[data-bfc-eu-toggle]');
+      var formWrap = root.querySelector('[data-bfc-eu-form]');
+
+      // EU + EEA country codes (right-to-cancel jurisdictions)
+      var EU_EEA = ['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO'];
+
+      function reveal() {
+        if (euBlock) euBlock.classList.add('is-visible');
+      }
+
+      // Toggle the form open/closed
+      if (toggle && formWrap) {
+        toggle.addEventListener('click', function () {
+          var open = formWrap.classList.toggle('is-open');
+          toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+          if (open) {
+            var firstInput = formWrap.querySelector('input, textarea');
+            if (firstInput) firstInput.focus();
+          }
+        });
+      }
+
+      // If the form posted (success or error), keep the EU block + form open on reload
+      {% if form.posted_successfully? or form.errors %}
+        reveal();
+        if (formWrap) formWrap.classList.add('is-open');
+        if (toggle) toggle.setAttribute('aria-expanded', 'true');
+      {% endif %}
+
+      // Geo-detect. If detection fails, reveal anyway (safer to over-show a legal option).
+      function detect() {
+        try {
+          fetch('https://ipapi.co/json/', { cache: 'no-store' })
+            .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+            .then(function (data) {
+              var cc = (data && (data.country_code || data.country)) || '';
+              if (EU_EEA.indexOf(String(cc).toUpperCase()) !== -1) reveal();
+            })
+            .catch(function () { reveal(); });
+        } catch (e) {
+          reveal();
+        }
+      }
+      detect();
+    })();
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "BFC Cancel Order",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "header", "content": "Intro" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Help" },
+    { "type": "text", "id": "heading", "label": "Page heading", "default": "Cancel Your Order" },
+    { "type": "richtext", "id": "lead", "label": "Lead paragraph", "default": "<p>Need to cancel or return something? Here is how it works.</p>" },
+
+    { "type": "header", "content": "Returns and cancellations" },
+    { "type": "text", "id": "returns_heading", "label": "Section heading", "default": "Returns and cancellations" },
+    { "type": "richtext", "id": "returns_body", "label": "Body text", "default": "<p>We offer 14 days of free returns and cancellations on eligible orders. If you need to cancel or return something, just reach out and we will take care of it.</p>" },
+    { "type": "text", "id": "contact_email", "label": "Contact email", "default": "addie@brooklynfilmcamera.com" },
+
+    { "type": "header", "content": "Warranty" },
+    { "type": "text", "id": "warranty_heading", "label": "Section heading", "default": "Warranty coverage" },
+    { "type": "richtext", "id": "warranty_body", "label": "Body text", "default": "<p>Cameras and gear come with warranty coverage that varies by category. Read the full terms on our warranty page.</p>" },
+    { "type": "url", "id": "warranty_url", "label": "Warranty page link" },
+    { "type": "text", "id": "warranty_link_label", "label": "Warranty link label", "default": "View warranty details" },
+
+    { "type": "header", "content": "EU right to cancel (auto-detected)" },
+    { "type": "paragraph", "content": "This block is hidden by default and only shown to visitors detected as being in the EU or EEA. If geo-detection fails, the block is shown to be safe." },
+    { "type": "text", "id": "eu_heading", "label": "EU heading", "default": "Your right to cancel" },
+    { "type": "richtext", "id": "eu_body", "label": "EU body text", "default": "<p>Under EU consumer law, you have the right to cancel your order within 14 days without giving a reason. Use the form below and we will confirm your cancellation by email.</p>" },
+    { "type": "text", "id": "eu_button_label", "label": "Cancel button label", "default": "Cancel my order" },
+    { "type": "text", "id": "success_message", "label": "Success message", "default": "Thanks. Your cancellation request has been received and our team will confirm by email shortly." },
+
+    { "type": "header", "content": "Spacing" },
+    { "type": "range", "id": "horizontal_padding", "label": "Horizontal padding", "min": 12, "max": 60, "step": 2, "unit": "px", "default": 24 },
+    { "type": "range", "id": "section_padding_top", "label": "Top padding", "min": 0, "max": 140, "step": 4, "unit": "px", "default": 56 },
+    { "type": "range", "id": "section_padding_bottom", "label": "Bottom padding", "min": 0, "max": 140, "step": 4, "unit": "px", "default": 72 },
+
+    { "type": "header", "content": "Colors" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#202009" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#F8F6EE" },
+    { "type": "color", "id": "accent_color", "label": "Accent (Super Orange)", "default": "#E36E15" },
+    { "type": "color", "id": "secondary_text_color", "label": "Secondary text", "default": "#82906B" },
+    { "type": "color", "id": "celadon_color", "label": "Celadon", "default": "#ABCC99" }
+  ],
+  "presets": [
+    { "name": "BFC Cancel Order" }
+  ]
+}
+{% endschema %}
