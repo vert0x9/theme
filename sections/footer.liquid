@@ -53,20 +53,26 @@
               {%- capture footer_menu_links -%}
                 <ul class="footer__links list-unstyled">
                   {%- for link in block.settings.menu.links -%}
+                    {%- assign link_href = link.url -%}
+                    {%- if link.url contains 'account.brooklynfilmcamera' -%}{%- assign link_href = link.url | split: '?' | first -%}{%- endif -%}
                     <li>
-                      <a href="{{- link.url -}}" title="{{- link.title -}}"{%- if link.url contains 'account.brooklynfilmcamera' -%} rel="nofollow"{%- endif -%}>
+                      <a href="{{- link_href -}}" title="{{- link.title -}}"{%- if link.url contains 'account.brooklynfilmcamera' -%} rel="nofollow"{%- endif -%}>
                         {{- link.title -}}
                       </a>
                     </li>
                     {%- for child_link in link.links -%}
+                      {%- assign child_href = child_link.url -%}
+                      {%- if child_link.url contains 'account.brooklynfilmcamera' -%}{%- assign child_href = child_link.url | split: '?' | first -%}{%- endif -%}
                       <li>
-                        <a href="{{- child_link.url -}}" title="{{- child_link.title | escape -}}"{%- if child_link.url contains 'account.brooklynfilmcamera' -%} rel="nofollow"{%- endif -%}>
+                        <a href="{{- child_href -}}" title="{{- child_link.title | escape -}}"{%- if child_link.url contains 'account.brooklynfilmcamera' -%} rel="nofollow"{%- endif -%}>
                           {{- child_link.title | escape -}}
                         </a>
                       </li>
                       {%- for grandchild_link in child_link.links -%}
+                        {%- assign grandchild_href = grandchild_link.url -%}
+                        {%- if grandchild_link.url contains 'account.brooklynfilmcamera' -%}{%- assign grandchild_href = grandchild_link.url | split: '?' | first -%}{%- endif -%}
                         <li>
-                          <a href="{{- grandchild_link.url -}}" title="{{- grandchild_link.title | escape -}}"{%- if grandchild_link.url contains 'account.brooklynfilmcamera' -%} rel="nofollow"{%- endif -%}>
+                          <a href="{{- grandchild_href -}}" title="{{- grandchild_link.title | escape -}}"{%- if grandchild_link.url contains 'account.brooklynfilmcamera' -%} rel="nofollow"{%- endif -%}>
                             {{- grandchild_link.title | escape -}}
                           </a>
                         </li>
