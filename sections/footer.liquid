@@ -54,19 +54,19 @@
                 <ul class="footer__links list-unstyled">
                   {%- for link in block.settings.menu.links -%}
                     <li>
-                      <a href="{{- link.url -}}" title="{{- link.title -}}">
+                      <a href="{{- link.url -}}" title="{{- link.title -}}"{%- if link.url contains 'account.brooklynfilmcamera' -%} rel="nofollow"{%- endif -%}>
                         {{- link.title -}}
                       </a>
                     </li>
                     {%- for child_link in link.links -%}
                       <li>
-                        <a href="{{- child_link.url -}}" title="{{- child_link.title | escape -}}">
+                        <a href="{{- child_link.url -}}" title="{{- child_link.title | escape -}}"{%- if child_link.url contains 'account.brooklynfilmcamera' -%} rel="nofollow"{%- endif -%}>
                           {{- child_link.title | escape -}}
                         </a>
                       </li>
                       {%- for grandchild_link in child_link.links -%}
                         <li>
-                          <a href="{{- grandchild_link.url -}}" title="{{- grandchild_link.title | escape -}}">
+                          <a href="{{- grandchild_link.url -}}" title="{{- grandchild_link.title | escape -}}"{%- if grandchild_link.url contains 'account.brooklynfilmcamera' -%} rel="nofollow"{%- endif -%}>
                             {{- grandchild_link.title | escape -}}
                           </a>
                         </li>
