@@ -156,21 +156,6 @@
             "extra_link_label": "More"
           }
         },
-        "team_member_bDkpeN": {
-          "type": "team_member",
-          "settings": {
-            "photo": "shopify://shop_images/000089110009.jpg",
-            "name": "Taylor",
-            "pronouns": "",
-            "role": "Camera Tech Manager",
-            "bio": "Taylor is a freelance camera assistant, graphic designer, and lens tech at BFC. Her path through the film world started behind the camera, but eventually she found herself drawn to what's inside the gear. There's an art to fixing something broken — restoring a lens, cleaning out the years, and revealing its history.",
-            "email": "taylor@brooklynfilmcamera.com",
-            "website": "",
-            "instagram": "https://www.instagram.com/filmsbytaylor/",
-            "extra_link_url": "",
-            "extra_link_label": "More"
-          }
-        },
         "team_member_KXBPG7": {
           "type": "team_member",
           "settings": {
@@ -182,6 +167,21 @@
             "email": "griffin@brooklynfilmcamera.com",
             "website": "",
             "instagram": "https://www.instagram.com/griffinforme/",
+            "extra_link_url": "",
+            "extra_link_label": "More"
+          }
+        },
+        "team_member_bDkpeN": {
+          "type": "team_member",
+          "settings": {
+            "photo": "shopify://shop_images/000089110009.jpg",
+            "name": "Taylor",
+            "pronouns": "",
+            "role": "Camera Tech Manager",
+            "bio": "Taylor is a freelance camera assistant, graphic designer, and lens tech at BFC. Her path through the film world started behind the camera, but eventually she found herself drawn to what's inside the gear. There's an art to fixing something broken — restoring a lens, cleaning out the years, and revealing its history.",
+            "email": "taylor@brooklynfilmcamera.com",
+            "website": "",
+            "instagram": "https://www.instagram.com/filmsbytaylor/",
             "extra_link_url": "",
             "extra_link_label": "More"
           }
@@ -356,8 +356,8 @@
         "team_member_jBXJB6",
         "team_member_VcCyWD",
         "team_member_6N6pC4",
-        "team_member_bDkpeN",
         "team_member_KXBPG7",
+        "team_member_bDkpeN",
         "team_member_PFXV6c",
         "team_member_GmxEyB",
         "team_member_GPfxWG",
