@@ -211,6 +211,7 @@
             <li class="drawer__subs-item">
               <a
                 href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+                rel="nofollow"
                 class="drawer__subs-link"
                 title="{%- if customer -%}{{ 'customer.account.label' | t }}{%- else -%}{{ 'theme.actions.log_in' | t }}{%- endif -%}"
               >

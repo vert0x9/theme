@@ -467,6 +467,7 @@
               <li class="header__utils-item header__utils-item--account">
                 <a
                   href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+                  rel="nofollow"
                   class="header__utils-link text--link"
                   title="{%- if customer -%}{{ 'customer.account.label' | t }}{%- else -%}{{ 'theme.actions.log_in' | t }}{%- endif -%}"
                 >
