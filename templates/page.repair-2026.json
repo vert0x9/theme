@@ -83,6 +83,11 @@
       "custom_css": [],
       "name": "BFC Repair (Offline)",
       "settings": {
+        "turnaround_show": true,
+        "turnaround_label": "Current Turnaround:",
+        "turnaround_text": "6 to 8 Weeks",
+        "turnaround_show_dot": true,
+        "turnaround_style": "accent",
         "hero_headline": "<p>Expert repair for cameras worth keeping</p>",
         "hero_tagline": "<p>In-house technicians. Transparent quotes. No work starts until you approve. Mail-in or drop off at 855 Grand St, Brooklyn.</p>",
         "url_44r2z7TSjcGHkDEt-1": "shopify://pages/film-camera-repairs-1",
