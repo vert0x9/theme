@@ -406,27 +406,71 @@
   {%- endif -%}
 {%- endfor -%}
 
-{%- comment -%} Compute kit total for starter {%- endcomment -%}
+{%- comment -%}
+  ── Complementary products (Shopify Search & Discovery) ──
+  Classify ALL complementary products as case / bag / other by substring
+  "case"/"bag" in product type, title, or tags. Capture the first AVAILABLE
+  of each:
+  - comp_case  → replaces the generic Case starter tile
+  - comp_bag   → replaces the generic Bag starter tile
+  - comp_other → takes the camera tile's display slot (camera still added via
+    the product form; e.g. a compatible lens shows instead of the camera).
+  Captured complements render as pre-selected starter tiles, so the existing
+  JS seed loop prices them in and adds them on "Add Starter Kit" automatically.
+{%- endcomment -%}
+{%- liquid
+  assign comp_case  = null
+  assign comp_bag   = null
+  assign comp_other = null
+  assign comp_list = product.metafields.shopify--discovery--product_recommendation.complementary_products.value
+  if comp_list
+    for cp in comp_list
+      assign cp_dv = cp.selected_or_first_available_variant | default: cp.variants.first
+      unless cp_dv.available
+        continue
+      endunless
+      assign cp_type  = cp.type | downcase
+      assign cp_title = cp.title | downcase
+      assign cp_tags  = cp.tags | join: ' ' | downcase
+      assign cp_is_case = false
+      assign cp_is_bag  = false
+      if cp_type contains 'case' or cp_title contains 'case' or cp_tags contains 'case'
+        assign cp_is_case = true
+      endif
+      if cp_type contains 'bag' or cp_title contains 'bag' or cp_tags contains 'bag'
+        assign cp_is_bag = true
+      endif
+      if cp_is_case and comp_case == null
+        assign comp_case = cp
+      elsif cp_is_bag and comp_bag == null
+        assign comp_bag = cp
+      elsif cp_is_case == false and cp_is_bag == false and comp_other == null
+        assign comp_other = cp
+      endif
+    endfor
+  endif
+-%}
+
+{%- comment -%} Compute kit total for starter (swap-aware) {%- endcomment -%}
 {%- liquid
   assign sk_total = current_variant.price
   for block in sk_blocks
     if block.settings.is_starter_kit and block.settings.product != blank
       assign sk_bp  = block.settings.product
-      assign sk_dv  = sk_bp.variants.first
-      assign sk_d   = block.settings.discount_percent
-      assign sk_dev = block.settings.is_developing
-      if sk_dev
-        assign sk_sale = 0
-      elsif sk_d > 0
-        assign sk_df   = sk_d | times: 1.0 | divided_by: 100
-        assign sk_sv   = sk_dv.price | times: sk_df | floor
-        assign sk_sale = sk_dv.price | minus: sk_sv
-      else
-        assign sk_sale = sk_dv.price
+      assign t_col = block.settings.column | default: block.settings.label | downcase
+      if t_col contains 'case' and comp_case
+        assign sk_bp = comp_case
+      elsif t_col contains 'bag' and comp_bag
+        assign sk_bp = comp_bag
       endif
+      assign sk_dv  = sk_bp.selected_or_first_available_variant | default: sk_bp.variants.first
       assign sk_total = sk_total | plus: sk_dv.price
     endif
   endfor
+  if comp_other
+    assign co_dv = comp_other.selected_or_first_available_variant | default: comp_other.variants.first
+    assign sk_total = sk_total | plus: co_dv.price
+  endif
 -%}
 
 {%- comment -%} ── SPLIT: left image + right content ── {%- endcomment -%}
@@ -529,7 +573,6 @@
       </nav>
       <h1 class="bfc4-title">{{ product.title }}</h1>
       {%- render 'bfc-rating-stars', pdp_handle: product.handle -%}
-      <span id="bfc4-star-placeholder"></span>
       {%- comment -%} Extract prose only from __desc, skipping spec grid {%- endcomment -%}
       {%- assign desc_text = '' -%}
       {%- if product.description contains 'bfc-desc-specs__desc' -%}
@@ -592,32 +635,102 @@
 
     {%- comment -%} 3. Starter kit tiles (pre-selected, orange border) + all selectable {%- endcomment -%}
     <div class="bfc4-tiles" id="bfc4-tiles" role="group" aria-label="Kit items">
-      {%- comment -%} Camera tile {%- endcomment -%}
-      <div class="bfc4-tile is-cam">
-        <div class="bfc4-tile-img-wrap">
-          {%- if product.featured_image -%}
-            <img src="{{ product.featured_image | image_url: width: 400 }}" alt="" role="presentation" loading="eager"/>
+      {%- comment -%}
+        Camera tile. If a non-case/bag complementary product exists (comp_other),
+        it takes this display slot as a pre-selected addable tile — the camera
+        itself is still added via the product form, so we just avoid picturing
+        the camera twice. Otherwise the camera shows as a static included tile.
+      {%- endcomment -%}
+      {%- if comp_other -%}
+        {%- assign co_dv = comp_other.selected_or_first_available_variant | default: comp_other.variants.first -%}
+        {%- assign co_imgs = '' -%}
+        {%- for media in comp_other.media limit: 6 -%}
+          {%- if media.media_type == 'image' -%}
+            {%- assign co_iu = media | image_url: width: 600 -%}
+            {%- if co_imgs == '' -%}{%- assign co_imgs = co_iu -%}
+            {%- else -%}{%- assign co_imgs = co_imgs | append: '||' | append: co_iu -%}{%- endif -%}
           {%- endif -%}
-          <span class="bfc4-tile-cam-badge">Camera</span>
+        {%- endfor -%}
+        <div class="bfc4-tile is-sel"
+          data-col="Recommended"
+          data-tile-id="bfc4-tile-comp-other"
+          data-variant-id="{{ co_dv.id }}"
+          data-product-title="{{ comp_other.title | escape }}"
+          data-orig="{{ co_dv.price | default: 0 }}"
+          data-sale="{{ co_dv.price | default: 0 }}"
+          data-is-dev="false"
+          data-disc="0"
+          data-img="{{ comp_other.featured_image | image_url: width: 400 }}"
+          onclick="bfc4TileToggle(this)"
+        >
+          <div class="bfc4-tile-img-wrap">
+            {%- if comp_other.featured_image -%}
+              <img src="{{ comp_other.featured_image | image_url: width: 400 }}" alt="" role="presentation" loading="eager"/>
+            {%- endif -%}
+            <span class="bfc4-tile-cam-badge">Recommended</span>
+            <div class="bfc4-tile-sel-check">✓</div>
+            <button class="bfc4-tile-info" onclick="event.stopPropagation(); baOpenPopup('bfc4-tile-comp-other')" aria-label="More info">
+              <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/><line x1="7" y1="6.5" x2="7" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="7" cy="4" r="0.7" fill="currentColor"/></svg>
+            </button>
+          </div>
+          <div class="bfc4-tile-body">
+            <span class="bfc4-tile-label">For your {{ product.title | truncatewords: 3, '' }}</span>
+            <span class="bfc4-tile-name">{{ comp_other.title }}</span>
+            <span class="bfc4-tile-price">{{ co_dv.price | money }}</span>
+          </div>
         </div>
-        <div class="bfc4-tile-body">
-          <span class="bfc4-tile-label">Included</span>
-          <span class="bfc4-tile-name">{{ product.title }}</span>
-          <span class="bfc4-tile-price" id="bfc4-cam-price">{{ current_variant.price | money }}</span>
+        <div id="ba-popup-data-bfc4-tile-comp-other" style="display:none"
+          data-title="{{ comp_other.title | escape }}"
+          data-desc="{{ comp_other.description | strip_html | escape }}"
+          data-imgs="{{ co_imgs | escape }}"
+        ></div>
+      {%- else -%}
+        {%- comment -%} Camera tile {%- endcomment -%}
+        <div class="bfc4-tile is-cam">
+          <div class="bfc4-tile-img-wrap">
+            {%- if product.featured_image -%}
+              <img src="{{ product.featured_image | image_url: width: 400 }}" alt="" role="presentation" loading="eager"/>
+            {%- endif -%}
+            <span class="bfc4-tile-cam-badge">Camera</span>
+          </div>
+          <div class="bfc4-tile-body">
+            <span class="bfc4-tile-label">Included</span>
+            <span class="bfc4-tile-name">{{ product.title }}</span>
+            <span class="bfc4-tile-price" id="bfc4-cam-price">{{ current_variant.price | money }}</span>
+          </div>
         </div>
-      </div>
+      {%- endif -%}
 
       {%- comment -%} Starter kit tiles only {%- endcomment -%}
       {%- for block in sk_blocks -%}
         {%- if block.type != 'kit_item' or block.settings.product == blank -%}{% continue %}{%- endif -%}
         {%- unless block.settings.is_starter_kit -%}{% continue %}{%- endunless -%}
         {%- if block.settings.only_show_for != blank and block.settings.only_show_for.handle != product.handle -%}{% continue %}{%- endif -%}
+        {%- if block.settings.hide_for != blank and block.settings.hide_for.handle == product.handle -%}{% continue %}{%- endif -%}
         {%- assign sk_bp  = block.settings.product -%}
         {%- assign sk_d   = block.settings.discount_percent -%}
         {%- assign sk_dev = block.settings.is_developing -%}
         {%- assign sk_starter = block.settings.is_starter_kit -%}
         {%- assign sk_dv  = sk_bp.variants.first -%}
         {%- assign sk_col = block.settings.column | default: block.settings.label -%}
+        {%- comment -%}
+          Auto-swap: if this starter tile is a Case/Bag column and a matching
+          complementary product was found, render the complement instead of the
+          generic. Detection is on the column name (Case / Bag).
+        {%- endcomment -%}
+        {%- assign sk_col_lc = sk_col | downcase -%}
+        {%- assign sk_comp_swapped = false -%}
+        {%- if sk_col_lc contains 'case' and comp_case -%}
+          {%- assign sk_bp = comp_case -%}
+          {%- assign sk_comp_swapped = true -%}
+        {%- elsif sk_col_lc contains 'bag' and comp_bag -%}
+          {%- assign sk_bp = comp_bag -%}
+          {%- assign sk_comp_swapped = true -%}
+        {%- endif -%}
+        {%- if sk_comp_swapped -%}
+          {%- assign sk_dv = sk_bp.selected_or_first_available_variant | default: sk_bp.variants.first -%}
+          {%- assign sk_d = 0 -%}
+        {%- endif -%}
         {%- if sk_dev -%}{%- assign sk_sale = 0 -%}
         {%- elsif sk_d > 0 -%}
           {%- assign sk_df = sk_d | times: 1.0 | divided_by: 100 -%}
@@ -658,7 +771,7 @@
           </div>
           <div class="bfc4-tile-body">
             <span class="bfc4-tile-label">{{ sk_col }}</span>
-            <span class="bfc4-tile-name">{{ block.settings.custom_label | default: sk_bp.title }}</span>
+            <span class="bfc4-tile-name">{% if sk_comp_swapped %}{{ sk_bp.title }}{% else %}{{ block.settings.custom_label | default: sk_bp.title }}{% endif %}</span>
             
             {%- unless sk_dev -%}<span class="bfc4-tile-price">{{ sk_dv.price | money }}</span>{%- endunless -%}
           </div>
@@ -1023,11 +1136,13 @@
     {%- for block in section.blocks -%}
       {%- if block.type == 'kit_item' and block.settings.product != blank -%}
         {%- if block.settings.only_show_for == blank or block.settings.only_show_for.handle == product.handle -%}
+        {%- unless block.settings.hide_for != blank and block.settings.hide_for.handle == product.handle -%}
         {%- assign col = block.settings.column | default: block.settings.label -%}
         {%- unless col_names contains col -%}
           {%- if col_names == '' -%}{%- assign col_names = col -%}
           {%- else -%}{%- assign col_names = col_names | append: '||' | append: col -%}
           {%- endif -%}
+        {%- endunless -%}
         {%- endunless -%}
         {%- endif -%}
       {%- endif -%}
@@ -1050,8 +1165,10 @@
           {%- for block in section.blocks -%}
             {%- if block.type == 'kit_item' and block.settings.product != blank -%}
               {%- if block.settings.only_show_for == blank or block.settings.only_show_for.handle == product.handle -%}
+              {%- unless block.settings.hide_for != blank and block.settings.hide_for.handle == product.handle -%}
               {%- assign block_col = block.settings.column | default: block.settings.label -%}
               {%- if block_col == col_name -%}{%- assign col_item_total = col_item_total | plus: 1 -%}{%- endif -%}
+              {%- endunless -%}
               {%- endif -%}
             {%- endif -%}
           {%- endfor -%}
@@ -1061,6 +1178,7 @@
             {%- assign bp = block.settings.product -%}
             {%- if bp == blank -%}{% continue %}{%- endif -%}
             {%- if block.settings.only_show_for != blank and block.settings.only_show_for.handle != product.handle -%}{% continue %}{%- endif -%}
+            {%- if block.settings.hide_for != blank and block.settings.hide_for.handle == product.handle -%}{% continue %}{%- endif -%}
             {%- assign block_col = block.settings.column | default: block.settings.label -%}
             {%- unless block_col == col_name -%}{% continue %}{%- endunless -%}
             {%- assign col_item_index = col_item_index | plus: 1 -%}
@@ -2081,7 +2199,8 @@ if (stickyBar && mainAtc) {
         { "type": "range", "id": "discount_percent", "min": 0, "max": 50, "step": 5, "unit": "%", "label": "Discount %", "default": 10 },
         { "type": "checkbox", "id": "is_developing", "label": "Is free developing", "default": false },
         { "type": "checkbox", "id": "is_starter_kit", "label": "Include in Starter Kit", "default": false },
-        { "type": "product", "id": "only_show_for", "label": "Only show for product", "info": "If set, this item only appears when the main product matches. Leave blank to show on all products." }
+        { "type": "product", "id": "only_show_for", "label": "Only show for product", "info": "If set, this item only appears when the main product matches. Leave blank to show on all products." },
+        { "type": "product", "id": "hide_for", "label": "Hide for product", "info": "If set, this item is hidden when the main product matches. Use to replace a generic item (e.g. generic case) with a model-specific one on a particular product page." }
       ]
     }
   ],
