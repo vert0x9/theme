@@ -84,37 +84,20 @@
         assign card_main_image = product_ref.images.first | default: product_ref.featured_image
       endunless
 
-      if product_ref.featured_image
-        if product_images.size > 1 and variants_display_desktop != 'none' or variants_display_mobile != 'none'
-          # Always render the main product image as the default visible image
-          assign default_loading = 'lazy'
-          if product_index and product_index <= image_per_view
-            assign default_loading = 'eager'
-          endif
-          render 'image', image: card_main_image, attr: 'data-default-image', image_per_view: image_per_view, loading: default_loading
-
-          # Render variant-specific images as hidden for JS swapping on swatch click
-          for product_image in product_images
-            if product_image != blank and product_image.id != card_main_image.id
-              assign data_product_images = ''
-              for variant in product_ref.variants
-                if variant.featured_image == product_image
-                  assign data_product_images = data_product_images | append: variant.id | append: ','
-                endif
-              endfor
-              assign data_product_images = data_product_images | split: ',' | uniq | join: ','
-              if data_product_images != ""
-                assign attr = 'data-product-images="' | append: data_product_images | append: '"'
-              endif
-
-              render 'image', image: product_image, attr: attr, image_per_view: image_per_view, loading: 'lazy', class: 'hidden'
-            endif
-          endfor
-        else
-          render 'image', image: card_main_image, image_per_view: image_per_view, loading: loading
+      if card_main_image
+        # Render ONLY the catalog main image as the visible card image.
+        # We intentionally do NOT render the variant images with
+        # data-product-images, because the theme's JS uses those to swap the
+        # card to a variant photo on load (which kept forcing the green/variant
+        # image over the catalog shot). Dropping them keeps the catalog image
+        # fixed. Swatch-click image swapping on the card is disabled as a result.
+        assign default_loading = 'lazy'
+        if product_index and product_index <= image_per_view
+          assign default_loading = 'eager'
         endif
+        render 'image', image: card_main_image, attr: 'data-default-image', image_per_view: image_per_view, loading: default_loading
 
-        if settings.product_card_media_hover and product_ref.media.size > 1 and hover_media != nil
+        if settings.product_card_media_hover and hover_media != nil
           render 'image', image: hover_media, alt: hover_media.alt | default: product_ref.title, class: 'hover-img', image_per_view: image_per_view
         endif
       else
