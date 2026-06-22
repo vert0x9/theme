@@ -6,14 +6,17 @@
   aggregateRating, and the on-page reviews always agree. Does NOT use the
   per-product judgeme.review_widget_data metafield (that path is unreliable).
 
+  Display logic (one block, never two):
+    - Product has its own reviews  -> show product rating + "(N reviews)"
+    - Product has none but shop does -> show shop average + "(N shop reviews)"
+    - Neither -> render nothing
+
   Usage (place right after the product <h1>):
     {%- render 'bfc-rating-stars', pdp_handle: product.handle -%}
 
   Optional:
     pdp_product : product object (defaults to global `product`)
     anchor      : in-page target id (default 'bfc-rv-section' — the reviews block)
-
-  Renders nothing when the product has zero reviews.
 {%- endcomment -%}
 
 {%- liquid
@@ -29,6 +32,7 @@
 
   assign rs_blob = shop.metafields.bfc.reviews_json.value
   assign rs_all = rs_blob.reviews
+
   assign rs_count = 0
   assign rs_sum = 0
   capture rs_pid_str
@@ -52,35 +56,68 @@
       endif
     endfor
   endif
+
+  assign shop_count = shop.metafields.judgeme.all_reviews_count | plus: 0
+  capture shop_rating_str
+    echo shop.metafields.judgeme.all_reviews_rating | default: 0
+  endcapture
+  assign shop_rating_num = shop_rating_str | plus: 0.0
+  assign shop_avg_x10 = shop_rating_num | times: 10 | round
+
+  if shop_count == 0 and rs_all != blank
+    assign blob_count = 0
+    assign blob_sum = 0
+    for review in rs_all
+      if review.rating != blank
+        assign blob_count = blob_count | plus: 1
+        assign blob_sum = blob_sum | plus: review.rating
+      endif
+    endfor
+    assign shop_count = blob_count
+    if blob_count > 0
+      assign shop_avg_x10 = blob_sum | times: 10 | divided_by: blob_count
+    endif
+  endif
+
+  assign rv_is_shop = false
+  if rs_count > 0
+    assign rv_count = rs_count
+    assign rv_avg_x10 = rs_sum | times: 10 | divided_by: rs_count
+  elsif shop_count > 0
+    assign rv_is_shop = true
+    assign rv_count = shop_count
+    assign rv_avg_x10 = shop_avg_x10
+  else
+    assign rv_count = 0
+  endif
 -%}
 
-{%- if rs_count > 0 -%}
+{%- if rv_count > 0 -%}
   {%- liquid
-    assign rs_avg_x10 = rs_sum | times: 10 | divided_by: rs_count
-    assign rs_avg = rs_avg_x10 | divided_by: 10.0
-    assign rs_full = rs_avg_x10 | divided_by: 10
-    assign rs_rem = rs_avg_x10 | modulo: 10
-    assign rs_has_half = false
-    if rs_rem >= 3 and rs_rem < 8
-      assign rs_has_half = true
-    elsif rs_rem >= 8
-      assign rs_full = rs_full | plus: 1
+    assign rv_avg = rv_avg_x10 | divided_by: 10.0
+    assign rv_full = rv_avg_x10 | divided_by: 10
+    assign rv_rem = rv_avg_x10 | modulo: 10
+    assign rv_has_half = false
+    if rv_rem >= 3 and rv_rem < 8
+      assign rv_has_half = true
+    elsif rv_rem >= 8
+      assign rv_full = rv_full | plus: 1
     endif
-    assign rs_half_idx = rs_full | plus: 1
+    assign rv_half_idx = rv_full | plus: 1
   -%}
-  <a class="bfc-rs" href="#{{ anchor }}" aria-label="Rated {{ rs_avg }} out of 5 from {{ rs_count }} review{% if rs_count != 1 %}s{% endif %}">
+  <a class="bfc-rs" href="#{{ anchor }}" aria-label="Rated {{ rv_avg }} out of 5 from {{ rv_count }}{% if rv_is_shop %} shop{% endif %} review{% if rv_count != 1 %}s{% endif %}">
     <span class="bfc-rs-stars" aria-hidden="true">
       {%- for i in (1..5) -%}
-        {%- if i <= rs_full -%}
+        {%- if i <= rv_full -%}
           <svg class="bfc-rs-star is-full" width="14" height="14" viewBox="0 0 12 12" fill="currentColor"><path d="M6 .5l1.7 3.4 3.8.5-2.7 2.6.6 3.8L6 9l-3.4 1.8.6-3.8L.5 4.4l3.8-.5z"/></svg>
-        {%- elsif rs_has_half and i == rs_half_idx -%}
+        {%- elsif rv_has_half and i == rv_half_idx -%}
           <svg class="bfc-rs-star is-half" width="14" height="14" viewBox="0 0 12 12"><defs><linearGradient id="bfcRsHalf{{ pdp_product.id }}"><stop offset="50%" stop-color="#E36E15"/><stop offset="50%" stop-color="rgba(32,32,9,0.18)"/></linearGradient></defs><path fill="url(#bfcRsHalf{{ pdp_product.id }})" d="M6 .5l1.7 3.4 3.8.5-2.7 2.6.6 3.8L6 9l-3.4 1.8.6-3.8L.5 4.4l3.8-.5z"/></svg>
         {%- else -%}
           <svg class="bfc-rs-star is-empty" width="14" height="14" viewBox="0 0 12 12" fill="currentColor"><path d="M6 .5l1.7 3.4 3.8.5-2.7 2.6.6 3.8L6 9l-3.4 1.8.6-3.8L.5 4.4l3.8-.5z"/></svg>
         {%- endif -%}
       {%- endfor -%}
     </span>
-    <span class="bfc-rs-count">{{ rs_count }} review{% if rs_count != 1 %}s{% endif %}</span>
+    <span class="bfc-rs-count">{{ rv_count }}{% if rv_is_shop %} shop{% endif %} review{% if rv_count != 1 %}s{% endif %}</span>
   </a>
   <style>
     .bfc-rs{display:inline-flex;align-items:center;gap:8px;margin:6px 0 2px;text-decoration:none;line-height:1}
