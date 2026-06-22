@@ -379,7 +379,8 @@
   </script>
 {%- endcapture -%}
 
-{%- assign product_link_with_variant = product_ref.url | append: '?variant=' | append: product_ref.selected_or_first_available_variant.id -%}
+{%- comment -%} Use the plain product URL (no ?variant=) so the theme's variant-image JS does not auto-swap the card image to the first-available variant photo. The collection card should always show the product's main catalog image. {%- endcomment -%}
+{%- assign product_link_with_variant = product_ref.url -%}
 
 {%- if search_product -%}
   {%- assign product_link_with_variant = product_ref.url -%}
