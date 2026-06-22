@@ -1834,6 +1834,8 @@
         {%- endfor -%}
         {%- assign desc_html = desc_html | split: '<style' | first -%}
       {%- endif -%}
+      {%- comment -%} Convert any div tags in the extracted prose to spans so a mismatched split can never inject an unbalanced div into the page (the prose is paragraphs/lists, not layout divs). {%- endcomment -%}
+      {%- assign desc_html = desc_html | replace: '<div', '<span' | replace: '</div>', '</span>' -%}
       {%- assign desc_plain = desc_html | strip_html | strip -%}
       {%- if desc_plain != blank -%}
         <div class="bfc4-kit-desc bfc4-desc-rich" data-readmore>
