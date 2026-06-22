@@ -46,7 +46,7 @@
   {% comment %} Render | Product Media {% endcomment %}
   <div
     class="{{ media_classes }}"
-    data-update-media="{% if product_ref.first_available_variant == product_ref.selected_variant %}true{% else %}false{% endif %}"
+    data-update-media="false"
   >
     {% liquid
       assign hover_media = product_ref.media[1]
