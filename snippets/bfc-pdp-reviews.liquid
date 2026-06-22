@@ -346,18 +346,38 @@ a.bfc-rv-cta-btn:hover, a.bfc-rv-cta-btn:focus, a.bfc-rv-cta-btn:active { backgr
   </div>
 </div>
 
+{%- comment -%} ── Inject star rating into PDP header placeholder ── {%- endcomment -%}
+{%- liquid
+  if has_product_reviews
+    assign hdr_whole = product_avg_whole
+    assign hdr_frac = product_avg_frac
+    assign hdr_partial_star = partial_star
+    assign hdr_is_shop = false
+  else
+    assign hdr_whole = all_avg_whole
+    assign hdr_frac = all_avg_frac
+    assign hdr_partial_star = all_partial_star
+    assign hdr_is_shop = true
+  endif
+  assign h_pct = hdr_frac | times: 10
+-%}
+<script>
+(function(){
+  var ph = document.getElementById('bfc4-star-placeholder');
+  if (!ph) return;
+  ph.innerHTML = '<span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--ch,#4E4741);letter-spacing:0.04em;cursor:pointer" onclick="document.getElementById(\'bfc-rv-section\').scrollIntoView({behavior:\'smooth\'})">'
+    + '<span style="display:flex;gap:1px;color:var(--or,#E36E15)">'
+    + '{%- for s in (1..5) -%}{%- if s <= hdr_whole -%}<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>{%- elsif s == hdr_partial_star and hdr_frac > 0 -%}<svg width="12" height="12" viewBox="0 0 24 24"><defs><linearGradient id="rv-hdr-partial"><stop offset="{{ h_pct }}%" stop-color="currentColor"/><stop offset="{{ h_pct }}%" stop-color="transparent"/></linearGradient></defs><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#rv-hdr-partial)" stroke="currentColor" stroke-width="1"/></svg>{%- else -%}<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(32,32,9,0.2)" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>{%- endif -%}{%- endfor -%}'
+    + '</span>'
+    + '{{ hdr_whole }}.{{ hdr_frac }}{%- if hdr_is_shop and all_review_count > 0 %} ({{ all_review_count }} review{% if all_review_count != 1 %}s{% endif %}){%- elsif product_review_count >= 1 %} ({{ product_review_count }} review{% if product_review_count != 1 %}s{% endif %}){%- endif -%}'
+    + '</span>';
+})();
+</script>
+
 <script>
 (function(){
   var sec = document.getElementById('bfc-rv-section');
   if (!sec) return;
-
-  /* ── Smooth-scroll the header rating link (bfc-rating-stars) to reviews ── */
-  document.querySelectorAll('a.bfc-rs[href="#bfc-rv-section"]').forEach(function(link){
-    link.addEventListener('click', function(e){
-      e.preventDefault();
-      sec.scrollIntoView({ behavior: 'smooth' });
-    });
-  });
 
   var pos = 0;
 
