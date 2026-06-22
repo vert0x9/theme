@@ -18,6 +18,13 @@
   assign is_in_drawer = is_in_drawer | default: false
   assign product_images = product_ref.variants | map: 'featured_image' | uniq
 
+  assign variant_image_ids = ''
+  for v in product_ref.variants
+    if v.featured_image != blank
+      assign variant_image_ids = variant_image_ids | append: v.featured_image.id | append: ','
+    endif
+  endfor
+
   assign variants_display_desktop = settings.product_card_variants_display_desktop
   assign variants_display_mobile = settings.product_card_variants_display_mobile
 
@@ -49,16 +56,33 @@
     data-update-media="false"
   >
     {% liquid
-      assign hover_media = product_ref.media[1]
+      # Pick the card's main image and hover image from NON-variant (catalog) media.
+      # The theme's hover feature used media[1] which can be a variant photo; that
+      # variant image was surfacing on the card. We walk media in order and take the
+      # first two images that are NOT assigned to any variant.
+      assign card_main_image = nil
+      assign hover_media = nil
+      for m in product_ref.media
+        if m.media_type != 'image'
+          continue
+        endif
+        assign m_is_variant = false
+        if variant_image_ids contains m.id
+          assign m_is_variant = true
+        endif
+        unless m_is_variant
+          if card_main_image == nil
+            assign card_main_image = m
+          elsif hover_media == nil
+            assign hover_media = m
+          endif
+        endunless
+      endfor
 
-      if hover_media.media_type == 'video' or hover_media.media_type == 'external_video'
-        assign hover_media = product_ref.media[2]
-      endif
-
-      # Default visible image = first PRODUCT image by media order.
-      # featured_image can resolve to a variant image when variants have images,
-      # which made cards show the first variant photo instead of the product photo.
-      assign card_main_image = product_ref.images.first | default: product_ref.featured_image
+      # Fallbacks if a product has no non-variant images at all
+      unless card_main_image
+        assign card_main_image = product_ref.images.first | default: product_ref.featured_image
+      endunless
 
       if product_ref.featured_image
         if product_images.size > 1 and variants_display_desktop != 'none' or variants_display_mobile != 'none'
