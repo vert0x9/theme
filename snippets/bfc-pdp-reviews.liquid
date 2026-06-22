@@ -351,6 +351,14 @@ a.bfc-rv-cta-btn:hover, a.bfc-rv-cta-btn:focus, a.bfc-rv-cta-btn:active { backgr
   var sec = document.getElementById('bfc-rv-section');
   if (!sec) return;
 
+  /* ── Smooth-scroll the header rating link (bfc-rating-stars) to reviews ── */
+  document.querySelectorAll('a.bfc-rs[href="#bfc-rv-section"]').forEach(function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      sec.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
   var pos = 0;
 
   /* ── Tab switching ── */
