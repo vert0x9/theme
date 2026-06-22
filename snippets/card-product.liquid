@@ -25,7 +25,7 @@
 
   assign show_variants = show_variants | default: true
 
-  assign product_title_placeholder = 'product.label' | t
+  assign product_title_placeholder = 'product.label' | 
 -%}
 
 {%- capture media -%}
@@ -55,18 +55,23 @@
         assign hover_media = product_ref.media[2]
       endif
 
+      # Default visible image = first PRODUCT image by media order.
+      # featured_image can resolve to a variant image when variants have images,
+      # which made cards show the first variant photo instead of the product photo.
+      assign card_main_image = product_ref.images.first | default: product_ref.featured_image
+
       if product_ref.featured_image
         if product_images.size > 1 and variants_display_desktop != 'none' or variants_display_mobile != 'none'
-          # Always render the main product featured_image as the default visible image
+          # Always render the main product image as the default visible image
           assign default_loading = 'lazy'
           if product_index and product_index <= image_per_view
             assign default_loading = 'eager'
           endif
-          render 'image', image: product_ref.featured_image, attr: 'data-default-image', image_per_view: image_per_view, loading: default_loading
+          render 'image', image: card_main_image, attr: 'data-default-image', image_per_view: image_per_view, loading: default_loading
 
           # Render variant-specific images as hidden for JS swapping on swatch click
           for product_image in product_images
-            if product_image != blank and product_image.id != product_ref.featured_image.id
+            if product_image != blank and product_image.id != card_main_image.id
               assign data_product_images = ''
               for variant in product_ref.variants
                 if variant.featured_image == product_image
@@ -82,7 +87,7 @@
             endif
           endfor
         else
-          render 'image', image: product_ref.featured_image, image_per_view: image_per_view, loading: loading
+          render 'image', image: card_main_image, image_per_view: image_per_view, loading: loading
         endif
 
         if settings.product_card_media_hover and product_ref.media.size > 1 and hover_media != nil
