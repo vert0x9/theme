@@ -1,0 +1,552 @@
+<script src="{{ 'product-variants.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+#bfc-pdp-bag-{{ section.id }} {
+  --or: #E36E15;
+  --gh: #F4A027;
+  --ce: #ABCC99;
+  --bc: #F8F6EE;
+  --bk: #202009;
+  --ch: #4E4741;
+  --db: #5A3E2D;
+  --gr: #E3DDDA;
+  --sn: 'Poppins', sans-serif;
+  --sd: 'Cormorant Garamond', serif;
+  --t: 0.2s ease;
+}
+#bfc-pdp-bag-{{ section.id }} .bfc4, #bfc-pdp-bag-{{ section.id }} .bfc4 *, #bfc-pdp-bag-{{ section.id }} .bfc4 *::before, #bfc-pdp-bag-{{ section.id }} .bfc4 *::after { box-sizing: border-box; margin: 0; padding: 0; }
+#bfc-pdp-bag-{{ section.id }} .bfc4 { font-family: var(--sn); color: var(--bk); background: var(--bc); }
+
+/* ── SPLIT ── */
+#bfc-pdp-bag-{{ section.id }} .bfc4-split { display: flex; align-items: flex-start; }
+@media (max-width: 900px) { #bfc-pdp-bag-{{ section.id }} .bfc4-split { flex-direction: column; } }
+
+/* ── LEFT: STICKY SLIDER ── */
+#bfc-pdp-bag-{{ section.id }} .bfc4-left {
+  position: sticky; top: 0;
+  width: 50vw; height: 50vw; max-height: 100vh;
+  overflow: hidden; background: var(--gr);
+}
+@media (max-width: 900px) { #bfc-pdp-bag-{{ section.id }} .bfc4-left { position: relative; width: 100%; height: 100vw; max-height: 100vw; } }
+#bfc-pdp-bag-{{ section.id }} .bfc4-slides { display: flex; width: 100%; height: 100%; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); will-change: transform; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-slide { min-width: 100%; height: 100%; flex-shrink: 0; position: relative; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-slide img { width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
+  background: rgba(32,32,9,0.3); border: none; width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background var(--t);
+}
+#bfc-pdp-bag-{{ section.id }} .bfc4-arrow:hover { background: rgba(32,32,9,0.55); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-arrow.is-prev { left: 16px; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-arrow.is-next { right: 16px; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-dots { position: absolute; bottom: 16px; left: 0; right: 0; display: flex; justify-content: center; gap: 7px; z-index: 10; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-dot { width: 7px; height: 7px; background: rgba(255,255,255,0.55); border: none; cursor: pointer; padding: 0; transition: background var(--t); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-dot.is-active { background: #fff; }
+
+/* ── RIGHT: CONTENT ── */
+#bfc-pdp-bag-{{ section.id }} .bfc4-right { flex: 1; padding: 36px 40px 56px; min-width: 0; }
+@media (max-width: 900px) { #bfc-pdp-bag-{{ section.id }} .bfc4-right { padding: 28px 20px 48px; width: 100%; } }
+
+#bfc-pdp-bag-{{ section.id }} .bfc4-breadcrumb { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ch); margin-bottom: 18px; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-breadcrumb a { color: var(--ch); text-decoration: none; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-breadcrumb a:hover { color: var(--or); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-title { font-family: var(--sd); font-weight: 600; font-size: 44px; line-height: 1.05; letter-spacing: -0.01em; }
+@media (max-width: 900px) { #bfc-pdp-bag-{{ section.id }} .bfc4-title { font-size: 36px; } }
+#bfc-pdp-bag-{{ section.id }} #bfc4-star-placeholder { display: block; margin-top: 8px; min-height: 16px; }
+
+#bfc-pdp-bag-{{ section.id }} .bfc4-desc { margin-top: 22px; font-size: 14px; line-height: 1.65; color: var(--ch); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-desc p { margin-bottom: 12px; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-desc p:last-child { margin-bottom: 0; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-desc ul, #bfc-pdp-bag-{{ section.id }} .bfc4-desc ol { margin: 0 0 12px 18px; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-desc li { margin-bottom: 6px; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-desc a { color: var(--or); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-desc-clamp { display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-desc-toggle { background: none; border: none; cursor: pointer; font-family: var(--sn); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: var(--or); padding: 6px 0 0; display: none; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-desc-toggle.is-visible { display: inline-block; }
+
+/* ── COLOR SWATCHES ── */
+#bfc-pdp-bag-{{ section.id }} .bfc4-color { margin-top: 26px; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ch); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-name { font-size: 12px; font-weight: 500; letter-spacing: 0.02em; color: var(--bk); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-row { display: flex; flex-wrap: wrap; gap: 10px; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch {
+  width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.15);
+  cursor: pointer; padding: 0; font-size: 0; color: transparent; position: relative;
+  transition: transform var(--t), box-shadow var(--t); flex-shrink: 0;
+}
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch:hover { transform: scale(1.12); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch.is-active { box-shadow: 0 0 0 2px var(--bc), 0 0 0 4px var(--bk); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[disabled] { cursor: not-allowed; opacity: 0.65; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[disabled]::after {
+  content: ''; position: absolute; top: 50%; left: -2px; right: -2px; height: 1px;
+  background: rgba(120,20,20,0.7); transform: rotate(-45deg);
+}
+/* Color → hex lookup. Add more as you stock more colors. */
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="black"]    { background: #1a1a1a; border-color: rgba(0,0,0,0.25); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="brown"]    { background: #5e3a1f; border-color: rgba(0,0,0,0.2); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="tan"]      { background: #b48a5d; border-color: rgba(0,0,0,0.15); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="khaki"]    { background: #8f7d52; border-color: rgba(0,0,0,0.15); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="olive"]    { background: #5a5a30; border-color: rgba(0,0,0,0.2); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="green"]    { background: #3a5c3a; border-color: rgba(0,0,0,0.2); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="burgundy"] { background: #7a1f1f; border-color: rgba(0,0,0,0.2); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="bordeaux"] { background: #5e1a25; border-color: rgba(0,0,0,0.25); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="wine"]     { background: #6e1f2c; border-color: rgba(0,0,0,0.25); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="maroon"]   { background: #5d1a1a; border-color: rgba(0,0,0,0.25); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="oxblood"]  { background: #4a181a; border-color: rgba(0,0,0,0.25); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="red"]      { background: #c8362b; border-color: rgba(0,0,0,0.15); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="blue"]     { background: #2b4566; border-color: rgba(0,0,0,0.2); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="navy"]     { background: #1f2d4a; border-color: rgba(0,0,0,0.25); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="teal"]     { background: #1f5a5a; border-color: rgba(0,0,0,0.2); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="gray"]     { background: #666660; border-color: rgba(0,0,0,0.15); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="grey"]     { background: #666660; border-color: rgba(0,0,0,0.15); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="charcoal"] { background: #36352f; border-color: rgba(0,0,0,0.2); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="cream"]    { background: #e8e2d4; border-color: rgba(0,0,0,0.15); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="white"]    { background: #f0eee6; border-color: rgba(0,0,0,0.15); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="ivory"]    { background: #ece4cf; border-color: rgba(0,0,0,0.15); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="beige"]    { background: #d8c8a8; border-color: rgba(0,0,0,0.15); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="sand"]     { background: #cbb487; border-color: rgba(0,0,0,0.15); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="orange"]   { background: #d46818; border-color: rgba(0,0,0,0.15); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="rust"]     { background: #8a3a14; border-color: rgba(0,0,0,0.2); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="mustard"]  { background: #c8972b; border-color: rgba(0,0,0,0.15); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="yellow"]   { background: #c8a72b; border-color: rgba(0,0,0,0.15); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="purple"]   { background: #503966; border-color: rgba(0,0,0,0.2); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="pink"]     { background: #c97a8c; border-color: rgba(0,0,0,0.15); }
+
+/* ── BUY BOX ── */
+#bfc-pdp-bag-{{ section.id }} .bfc4-buy { margin-top: 30px; padding-top: 26px; border-top: 1px solid rgba(32,32,9,0.1); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-price { font-family: var(--sd); font-weight: 600; font-size: 34px; color: var(--bk); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-price-compare { font-size: 15px; color: var(--ch); text-decoration: line-through; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-atc {
+  width: 100%; padding: 14px; background: var(--or); color: #fff; border: none; cursor: pointer;
+  font-family: var(--sn); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; transition: background var(--t);
+}
+#bfc-pdp-bag-{{ section.id }} .bfc4-atc:hover:not([disabled]) { background: #c9600f; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-atc[disabled] { opacity: 0.5; cursor: not-allowed; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-atc.is-success { background: #2a4820 !important; }
+
+/* ── STICKY BAR ── */
+#bfc-pdp-bag-{{ section.id }} .bfc4-sticky-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+  background: var(--bc); border-top: 1px solid rgba(32,32,9,0.12);
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 12px 24px; transform: translateY(110%); transition: transform 0.3s ease; box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+}
+#bfc-pdp-bag-{{ section.id }} .bfc4-sticky-bar.is-visible { transform: translateY(0); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-sticky-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-sticky-title { font-family: var(--sd); font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-sticky-price { font-size: 13px; font-weight: 600; color: var(--or); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-sticky-btn {
+  background: var(--or); color: #fff; border: none; padding: 12px 28px; font-size: 10px; font-weight: 600;
+  font-family: var(--sn); text-transform: uppercase; letter-spacing: 0.14em; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: background var(--t);
+}
+#bfc-pdp-bag-{{ section.id }} .bfc4-sticky-btn:hover:not(:disabled) { background: #c9600f; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-sticky-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+</style>
+
+{%- comment -%} ── Detect a color option (Color / Colour / Leather / Cover / Finish) ── {%- endcomment -%}
+{%- assign color_opt_idx = null -%}
+{%- assign color_opt_name = '' -%}
+{%- assign current_color = '' -%}
+{%- for opt in product.options_with_values -%}
+  {%- assign opt_name_lower = opt.name | downcase -%}
+  {%- if opt_name_lower contains 'color' or opt_name_lower contains 'colour' or opt_name_lower contains 'leather' or opt_name_lower == 'cover' or opt_name_lower == 'finish' -%}
+    {%- assign color_opt_idx = forloop.index0 -%}
+    {%- assign color_opt_name = opt.name -%}
+    {%- assign color_opt_obj = opt -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- if color_opt_idx != null -%}
+  {%- assign current_color = current_variant.options[color_opt_idx] -%}
+{%- endif -%}
+
+<div id="bfc-pdp-bag-{{ section.id }}">
+<div class="bfc4">
+<div class="bfc4-split">
+
+  {%- comment -%} LEFT: image slider (section pickers, else product.media) {%- endcomment -%}
+  <div class="bfc4-left" id="bfc4-top">
+    {%- assign has_section_imgs = false -%}
+    {%- for i in (1..8) -%}
+      {%- assign img_key = 'slide_' | append: i -%}
+      {%- if section.settings[img_key] != blank -%}{%- assign has_section_imgs = true -%}{%- endif -%}
+    {%- endfor -%}
+
+    {%- if has_section_imgs -%}
+      {%- assign slide_marks = '' -%}
+      {%- for i in (1..8) -%}
+        {%- assign img_key = 'slide_' | append: i -%}
+        {%- if section.settings[img_key] != blank -%}{%- assign slide_marks = slide_marks | append: '1' -%}{%- endif -%}
+      {%- endfor -%}
+      {%- assign total_slides = slide_marks | size -%}
+      <div class="bfc4-slides" id="bfc4-slides">
+        {%- for i in (1..8) -%}
+          {%- assign img_key = 'slide_' | append: i -%}
+          {%- assign img_val = section.settings[img_key] -%}
+          {%- if img_val != blank -%}
+            <div class="bfc4-slide">
+              <img
+                src="{{ img_val | image_url: width: 900 }}"
+                srcset="{{ img_val | image_url: width: 600 }} 600w, {{ img_val | image_url: width: 900 }} 900w, {{ img_val | image_url: width: 1200 }} 1200w"
+                sizes="(max-width: 900px) 100vw, 50vw"
+                alt="{{ product.title | escape }}"
+                width="900" height="900"
+                {%- if i <= 2 -%}loading="eager" fetchpriority="high"{%- else -%}loading="lazy"{%- endif -%}
+              />
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      {%- assign media_images = product.media | where: 'media_type', 'image' -%}
+      {%- assign total_slides = media_images | size -%}
+      <div class="bfc4-slides" id="bfc4-slides">
+        {%- for media in media_images limit: 12 -%}
+          <div class="bfc4-slide" data-media-id="{{ media.id }}">
+            <img
+              src="{{ media | image_url: width: 900 }}"
+              srcset="{{ media | image_url: width: 600 }} 600w, {{ media | image_url: width: 900 }} 900w, {{ media | image_url: width: 1200 }} 1200w"
+              sizes="(max-width: 900px) 100vw, 50vw"
+              alt="{{ media.alt | default: product.title | escape }}"
+              width="900" height="900"
+              {%- if forloop.index <= 2 -%}loading="eager" fetchpriority="high"{%- else -%}loading="lazy"{%- endif -%}
+            />
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if total_slides > 1 -%}
+      <button class="bfc4-arrow is-prev" onclick="bfc4Slide(-1)" aria-label="Previous">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="white" stroke-width="1.5" stroke-linecap="square"/></svg>
+      </button>
+      <button class="bfc4-arrow is-next" onclick="bfc4Slide(1)" aria-label="Next">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="white" stroke-width="1.5" stroke-linecap="square"/></svg>
+      </button>
+      <div class="bfc4-dots" id="bfc4-dots">
+        {%- for i in (1..total_slides) -%}
+          <button class="bfc4-dot{% if forloop.first %} is-active{% endif %}" onclick="bfc4GoTo({{ forloop.index0 }})" aria-label="Slide {{ forloop.index }}"></button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} RIGHT: product content {%- endcomment -%}
+  <div class="bfc4-right">
+    <nav class="bfc4-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> / {% if collection %}<a href="{{ collection.url }}">{{ collection.title }}</a> / {% endif %}{{ product.title }}
+    </nav>
+
+    <h1 class="bfc4-title">{{ product.title }}</h1>
+    <div id="bfc4-star-placeholder"></div>
+
+    {%- comment -%} Freeform description (rich HTML preserved, clamped with read-more) {%- endcomment -%}
+    {%- assign desc_plain = product.description | strip_html | strip -%}
+    {%- if desc_plain != blank -%}
+      {%- assign desc_len = desc_plain | size -%}
+      <div class="bfc4-desc{% if desc_len > 320 %} bfc4-desc-clamp{% endif %}" id="bfc4-desc">{{ product.description }}</div>
+      {%- if desc_len > 320 -%}
+        <button type="button" class="bfc4-desc-toggle is-visible" id="bfc4-desc-toggle" onclick="bfc4ToggleDesc()" aria-expanded="false" aria-controls="bfc4-desc">Read more</button>
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- comment -%} Color swatches (only when a color-type option exists) {%- endcomment -%}
+    {%- if color_opt_idx != null -%}
+      <div class="bfc4-color">
+        <div class="bfc4-color-head">
+          <span class="bfc4-color-label">{{ color_opt_name }}</span>
+          <span class="bfc4-color-name" id="bfc4-color-name">{{ current_color }}</span>
+        </div>
+        <div class="bfc4-color-row">
+          {%- for v_value in color_opt_obj.values -%}
+            {%- assign v_available = false -%}
+            {%- for var in product.variants -%}
+              {%- assign var_v_value = var.options[color_opt_idx] -%}
+              {%- if var_v_value == v_value and var.available -%}{%- assign v_available = true -%}{%- endif -%}
+            {%- endfor -%}
+            {%- assign v_color = v_value | downcase | split: ' ' | first | split: '/' | first -%}
+            <button
+              type="button"
+              class="bfc4-color-swatch{% if v_value == current_color %} is-active{% endif %}"
+              data-color="{{ v_color }}"
+              data-color-value="{{ v_value | escape }}"
+              data-opt-index="{{ color_opt_idx }}"
+              onclick="bfc4SelectColor(this)"
+              title="{{ v_value | escape }}{% unless v_available %} (sold out){% endunless %}"
+              aria-label="{{ color_opt_name }}: {{ v_value | escape }}"
+              {%- unless v_available -%}disabled{%- endunless -%}
+            >{{ v_value }}</button>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Buy box {%- endcomment -%}
+    <div class="bfc4-buy">
+      <div class="bfc4-price-row">
+        <span class="bfc4-price" id="bfc4-price">{{ current_variant.price | money }}</span>
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <span class="bfc4-price-compare" id="bfc4-price-compare">{{ current_variant.compare_at_price | money }}</span>
+        {%- endif -%}
+      </div>
+
+      {% render 'bfc-pdp-urgency', variant: current_variant, handle: product.handle, show_trust: true, price: current_variant.price %}
+
+      <button class="bfc4-atc" id="bfc4-atc" onclick="bfc4BagATC()"{% unless current_variant.available %} disabled{% endunless %}>
+        <span id="bfc4-atc-text">{% if current_variant.available %}Add to Cart{% else %}Sold Out{% endif %}</span>
+      </button>
+    </div>
+  </div>
+
+</div>{%- comment -%} /bfc4-split {%- endcomment -%}
+</div>{%- comment -%} /bfc4 {%- endcomment -%}
+
+{%- comment -%} Reviews block {%- endcomment -%}
+{% render 'bfc-pdp-reviews', pdp_handle: product.handle, pdp_title: product.title %}
+
+</div>{%- comment -%} /#bfc-pdp-bag {%- endcomment -%}
+
+{%- comment -%} Sticky add-to-cart bar {%- endcomment -%}
+<div class="bfc4-sticky-bar" id="bfc4-sticky-bar" style="display:none">
+  <div class="bfc4-sticky-info">
+    <span class="bfc4-sticky-title">{{ product.title }}</span>
+    <span class="bfc4-sticky-price" id="bfc4-sticky-price">{{ current_variant.price | money }}</span>
+  </div>
+  <button class="bfc4-sticky-btn" id="bfc4-sticky-btn" onclick="bfc4BagATC()"{% unless current_variant.available %} disabled{% endunless %}>{% if current_variant.available %}Add to Cart{% else %}Sold Out{% endif %}</button>
+</div>
+
+{%- comment -%} Hidden Shopify product form — powers the real add-to-cart and opens the cart drawer {%- endcomment -%}
+{%- assign bfc4_form_id = 'bfc4-bag-form-' | append: section.id -%}
+<div style="display:none">
+  <product-form class="product-form" data-hide-errors="false" data-section-id="{{ section.id }}">
+    {%- form 'product', product, id: bfc4_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+      <input type="hidden" name="id" value="{{ current_variant.id }}" class="product-variant-id" id="bfc4-variant-input"/>
+      <div class="product-form__buttons" data-display-quantity="false" data-display-layout="seperate" data-display-dynamics="false">
+        <button id="ProductSubmitButton-{{ section.id }}" type="submit" name="add" class="product-form__submit button button--filled">
+          <span>Add to Cart</span>
+          <div class="loading__spinner hidden">
+            <svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66"><circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle></svg>
+          </div>
+        </button>
+      </div>
+      <div class="product-form__error-message-wrapper" role="alert" hidden>
+        <span class="product-form__error-message"></span>
+      </div>
+    {%- endform -%}
+  </product-form>
+</div>
+
+<script>
+(function() {
+  var SECTION = '{{ section.id }}';
+
+  // ── Variant lookup table (for color swatch → variant resolution) ──
+  window.__bfcBagVariants = [
+    {%- for v in product.variants -%}
+    { id: {{ v.id }}, price: {{ v.price }}, price_fmt: {{ v.price | money | json }}, compare_fmt: {{ v.compare_at_price | money | json }}, has_compare: {% if v.compare_at_price > v.price %}true{% else %}false{% endif %}, available: {{ v.available }}, options: [{% for o in v.options %}{{ o | json }}{% unless forloop.last %},{% endunless %}{% endfor %}], featured_media_id: {% if v.featured_media %}{{ v.featured_media.id }}{% else %}null{% endif %} }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ];
+
+  var STATE = { variantId: {{ current_variant.id }} };
+
+  // ── Image slider ──
+  var slidesEl = document.getElementById('bfc4-slides');
+  var slideTotal = document.querySelectorAll('#bfc-pdp-bag-' + SECTION + ' .bfc4-slide').length;
+  var slideCurrent = 0;
+  window.bfc4Slide = function(dir) {
+    if (slideTotal <= 1) return;
+    bfc4GoTo((slideCurrent + dir + slideTotal) % slideTotal);
+  };
+  window.bfc4GoTo = function(idx) {
+    slideCurrent = idx;
+    if (slidesEl) slidesEl.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    document.querySelectorAll('#bfc-pdp-bag-' + SECTION + ' .bfc4-dot').forEach(function(d, i) { d.classList.toggle('is-active', i === idx); });
+    var prev = document.querySelector('#bfc-pdp-bag-' + SECTION + ' .bfc4-arrow.is-prev');
+    if (prev) prev.style.visibility = idx === 0 ? 'hidden' : 'visible';
+  };
+  // swipe
+  (function() {
+    var left = document.querySelector('#bfc-pdp-bag-' + SECTION + ' .bfc4-left');
+    if (!left || slideTotal <= 1) return;
+    var startX = 0;
+    left.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, { passive: true });
+    left.addEventListener('touchend', function(e) {
+      var dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40) bfc4Slide(dx < 0 ? 1 : -1);
+    });
+  })();
+  // preload remaining slides after the page settles (no fade when tabbing)
+  (function() {
+    function preload() {
+      document.querySelectorAll('#bfc-pdp-bag-' + SECTION + ' .bfc4-slide img[loading="lazy"]').forEach(function(img) {
+        if (img.dataset.bfcPreloaded) return;
+        img.dataset.bfcPreloaded = '1';
+        var pre = new Image();
+        if (img.srcset) pre.srcset = img.srcset;
+        if (img.sizes) pre.sizes = img.sizes;
+        pre.src = img.currentSrc || img.src;
+        img.loading = 'eager';
+      });
+    }
+    if ('requestIdleCallback' in window) { requestIdleCallback(preload, { timeout: 2000 }); }
+    else { window.addEventListener('load', function() { setTimeout(preload, 300); }); }
+  })();
+
+  // ── Jump slider to a variant's image when the color changes ──
+  function jumpToVariantImage(variantId) {
+    var v = window.__bfcBagVariants.find(function(x) { return x.id === variantId; });
+    if (!v) return;
+    var slides = document.querySelectorAll('#bfc-pdp-bag-' + SECTION + ' .bfc4-slide');
+    // 1: match by featured_media_id (product.media fallback case)
+    if (v.featured_media_id) {
+      for (var i = 0; i < slides.length; i++) {
+        if (String(slides[i].dataset.mediaId) === String(v.featured_media_id)) { bfc4GoTo(i); return; }
+      }
+    }
+    // 2: match by alt text containing the color value (section-image case)
+    var colorVal = v.options.join(' ').toLowerCase();
+    for (var j = 0; j < slides.length; j++) {
+      var img = slides[j].querySelector('img');
+      if (img && img.alt && colorVal && img.alt.toLowerCase().indexOf(v.options[v.options.length - 1].toLowerCase()) !== -1) { bfc4GoTo(j); return; }
+    }
+  }
+
+  // ── Color swatch selection ──
+  window.bfc4SelectColor = function(btn) {
+    if (btn.disabled) return;
+    var newColor = btn.dataset.colorValue;
+    var optIdx = parseInt(btn.dataset.optIndex, 10);
+    document.querySelectorAll('#bfc-pdp-bag-' + SECTION + ' .bfc4-color-swatch').forEach(function(b) { b.classList.remove('is-active'); });
+    btn.classList.add('is-active');
+
+    var nameEl = document.getElementById('bfc4-color-name');
+    if (nameEl) nameEl.textContent = newColor;
+
+    var current = window.__bfcBagVariants.find(function(v) { return v.id === STATE.variantId; });
+    if (!current) return;
+    var newOpts = current.options.slice();
+    newOpts[optIdx] = newColor;
+    var match = window.__bfcBagVariants.find(function(v) {
+      for (var i = 0; i < newOpts.length; i++) { if (v.options[i] !== newOpts[i]) return false; }
+      return true;
+    });
+    if (!match) return;
+
+    STATE.variantId = match.id;
+    var inp = document.getElementById('bfc4-variant-input');
+    if (inp) inp.value = STATE.variantId;
+    var priceEl = document.getElementById('bfc4-price');
+    if (priceEl) priceEl.textContent = match.price_fmt;
+    var stickyPrice = document.getElementById('bfc4-sticky-price');
+    if (stickyPrice) stickyPrice.textContent = match.price_fmt;
+    var cmpEl = document.getElementById('bfc4-price-compare');
+    if (cmpEl) { cmpEl.textContent = match.has_compare ? match.compare_fmt : ''; cmpEl.style.display = match.has_compare ? '' : 'none'; }
+
+    // availability of the add button
+    var atc = document.getElementById('bfc4-atc');
+    var atcText = document.getElementById('bfc4-atc-text');
+    var stickyBtn = document.getElementById('bfc4-sticky-btn');
+    if (atc) atc.disabled = !match.available;
+    if (stickyBtn) stickyBtn.disabled = !match.available;
+    if (atcText) atcText.textContent = match.available ? 'Add to Cart' : 'Sold Out';
+
+    jumpToVariantImage(match.id);
+  };
+
+  // ── Add to Cart (single product; theme form opens the drawer) ──
+  var _adding = false;
+  window.bfc4BagATC = function() {
+    if (_adding) return;
+    var current = window.__bfcBagVariants.find(function(v) { return v.id === STATE.variantId; });
+    if (!current || !current.available) return;
+    _adding = true;
+
+    var textEl = document.getElementById('bfc4-atc-text');
+    var mainBtn = document.getElementById('bfc4-atc');
+    var stickyBtn = document.getElementById('bfc4-sticky-btn');
+    function reset() {
+      if (textEl) textEl.textContent = 'Add to Cart';
+      if (mainBtn) { mainBtn.disabled = false; mainBtn.classList.remove('is-success'); }
+      if (stickyBtn) { stickyBtn.disabled = false; stickyBtn.textContent = 'Add to Cart'; stickyBtn.style.background = ''; }
+      _adding = false;
+    }
+    if (mainBtn) mainBtn.disabled = true;
+    if (stickyBtn) stickyBtn.disabled = true;
+    if (textEl) textEl.textContent = 'Adding\u2026';
+    if (stickyBtn) stickyBtn.textContent = 'Adding\u2026';
+
+    var submitBtn = document.getElementById('ProductSubmitButton-' + SECTION);
+    if (!submitBtn) { reset(); return; }
+    try {
+      submitBtn.click();
+      if (mainBtn) mainBtn.classList.add('is-success');
+      if (textEl) textEl.textContent = 'Added!';
+      if (stickyBtn) { stickyBtn.textContent = 'Added!'; stickyBtn.style.background = '#2a4820'; }
+      setTimeout(reset, 2400);
+    } catch (e) { reset(); }
+  };
+
+  // ── Read more / less ──
+  window.bfc4ToggleDesc = function() {
+    var desc = document.getElementById('bfc4-desc');
+    var btn = document.getElementById('bfc4-desc-toggle');
+    if (!desc || !btn) return;
+    var clamped = desc.classList.toggle('bfc4-desc-clamp');
+    btn.textContent = clamped ? 'Read more' : 'Read less';
+    btn.setAttribute('aria-expanded', clamped ? 'false' : 'true');
+  };
+
+  // ── Sticky bar visibility ──
+  var stickyBar = document.getElementById('bfc4-sticky-bar');
+  var mainAtc = document.getElementById('bfc4-atc');
+  if (stickyBar) stickyBar.style.display = '';
+  if (stickyBar && mainAtc) {
+    new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { stickyBar.classList.toggle('is-visible', !e.isIntersecting); });
+    }, { threshold: 0 }).observe(mainAtc);
+  }
+  if (stickyBar) {
+    var hide = function() { stickyBar.classList.remove('is-visible'); };
+    document.addEventListener('click', function(e) {
+      var t = e.target.closest('a[href="/cart"], a[href^="/cart?"], [data-cart-icon], [data-cart-toggle], summary[aria-controls*="cart" i], button[aria-controls*="cart" i], .header__icon--cart');
+      if (t) hide();
+    }, true);
+    ['cart:open', 'cart-drawer:open', 'drawer:open'].forEach(function(ev) { document.addEventListener(ev, hide); });
+  }
+
+  // init arrow visibility
+  bfc4GoTo(0);
+})();
+</script>
+
+{%- render 'bfc-product-schema' -%}
+
+{% schema %}
+{
+  "name": "BFC Bag PDP",
+  "tag": "section",
+  "class": "bfc-pdp-bag-section",
+  "settings": [
+    { "type": "header", "content": "Product Images" },
+    { "type": "paragraph", "content": "Optional. If set, these override the product's own media in the slider. Leave all blank to use the product's images." },
+    { "type": "image_picker", "id": "slide_1", "label": "Image 1" },
+    { "type": "image_picker", "id": "slide_2", "label": "Image 2" },
+    { "type": "image_picker", "id": "slide_3", "label": "Image 3" },
+    { "type": "image_picker", "id": "slide_4", "label": "Image 4" },
+    { "type": "image_picker", "id": "slide_5", "label": "Image 5" },
+    { "type": "image_picker", "id": "slide_6", "label": "Image 6" },
+    { "type": "image_picker", "id": "slide_7", "label": "Image 7" },
+    { "type": "image_picker", "id": "slide_8", "label": "Image 8" }
+  ],
+  "presets": [
+    { "name": "BFC Bag PDP" }
+  ]
+}
+{% endschema %}
