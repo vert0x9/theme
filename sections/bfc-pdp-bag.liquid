@@ -265,7 +265,15 @@
   {%- comment -%} RIGHT: product content {%- endcomment -%}
   <div class="bfc4-right">
     <nav class="bfc4-breadcrumb" aria-label="Breadcrumb">
-      <a href="/">Home</a> / {% if collection %}<a href="{{ collection.url }}">{{ collection.title }}</a> / {% endif %}{{ product.title }}
+      {%- liquid
+        assign crumb_coll = null
+        if section.settings.breadcrumb_collection != blank
+          assign crumb_coll = collections[section.settings.breadcrumb_collection]
+        elsif collection
+          assign crumb_coll = collection
+        endif
+      -%}
+      <a href="/">Home</a> / {% if crumb_coll %}<a href="{{ crumb_coll.url }}">{{ crumb_coll.title }}</a> / {% endif %}{{ product.title }}
     </nav>
 
     <h1 class="bfc4-title">{{ product.title }}</h1>
@@ -321,7 +329,7 @@
         {%- endif -%}
       </div>
 
-      {% render 'bfc-pdp-urgency', variant: current_variant, handle: product.handle, show_trust: true, price: current_variant.price %}
+      {% render 'bfc-pdp-urgency', variant: current_variant, handle: product.handle, show_trust: false, price: current_variant.price %}
 
       <button class="bfc4-atc" id="bfc4-atc" onclick="bfc4BagATC()"{% unless current_variant.available %} disabled{% endunless %}>
         <span id="bfc4-atc-text">{% if current_variant.available %}Add to Cart{% else %}Sold Out{% endif %}</span>
@@ -595,6 +603,8 @@
   "tag": "section",
   "class": "bfc-pdp-bag-section",
   "settings": [
+    { "type": "header", "content": "Breadcrumb" },
+    { "type": "collection", "id": "breadcrumb_collection", "label": "Breadcrumb collection", "info": "The collection shown in the breadcrumb (e.g. Bags). If blank, uses the collection the shopper arrived through, or just Home." },
     { "type": "header", "content": "Product Images" },
     { "type": "paragraph", "content": "Optional. If set, these override the product's own media in the slider. Leave all blank to use the product's images." },
     { "type": "image_picker", "id": "slide_1", "label": "Image 1" },
