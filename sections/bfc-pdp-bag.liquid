@@ -94,6 +94,9 @@
 #bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="tan"]      { background: #b48a5d; border-color: rgba(0,0,0,0.15); }
 #bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="khaki"]    { background: #8f7d52; border-color: rgba(0,0,0,0.15); }
 #bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="olive"]    { background: #5a5a30; border-color: rgba(0,0,0,0.2); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="moss"]     { background: #6b7340; border-color: rgba(0,0,0,0.2); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="sage"]     { background: #9aa87f; border-color: rgba(0,0,0,0.15); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="forest"]   { background: #2f4a2f; border-color: rgba(0,0,0,0.25); }
 #bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="green"]    { background: #3a5c3a; border-color: rgba(0,0,0,0.2); }
 #bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="burgundy"] { background: #7a1f1f; border-color: rgba(0,0,0,0.2); }
 #bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="bordeaux"] { background: #5e1a25; border-color: rgba(0,0,0,0.25); }
@@ -124,6 +127,8 @@
 #bfc-pdp-bag-{{ section.id }} .bfc4-price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; }
 #bfc-pdp-bag-{{ section.id }} .bfc4-price { font-family: var(--sd); font-weight: 600; font-size: 34px; color: var(--bk); }
 #bfc-pdp-bag-{{ section.id }} .bfc4-price-compare { font-size: 15px; color: var(--ch); text-decoration: line-through; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-urgency-wrap { margin: 14px 0 18px; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-urgency-wrap:empty { margin: 0; }
 #bfc-pdp-bag-{{ section.id }} .bfc4-atc {
   width: 100%; padding: 14px; background: var(--or); color: #fff; border: none; cursor: pointer;
   font-family: var(--sn); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; transition: background var(--t);
@@ -329,7 +334,9 @@
         {%- endif -%}
       </div>
 
-      {% render 'bfc-pdp-urgency', variant: current_variant, handle: product.handle, show_trust: false, price: current_variant.price %}
+      <div class="bfc4-urgency-wrap">
+        {% render 'bfc-pdp-urgency', variant: current_variant, handle: product.handle, show_trust: false, price: current_variant.price %}
+      </div>
 
       <button class="bfc4-atc" id="bfc4-atc" onclick="bfc4BagATC()"{% unless current_variant.available %} disabled{% endunless %}>
         <span id="bfc4-atc-text">{% if current_variant.available %}Add to Cart{% else %}Sold Out{% endif %}</span>
@@ -340,20 +347,48 @@
 </div>{%- comment -%} /bfc4-split {%- endcomment -%}
 </div>{%- comment -%} /bfc4 {%- endcomment -%}
 
-{%- comment -%} ── Cross-sell rail: top sellers around the shop ── {%- endcomment -%}
-{%- assign rail_handle = section.settings.rail_collection | default: 'all' -%}
-{%- if section.settings.rail_collection != blank -%}
-  {%- assign rail_coll = collections[section.settings.rail_collection] -%}
-{%- else -%}
-  {%- assign rail_coll = collections['all'] -%}
-{%- endif -%}
-{%- if rail_coll and rail_coll.products_count > 0 -%}
-  {%- assign rail_limit = section.settings.rail_count | default: 12 -%}
-  {%- assign rail_shown = 0 -%}
-  {%- capture rail_cards -%}
-    {%- for p in rail_coll.products -%}
+{%- comment -%} ── Cross-sell rail: a mix of top sellers across categories ──
+     Pulls from up to 3 configurable collections and interleaves them
+     (camera, film, accessory, camera, film, accessory ...) so the rail
+     spans categories instead of showing only one. Set each collection's
+     sort order to "Best selling" in admin for true top sellers. {%- endcomment -%}
+{%- liquid
+  assign rail_total = section.settings.rail_count | default: 12
+
+  assign coll_a = null
+  assign coll_b = null
+  assign coll_c = null
+  if section.settings.rail_collection_1 != blank
+    assign coll_a = collections[section.settings.rail_collection_1]
+  endif
+  if section.settings.rail_collection_2 != blank
+    assign coll_b = collections[section.settings.rail_collection_2]
+  endif
+  if section.settings.rail_collection_3 != blank
+    assign coll_c = collections[section.settings.rail_collection_3]
+  endif
+  unless coll_a or coll_b or coll_c
+    assign coll_a = collections['all']
+  endunless
+-%}
+
+{%- comment -%} Round-robin interleave by index across the 3 collections {%- endcomment -%}
+{%- assign rail_shown = 0 -%}
+{%- assign seen_ids = '' -%}
+{%- capture rail_cards -%}
+  {%- for i in (0..19) -%}
+    {%- if rail_shown >= rail_total -%}{%- break -%}{%- endif -%}
+    {%- for which in (1..3) -%}
+      {%- if rail_shown >= rail_total -%}{%- break -%}{%- endif -%}
+      {%- assign src = null -%}
+      {%- if which == 1 -%}{%- assign src = coll_a -%}{%- elsif which == 2 -%}{%- assign src = coll_b -%}{%- else -%}{%- assign src = coll_c -%}{%- endif -%}
+      {%- if src == null -%}{%- continue -%}{%- endif -%}
+      {%- assign p = src.products[i] -%}
+      {%- if p == blank -%}{%- continue -%}{%- endif -%}
       {%- if p.id == product.id -%}{%- continue -%}{%- endif -%}
-      {%- if rail_shown >= rail_limit -%}{%- break -%}{%- endif -%}
+      {%- capture id_tag -%}|{{ p.id }}|{%- endcapture -%}
+      {%- if seen_ids contains id_tag -%}{%- continue -%}{%- endif -%}
+      {%- assign seen_ids = seen_ids | append: id_tag -%}
       {%- assign rail_shown = rail_shown | plus: 1 -%}
       <a class="bfc4-rail-card" href="{{ p.url }}">
         <div class="bfc4-rail-img">
@@ -367,14 +402,14 @@
         </div>
       </a>
     {%- endfor -%}
-  {%- endcapture -%}
-  {%- if rail_shown > 0 -%}
-    <div class="bfc4-rail">
-      <h2 class="bfc4-rail-head">{{ section.settings.rail_title | default: 'Need a camera to go in there?' }}</h2>
-      {%- if section.settings.rail_subtitle != blank -%}<p class="bfc4-rail-sub">{{ section.settings.rail_subtitle }}</p>{%- endif -%}
-      <div class="bfc4-rail-track">{{ rail_cards }}</div>
-    </div>
-  {%- endif -%}
+  {%- endfor -%}
+{%- endcapture -%}
+{%- if rail_shown > 0 -%}
+  <div class="bfc4-rail">
+    <h2 class="bfc4-rail-head">{{ section.settings.rail_title | default: 'Need a camera to go in there?' }}</h2>
+    {%- if section.settings.rail_subtitle != blank -%}<p class="bfc4-rail-sub">{{ section.settings.rail_subtitle }}</p>{%- endif -%}
+    <div class="bfc4-rail-track">{{ rail_cards }}</div>
+  </div>
 {%- endif -%}
 
 {%- comment -%} Reviews block {%- endcomment -%}
@@ -618,8 +653,10 @@
     { "type": "header", "content": "Top Sellers Rail" },
     { "type": "text", "id": "rail_title", "label": "Rail heading", "default": "Need a camera to go in there?" },
     { "type": "text", "id": "rail_subtitle", "label": "Rail subheading", "default": "Our best sellers around the shop." },
-    { "type": "collection", "id": "rail_collection", "label": "Source collection", "info": "Cameras, bags, and more. For true top sellers, set this collection's sort order to 'Best selling' in the collection admin. Leave blank to use all products." },
-    { "type": "range", "id": "rail_count", "label": "Number of products", "min": 4, "max": 20, "step": 1, "default": 12 }
+    { "type": "collection", "id": "rail_collection_1", "label": "Source collection 1", "info": "e.g. Cameras. Set its sort to 'Best selling' in admin for top sellers." },
+    { "type": "collection", "id": "rail_collection_2", "label": "Source collection 2", "info": "e.g. Film." },
+    { "type": "collection", "id": "rail_collection_3", "label": "Source collection 3", "info": "e.g. Accessories. Products are woven together across the three." },
+    { "type": "range", "id": "rail_count", "label": "Total products in rail", "min": 4, "max": 20, "step": 1, "default": 12 }
   ],
   "presets": [
     { "name": "BFC Bag PDP" }
