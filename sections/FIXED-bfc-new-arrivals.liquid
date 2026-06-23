@@ -227,13 +227,6 @@
       display: grid;
       gap: 2px;
     }
-    #bfc-new-arrivals-{{ section.id }} .bfc-na-vendor {
-      font-family: 'Poppins', sans-serif;
-      font-size: 11px;
-      color: var(--na-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
     #bfc-new-arrivals-{{ section.id }} .bfc-na-name {
       color: var(--na-text);
       text-decoration: none;
@@ -524,9 +517,6 @@
                         {% endif %}
                       </a>
                       <div class="bfc-na-meta">
-                        {% if product.vendor != blank %}
-                          <div class="bfc-na-vendor">{{ product.vendor | escape }}</div>
-                        {% endif %}
                         <a class="bfc-na-name" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
                           {{ product.title | escape }}
                         </a>
@@ -603,9 +593,6 @@
                           {% endif %}
                         </a>
                         <div class="bfc-na-meta">
-                          {% if product.vendor != blank %}
-                            <div class="bfc-na-vendor">{{ product.vendor | escape }}</div>
-                          {% endif %}
                           <a class="bfc-na-name" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
                             {{ product.title | escape }}
                           </a>
