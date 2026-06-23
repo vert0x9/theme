@@ -1,192 +1,30 @@
+{{- 'section-product.css' | asset_url | stylesheet_tag -}}
 <script src="{{ 'product-variants.js' | asset_url }}" defer="defer"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/></noscript>
 
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
+  assign first_collection = product.collections | first
 -%}
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+{%- comment -%} Breadcrumb collection: setting first, then first product collection {%- endcomment -%}
+{%- assign crumb_coll = null -%}
+{%- if section.settings.breadcrumb_collection != blank -%}
+  {%- assign crumb_coll = collections[section.settings.breadcrumb_collection] -%}
+{%- elsif first_collection -%}
+  {%- assign crumb_coll = first_collection -%}
+{%- endif -%}
 
-<style>
-#bfc-pdp-bag-{{ section.id }} {
-  --or: #E36E15;
-  --gh: #F4A027;
-  --ce: #ABCC99;
-  --bc: #F8F6EE;
-  --bk: #202009;
-  --ch: #4E4741;
-  --db: #5A3E2D;
-  --gr: #E3DDDA;
-  --sn: 'Poppins', sans-serif;
-  --sd: 'Cormorant Garamond', serif;
-  --t: 0.2s ease;
-}
-#bfc-pdp-bag-{{ section.id }} .bfc4, #bfc-pdp-bag-{{ section.id }} .bfc4 *, #bfc-pdp-bag-{{ section.id }} .bfc4 *::before, #bfc-pdp-bag-{{ section.id }} .bfc4 *::after { box-sizing: border-box; margin: 0; padding: 0; }
-#bfc-pdp-bag-{{ section.id }} .bfc4 { font-family: var(--sn); color: var(--bk); background: var(--bc); }
-
-/* ── SPLIT ── */
-#bfc-pdp-bag-{{ section.id }} .bfc4-split { display: flex; align-items: flex-start; }
-@media (max-width: 900px) { #bfc-pdp-bag-{{ section.id }} .bfc4-split { flex-direction: column; } }
-
-/* ── LEFT: STICKY SLIDER ── */
-#bfc-pdp-bag-{{ section.id }} .bfc4-left {
-  position: sticky; top: 0;
-  width: 50vw; height: 50vw; max-height: 100vh;
-  overflow: hidden; background: var(--gr);
-}
-@media (max-width: 900px) { #bfc-pdp-bag-{{ section.id }} .bfc4-left { position: relative; width: 100%; height: 100vw; max-height: 100vw; } }
-#bfc-pdp-bag-{{ section.id }} .bfc4-slides { display: flex; width: 100%; height: 100%; transition: transform 0.5s cubic-bezier(0.4,0,0.2,1); will-change: transform; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-slide { min-width: 100%; height: 100%; flex-shrink: 0; position: relative; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-slide img { width: 100%; height: 100%; object-fit: contain; object-position: center; display: block; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-arrow {
-  position: absolute; top: 50%; transform: translateY(-50%); z-index: 10;
-  background: rgba(32,32,9,0.3); border: none; width: 40px; height: 40px;
-  display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background var(--t);
-}
-#bfc-pdp-bag-{{ section.id }} .bfc4-arrow:hover { background: rgba(32,32,9,0.55); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-arrow.is-prev { left: 16px; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-arrow.is-next { right: 16px; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-dots { position: absolute; bottom: 16px; left: 0; right: 0; display: flex; justify-content: center; gap: 7px; z-index: 10; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-dot { width: 7px; height: 7px; background: rgba(255,255,255,0.55); border: none; cursor: pointer; padding: 0; transition: background var(--t); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-dot.is-active { background: #fff; }
-
-/* ── RIGHT: CONTENT ── */
-#bfc-pdp-bag-{{ section.id }} .bfc4-right { flex: 1; padding: 36px 40px 56px; min-width: 0; }
-@media (max-width: 900px) { #bfc-pdp-bag-{{ section.id }} .bfc4-right { padding: 28px 20px 48px; width: 100%; } }
-
-#bfc-pdp-bag-{{ section.id }} .bfc4-breadcrumb { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ch); margin-bottom: 18px; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-breadcrumb a { color: var(--ch); text-decoration: none; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-breadcrumb a:hover { color: var(--or); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-title { font-family: var(--sd); font-weight: 600; font-size: 44px; line-height: 1.05; letter-spacing: -0.01em; }
-@media (max-width: 900px) { #bfc-pdp-bag-{{ section.id }} .bfc4-title { font-size: 36px; } }
-#bfc-pdp-bag-{{ section.id }} #bfc4-star-placeholder { display: block; margin-top: 8px; min-height: 16px; }
-
-#bfc-pdp-bag-{{ section.id }} .bfc4-desc { margin-top: 22px; font-size: 14px; line-height: 1.65; color: var(--ch); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-desc p { margin-bottom: 12px; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-desc p:last-child { margin-bottom: 0; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-desc ul, #bfc-pdp-bag-{{ section.id }} .bfc4-desc ol { margin: 0 0 12px 18px; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-desc li { margin-bottom: 6px; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-desc a { color: var(--or); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-desc-clamp { display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-desc-toggle { background: none; border: none; cursor: pointer; font-family: var(--sn); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; color: var(--or); padding: 6px 0 0; display: none; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-desc-toggle.is-visible { display: inline-block; }
-
-/* ── COLOR SWATCHES ── */
-#bfc-pdp-bag-{{ section.id }} .bfc4-color { margin-top: 26px; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ch); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-name { font-size: 12px; font-weight: 500; letter-spacing: 0.02em; color: var(--bk); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-row { display: flex; flex-wrap: wrap; gap: 10px; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch {
-  width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.15);
-  cursor: pointer; padding: 0; font-size: 0; color: transparent; position: relative;
-  transition: transform var(--t), box-shadow var(--t); flex-shrink: 0;
-}
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch:hover { transform: scale(1.12); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch.is-active { box-shadow: 0 0 0 2px var(--bc), 0 0 0 4px var(--bk); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[disabled] { cursor: not-allowed; opacity: 0.65; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[disabled]::after {
-  content: ''; position: absolute; top: 50%; left: -2px; right: -2px; height: 1px;
-  background: rgba(120,20,20,0.7); transform: rotate(-45deg);
-}
-/* Color → hex lookup. Add more as you stock more colors. */
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="black"]    { background: #1a1a1a; border-color: rgba(0,0,0,0.25); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="brown"]    { background: #5e3a1f; border-color: rgba(0,0,0,0.2); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="tan"]      { background: #b48a5d; border-color: rgba(0,0,0,0.15); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="khaki"]    { background: #8f7d52; border-color: rgba(0,0,0,0.15); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="olive"]    { background: #5a5a30; border-color: rgba(0,0,0,0.2); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="moss"]     { background: #6b7340; border-color: rgba(0,0,0,0.2); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="sage"]     { background: #9aa87f; border-color: rgba(0,0,0,0.15); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="forest"]   { background: #2f4a2f; border-color: rgba(0,0,0,0.25); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="green"]    { background: #3a5c3a; border-color: rgba(0,0,0,0.2); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="burgundy"] { background: #7a1f1f; border-color: rgba(0,0,0,0.2); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="bordeaux"] { background: #5e1a25; border-color: rgba(0,0,0,0.25); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="wine"]     { background: #6e1f2c; border-color: rgba(0,0,0,0.25); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="maroon"]   { background: #5d1a1a; border-color: rgba(0,0,0,0.25); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="oxblood"]  { background: #4a181a; border-color: rgba(0,0,0,0.25); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="red"]      { background: #c8362b; border-color: rgba(0,0,0,0.15); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="blue"]     { background: #2b4566; border-color: rgba(0,0,0,0.2); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="navy"]     { background: #1f2d4a; border-color: rgba(0,0,0,0.25); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="teal"]     { background: #1f5a5a; border-color: rgba(0,0,0,0.2); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="gray"]     { background: #666660; border-color: rgba(0,0,0,0.15); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="grey"]     { background: #666660; border-color: rgba(0,0,0,0.15); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="charcoal"] { background: #36352f; border-color: rgba(0,0,0,0.2); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="cream"]    { background: #e8e2d4; border-color: rgba(0,0,0,0.15); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="white"]    { background: #f0eee6; border-color: rgba(0,0,0,0.15); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="ivory"]    { background: #ece4cf; border-color: rgba(0,0,0,0.15); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="beige"]    { background: #d8c8a8; border-color: rgba(0,0,0,0.15); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="sand"]     { background: #cbb487; border-color: rgba(0,0,0,0.15); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="orange"]   { background: #d46818; border-color: rgba(0,0,0,0.15); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="rust"]     { background: #8a3a14; border-color: rgba(0,0,0,0.2); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="mustard"]  { background: #c8972b; border-color: rgba(0,0,0,0.15); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="yellow"]   { background: #c8a72b; border-color: rgba(0,0,0,0.15); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="purple"]   { background: #503966; border-color: rgba(0,0,0,0.2); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-color-swatch[data-color="pink"]     { background: #c97a8c; border-color: rgba(0,0,0,0.15); }
-
-/* ── BUY BOX ── */
-#bfc-pdp-bag-{{ section.id }} .bfc4-buy { margin-top: 30px; padding-top: 26px; border-top: 1px solid rgba(32,32,9,0.1); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-price-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-price { font-family: var(--sd); font-weight: 600; font-size: 34px; color: var(--bk); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-price-compare { font-size: 15px; color: var(--ch); text-decoration: line-through; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-urgency-wrap { margin: 14px 0 18px; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-urgency-wrap:empty { margin: 0; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-atc {
-  width: 100%; padding: 14px; background: var(--or); color: #fff; border: none; cursor: pointer;
-  font-family: var(--sn); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; transition: background var(--t);
-}
-#bfc-pdp-bag-{{ section.id }} .bfc4-atc:hover:not([disabled]) { background: #c9600f; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-atc[disabled] { opacity: 0.5; cursor: not-allowed; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-atc.is-success { background: #2a4820 !important; }
-
-/* ── STICKY BAR ── */
-#bfc-pdp-bag-{{ section.id }} .bfc4-sticky-bar {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
-  background: var(--bc); border-top: 1px solid rgba(32,32,9,0.12);
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding: 12px 24px; transform: translateY(110%); transition: transform 0.3s ease; box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
-}
-#bfc-pdp-bag-{{ section.id }} .bfc4-sticky-bar.is-visible { transform: translateY(0); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-sticky-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-sticky-title { font-family: var(--sd); font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-sticky-price { font-size: 13px; font-weight: 600; color: var(--or); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-sticky-btn {
-  background: var(--or); color: #fff; border: none; padding: 12px 28px; font-size: 10px; font-weight: 600;
-  font-family: var(--sn); text-transform: uppercase; letter-spacing: 0.14em; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: background var(--t);
-}
-#bfc-pdp-bag-{{ section.id }} .bfc4-sticky-btn:hover:not(:disabled) { background: #c9600f; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-sticky-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-/* ── CROSS-SELL RAIL ── */
-#bfc-pdp-bag-{{ section.id }} .bfc4-rail { padding: 48px 40px 8px; border-top: 1px solid rgba(32,32,9,0.1); }
-@media (max-width: 900px) { #bfc-pdp-bag-{{ section.id }} .bfc4-rail { padding: 36px 20px 8px; } }
-#bfc-pdp-bag-{{ section.id }} .bfc4-rail-head { font-family: var(--sd); font-weight: 600; font-size: 26px; line-height: 1.1; margin-bottom: 4px; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-rail-sub { font-size: 13px; color: var(--ch); margin-bottom: 22px; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-rail-track {
-  display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory;
-  padding-bottom: 16px; scrollbar-width: thin; -webkit-overflow-scrolling: touch;
-}
-#bfc-pdp-bag-{{ section.id }} .bfc4-rail-track::-webkit-scrollbar { height: 5px; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-rail-track::-webkit-scrollbar-thumb { background: rgba(32,32,9,0.18); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-rail-card {
-  flex: 0 0 auto; width: 200px; scroll-snap-align: start; text-decoration: none; color: var(--bk); display: block;
-}
-@media (max-width: 900px) { #bfc-pdp-bag-{{ section.id }} .bfc4-rail-card { width: 156px; } }
-#bfc-pdp-bag-{{ section.id }} .bfc4-rail-img { width: 100%; aspect-ratio: 1/1; background: var(--gr); overflow: hidden; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-rail-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform var(--t); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-rail-card:hover .bfc4-rail-img img { transform: scale(1.04); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-rail-name { font-size: 13px; font-weight: 500; line-height: 1.3; margin-top: 10px; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-rail-card:hover .bfc4-rail-name { color: var(--or); }
-#bfc-pdp-bag-{{ section.id }} .bfc4-rail-price { font-size: 12px; color: var(--ch); margin-top: 3px; }
-#bfc-pdp-bag-{{ section.id }} .bfc4-rail-price .compare { text-decoration: line-through; opacity: 0.55; margin-left: 5px; }
-</style>
-
-
-{%- comment -%} ── Detect a color option (Color / Colour / Leather / Cover / Finish) ── {%- endcomment -%}
+{%- comment -%} Detect a color-type option for swatches {%- endcomment -%}
 {%- assign color_opt_idx = null -%}
 {%- assign color_opt_name = '' -%}
 {%- assign current_color = '' -%}
 {%- for opt in product.options_with_values -%}
-  {%- assign opt_name_lower = opt.name | downcase -%}
-  {%- if opt_name_lower contains 'color' or opt_name_lower contains 'colour' or opt_name_lower contains 'leather' or opt_name_lower == 'cover' or opt_name_lower == 'finish' -%}
+  {%- assign onl = opt.name | downcase -%}
+  {%- if onl contains 'color' or onl contains 'colour' or onl contains 'leather' or onl == 'cover' or onl == 'finish' -%}
     {%- assign color_opt_idx = forloop.index0 -%}
     {%- assign color_opt_name = opt.name -%}
     {%- assign color_opt_obj = opt -%}
@@ -196,437 +34,532 @@
   {%- assign current_color = current_variant.options[color_opt_idx] -%}
 {%- endif -%}
 
-<div id="bfc-pdp-bag-{{ section.id }}">
-<div class="bfc4">
-<div class="bfc4-split">
+{%- comment -%} Judge.me rating parse {%- endcomment -%}
+{%- assign jm_count = 0 -%}
+{%- assign jm_avg = 0 -%}
+{%- assign jm_raw = product.metafields.judgeme.review_widget_data -%}
+{%- if jm_raw != blank -%}
+  {%- assign jm_num = jm_raw.number_of_reviews -%}
+  {%- if jm_num != blank -%}{%- assign jm_count = jm_num | plus: 0 -%}{%- endif -%}
+  {%- assign jm_ar = jm_raw.average_rating -%}
+  {%- if jm_ar != blank -%}{%- assign jm_avg = jm_ar | times: 1.0 -%}{%- endif -%}
+{%- endif -%}
+{%- assign jm_show = false -%}
+{%- if jm_count > 0 and jm_avg >= 4.0 -%}{%- assign jm_show = true -%}{%- endif -%}
+{%- assign jm_full = jm_avg | floor -%}
+{%- assign jm_frac = jm_avg | minus: jm_full -%}
+{%- assign jm_has_half = false -%}
+{%- if jm_frac >= 0.25 and jm_frac < 0.75 -%}{%- assign jm_has_half = true -%}{%- endif -%}
+{%- if jm_frac >= 0.75 -%}{%- assign jm_full = jm_full | plus: 1 -%}{%- endif -%}
+{%- assign jm_half_idx = jm_full | plus: 1 -%}
 
-  {%- comment -%} LEFT: image slider (section pickers, else product.media) {%- endcomment -%}
-  <div class="bfc4-left" id="bfc4-top">
-    {%- assign has_section_imgs = false -%}
-    {%- for i in (1..8) -%}
-      {%- assign img_key = 'slide_' | append: i -%}
-      {%- if section.settings[img_key] != blank -%}{%- assign has_section_imgs = true -%}{%- endif -%}
-    {%- endfor -%}
+<style>
+.bfc4d *,.bfc4d *::before,.bfc4d *::after{box-sizing:border-box;margin:0;padding:0}
+.bfc4d{
+  --or:#E36E15;--go:#F4A027;--ce:#ABCC99;--cv:#F8F6EE;
+  --bk:#202009;--ch:#4E4741;--gr:#E3DDDA;
+  --sr:'Cormorant Garamond',Georgia,serif;
+  --sn:'Poppins',sans-serif;--t:0.2s ease;
+  font-family:var(--sn);color:var(--bk);background:var(--cv);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+.bfc4d-crumbs{font-size:10px;color:rgba(32,32,9,0.5);letter-spacing:0.06em;text-transform:uppercase;font-weight:500}
+.bfc4d-crumbs a{color:inherit;text-decoration:none;transition:color var(--t)}
+.bfc4d-crumbs a:hover{color:var(--or)}
+.bfc4d-crumbs span{margin:0 8px;opacity:0.4}
+.bfc4d-crumbs strong{color:var(--bk);font-weight:500}
+.bfc4d-split{display:grid;grid-template-columns:1fr 1fr;align-items:start}
+.bfc4d-left{position:sticky;top:0;width:50vw;height:50vw;max-height:100vh;overflow:hidden;background:var(--gr)}
+.bfc4d-slides{display:flex;height:100%;transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);will-change:transform}
+.bfc4d-slide{width:50vw;flex-shrink:0;height:100%;position:relative}
+.bfc4d-slide img{width:100%;height:100%;object-fit:contain;object-position:center;display:block}
+.bfc4d-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:10;background:rgba(32,32,9,0.3);border:none;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background var(--t);backdrop-filter:blur(4px)}
+.bfc4d-arrow:hover{background:rgba(32,32,9,0.6)}
+.bfc4d-arrow.is-prev{left:16px}
+.bfc4d-arrow.is-next{right:16px}
+.bfc4d-dots{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:10}
+.bfc4d-dot{width:6px;height:6px;background:rgba(255,255,255,0.4);border:none;cursor:pointer;padding:0;transition:background var(--t),transform var(--t)}
+.bfc4d-dot.is-active{background:#fff;transform:scale(1.3)}
+.bfc4d-noimg{display:flex;align-items:center;justify-content:center;height:100%;color:rgba(32,32,9,0.2);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600}
+.bfc4d-right{background:var(--cv);padding:36px 40px 56px;display:flex;flex-direction:column;gap:16px}
+.bfc4d-title{font-family:var(--sn);font-size:28px;font-weight:600;line-height:1.1;letter-spacing:-0.3px;margin-bottom:2px}
+.bfc4d-rating{display:flex;align-items:center;gap:8px;font-family:var(--sn);font-size:11px;color:var(--ch);font-weight:500}
+.bfc4d-stars{display:inline-flex;gap:2px}
+.bfc4d-star{width:12px;height:12px;display:inline-block;color:rgba(32,32,9,0.15)}
+.bfc4d-star.is-full{color:var(--or)}
+.bfc4d-star.is-half{background:linear-gradient(90deg,var(--or) 50%,rgba(32,32,9,0.15) 50%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.bfc4d-rating-count{color:rgba(32,32,9,0.55);font-size:10.5px}
+.bfc4d-price-row{display:flex;align-items:baseline;gap:12px;margin-bottom:2px}
+.bfc4d-price{font-family:var(--sr);font-size:40px;font-weight:300;color:var(--bk);line-height:1}
+.bfc4d-price-compare{font-family:var(--sr);font-size:24px;font-weight:300;color:rgba(32,32,9,0.25);text-decoration:line-through}
+.bfc4d-save{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--or);background:rgba(227,110,21,0.08);padding:4px 8px;align-self:center}
+.bfc4d-var-label{font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ch);margin-bottom:8px;display:block}
+.bfc4d-color-name{font-weight:500;color:var(--bk);text-transform:none;letter-spacing:0}
+.bfc4d-color-row{display:flex;gap:10px;flex-wrap:wrap}
+.bfc4d-color-swatch{width:30px;height:30px;border-radius:50%;border:1px solid rgba(0,0,0,0.15);cursor:pointer;padding:0;font-size:0;color:transparent;position:relative;transition:transform var(--t),box-shadow var(--t);flex-shrink:0}
+.bfc4d-color-swatch:hover{transform:scale(1.12)}
+.bfc4d-color-swatch.is-active{box-shadow:0 0 0 2px var(--cv),0 0 0 4px var(--bk)}
+.bfc4d-color-swatch[disabled]{cursor:not-allowed;opacity:0.65}
+.bfc4d-color-swatch[disabled]::after{content:'';position:absolute;top:50%;left:-2px;right:-2px;height:1px;background:rgba(120,20,20,0.7);transform:rotate(-45deg)}
+.bfc4d-color-swatch[data-color="black"]{background:#1a1a1a;border-color:rgba(0,0,0,0.25)}
+.bfc4d-color-swatch[data-color="brown"]{background:#5e3a1f;border-color:rgba(0,0,0,0.2)}
+.bfc4d-color-swatch[data-color="tan"]{background:#b48a5d}
+.bfc4d-color-swatch[data-color="khaki"]{background:#8f7d52}
+.bfc4d-color-swatch[data-color="olive"]{background:#5a5a30;border-color:rgba(0,0,0,0.2)}
+.bfc4d-color-swatch[data-color="moss"]{background:#6b7340;border-color:rgba(0,0,0,0.2)}
+.bfc4d-color-swatch[data-color="sage"]{background:#9aa87f}
+.bfc4d-color-swatch[data-color="forest"]{background:#2f4a2f;border-color:rgba(0,0,0,0.25)}
+.bfc4d-color-swatch[data-color="green"]{background:#3a5c3a;border-color:rgba(0,0,0,0.2)}
+.bfc4d-color-swatch[data-color="burgundy"]{background:#7a1f1f;border-color:rgba(0,0,0,0.2)}
+.bfc4d-color-swatch[data-color="bordeaux"]{background:#5e1a25;border-color:rgba(0,0,0,0.25)}
+.bfc4d-color-swatch[data-color="wine"]{background:#6e1f2c;border-color:rgba(0,0,0,0.25)}
+.bfc4d-color-swatch[data-color="maroon"]{background:#5d1a1a;border-color:rgba(0,0,0,0.25)}
+.bfc4d-color-swatch[data-color="oxblood"]{background:#4a181a;border-color:rgba(0,0,0,0.25)}
+.bfc4d-color-swatch[data-color="red"]{background:#c8362b}
+.bfc4d-color-swatch[data-color="blue"]{background:#2b4566;border-color:rgba(0,0,0,0.2)}
+.bfc4d-color-swatch[data-color="navy"]{background:#1f2d4a;border-color:rgba(0,0,0,0.25)}
+.bfc4d-color-swatch[data-color="teal"]{background:#1f5a5a;border-color:rgba(0,0,0,0.2)}
+.bfc4d-color-swatch[data-color="gray"]{background:#666660}
+.bfc4d-color-swatch[data-color="grey"]{background:#666660}
+.bfc4d-color-swatch[data-color="charcoal"]{background:#36352f;border-color:rgba(0,0,0,0.2)}
+.bfc4d-color-swatch[data-color="cream"]{background:#e8e2d4}
+.bfc4d-color-swatch[data-color="white"]{background:#f0eee6}
+.bfc4d-color-swatch[data-color="ivory"]{background:#ece4cf}
+.bfc4d-color-swatch[data-color="beige"]{background:#d8c8a8}
+.bfc4d-color-swatch[data-color="sand"]{background:#cbb487}
+.bfc4d-color-swatch[data-color="orange"]{background:#d46818}
+.bfc4d-color-swatch[data-color="rust"]{background:#8a3a14;border-color:rgba(0,0,0,0.2)}
+.bfc4d-color-swatch[data-color="mustard"]{background:#c8972b}
+.bfc4d-color-swatch[data-color="yellow"]{background:#c8a72b}
+.bfc4d-color-swatch[data-color="purple"]{background:#503966;border-color:rgba(0,0,0,0.2)}
+.bfc4d-color-swatch[data-color="pink"]{background:#c97a8c}
+.bfc4d-var-row{display:flex;gap:6px;flex-wrap:wrap}
+.bfc4d-var-btn{flex:1;min-width:64px;padding:10px 8px;border:1px solid rgba(32,32,9,0.15);background:#fff;cursor:pointer;font-family:var(--sn);font-size:11px;font-weight:600;color:var(--bk);transition:all var(--t);text-align:center}
+.bfc4d-var-btn:hover{border-color:var(--or)}
+.bfc4d-var-btn.is-active{border:2px solid var(--or);color:var(--or);background:rgba(227,110,21,0.05)}
+.bfc4d-var-btn[disabled]{opacity:0.5;cursor:not-allowed;border-color:rgba(32,32,9,0.08);color:rgba(32,32,9,0.3);background:rgba(32,32,9,0.03)}
+.bfc4d-var-oos{display:block;font-size:8px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:rgba(32,32,9,0.3);margin-top:2px}
+.bfc4d-qty-row{display:flex;gap:6px;margin-bottom:8px;align-items:stretch}
+.bfc4d-qty{display:flex;border:1px solid rgba(32,32,9,0.15);background:#fff;align-items:center}
+.bfc4d-qty button{width:36px;height:100%;background:none;border:none;font-size:16px;cursor:pointer;color:var(--bk);font-family:var(--sn);transition:background var(--t)}
+.bfc4d-qty button:hover{background:rgba(32,32,9,0.04)}
+.bfc4d-qty-val{width:40px;text-align:center;font-size:12px;font-weight:600;border:none;border-left:1px solid rgba(32,32,9,0.1);border-right:1px solid rgba(32,32,9,0.1);background:none;font-family:var(--sn);color:var(--bk);-moz-appearance:textfield}
+.bfc4d-qty-val::-webkit-inner-spin-button,.bfc4d-qty-val::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.bfc4d-atc{flex:1;padding:14px;background:var(--or);color:#fff;border:none;cursor:pointer;font-family:var(--sn);font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;transition:background var(--t);display:block;text-align:center}
+.bfc4d-atc:hover:not([disabled]){background:#c9600f}
+.bfc4d-atc[disabled]{opacity:0.5;cursor:not-allowed}
+.bfc4d-stock{font-size:10px;font-weight:600;letter-spacing:0.08em;color:var(--ch);display:flex;align-items:center;gap:6px}
+.bfc4d-stock-dot{width:6px;height:6px;background:var(--ce);display:inline-block}
+.bfc4d-stock.is-low .bfc4d-stock-dot{background:var(--or)}
+.bfc4d-stock.is-low{color:var(--or)}
+.bfc4d-desc{border-top:1px solid rgba(32,32,9,0.08);padding-top:16px}
+.bfc4d-desc-label{font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ch);margin-bottom:8px;display:block}
+.bfc4d-desc-text{font-size:12px;color:var(--ch);line-height:1.6}
+.bfc4d-desc-text p{margin:0 0 8px}.bfc4d-desc-text p:last-child{margin:0}
+.bfc4d-desc-text ul,.bfc4d-desc-text ol{padding-left:20px;margin:0 0 8px}
+.bfc4d-desc-text li{margin-bottom:2px}
+.bfc4d-desc-text a{color:var(--or);text-decoration:none;border-bottom:1px solid rgba(227,110,21,0.3)}
+.bfc4d-desc-text a:hover{border-color:var(--or)}
+.bfc4d-desc-text img{max-width:100%;height:auto;display:block;margin:8px 0}
+.bfc4d-policies{border-top:1px solid rgba(32,32,9,0.08)}
+.bfc4d-policy{border-bottom:1px solid rgba(32,32,9,0.06)}
+.bfc4d-policy summary{display:flex;align-items:center;justify-content:space-between;padding:12px 0;font-size:10.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--bk);cursor:pointer;list-style:none;user-select:none}
+.bfc4d-policy summary::-webkit-details-marker{display:none}
+.bfc4d-policy summary::after{content:'+';font-size:14px;font-weight:400;opacity:.3}
+.bfc4d-policy[open] summary::after{content:'\2212'}
+.bfc4d-policy-body{padding:0 0 12px;font-size:11px;line-height:1.5;color:var(--ch)}
+.bfc4d-app-block{margin:0}
+.bfc4d-lightbox{display:none;position:fixed;inset:0;background:rgba(32,32,9,0.92);z-index:200;align-items:center;justify-content:center;cursor:zoom-out}
+.bfc4d-lightbox.is-open{display:flex}
+.bfc4d-lightbox img{max-width:90vw;max-height:90vh;object-fit:contain}
+.bfc4d-lightbox-close{position:absolute;top:16px;right:20px;background:none;border:none;color:rgba(255,255,255,0.6);font-size:28px;cursor:pointer;line-height:1}
+.bfc4d-lightbox-close:hover{color:#fff}
+.bfc4d-sticky{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--cv);border-top:1px solid rgba(32,32,9,0.15);padding:10px 16px;z-index:100;align-items:center;gap:12px}
+.bfc4d-sticky-info{flex:1;min-width:0}
+.bfc4d-sticky-title{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bfc4d-sticky-price{font-size:11px;color:var(--ch)}
+.bfc4d-sticky-btn{background:var(--or);color:#fff;border:none;padding:12px 24px;font-size:10px;font-weight:700;font-family:var(--sn);text-transform:uppercase;letter-spacing:0.14em;cursor:pointer;white-space:nowrap}
+.bfc4d-below{background:var(--cv)}
+.bfc4d-recs{border-top:1px solid rgba(32,32,9,0.1);padding:48px}
+.bfc4d-recs-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px}
+.bfc4d-recs-title{font-family:var(--sr);font-size:40px;font-weight:300}
+.bfc4d-recs-all{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(32,32,9,0.4);text-decoration:none;transition:color var(--t)}
+.bfc4d-recs-all:hover{color:var(--or)}
+.bfc4d-recs-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.bfc4d-rec-card{text-decoration:none;color:var(--bk);background:#fff;border:1px solid rgba(32,32,9,0.08);overflow:hidden;display:flex;flex-direction:column;transition:border-color var(--t)}
+.bfc4d-rec-card:hover{border-color:rgba(227,110,21,0.3)}
+.bfc4d-rec-img-wrap{aspect-ratio:1/1;overflow:hidden;background:var(--gr)}
+.bfc4d-rec-img{width:100%;height:100%;object-fit:contain;display:block;transition:transform 0.4s ease}
+.bfc4d-rec-card:hover .bfc4d-rec-img{transform:scale(1.04)}
+.bfc4d-rec-body{padding:10px 10px 12px}
+.bfc4d-rec-name{font-size:11px;font-weight:600;line-height:1.3;margin-bottom:4px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.bfc4d-rec-price{font-size:11px;font-weight:700;color:var(--or)}
+@media(max-width:900px){
+  .bfc4d-split{grid-template-columns:1fr}
+  .bfc4d-left{position:relative;width:100%;height:100vw;max-height:520px}
+  .bfc4d-slide{width:100%}
+  .bfc4d-arrow{width:32px;height:32px}
+  .bfc4d-right{padding:24px 20px 40px;gap:14px}
+  .bfc4d-title{font-size:22px}
+  .bfc4d-price{font-size:32px}
+  .bfc4d-recs{padding:32px 20px}
+  .bfc4d-recs-title{font-size:28px}
+  .bfc4d-recs-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .bfc4d-sticky.is-visible{display:flex}
+  .bfc4d{padding-bottom:64px}
+}
+</style>
 
-    {%- if has_section_imgs -%}
-      {%- assign slide_marks = '' -%}
-      {%- for i in (1..8) -%}
-        {%- assign img_key = 'slide_' | append: i -%}
-        {%- if section.settings[img_key] != blank -%}{%- assign slide_marks = slide_marks | append: '1' -%}{%- endif -%}
-      {%- endfor -%}
-      {%- assign total_slides = slide_marks | size -%}
-      <div class="bfc4-slides" id="bfc4-slides">
-        {%- for i in (1..8) -%}
-          {%- assign img_key = 'slide_' | append: i -%}
-          {%- assign img_val = section.settings[img_key] -%}
-          {%- if img_val != blank -%}
-            <div class="bfc4-slide">
-              <img
-                src="{{ img_val | image_url: width: 900 }}"
-                srcset="{{ img_val | image_url: width: 600 }} 600w, {{ img_val | image_url: width: 900 }} 900w, {{ img_val | image_url: width: 1200 }} 1200w"
-                sizes="(max-width: 900px) 100vw, 50vw"
-                alt="{{ product.title | escape }}"
-                width="900" height="900"
-                {%- if i <= 2 -%}loading="eager" fetchpriority="high"{%- else -%}loading="lazy"{%- endif -%}
-              />
+<div class="bfc4d" data-section-id="{{ section.id }}">
+  <div class="bfc4d-split">
+
+    <div class="bfc4d-left" id="bfc4d-slider">
+      {%- if product.images.size > 0 -%}
+        <div class="bfc4d-slides" id="bfc4d-slides">
+          {%- for image in product.images -%}
+            <div class="bfc4d-slide">
+              <img src="{{ image | image_url: width: 1200 }}" alt="{{ image.alt | default: product.title }}"
+                {% if forloop.index <= 2 %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}
+                onclick="bfc4dLightbox('{{ image | image_url: width: 2400 }}')" style="cursor:zoom-in">
             </div>
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
-    {%- else -%}
-      {%- assign media_images = product.media | where: 'media_type', 'image' -%}
-      {%- assign total_slides = media_images | size -%}
-      <div class="bfc4-slides" id="bfc4-slides">
-        {%- for media in media_images limit: 12 -%}
-          <div class="bfc4-slide" data-media-id="{{ media.id }}">
-            <img
-              src="{{ media | image_url: width: 900 }}"
-              srcset="{{ media | image_url: width: 600 }} 600w, {{ media | image_url: width: 900 }} 900w, {{ media | image_url: width: 1200 }} 1200w"
-              sizes="(max-width: 900px) 100vw, 50vw"
-              alt="{{ media.alt | default: product.title | escape }}"
-              width="900" height="900"
-              {%- if forloop.index <= 2 -%}loading="eager" fetchpriority="high"{%- else -%}loading="lazy"{%- endif -%}
-            />
-          </div>
-        {%- endfor -%}
-      </div>
-    {%- endif -%}
-
-    {%- if total_slides > 1 -%}
-      <button class="bfc4-arrow is-prev" onclick="bfc4Slide(-1)" aria-label="Previous">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="white" stroke-width="1.5" stroke-linecap="square"/></svg>
-      </button>
-      <button class="bfc4-arrow is-next" onclick="bfc4Slide(1)" aria-label="Next">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="white" stroke-width="1.5" stroke-linecap="square"/></svg>
-      </button>
-      <div class="bfc4-dots" id="bfc4-dots">
-        {%- for i in (1..total_slides) -%}
-          <button class="bfc4-dot{% if forloop.first %} is-active{% endif %}" onclick="bfc4GoTo({{ forloop.index0 }})" aria-label="Slide {{ forloop.index }}"></button>
-        {%- endfor -%}
-      </div>
-    {%- endif -%}
-  </div>
-
-  {%- comment -%} RIGHT: product content {%- endcomment -%}
-  <div class="bfc4-right">
-    <nav class="bfc4-breadcrumb" aria-label="Breadcrumb">
-      {%- liquid
-        assign crumb_coll = null
-        if section.settings.breadcrumb_collection != blank
-          assign crumb_coll = collections[section.settings.breadcrumb_collection]
-        elsif collection
-          assign crumb_coll = collection
-        endif
-      -%}
-      <a href="/">Home</a> / {% if crumb_coll %}<a href="{{ crumb_coll.url }}">{{ crumb_coll.title }}</a> / {% endif %}{{ product.title }}
-    </nav>
-
-    <h1 class="bfc4-title">{{ product.title }}</h1>
-    <div id="bfc4-star-placeholder"></div>
-
-    {%- comment -%} Freeform description (rich HTML preserved, clamped with read-more) {%- endcomment -%}
-    {%- assign desc_plain = product.description | strip_html | strip -%}
-    {%- if desc_plain != blank -%}
-      {%- assign desc_len = desc_plain | size -%}
-      <div class="bfc4-desc{% if desc_len > 320 %} bfc4-desc-clamp{% endif %}" id="bfc4-desc">{{ product.description }}</div>
-      {%- if desc_len > 320 -%}
-        <button type="button" class="bfc4-desc-toggle is-visible" id="bfc4-desc-toggle" onclick="bfc4ToggleDesc()" aria-expanded="false" aria-controls="bfc4-desc">Read more</button>
-      {%- endif -%}
-    {%- endif -%}
-
-    {%- comment -%} Color swatches (only when a color-type option exists) {%- endcomment -%}
-    {%- if color_opt_idx != null -%}
-      <div class="bfc4-color">
-        <div class="bfc4-color-head">
-          <span class="bfc4-color-label">{{ color_opt_name }}</span>
-          <span class="bfc4-color-name" id="bfc4-color-name">{{ current_color }}</span>
-        </div>
-        <div class="bfc4-color-row">
-          {%- for v_value in color_opt_obj.values -%}
-            {%- assign v_available = false -%}
-            {%- for var in product.variants -%}
-              {%- assign var_v_value = var.options[color_opt_idx] -%}
-              {%- if var_v_value == v_value and var.available -%}{%- assign v_available = true -%}{%- endif -%}
-            {%- endfor -%}
-            {%- assign v_color = v_value | downcase | split: ' ' | first | split: '/' | first -%}
-            <button
-              type="button"
-              class="bfc4-color-swatch{% if v_value == current_color %} is-active{% endif %}"
-              data-color="{{ v_color }}"
-              data-color-value="{{ v_value | escape }}"
-              data-opt-index="{{ color_opt_idx }}"
-              onclick="bfc4SelectColor(this)"
-              title="{{ v_value | escape }}{% unless v_available %} (sold out){% endunless %}"
-              aria-label="{{ color_opt_name }}: {{ v_value | escape }}"
-              {%- unless v_available -%}disabled{%- endunless -%}
-            >{{ v_value }}</button>
           {%- endfor -%}
         </div>
-      </div>
-    {%- endif -%}
+        {%- if product.images.size > 1 -%}
+          <button class="bfc4d-arrow is-prev" id="bfc4d-prev" aria-label="Previous" style="visibility:hidden">
+            <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="2"><path d="M10 2L4 8l6 6"/></svg>
+          </button>
+          <button class="bfc4d-arrow is-next" id="bfc4d-next" aria-label="Next">
+            <svg width="16" height="16" fill="none" stroke="#fff" stroke-width="2"><path d="M6 2l6 6-6 6"/></svg>
+          </button>
+          <div class="bfc4d-dots" id="bfc4d-dots">
+            {%- for image in product.images -%}
+              <button class="bfc4d-dot{% if forloop.first %} is-active{% endif %}" data-idx="{{ forloop.index0 }}" aria-label="Go to image {{ forloop.index }}"></button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- else -%}
+        <div class="bfc4d-noimg">No Image Available</div>
+      {%- endif -%}
+    </div>
 
-    {%- comment -%} Buy box {%- endcomment -%}
-    <div class="bfc4-buy">
-      <div class="bfc4-price-row">
-        <span class="bfc4-price" id="bfc4-price">{{ current_variant.price | money }}</span>
-        {%- if current_variant.compare_at_price > current_variant.price -%}
-          <span class="bfc4-price-compare" id="bfc4-price-compare">{{ current_variant.compare_at_price | money }}</span>
+    <div class="bfc4d-right">
+      <div class="bfc4d-crumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        {%- if crumb_coll -%}
+          <a href="{{ crumb_coll.url }}">{{ crumb_coll.title }}</a>
+          <span>/</span>
+        {%- endif -%}
+        <strong>{{ product.title | truncate: 60 }}</strong>
+      </div>
+
+      <div>
+        <h1 class="bfc4d-title">{{ product.title }}</h1>
+        {%- if jm_show -%}
+          <div class="bfc4d-rating" aria-label="Rated {{ jm_avg }} out of 5 based on {{ jm_count }} reviews">
+            <span class="bfc4d-stars" aria-hidden="true">
+              {%- for i in (1..5) -%}
+                {%- if i <= jm_full -%}
+                  <span class="bfc4d-star is-full"><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 .5l1.7 3.4 3.8.5-2.7 2.6.6 3.8L6 9l-3.4 1.8.6-3.8L.5 4.4l3.8-.5z"/></svg></span>
+                {%- elsif jm_has_half and i == jm_half_idx -%}
+                  <span class="bfc4d-star is-half"><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 .5l1.7 3.4 3.8.5-2.7 2.6.6 3.8L6 9l-3.4 1.8.6-3.8L.5 4.4l3.8-.5z"/></svg></span>
+                {%- else -%}
+                  <span class="bfc4d-star"><svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor"><path d="M6 .5l1.7 3.4 3.8.5-2.7 2.6.6 3.8L6 9l-3.4 1.8.6-3.8L.5 4.4l3.8-.5z"/></svg></span>
+                {%- endif -%}
+              {%- endfor -%}
+            </span>
+            <span class="bfc4d-rating-count">{{ jm_count }} review{% if jm_count != 1 %}s{% endif %}</span>
+          </div>
         {%- endif -%}
       </div>
 
-      <div class="bfc4-urgency-wrap">
-        {% render 'bfc-pdp-urgency', variant: current_variant, handle: product.handle, show_trust: false, price: current_variant.price %}
+      <div>
+        <div class="bfc4d-price-row">
+          <span class="bfc4d-price" id="bfc4d-price">{{ current_variant.price | money_without_trailing_zeros }}</span>
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            <span class="bfc4d-price-compare" id="bfc4d-compare">{{ current_variant.compare_at_price | money_without_trailing_zeros }}</span>
+            {%- assign save_pct = current_variant.compare_at_price | minus: current_variant.price | times: 100.0 | divided_by: current_variant.compare_at_price | round -%}
+            <span class="bfc4d-save" id="bfc4d-save">Save {{ save_pct }}%</span>
+          {%- endif -%}
+        </div>
       </div>
 
-      <button class="bfc4-atc" id="bfc4-atc" onclick="bfc4BagATC()"{% unless current_variant.available %} disabled{% endunless %}>
-        <span id="bfc4-atc-text">{% if current_variant.available %}Add to Cart{% else %}Sold Out{% endif %}</span>
-      </button>
+      {%- if color_opt_idx != null -%}
+        <div>
+          <span class="bfc4d-var-label">{{ color_opt_name }}: <span class="bfc4d-color-name" id="bfc4d-color-name">{{ current_color }}</span></span>
+          <div class="bfc4d-color-row" role="radiogroup" aria-label="{{ color_opt_name }}">
+            {%- for v_value in color_opt_obj.values -%}
+              {%- assign v_available = false -%}
+              {%- for var in product.variants -%}
+                {%- if var.options[color_opt_idx] == v_value and var.available -%}{%- assign v_available = true -%}{%- endif -%}
+              {%- endfor -%}
+              {%- assign v_color = v_value | downcase | split: ' ' | first | split: '/' | first -%}
+              <button type="button" class="bfc4d-color-swatch{% if v_value == current_color %} is-active{% endif %}"
+                data-color="{{ v_color }}" data-color-value="{{ v_value | escape }}" data-opt-index="{{ color_opt_idx }}"
+                onclick="bfc4dSelectColor(this)" title="{{ v_value | escape }}{% unless v_available %} (sold out){% endunless %}"
+                aria-label="{{ color_opt_name }}: {{ v_value | escape }}"{% unless v_available %} disabled{% endunless %}>{{ v_value }}</button>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- elsif product.variants.size > 1 -%}
+        <div>
+          <span class="bfc4d-var-label">{%- if product.options.size == 1 -%}{{ product.options.first }}{%- else -%}Options{%- endif -%}</span>
+          <div class="bfc4d-var-row" role="radiogroup" aria-label="Product options">
+            {%- for variant in product.variants -%}
+              <button type="button" class="bfc4d-var-btn{% if variant == current_variant %} is-active{% endif %}"
+                data-vid="{{ variant.id }}" data-price="{{ variant.price | money_without_trailing_zeros }}"
+                data-compare-price="{{ variant.compare_at_price | money_without_trailing_zeros }}"
+                data-has-compare="{% if variant.compare_at_price > variant.price %}1{% else %}0{% endif %}"
+                data-available="{{ variant.available }}" data-url="{{ product.url }}?variant={{ variant.id }}"
+                data-inventory="{{ variant.inventory_quantity }}"
+                {% unless variant.available %}disabled{% endunless %}>
+                {{ variant.title }}{%- unless variant.available -%}<span class="bfc4d-var-oos">Sold Out</span>{%- endunless -%}
+              </button>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      <div class="bfc4d-buy">
+        <input type="hidden" id="bfc4d-vid" value="{{ current_variant.id }}">
+        <div class="bfc4d-qty-row">
+          <div class="bfc4d-qty">
+            <button type="button" onclick="bfc4dQty(-1)" aria-label="Decrease">&minus;</button>
+            <input class="bfc4d-qty-val" type="number" value="1" min="1" max="99" id="bfc4d-qty" aria-label="Quantity">
+            <button type="button" onclick="bfc4dQty(1)" aria-label="Increase">+</button>
+          </div>
+          <button type="button" class="bfc4d-atc" id="bfc4d-atc" onclick="bfc4dAddToCart()" {% unless current_variant.available %}disabled{% endunless %}>
+            <span id="bfc4d-atc-text">{%- if current_variant.available -%}Add to Cart{%- else -%}Sold Out{%- endif -%}</span>
+          </button>
+        </div>
+
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when '@app' -%}
+              <div class="bfc4d-app-block" {{ block.shopify_attributes }}>{% render block %}</div>
+          {%- endcase -%}
+        {%- endfor -%}
+
+        {%- if current_variant.available and current_variant.inventory_management == 'shopify' -%}
+          <div class="bfc4d-stock{% if current_variant.inventory_quantity <= 5 %} is-low{% endif %}" id="bfc4d-stock" style="margin-top:6px">
+            <span class="bfc4d-stock-dot"></span>
+            {%- if current_variant.inventory_quantity <= 5 -%}Only {{ current_variant.inventory_quantity }} left{%- else -%}In stock{%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if product.description != blank -%}
+        <div class="bfc4d-desc">
+          <span class="bfc4d-desc-label">Details</span>
+          <div class="bfc4d-desc-text">{{ product.description }}</div>
+        </div>
+      {%- endif -%}
+
+      <div class="bfc4d-policies">
+        <details class="bfc4d-policy">
+          <summary>Shipping</summary>
+          <div class="bfc4d-policy-body">Most orders ship same day from our Brooklyn shop. Domestic delivery via USPS or UPS typically arrives in 2-4 business days. Free shipping on US orders over $399. In-store pickup at 855 Grand Street is always free.</div>
+        </details>
+        <details class="bfc4d-policy">
+          <summary>Returns</summary>
+          <div class="bfc4d-policy-body">Unopened accessories and gear can be returned within 14 days of delivery. Items must be in original condition. Contact <a href="mailto:hello@brooklynfilmcamera.com" style="color:var(--or)">hello@brooklynfilmcamera.com</a> to start a return.</div>
+        </details>
+        <details class="bfc4d-policy">
+          <summary>Questions?</summary>
+          <div class="bfc4d-policy-body">Email <a href="mailto:hello@brooklynfilmcamera.com" style="color:var(--or)">hello@brooklynfilmcamera.com</a> or stop by the shop — we're open every day. You can also browse our <a href="https://brooklynfilmcamera.com/pages/faq" style="color:var(--or)">FAQ</a>. We're happy to help you find the right thing.</div>
+        </details>
+      </div>
     </div>
   </div>
 
-</div>{%- comment -%} /bfc4-split {%- endcomment -%}
-</div>{%- comment -%} /bfc4 {%- endcomment -%}
-
-{%- comment -%} ── Cross-sell rail: a mix of top sellers across categories ──
-     Pulls from up to 3 configurable collections and interleaves them
-     (camera, film, accessory, camera, film, accessory ...) so the rail
-     spans categories instead of showing only one. Set each collection's
-     sort order to "Best selling" in admin for true top sellers. {%- endcomment -%}
-{%- liquid
-  assign rail_total = section.settings.rail_count | default: 12
-
-  assign coll_a = null
-  assign coll_b = null
-  assign coll_c = null
-  if section.settings.rail_collection_1 != blank
-    assign coll_a = collections[section.settings.rail_collection_1]
-  endif
-  if section.settings.rail_collection_2 != blank
-    assign coll_b = collections[section.settings.rail_collection_2]
-  endif
-  if section.settings.rail_collection_3 != blank
-    assign coll_c = collections[section.settings.rail_collection_3]
-  endif
-  unless coll_a or coll_b or coll_c
-    assign coll_a = collections['all']
-  endunless
--%}
-
-{%- comment -%} Round-robin interleave by index across the 3 collections {%- endcomment -%}
-{%- assign rail_shown = 0 -%}
-{%- assign seen_ids = '' -%}
-{%- capture rail_cards -%}
-  {%- for i in (0..19) -%}
-    {%- if rail_shown >= rail_total -%}{%- break -%}{%- endif -%}
-    {%- for which in (1..3) -%}
-      {%- if rail_shown >= rail_total -%}{%- break -%}{%- endif -%}
-      {%- assign src = null -%}
-      {%- if which == 1 -%}{%- assign src = coll_a -%}{%- elsif which == 2 -%}{%- assign src = coll_b -%}{%- else -%}{%- assign src = coll_c -%}{%- endif -%}
-      {%- if src == null -%}{%- continue -%}{%- endif -%}
-      {%- assign p = src.products[i] -%}
-      {%- if p == blank -%}{%- continue -%}{%- endif -%}
-      {%- if p.id == product.id -%}{%- continue -%}{%- endif -%}
-      {%- capture id_tag -%}|{{ p.id }}|{%- endcapture -%}
-      {%- if seen_ids contains id_tag -%}{%- continue -%}{%- endif -%}
-      {%- assign seen_ids = seen_ids | append: id_tag -%}
-      {%- assign rail_shown = rail_shown | plus: 1 -%}
-      <a class="bfc4-rail-card" href="{{ p.url }}">
-        <div class="bfc4-rail-img">
-          {%- if p.featured_image -%}
-            <img src="{{ p.featured_image | image_url: width: 400 }}" alt="{{ p.title | escape }}" loading="lazy" width="400" height="400"/>
-          {%- endif -%}
+  <div class="bfc4d-below">
+    {%- assign rail_shown = 0 -%}
+    {%- capture rail_cards -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type != 'rail_product' -%}{%- continue -%}{%- endif -%}
+        {%- assign p = block.settings.product -%}
+        {%- if p == blank -%}{%- continue -%}{%- endif -%}
+        {%- unless p.available -%}{%- continue -%}{%- endunless -%}
+        {%- if p.id == product.id -%}{%- continue -%}{%- endif -%}
+        {%- assign rail_shown = rail_shown | plus: 1 -%}
+        <a href="{{ p.url }}" class="bfc4d-rec-card" {{ block.shopify_attributes }}>
+          <div class="bfc4d-rec-img-wrap">
+            {%- if p.featured_image -%}<img class="bfc4d-rec-img" src="{{ p.featured_image | image_url: width: 400 }}" alt="{{ p.featured_image.alt | default: p.title }}" loading="lazy" width="400" height="400">{%- endif -%}
+          </div>
+          <div class="bfc4d-rec-body">
+            <div class="bfc4d-rec-name">{{ p.title }}</div>
+            <div class="bfc4d-rec-price">{%- if p.price_varies -%}from {% endif -%}{{ p.price_min | money_without_trailing_zeros }}</div>
+          </div>
+        </a>
+      {%- endfor -%}
+    {%- endcapture -%}
+    {%- if rail_shown > 0 -%}
+      <div class="bfc4d-recs">
+        <div class="bfc4d-recs-head">
+          <div class="bfc4d-recs-title">{{ section.settings.rail_title | default: 'Need a camera to go in there?' }}</div>
         </div>
-        <div class="bfc4-rail-name">{{ p.title }}</div>
-        <div class="bfc4-rail-price">
-          {{ p.price | money }}{% if p.compare_at_price > p.price %}<span class="compare">{{ p.compare_at_price | money }}</span>{% endif %}
-        </div>
-      </a>
-    {%- endfor -%}
-  {%- endfor -%}
-{%- endcapture -%}
-{%- if rail_shown > 0 -%}
-  <div class="bfc4-rail">
-    <h2 class="bfc4-rail-head">{{ section.settings.rail_title | default: 'Need a camera to go in there?' }}</h2>
-    {%- if section.settings.rail_subtitle != blank -%}<p class="bfc4-rail-sub">{{ section.settings.rail_subtitle }}</p>{%- endif -%}
-    <div class="bfc4-rail-track">{{ rail_cards }}</div>
+        <div class="bfc4d-recs-grid">{{ rail_cards }}</div>
+      </div>
+    {%- endif -%}
   </div>
-{%- endif -%}
 
-{%- comment -%} Reviews block {%- endcomment -%}
+  <div class="bfc4d-lightbox" id="bfc4d-lightbox" onclick="bfc4dCloseLightbox()">
+    <button class="bfc4d-lightbox-close" onclick="bfc4dCloseLightbox()" aria-label="Close">&times;</button>
+    <img id="bfc4d-lightbox-img" alt="">
+  </div>
+
+  <div class="bfc4d-sticky" id="bfc4d-sticky">
+    <div class="bfc4d-sticky-info">
+      <div class="bfc4d-sticky-title">{{ product.title | truncate: 40 }}</div>
+      <div class="bfc4d-sticky-price" id="bfc4d-sticky-price">{{ current_variant.price | money_without_trailing_zeros }}</div>
+    </div>
+    <button class="bfc4d-sticky-btn" id="bfc4d-sticky-btn" onclick="bfc4dAddToCart()"><span id="bfc4d-sticky-btn-text">Add to Cart</span></button>
+  </div>
+
+  {%- assign bfc4d_form_id = 'bfc4d-form-' | append: section.id -%}
+  <div style="display:none">
+    <product-form class="product-form" data-hide-errors="false" data-section-id="{{ section.id }}">
+      {%- form 'product', product, id: bfc4d_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+        <input type="hidden" name="id" value="{{ current_variant.id }}" class="product-variant-id" id="bfc4d-hidden-vid"/>
+        <input type="hidden" name="quantity" value="1" id="bfc4d-hidden-qty"/>
+        <div class="product-form__buttons" data-display-quantity="false" data-display-layout="seperate" data-display-dynamics="false">
+          <button id="ProductSubmitButton-{{ section.id }}" type="submit" name="add" class="product-form__submit button button--filled">
+            <span>Add to Cart</span>
+            <div class="loading__spinner hidden"><svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66"><circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle></svg></div>
+          </button>
+        </div>
+        <div class="product-form__error-message-wrapper" role="alert" hidden><span class="product-form__error-message"></span></div>
+      {%- endform -%}
+    </product-form>
+  </div>
+
+</div>
+
 {% render 'bfc-pdp-reviews', pdp_handle: product.handle, pdp_title: product.title %}
 
-</div>{%- comment -%} /#bfc-pdp-bag {%- endcomment -%}
-
-{%- comment -%} Sticky add-to-cart bar {%- endcomment -%}
-<div class="bfc4-sticky-bar" id="bfc4-sticky-bar" style="display:none">
-  <div class="bfc4-sticky-info">
-    <span class="bfc4-sticky-title">{{ product.title }}</span>
-    <span class="bfc4-sticky-price" id="bfc4-sticky-price">{{ current_variant.price | money }}</span>
-  </div>
-  <button class="bfc4-sticky-btn" id="bfc4-sticky-btn" onclick="bfc4BagATC()"{% unless current_variant.available %} disabled{% endunless %}>{% if current_variant.available %}Add to Cart{% else %}Sold Out{% endif %}</button>
-</div>
-
-{%- comment -%} Hidden Shopify product form — powers the real add-to-cart and opens the cart drawer {%- endcomment -%}
-{%- assign bfc4_form_id = 'bfc4-bag-form-' | append: section.id -%}
-<div style="display:none">
-  <product-form class="product-form" data-hide-errors="false" data-section-id="{{ section.id }}">
-    {%- form 'product', product, id: bfc4_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
-      <input type="hidden" name="id" value="{{ current_variant.id }}" class="product-variant-id" id="bfc4-variant-input"/>
-      <div class="product-form__buttons" data-display-quantity="false" data-display-layout="seperate" data-display-dynamics="false">
-        <button id="ProductSubmitButton-{{ section.id }}" type="submit" name="add" class="product-form__submit button button--filled">
-          <span>Add to Cart</span>
-          <div class="loading__spinner hidden">
-            <svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66"><circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle></svg>
-          </div>
-        </button>
-      </div>
-      <div class="product-form__error-message-wrapper" role="alert" hidden>
-        <span class="product-form__error-message"></span>
-      </div>
-    {%- endform -%}
-  </product-form>
-</div>
-
 <script>
-(function() {
-  var SECTION = '{{ section.id }}';
-
-  // ── Variant lookup table (for color swatch → variant resolution) ──
-  window.__bfcBagVariants = [
+(function(){
+  window.__bfc4dVariants = [
     {%- for v in product.variants -%}
-    { id: {{ v.id }}, price: {{ v.price }}, price_fmt: {{ v.price | money | json }}, compare_fmt: {{ v.compare_at_price | money | json }}, has_compare: {% if v.compare_at_price > v.price %}true{% else %}false{% endif %}, available: {{ v.available }}, options: [{% for o in v.options %}{{ o | json }}{% unless forloop.last %},{% endunless %}{% endfor %}], featured_media_id: {% if v.featured_media %}{{ v.featured_media.id }}{% else %}null{% endif %} }{% unless forloop.last %},{% endunless %}
+    { id: {{ v.id }}, price_fmt: {{ v.price | money_without_trailing_zeros | json }}, compare_fmt: {{ v.compare_at_price | money_without_trailing_zeros | json }}, has_compare: {% if v.compare_at_price > v.price %}true{% else %}false{% endif %}, available: {{ v.available }}, inventory: {{ v.inventory_quantity | default: 0 }}, options: [{% for o in v.options %}{{ o | json }}{% unless forloop.last %},{% endunless %}{% endfor %}], url: {{ v.id | prepend: '?variant=' | prepend: product.url | json }} }{% unless forloop.last %},{% endunless %}
     {%- endfor -%}
   ];
 
-  var STATE = { variantId: {{ current_variant.id }} };
-
-  // ── Image slider ──
-  var slidesEl = document.getElementById('bfc4-slides');
-  var slideTotal = document.querySelectorAll('#bfc-pdp-bag-' + SECTION + ' .bfc4-slide').length;
-  var slideCurrent = 0;
-  window.bfc4Slide = function(dir) {
-    if (slideTotal <= 1) return;
-    bfc4GoTo((slideCurrent + dir + slideTotal) % slideTotal);
-  };
-  window.bfc4GoTo = function(idx) {
-    slideCurrent = idx;
-    if (slidesEl) slidesEl.style.transform = 'translateX(-' + (idx * 100) + '%)';
-    document.querySelectorAll('#bfc-pdp-bag-' + SECTION + ' .bfc4-dot').forEach(function(d, i) { d.classList.toggle('is-active', i === idx); });
-    var prev = document.querySelector('#bfc-pdp-bag-' + SECTION + ' .bfc4-arrow.is-prev');
-    if (prev) prev.style.visibility = idx === 0 ? 'hidden' : 'visible';
-  };
-  // swipe
-  (function() {
-    var left = document.querySelector('#bfc-pdp-bag-' + SECTION + ' .bfc4-left');
-    if (!left || slideTotal <= 1) return;
-    var startX = 0;
-    left.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, { passive: true });
-    left.addEventListener('touchend', function(e) {
-      var dx = e.changedTouches[0].clientX - startX;
-      if (Math.abs(dx) > 40) bfc4Slide(dx < 0 ? 1 : -1);
-    });
-  })();
-  // preload remaining slides after the page settles (no fade when tabbing)
-  (function() {
-    function preload() {
-      document.querySelectorAll('#bfc-pdp-bag-' + SECTION + ' .bfc4-slide img[loading="lazy"]').forEach(function(img) {
-        if (img.dataset.bfcPreloaded) return;
-        img.dataset.bfcPreloaded = '1';
-        var pre = new Image();
-        if (img.srcset) pre.srcset = img.srcset;
-        if (img.sizes) pre.sizes = img.sizes;
-        pre.src = img.currentSrc || img.src;
-        img.loading = 'eager';
-      });
-    }
-    if ('requestIdleCallback' in window) { requestIdleCallback(preload, { timeout: 2000 }); }
-    else { window.addEventListener('load', function() { setTimeout(preload, 300); }); }
+  /* Slider */
+  var idx=0,slides=document.getElementById('bfc4d-slides'),
+      dots=document.querySelectorAll('.bfc4d-dot'),total=dots.length,
+      prev=document.getElementById('bfc4d-prev'),next=document.getElementById('bfc4d-next');
+  function goTo(i){if(i<0)i=0;if(i>=total)i=total-1;idx=i;
+    if(slides)slides.style.transform='translateX(-'+(idx*100)+'%)';
+    dots.forEach(function(d,j){d.classList.toggle('is-active',j===idx);});
+    if(prev)prev.style.visibility=idx===0?'hidden':'visible';
+    if(next)next.style.visibility=idx>=total-1?'hidden':'visible';
+  }
+  window.__bfc4dGoTo=goTo;
+  if(prev)prev.onclick=function(){goTo(idx-1);};
+  if(next)next.onclick=function(){goTo(idx+1);};
+  dots.forEach(function(d){d.onclick=function(){goTo(+this.dataset.idx);};});
+  if(total<=1&&next)next.style.visibility='hidden';
+  var sx=0,sl=document.getElementById('bfc4d-slider');
+  if(sl){
+    sl.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;},{passive:true});
+    sl.addEventListener('touchend',function(e){var d=sx-e.changedTouches[0].clientX;if(Math.abs(d)>40){d>0?goTo(idx+1):goTo(idx-1);}},{passive:true});
+  }
+  /* preload lazy slides after load */
+  (function(){
+    function pl(){document.querySelectorAll('#bfc4d-slides img[loading="lazy"]').forEach(function(im){if(im.dataset.pp)return;im.dataset.pp='1';var p=new Image();if(im.srcset)p.srcset=im.srcset;p.src=im.currentSrc||im.src;im.loading='eager';});}
+    if('requestIdleCallback' in window){requestIdleCallback(pl,{timeout:2000});}else{window.addEventListener('load',function(){setTimeout(pl,300);});}
   })();
 
-  // ── Jump slider to a variant's image when the color changes ──
-  function jumpToVariantImage(variantId) {
-    var v = window.__bfcBagVariants.find(function(x) { return x.id === variantId; });
-    if (!v) return;
-    var slides = document.querySelectorAll('#bfc-pdp-bag-' + SECTION + ' .bfc4-slide');
-    // 1: match by featured_media_id (product.media fallback case)
-    if (v.featured_media_id) {
-      for (var i = 0; i < slides.length; i++) {
-        if (String(slides[i].dataset.mediaId) === String(v.featured_media_id)) { bfc4GoTo(i); return; }
-      }
+  function applyVariant(v){
+    document.getElementById('bfc4d-vid').value=v.id;
+    var hv=document.getElementById('bfc4d-hidden-vid');if(hv)hv.value=v.id;
+    var pe=document.getElementById('bfc4d-price');if(pe)pe.textContent=v.price_fmt;
+    var sp=document.getElementById('bfc4d-sticky-price');if(sp)sp.textContent=v.price_fmt;
+    var ce=document.getElementById('bfc4d-compare'),se=document.getElementById('bfc4d-save');
+    if(v.has_compare&&ce){ce.textContent=v.compare_fmt;ce.style.display='';if(se)se.style.display='';}
+    else{if(ce)ce.style.display='none';if(se)se.style.display='none';}
+    var stockEl=document.getElementById('bfc4d-stock');
+    if(stockEl){
+      if(v.available&&v.inventory>0){stockEl.style.display='';
+        if(v.inventory<=5){stockEl.classList.add('is-low');stockEl.innerHTML='<span class="bfc4d-stock-dot"></span>Only '+v.inventory+' left';}
+        else{stockEl.classList.remove('is-low');stockEl.innerHTML='<span class="bfc4d-stock-dot"></span>In stock';}
+      } else { stockEl.style.display='none'; }
     }
-    // 2: match by alt text containing the color value (section-image case)
-    var colorVal = v.options.join(' ').toLowerCase();
-    for (var j = 0; j < slides.length; j++) {
-      var img = slides[j].querySelector('img');
-      if (img && img.alt && colorVal && img.alt.toLowerCase().indexOf(v.options[v.options.length - 1].toLowerCase()) !== -1) { bfc4GoTo(j); return; }
-    }
+    var atcBtn=document.getElementById('bfc4d-atc'),atcTxt=document.getElementById('bfc4d-atc-text');
+    if(atcBtn)atcBtn.disabled=!v.available;
+    if(atcTxt)atcTxt.textContent=v.available?'Add to Cart':'Sold Out';
+    var u=new URL(v.url,window.location.origin);
+    window.history.replaceState({},'',u.pathname+u.search);
   }
 
-  // ── Color swatch selection ──
-  window.bfc4SelectColor = function(btn) {
-    if (btn.disabled) return;
-    var newColor = btn.dataset.colorValue;
-    var optIdx = parseInt(btn.dataset.optIndex, 10);
-    document.querySelectorAll('#bfc-pdp-bag-' + SECTION + ' .bfc4-color-swatch').forEach(function(b) { b.classList.remove('is-active'); });
+  /* Color swatches */
+  window.bfc4dSelectColor=function(btn){
+    if(btn.disabled)return;
+    var newColor=btn.dataset.colorValue,optIdx=parseInt(btn.dataset.optIndex,10);
+    document.querySelectorAll('.bfc4d-color-swatch').forEach(function(b){b.classList.remove('is-active');});
     btn.classList.add('is-active');
+    var nm=document.getElementById('bfc4d-color-name');if(nm)nm.textContent=newColor;
+    var cur=window.__bfc4dVariants.find(function(v){return v.id===parseInt(document.getElementById('bfc4d-vid').value,10);});
+    if(!cur)return;
+    var newOpts=cur.options.slice();newOpts[optIdx]=newColor;
+    var match=window.__bfc4dVariants.find(function(v){for(var i=0;i<newOpts.length;i++){if(v.options[i]!==newOpts[i])return false;}return true;});
+    if(!match)return;
+    applyVariant(match);
+  };
 
-    var nameEl = document.getElementById('bfc4-color-name');
-    if (nameEl) nameEl.textContent = newColor;
-
-    var current = window.__bfcBagVariants.find(function(v) { return v.id === STATE.variantId; });
-    if (!current) return;
-    var newOpts = current.options.slice();
-    newOpts[optIdx] = newColor;
-    var match = window.__bfcBagVariants.find(function(v) {
-      for (var i = 0; i < newOpts.length; i++) { if (v.options[i] !== newOpts[i]) return false; }
-      return true;
+  /* Variant text buttons */
+  document.querySelectorAll('.bfc4d-var-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      if(this.disabled)return;
+      document.querySelectorAll('.bfc4d-var-btn').forEach(function(b){b.classList.remove('is-active');});
+      this.classList.add('is-active');
+      var v=window.__bfc4dVariants.find(function(x){return x.id===parseInt(btn.dataset.vid,10);});
+      if(v)applyVariant(v);
     });
-    if (!match) return;
+  });
 
-    STATE.variantId = match.id;
-    var inp = document.getElementById('bfc4-variant-input');
-    if (inp) inp.value = STATE.variantId;
-    var priceEl = document.getElementById('bfc4-price');
-    if (priceEl) priceEl.textContent = match.price_fmt;
-    var stickyPrice = document.getElementById('bfc4-sticky-price');
-    if (stickyPrice) stickyPrice.textContent = match.price_fmt;
-    var cmpEl = document.getElementById('bfc4-price-compare');
-    if (cmpEl) { cmpEl.textContent = match.has_compare ? match.compare_fmt : ''; cmpEl.style.display = match.has_compare ? '' : 'none'; }
+  /* Qty */
+  window.bfc4dQty=function(d){var q=document.getElementById('bfc4d-qty');if(!q)return;var v=(parseInt(q.value,10)||1)+d;if(v<1)v=1;if(v>99)v=99;q.value=v;};
 
-    // availability of the add button
-    var atc = document.getElementById('bfc4-atc');
-    var atcText = document.getElementById('bfc4-atc-text');
-    var stickyBtn = document.getElementById('bfc4-sticky-btn');
-    if (atc) atc.disabled = !match.available;
-    if (stickyBtn) stickyBtn.disabled = !match.available;
-    if (atcText) atcText.textContent = match.available ? 'Add to Cart' : 'Sold Out';
+  /* Lightbox */
+  window.bfc4dLightbox=function(src){var lb=document.getElementById('bfc4d-lightbox'),im=document.getElementById('bfc4d-lightbox-img');if(!lb||!im)return;im.src=src;lb.classList.add('is-open');document.body.style.overflow='hidden';};
+  window.bfc4dCloseLightbox=function(){var lb=document.getElementById('bfc4d-lightbox');if(!lb)return;lb.classList.remove('is-open');document.body.style.overflow='';};
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')bfc4dCloseLightbox();});
 
-    jumpToVariantImage(match.id);
-  };
+  /* Sticky */
+  var sticky=document.getElementById('bfc4d-sticky'),atcB=document.getElementById('bfc4d-atc');
+  if(sticky&&atcB&&window.innerWidth<=900){
+    new IntersectionObserver(function(e){e.forEach(function(x){sticky.classList.toggle('is-visible',!x.isIntersecting);});},{threshold:0}).observe(atcB);
+  }
 
-  // ── Add to Cart (single product; theme form opens the drawer) ──
-  var _adding = false;
-  window.bfc4BagATC = function() {
-    if (_adding) return;
-    var current = window.__bfcBagVariants.find(function(v) { return v.id === STATE.variantId; });
-    if (!current || !current.available) return;
-    _adding = true;
+  /* ATC button state */
+  function setAdding(){var b=document.getElementById('bfc4d-atc'),t=document.getElementById('bfc4d-atc-text'),sb=document.getElementById('bfc4d-sticky-btn'),st=document.getElementById('bfc4d-sticky-btn-text');if(b)b.disabled=true;if(sb)sb.disabled=true;if(t)t.textContent='Adding\u2026';if(st)st.textContent='Adding\u2026';}
+  function setAdded(){var b=document.getElementById('bfc4d-atc'),t=document.getElementById('bfc4d-atc-text'),sb=document.getElementById('bfc4d-sticky-btn'),st=document.getElementById('bfc4d-sticky-btn-text');if(t)t.textContent='Added!';if(st)st.textContent='Added!';if(b)b.style.background='#2a4820';setTimeout(function(){if(t)t.textContent='Add to Cart';if(st)st.textContent='Add to Cart';if(b){b.disabled=false;b.style.background='';}if(sb)sb.disabled=false;},1500);}
+  function setError(msg){var b=document.getElementById('bfc4d-atc'),t=document.getElementById('bfc4d-atc-text'),sb=document.getElementById('bfc4d-sticky-btn'),st=document.getElementById('bfc4d-sticky-btn-text');if(t)t.textContent=String(msg||'Error').slice(0,30);if(st)st.textContent='Add to Cart';if(b)b.style.background='#a33';setTimeout(function(){if(t)t.textContent='Add to Cart';if(b){b.disabled=false;b.style.background='';}if(sb)sb.disabled=false;},3000);}
 
-    var textEl = document.getElementById('bfc4-atc-text');
-    var mainBtn = document.getElementById('bfc4-atc');
-    var stickyBtn = document.getElementById('bfc4-sticky-btn');
-    function reset() {
-      if (textEl) textEl.textContent = 'Add to Cart';
-      if (mainBtn) { mainBtn.disabled = false; mainBtn.classList.remove('is-success'); }
-      if (stickyBtn) { stickyBtn.disabled = false; stickyBtn.textContent = 'Add to Cart'; stickyBtn.style.background = ''; }
-      _adding = false;
+  window.bfc4dAddToCart=function(){
+    var btn=document.getElementById('bfc4d-atc'),
+        vid=parseInt(document.getElementById('bfc4d-vid').value,10),
+        qty=parseInt(document.getElementById('bfc4d-qty').value,10)||1,
+        hiddenVid=document.getElementById('bfc4d-hidden-vid'),
+        hiddenQty=document.getElementById('bfc4d-hidden-qty'),
+        hiddenSubmit=document.querySelector('product-form .product-form__submit');
+    if(!vid||(btn&&btn.disabled))return;
+    setAdding();
+    if(hiddenVid)hiddenVid.value=vid;
+    if(hiddenQty)hiddenQty.value=qty;
+    if(hiddenSubmit){
+      try{hiddenSubmit.click();}catch(e){setError('Error');return;}
+      setTimeout(function(){
+        var errEl=document.querySelector('product-form .product-form__error-message');
+        var errMsg=errEl&&!errEl.hidden&&errEl.textContent.trim();
+        if(errMsg){setError(errMsg);}else{setAdded();}
+      },800);
+      return;
     }
-    if (mainBtn) mainBtn.disabled = true;
-    if (stickyBtn) stickyBtn.disabled = true;
-    if (textEl) textEl.textContent = 'Adding\u2026';
-    if (stickyBtn) stickyBtn.textContent = 'Adding\u2026';
-
-    var submitBtn = document.getElementById('ProductSubmitButton-' + SECTION);
-    if (!submitBtn) { reset(); return; }
-    try {
-      submitBtn.click();
-      if (mainBtn) mainBtn.classList.add('is-success');
-      if (textEl) textEl.textContent = 'Added!';
-      if (stickyBtn) { stickyBtn.textContent = 'Added!'; stickyBtn.style.background = '#2a4820'; }
-      setTimeout(reset, 2400);
-    } catch (e) { reset(); }
+    setError('Unavailable');
   };
-
-  // ── Read more / less ──
-  window.bfc4ToggleDesc = function() {
-    var desc = document.getElementById('bfc4-desc');
-    var btn = document.getElementById('bfc4-desc-toggle');
-    if (!desc || !btn) return;
-    var clamped = desc.classList.toggle('bfc4-desc-clamp');
-    btn.textContent = clamped ? 'Read more' : 'Read less';
-    btn.setAttribute('aria-expanded', clamped ? 'false' : 'true');
-  };
-
-  // ── Sticky bar visibility ──
-  var stickyBar = document.getElementById('bfc4-sticky-bar');
-  var mainAtc = document.getElementById('bfc4-atc');
-  if (stickyBar) stickyBar.style.display = '';
-  if (stickyBar && mainAtc) {
-    new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) { stickyBar.classList.toggle('is-visible', !e.isIntersecting); });
-    }, { threshold: 0 }).observe(mainAtc);
-  }
-  if (stickyBar) {
-    var hide = function() { stickyBar.classList.remove('is-visible'); };
-    document.addEventListener('click', function(e) {
-      var t = e.target.closest('a[href="/cart"], a[href^="/cart?"], [data-cart-icon], [data-cart-toggle], summary[aria-controls*="cart" i], button[aria-controls*="cart" i], .header__icon--cart');
-      if (t) hide();
-    }, true);
-    ['cart:open', 'cart-drawer:open', 'drawer:open'].forEach(function(ev) { document.addEventListener(ev, hide); });
-  }
-
-  // init arrow visibility
-  bfc4GoTo(0);
 })();
 </script>
 
@@ -636,30 +569,27 @@
 {
   "name": "BFC Bag PDP",
   "tag": "section",
-  "class": "bfc-pdp-bag-section",
+  "class": "bfc-bag-section",
   "settings": [
     { "type": "header", "content": "Breadcrumb" },
-    { "type": "collection", "id": "breadcrumb_collection", "label": "Breadcrumb collection", "info": "The collection shown in the breadcrumb (e.g. Bags). If blank, uses the collection the shopper arrived through, or just Home." },
-    { "type": "header", "content": "Product Images" },
-    { "type": "paragraph", "content": "Optional. If set, these override the product's own media in the slider. Leave all blank to use the product's images." },
-    { "type": "image_picker", "id": "slide_1", "label": "Image 1" },
-    { "type": "image_picker", "id": "slide_2", "label": "Image 2" },
-    { "type": "image_picker", "id": "slide_3", "label": "Image 3" },
-    { "type": "image_picker", "id": "slide_4", "label": "Image 4" },
-    { "type": "image_picker", "id": "slide_5", "label": "Image 5" },
-    { "type": "image_picker", "id": "slide_6", "label": "Image 6" },
-    { "type": "image_picker", "id": "slide_7", "label": "Image 7" },
-    { "type": "image_picker", "id": "slide_8", "label": "Image 8" },
-    { "type": "header", "content": "Top Sellers Rail" },
+    { "type": "collection", "id": "breadcrumb_collection", "label": "Breadcrumb collection", "info": "e.g. Bags & Cases. If blank, uses the product's first collection." },
+    { "type": "header", "content": "Cross-sell Rail" },
     { "type": "text", "id": "rail_title", "label": "Rail heading", "default": "Need a camera to go in there?" },
-    { "type": "text", "id": "rail_subtitle", "label": "Rail subheading", "default": "Our best sellers around the shop." },
-    { "type": "collection", "id": "rail_collection_1", "label": "Source collection 1", "info": "e.g. Cameras. Set its sort to 'Best selling' in admin for top sellers." },
-    { "type": "collection", "id": "rail_collection_2", "label": "Source collection 2", "info": "e.g. Film." },
-    { "type": "collection", "id": "rail_collection_3", "label": "Source collection 3", "info": "e.g. Accessories. Products are woven together across the three." },
-    { "type": "range", "id": "rail_count", "label": "Total products in rail", "min": 4, "max": 20, "step": 1, "default": 12 }
+    { "type": "paragraph", "content": "Add products to the rail using the 'Rail product' blocks below. Drag to reorder. Out-of-stock products are hidden automatically." }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "rail_product",
+      "name": "Rail product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" }
+      ]
+    }
   ],
   "presets": [
     { "name": "BFC Bag PDP" }
-  ]
+  ],
+  "templates": ["product"]
 }
 {% endschema %}
