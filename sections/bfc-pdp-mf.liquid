@@ -1871,7 +1871,7 @@
                   data-zoom="{{ img_val | image_url: width: 1600 }}"
                   alt="{{ product.title | escape }}"
                   width="900" height="900"
-                  {%- if i == 1 -%}loading="eager" fetchpriority="high"{%- else -%}loading="lazy"{%- endif -%}
+                  {%- if i <= 2 -%}loading="eager" fetchpriority="high"{%- else -%}loading="lazy"{%- endif -%}
                 />
               </picture>
             </div>
@@ -1896,7 +1896,7 @@
               data-zoom="{{ media | image_url: width: 1600 }}"
               alt="{{ product.title | escape }}"
               width="900" height="900"
-              {%- if forloop.first -%}loading="eager" fetchpriority="high"{%- else -%}loading="lazy"{%- endif -%}
+              {%- if forloop.index <= 2 -%}loading="eager" fetchpriority="high"{%- else -%}loading="lazy"{%- endif -%}
             />
           </div>
         {%- endfor -%}
@@ -3562,6 +3562,32 @@
   // ── Image slider ─────────────────────────────────
   var bfc4Slide_current = 0;
   var bfc4Slide_total   = document.querySelectorAll('.bfc4-slide').length;
+
+  // Preload the remaining (lazy) hero slide images after the page settles, so
+  // tabbing/swiping past the first two slides shows them instantly without the
+  // background flashing through while a lazy image fetches.
+  (function() {
+    function preloadHeroSlides() {
+      var imgs = document.querySelectorAll('#bfc4-slides .bfc4-slide img[loading="lazy"]');
+      imgs.forEach(function(img) {
+        // Trigger the fetch now and let the browser cache it.
+        if (img.dataset.bfcPreloaded) return;
+        img.dataset.bfcPreloaded = '1';
+        var pre = new Image();
+        if (img.srcset) pre.srcset = img.srcset;
+        if (img.sizes) pre.sizes = img.sizes;
+        pre.src = img.currentSrc || img.src;
+        // Also flip the actual element to eager so it stays decoded.
+        img.loading = 'eager';
+      });
+    }
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(preloadHeroSlides, { timeout: 2000 });
+    } else {
+      window.addEventListener('load', function() { setTimeout(preloadHeroSlides, 300); });
+    }
+  })();
+
   window.bfc4Slide = function(dir) {
     bfc4GoTo((bfc4Slide_current + dir + bfc4Slide_total) % bfc4Slide_total);
   };
