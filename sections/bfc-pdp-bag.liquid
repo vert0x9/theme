@@ -149,7 +149,31 @@
 }
 #bfc-pdp-bag-{{ section.id }} .bfc4-sticky-btn:hover:not(:disabled) { background: #c9600f; }
 #bfc-pdp-bag-{{ section.id }} .bfc4-sticky-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── CROSS-SELL RAIL ── */
+#bfc-pdp-bag-{{ section.id }} .bfc4-rail { padding: 48px 40px 8px; border-top: 1px solid rgba(32,32,9,0.1); }
+@media (max-width: 900px) { #bfc-pdp-bag-{{ section.id }} .bfc4-rail { padding: 36px 20px 8px; } }
+#bfc-pdp-bag-{{ section.id }} .bfc4-rail-head { font-family: var(--sd); font-weight: 600; font-size: 26px; line-height: 1.1; margin-bottom: 4px; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-rail-sub { font-size: 13px; color: var(--ch); margin-bottom: 22px; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-rail-track {
+  display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding-bottom: 16px; scrollbar-width: thin; -webkit-overflow-scrolling: touch;
+}
+#bfc-pdp-bag-{{ section.id }} .bfc4-rail-track::-webkit-scrollbar { height: 5px; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-rail-track::-webkit-scrollbar-thumb { background: rgba(32,32,9,0.18); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-rail-card {
+  flex: 0 0 auto; width: 200px; scroll-snap-align: start; text-decoration: none; color: var(--bk); display: block;
+}
+@media (max-width: 900px) { #bfc-pdp-bag-{{ section.id }} .bfc4-rail-card { width: 156px; } }
+#bfc-pdp-bag-{{ section.id }} .bfc4-rail-img { width: 100%; aspect-ratio: 1/1; background: var(--gr); overflow: hidden; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-rail-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform var(--t); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-rail-card:hover .bfc4-rail-img img { transform: scale(1.04); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-rail-name { font-size: 13px; font-weight: 500; line-height: 1.3; margin-top: 10px; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-rail-card:hover .bfc4-rail-name { color: var(--or); }
+#bfc-pdp-bag-{{ section.id }} .bfc4-rail-price { font-size: 12px; color: var(--ch); margin-top: 3px; }
+#bfc-pdp-bag-{{ section.id }} .bfc4-rail-price .compare { text-decoration: line-through; opacity: 0.55; margin-left: 5px; }
 </style>
+
 
 {%- comment -%} ── Detect a color option (Color / Colour / Leather / Cover / Finish) ── {%- endcomment -%}
 {%- assign color_opt_idx = null -%}
@@ -307,6 +331,43 @@
 
 </div>{%- comment -%} /bfc4-split {%- endcomment -%}
 </div>{%- comment -%} /bfc4 {%- endcomment -%}
+
+{%- comment -%} ── Cross-sell rail: top sellers around the shop ── {%- endcomment -%}
+{%- assign rail_handle = section.settings.rail_collection | default: 'all' -%}
+{%- if section.settings.rail_collection != blank -%}
+  {%- assign rail_coll = collections[section.settings.rail_collection] -%}
+{%- else -%}
+  {%- assign rail_coll = collections['all'] -%}
+{%- endif -%}
+{%- if rail_coll and rail_coll.products_count > 0 -%}
+  {%- assign rail_limit = section.settings.rail_count | default: 12 -%}
+  {%- assign rail_shown = 0 -%}
+  {%- capture rail_cards -%}
+    {%- for p in rail_coll.products -%}
+      {%- if p.id == product.id -%}{%- continue -%}{%- endif -%}
+      {%- if rail_shown >= rail_limit -%}{%- break -%}{%- endif -%}
+      {%- assign rail_shown = rail_shown | plus: 1 -%}
+      <a class="bfc4-rail-card" href="{{ p.url }}">
+        <div class="bfc4-rail-img">
+          {%- if p.featured_image -%}
+            <img src="{{ p.featured_image | image_url: width: 400 }}" alt="{{ p.title | escape }}" loading="lazy" width="400" height="400"/>
+          {%- endif -%}
+        </div>
+        <div class="bfc4-rail-name">{{ p.title }}</div>
+        <div class="bfc4-rail-price">
+          {{ p.price | money }}{% if p.compare_at_price > p.price %}<span class="compare">{{ p.compare_at_price | money }}</span>{% endif %}
+        </div>
+      </a>
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- if rail_shown > 0 -%}
+    <div class="bfc4-rail">
+      <h2 class="bfc4-rail-head">{{ section.settings.rail_title | default: 'Need a camera to go in there?' }}</h2>
+      {%- if section.settings.rail_subtitle != blank -%}<p class="bfc4-rail-sub">{{ section.settings.rail_subtitle }}</p>{%- endif -%}
+      <div class="bfc4-rail-track">{{ rail_cards }}</div>
+    </div>
+  {%- endif -%}
+{%- endif -%}
 
 {%- comment -%} Reviews block {%- endcomment -%}
 {% render 'bfc-pdp-reviews', pdp_handle: product.handle, pdp_title: product.title %}
@@ -543,7 +604,12 @@
     { "type": "image_picker", "id": "slide_5", "label": "Image 5" },
     { "type": "image_picker", "id": "slide_6", "label": "Image 6" },
     { "type": "image_picker", "id": "slide_7", "label": "Image 7" },
-    { "type": "image_picker", "id": "slide_8", "label": "Image 8" }
+    { "type": "image_picker", "id": "slide_8", "label": "Image 8" },
+    { "type": "header", "content": "Top Sellers Rail" },
+    { "type": "text", "id": "rail_title", "label": "Rail heading", "default": "Need a camera to go in there?" },
+    { "type": "text", "id": "rail_subtitle", "label": "Rail subheading", "default": "Our best sellers around the shop." },
+    { "type": "collection", "id": "rail_collection", "label": "Source collection", "info": "Cameras, bags, and more. For true top sellers, set this collection's sort order to 'Best selling' in the collection admin. Leave blank to use all products." },
+    { "type": "range", "id": "rail_count", "label": "Number of products", "min": 4, "max": 20, "step": 1, "default": 12 }
   ],
   "presets": [
     { "name": "BFC Bag PDP" }
