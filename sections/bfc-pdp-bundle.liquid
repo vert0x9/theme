@@ -1148,7 +1148,6 @@
     <div class="bfc4-header">
       {% render 'bfc-pdp-breadcrumbs' %}
       <h1 class="bfc4-title">{{ product.title }}</h1>
-      {%- render 'bfc-rating-stars', pdp_handle: product.handle -%}
       <div id="bfc4-star-placeholder"></div>
       {%- comment -%} Extract description, stripping the bundle list block {%- endcomment -%}
       {%- assign desc_inner = product.description | split: 'bfc-desc-specs__desc">' | last | split: '</div>' | first -%}
@@ -1540,6 +1539,82 @@
   </div>
   <button class="bfc4-sticky-btn" onclick="var _s=this;_s.textContent='Adding\u2026';_s.style.opacity='0.7';bfc4BundleATC()"{%- unless current_variant.available %} disabled{%- endunless %}>Add to Cart</button>
 </div>
+
+{%- comment -%} Hidden Shopify product form — powers the real add-to-cart and opens the cart drawer {%- endcomment -%}
+{%- assign bfc4_form_id = 'bfc4-form-' | append: section.id -%}
+<div style="display:none">
+  <product-form class="product-form" data-hide-errors="false" data-section-id="{{ section.id }}">
+    {%- form 'product', product, id: bfc4_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+      <input type="hidden" name="id" value="{{ current_variant.id }}" class="product-variant-id" id="bfc4-variant-input"/>
+      <div class="product-form__buttons" data-display-quantity="false" data-display-layout="seperate" data-display-dynamics="false">
+        <button id="ProductSubmitButton-{{ section.id }}" type="submit" name="add" class="product-form__submit button button--filled">
+          <span>Add to Cart</span>
+          <div class="loading__spinner hidden">
+            <svg aria-hidden="true" focusable="false" class="spinner" viewBox="0 0 66 66"><circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle></svg>
+          </div>
+        </button>
+      </div>
+      <div class="product-form__error-message-wrapper" role="alert" hidden>
+        <span class="product-form__error-message"></span>
+      </div>
+    {%- endform -%}
+  </product-form>
+</div>
+
+<script>
+(function() {
+  // ── Grade/variant selection (no-op-safe when there's a single variant) ──
+  window.bfc4SelectVariant = function(btn) {
+    if (btn.dataset.variantAvailable === 'false') return;
+    document.querySelectorAll('.bfc4-var-btn').forEach(function(b) { b.classList.remove('is-active'); });
+    btn.classList.add('is-active');
+    var vid = parseInt(btn.dataset.variantId, 10);
+    var inp = document.getElementById('bfc4-variant-input');
+    if (inp) inp.value = vid;
+    var totalEl = document.getElementById('bfc4-total');
+    if (totalEl && btn.dataset.variantPriceFmt) totalEl.textContent = btn.dataset.variantPriceFmt;
+    var stickyPrice = document.getElementById('bfc4-sticky-price');
+    if (stickyPrice && btn.dataset.variantPriceFmt) stickyPrice.textContent = btn.dataset.variantPriceFmt;
+    var stickyGrade = document.getElementById('bfc4-sticky-grade');
+    if (stickyGrade) stickyGrade.textContent = btn.textContent.trim();
+  };
+  window.baSelectVariant = window.bfc4SelectVariant;
+
+  // ── Add to Cart: add the product via the hidden Shopify form, which also
+  //    opens the cart drawer. Single product, no kit/warranty items. ──
+  var _bfcAdding = false;
+  window.bfc4BundleATC = function() {
+    if (_bfcAdding) return;
+    if (!{{ current_variant.available | json }}) return;
+    _bfcAdding = true;
+
+    var textEl     = document.getElementById('bfc4-atc-text');
+    var mainBtn    = document.getElementById('bfc4-atc');
+    var stickyBtns = document.querySelectorAll('.bfc4-sticky-btn');
+
+    function reset(label) {
+      if (textEl) textEl.textContent = label;
+      if (mainBtn) { mainBtn.style.opacity = ''; mainBtn.classList.remove('is-success'); }
+      stickyBtns.forEach(function(b){ b.textContent = 'Add to Cart'; b.style.opacity=''; b.style.background=''; });
+      _bfcAdding = false;
+    }
+
+    var submitBtn = document.getElementById('ProductSubmitButton-{{ section.id }}');
+    if (!submitBtn) { reset('Add to Cart'); return; }
+
+    try {
+      // The theme's product-form handles the /cart/add + drawer open.
+      submitBtn.click();
+      if (mainBtn) mainBtn.classList.add('is-success');
+      if (textEl) textEl.textContent = 'Added!';
+      stickyBtns.forEach(function(b){ b.textContent = 'Added!'; b.style.background = '#2a4820'; });
+      setTimeout(function(){ reset('Add to Cart'); }, 2400);
+    } catch (e) {
+      reset('Add to Cart');
+    }
+  };
+})();
+</script>
 
 <script>
 (function() {
