@@ -284,9 +284,10 @@
   </div>
 {%- endif -%}
 
-{% render 'bfc-pdp-reviews', pdp_handle: product.handle, pdp_title: product.title %}
-
 </div>
+
+{%- comment -%} Reviews rendered OUTSIDE the bag wrapper so the scoped .bfc4 reset CSS does not leak into the reviews section {%- endcomment -%}
+{% render 'bfc-pdp-reviews', pdp_handle: product.handle, pdp_title: product.title %}
 
 <div class="bfc4-lightbox" id="bfc4-lightbox" onclick="bfc4BagCloseLightbox()">
   <button class="bfc4-lightbox-close" onclick="bfc4BagCloseLightbox()" aria-label="Close">&times;</button>
