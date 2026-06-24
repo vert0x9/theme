@@ -485,7 +485,7 @@
       {%- comment -%} Collection IDs to EXCLUDE from warranty badge (modern Polaroid, disposables, etc) {%- endcomment -%}
       {%- assign bfc_hide_ids = '291299754156,323693871276' | split: ',' -%}
       {%- comment -%} Handle-based excludes (film/accessories/services/etc) {%- endcomment -%}
-      {%- assign bfc_hide_collections = 'film,35mm-film,120-film,super-8-film,black-and-white-film,color-film,slide-film,expired-film,cinestill,fuji,kodak,ilford,lomography,accessories,straps,cases,lens-caps,caps,batteries,developing,film-developing,services,memberships,gift-cards,merch,apparel,books,prints,posters' | split: ',' -%}
+      {%- assign bfc_hide_collections = 'film,35mm-film,120-film,super-8-film,black-and-white-film,color-film,slide-film,expired-film,cinestill,fuji,kodak,ilford,lomography,accessories,straps,cases,bags,bags-cases,camera-bags,camera-bags-cases,lens-caps,caps,batteries,developing,film-developing,services,memberships,gift-cards,merch,apparel,books,prints,posters' | split: ',' -%}
       {%- assign bfc_exclude = false -%}
       {%- if product_ref.gift_card? -%}
         {%- assign bfc_exclude = true -%}
