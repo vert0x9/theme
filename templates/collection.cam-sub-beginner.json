@@ -418,7 +418,7 @@
             "view_all_label": "Shop all",
             "show_arrows": true,
             "edge_fade": true,
-            "square_corners": false,
+            "square_corners": true,
             "mobile_limit_enabled": false,
             "mobile_show_count": 6,
             "section_padding_y": 28,
@@ -452,7 +452,7 @@
         "body_line_height": "1.5",
         "body_letter_spacing": 0,
         "section_padding_top": 40,
-        "section_padding_bottom": 40,
+        "section_padding_bottom": 0,
         "accent_color": "#E36E15",
         "secondary_text_color": "#82906B",
         "item_title_font": "poppins_n5"
@@ -568,6 +568,61 @@
         "accent_color": "#e36e15",
         "secondary_text_color": "#82906b"
       }
+    },
+    "bfc_refurb_process_kfLbbH": {
+      "type": "bfc-refurb-process",
+      "name": "BFC Refurb Process",
+      "settings": {
+        "camera_type": "slr",
+        "open_by_default": false,
+        "mobile_sticky": false,
+        "eyebrow": "Why BFC",
+        "bar_title": "",
+        "open_label": "Learn how",
+        "close_label": "Close",
+        "hero_eyebrow": "Why buy from us, not eBay",
+        "hero_h": "",
+        "hero_p": "",
+        "pillar1_h": "Past the surface",
+        "pillar1_p": "Most resellers clean the outside and call it done. Our techs go further: full internal service, part replacement where needed, and recalibration to factory tolerances.",
+        "pillar2_h": "A real repair department",
+        "pillar2_p": "Cameras come in broken and leave shooting. Our repair department is in-house, which means faster turnaround and no guessing games about what was actually done.",
+        "pillar3_h": "Verified, not assumed",
+        "pillar3_p": "Shutter speeds, meter accuracy, and focus calibration all get checked against pro bench equipment and factory specs.",
+        "pillar4_h": "Warranties on every camera, extended options available",
+        "pillar4_p": "Every camera comes with a warranty. Want longer? We offer extended warranties at checkout. Something goes wrong, bring it back.",
+        "vs_left_label": "Buying from BFC",
+        "vs_right_label": "Buying from a stranger online",
+        "vs_row1_left": "Fully refurbished, calibrated, warrantied",
+        "vs_row1_right": "\"Worked last time I used it\"",
+        "vs_row2_left": "Repair dept on staff",
+        "vs_row2_right": "You are on your own",
+        "vs_row3_left": "Honest condition notes from techs",
+        "vs_row3_right": "Phone photos and hope",
+        "vs_row4_left": "Warranties standard, extended available",
+        "vs_row4_right": "Open a case, wait three weeks",
+        "proc_h": "",
+        "proc_intro": "",
+        "step1_h": "",
+        "step1_p": "",
+        "step2_h": "",
+        "step2_p": "",
+        "step3_h": "",
+        "step3_p": "",
+        "step4_h": "",
+        "step4_p": "",
+        "step5_h": "",
+        "step5_p": "",
+        "guarantee_ey": "Risk, removed",
+        "guarantee_h": "If something is wrong, we fix it.",
+        "guarantee_p": "Every camera ships with a real warranty. If it stops working we will fix or replace it. We offer affordable extended warranties as well.",
+        "guarantee_pt1": "Warranty standard on every camera",
+        "guarantee_pt2": "In-house techs handle every repair",
+        "guarantee_pt3": "Affordable extended warranty available",
+        "guarantee_pt4": "Stop in. Email us. Call us. We answer.",
+        "cta_label": "",
+        "cta_url": ""
+      }
     }
   },
   "order": [
@@ -581,6 +636,7 @@
     "f8303da3-c3cb-4a90-a63a-7a628615aa6f",
     "product_recommendations_QrVpBw",
     "fixed_bfc_top_sellers_EhkN6E",
-    "fixed_bfc_category_strip_iePnyR"
+    "fixed_bfc_category_strip_iePnyR",
+    "bfc_refurb_process_kfLbbH"
   ]
 }
