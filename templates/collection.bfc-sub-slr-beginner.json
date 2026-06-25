@@ -198,6 +198,25 @@
     "main": {
       "type": "main-collection",
       "blocks": {
+        "text_card_n8GBcb": {
+          "type": "text-card",
+          "settings": {
+            "color_scheme": "scheme-1",
+            "text": "",
+            "button_link": "",
+            "link_type": "button",
+            "button_label": "",
+            "button_style": "button--text",
+            "content_position": "center",
+            "content_alignment": "center",
+            "content_position_mobile": "center",
+            "content_alignment_mobile": "center",
+            "position": 3,
+            "column_factor": 2,
+            "row_factor": 2,
+            "card_image": "shopify://shop_images/Canon_AE-1_1.jpg"
+          }
+        },
         "text_card_z8df4a": {
           "type": "text-card",
           "disabled": true,
@@ -234,7 +253,7 @@
             "position": 7,
             "column_factor": 2,
             "row_factor": 1,
-            "card_image": "shopify://shop_images/3_d4a0d78d-d64c-404a-9b43-77889ada6597.jpg"
+            "card_image": "shopify://shop_images/A7409699__1_0a3b9653-c2ba-4ea8-b25a-412f13ca95d1.jpg"
           }
         },
         "text_card_NeqRrh": {
@@ -259,6 +278,7 @@
         }
       },
       "block_order": [
+        "text_card_n8GBcb",
         "text_card_z8df4a",
         "text_card_J6n8hm",
         "text_card_NeqRrh"
