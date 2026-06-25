@@ -140,6 +140,61 @@
         "theme": "light"
       }
     },
+    "bfc_collection_intro_RBqfMH": {
+      "type": "bfc-collection-intro",
+      "blocks": {
+        "quick_nav_qwEgkb": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Beginner friendly",
+            "sublabel": "",
+            "link_collection": "beginner-friendly-35mm",
+            "custom_url": ""
+          }
+        },
+        "quick_nav_XfEkfc": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Staff Favorites",
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": ""
+          }
+        },
+        "quick_nav_Jbhnnt": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "High Tier: Leica & Contax",
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "quick_nav_qwEgkb",
+        "quick_nav_XfEkfc",
+        "quick_nav_Jbhnnt"
+      ],
+      "name": "BFC Collection Intro",
+      "settings": {
+        "intro_eyebrow": "Shop all",
+        "intro_title": "Every Camera, Restored",
+        "intro_body": "Single-lens reflex cameras & Rangefinders- brought back to life and ready to shoot. Every body here has been serviced, cleaned, and bench-tested by our techs in Brooklyn, then backed by a warranty.",
+        "trust_1": "Restored & bench-tested in Brooklyn",
+        "trust_2": "Warrantied",
+        "trust_3": "Free shipping over $400",
+        "sub_mode": false,
+        "sub_eyebrow": "A subset of All Cameras",
+        "sub_title": "Beginner Friendly",
+        "sub_body": "Simple, reliable cameras that are easy to learn on. No fiddly settings, no surprises. Every one restored, bench-tested, and warrantied.",
+        "back_collection": "",
+        "back_label": "Back to All Cameras",
+        "nav_title": "Browse by",
+        "nav_style": "list",
+        "theme": "light"
+      }
+    },
     "main": {
       "type": "main-collection",
       "blocks": {
@@ -362,6 +417,7 @@
     "page_banner_jWtyM4",
     "featured_collections_ybC3xQ",
     "bfc_collection_intro_zVqc9H",
+    "bfc_collection_intro_RBqfMH",
     "main",
     "bfc_refurb_process_BaPGXJ",
     "bfc_sx70_guide_z4PmxW",
