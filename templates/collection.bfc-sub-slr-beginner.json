@@ -238,7 +238,6 @@
         },
         "text_card_J6n8hm": {
           "type": "text-card",
-          "disabled": true,
           "settings": {
             "color_scheme": "scheme-2",
             "text": "",
@@ -250,7 +249,7 @@
             "content_alignment": "start",
             "content_position_mobile": "end",
             "content_alignment_mobile": "center",
-            "position": 7,
+            "position": 10,
             "column_factor": 2,
             "row_factor": 1,
             "card_image": "shopify://shop_images/A7409699__1_0a3b9653-c2ba-4ea8-b25a-412f13ca95d1.jpg"
