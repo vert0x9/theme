@@ -142,6 +142,25 @@
     "main": {
       "type": "main-collection",
       "blocks": {
+        "text_card_ngTqjH": {
+          "type": "text-card",
+          "settings": {
+            "color_scheme": "scheme-1",
+            "text": "",
+            "button_link": "shopify://products/canon-ae-1-program",
+            "link_type": "button",
+            "button_label": "",
+            "button_style": "button--text",
+            "content_position": "center",
+            "content_alignment": "center",
+            "content_position_mobile": "center",
+            "content_alignment_mobile": "center",
+            "position": 10,
+            "column_factor": 2,
+            "row_factor": 2,
+            "card_image": "shopify://shop_images/Canon_AE-1_1.jpg"
+          }
+        },
         "text_card_z8df4a": {
           "type": "text-card",
           "disabled": true,
@@ -203,6 +222,7 @@
         }
       },
       "block_order": [
+        "text_card_ngTqjH",
         "text_card_z8df4a",
         "text_card_J6n8hm",
         "text_card_NeqRrh"
