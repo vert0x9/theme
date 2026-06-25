@@ -457,6 +457,117 @@
         "secondary_text_color": "#82906B",
         "item_title_font": "poppins_n5"
       }
+    },
+    "fixed_bfc_category_strip_iePnyR": {
+      "type": "FIXED-bfc-category-strip",
+      "blocks": {
+        "cover_item_MiWNnE": {
+          "type": "cover_item",
+          "settings": {
+            "image": "shopify://shop_images/Canon_AE-1_Program_Black_4.png",
+            "title": "35mm",
+            "subtitle": "",
+            "url": "shopify://collections/35mm-cameras",
+            "badge": ""
+          }
+        },
+        "cover_item_gDENjy": {
+          "type": "cover_item",
+          "settings": {
+            "image": "shopify://shop_images/Yashica_A_Grey_4.png",
+            "title": "Medium Format",
+            "subtitle": "",
+            "url": "shopify://collections/medium-format-cameras",
+            "badge": ""
+          }
+        },
+        "cover_item_y8fPWq": {
+          "type": "cover_item",
+          "settings": {
+            "image": "shopify://shop_images/Yashica_Sound_20XL_1.png",
+            "title": "Super 8",
+            "subtitle": "",
+            "url": "shopify://collections/8mm",
+            "badge": ""
+          }
+        },
+        "cover_item_zPbDJN": {
+          "type": "cover_item",
+          "settings": {
+            "image": "shopify://shop_images/Polaroid_SX70_White_Tan.png",
+            "title": "SX-70's",
+            "subtitle": "",
+            "url": "shopify://collections/cameras-polaroid-sx-70",
+            "badge": ""
+          }
+        },
+        "cover_item_QN7b9b": {
+          "type": "cover_item",
+          "settings": {
+            "image": "shopify://shop_images/Barbie_600_ba446c6a-6dfe-4c44-823b-9c87301cbe01.png",
+            "title": "Polaroid 600",
+            "subtitle": "",
+            "url": "shopify://collections/cameras-polaroid-600",
+            "badge": ""
+          }
+        },
+        "cover_item_wxpWic": {
+          "type": "cover_item",
+          "settings": {
+            "image": "shopify://shop_images/35mm_Group_1901.png",
+            "title": "35mm",
+            "subtitle": "",
+            "url": "shopify://collections/35mm-film",
+            "badge": ""
+          }
+        }
+      },
+      "block_order": [
+        "cover_item_MiWNnE",
+        "cover_item_gDENjy",
+        "cover_item_y8fPWq",
+        "cover_item_zPbDJN",
+        "cover_item_QN7b9b",
+        "cover_item_wxpWic"
+      ],
+      "custom_css": [
+        "h2 {}"
+      ],
+      "name": "BFC Category Strip",
+      "settings": {
+        "eyebrow": "",
+        "heading": "Explore More",
+        "subheading": "",
+        "header_align": "left",
+        "columns_mobile": 2,
+        "mobile_slider": false,
+        "mobile_slider_width": 30,
+        "columns_desktop": 6,
+        "grid_gap": 16,
+        "media_aspect": "1 / 1",
+        "media_radius": 8,
+        "square_corners": false,
+        "media_placeholder_color": "#e3ddda",
+        "text_align": "left",
+        "horizontal_padding": 24,
+        "header_font_weight": "400",
+        "body_font_weight": "400",
+        "body_font_size": 14,
+        "body_font_size_small": 11,
+        "heading_size_preset": "default",
+        "header_line_height": "1.2",
+        "header_letter_spacing": 0,
+        "heading_color": "#111111",
+        "body_line_height": "1.5",
+        "body_letter_spacing": 0,
+        "item_title_font": "poppins_n5",
+        "section_padding_top": 40,
+        "section_padding_bottom": 40,
+        "text_color": "#111111",
+        "background_color": "#f7f4f0",
+        "accent_color": "#e36e15",
+        "secondary_text_color": "#82906b"
+      }
     }
   },
   "order": [
@@ -469,6 +580,7 @@
     "nyt_editorial_QkcfLB",
     "f8303da3-c3cb-4a90-a63a-7a628615aa6f",
     "product_recommendations_QrVpBw",
-    "fixed_bfc_top_sellers_EhkN6E"
+    "fixed_bfc_top_sellers_EhkN6E",
+    "fixed_bfc_category_strip_iePnyR"
   ]
 }
