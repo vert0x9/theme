@@ -140,6 +140,61 @@
         "theme": "light"
       }
     },
+    "bfc_collection_intro_ALkKWM": {
+      "type": "bfc-collection-intro",
+      "blocks": {
+        "quick_nav_BYcYXk": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Beginner friendly",
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": ""
+          }
+        },
+        "quick_nav_EBJNTf": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Point & shoots",
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": ""
+          }
+        },
+        "quick_nav_cDTgqG": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Premium compacts",
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "quick_nav_BYcYXk",
+        "quick_nav_EBJNTf",
+        "quick_nav_cDTgqG"
+      ],
+      "name": "BFC Collection Intro",
+      "settings": {
+        "intro_eyebrow": "Shop all",
+        "intro_title": "Every Camera, Restored",
+        "intro_body": "Film cameras, brought back to life and ready to shoot. Every body here has been serviced, cleaned, and bench-tested by our techs in Brooklyn, then backed by a warranty. New to film or coming back to it, this is the whole shelf. Not sure where to start? Use the links to browse by what matters to you.",
+        "trust_1": "Restored & bench-tested in Brooklyn",
+        "trust_2": "Warrantied",
+        "trust_3": "Free shipping over $400",
+        "sub_mode": true,
+        "sub_eyebrow": "A subset of SLR & Rangefinders",
+        "sub_title": "Beginner Friendly",
+        "sub_body": "Simple, reliable cameras that are easy to learn on. No fiddly settings, no surprises. Every one restored, bench-tested, and warrantied.",
+        "back_collection": "slr-other",
+        "back_label": "Back to SLR & Rangefinders",
+        "nav_title": "Browse by",
+        "nav_style": "list",
+        "theme": "light"
+      }
+    },
     "main": {
       "type": "main-collection",
       "blocks": {
@@ -223,6 +278,88 @@
         "color_scheme": "scheme-5",
         "spacing_top": "2",
         "spacing_bottom": "6"
+      }
+    },
+    "fixed_bfc_top_sellers_GzRqjx": {
+      "type": "FIXED-bfc-top-sellers",
+      "blocks": {
+        "top_sellers_6XQJzb": {
+          "type": "top_sellers",
+          "settings": {
+            "heading": "Looking for something else?",
+            "subheading": "Best selling 35mm Cameras",
+            "collection": "35mm-cameras",
+            "products_limit": 20,
+            "show_vendor": false,
+            "show_custom_text": false,
+            "custom_text": "Custom text",
+            "custom_text_use_tags": false,
+            "custom_text_tag_1": "preorder, pre-order",
+            "custom_text_label_1": "Preorder",
+            "custom_text_tag_2": "exclusive, limited",
+            "custom_text_label_2": "Exclusive",
+            "custom_text_tag_3": "backorder, back-order",
+            "custom_text_label_3": "Backorder",
+            "show_stock": false,
+            "show_variant_count": false,
+            "show_urgency": true,
+            "show_urgency_trust": true,
+            "show_stock_sticker": true,
+            "show_price": true,
+            "show_quick_add": true,
+            "hide_oos": true,
+            "exclude_handles": "",
+            "show_two_variant_adds": false,
+            "variant_add_label": "Add",
+            "enable_badges": true,
+            "badge_tag_1": "best seller, best-seller",
+            "badge_label_1": "Best Seller",
+            "badge_tag_2": "just arrived, new",
+            "badge_label_2": "Just Arrived",
+            "badge_tag_3": "limited, limited edition",
+            "badge_label_3": "Limited",
+            "show_view_all": true,
+            "view_all_label": "Shop all",
+            "show_arrows": true,
+            "edge_fade": true,
+            "square_corners": true,
+            "mobile_limit_enabled": false,
+            "mobile_show_count": 6,
+            "section_padding_y": 28,
+            "side_padding_vw": 0,
+            "ignore_padding_mobile": false,
+            "add_label": "Add",
+            "img_override_handle_1": "",
+            "img_override_handle_2": "",
+            "img_override_handle_3": "",
+            "img_override_handle_4": "",
+            "img_override_handle_5": ""
+          }
+        }
+      },
+      "block_order": [
+        "top_sellers_6XQJzb"
+      ],
+      "name": "BFC Top Sellers",
+      "settings": {
+        "horizontal_padding": 24,
+        "header_font_weight": "300",
+        "body_font_weight": "400",
+        "body_font_size": 16,
+        "body_font_size_small": 12,
+        "text_color": "#111111",
+        "background_color": "#F7F4F0",
+        "heading_size_preset": "default",
+        "header_line_height": "1.05",
+        "header_letter_spacing": -2,
+        "heading_color": "#111111",
+        "body_line_height": "1.5",
+        "body_letter_spacing": 0,
+        "section_padding_top": 40,
+        "section_padding_bottom": 40,
+        "accent_color": "#E36E15",
+        "secondary_text_color": "#82906B",
+        "item_title_font": "poppins_n5"
       }
     },
     "bfc_refurb_process_BaPGXJ": {
@@ -362,7 +499,9 @@
     "page_banner_jWtyM4",
     "featured_collections_ybC3xQ",
     "bfc_collection_intro_zVqc9H",
+    "bfc_collection_intro_ALkKWM",
     "main",
+    "fixed_bfc_top_sellers_GzRqjx",
     "bfc_refurb_process_BaPGXJ",
     "bfc_sx70_guide_z4PmxW",
     "nyt_editorial_QkcfLB",
