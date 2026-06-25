@@ -152,15 +152,6 @@
             "custom_url": ""
           }
         },
-        "quick_nav_XfEkfc": {
-          "type": "quick_nav",
-          "settings": {
-            "label": "Staff Favorites",
-            "sublabel": "",
-            "link_collection": "",
-            "custom_url": ""
-          }
-        },
         "quick_nav_Jbhnnt": {
           "type": "quick_nav",
           "settings": {
@@ -169,12 +160,21 @@
             "link_collection": "",
             "custom_url": ""
           }
+        },
+        "quick_nav_XfEkfc": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "View Point & Shoots",
+            "sublabel": "",
+            "link_collection": "point-shoots",
+            "custom_url": ""
+          }
         }
       },
       "block_order": [
         "quick_nav_qwEgkb",
-        "quick_nav_XfEkfc",
-        "quick_nav_Jbhnnt"
+        "quick_nav_Jbhnnt",
+        "quick_nav_XfEkfc"
       ],
       "name": "BFC Collection Intro",
       "settings": {
