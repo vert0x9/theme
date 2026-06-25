@@ -60,6 +60,7 @@
         "back_collection": "cameras",
         "back_label": "Back to All Cameras",
         "nav_title": "Browse by",
+        "nav_style": "list",
         "theme": "light"
       }
     },
@@ -223,6 +224,62 @@
         "spacing_bottom": "6"
       }
     },
+    "bfc_collection_intro_rpQtFk": {
+      "type": "bfc-collection-intro",
+      "blocks": {
+        "quick_nav_KRNBGb": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Beginner friendly",
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": ""
+          }
+        },
+        "quick_nav_qHBjEQ": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Point & shoots",
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": ""
+          }
+        },
+        "quick_nav_tEg4zC": {
+          "type": "quick_nav",
+          "settings": {
+            "label": "Premium compacts",
+            "sublabel": "",
+            "link_collection": "",
+            "custom_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "quick_nav_KRNBGb",
+        "quick_nav_qHBjEQ",
+        "quick_nav_tEg4zC"
+      ],
+      "disabled": true,
+      "name": "BFC Collection Intro",
+      "settings": {
+        "intro_eyebrow": "Shop all",
+        "intro_title": "Every Camera, Restored",
+        "intro_body": "Film cameras, brought back to life and ready to shoot. Every body here has been serviced, cleaned, and bench-tested by our techs in Brooklyn, then backed by a warranty. New to film or coming back to it, this is the whole shelf. Not sure where to start? Use the links to browse by what matters to you.",
+        "trust_1": "Restored & bench-tested in Brooklyn",
+        "trust_2": "Warrantied",
+        "trust_3": "Free shipping over $400",
+        "sub_mode": false,
+        "sub_eyebrow": "A subset of All Cameras",
+        "sub_title": "Beginner Friendly",
+        "sub_body": "Simple, reliable cameras that are easy to learn on. No fiddly settings, no surprises. Every one restored, bench-tested, and warrantied.",
+        "back_collection": "",
+        "back_label": "Back to All Cameras",
+        "nav_title": "Browse by",
+        "nav_style": "list",
+        "theme": "light"
+      }
+    },
     "bfc_refurb_process_BaPGXJ": {
       "type": "bfc-refurb-process",
       "disabled": true,
@@ -361,6 +418,7 @@
     "page_banner_jWtyM4",
     "featured_collections_ybC3xQ",
     "main",
+    "bfc_collection_intro_rpQtFk",
     "bfc_refurb_process_BaPGXJ",
     "bfc_sx70_guide_z4PmxW",
     "nyt_editorial_QkcfLB",
