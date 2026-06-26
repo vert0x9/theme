@@ -658,13 +658,13 @@
         <li>
           <span class="bfc-ew-warning-rule-num">02</span>
           <div class="bfc-ew-warning-rule-body">
-            <strong>30-day purchase window.</strong> Extended warranties must be purchased within <strong>30 days</strong> of your original camera purchase. After 30 days, coverage is no longer available.
+            <strong>In person, or online within 7 days.</strong> Extended coverage is added in person at the shop when you buy your camera. If you bought online, you can add it here within <strong>7 days</strong> of your order, while your camera is still on its way. After 7 days, coverage can only be added in person.
           </div>
         </li>
         <li>
           <span class="bfc-ew-warning-rule-num">03</span>
           <div class="bfc-ew-warning-rule-body">
-            <strong>Coverage starts from the camera purchase date.</strong> The extension is added to the date you bought the camera, not the date you bought the warranty. A +6 month extension on a camera bought 20 days ago gives you 6 additional months from the original purchase.
+            <strong>Coverage starts from the camera purchase date.</strong> The extension is added to the date you bought the camera, not the date you bought the warranty. A +6 month extension on a camera bought 5 days ago gives you 6 additional months from the original purchase.
           </div>
         </li>
         <li>
@@ -775,23 +775,23 @@
 
       <div class="bfc-ew-order-field">
         <label class="bfc-ew-order-label" for="bfc-ew-order-id">
-          Original camera order number
+          Verified order number
           <span class="bfc-ew-order-required">Required</span>
         </label>
         <input
           type="text"
           id="bfc-ew-order-id"
           class="bfc-ew-order-input"
-          placeholder="e.g. #BFC12345"
+          placeholder="Verify your order below to unlock"
           autocomplete="off"
           required
         />
-        <div class="bfc-ew-order-help">We use this to confirm coverage eligibility and attach the warranty to your original purchase. Find it in your order confirmation email or BFC account.</div>
+        <div class="bfc-ew-order-help">Verify your order number in the section below. Once confirmed (within the 7-day window), this fills in and unlocks checkout. Outside 7 days, add coverage in person at the shop.</div>
       </div>
 
       <div class="bfc-ew-result-actions">
         <button type="button" class="bfc-ew-atc" id="bfc-ew-atc" disabled>
-          <span id="bfc-ew-atc-text">Enter your order number</span>
+          <span id="bfc-ew-atc-text">Verify your order to continue</span>
         </button>
       </div>
       <div class="bfc-ew-result-note">
@@ -799,38 +799,36 @@
       </div>
     </div>
 
-    {%- comment -%} ── ORDER LOOKUP (optional, gated by section setting) ── {%- endcomment -%}
+    {%- comment -%} ── ELIGIBILITY: in-person vs online order verification ── {%- endcomment -%}
     {%- if section.settings.show_lookup -%}
       <div class="bfc-ew-lookup">
         <div class="bfc-ew-lookup-head">
-          <span class="bfc-ew-lookup-ey">Need help finding your price?</span>
-          <h2 class="bfc-ew-lookup-title">Look up your past purchase.</h2>
+          <span class="bfc-ew-lookup-ey">Two ways to add coverage</span>
+          <h2 class="bfc-ew-lookup-title">In person, or online within 7 days.</h2>
         </div>
         <div class="bfc-ew-lookup-options">
 
-          {%- comment -%} Account deep-link (works under CAO since /account redirects to the customer portal) {%- endcomment -%}
+          {%- comment -%} In-person / POS path — informational, no cart action {%- endcomment -%}
           <div class="bfc-ew-lookup-card">
-            <span class="bfc-ew-lookup-card-ey">Option 1</span>
-            <div class="bfc-ew-lookup-card-title">Sign in to your account</div>
-            <p class="bfc-ew-lookup-card-body">View your full order history and find the camera you want to cover. The price you paid is shown on each order.</p>
-            <a href="/account" class="bfc-ew-lookup-link">
-              Open my account
-              <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="round"/>
-              </svg>
-            </a>
+            <span class="bfc-ew-lookup-card-ey">In person</span>
+            <div class="bfc-ew-lookup-card-title">Add it with your camera at the shop</div>
+            <p class="bfc-ew-lookup-card-body">The easiest way: add extended coverage in person when you buy or pick up your camera. Our team sets it up at the register.</p>
+            <p class="bfc-ew-lookup-card-body" style="margin-top:10px;">
+              <strong>{{ section.settings.shop_name | default: 'Brooklyn Film Camera' }}</strong><br>
+              {{ section.settings.shop_address | default: '855 Grand Street, Brooklyn, NY 11211' }}<br>
+              {{ section.settings.shop_hours | default: 'Open daily, 11am – 7pm' }}
+            </p>
           </div>
 
-          {%- comment -%} Manual order lookup via Base44 (skipped if endpoint URL is blank) {%- endcomment -%}
+          {%- comment -%} Online order verification via Base44 (skipped if endpoint URL is blank) {%- endcomment -%}
           {%- if section.settings.lookup_endpoint != blank -%}
             <div class="bfc-ew-lookup-card">
-              <span class="bfc-ew-lookup-card-ey">Option 2</span>
-              <div class="bfc-ew-lookup-card-title">Have an order number?</div>
-              <p class="bfc-ew-lookup-card-body">Enter your order number and email and we'll find the camera price for you. Order numbers start with #BFC.</p>
+              <span class="bfc-ew-lookup-card-ey">Bought online?</span>
+              <div class="bfc-ew-lookup-card-title">Verify your order to add coverage</div>
+              <p class="bfc-ew-lookup-card-body">Enter your order number. If it's within 7 days, we'll unlock extended coverage for it below. Order numbers start with #BFC.</p>
               <div class="bfc-ew-lookup-form">
                 <input type="text" class="bfc-ew-lookup-input" id="bfc-ew-lookup-order" placeholder="Order number (e.g. #BFC12345)" autocomplete="off"/>
-                <input type="email" class="bfc-ew-lookup-input" id="bfc-ew-lookup-email" placeholder="Email used on the order" autocomplete="email"/>
-                <button type="button" class="bfc-ew-lookup-btn" id="bfc-ew-lookup-btn" data-endpoint="{{ section.settings.lookup_endpoint }}">Find My Camera</button>
+                <button type="button" class="bfc-ew-lookup-btn" id="bfc-ew-lookup-btn" data-endpoint="{{ section.settings.lookup_endpoint }}">Verify My Order</button>
                 <div class="bfc-ew-lookup-status" id="bfc-ew-lookup-status"></div>
                 <div class="bfc-ew-lookup-result" id="bfc-ew-lookup-result">
                   <div class="bfc-ew-lookup-result-title" id="bfc-ew-lookup-result-title">—</div>
@@ -850,7 +848,7 @@
       <span class="bfc-ew-disclaimer-ey">Warranty Disclaimer</span>
       <div class="bfc-ew-disclaimer-body">
         <p><strong>Mechanical and electrical defects only.</strong> BFC extended warranties cover mechanical and electrical failures under normal use. Coverage does not extend to cosmetic issues of any kind, including but not limited to scratches, dents, dings, finish wear, brassing, paint loss, leatherette condition, viewfinder dust, or any other aesthetic deterioration.</p>
-        <p><strong>Eligibility.</strong> Extended warranties are available exclusively for cameras purchased directly from Brooklyn Film Camera. Coverage must be purchased within 30 days of the original camera purchase date. Warranties are non-transferable and apply only to the original purchaser.</p>
+        <p><strong>Eligibility.</strong> Extended warranties are available exclusively for cameras purchased directly from Brooklyn Film Camera. Coverage is added in person at the shop at the time of purchase, or online within 7 days of an online order. Warranties are non-transferable and apply only to the original purchaser.</p>
         <p><strong>Coverage period.</strong> The extended warranty period begins on the date of the original camera purchase, not the date the extended warranty was purchased. Coverage is additive to the included base warranty (6 months for SLR/Rangefinder, Medium Format, Polaroid/SX-70, and Super 8; 3 months for Point &amp; Shoot).</p>
         <p><strong>Exclusions.</strong> Coverage does not apply to damage resulting from modifications, unauthorized repairs, or use of incompatible film, batteries, or accessories. Film-related failures (light leaks, advance issues attributable to film load) are evaluated on a case-by-case basis.</p>
         <p><strong>Service.</strong> All warranty service must be performed by Brooklyn Film Camera. Repairs performed by third parties void remaining coverage. BFC reserves the right to repair or replace a covered camera at its discretion.</p>
@@ -1141,33 +1139,37 @@
     refreshAtcButton(v);
   }
 
-  /* Button state depends on variant + order ID together. Pulled out so we
-     can refresh it on order-input changes without re-computing the tier. */
+  /* Eligibility gate: online purchases can only add the extended warranty
+     within 7 days of the original order, verified server-side via Base44.
+     EW_ELIGIBLE flips true only on a successful lookup. The order input is
+     filled (and locked) by that lookup, so it can't be hand-typed to bypass. */
+  var EW_ELIGIBLE = false;
+  var EW_VERIFIED_ORDER = '';
+
+  /* Button state depends on variant + verified eligibility together. Pulled out
+     so we can refresh it on changes without re-computing the tier. */
   function refreshAtcButton(v) {
     if (!v) v = lookupVariant();
-    var hasOrder = $orderInput && $orderInput.value.trim().length > 0;
     $atc.classList.remove('is-success');
     if (!v || !v.variantId) {
       $atc.disabled = true;
       $atcText.textContent = 'Add to Cart';
       return;
     }
-    if (!hasOrder) {
+    if (!EW_ELIGIBLE) {
       $atc.disabled = true;
-      $atcText.textContent = 'Enter your order number';
+      $atcText.textContent = 'Verify your order to continue';
       return;
     }
     $atc.disabled = false;
     $atcText.textContent = 'Add to Cart — ' + fmtMoney(v.price);
   }
 
-  /* Live-refresh ATC state as user types in the order field, and clear
-     any invalid-state styling once they start fixing it. */
+  /* The order field is verification-only output now; it's filled by the lookup
+     and not hand-editable, so eligibility can't be faked by typing a number. */
   if ($orderInput) {
-    $orderInput.addEventListener('input', function() {
-      $orderInput.classList.remove('is-invalid');
-      refreshAtcButton();
-    });
+    $orderInput.readOnly = true;
+    $orderInput.setAttribute('aria-readonly', 'true');
   }
 
   /* ── ATC ─────────────────────────── */
@@ -1248,7 +1250,6 @@
   var $lookupBtn = document.getElementById('bfc-ew-lookup-btn');
   if ($lookupBtn) {
     var $lookupOrder = document.getElementById('bfc-ew-lookup-order');
-    var $lookupEmail = document.getElementById('bfc-ew-lookup-email');
     var $lookupStatus = document.getElementById('bfc-ew-lookup-status');
     var $lookupResult = document.getElementById('bfc-ew-lookup-result');
     var $lookupResTitle = document.getElementById('bfc-ew-lookup-result-title');
@@ -1263,49 +1264,74 @@
 
     $lookupBtn.addEventListener('click', function() {
       var order = $lookupOrder.value.trim();
-      var email = $lookupEmail.value.trim();
-      if (!order || !email) {
-        setLookupStatus('Enter both order number and email.', 'error');
+      if (!order) {
+        setLookupStatus('Enter your order number.', 'error');
         return;
       }
       var endpoint = $lookupBtn.dataset.endpoint;
       if (!endpoint) {
-        setLookupStatus('Lookup not configured. Please sign in to your account instead.', 'error');
+        setLookupStatus('Lookup not configured. Please contact us or visit the shop.', 'error');
         return;
       }
       $lookupBtn.disabled = true;
-      setLookupStatus('Searching…');
+      setLookupStatus('Checking your order…');
       $lookupResult.classList.remove('is-visible');
-      xhrJSON('POST', endpoint, { order_number: order, email: email }, null, function(err, data) {
+      EW_ELIGIBLE = false;
+      EW_VERIFIED_ORDER = '';
+      refreshAtcButton();
+
+      xhrJSON('POST', endpoint, { order_number: order }, null, function(err, data) {
         $lookupBtn.disabled = false;
         if (err) {
-          setLookupStatus(err === 'Network error' ? 'Network error. Try again or sign in to your account.' : "Couldn't find that order. Check your inputs or sign in to your account.", 'error');
+          setLookupStatus(err === 'Network error' ? 'Network error. Please try again.' : "Couldn't check that order. Double-check the number.", 'error');
           return;
         }
-        if (!data || !data.found || !data.items || !data.items.length) {
-          setLookupStatus("No matching camera found on that order.", 'error');
+        if (!data || !data.found) {
+          setLookupStatus("We couldn't find an order with that number.", 'error');
           return;
         }
-        // Use the highest-priced item as the camera (warranties / accessories typically cost less)
-        var primary = data.items.slice().sort(function(a, b) { return (b.price_cents || 0) - (a.price_cents || 0); })[0];
-        setLookupStatus('Found your order.', 'success');
-        $lookupResult.classList.add('is-visible');
-        $lookupResTitle.textContent = primary.title || 'Camera';
-        $lookupResMeta.textContent = 'Paid ' + fmtMoney(primary.price_cents) + ' • Order ' + order;
-        $lookupResAction.onclick = function() {
-          STATE.priceCents = primary.price_cents;
-          $price.value = (primary.price_cents / 100).toFixed(2).replace(/\.00$/, '');
-          var detected = detectCategory({ type: primary.product_type || '', tags: primary.tags || [] });
-          if (detected) selectCategory(detected);
-          $step3.classList.remove('is-disabled');
-          /* Pre-fill the required order ID since they just looked it up. */
-          if ($orderInput && order) {
-            $orderInput.value = order;
-            $orderInput.classList.remove('is-invalid');
-          }
-          refreshResult();
-          window.scrollTo({ top: $result.getBoundingClientRect().top + window.pageYOffset - 80, behavior: 'smooth' });
-        };
+        /* Base44 owns the decision: it returns eligible (within the 7-day
+           window, BFC purchase, not yet delivered) plus an optional reason and
+           camera price. The page trusts it and unlocks accordingly. */
+        if (!data.eligible) {
+          var why = data.reason_message
+            || 'This order is outside the 7-day window for adding extended coverage online. Extended warranties can still be added in person at the shop with your camera.';
+          setLookupStatus(why, 'error');
+          return;
+        }
+
+        EW_ELIGIBLE = true;
+        EW_VERIFIED_ORDER = order;
+        setLookupStatus('Order verified — you can add coverage below.', 'success');
+
+        /* Fill the (read-only) order field so it attaches to the cart line. */
+        if ($orderInput) {
+          $orderInput.value = order;
+          $orderInput.classList.remove('is-invalid');
+        }
+
+        /* If Base44 returned the camera price/details, auto-fill the calculator. */
+        var primary = null;
+        if (data.items && data.items.length) {
+          primary = data.items.slice().sort(function(a, b) { return (b.price_cents || 0) - (a.price_cents || 0); })[0];
+        }
+        if (primary && primary.price_cents) {
+          $lookupResult.classList.add('is-visible');
+          $lookupResTitle.textContent = primary.title || 'Your camera';
+          $lookupResMeta.textContent = 'Paid ' + fmtMoney(primary.price_cents) + ' • Order ' + order;
+          $lookupResAction.textContent = 'Use this price';
+          $lookupResAction.onclick = function() {
+            STATE.priceCents = primary.price_cents;
+            $price.value = (primary.price_cents / 100).toFixed(2).replace(/\.00$/, '');
+            var detected = detectCategory({ type: primary.product_type || '', tags: primary.tags || [] });
+            if (detected) selectCategory(detected);
+            $step3.classList.remove('is-disabled');
+            refreshResult();
+            window.scrollTo({ top: $result.getBoundingClientRect().top + window.pageYOffset - 80, behavior: 'smooth' });
+          };
+        }
+        refreshAtcButton();
+        window.scrollTo({ top: $result.getBoundingClientRect().top + window.pageYOffset - 80, behavior: 'smooth' });
       });
     });
   }
@@ -1351,14 +1377,32 @@
     {
       "type": "checkbox",
       "id": "show_lookup",
-      "label": "Show order lookup section",
+      "label": "Show eligibility section (in-person + online verify)",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "shop_name",
+      "label": "Shop name",
+      "default": "Brooklyn Film Camera"
+    },
+    {
+      "type": "text",
+      "id": "shop_address",
+      "label": "Shop address",
+      "default": "855 Grand Street, Brooklyn, NY 11211"
+    },
+    {
+      "type": "text",
+      "id": "shop_hours",
+      "label": "Shop hours",
+      "default": "Open daily, 11am – 7pm"
     },
     {
       "type": "url",
       "id": "lookup_endpoint",
-      "label": "Base44 lookup endpoint URL",
-      "info": "If configured, shoppers can paste their order # + email and we'll fetch the camera price via Base44 (which has Admin API access). Leave blank to hide the manual lookup form. Endpoint should accept POST { order_number, email } and return { found: true, items: [{ title, price_cents, product_type, tags }] }."
+      "label": "Base44 eligibility endpoint URL",
+      "info": "POST { order_number } and return { found: true, eligible: true|false, reason_message: '...', items: [{ title, price_cents, product_type, tags }] }. Base44 decides eligibility (within 7 days, BFC order, not delivered). The page trusts that flag. Leave blank to hide the online verify form."
     }
   ],
   "presets": [
