@@ -658,7 +658,7 @@
         <li>
           <span class="bfc-ew-warning-rule-num">02</span>
           <div class="bfc-ew-warning-rule-body">
-            <strong>In person, or online within 7 days.</strong> Extended coverage is added in person at the shop when you buy your camera. If you bought online, you can add it here within <strong>7 days</strong> of your order, while your camera is still on its way. After 7 days, coverage can only be added in person.
+            <strong>Within 7 days of purchase, no exceptions.</strong> Extended coverage can only be added within 7 days of buying your camera. If you bought <strong>online</strong>, you can add it here within 7 days, as long as your camera hasn't been delivered yet. If you bought <strong>in store</strong>, coverage can only be added in store, within 7 days. After 7 days, coverage is no longer available through any channel.
           </div>
         </li>
         <li>
@@ -676,8 +676,8 @@
       </ol>
     </div>
 
-    {%- comment -%} ── STEP 1: CATEGORY ── {%- endcomment -%}
-    <div class="bfc-ew-step" id="bfc-ew-step1">
+    {%- comment -%} ── STEP 1: CATEGORY (hidden — resolved from the verified order) ── {%- endcomment -%}
+    <div class="bfc-ew-step" id="bfc-ew-step1" style="display:none">
       <div class="bfc-ew-step-head">
         <span class="bfc-ew-step-num">01</span>
         <div class="bfc-ew-step-title">Which type of camera are you covering?</div>
@@ -708,8 +708,8 @@
       </div>
     </div>
 
-    {%- comment -%} ── STEP 2: PRICE ── {%- endcomment -%}
-    <div class="bfc-ew-step is-disabled" id="bfc-ew-step2">
+    {%- comment -%} ── STEP 2: PRICE (hidden — resolved from the verified order) ── {%- endcomment -%}
+    <div class="bfc-ew-step is-disabled" id="bfc-ew-step2" style="display:none">
       <div class="bfc-ew-step-head">
         <span class="bfc-ew-step-num">02</span>
         <div class="bfc-ew-step-title">How much did you pay for the camera?</div>
@@ -803,16 +803,16 @@
     {%- if section.settings.show_lookup -%}
       <div class="bfc-ew-lookup">
         <div class="bfc-ew-lookup-head">
-          <span class="bfc-ew-lookup-ey">Two ways to add coverage</span>
-          <h2 class="bfc-ew-lookup-title">In person, or online within 7 days.</h2>
+          <span class="bfc-ew-lookup-ey">Add within 7 days of purchase</span>
+          <h2 class="bfc-ew-lookup-title">Bought online? Verify your order.</h2>
         </div>
         <div class="bfc-ew-lookup-options">
 
-          {%- comment -%} In-person / POS path — informational, no cart action {%- endcomment -%}
+          {%- comment -%} In-person / POS path — informational, in-store only {%- endcomment -%}
           <div class="bfc-ew-lookup-card">
-            <span class="bfc-ew-lookup-card-ey">In person</span>
-            <div class="bfc-ew-lookup-card-title">Add it with your camera at the shop</div>
-            <p class="bfc-ew-lookup-card-body">The easiest way: add extended coverage in person when you buy or pick up your camera. Our team sets it up at the register.</p>
+            <span class="bfc-ew-lookup-card-ey">Bought in store</span>
+            <div class="bfc-ew-lookup-card-title">Add it in store, within 7 days</div>
+            <p class="bfc-ew-lookup-card-body">If you bought your camera in store, extended coverage can only be added in store, within 7 days of purchase. Stop by and our team will set it up at the register. It can't be added online for in-store purchases.</p>
             <p class="bfc-ew-lookup-card-body" style="margin-top:10px;">
               <strong>{{ section.settings.shop_name | default: 'Brooklyn Film Camera' }}</strong><br>
               {{ section.settings.shop_address | default: '855 Grand Street, Brooklyn, NY 11211' }}<br>
@@ -823,9 +823,9 @@
           {%- comment -%} Online order verification via Base44 (skipped if endpoint URL is blank) {%- endcomment -%}
           {%- if section.settings.lookup_endpoint != blank -%}
             <div class="bfc-ew-lookup-card">
-              <span class="bfc-ew-lookup-card-ey">Bought online?</span>
+              <span class="bfc-ew-lookup-card-ey">Bought online</span>
               <div class="bfc-ew-lookup-card-title">Verify your order to add coverage</div>
-              <p class="bfc-ew-lookup-card-body">Enter your order number. If it's within 7 days, we'll unlock extended coverage for it below. Order numbers start with #BFC.</p>
+              <p class="bfc-ew-lookup-card-body">Enter your order number. If it's within 7 days and hasn't been delivered yet, we'll find your camera and unlock extended coverage automatically. Order numbers start with #BFC.</p>
               <div class="bfc-ew-lookup-form">
                 <input type="text" class="bfc-ew-lookup-input" id="bfc-ew-lookup-order" placeholder="Order number (e.g. #BFC12345)" autocomplete="off"/>
                 <button type="button" class="bfc-ew-lookup-btn" id="bfc-ew-lookup-btn" data-endpoint="{{ section.settings.lookup_endpoint }}">Verify My Order</button>
@@ -833,7 +833,6 @@
                 <div class="bfc-ew-lookup-result" id="bfc-ew-lookup-result">
                   <div class="bfc-ew-lookup-result-title" id="bfc-ew-lookup-result-title">—</div>
                   <div class="bfc-ew-lookup-result-meta" id="bfc-ew-lookup-result-meta">—</div>
-                  <button type="button" class="bfc-ew-lookup-result-action" id="bfc-ew-lookup-result-action">Use this price</button>
                 </div>
               </div>
             </div>
@@ -1254,7 +1253,7 @@
     var $lookupResult = document.getElementById('bfc-ew-lookup-result');
     var $lookupResTitle = document.getElementById('bfc-ew-lookup-result-title');
     var $lookupResMeta = document.getElementById('bfc-ew-lookup-result-meta');
-    var $lookupResAction = document.getElementById('bfc-ew-lookup-result-action');
+
 
     function setLookupStatus(msg, kind) {
       $lookupStatus.textContent = msg || '';
@@ -1295,14 +1294,13 @@
            camera price. The page trusts it and unlocks accordingly. */
         if (!data.eligible) {
           var why = data.reason_message
-            || 'This order is outside the 7-day window for adding extended coverage online. Extended warranties can still be added in person at the shop with your camera.';
+            || 'This order isn\'t eligible. Coverage can only be added within 7 days of purchase, and online only while your camera hasn\'t been delivered yet. In-store purchases must be covered in store. After 7 days, coverage is no longer available.';
           setLookupStatus(why, 'error');
           return;
         }
 
         EW_ELIGIBLE = true;
         EW_VERIFIED_ORDER = order;
-        setLookupStatus('Order verified — you can add coverage below.', 'success');
 
         /* Fill the (read-only) order field so it attaches to the cart line. */
         if ($orderInput) {
@@ -1310,25 +1308,28 @@
           $orderInput.classList.remove('is-invalid');
         }
 
-        /* If Base44 returned the camera price/details, auto-fill the calculator. */
+        /* Base44 returns the camera; auto-apply its price + category — no manual
+           entry, no extra click. The shopper just picks coverage length next. */
         var primary = null;
         if (data.items && data.items.length) {
           primary = data.items.slice().sort(function(a, b) { return (b.price_cents || 0) - (a.price_cents || 0); })[0];
         }
         if (primary && primary.price_cents) {
+          STATE.priceCents = primary.price_cents;
+          var detected = detectCategory({ type: primary.product_type || '', tags: primary.tags || [] });
+          if (detected) selectCategory(detected);
+          $step3.classList.remove('is-disabled');
+          setLookupStatus('Order verified — ' + (primary.title || 'your camera') + ', ' + fmtMoney(primary.price_cents) + '. Pick your coverage below.', 'success');
           $lookupResult.classList.add('is-visible');
           $lookupResTitle.textContent = primary.title || 'Your camera';
-          $lookupResMeta.textContent = 'Paid ' + fmtMoney(primary.price_cents) + ' • Order ' + order;
-          $lookupResAction.textContent = 'Use this price';
-          $lookupResAction.onclick = function() {
-            STATE.priceCents = primary.price_cents;
-            $price.value = (primary.price_cents / 100).toFixed(2).replace(/\.00$/, '');
-            var detected = detectCategory({ type: primary.product_type || '', tags: primary.tags || [] });
-            if (detected) selectCategory(detected);
-            $step3.classList.remove('is-disabled');
-            refreshResult();
-            window.scrollTo({ top: $result.getBoundingClientRect().top + window.pageYOffset - 80, behavior: 'smooth' });
-          };
+          $lookupResMeta.textContent = 'Order ' + order + ' • verified';
+          refreshResult();
+        } else {
+          /* Eligible but no camera price returned — surface for support rather than silently failing. */
+          EW_ELIGIBLE = false;
+          setLookupStatus("We verified your order but couldn't read the camera price. Please email hello@brooklynfilmcamera.com and we'll sort it out.", 'error');
+          refreshAtcButton();
+          return;
         }
         refreshAtcButton();
         window.scrollTo({ top: $result.getBoundingClientRect().top + window.pageYOffset - 80, behavior: 'smooth' });
