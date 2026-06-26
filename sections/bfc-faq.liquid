@@ -166,6 +166,40 @@
     min-height: 18px;
   }
 
+  /* Best answer panel */
+  .bfc-faq__best {
+    border: 1px solid #D4A853;
+    background: rgba(212, 168, 83, 0.06);
+    padding: 18px 20px;
+    margin: 0 0 22px;
+  }
+  .bfc-faq__best[hidden] { display: none; }
+  .bfc-faq__best-label {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #D4A853;
+    margin-bottom: 8px;
+  }
+  .bfc-faq__best-q {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    line-height: 1.3;
+    color: #F0E8DC;
+    margin: 0 0 8px;
+  }
+  .bfc-faq__best-a {
+    font-family: 'Lora', serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #B8AFA5;
+    margin: 0;
+  }
+  .bfc-faq__best-a a { color: #D4A853; }
+
   /* Accordion */
   .bfc-faq__list {
     border: 1px solid rgba(255, 255, 255, 0.07);
@@ -424,12 +458,20 @@
     <!-- Count label -->
     <p class="bfc-faq__count" id="bfc-faq-count-{{ section.id }}" aria-live="polite"></p>
 
+    <!-- Best answer panel (shown only while searching, surfaces the top match) -->
+    <div class="bfc-faq__best" id="bfc-faq-best-{{ section.id }}" aria-live="polite" hidden>
+      <span class="bfc-faq__best-label">Best answer</span>
+      <p class="bfc-faq__best-q" id="bfc-faq-best-q-{{ section.id }}"></p>
+      <p class="bfc-faq__best-a" id="bfc-faq-best-a-{{ section.id }}"></p>
+    </div>
+
     <!-- Accordion list -->
     <ul class="bfc-faq__list" id="bfc-faq-list-{{ section.id }}" role="list">
       {% for block in section.blocks %}
         <li
           class="bfc-faq__item"
           data-cat="{{ block.settings.category }}"
+          data-idx="{{ forloop.index }}"
           data-q="{{ block.settings.question | downcase | escape }}"
           data-a="{{ block.settings.answer | downcase | escape }}"
           data-k="{{ block.settings.keywords | downcase | escape }}"
@@ -496,6 +538,9 @@
   var countEl     = document.getElementById('bfc-faq-count-' + sid);
   var listEl      = document.getElementById('bfc-faq-list-' + sid);
   var emptyEl     = document.getElementById('bfc-faq-empty-' + sid);
+  var bestEl      = document.getElementById('bfc-faq-best-' + sid);
+  var bestQEl     = document.getElementById('bfc-faq-best-q-' + sid);
+  var bestAEl     = document.getElementById('bfc-faq-best-a-' + sid);
   var items       = Array.from(listEl.querySelectorAll('.bfc-faq__item'));
   var catBtns     = Array.from(catStrip.querySelectorAll('.bfc-faq__cat-btn'));
 
@@ -599,40 +644,88 @@
     return false;
   }
 
+  // Score how well an item matches the query tokens. Higher is better.
+  // A hit in the question counts most, then keywords, then the answer body.
+  // This lets us rank results and surface the single best one, all without AI.
+  function scoreItem(item, queryTokens) {
+    if (!queryTokens.length) return 0;
+    var q = item.getAttribute('data-q') || '';
+    var k = item.getAttribute('data-k') || '';
+    var a = item.getAttribute('data-a') || '';
+    var score = 0, matched = 0;
+    for (var t = 0; t < queryTokens.length; t++) {
+      var tok = queryTokens[t];
+      var hit = false;
+      if (tokenMatches(tok, q)) { score += 5; hit = true; }
+      else if (tokenMatches(tok, k)) { score += 3; hit = true; }
+      else if (tokenMatches(tok, a)) { score += 1; hit = true; }
+      if (hit) matched++;
+    }
+    // Reward items that match more of the query (covers more of what was asked).
+    if (matched === queryTokens.length) score += 4;
+    score += matched * 2;
+    return score;
+  }
+
   // ---------- filter logic ----------
   function applyFilters() {
-    var visible = 0;
     var queryTokens = tokenize(searchVal);
+    var searching = queryTokens.length > 0;
+    var visible = 0;
+    var scored = [];
 
     items.forEach(function(item) {
-      var catMatch  = activecat === 'all' || item.getAttribute('data-cat') === activecat;
-      var q = item.getAttribute('data-q') || '';
-      var a = item.getAttribute('data-a') || '';
-      var k = item.getAttribute('data-k') || '';
-      var haystack = q + ' ' + a + ' ' + k;
-
-      // Search matches when every meaningful query token (or a synonym of it)
-      // is found somewhere in the item's question, answer, or keywords.
-      var searchMatch = true;
-      if (queryTokens.length) {
-        for (var t = 0; t < queryTokens.length; t++) {
-          if (!tokenMatches(queryTokens[t], haystack)) { searchMatch = false; break; }
-        }
-      }
-      var show = catMatch && searchMatch;
+      var catMatch = activecat === 'all' || item.getAttribute('data-cat') === activecat;
+      var score = searching ? scoreItem(item, queryTokens) : 0;
+      // When searching, an item shows if it matches at least one query token.
+      // When not searching, all items in the active category show.
+      var show = catMatch && (!searching || score > 0);
 
       item.setAttribute('aria-hidden', show ? 'false' : 'true');
+      item.style.display = show ? '' : 'none';
 
       if (!show) {
         item.classList.remove('is-open');
         item.querySelector('.bfc-faq__trigger').setAttribute('aria-expanded', 'false');
       }
-
-      if (show) visible++;
+      if (show) {
+        visible++;
+        if (searching) scored.push({ item: item, score: score });
+      }
     });
 
+    // Rank best-first when searching, and reflect that order in the DOM.
+    if (searching && scored.length) {
+      scored.sort(function(a, b) { return b.score - a.score; });
+      scored.forEach(function(entry) { listEl.appendChild(entry.item); });
+    } else {
+      // Restore original author order when not searching.
+      items.forEach(function(item) { listEl.appendChild(item); });
+    }
+
+    // Best-answer panel: surface the single top match while searching.
+    if (searching && scored.length) {
+      var top = scored[0].item;
+      var qText = top.querySelector('.bfc-faq__question');
+      var aText = top.querySelector('.bfc-faq__answer');
+      bestQEl.textContent = qText ? qText.textContent : '';
+      bestAEl.innerHTML = aText ? aText.innerHTML : '';
+      bestEl.hidden = false;
+      // Auto-expand the top match in the list too.
+      items.forEach(function(i) {
+        i.classList.remove('is-open');
+        i.querySelector('.bfc-faq__trigger').setAttribute('aria-expanded', 'false');
+      });
+      top.classList.add('is-open');
+      top.querySelector('.bfc-faq__trigger').setAttribute('aria-expanded', 'true');
+    } else {
+      bestEl.hidden = true;
+      bestQEl.textContent = '';
+      bestAEl.innerHTML = '';
+    }
+
     // count label (only when not searching)
-    if (searchVal === '') {
+    if (!searching) {
       countEl.textContent = visible + (visible === 1 ? ' question' : ' questions');
     } else {
       countEl.textContent = '';
