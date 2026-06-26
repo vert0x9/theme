@@ -478,6 +478,47 @@
 .bfc-ew-atc:hover { background: #c9600f; }
 .bfc-ew-atc:disabled { opacity: 0.5; cursor: not-allowed; }
 .bfc-ew-atc.is-success { background: #2a4820; }
+
+/* ── CONFIRM MODAL ─────────────────────────── */
+.bfc-ew-confirm-overlay {
+  display: none; position: fixed; inset: 0; z-index: 1000;
+  background: rgba(32,32,9,0.6); align-items: center; justify-content: center;
+  padding: 20px;
+}
+.bfc-ew-confirm-overlay.is-open { display: flex; }
+.bfc-ew-confirm {
+  background: var(--cv); max-width: 460px; width: 100%;
+  padding: 32px 30px 26px; border: 1px solid rgba(32,32,9,0.12);
+}
+.bfc-ew-confirm-title {
+  font-family: var(--sr, 'Cormorant Garamond', serif); font-weight: 600;
+  font-size: 26px; line-height: 1.1; margin: 0 0 6px; color: var(--bk);
+}
+.bfc-ew-confirm-lead { font-size: 13px; color: var(--ch); line-height: 1.5; margin: 0 0 18px; }
+.bfc-ew-confirm-rows { border-top: 1px solid rgba(32,32,9,0.1); margin-bottom: 16px; }
+.bfc-ew-confirm-row {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+  padding: 12px 0; border-bottom: 1px solid rgba(32,32,9,0.08);
+}
+.bfc-ew-confirm-key {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ch); flex-shrink: 0;
+}
+.bfc-ew-confirm-val { font-size: 14px; font-weight: 600; color: var(--bk); text-align: right; }
+.bfc-ew-confirm-warn {
+  font-size: 11.5px; line-height: 1.55; color: #8a3a14;
+  background: rgba(227,110,21,0.07); padding: 12px 14px; margin-bottom: 18px;
+}
+.bfc-ew-confirm-actions { display: flex; gap: 10px; }
+.bfc-ew-confirm-btn {
+  flex: 1; padding: 13px; border: none; cursor: pointer;
+  font-family: var(--sn); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase; transition: background 0.2s ease, color 0.2s ease;
+}
+.bfc-ew-confirm-cancel { background: transparent; border: 1px solid rgba(32,32,9,0.2); color: var(--bk); }
+.bfc-ew-confirm-cancel:hover { border-color: var(--bk); }
+.bfc-ew-confirm-go { background: var(--or); color: #fff; }
+.bfc-ew-confirm-go:hover { background: #c9600f; }
 .bfc-ew-result-note {
   font-size: 11px;
   color: rgba(255,255,255,0.5);
@@ -864,6 +905,38 @@
   </div>
 </div>
 
+<div class="bfc-ew-confirm-overlay" id="bfc-ew-confirm-overlay" role="dialog" aria-modal="true" aria-labelledby="bfc-ew-confirm-title">
+  <div class="bfc-ew-confirm">
+    <h2 class="bfc-ew-confirm-title" id="bfc-ew-confirm-title">Confirm your coverage</h2>
+    <p class="bfc-ew-confirm-lead">Please confirm these details are correct before adding extended coverage to your cart.</p>
+    <div class="bfc-ew-confirm-rows">
+      <div class="bfc-ew-confirm-row">
+        <span class="bfc-ew-confirm-key">Camera category</span>
+        <span class="bfc-ew-confirm-val" id="bfc-ew-confirm-cat">—</span>
+      </div>
+      <div class="bfc-ew-confirm-row">
+        <span class="bfc-ew-confirm-key">Camera purchase price</span>
+        <span class="bfc-ew-confirm-val" id="bfc-ew-confirm-price">—</span>
+      </div>
+      <div class="bfc-ew-confirm-row">
+        <span class="bfc-ew-confirm-key">Coverage</span>
+        <span class="bfc-ew-confirm-val" id="bfc-ew-confirm-coverage">—</span>
+      </div>
+      <div class="bfc-ew-confirm-row">
+        <span class="bfc-ew-confirm-key">Order</span>
+        <span class="bfc-ew-confirm-val" id="bfc-ew-confirm-order">—</span>
+      </div>
+    </div>
+    <div class="bfc-ew-confirm-warn">
+      Please confirm your camera was purchased for the price shown and falls in the category shown. Providing inaccurate details can result in cancellation of your extended warranty with no refund.
+    </div>
+    <div class="bfc-ew-confirm-actions">
+      <button type="button" class="bfc-ew-confirm-btn bfc-ew-confirm-cancel" id="bfc-ew-confirm-cancel">Go back</button>
+      <button type="button" class="bfc-ew-confirm-btn bfc-ew-confirm-go" id="bfc-ew-confirm-go">Confirm &amp; add</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function() {
   'use strict';
@@ -1064,14 +1137,34 @@
     $urlStatus.classList.toggle('is-success', kind === 'success');
   }
   function detectCategory(product) {
+    /* Prefer an explicit category from Base44 if provided. */
+    var explicit = (product.category || '').toLowerCase();
+    if (explicit) {
+      if (/point|p&s|p and s|compact/.test(explicit)) return 'pas';
+      if (/super\s?8/.test(explicit)) return 's8';
+      if (/medium/.test(explicit)) return 'mf';
+      if (/polaroid|sx-?70|instant/.test(explicit)) return 'pol';
+      if (/slr|rangefinder/.test(explicit)) return 'slr';
+    }
+    /* Otherwise infer from type + tags + collections + title. Collections are
+       the most reliable signal (e.g. a "Point & Shoot" collection), so include
+       them and check the specific categories BEFORE the broad 35mm/SLR catch. */
     var t = (product.type || '').toLowerCase();
-    var tags = (product.tags || []).map(function(s) { return s.toLowerCase(); });
-    var combined = t + ' ' + tags.join(' ');
+    var tags = (product.tags || []).map(function(s) { return String(s).toLowerCase(); });
+    var colls = (product.collections || []).map(function(s) { return String(s).toLowerCase(); });
+    var title = (product.title || '').toLowerCase();
+    var combined = [t, tags.join(' '), colls.join(' '), title].join(' ');
+
     if (/super\s?8|super-8/.test(combined)) return 's8';
     if (/medium\s?format|6x6|6x7|tlr|rolleiflex|hasselblad|mamiya/.test(combined)) return 'mf';
     if (/polaroid|sx-?70|instant/.test(combined)) return 'pol';
-    if (/point\s?(\&|and)?\s?shoot|p&s|compact/.test(combined)) return 'pas';
-    if (/slr|rangefinder|35mm|leica/.test(combined)) return 'slr';
+    /* Point & Shoot before SLR: many P&S bodies are 35mm too, so the generic
+       "35mm" signal must not pre-empt an explicit point-and-shoot match. */
+    if (/point\s?(\&|and)?\s?shoot|p&s|p and s|compact/.test(combined)) return 'pas';
+    if (/slr|rangefinder|leica/.test(combined)) return 'slr';
+    /* Last resort: a bare "35mm"/"camera" with no clearer signal. Default to SLR
+       only if nothing else matched; otherwise leave null so the user must pick. */
+    if (/\b35mm\b/.test(combined)) return 'slr';
     return null;
   }
   function selectCategory(cat) {
@@ -1178,21 +1271,15 @@
   }
 
   /* ── ATC ─────────────────────────── */
-  $atc.addEventListener('click', function() {
+  /* Clicking Add to Cart opens a confirmation modal first. The actual
+     /cart/add.js call only fires after the user confirms the price +
+     category, since an inaccurate self-reported price can void coverage. */
+  function doAddToCart() {
     var v = lookupVariant();
     if (!v || !v.variantId) return;
-
-    /* Required: the original camera's order number. Sent as a line item
-       property so the warranty cart line shows the original order on
-       Shopify's order page (visible to customer + admin). Underscore-
-       prefixed names would hide it from the customer; we want this
-       visible since it's the link to their original purchase. */
     var orderNumber = $orderInput ? $orderInput.value.trim() : '';
     if (!orderNumber) {
-      if ($orderInput) {
-        $orderInput.classList.add('is-invalid');
-        $orderInput.focus();
-      }
+      if ($orderInput) { $orderInput.classList.add('is-invalid'); $orderInput.focus(); }
       return;
     }
 
@@ -1249,6 +1336,48 @@
       }
       window.location.href = '/cart';
     });
+  }
+
+  /* Confirmation modal wiring */
+  var $confirmOverlay = document.getElementById('bfc-ew-confirm-overlay');
+  var $confirmCat = document.getElementById('bfc-ew-confirm-cat');
+  var $confirmPrice = document.getElementById('bfc-ew-confirm-price');
+  var $confirmCoverage = document.getElementById('bfc-ew-confirm-coverage');
+  var $confirmOrder = document.getElementById('bfc-ew-confirm-order');
+  var $confirmGo = document.getElementById('bfc-ew-confirm-go');
+  var $confirmCancel = document.getElementById('bfc-ew-confirm-cancel');
+
+  function openConfirm() {
+    var v = lookupVariant();
+    if (!v || !v.variantId) return;
+    var meta = CAT_META[STATE.category];
+    if ($confirmCat) $confirmCat.textContent = meta ? meta.name : '—';
+    if ($confirmPrice) $confirmPrice.textContent = fmtMoney(STATE.priceCents);
+    if ($confirmCoverage) $confirmCoverage.textContent = '+' + STATE.length + ' months (' + fmtMoney(v.price) + ')';
+    if ($confirmOrder) $confirmOrder.textContent = $orderInput ? $orderInput.value.trim() : '—';
+    if ($confirmOverlay) $confirmOverlay.classList.add('is-open');
+  }
+  function closeConfirm() {
+    if ($confirmOverlay) $confirmOverlay.classList.remove('is-open');
+  }
+
+  $atc.addEventListener('click', function() {
+    var v = lookupVariant();
+    if (!v || !v.variantId) return;
+    var orderNumber = $orderInput ? $orderInput.value.trim() : '';
+    if (!orderNumber) {
+      if ($orderInput) { $orderInput.classList.add('is-invalid'); $orderInput.focus(); }
+      return;
+    }
+    openConfirm();
+  });
+  if ($confirmCancel) $confirmCancel.addEventListener('click', closeConfirm);
+  if ($confirmOverlay) $confirmOverlay.addEventListener('click', function(e) {
+    if (e.target === $confirmOverlay) closeConfirm();
+  });
+  if ($confirmGo) $confirmGo.addEventListener('click', function() {
+    closeConfirm();
+    doAddToCart();
   });
 
   /* ── ORDER LOOKUP (only wired if Base44 endpoint configured) ── */
@@ -1322,7 +1451,13 @@
         }
         if (primary && primary.price_cents) {
           STATE.priceCents = primary.price_cents;
-          var detected = detectCategory({ type: primary.product_type || '', tags: primary.tags || [] });
+          var detected = detectCategory({
+            type: primary.product_type || '',
+            tags: primary.tags || [],
+            collections: primary.collections || data.collections || [],
+            category: primary.category || data.category || '',
+            title: primary.title || ''
+          });
           if (detected) selectCategory(detected);
           $step3.classList.remove('is-disabled');
           setLookupStatus('Order verified — ' + (primary.title || 'your camera') + ', ' + fmtMoney(primary.price_cents) + '. Pick your coverage below.', 'success');
