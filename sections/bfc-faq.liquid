@@ -593,11 +593,12 @@
     'just':1,'me':1,'my':1,'of':1,'on':1,'or':1,'our':1,'should':1,'so':1,'than':1,
     'that':1,'the':1,'their':1,'them':1,'then':1,'there':1,'these':1,'they':1,
     'this':1,'to':1,'up':1,'use':1,'want':1,'was':1,'we':1,'what':1,'when':1,
-    'where':1,'which':1,'who':1,'will':1,'with':1,'would':1,'you':1,'your':1,'about':1
+    'where':1,'which':1,'who':1,'will':1,'with':1,'would':1,'you':1,'your':1,'about':1,
+    'something':1,'anything':1,'thing':1,'things':1,'stuff':1,'some':1,'any':1,'please':1
   };
   // Synonym groups: any term in a group matches the others. Edit freely.
   var SYNONYMS = [
-    ['fridge','refrigerator','refrigerate','refrigerated','cold','chilled','freezer','freeze','frozen','store','storage','storing','keep','keeping'],
+    ['fridge','refrigerator','refrigerate','refrigerated','cold','chilled','freezer','freeze','frozen'],
     ['develop','developing','development','process','processing','dev'],
     ['repair','repairs','fix','fixing','service','servicing','serviced','restore','restoration','cla'],
     ['ship','shipping','mail','mailing','post','send','sending','delivery','deliver'],
@@ -648,23 +649,25 @@
   // A hit in the question counts most, then keywords, then the answer body.
   // This lets us rank results and surface the single best one, all without AI.
   function scoreItem(item, queryTokens) {
-    if (!queryTokens.length) return 0;
+    if (!queryTokens.length) return { score: 0, matched: 0, strong: 0 };
     var q = item.getAttribute('data-q') || '';
     var k = item.getAttribute('data-k') || '';
     var a = item.getAttribute('data-a') || '';
-    var score = 0, matched = 0;
+    var score = 0, matched = 0, strong = 0;
     for (var t = 0; t < queryTokens.length; t++) {
       var tok = queryTokens[t];
       var hit = false;
-      if (tokenMatches(tok, q)) { score += 5; hit = true; }
-      else if (tokenMatches(tok, k)) { score += 3; hit = true; }
+      // "strong" = matched in the question or keywords, which is a far better
+      // signal of relevance than a word that merely appears in the answer body
+      // (e.g. "store" buried inside "in-store pickup").
+      if (tokenMatches(tok, q)) { score += 5; hit = true; strong++; }
+      else if (tokenMatches(tok, k)) { score += 3; hit = true; strong++; }
       else if (tokenMatches(tok, a)) { score += 1; hit = true; }
       if (hit) matched++;
     }
-    // Reward items that match more of the query (covers more of what was asked).
     if (matched === queryTokens.length) score += 4;
     score += matched * 2;
-    return score;
+    return { score: score, matched: matched, strong: strong };
   }
 
   // ---------- filter logic ----------
@@ -676,10 +679,13 @@
 
     items.forEach(function(item) {
       var catMatch = activecat === 'all' || item.getAttribute('data-cat') === activecat;
-      var score = searching ? scoreItem(item, queryTokens) : 0;
-      // When searching, an item shows if it matches at least one query token.
-      // When not searching, all items in the active category show.
-      var show = catMatch && (!searching || score > 0);
+      var res = searching ? scoreItem(item, queryTokens) : { score: 0, matched: 0, strong: 0 };
+      // Relevance bar so stray weak hits don't surface as results:
+      // an item must either match the query strongly (in its question/keywords),
+      // or match at least two query tokens anywhere. A single answer-body-only
+      // coincidence (e.g. "store" inside "in-store pickup") is not enough.
+      var relevant = res.strong > 0 || res.matched >= 2;
+      var show = catMatch && (!searching || (res.score > 0 && relevant));
 
       item.setAttribute('aria-hidden', show ? 'false' : 'true');
       item.style.display = show ? '' : 'none';
@@ -690,7 +696,7 @@
       }
       if (show) {
         visible++;
-        if (searching) scored.push({ item: item, score: score });
+        if (searching) scored.push({ item: item, score: res.score, strong: res.strong });
       }
     });
 
@@ -703,15 +709,16 @@
       items.forEach(function(item) { listEl.appendChild(item); });
     }
 
-    // Best-answer panel: surface the single top match while searching.
-    if (searching && scored.length) {
+    // Best-answer panel: only claim a confident answer when the top match is
+    // strong (matched in its question or keywords). Otherwise just show the
+    // ranked list without asserting a single "best answer".
+    if (searching && scored.length && scored[0].strong > 0) {
       var top = scored[0].item;
       var qText = top.querySelector('.bfc-faq__question');
       var aText = top.querySelector('.bfc-faq__answer');
       bestQEl.textContent = qText ? qText.textContent : '';
       bestAEl.innerHTML = aText ? aText.innerHTML : '';
       bestEl.hidden = false;
-      // Auto-expand the top match in the list too.
       items.forEach(function(i) {
         i.classList.remove('is-open');
         i.querySelector('.bfc-faq__trigger').setAttribute('aria-expanded', 'false');
