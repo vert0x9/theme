@@ -432,6 +432,7 @@
           data-cat="{{ block.settings.category }}"
           data-q="{{ block.settings.question | downcase | escape }}"
           data-a="{{ block.settings.answer | downcase | escape }}"
+          data-k="{{ block.settings.keywords | downcase | escape }}"
           {{ block.shopify_attributes }}
         >
           <button
@@ -537,15 +538,87 @@
     applyFilters();
   });
 
+  // ---------- search helpers (no AI; classic token + synonym matching) ----------
+  // Filler words ignored so "can i store my film in the fridge" reduces to
+  // the meaningful tokens: store, film, fridge.
+  var STOPWORDS = {
+    'a':1,'an':1,'and':1,'are':1,'as':1,'at':1,'be':1,'but':1,'by':1,'can':1,
+    'could':1,'did':1,'do':1,'does':1,'for':1,'from':1,'get':1,'got':1,'had':1,
+    'has':1,'have':1,'how':1,'i':1,'if':1,'in':1,'into':1,'is':1,'it':1,'its':1,
+    'just':1,'me':1,'my':1,'of':1,'on':1,'or':1,'our':1,'should':1,'so':1,'than':1,
+    'that':1,'the':1,'their':1,'them':1,'then':1,'there':1,'these':1,'they':1,
+    'this':1,'to':1,'up':1,'use':1,'want':1,'was':1,'we':1,'what':1,'when':1,
+    'where':1,'which':1,'who':1,'will':1,'with':1,'would':1,'you':1,'your':1,'about':1
+  };
+  // Synonym groups: any term in a group matches the others. Edit freely.
+  var SYNONYMS = [
+    ['fridge','refrigerator','refrigerate','refrigerated','cold','chilled','freezer','freeze','frozen','store','storage','storing','keep','keeping'],
+    ['develop','developing','development','process','processing','dev'],
+    ['repair','repairs','fix','fixing','service','servicing','serviced','restore','restoration','cla'],
+    ['ship','shipping','mail','mailing','post','send','sending','delivery','deliver'],
+    ['price','prices','pricing','cost','costs','fee','fees','charge'],
+    ['hours','open','opening','closing','close','schedule'],
+    ['location','located','address','directions','visit','find'],
+    ['expired','expiry','expiration'],
+    ['warranty','guarantee','coverage','covered'],
+    ['sx70','sx-70'],
+    ['polaroid','instant'],
+    ['pickup','collect','collection'],
+    ['return','returns','refund','refunds','exchange'],
+    ['scan','scans','scanning','digitize','digital','digitise'],
+    ['negative','negatives','negs'],
+    ['battery','batteries','power','charge','charging'],
+    ['leak','leaks','fog','fogging'],
+    ['buy','sell','selling','trade','consign','consignment','purchase'],
+    ['format','formats','35mm','120'],
+    ['membership','member','subscription','subscribe','plan']
+  ];
+  var SYN_INDEX = {};
+  SYNONYMS.forEach(function(group) {
+    group.forEach(function(term) {
+      (SYN_INDEX[term] = SYN_INDEX[term] || []).push(group);
+    });
+  });
+  function tokenize(str) {
+    return (str || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, ' ')
+      .split(/\s+/)
+      .filter(function(w) { return w && !STOPWORDS[w]; });
+  }
+  function tokenMatches(token, haystack) {
+    if (haystack.indexOf(token) !== -1) return true;
+    var groups = SYN_INDEX[token];
+    if (groups) {
+      for (var g = 0; g < groups.length; g++) {
+        for (var i = 0; i < groups[g].length; i++) {
+          if (haystack.indexOf(groups[g][i]) !== -1) return true;
+        }
+      }
+    }
+    return false;
+  }
+
   // ---------- filter logic ----------
   function applyFilters() {
     var visible = 0;
+    var queryTokens = tokenize(searchVal);
 
     items.forEach(function(item) {
       var catMatch  = activecat === 'all' || item.getAttribute('data-cat') === activecat;
       var q = item.getAttribute('data-q') || '';
       var a = item.getAttribute('data-a') || '';
-      var searchMatch = searchVal === '' || q.indexOf(searchVal) !== -1 || a.indexOf(searchVal) !== -1;
+      var k = item.getAttribute('data-k') || '';
+      var haystack = q + ' ' + a + ' ' + k;
+
+      // Search matches when every meaningful query token (or a synonym of it)
+      // is found somewhere in the item's question, answer, or keywords.
+      var searchMatch = true;
+      if (queryTokens.length) {
+        for (var t = 0; t < queryTokens.length; t++) {
+          if (!tokenMatches(queryTokens[t], haystack)) { searchMatch = false; break; }
+        }
+      }
       var show = catMatch && searchMatch;
 
       item.setAttribute('aria-hidden', show ? 'false' : 'true');
@@ -662,7 +735,7 @@
       "type": "text",
       "id": "contact_subtext",
       "label": "Subtext",
-      "default": "Our team is at 855 Grand St, Brooklyn — open every day 11–8."
+      "default": "Our team is at 855 Grand St, Brooklyn, open every day 11–8."
     },
     {
       "type": "text",
@@ -713,6 +786,12 @@
           "label": "Answer"
         },
         {
+          "type": "text",
+          "id": "keywords",
+          "label": "Search keywords (optional)",
+          "info": "Extra words shoppers might search that aren't in the question/answer (e.g. 'fridge, refrigerate, cold storage'). Comma-separated. Improves search matching."
+        },
+        {
           "type": "url",
           "id": "video_url",
           "label": "Video link (optional)"
@@ -754,7 +833,7 @@
             "category": "info",
             "category_label": "Store Info",
             "question": "Do you ship internationally?",
-            "answer": "Yes — we ship to most regions worldwide. Free shipping on all US orders over $200."
+            "answer": "Yes, we ship to most regions worldwide. Free shipping on all US orders over $200."
           }
         },
         {
@@ -799,7 +878,7 @@
             "category": "repairs",
             "category_label": "Repairs",
             "question": "What is the repair process?",
-            "answer": "Order a repair quote online and drop off your camera at our Grand Street workshop — or use our Service Portal to generate a pre-paid shipping label and mail it in. Our technician performs a thorough diagnostic assessment, then contacts you with a detailed quote. No work proceeds until you approve. Once approved, repairs are completed and the camera is fully tested before being returned to you."
+            "answer": "Order a repair quote online and drop off your camera at our Grand Street workshop, or use our Service Portal to generate a pre-paid shipping label and mail it in. Our technician performs a thorough diagnostic assessment, then contacts you with a detailed quote. No work proceeds until you approve. Once approved, repairs are completed and the camera is fully tested before being returned to you."
           }
         },
         {
@@ -817,7 +896,7 @@
             "category": "repairs",
             "category_label": "Repairs",
             "question": "What cameras do you repair?",
-            "answer": "We repair most 35mm and medium format film cameras — Canon, Nikon, Pentax, Olympus, Minolta, Contax, Leica, Hasselblad, Mamiya, Bronica, Rolleiflex, Yashica, and many more. We service through two departments: Polaroid, and Everything Else. If you're unsure whether we service your model, contact us before submitting."
+            "answer": "We repair most 35mm and medium format film cameras, Canon, Nikon, Pentax, Olympus, Minolta, Contax, Leica, Hasselblad, Mamiya, Bronica, Rolleiflex, Yashica, and many more. We service through two departments: Polaroid, and Everything Else. If you're unsure whether we service your model, contact us before submitting."
           }
         },
         {
@@ -834,7 +913,7 @@
           "settings": {
             "category": "repairs",
             "category_label": "Repairs",
-            "question": "I shipped my camera — did you receive it?",
+            "question": "I shipped my camera, did you receive it?",
             "answer": "If your tracking shows delivered, it's with us. For confirmation, include your order number inside the package, or reference it in your account. You can also reply to any of your order emails and we'll confirm."
           }
         },
@@ -888,7 +967,7 @@
           "settings": {
             "category": "sx70",
             "category_label": "SX-70",
-            "question": "My SX-70 won't power on — what should I try?",
+            "question": "My SX-70 won't power on, what should I try?",
             "answer": "The most common cause is a depleted film-pack battery. Try a fresh pack, clean the battery contacts inside the camera, and reseat the pack firmly. This often jump-starts the camera.",
             "video_url": "https://www.youtube.com/watch?v=N3TTMkNE-jE",
             "video_label": "Watch video"
@@ -899,7 +978,7 @@
           "settings": {
             "category": "sx70",
             "category_label": "SX-70",
-            "question": "My exposures are too dark or too light — what's happening?",
+            "question": "My exposures are too dark or too light, what's happening?",
             "answer": "This may indicate a meter that needs service. In the meantime, learn your camera's tendencies and use the lighten/darken compensation wheel to correct. If it's consistently off by a large margin, it likely needs a CLA.",
             "video_url": "https://www.youtube.com/watch?v=iNhyW7BJ5gA",
             "video_label": "Watch video"
@@ -911,7 +990,7 @@
             "category": "sx70",
             "category_label": "SX-70",
             "question": "My SX-70 won't close fully.",
-            "answer": "This is usually a mirror stuck mid-cycle. Carefully reset it by slowly cycling the mechanism with the camera open. Do not force the panels shut — you can damage the hinges.",
+            "answer": "This is usually a mirror stuck mid-cycle. Carefully reset it by slowly cycling the mechanism with the camera open. Do not force the panels shut, you can damage the hinges.",
             "video_url": "https://www.youtube.com/watch?v=kIhiuvZQ7MU",
             "video_label": "Watch video"
           }
@@ -955,7 +1034,7 @@
             "category": "sx70",
             "category_label": "SX-70",
             "question": "I'm seeing light leaks in my photos.",
-            "answer": "Light leaks on an SX-70 are often caused by bellows wear. Inspect in a dark room using a small flashlight held inside the open bellows — you'll see pinhole leaks if they're there.",
+            "answer": "Light leaks on an SX-70 are often caused by bellows wear. Inspect in a dark room using a small flashlight held inside the open bellows, you'll see pinhole leaks if they're there.",
             "video_url": "https://www.youtube.com/watch?v=-fekZBMoLcs",
             "video_label": "Watch video"
           }
@@ -966,7 +1045,7 @@
             "category": "sx70",
             "category_label": "SX-70",
             "question": "What is the 600 film mod?",
-            "answer": "The 600 mod allows your SX-70 to shoot Polaroid 600 film, which has a higher ISO of 640 and is widely available. This is a permanent board-level electronic modification — it cannot be undone. Benefits include better low-light performance, easier film sourcing, and access to Polaroid's many special edition 600 releases."
+            "answer": "The 600 mod allows your SX-70 to shoot Polaroid 600 film, which has a higher ISO of 640 and is widely available. This is a permanent board-level electronic modification, it cannot be undone. Benefits include better low-light performance, easier film sourcing, and access to Polaroid's many special edition 600 releases."
           }
         },
         {
@@ -1029,7 +1108,7 @@
             "category": "cameras",
             "category_label": "Cameras",
             "question": "Do you sell new Polaroid cameras?",
-            "answer": "Yes — we stock all current Polaroid models. Check our Polaroid collection for what's available."
+            "answer": "Yes, we stock all current Polaroid models. Check our Polaroid collection for what's available."
           }
         },
         {
@@ -1038,7 +1117,7 @@
             "category": "cameras",
             "category_label": "Cameras",
             "question": "Do you sell SLRs?",
-            "answer": "Yes! We stock models like the Pentax K1000, Nikon F3, Canon AE-1 Program, and more. Our inventory updates frequently — check back regularly or sign up for restock alerts."
+            "answer": "Yes! We stock models like the Pentax K1000, Nikon F3, Canon AE-1 Program, and more. Our inventory updates frequently, check back regularly or sign up for restock alerts."
           }
         },
         {
@@ -1047,7 +1126,357 @@
             "category": "cameras",
             "category_label": "Cameras",
             "question": "What are the differences between Yashica TLR models?",
-            "answer": "Yashica A: 1/25–1/300s, f/3.5–f/22. Yashica C: Bulb–1/300s, f/3.5–f/22. Yashica D: 1–1/500s with bulb mode, plus lock and ergonomic upgrades. Yashica Mat-124: Modeled after the Rolleiflex, 4-element lens, built-in meter (now unreliable). Yashica Mat-124G: Final TLR iteration — cosmetic updates, 1–1/500s shutter, unreliable internal meter."
+            "answer": "Yashica A: 1/25–1/300s, f/3.5–f/22. Yashica C: Bulb–1/300s, f/3.5–f/22. Yashica D: 1–1/500s with bulb mode, plus lock and ergonomic upgrades. Yashica Mat-124: Modeled after the Rolleiflex, 4-element lens, built-in meter (now unreliable). Yashica Mat-124G: Final TLR iteration, cosmetic updates, 1–1/500s shutter, unreliable internal meter."
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "dev",
+            "category_label": "Film Dev",
+            "question": "How should I store my film before and after shooting?",
+            "answer": "Keep unexposed film cool and dry. The refrigerator is great for medium-term storage and the freezer for long-term, sealed in an airtight bag. Let film come fully back to room temperature before loading it, usually a couple of hours, so condensation does not form. Once shot, get film developed reasonably soon and keep it cool and out of heat and humidity until you do.",
+            "keywords": "fridge, refrigerator, freezer, cold, storage, store, keep, humidity, heat"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "dev",
+            "category_label": "Film Dev",
+            "question": "Can I shoot and develop expired film?",
+            "answer": "Yes, expired film can produce beautiful results. As a rough guide, overexpose by about one stop for every decade past the expiration date to counter the loss of sensitivity over time. Color shifts and added grain are normal and part of the look. Film stored cold ages much more slowly, so refrigerated or frozen expired film often behaves close to fresh.",
+            "keywords": "expired, out of date, old film, overexpose, expiry"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "dev",
+            "category_label": "Film Dev",
+            "question": "How long does film developing take?",
+            "answer": "Typical turnaround is 3 to 5 business days for color, 4 to 7 for black and white, and 5 to 10 for any specialty work including push or pull. Drop your film in store or mail it in, and we will let you know when your scans and any negatives are ready. Questions on a specific order can go to developing@brooklynfilmcamera.com.",
+            "keywords": "turnaround, how long, time, wait, ready, days, color, black and white, specialty"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "dev",
+            "category_label": "Film Dev",
+            "question": "Do I get my negatives back?",
+            "answer": "Your call. At checkout you can choose to have your negatives returned with a shipping option, or select pick up in store. If you would rather not keep them, choose pick up in store on the shipping page and we will handle disposal.",
+            "keywords": "negatives, negs, return, keep, back"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "dev",
+            "category_label": "Film Dev",
+            "question": "How do I get my scans after developing?",
+            "answer": "Finished scans are delivered through our online scan portal. You will get a notification when they are ready to view and download. If you need a different resolution or a rescan, reach out to developing@brooklynfilmcamera.com.",
+            "keywords": "scans, scanning, digital, download, portal, files"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "dev",
+            "category_label": "Film Dev",
+            "question": "Do you develop black and white film?",
+            "answer": "Yes. We develop common black and white film alongside color. Check the Film Processing page for the current menu and any film types that need special handling.",
+            "keywords": "black and white, bw, b&w, monochrome"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "dev",
+            "category_label": "Film Dev",
+            "question": "Can you push or pull my film?",
+            "answer": "Yes, we can push or pull common films. You must select the correct push or pull option when you place your developing order on our order page so it is processed properly. We cannot honor instructions written on the package or added separately. Specialty work like push or pull typically takes 5 to 10 business days.",
+            "keywords": "push, pull, process, stops, e6, c41, order page"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "dev",
+            "category_label": "Film Dev",
+            "question": "What is a film developing membership?",
+            "answer": "Our membership is built for people who shoot regularly. It bundles developing at a better effective rate. See the membership page for current plan tiers and the savings breakdown.",
+            "keywords": "membership, member, subscription, plan, save"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "info",
+            "category_label": "Store Info",
+            "question": "Do you buy cameras and gear?",
+            "answer": "Yes. Email photos of your gear to dan@brooklynfilmcamera.com first so we can gauge interest before you make the trip, then bring it to our Brooklyn location in person.",
+            "keywords": "buy, sell, trade, gear, consign, purchase"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "info",
+            "category_label": "Store Info",
+            "question": "Do you offer gift cards?",
+            "answer": "Yes, gift cards are available and work on cameras, film, developing, and repairs. Ask in store or look for gift cards on our website.",
+            "keywords": "gift card, giftcard, voucher, present"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "info",
+            "category_label": "Store Info",
+            "question": "Do you rent cameras or studio space?",
+            "answer": "Availability varies. Check our site for current studio booking and any rental options, or email hello@brooklynfilmcamera.com to ask about a specific date.",
+            "keywords": "rent, rental, studio, booking, hire, space"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "info",
+            "category_label": "Store Info",
+            "question": "How can I contact you?",
+            "answer": "Email hello@brooklynfilmcamera.com, or stop by 855 Grand Street, Brooklyn, NY 11211 during open hours. We are happy to help with cameras, film, developing, and repairs.",
+            "keywords": "contact, email, phone, reach, get in touch"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "info",
+            "category_label": "Store Info",
+            "question": "Do you offer classes or workshops?",
+            "answer": "We run events from time to time. Check our events page at brooklynfilmcamera.com/pages/calendar for what is coming up.",
+            "keywords": "class, classes, workshop, lesson, learn, teach, course, events, calendar"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "info",
+            "category_label": "Store Info",
+            "question": "Can I add extended warranty after I buy a camera?",
+            "answer": "Extended coverage can be added within 7 days of purchase. If you bought online, you can add it within 7 days as long as the camera has not been delivered yet. If you bought in store, coverage can only be added in store, within 7 days.",
+            "keywords": "extended warranty, coverage, add, protection, plan"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "cameras",
+            "category_label": "Cameras",
+            "question": "Which camera is good for a beginner?",
+            "answer": "Great question. It really depends on what kind of shooting you're drawn to. For a classic 35mm SLR, the Pentax K1000 is hard to beat as a first camera. It's fully manual, which means you learn the fundamentals hands-on, and it's built simply enough that not much goes wrong with it. The Canon AE-1 Program is another popular starting point, with more automation if you want the option to ease in. If you'd rather something more point-and-shoot, we have a rotating selection of compact 35mm cameras that are great for carrying everywhere without thinking too much about settings. We love the XA2, MJU, Contax TVS, and Yashica T3 (browse our <a href='https://brooklynfilmcamera.com/collections/point-shoots'>point and shoots here</a>). On the instant side, the Polaroid 600 makes a great camera, but you can't beat our <a href='https://brooklynfilmcamera.com/collections/cameras-polaroid-sx-70'>SX-70 cameras</a> in terms of quality. Inventory shifts pretty often, so the best way to see what's in stock right now is to browse <a href='https://brooklynfilmcamera.com/collections/cameras'>all our cameras here</a>. And if you want to talk it through in person, we're open every day from 11 to 8 at 855 Grand St in Brooklyn. Happy to help you find the right fit.",
+            "keywords": "beginner, first camera, starter, easy, recommend, new to film, k1000, ae-1, point and shoot, sx70"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "cameras",
+            "category_label": "Cameras",
+            "question": "What film does my camera take?",
+            "answer": "Most 35mm cameras take standard 35mm film. Medium format cameras typically take 120 film. Polaroid and instant cameras use the matching instant film for their type. If you are unsure, tell us the camera model and we will confirm.",
+            "keywords": "what film, film type, 35mm, 120, format, takes"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "cameras",
+            "category_label": "Cameras",
+            "question": "How do I load 35mm film?",
+            "answer": "Open the back, drop the canister into the chamber, pull the leader across to the take up spool and catch it, then close the back and advance until the rewind knob turns. If your camera has a frame counter, advance until it reaches frame one. Load in shade or with your body blocking direct sun.",
+            "keywords": "load film, loading, insert, 35mm, leader, spool"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "cameras",
+            "category_label": "Cameras",
+            "question": "What batteries does my film camera use?",
+            "answer": "It depends on the model. Many mechanical cameras need no battery to fire, while their light meter may use a small button cell. Electronic cameras often use common cells like LR44, 357, or a 2CR5. Tell us your model and we will confirm the right battery.",
+            "keywords": "battery, batteries, power, cell, lr44, what battery"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "cameras",
+            "category_label": "Cameras",
+            "question": "Do your cameras come tested and ready to shoot?",
+            "answer": "Every camera we sell is fully refurbished by our techs and checked with professional testing equipment before it goes out, so it arrives ready to load and shoot.",
+            "keywords": "tested, working, ready, checked, serviced, reliable, refurbished, restored"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "cameras",
+            "category_label": "Cameras",
+            "question": "What is the difference between a rangefinder and an SLR?",
+            "answer": "An SLR shows you the actual image through the lens using a mirror, which is great for precise framing and macro. A rangefinder uses a separate viewfinder window and a focusing patch, which makes for a smaller, quieter body that many people love for street and travel.",
+            "keywords": "rangefinder, slr, difference, viewfinder, focus"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "What batteries do SX-70 and Polaroid cameras use?",
+            "answer": "Vintage Polaroid pack film cameras like the SX-70 and 600 series draw power from a battery built into each film pack, so a fresh pack means fresh power. If the camera will not power on with a new pack, the issue is usually the contacts or the camera itself rather than a separate battery.",
+            "keywords": "battery, power, sx70, sx-70, 600, film pack, won't turn on"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "How should I store my instant film?",
+            "answer": "Store instant film in the fridge, never the freezer. Freezing can damage the chemistry and the battery built into the pack. Keep it flat, and let it come back to room temperature before loading. Shoot it before the expiration date for the most consistent results, since instant chemistry is more sensitive to age and heat than regular film.",
+            "keywords": "instant film, store, fridge, refrigerate, cold, polaroid film, storage, freezer"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "repairs",
+            "category_label": "Repairs",
+            "question": "Do you give estimates before repairing?",
+            "answer": "Yes. After the initial bench evaluation we contact you with what the camera needs and the cost before any repair work proceeds, so there are no surprises.",
+            "keywords": "estimate, quote, cost, price, before, approve"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "repairs",
+            "category_label": "Repairs",
+            "question": "Can you service a camera I did not buy from you?",
+            "answer": "Yes, we service cameras regardless of where you bought them. Bring it in or mail it in, and we will start with a bench evaluation to see what it needs.",
+            "keywords": "service, repair, not bought here, elsewhere, my own camera, cla"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "What is the OpenSX70 board?",
+            "answer": "OpenSX70 is our exclusive custom motherboard fitted to every SX-70 we restore. It replaces the original circuit with fresh modern electronics while keeping the camera fully analog in feel. It brings accurate real-time metering, full film compatibility, flash metering, a low-light indicator, and hold-to-eject control to a camera that was designed before the microprocessor existed.",
+            "keywords": "opensx70, open sx70, board, motherboard, modification, mod, electronics"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "What film does a restored SX-70 shoot?",
+            "answer": "Every SX-70 we restore shoots SX-70, 600, and i-Type film thanks to the OpenSX70 board. You switch film types right on the camera. One note on i-Type: i-Type film does not contain a battery to power the camera, so a separate battery extension pack is required to shoot it.",
+            "keywords": "film, sx-70, sx70, 600, i-type, itype, compatibility, battery pack"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "How do I switch between SX-70, 600, and i-Type film?",
+            "answer": "The OpenSX70 board lets you change the ISO setting without any external tools. Hold the shutter button, then open and close the film door. The LED blinks to confirm the change. A blue blink means 600 or i-Type film is active, a red blink means SX-70 film is active.",
+            "keywords": "iso, switch, swap, film door, 600, sx-70, i-type, change film"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "What do the LED colors mean on my SX-70?",
+            "answer": "A blue blink means 600 or i-Type film is active. A red blink means SX-70 film is active. A solid red LED is the low-light warning, telling you there is not enough light for a sharp handheld shot, so grab a tripod or add a flash.",
+            "keywords": "led, light, blink, blue, red, indicator, meaning, reference"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "What is the low-light indicator?",
+            "answer": "The OpenSX70 board lights a solid red LED when ambient light is too low for a sharp handheld shot. It takes the guesswork out of dim conditions. When you see it, steady the camera on a tripod or add a flash for a clean exposure.",
+            "keywords": "low light, indicator, red led, dark, tripod, flash, handheld"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "What is hold-to-eject and why does it matter?",
+            "answer": "Hold the shutter button during exposure to delay the print from ejecting. This lets you shield it from bright light the moment it comes out, which protects the image as it develops. A stock SX-70 ejects immediately with no way to control it.",
+            "keywords": "hold to eject, eject, shield, print, light, develop, protect"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "What is the OpenSX70 control dongle?",
+            "answer": "The control dongle is an optional accessory, currently in development, that attaches to your camera and unlocks manual control. It adds manual shutter speeds from 1/2000 to 1 second, bulb and time modes, strobe sync through a 2.5mm jack at 1/125 and below, a self-timer with mirror lockup, multiple exposure, and an auto flash bar mode for guide number 20 flashes. Every SX-70 we sell is dongle-ready, so when it ships your camera will work with it out of the box.",
+            "keywords": "dongle, manual, control, accessory, shutter speed, bulb, strobe, self timer, multiple exposure"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "Can I get manual shutter control on my SX-70?",
+            "answer": "A restored SX-70 meters and shoots automatically out of the box. Full manual control, including shutter speeds from 1/2000 to 1 second plus bulb and time modes, comes with the optional OpenSX70 control dongle, which is in development. Your camera is built dongle-ready for it.",
+            "keywords": "manual, shutter, control, speed, bulb, time, dongle, exposure"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "Do you offer board or firmware upgrades for my SX-70?",
+            "answer": "Yes. Board and firmware upgrades are free. Contact our SX-70 department at sx70@brooklynfilmcamera.com to arrange sending your camera in.",
+            "keywords": "upgrade, board, firmware, update, free, sx70 department"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "How is your SX-70 restoration done?",
+            "answer": "Every SX-70 is rebuilt by hand in our Brooklyn shop. The camera is fully disassembled, then the OpenSX70 board is installed, the mirror and lens are cleaned, the bellows are inspected and replaced if needed, and the shutter, gears, rollers, and ejection path are serviced. It finishes with full QC where metering accuracy, shutter timing, and ISO detection are verified with precision instruments. It is a ground-up restoration, not just a board swap.",
+            "keywords": "restoration, refurbished, rebuild, process, disassembly, qc, ground up"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "category": "sx70",
+            "category_label": "SX-70",
+            "question": "What warranty comes with a restored SX-70?",
+            "answer": "Restored SX-70 cameras include a 6-month warranty. You can extend coverage at checkout. For warranty questions specific to your SX-70, contact sx70@brooklynfilmcamera.com.",
+            "keywords": "warranty, coverage, sx70, 6 month, guarantee"
           }
         }
       ]
