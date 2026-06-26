@@ -226,14 +226,20 @@
   content: '';
   width: 16px; height: 1px; background: var(--ch); display: block;
 }
+.bfc4-crumb-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+}
 .bfc4-cla-badge {
   display: inline-flex; align-items: center; gap: 5px;
-  margin-top: 8px; padding: 4px 9px;
+  padding: 4px 9px; flex-shrink: 0; cursor: pointer;
   background: rgba(227,110,21,0.08); color: var(--or);
   font-family: var(--sn); font-size: 9px; font-weight: 700;
   letter-spacing: 0.12em; text-transform: uppercase;
   border: 1px solid rgba(227,110,21,0.25);
+  transition: background var(--t), border-color var(--t);
 }
+.bfc4-cla-badge:hover { background: rgba(227,110,21,0.16); border-color: rgba(227,110,21,0.5); }
 .bfc4-cla-badge svg { flex-shrink: 0; }
 
 /* ── KIT HEADING ─────────────────────────── */
@@ -1819,20 +1825,22 @@
     {%- comment -%} 1. Product header + description {%- endcomment -%}
     <div class="bfc4-header">
       {%- comment -%} Breadcrumbs hardcoded for the SLR PDP: Home > Cameras > 35mm SLR Cameras. Ends at category (H1 below shows product). {%- endcomment -%}
-      <nav class="bfc4-crumbs" aria-label="Breadcrumb">
-        <a href="/" class="bfc4-crumb">Home</a>
-        <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
-        <a href="/collections/cameras" class="bfc4-crumb">Cameras</a>
-        <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
-        <a href="/collections/35mm-slr-cameras" class="bfc4-crumb">35mm SLR</a>
-      </nav>
+      <div class="bfc4-crumb-row">
+        <nav class="bfc4-crumbs" aria-label="Breadcrumb">
+          <a href="/" class="bfc4-crumb">Home</a>
+          <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
+          <a href="/collections/cameras" class="bfc4-crumb">Cameras</a>
+          <span class="bfc4-crumb-sep" aria-hidden="true">/</span>
+          <a href="/collections/35mm-slr-cameras" class="bfc4-crumb">35mm SLR</a>
+        </nav>
+        {%- if section.settings.show_cla_badge and is_cla -%}
+          <button type="button" class="bfc4-cla-badge" onclick="baOpenPopup('bfc4-restoration-popup')" title="Fully cleaned, lubricated, and adjusted to factory specification. Tap for details." aria-label="CLA'd to factory spec. Tap for restoration details.">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 8L6 12L14 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            CLA'd to factory spec
+          </button>
+        {%- endif -%}
+      </div>
       <h1 class="bfc4-title">{{ product.title }}</h1>
-      {%- if is_cla -%}
-        <span class="bfc4-cla-badge" title="Fully cleaned, lubricated, and adjusted to factory specification">
-          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 8L6 12L14 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          CLA'd to factory spec
-        </span>
-      {%- endif -%}
       <span id="bfc4-star-placeholder"></span>
       {%- comment -%}
         Product description rendered as HTML (paragraphs, lists, headings honored).
@@ -1886,7 +1894,7 @@
       </ul>
       <div id="ba-popup-data-bfc4-restoration-popup" style="display:none"
         data-title="How We Restore Each Camera"
-        data-desc="Every camera in our shop is fully serviced by our in-house technicians before it leaves Brooklyn. We open up each body, replace light seals and foam, adjust shutter speeds across the full range, calibrate the light meter and install a fresh battery, fix any malfunctioning functions, and modify circuitry when needed. Lenses are cleaned, lubricated, and adjusted. Mirrors and viewfinders cleared. Every reading, click, and motion is checked and tuned against professional bench equipment. All necessary fixes are made before it ships. This is the standard for every camera we sell, regardless of model or age.{% if is_cla %} On this camera, that full service included a complete CLA (clean, lubricate, adjust) to factory specification, so anything that had drifted out of spec was brought back to where it should be.{% endif %}"
+        data-desc="{% if is_cla %}Every camera is fully serviced by our techs in Brooklyn before it ships, not just wiped down. This one received a complete CLA (clean, lubricate, adjust) to factory spec. That means:<br/>&bull; Body opened, mechanism cleaned, lubricated, and serviced<br/>&bull; Shutter speeds verified and adjusted to factory spec<br/>&bull; Light meter calibrated, fresh battery installed<br/>&bull; Light seals and foam replaced when needed<br/>&bull; Optics cleaned, mirror and viewfinder cleared<br/>&bull; Every function tested on professional bench equipment<br/><br/>Anything out of spec was brought back.{% else %}Every camera is fully serviced by our techs in Brooklyn before it ships, not just wiped down. That means:<br/>&bull; Body opened, mechanism cleaned and serviced<br/>&bull; Light seals and foam replaced when needed<br/>&bull; Shutter speeds checked and adjusted to spec<br/>&bull; Light meter calibrated, fresh battery installed<br/>&bull; Optics cleaned, mirror and viewfinder cleared<br/>&bull; Every function tested on professional bench equipment<br/><br/>This is our standard on every camera, whatever the model or age.{% endif %}"
         data-imgs=""
       ></div>
     </div>
@@ -3814,7 +3822,8 @@ window.bfc4TocAddToCart = function() {
     { "type": "image_picker", "id": "slide_4_mobile", "label": "Mobile slide 4" },
     { "type": "image_picker", "id": "slide_5_mobile", "label": "Mobile slide 5" },
     { "type": "image_picker", "id": "restoration_photo", "label": "Restoration photo (16:9 landscape works best)" },
-    { "type": "richtext",     "id": "restoration_prose", "label": "Restoration narrative (optional override)" }
+    { "type": "richtext",     "id": "restoration_prose", "label": "Restoration narrative (optional override)" },
+    { "type": "checkbox", "id": "show_cla_badge", "label": "Show CLA badge", "default": false, "info": "Shows a \"CLA'd to factory spec\" badge by the title on products whose claability metafield is set to yes. Off by default." }
   ],
   "blocks": [
     {
