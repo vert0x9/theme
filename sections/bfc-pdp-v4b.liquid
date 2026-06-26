@@ -26,6 +26,16 @@
   assign spec_expcomp = product.metafields.custom.spec_exposurecompensation.value
   assign spec_meter   = product.metafields.custom.spec_meter.value
   assign spec_focus   = product.metafields.custom.spec_focus.value
+  comment
+    CLA flag: custom.claability metafield (yes/no). True when the value
+    reads yes/true. Drives the small CLA badge and an appended line in
+    the restoration popup. Cameras that are not flagged are unchanged.
+  endcomment
+  assign cla_raw = product.metafields.custom.claability.value | downcase
+  assign is_cla = false
+  if cla_raw == 'yes' or cla_raw == 'true'
+    assign is_cla = true
+  endif
 -%}
 
 <style>
@@ -219,6 +229,15 @@
   content: '';
   width: 16px; height: 1px; background: var(--ch); display: block;
 }
+.bfc4-cla-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-top: 8px; padding: 4px 9px;
+  background: rgba(227,110,21,0.08); color: var(--or);
+  font-family: var(--sn); font-size: 9px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  border: 1px solid rgba(227,110,21,0.25);
+}
+.bfc4-cla-badge svg { flex-shrink: 0; }
 
 /* ── KIT HEADING ─────────────────────────── */
 .bfc4-kit-head {
@@ -1966,6 +1985,12 @@
         <a href="/collections/slr-other" class="bfc4-crumb">35mm SLR</a>
       </nav>
       <h1 class="bfc4-title">{{ product.title }}</h1>
+      {%- if is_cla -%}
+        <span class="bfc4-cla-badge" title="Fully cleaned, lubricated, and adjusted to factory specification">
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 8L6 12L14 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          CLA'd to factory spec
+        </span>
+      {%- endif -%}
       <span id="bfc4-star-placeholder"></span>
       {%- comment -%}
         Product description rendered as HTML (paragraphs, lists, headings honored).
@@ -2017,7 +2042,7 @@
       </ul>
       <div id="ba-popup-data-bfc4-restoration-popup" style="display:none"
         data-title="How We Restore Each Camera"
-        data-desc="Every camera in our shop is fully serviced by our in-house technicians before it leaves Brooklyn. We open up each body, replace light seals and foam, adjust shutter speeds across the full range, calibrate the light meter and install a fresh battery, fix any malfunctioning functions, and modify circuitry when needed. Lenses are cleaned, lubricated, and adjusted. Mirrors and viewfinders cleared. Every reading, click, and motion is checked and tuned against professional bench equipment. All necessary fixes are made before it ships. This is the standard for every camera we sell, regardless of model or age."
+        data-desc="Every camera in our shop is fully serviced by our in-house technicians before it leaves Brooklyn. We open up each body, replace light seals and foam, adjust shutter speeds across the full range, calibrate the light meter and install a fresh battery, fix any malfunctioning functions, and modify circuitry when needed. Lenses are cleaned, lubricated, and adjusted. Mirrors and viewfinders cleared. Every reading, click, and motion is checked and tuned against professional bench equipment. All necessary fixes are made before it ships. This is the standard for every camera we sell, regardless of model or age.{% if is_cla %} On this camera, that full service included a complete CLA (clean, lubricate, adjust) to factory specification, so anything that had drifted out of spec was brought back to where it should be.{% endif %}"
         data-imgs=""
       ></div>
     </div>
@@ -2226,10 +2251,10 @@
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="1" width="16" height="16" rx="1" stroke="#ABCC99" stroke-width="1.5"/><circle cx="9" cy="9" r="3" stroke="#ABCC99" stroke-width="1.5"/><line x1="1" y1="5" x2="17" y2="5" stroke="#ABCC99" stroke-width="1"/><line x1="1" y1="13" x2="17" y2="13" stroke="#ABCC99" stroke-width="1"/></svg>
       </div>
       <div class="ba-film-promo-text">
-        <div class="ba-film-promo-title">Free developing credit unlocked!</div>
-        <div class="ba-film-promo-sub">A standard C-41 developing credit will be included with your order.</div>
+        <div class="ba-film-promo-title" id="ba-promo-title">Add 2 films for free developing credit</div>
+        <div class="ba-film-promo-sub" id="ba-promo-sub">Add any 2 rolls and a standard C-41 developing credit is on us.</div>
       </div>
-      <div class="ba-film-promo-status" id="ba-promo-status" style="color:var(--ce);">✓ Unlocked</div>
+      <div class="ba-film-promo-status" id="ba-promo-status" style="color:var(--ce);"></div>
     </div>
 
     {%- comment -%} 6. (Mini-specs removed above-fold; see chapter quick-view below) {%- endcomment -%}
@@ -3293,7 +3318,22 @@
 
 
     var promoEl = document.getElementById('ba-film-promo');
-    if (promoEl) promoEl.style.display = filmCount >= 2 ? 'flex' : 'none';
+    if (promoEl) {
+      // Two-state banner: prompt to add films, or confirm the credit is unlocked.
+      promoEl.style.display = 'flex';
+      var promoTitle  = document.getElementById('ba-promo-title');
+      var promoSub    = document.getElementById('ba-promo-sub');
+      var promoStatus = document.getElementById('ba-promo-status');
+      if (filmCount >= 2) {
+        if (promoTitle)  promoTitle.textContent  = 'Free developing credit unlocked!';
+        if (promoSub)    promoSub.textContent    = 'A standard C-41 developing credit will be included with your order.';
+        if (promoStatus) promoStatus.textContent = '\u2713 Unlocked';
+      } else {
+        if (promoTitle)  promoTitle.textContent  = 'Add 2 films for free developing credit';
+        if (promoSub)    promoSub.textContent    = 'Add any 2 rolls and a standard C-41 developing credit is on us.';
+        if (promoStatus) promoStatus.textContent = '';
+      }
+    }
 
     // Selected items row below fold
     var selEl = document.getElementById('bfc4-selected-items');
@@ -3565,9 +3605,9 @@
     document.getElementById('ba-popup-desc').innerHTML =
       '<p class="bfc4-gi-intro">Grading is <strong>purely cosmetic</strong>. Every camera we sell, {% if section.settings.enable_c_grade %}Best, Great, or Worn{% else %}A or B{% endif %}, is fully restored, bench-tested, and covered by the <strong>same warranty</strong>. The grade only describes how the body looks.</p>' +
       '<div class="bfc4-gi-cards{% if section.settings.enable_c_grade %} is-three{% endif %}">' +
-        '<div class="bfc4-gi-card"><div class="bfc4-gi-grade">{% if section.settings.enable_c_grade %}Best (A){% else %}Grade A{% endif %}</div><div class="bfc4-gi-text">Shows very little cosmetic wear. Closest to original condition.</div></div>' +
-        '<div class="bfc4-gi-card"><div class="bfc4-gi-grade">{% if section.settings.enable_c_grade %}Great (B){% else %}Grade B{% endif %}</div><div class="bfc4-gi-text">Shows light cosmetic wear including small scratches, spots, or worn finish. <strong>Still very clean for its age.</strong> We maintain a high bar for {% if section.settings.enable_c_grade %}Great (B){% else %}B{% endif %} grade.</div></div>' +
-      '{% if section.settings.enable_c_grade %}<div class="bfc4-gi-card"><div class="bfc4-gi-grade">Worn (C)</div><div class="bfc4-gi-text">Shows heavier cosmetic wear such as deeper scratches, brassing, or worn coverings. Currently out of stock.</div></div>{% endif %}' +
+        '<div class="bfc4-gi-card"><div class="bfc4-gi-grade">{% if section.settings.enable_c_grade %}Best{% else %}Grade A{% endif %}</div><div class="bfc4-gi-text">Shows very little cosmetic wear. Closest to original condition.</div></div>' +
+        '<div class="bfc4-gi-card"><div class="bfc4-gi-grade">{% if section.settings.enable_c_grade %}Great{% else %}Grade B{% endif %}</div><div class="bfc4-gi-text">Shows light cosmetic wear including small scratches, spots, or worn finish. <strong>Still very clean for its age.</strong> We maintain a high bar for {% if section.settings.enable_c_grade %}Great{% else %}B{% endif %} grade.</div></div>' +
+      '{% if section.settings.enable_c_grade %}<div class="bfc4-gi-card"><div class="bfc4-gi-grade">Worn</div><div class="bfc4-gi-text">Shows heavier cosmetic wear such as deeper scratches, brassing, or worn coverings. Currently out of stock.</div></div>{% endif %}' +
       '</div>' +
       '<div class="bfc4-gi-note">{% if section.settings.enable_c_grade %}<strong>A lower grade is not a lesser camera.</strong>{% else %}<strong>Grade B is not a lesser camera.</strong>{% endif %} Same restoration, same bench testing, same warranty. It just shows a little more life.</div>';
     document.getElementById('ba-popup-imgs').innerHTML = '';
