@@ -35,10 +35,13 @@
       "name": "BFC Extended Warranty",
       "settings": {
         "eyebrow": "BFC Coverage",
-        "headline": "Extended <em>Coverage</em>",
+        "headline": "Extended Coverage",
         "lead": "Use the calculator below to find the right extended warranty for any camera you bought from us. Pick your camera type, enter the price you paid, and choose how long you want coverage to run.",
         "show_lookup": true,
-        "lookup_endpoint": ""
+        "shop_name": "Brooklyn Film Camera",
+        "shop_address": "855 Grand Street, Brooklyn, NY 11211",
+        "shop_hours": "Open daily, 11am – 7pm",
+        "lookup_endpoint": "https://time-tracker-03f66780.base44.app/api/functions/checkWarrantyEligibility"
       }
     }
   },
