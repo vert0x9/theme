@@ -54,7 +54,15 @@
   padding: 64px 48px 96px;
 }
 .bfc-ew * { box-sizing: border-box; }
-.bfc-ew-inner { max-width: 880px; margin: 0 auto; }
+.bfc-ew-inner { max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; }
+/* Flow order: header/warning, then verify-your-order, then coverage length, then result, then disclaimer.
+   Using flex order keeps the markup intact while presenting the entry point before the locked steps. */
+.bfc-ew-header { order: 0; }
+.bfc-ew-warning { order: 1; }
+.bfc-ew-lookup { order: 2; }
+#bfc-ew-step3 { order: 3; }
+.bfc-ew-result { order: 4; }
+.bfc-ew-disclaimer { order: 5; }
 
 /* ── HEADER ────────────────────────────────── */
 .bfc-ew-header {
@@ -820,23 +828,21 @@
             </p>
           </div>
 
-          {%- comment -%} Online order verification via Base44 (skipped if endpoint URL is blank) {%- endcomment -%}
-          {%- if section.settings.lookup_endpoint != blank -%}
-            <div class="bfc-ew-lookup-card">
-              <span class="bfc-ew-lookup-card-ey">Bought online</span>
-              <div class="bfc-ew-lookup-card-title">Verify your order to add coverage</div>
-              <p class="bfc-ew-lookup-card-body">Enter your order number. If it's within 7 days and hasn't been delivered yet, we'll find your camera and unlock extended coverage automatically. Order numbers start with #BFC.</p>
-              <div class="bfc-ew-lookup-form">
-                <input type="text" class="bfc-ew-lookup-input" id="bfc-ew-lookup-order" placeholder="Order number (e.g. #BFC12345)" autocomplete="off"/>
-                <button type="button" class="bfc-ew-lookup-btn" id="bfc-ew-lookup-btn" data-endpoint="{{ section.settings.lookup_endpoint }}">Verify My Order</button>
-                <div class="bfc-ew-lookup-status" id="bfc-ew-lookup-status"></div>
-                <div class="bfc-ew-lookup-result" id="bfc-ew-lookup-result">
-                  <div class="bfc-ew-lookup-result-title" id="bfc-ew-lookup-result-title">—</div>
-                  <div class="bfc-ew-lookup-result-meta" id="bfc-ew-lookup-result-meta">—</div>
-                </div>
+          {%- comment -%} Online order verification via Base44. Card always renders so there's a clear place to start; if endpoint isn't configured, the button shows an unavailable state instead of the card vanishing. {%- endcomment -%}
+          <div class="bfc-ew-lookup-card">
+            <span class="bfc-ew-lookup-card-ey">Bought online</span>
+            <div class="bfc-ew-lookup-card-title">Verify your order to add coverage</div>
+            <p class="bfc-ew-lookup-card-body">Enter your order number. If it's within 7 days and hasn't been delivered yet, we'll find your camera and unlock extended coverage automatically. Order numbers start with #BFC.</p>
+            <div class="bfc-ew-lookup-form">
+              <input type="text" class="bfc-ew-lookup-input" id="bfc-ew-lookup-order" placeholder="Order number (e.g. #BFC12345)" autocomplete="off"{% if section.settings.lookup_endpoint == blank %} disabled{% endif %}/>
+              <button type="button" class="bfc-ew-lookup-btn" id="bfc-ew-lookup-btn" data-endpoint="{{ section.settings.lookup_endpoint }}"{% if section.settings.lookup_endpoint == blank %} disabled{% endif %}>Verify My Order</button>
+              <div class="bfc-ew-lookup-status" id="bfc-ew-lookup-status">{% if section.settings.lookup_endpoint == blank %}Online verification is being set up. To add coverage now, visit us in store within 7 days of purchase.{% endif %}</div>
+              <div class="bfc-ew-lookup-result" id="bfc-ew-lookup-result">
+                <div class="bfc-ew-lookup-result-title" id="bfc-ew-lookup-result-title">—</div>
+                <div class="bfc-ew-lookup-result-meta" id="bfc-ew-lookup-result-meta">—</div>
               </div>
             </div>
-          {%- endif -%}
+          </div>
 
         </div>
       </div>
