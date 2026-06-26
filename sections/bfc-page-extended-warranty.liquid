@@ -835,7 +835,7 @@
           autocomplete="off"
           required
         />
-        <div class="bfc-ew-order-help">Verify your order number in the section below. Once confirmed (within the 7-day window), this fills in and unlocks checkout. Outside 7 days, add coverage in person at the shop.</div>
+        <div class="bfc-ew-order-help">Verify your order number in the section below. Once confirmed (within the 7-day window), this fills in and unlocks checkout.</div>
       </div>
 
       <div class="bfc-ew-result-actions">
@@ -1300,10 +1300,15 @@
       sections_url: window.location.pathname
     };
 
-    xhrJSON('POST', '/cart/add.js', payload, null, function(err, data) {
+    /* Log the exact variant + payload so we can diagnose cart rejections. */
+    try { console.log('[BFC EW] adding variant', v.variantId, 'category', STATE.category, 'length', STATE.length, payload); } catch(e){}
+
+    xhrJSON('POST', '/cart/add.js', payload, null, function(err, data, status) {
       if (err) {
         $atc.disabled = false;
-        $atcText.textContent = 'Error — try again';
+        var msg = (data && (data.description || data.message)) || err || 'Error';
+        try { console.error('[BFC EW] cart/add failed', status, data); } catch(e){}
+        $atcText.textContent = String(msg).slice(0, 40);
         return;
       }
       $atc.classList.add('is-success');

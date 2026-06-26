@@ -41,7 +41,7 @@
         "shop_name": "Brooklyn Film Camera",
         "shop_address": "855 Grand Street, Brooklyn, NY 11211",
         "shop_hours": "Open daily, 11am – 7pm",
-        "lookup_endpoint": "https://time-tracker-03f66780.base44.app/api/functions/checkWarrantyEligibility"
+        "lookup_endpoint": "https://time-tracker-03f66780.base44.app/api/apps/6910fd9136cfabdf03f66780/functions/checkWarrantyEligibility"
       }
     }
   },
