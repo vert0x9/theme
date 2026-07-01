@@ -495,12 +495,13 @@
 .bfc4-opt-label-btn:hover{color:var(--or)}
 .bfc4-opt-row{display:flex;flex-wrap:wrap;gap:6px}
 .bfc4-opt-btn{border:2px solid rgba(32,32,9,0.15);background:#fff;cursor:pointer;font-family:var(--sn);font-size:12px;font-weight:600;color:var(--bk);transition:all var(--t);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
-.bfc4-opt-btn-circle{width:34px;height:34px;padding:0;border-radius:50%}
+.bfc4-opt-btn-circle{min-width:38px;padding:8px 16px;border-radius:999px;position:relative}
 .bfc4-opt-btn-text{padding:8px 16px;border-radius:0}
 .bfc4-opt-btn:hover{border-color:var(--or)}
 .bfc4-opt-btn.is-active{border:2px solid var(--or);color:var(--or);background:rgba(227,110,21,0.05)}
 .bfc4-opt-btn.is-oos{color:rgba(32,32,9,0.4);border-color:rgba(32,32,9,0.12);background:rgba(32,32,9,0.02);position:relative}
-.bfc4-opt-btn-circle.is-oos::after{content:'';position:absolute;top:50%;left:-2px;right:-2px;height:2px;background:rgba(120,20,20,0.85);transform:rotate(-45deg)}
+.bfc4-opt-btn-circle.is-oos{overflow:hidden}
+.bfc4-opt-btn-circle.is-oos::after{content:'';position:absolute;top:50%;left:8%;right:8%;height:1.5px;background:rgba(120,20,20,0.8);transform:rotate(-8deg)}
 .bfc4-opt-btn-text.is-oos{overflow:hidden}
 .bfc4-opt-btn-text.is-oos::after{content:'';position:absolute;top:50%;left:8%;right:8%;height:1px;background:rgba(32,32,9,0.45);transform:rotate(-6deg)}
 .bfc4-opt-btn.is-oos.is-active{color:var(--or);border-color:var(--or)}
