@@ -992,7 +992,12 @@
                     {%- if opt.position == 1 -%}{%- assign v_optval = v.option1 -%}{%- elsif opt.position == 2 -%}{%- assign v_optval = v.option2 -%}{%- else -%}{%- assign v_optval = v.option3 -%}{%- endif -%}
                     {%- if v_optval == val and v.available -%}{%- assign val_avail = true -%}{%- break -%}{%- endif -%}
                   {%- endfor -%}
-                  <button type="button" class="bfc4-opt-btn bfc4-opt-btn-circle{% if opt.selected_value == val %} is-active{% endif %}{% unless val_avail %} is-oos{% endunless %}" data-opt-pos="{{ opt.position }}" data-opt-value="{{ val | escape }}" onclick="bfc4SelectOption(this)"{% unless val_avail %} title="{{ val | escape }} — currently out of stock"{% endunless %}>{{ val }}</button>
+                  {%- assign grade_first = val | upcase | slice: 0 -%}
+                  {%- if grade_first == 'A' -%}{%- assign grade_label = 'A &middot; Excellent' -%}
+                  {%- elsif grade_first == 'B' -%}{%- assign grade_label = 'B &middot; Good' -%}
+                  {%- elsif grade_first == 'C' -%}{%- assign grade_label = 'C &middot; Fair' -%}
+                  {%- else -%}{%- assign grade_label = val -%}{%- endif -%}
+                  <button type="button" class="bfc4-opt-btn bfc4-opt-btn-circle{% if opt.selected_value == val %} is-active{% endif %}{% unless val_avail %} is-oos{% endunless %}" data-opt-pos="{{ opt.position }}" data-opt-value="{{ val | escape }}" onclick="bfc4SelectOption(this)"{% unless val_avail %} title="{{ val | escape }} — currently out of stock"{% endunless %}>{{ grade_label }}</button>
                 {%- endfor -%}
               </div>
             {%- elsif is_color_opt -%}
@@ -1560,7 +1565,12 @@
                         {%- if opt.position == 1 -%}{%- assign v_optval2 = v.option1 -%}{%- elsif opt.position == 2 -%}{%- assign v_optval2 = v.option2 -%}{%- else -%}{%- assign v_optval2 = v.option3 -%}{%- endif -%}
                         {%- if v_optval2 == val and v.available -%}{%- assign val_avail2 = true -%}{%- break -%}{%- endif -%}
                       {%- endfor -%}
-                      <button type="button" class="bfc4-opt-btn bfc4-opt-btn-circle{% if opt.selected_value == val %} is-active{% endif %}{% unless val_avail2 %} is-oos{% endunless %}" data-opt-pos="{{ opt.position }}" data-opt-value="{{ val | escape }}" onclick="bfc4SelectOption(this)"{% unless val_avail2 %} title="{{ val | escape }} — currently out of stock"{% endunless %}>{{ val }}</button>
+                      {%- assign grade_first2 = val | upcase | slice: 0 -%}
+                      {%- if grade_first2 == 'A' -%}{%- assign grade_label2 = 'A &middot; Excellent' -%}
+                      {%- elsif grade_first2 == 'B' -%}{%- assign grade_label2 = 'B &middot; Good' -%}
+                      {%- elsif grade_first2 == 'C' -%}{%- assign grade_label2 = 'C &middot; Fair' -%}
+                      {%- else -%}{%- assign grade_label2 = val -%}{%- endif -%}
+                      <button type="button" class="bfc4-opt-btn bfc4-opt-btn-circle{% if opt.selected_value == val %} is-active{% endif %}{% unless val_avail2 %} is-oos{% endunless %}" data-opt-pos="{{ opt.position }}" data-opt-value="{{ val | escape }}" onclick="bfc4SelectOption(this)"{% unless val_avail2 %} title="{{ val | escape }} — currently out of stock"{% endunless %}>{{ grade_label2 }}</button>
                     {%- endfor -%}
                   </div>
                 {%- elsif is_color_opt2 -%}
