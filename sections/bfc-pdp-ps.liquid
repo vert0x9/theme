@@ -104,7 +104,7 @@
   assign grade_opt_pos = 0
   for opt in product.options_with_values
     assign optname_dc = opt.name | downcase
-    if optname_dc contains 'grade'
+    if optname_dc contains 'grade' or optname_dc contains 'condition'
       assign grade_opt_pos = opt.position
     endif
   endfor
@@ -642,7 +642,7 @@
   <div class="bfc4-left" id="bfc4-top" role="region" aria-label="Product images">
     {%- comment -%} Check if any section images are set {%- endcomment -%}
     {%- assign has_section_imgs = false -%}
-    {%- for i in (1..5) -%}
+    {%- for i in (1..10) -%}
       {%- assign img_key = 'slide_' | append: i -%}
       {%- if section.settings[img_key] != blank -%}{%- assign has_section_imgs = true -%}{%- endif -%}
     {%- endfor -%}
@@ -650,14 +650,14 @@
     {%- if has_section_imgs -%}
       {%- comment -%} Count section slides {%- endcomment -%}
       {%- assign slide_images = '' -%}
-      {%- for i in (1..5) -%}
+      {%- for i in (1..10) -%}
         {%- assign img_key = 'slide_' | append: i -%}
         {%- if section.settings[img_key] != blank -%}{%- assign slide_images = slide_images | append: '1' -%}{%- endif -%}
       {%- endfor -%}
       {%- assign total_slides = slide_images | size -%}
 
       <div class="bfc4-slides" id="bfc4-slides">
-        {%- for i in (1..5) -%}
+        {%- for i in (1..10) -%}
           {%- assign img_key = 'slide_' | append: i -%}
           {%- assign img_mob_key = 'slide_' | append: i | append: '_mobile' -%}
           {%- assign img_val = section.settings[img_key] -%}
@@ -688,7 +688,7 @@
       {%- assign total_slides = media_images | size -%}
 
       <div class="bfc4-slides" id="bfc4-slides">
-        {%- for media in media_images limit: 8 -%}
+        {%- for media in media_images limit: 20 -%}
           <div class="bfc4-slide">
             <img
               src="{{ media | image_url: width: 900 }}"
@@ -962,7 +962,7 @@
         {%- for opt in product.options_with_values -%}
           {%- assign is_grade_opt = false -%}
           {%- assign optname_dc = opt.name | downcase -%}
-          {%- if optname_dc contains 'grade' -%}{%- assign is_grade_opt = true -%}{%- endif -%}
+          {%- if optname_dc contains 'grade' or optname_dc contains 'condition' -%}{%- assign is_grade_opt = true -%}{%- endif -%}
           <div class="bfc4-opt-group" data-opt-pos="{{ opt.position }}">
             {%- if is_grade_opt -%}
               <button type="button" class="bfc4-opt-label bfc4-opt-label-btn" onclick="baOpenPopup('bfc4-grade-popup')" aria-label="{{ opt.name | escape }}. Tap for grade details.">
@@ -1505,7 +1505,7 @@
             {%- for opt in product.options_with_values -%}
               {%- assign is_grade_opt2 = false -%}
               {%- assign optname_dc2 = opt.name | downcase -%}
-              {%- if optname_dc2 contains 'grade' -%}{%- assign is_grade_opt2 = true -%}{%- endif -%}
+              {%- if optname_dc2 contains 'grade' or optname_dc2 contains 'condition' -%}{%- assign is_grade_opt2 = true -%}{%- endif -%}
               <div class="bfc4-opt-group" data-opt-pos="{{ opt.position }}">
                 {%- if is_grade_opt2 -%}
                   <button type="button" class="bfc4-opt-label bfc4-opt-label-btn" onclick="baOpenPopup('bfc4-grade-popup')" aria-label="{{ opt.name | escape }}. Tap for grade details.">
@@ -2472,12 +2472,22 @@ if (stickyBar && mainAtc) {
     { "type": "image_picker", "id": "slide_3", "label": "Hero slide 3" },
     { "type": "image_picker", "id": "slide_4", "label": "Hero slide 4" },
     { "type": "image_picker", "id": "slide_5", "label": "Hero slide 5" },
+    { "type": "image_picker", "id": "slide_6", "label": "Hero slide 6" },
+    { "type": "image_picker", "id": "slide_7", "label": "Hero slide 7" },
+    { "type": "image_picker", "id": "slide_8", "label": "Hero slide 8" },
+    { "type": "image_picker", "id": "slide_9", "label": "Hero slide 9" },
+    { "type": "image_picker", "id": "slide_10", "label": "Hero slide 10" },
     { "type": "header", "content": "Mobile slides (optional)" },
     { "type": "image_picker", "id": "slide_1_mobile", "label": "Mobile slide 1" },
     { "type": "image_picker", "id": "slide_2_mobile", "label": "Mobile slide 2" },
     { "type": "image_picker", "id": "slide_3_mobile", "label": "Mobile slide 3" },
     { "type": "image_picker", "id": "slide_4_mobile", "label": "Mobile slide 4" },
     { "type": "image_picker", "id": "slide_5_mobile", "label": "Mobile slide 5" },
+    { "type": "image_picker", "id": "slide_6_mobile", "label": "Mobile slide 6" },
+    { "type": "image_picker", "id": "slide_7_mobile", "label": "Mobile slide 7" },
+    { "type": "image_picker", "id": "slide_8_mobile", "label": "Mobile slide 8" },
+    { "type": "image_picker", "id": "slide_9_mobile", "label": "Mobile slide 9" },
+    { "type": "image_picker", "id": "slide_10_mobile", "label": "Mobile slide 10" },
     { "type": "header", "content": "Restoration chapter (below-fold)" },
     { "type": "image_picker", "id": "restoration_photo", "label": "Restoration photo (16:9 landscape works best)", "info": "Shown when the chapter's 'View full process' toggle is expanded. Optional." },
     { "type": "richtext", "id": "restoration_prose", "label": "Restoration prose", "info": "Optional override for the expanded chapter copy. Leave blank to use the default." }
