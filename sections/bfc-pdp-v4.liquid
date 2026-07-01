@@ -36,6 +36,22 @@
   if cla_raw == 'yes' or cla_raw == 'true'
     assign is_cla = true
   endif
+
+  comment
+    Variant option label + grade detection. Use the actual option name as the
+    selector label. Only treat it as a cosmetic-grade option (A&B Grade wording,
+    grade popup) when the name really is Grade / Condition / Cosmetic. Otherwise
+    it is a normal option (e.g. a lens choice) and is labeled by its real name.
+  endcomment
+  assign opt_name = 'Option'
+  if product.options.size > 0
+    assign opt_name = product.options.first
+  endif
+  assign opt_name_dc = opt_name | downcase
+  assign is_grade_opt = false
+  if opt_name_dc contains 'grade' or opt_name_dc contains 'condition' or opt_name_dc contains 'cosmetic'
+    assign is_grade_opt = true
+  endif
 -%}
 
 <style>
@@ -1993,7 +2009,7 @@
     <div class="bfc4-buy">
       {%- if product.variants.size > 1 -%}
         <div class="bfc4-grade-compact">
-          <span class="bfc4-grade-label">Grade</span>
+          <span class="bfc4-grade-label">{{ opt_name }}</span>
           <div class="bfc4-grade-row">
             {%- for variant in product.variants -%}
               <button
@@ -2247,7 +2263,7 @@
               {%- assign qs_count = qs_count | plus: 1 -%}
             {%- endif -%}
             {%- if qs_count < 4 -%}
-              <div><span class="key">Condition</span><span class="val">{% if product.variants.size > 1 %}A &amp; B Grade{% else %}Verified{% endif %}</span></div>
+              <div><span class="key">Condition</span><span class="val">{% if product.variants.size > 1 and is_grade_opt %}A &amp; B Grade{% else %}Verified{% endif %}</span></div>
               {%- assign qs_count = qs_count | plus: 1 -%}
             {%- endif -%}
             {%- comment -%} Fallback fillers (only fire if any of the four above missed) {%- endcomment -%}
@@ -2287,7 +2303,7 @@
               {%- if spec_tripod  != blank -%}<div><span class="key">Tripod</span><span class="val">{{ spec_tripod }}</span></div>{%- endif -%}
               {%- if spec_expcomp != blank -%}<div><span class="key">Exp. Comp.</span><span class="val">{{ spec_expcomp }}</span></div>{%- endif -%}
               {%- if spec_dx      != blank -%}<div><span class="key">DX Reader</span><span class="val">{{ spec_dx }}</span></div>{%- endif -%}
-              {%- if product.variants.size > 1 -%}
+              {%- if product.variants.size > 1 and is_grade_opt -%}
                 <div><span class="key">Condition</span><span class="val">A &amp; B Grade</span></div>
               {%- else -%}
                 <div><span class="key">Condition</span><span class="val">Quality benchmark verified</span></div>
@@ -2589,7 +2605,7 @@
         <div class="bfc4-below-atc">
           {%- if product.variants.size > 1 -%}
             <div class="bfc4-grade-compact">
-              <span class="bfc4-grade-label">Grade</span>
+              <span class="bfc4-grade-label">{{ opt_name }}</span>
               <div class="bfc4-grade-row">
                 {%- for variant in product.variants -%}
                   <button
