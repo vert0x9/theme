@@ -489,6 +489,18 @@
 .bfc4-opt-btn{padding:9px 14px;border:1px solid rgba(32,32,9,0.15);background:#fff;cursor:pointer;font-family:var(--sn);font-size:11px;font-weight:600;color:var(--bk);transition:all var(--t);text-align:center}
 .bfc4-opt-btn:hover{border-color:var(--or)}
 .bfc4-opt-btn.is-active{border:2px solid var(--or);color:var(--or);background:rgba(227,110,21,0.05)}
+.bfc4 .bfc4-gi-intro{font-size:13px;line-height:1.7;color:var(--ch);margin:0 0 16px}
+.bfc4 .bfc4-gi-intro strong{color:var(--bk)}
+.bfc4 .bfc4-gi-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.bfc4 .bfc4-gi-card{border:1px solid rgba(32,32,9,0.12);padding:12px;background:#fff;display:flex;flex-direction:column}
+.bfc4 .bfc4-gi-grade{font-size:11.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--or);margin-bottom:7px}
+.bfc4 .bfc4-gi-text{font-size:12.5px;line-height:1.6;color:var(--ch)}
+.bfc4 .bfc4-gi-text strong{color:var(--bk)}
+.bfc4 .bfc4-gi-photos{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:10px}
+.bfc4 .bfc4-gi-photos img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:var(--gr)}
+.bfc4 .bfc4-gi-note{font-size:12px;line-height:1.6;color:var(--ch);border-top:1px solid rgba(32,32,9,0.1);padding-top:12px}
+.bfc4 .bfc4-gi-note strong{color:var(--bk)}
+@media (max-width:640px){.bfc4 .bfc4-gi-cards{grid-template-columns:1fr}}
 </style>
 
 <main id="bfc4-main" aria-label="{{ product.title | escape }} product page">
@@ -722,19 +734,14 @@
         data-desc="Every camera in our shop is fully serviced by our in-house technicians before it leaves Brooklyn. We open up each body, clean the battery contacts and install a fresh battery, replace light seals and foam when the camera has them, clean and adjust the optics, clear the viewfinder, and check and tune every function against professional bench equipment. Any necessary fixes are made before it ships. This is the standard for every camera we sell, regardless of model or age."
         data-imgs=""
       ></div>
-      {%- comment -%} Cosmetic grade popup. Grade is purely cosmetic; every camera is fully restored and warrantied the same. B-grade example photos pulled from custom.b_grade when present. {%- endcomment -%}
-      {%- assign bgrade_imgs = '' -%}
-      {%- if bgrade_photos != blank -%}
-        {%- for img in bgrade_photos -%}
-          {%- assign bg_url = img | image_url: width: 600 -%}
-          {%- if bgrade_imgs == '' -%}{%- assign bgrade_imgs = bg_url -%}
-          {%- else -%}{%- assign bgrade_imgs = bgrade_imgs | append: '||' | append: bg_url -%}{%- endif -%}
-        {%- endfor -%}
-      {%- endif -%}
+      {%- comment -%} Cosmetic grade popup: side-by-side A | B cards (V4 style). B-grade example photos from custom.b_grade sit inside the B card. Rendered raw (data-raw) so the card markup is not wrapped in a paragraph. {%- endcomment -%}
+      {%- capture bgrade_photo_html -%}{%- if bgrade_photos != blank -%}<div class="bfc4-gi-photos">{%- for img in bgrade_photos limit: 4 -%}<img src="{{ img | image_url: width: 400 }}" alt="Example of B grade cosmetic wear" loading="lazy"/>{%- endfor -%}</div>{%- endif -%}{%- endcapture -%}
+      {%- capture grade_popup_desc -%}<p class="bfc4-gi-intro">Grading is <strong>purely cosmetic</strong>. Every camera we sell, A grade or B grade, is fully restored, bench-tested, and covered by the <strong>same warranty</strong>. The grade only describes how the body looks.</p><div class="bfc4-gi-cards"><div class="bfc4-gi-card"><div class="bfc4-gi-grade">A Grade</div><div class="bfc4-gi-text">Shows very little cosmetic wear. Closest to original condition.</div></div><div class="bfc4-gi-card"><div class="bfc4-gi-grade">B Grade</div><div class="bfc4-gi-text">Shows light cosmetic wear such as small scratches, spots, or worn finish. <strong>Still very clean for its age.</strong> We keep a high bar for what qualifies as B.</div>{{ bgrade_photo_html }}</div></div><div class="bfc4-gi-note"><strong>A lower grade is not a lesser camera.</strong> Same restoration, same bench testing, same warranty. It just shows a little more life.</div>{%- endcapture -%}
       <div id="ba-popup-data-bfc4-grade-popup" style="display:none"
         data-title="Cosmetic Grade Explained"
-        data-desc="Grading is purely cosmetic. Every camera we sell, A grade or B grade, is fully restored, bench-tested, and covered by the same warranty. The grade only describes how the body looks.<br/><br/><strong>A Grade:</strong> Shows very little cosmetic wear. Closest to original condition.<br/><br/><strong>B Grade:</strong> Shows light cosmetic wear such as small scratches, spots, or worn finish. Still very clean for its age, and we keep a high bar for what qualifies as B.{% if bgrade_imgs != blank %}<br/><br/>The photos above show real examples of B grade wear on this camera.{% endif %}<br/><br/>A lower grade is not a lesser camera. Same restoration, same bench testing, same warranty. It just shows a little more life."
-        data-imgs="{{ bgrade_imgs | escape }}"
+        data-raw="true"
+        data-desc="{{ grade_popup_desc | escape }}"
+        data-imgs=""
       ></div>
     </div>
 
@@ -2161,7 +2168,11 @@ var data = document.getElementById('ba-popup-data-' + catId);
 if (!data) return;
 document.getElementById('ba-popup-title').textContent = data.dataset.title;
 var desc = data.dataset.desc;
+if (data.dataset.raw === 'true') {
+document.getElementById('ba-popup-desc').innerHTML = desc || '';
+} else {
 document.getElementById('ba-popup-desc').innerHTML = desc ? '<p>' + desc.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br/>') + '</p>' : '';
+}
 var imgs = data.dataset.imgs ? data.dataset.imgs.split('||') : [];
 document.getElementById('ba-popup-imgs').innerHTML = imgs.map(function(src) { return '<img src="' + src + '" alt="" role="presentation" loading="lazy"/>'; }).join('');
 document.getElementById('ba-popup-overlay').classList.add('is-open');
