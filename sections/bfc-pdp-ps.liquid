@@ -481,6 +481,8 @@
 .bfc4 .bfc4-crumbs{font-size:9.5px}
 }
 .bfc4-opt-group{display:flex;flex-direction:column;gap:7px;margin-bottom:12px}
+.bfc4-opts-wrap{display:flex;flex-wrap:wrap;gap:10px 20px}
+.bfc4-opts-wrap .bfc4-opt-group{flex:1 1 160px;min-width:140px;margin-bottom:4px}
 .bfc4-opt-label{font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--ch)}
 .bfc4-opt-label-btn{display:inline-flex;align-items:center;gap:5px;background:none;border:none;padding:0;cursor:pointer;font-family:var(--sn);color:var(--ch);transition:color var(--t)}
 .bfc4-opt-label-btn svg{color:var(--or)}
@@ -497,7 +499,13 @@
 .bfc4 .bfc4-gi-text{font-size:12.5px;line-height:1.6;color:var(--ch)}
 .bfc4 .bfc4-gi-text strong{color:var(--bk)}
 .bfc4 .bfc4-gi-photos{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:10px}
-.bfc4 .bfc4-gi-photos img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:var(--gr)}
+.bfc4 .bfc4-gi-photos img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:var(--gr);cursor:zoom-in;transition:opacity var(--t)}
+.bfc4 .bfc4-gi-photos img:hover{opacity:0.85}
+.bfc4-gi-fullscreen{position:fixed;inset:0;z-index:100001;background:rgba(10,10,4,0.94);display:none;align-items:center;justify-content:center;padding:32px}
+.bfc4-gi-fullscreen.is-open{display:flex}
+.bfc4-gi-fullscreen img{max-width:92vw;max-height:88vh;object-fit:contain;display:block;cursor:default}
+.bfc4-gi-fs-close{position:absolute;top:20px;right:20px;background:none;border:none;color:#fff;cursor:pointer;padding:6px;display:flex;align-items:center}
+@media (max-width:640px){.bfc4-gi-fullscreen{padding:12px}}
 .bfc4 .bfc4-gi-note{font-size:12px;line-height:1.6;color:var(--ch);border-top:1px solid rgba(32,32,9,0.1);padding-top:12px}
 .bfc4 .bfc4-gi-note strong{color:var(--bk)}
 @media (max-width:640px){.bfc4 .bfc4-gi-cards{grid-template-columns:1fr}}
@@ -735,7 +743,7 @@
         data-imgs=""
       ></div>
       {%- comment -%} Cosmetic grade popup: side-by-side A | B cards (V4 style). B-grade example photos from custom.b_grade sit inside the B card. Rendered raw (data-raw) so the card markup is not wrapped in a paragraph. {%- endcomment -%}
-      {%- capture bgrade_photo_html -%}{%- if bgrade_photos != blank -%}<div class="bfc4-gi-photos">{%- for img in bgrade_photos limit: 4 -%}<img src="{{ img | image_url: width: 400 }}" alt="Example of B grade cosmetic wear" loading="lazy"/>{%- endfor -%}</div>{%- endif -%}{%- endcapture -%}
+      {%- capture bgrade_photo_html -%}{%- if bgrade_photos != blank -%}<div class="bfc4-gi-photos">{%- for img in bgrade_photos limit: 4 -%}<img src="{{ img | image_url: width: 1200 }}" alt="Example of B grade cosmetic wear" loading="lazy"/>{%- endfor -%}</div>{%- endif -%}{%- endcapture -%}
       {%- capture grade_popup_desc -%}<p class="bfc4-gi-intro">Grading is <strong>purely cosmetic</strong>. Every camera we sell, A grade or B grade, is fully restored, bench-tested, and covered by the <strong>same warranty</strong>. The grade only describes how the body looks.</p><div class="bfc4-gi-cards"><div class="bfc4-gi-card"><div class="bfc4-gi-grade">A Grade</div><div class="bfc4-gi-text">Shows very little cosmetic wear. Closest to original condition.</div></div><div class="bfc4-gi-card"><div class="bfc4-gi-grade">B Grade</div><div class="bfc4-gi-text">Shows light cosmetic wear such as small scratches, spots, or worn finish. <strong>Still very clean for its age.</strong> We keep a high bar for what qualifies as B.</div>{{ bgrade_photo_html }}</div></div><div class="bfc4-gi-note"><strong>A lower grade is not a lesser camera.</strong> Same restoration, same bench testing, same warranty. It just shows a little more life.</div>{%- endcapture -%}
       <div id="ba-popup-data-bfc4-grade-popup" style="display:none"
         data-title="Cosmetic Grade Explained"
@@ -905,6 +913,7 @@
     {%- comment -%} 4. Option selectors (Color, Cosmetic Grade, etc.) + price + ATC {%- endcomment -%}
     <div class="bfc4-buy">
       {%- if product.variants.size > 1 -%}
+        <div class="bfc4-opts-wrap">
         {%- for opt in product.options_with_values -%}
           {%- assign is_grade_opt = false -%}
           {%- assign optname_dc = opt.name | downcase -%}
@@ -933,9 +942,10 @@
             </div>
           </div>
         {%- endfor -%}
+        </div>
       {%- endif -%}
       <div class="bfc4-price-row">
-        <span class="bfc4-price-label">Total</span>
+              <span class="bfc4-price-label">Total</span>
         <span class="bfc4-price" id="bfc4-total">{{ sk_total | money }}</span>
       </div>
 
@@ -1442,6 +1452,7 @@
         </div>
         <div class="bfc4-below-atc">
           {%- if product.variants.size > 1 -%}
+            <div class="bfc4-opts-wrap">
             {%- for opt in product.options_with_values -%}
               {%- assign is_grade_opt2 = false -%}
               {%- assign optname_dc2 = opt.name | downcase -%}
@@ -1470,6 +1481,7 @@
                 </div>
               </div>
             {%- endfor -%}
+            </div>
           {%- endif -%}
           <div class="bfc4-price-row">
             <span class="bfc4-price-label">Total</span>
@@ -1569,6 +1581,14 @@
       <div class="ba-popup-desc" id="ba-popup-desc"></div>
     </div>
   </div>
+</div>
+
+{%- comment -%} Full-screen viewer for grade example photos (click a photo to zoom) {%- endcomment -%}
+<div class="bfc4-gi-fullscreen" id="bfc4-gi-fullscreen" role="dialog" aria-modal="true" aria-label="Photo viewer" onclick="bfc4CloseGiFull()">
+  <button class="bfc4-gi-fs-close" type="button" aria-label="Close" onclick="bfc4CloseGiFull()">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></svg>
+  </button>
+  <img src="" alt="B grade cosmetic wear example" onclick="event.stopPropagation()"/>
 </div>
 
 {%- comment -%} Hidden product form {%- endcomment -%}
@@ -2178,6 +2198,36 @@ document.getElementById('ba-popup-imgs').innerHTML = imgs.map(function(src) { re
 document.getElementById('ba-popup-overlay').classList.add('is-open');
 document.body.style.overflow = 'hidden';
 };
+// Full-screen viewer for grade example photos. Delegated so it works on the
+// images injected into the popup when it opens.
+window.bfc4OpenGiFull = function(src){
+var fs = document.getElementById('bfc4-gi-fullscreen');
+if (!fs) return;
+fs.querySelector('img').src = src;
+fs.classList.add('is-open');
+document.body.style.overflow = 'hidden';
+};
+window.bfc4CloseGiFull = function(){
+var fs = document.getElementById('bfc4-gi-fullscreen');
+if (!fs) return;
+fs.classList.remove('is-open');
+fs.querySelector('img').src = '';
+// Popup is still open behind it, so keep scroll locked.
+document.body.style.overflow = 'hidden';
+};
+(function(){
+var descEl = document.getElementById('ba-popup-desc');
+if (descEl) {
+descEl.addEventListener('click', function(e){
+var img = e.target.closest && e.target.closest('.bfc4-gi-photos img');
+if (img) { bfc4OpenGiFull(img.getAttribute('src')); }
+});
+}
+document.addEventListener('keydown', function(e){
+var fs = document.getElementById('bfc4-gi-fullscreen');
+if (fs && fs.classList.contains('is-open') && e.key === 'Escape') bfc4CloseGiFull();
+});
+})();
 window.baClosePopup = function() {
 document.getElementById('ba-popup-overlay').classList.remove('is-open');
 document.body.style.overflow = '';
