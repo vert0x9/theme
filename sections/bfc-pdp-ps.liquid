@@ -494,11 +494,15 @@
 .bfc4-opt-label-btn svg{color:var(--or)}
 .bfc4-opt-label-btn:hover{color:var(--or)}
 .bfc4-opt-row{display:flex;flex-wrap:wrap;gap:6px}
-.bfc4-opt-btn{width:34px;height:34px;padding:0;border:2px solid rgba(32,32,9,0.15);border-radius:50%;background:#fff;cursor:pointer;font-family:var(--sn);font-size:12px;font-weight:600;color:var(--bk);transition:all var(--t);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.bfc4-opt-btn{border:2px solid rgba(32,32,9,0.15);background:#fff;cursor:pointer;font-family:var(--sn);font-size:12px;font-weight:600;color:var(--bk);transition:all var(--t);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+.bfc4-opt-btn-circle{width:34px;height:34px;padding:0;border-radius:50%}
+.bfc4-opt-btn-text{padding:8px 16px;border-radius:0}
 .bfc4-opt-btn:hover{border-color:var(--or)}
 .bfc4-opt-btn.is-active{border:2px solid var(--or);color:var(--or);background:rgba(227,110,21,0.05)}
 .bfc4-opt-btn.is-oos{color:rgba(32,32,9,0.4);border-color:rgba(32,32,9,0.12);background:rgba(32,32,9,0.02);position:relative}
-.bfc4-opt-btn.is-oos::after{content:'';position:absolute;top:50%;left:-2px;right:-2px;height:2px;background:rgba(120,20,20,0.85);transform:rotate(-45deg)}
+.bfc4-opt-btn-circle.is-oos::after{content:'';position:absolute;top:50%;left:-2px;right:-2px;height:2px;background:rgba(120,20,20,0.85);transform:rotate(-45deg)}
+.bfc4-opt-btn-text.is-oos{overflow:hidden}
+.bfc4-opt-btn-text.is-oos::after{content:'';position:absolute;top:50%;left:8%;right:8%;height:1px;background:rgba(32,32,9,0.45);transform:rotate(-6deg)}
 .bfc4-opt-btn.is-oos.is-active{color:var(--or);border-color:var(--or)}
 .bfc4-color-swatch.is-oos{opacity:0.55}
 .bfc4-color-swatch.is-oos::after{content:'';position:absolute;top:50%;left:-2px;right:-2px;height:2px;background:rgba(120,20,20,0.85);transform:rotate(-45deg)}
@@ -970,8 +974,10 @@
         <div class="bfc4-opts-wrap">
         {%- for opt in product.options_with_values -%}
           {%- assign is_grade_opt = false -%}
+          {%- assign is_color_opt = false -%}
           {%- assign optname_dc = opt.name | downcase -%}
-          {%- if optname_dc contains 'grade' or optname_dc contains 'condition' -%}{%- assign is_grade_opt = true -%}{%- endif -%}
+          {%- if optname_dc contains 'grade' or optname_dc contains 'condition' or optname_dc contains 'cosmetic' -%}{%- assign is_grade_opt = true -%}{%- endif -%}
+          {%- if optname_dc contains 'color' or optname_dc contains 'colour' or optname_dc contains 'finish' -%}{%- assign is_color_opt = true -%}{%- endif -%}
           <div class="bfc4-opt-group" data-opt-pos="{{ opt.position }}">
             {%- if is_grade_opt -%}
               <button type="button" class="bfc4-opt-label bfc4-opt-label-btn" onclick="baOpenPopup('bfc4-grade-popup')" aria-label="{{ opt.name | escape }}. Tap for grade details.">
@@ -985,11 +991,11 @@
                     {%- if opt.position == 1 -%}{%- assign v_optval = v.option1 -%}{%- elsif opt.position == 2 -%}{%- assign v_optval = v.option2 -%}{%- else -%}{%- assign v_optval = v.option3 -%}{%- endif -%}
                     {%- if v_optval == val and v.available -%}{%- assign val_avail = true -%}{%- break -%}{%- endif -%}
                   {%- endfor -%}
-                  <button type="button" class="bfc4-opt-btn{% if opt.selected_value == val %} is-active{% endif %}{% unless val_avail %} is-oos{% endunless %}" data-opt-pos="{{ opt.position }}" data-opt-value="{{ val | escape }}" onclick="bfc4SelectOption(this)"{% unless val_avail %} title="{{ val | escape }} — currently out of stock"{% endunless %}>{{ val }}</button>
+                  <button type="button" class="bfc4-opt-btn bfc4-opt-btn-circle{% if opt.selected_value == val %} is-active{% endif %}{% unless val_avail %} is-oos{% endunless %}" data-opt-pos="{{ opt.position }}" data-opt-value="{{ val | escape }}" onclick="bfc4SelectOption(this)"{% unless val_avail %} title="{{ val | escape }} — currently out of stock"{% endunless %}>{{ val }}</button>
                 {%- endfor -%}
               </div>
-            {%- else -%}
-              {%- comment -%} Color-type option rendered as swatches. {%- endcomment -%}
+            {%- elsif is_color_opt -%}
+              {%- comment -%} Color/finish option rendered as swatches. {%- endcomment -%}
               <span class="bfc4-opt-label">{{ opt.name }}: <span class="bfc4-opt-selected" data-opt-selected-for="{{ opt.position }}">{{ opt.selected_value }}</span></span>
               <div class="bfc4-swatch-row">
                 {%- for val in opt.values -%}
@@ -1005,6 +1011,19 @@
                     {%- if v_optval == val and v.available -%}{%- assign val_avail = true -%}{%- break -%}{%- endif -%}
                   {%- endfor -%}
                   <button type="button" class="bfc4-color-swatch{% if opt.selected_value == val %} is-active{% endif %}{% unless val_avail %} is-oos{% endunless %}" data-color="{{ v_color }}" data-opt-pos="{{ opt.position }}" data-opt-value="{{ val | escape }}" onclick="bfc4SelectOption(this)" title="{{ val | escape }}{% unless val_avail %} — currently out of stock{% endunless %}" aria-label="{{ val | escape }}{% unless val_avail %}, out of stock{% endunless %}">{{ val }}</button>
+                {%- endfor -%}
+              </div>
+            {%- else -%}
+              {%- comment -%} Any other option (e.g. Camera: Body Only / With Lens) rendered as plain text buttons. {%- endcomment -%}
+              <span class="bfc4-opt-label">{{ opt.name }}: <span class="bfc4-opt-selected" data-opt-selected-for="{{ opt.position }}">{{ opt.selected_value }}</span></span>
+              <div class="bfc4-opt-row">
+                {%- for val in opt.values -%}
+                  {%- assign val_avail = false -%}
+                  {%- for v in product.variants -%}
+                    {%- if opt.position == 1 -%}{%- assign v_optval = v.option1 -%}{%- elsif opt.position == 2 -%}{%- assign v_optval = v.option2 -%}{%- else -%}{%- assign v_optval = v.option3 -%}{%- endif -%}
+                    {%- if v_optval == val and v.available -%}{%- assign val_avail = true -%}{%- break -%}{%- endif -%}
+                  {%- endfor -%}
+                  <button type="button" class="bfc4-opt-btn bfc4-opt-btn-text{% if opt.selected_value == val %} is-active{% endif %}{% unless val_avail %} is-oos{% endunless %}" data-opt-pos="{{ opt.position }}" data-opt-value="{{ val | escape }}" onclick="bfc4SelectOption(this)"{% unless val_avail %} title="{{ val | escape }} — currently out of stock"{% endunless %}>{{ val }}</button>
                 {%- endfor -%}
               </div>
             {%- endif -%}
@@ -1523,8 +1542,10 @@
             <div class="bfc4-opts-wrap">
             {%- for opt in product.options_with_values -%}
               {%- assign is_grade_opt2 = false -%}
+              {%- assign is_color_opt2 = false -%}
               {%- assign optname_dc2 = opt.name | downcase -%}
-              {%- if optname_dc2 contains 'grade' or optname_dc2 contains 'condition' -%}{%- assign is_grade_opt2 = true -%}{%- endif -%}
+              {%- if optname_dc2 contains 'grade' or optname_dc2 contains 'condition' or optname_dc2 contains 'cosmetic' -%}{%- assign is_grade_opt2 = true -%}{%- endif -%}
+              {%- if optname_dc2 contains 'color' or optname_dc2 contains 'colour' or optname_dc2 contains 'finish' -%}{%- assign is_color_opt2 = true -%}{%- endif -%}
               <div class="bfc4-opt-group" data-opt-pos="{{ opt.position }}">
                 {%- if is_grade_opt2 -%}
                   <button type="button" class="bfc4-opt-label bfc4-opt-label-btn" onclick="baOpenPopup('bfc4-grade-popup')" aria-label="{{ opt.name | escape }}. Tap for grade details.">
@@ -1538,10 +1559,10 @@
                         {%- if opt.position == 1 -%}{%- assign v_optval2 = v.option1 -%}{%- elsif opt.position == 2 -%}{%- assign v_optval2 = v.option2 -%}{%- else -%}{%- assign v_optval2 = v.option3 -%}{%- endif -%}
                         {%- if v_optval2 == val and v.available -%}{%- assign val_avail2 = true -%}{%- break -%}{%- endif -%}
                       {%- endfor -%}
-                      <button type="button" class="bfc4-opt-btn{% if opt.selected_value == val %} is-active{% endif %}{% unless val_avail2 %} is-oos{% endunless %}" data-opt-pos="{{ opt.position }}" data-opt-value="{{ val | escape }}" onclick="bfc4SelectOption(this)"{% unless val_avail2 %} title="{{ val | escape }} — currently out of stock"{% endunless %}>{{ val }}</button>
+                      <button type="button" class="bfc4-opt-btn bfc4-opt-btn-circle{% if opt.selected_value == val %} is-active{% endif %}{% unless val_avail2 %} is-oos{% endunless %}" data-opt-pos="{{ opt.position }}" data-opt-value="{{ val | escape }}" onclick="bfc4SelectOption(this)"{% unless val_avail2 %} title="{{ val | escape }} — currently out of stock"{% endunless %}>{{ val }}</button>
                     {%- endfor -%}
                   </div>
-                {%- else -%}
+                {%- elsif is_color_opt2 -%}
                   <span class="bfc4-opt-label">{{ opt.name }}: <span class="bfc4-opt-selected" data-opt-selected-for="{{ opt.position }}">{{ opt.selected_value }}</span></span>
                   <div class="bfc4-swatch-row">
                     {%- for val in opt.values -%}
@@ -1557,6 +1578,18 @@
                         {%- if v_optval2 == val and v.available -%}{%- assign val_avail2 = true -%}{%- break -%}{%- endif -%}
                       {%- endfor -%}
                       <button type="button" class="bfc4-color-swatch{% if opt.selected_value == val %} is-active{% endif %}{% unless val_avail2 %} is-oos{% endunless %}" data-color="{{ v_color2 }}" data-opt-pos="{{ opt.position }}" data-opt-value="{{ val | escape }}" onclick="bfc4SelectOption(this)" title="{{ val | escape }}{% unless val_avail2 %} — currently out of stock{% endunless %}" aria-label="{{ val | escape }}{% unless val_avail2 %}, out of stock{% endunless %}">{{ val }}</button>
+                    {%- endfor -%}
+                  </div>
+                {%- else -%}
+                  <span class="bfc4-opt-label">{{ opt.name }}: <span class="bfc4-opt-selected" data-opt-selected-for="{{ opt.position }}">{{ opt.selected_value }}</span></span>
+                  <div class="bfc4-opt-row">
+                    {%- for val in opt.values -%}
+                      {%- assign val_avail2 = false -%}
+                      {%- for v in product.variants -%}
+                        {%- if opt.position == 1 -%}{%- assign v_optval2 = v.option1 -%}{%- elsif opt.position == 2 -%}{%- assign v_optval2 = v.option2 -%}{%- else -%}{%- assign v_optval2 = v.option3 -%}{%- endif -%}
+                        {%- if v_optval2 == val and v.available -%}{%- assign val_avail2 = true -%}{%- break -%}{%- endif -%}
+                      {%- endfor -%}
+                      <button type="button" class="bfc4-opt-btn bfc4-opt-btn-text{% if opt.selected_value == val %} is-active{% endif %}{% unless val_avail2 %} is-oos{% endunless %}" data-opt-pos="{{ opt.position }}" data-opt-value="{{ val | escape }}" onclick="bfc4SelectOption(this)"{% unless val_avail2 %} title="{{ val | escape }} — currently out of stock"{% endunless %}>{{ val }}</button>
                     {%- endfor -%}
                   </div>
                 {%- endif -%}
