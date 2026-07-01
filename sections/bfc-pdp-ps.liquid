@@ -507,9 +507,9 @@
 .bfc4-color-swatch.is-oos{opacity:0.55}
 .bfc4-color-swatch.is-oos::after{content:'';position:absolute;top:50%;left:-2px;right:-2px;height:2px;background:rgba(120,20,20,0.85);transform:rotate(-45deg)}
 .bfc4-swatch-row{display:flex;flex-wrap:wrap;gap:9px;align-items:center}
-.bfc4-color-swatch{width:34px;height:34px;border-radius:50%;border:2px solid rgba(0,0,0,0.15);cursor:pointer;padding:0;font-size:0;color:transparent;position:relative;transition:transform var(--t),box-shadow var(--t),border-color var(--t);flex-shrink:0;background:#c4c4be}
-.bfc4-color-swatch:hover{transform:scale(1.12)}
-.bfc4-color-swatch.is-active{box-shadow:0 0 0 2px var(--cv),0 0 0 4px var(--or)}
+.bfc4-color-swatch{width:32px;height:32px;border-radius:50%;border:none;cursor:pointer;padding:0;font-size:0;color:transparent;position:relative;transition:transform var(--t),box-shadow var(--t);flex-shrink:0;background:#c4c4be;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.08),0 1px 3px rgba(32,32,9,0.14)}
+.bfc4-color-swatch:hover{transform:scale(1.08);box-shadow:inset 0 0 0 1px rgba(0,0,0,0.08),0 2px 6px rgba(32,32,9,0.2)}
+.bfc4-color-swatch.is-active{box-shadow:inset 0 0 0 1px rgba(0,0,0,0.08),0 0 0 2px var(--cv),0 0 0 3.5px var(--or)}
 .bfc4-color-swatch[data-color="black"]{background:linear-gradient(135deg,#3a3a3a 0%,#1c1c1c 55%,#0d0d0d 100%);border-color:rgba(0,0,0,0.3)}
 .bfc4-color-swatch[data-color="brown"]{background:#5e3a1f;border-color:rgba(0,0,0,0.2)}
 .bfc4-color-swatch[data-color="tan"]{background:#b48a5d}
